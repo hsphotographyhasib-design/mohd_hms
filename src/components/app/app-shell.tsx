@@ -131,7 +131,7 @@ export function AppShell() {
       {/* Floating Navigation Bar */}
       <FloatingNavBar />
       {/* Main Content - full width, no sidebar margin */}
-      <main className="pt-28 pb-8">
+      <main className="pt-2 pb-8">
         <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <ViewRouter />
         </div>
