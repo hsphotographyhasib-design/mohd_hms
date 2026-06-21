@@ -383,7 +383,7 @@ export async function POST(
     });
 
     // 6. Return updated complaint with timeline
-    const timeline = await getComplaintTimeline(complaint.id, tenantId);
+    const timeline = await getComplaintTimeline(tenantId, complaint.id);
 
     return NextResponse.json({
       complaint: {
@@ -467,7 +467,7 @@ export async function GET(
       isAdminOverride
     );
 
-    const timeline = await getComplaintTimeline(complaint.id, tenantId);
+    const timeline = await getComplaintTimeline(tenantId, complaint.id);
 
     return NextResponse.json({
       complaint: {
@@ -476,12 +476,21 @@ export async function GET(
         priority: complaint.priority,
         category: complaint.category,
         title: complaint.title,
+        source: complaint.source,
         assignedToId: complaint.assignedToId,
         assignedToName: complaint.assignedTo?.name,
         supervisorId: complaint.supervisorId,
         supervisorName: complaint.supervisor?.name,
+        workOrders: complaint.workOrders.map(wo => ({
+          id: wo.id,
+          status: wo.status,
+          type: wo.type,
+          assignedToName: wo.assignedTo?.name || null,
+          laborHours: wo.laborHours,
+          totalCost: wo.totalCost,
+          notes: wo.notes,
+        })),
         workOrderId: complaint.workOrders[0]?.id ?? null,
-        workOrderStatus: complaint.workOrders[0]?.status ?? null,
         invoiceId: complaint.invoiceId,
         eta: complaint.eta,
         rejectionReason: complaint.rejectionReason,

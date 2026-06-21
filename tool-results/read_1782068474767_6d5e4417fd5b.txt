@@ -1,0 +1,685 @@
+     1→'use client';
+     2→
+     3→import { useEffect, useState, useCallback } from 'react';
+     4→import { formatDistanceToNow, format } from 'date-fns';
+     5→import { motion, AnimatePresence } from 'framer-motion';
+     6→import {
+     7→  ArrowLeft, UserCheck, AlertCircle, FileText, Wrench, Star,
+     8→  CheckCircle2, Clock, Play, Ban, ChevronDown, Loader2,
+     9→  MessageSquare, MapPin, Phone, Building2, Package, Send,
+    10→  ShieldAlert, Banknote, Lock, RotateCcw, ThumbsUp, ClipboardList,
+    11→  CirclePlus, BadgeCheck, Eye, Camera, PenTool, Timer, X, Plus, Trash2,
+    12→} from 'lucide-react';
+    13→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+    14→import { Badge } from '@/components/ui/badge';
+    15→import { Button } from '@/components/ui/button';
+    16→import { Input } from '@/components/ui/input';
+    17→import { Textarea } from '@/components/ui/textarea';
+    18→import { Skeleton } from '@/components/ui/skeleton';
+    19→import { Separator } from '@/components/ui/separator';
+    20→import { ScrollArea } from '@/components/ui/scroll-area';
+    21→import {
+    22→  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
+    23→} from '@/components/ui/dialog';
+    24→import {
+    25→  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+    26→} from '@/components/ui/select';
+    27→import { Label } from '@/components/ui/label';
+    28→import { Switch } from '@/components/ui/switch';
+    29→import { useAuthStore, useAppStore } from '@/store';
+    30→import type { ComplaintItem, ComplaintTimelineEntry, WorkflowAction } from '@/types';
+    31→import { toast } from 'sonner';
+    32→import { cn } from '@/lib/utils';
+    33→
+    34→// ============ HELPERS ============
+    35→function getToken(): string { return localStorage.getItem('cmms_token') || ''; }
+    36→const API = (url: string, opts?: RequestInit) => fetch(url, {
+    37→  ...opts,
+    38→  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}`, ...opts?.headers },
+    39→});
+    40→
+    41→const MAIN_FLOW = [
+    42→  'NEW', 'ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS',
+    43→  'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED', 'DRAFT_INVOICE',
+    44→  'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED',
+    45→] as const;
+    46→
+    47→const STEP_LABELS: Record<string, string> = {
+    48→  NEW: 'New', ASSIGNED: 'Assigned', ACCEPTED: 'Accepted',
+    49→  WORK_ORDER_CREATED: 'WO Created', IN_PROGRESS: 'In Progress',
+    50→  WAITING_CLIENT_CONFIRMATION: 'Confirmation', CLIENT_CONFIRMED: 'Confirmed',
+    51→  DRAFT_INVOICE: 'Draft Invoice', INVOICE_APPROVED: 'Approved',
+    52→  INVOICE_SENT: 'Sent', PAID: 'Paid', CLOSED: 'Closed',
+    53→  REWORK_REQUIRED: 'Rework',
+    54→};
+    55→
+    56→const STEP_COLORS: Record<string, { dot: string; line: string; text: string }> = {
+    57→  NEW: { dot: 'bg-slate-400', line: 'bg-slate-200', text: 'text-slate-600' },
+    58→  ASSIGNED: { dot: 'bg-blue-500', line: 'bg-blue-200', text: 'text-blue-700' },
+    59→  ACCEPTED: { dot: 'bg-cyan-500', line: 'bg-cyan-200', text: 'text-cyan-700' },
+    60→  WORK_ORDER_CREATED: { dot: 'bg-indigo-500', line: 'bg-indigo-200', text: 'text-indigo-700' },
+    61→  IN_PROGRESS: { dot: 'bg-amber-500', line: 'bg-amber-200', text: 'text-amber-700' },
+    62→  WAITING_CLIENT_CONFIRMATION: { dot: 'bg-orange-500', line: 'bg-orange-200', text: 'text-orange-700' },
+    63→  CLIENT_CONFIRMED: { dot: 'bg-emerald-500', line: 'bg-emerald-200', text: 'text-emerald-700' },
+    64→  DRAFT_INVOICE: { dot: 'bg-violet-500', line: 'bg-violet-200', text: 'text-violet-700' },
+    65→  INVOICE_APPROVED: { dot: 'bg-purple-500', line: 'bg-purple-200', text: 'text-purple-700' },
+    66→  INVOICE_SENT: { dot: 'bg-sky-500', line: 'bg-sky-200', text: 'text-sky-700' },
+    67→  PAID: { dot: 'bg-green-500', line: 'bg-green-200', text: 'text-green-700' },
+    68→  CLOSED: { dot: 'bg-zinc-500', line: 'bg-zinc-200', text: 'text-zinc-500' },
+    69→  REWORK_REQUIRED: { dot: 'bg-rose-500', line: 'bg-rose-200', text: 'text-rose-700' },
+    70→};
+    71→
+    72→function getStepIndex(status: string): number {
+    73→  const idx = MAIN_FLOW.indexOf(status as typeof MAIN_FLOW[number]);
+    74→  return idx >= 0 ? idx : -1;
+    75→}
+    76→
+    77→function StatusBadge({ status }: { status: string }) {
+    78→  const c = STEP_COLORS[status] || STEP_COLORS.NEW;
+    79→  return (
+    80→    <Badge variant="outline" className={cn('px-3 py-1.5 font-semibold border', c.text, STEP_COLORS[status]?.line || 'bg-slate-100')}>
+    81→      {STEP_LABELS[status] || status.replace(/_/g, ' ')}
+    82→    </Badge>
+    83→  );
+    84→}
+    85→
+    86→function PriorityBadge({ priority }: { priority: string }) {
+    87→  const v: Record<string, string> = {
+    88→    low: 'bg-gray-100 text-gray-700 border-gray-300',
+    89→    medium: 'bg-amber-100 text-amber-700 border-amber-300',
+    90→    high: 'bg-orange-100 text-orange-700 border-orange-300',
+    91→    critical: 'bg-rose-100 text-rose-700 border-rose-300',
+    92→  };
+    93→  return <Badge variant="outline" className={cn('px-2.5 py-1 font-medium border', v[priority] || '')}>{priority.charAt(0).toUpperCase() + priority.slice(1)}</Badge>;
+    94→}
+    95→
+    96→function fmtDate(d?: string) { return d ? format(new Date(d), 'MMM d, yyyy HH:mm') : '—'; }
+    97→function fmtRelative(d?: string) { return d ? formatDistanceToNow(new Date(d), { addSuffix: true }) : ''; }
+    98→
+    99→function TimelineIcon({ action }: { action: string }) {
+   100→  const icons: Record<string, React.ReactNode> = {
+   101→    created: <CirclePlus className="h-4 w-4 text-slate-500" />,
+   102→    assigned: <UserCheck className="h-4 w-4 text-blue-500" />,
+   103→    accepted: <CheckCircle2 className="h-4 w-4 text-cyan-500" />,
+   104→    rejected: <Ban className="h-4 w-4 text-rose-500" />,
+   105→    started: <Play className="h-4 w-4 text-amber-500" />,
+   106→    completed: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
+   107→    client_confirmed: <ThumbsUp className="h-4 w-4 text-emerald-500" />,
+   108→    client_rejected: <RotateCcw className="h-4 w-4 text-rose-500" />,
+   109→    rework_required: <RotateCcw className="h-4 w-4 text-rose-500" />,
+   110→    invoice_generated: <FileText className="h-4 w-4 text-violet-500" />,
+   111→    invoice_approved: <BadgeCheck className="h-4 w-4 text-purple-500" />,
+   112→    invoice_sent: <Send className="h-4 w-4 text-sky-500" />,
+   113→    payment_received: <Banknote className="h-4 w-4 text-green-500" />,
+   114→    closed: <Lock className="h-4 w-4 text-zinc-500" />,
+   115→    status_override: <ShieldAlert className="h-4 w-4 text-amber-500" />,
+   116→  };
+   117→  return icons[action] || <Clock className="h-4 w-4 text-gray-400" />;
+   118→}
+   119→
+   120→// ============ MAIN COMPONENT ============
+   121→export function ComplaintDetail() {
+   122→  const { user } = useAuthStore();
+   123→  const { viewParams, setView } = useAppStore();
+   124→  const complaintId = viewParams?.id as string;
+   125→
+   126→  const [complaint, setComplaint] = useState<ComplaintItem | null>(null);
+   127→  const [timeline, setTimeline] = useState<ComplaintTimelineEntry[]>([]);
+   128→  const [actions, setActions] = useState<WorkflowAction[]>([]);
+   129→  const [loading, setLoading] = useState(true);
+   130→  const [transitioning, setTransitioning] = useState(false);
+   131→
+   132→  // Dialogs
+   133→  const [dialogType, setDialogType] = useState<string | null>(null);
+   134→  const [dialogData, setDialogData] = useState<Record<string, unknown>>({});
+   135→
+   136→  // Form state
+   137→  const [formData, setFormData] = useState<Record<string, string>>({});
+   138→  const [materials, setMaterials] = useState<Array<{ name: string; qty: string; unit: string; cost: string }>>([]);
+   139→  const [technicians, setTechnicians] = useState<Array<{ id: string; name: string }>>([]);
+   140→  const [supervisors, setSupervisors] = useState<Array<{ id: string; name: string }>>([]);
+   141→
+   142→  // ============ FETCH ============
+   143→  const fetchWorkflow = useCallback(async () => {
+   144→    if (!complaintId) return;
+   145→    try {
+   146→      const res = await fetch(`/api/complaints/${complaintId}/workflow`, {
+   147→        headers: { Authorization: `Bearer ${getToken()}` },
+   148→      });
+   149→      if (!res.ok) throw new Error('Failed to fetch');
+   150→      const data = await res.json();
+   151→      setActions(data.availableActions || []);
+   152→      setTimeline(data.timeline || []);
+   153→      // Merge workflow data into complaint
+   154→      if (data.complaint) {
+   155→        setComplaint(prev => prev ? { ...prev, ...data.complaint } : prev);
+   156→      }
+   157→    } catch {
+   158→      toast.error('Failed to load workflow data');
+   159→    }
+   160→  }, [complaintId]);
+   161→
+   162→  const fetchComplaint = useCallback(async () => {
+   163→    if (!complaintId) return;
+   164→    setLoading(true);
+   165→    try {
+   166→      const res = await fetch(`/api/complaints/${complaintId}`, {
+   167→        headers: { Authorization: `Bearer ${getToken()}` },
+   168→      });
+   169→      if (!res.ok) throw new Error('Not found');
+   170→      const data = await res.json();
+   171→      setComplaint(data);
+   172→      // Fetch workflow actions + timeline
+   173→      await fetchWorkflow();
+   174→    } catch {
+   175→      toast.error('Failed to load complaint');
+   176→      setView('complaints');
+   177→    } finally {
+   178→      setLoading(false);
+   179→    }
+   180→  }, [complaintId, fetchWorkflow, setView]);
+   181→
+   182→  const fetchUsers = useCallback(async () => {
+   183→    try {
+   184→      const [techRes, supRes] = await Promise.all([
+   185→        fetch(`/api/employees?role=technician&pageSize=100`, { headers: { Authorization: `Bearer ${getToken()}` } }),
+   186→        fetch(`/api/employees?role=supervisor&pageSize=100`, { headers: { Authorization: `Bearer ${getToken()}` } }),
+   187→      ]);
+   188→      if (techRes.ok) { const d = await techRes.json(); setTechnicians((d.data || []).map((u: { id: string; name: string }) => ({ id: u.id, name: u.name }))); }
+   189→      if (supRes.ok) { const d = await supRes.json(); setSupervisors((d.data || []).map((u: { id: string; name: string }) => ({ id: u.id, name: u.name }))); }
+   190→    } catch {}
+   191→  }, []);
+   192→
+   193→  useEffect(() => { fetchComplaint(); fetchUsers(); }, [fetchComplaint, fetchUsers]);
+   194→
+   195→  // ============ TRANSITION ============
+   196→  const executeTransition = async (action: string, body: Record<string, unknown> = {}) => {
+   197→    if (!complaintId || transitioning) return;
+   198→    setTransitioning(true);
+   199→    try {
+   200→      const res = await API(`/api/complaints/${complaintId}/workflow`, {
+   201→        method: 'POST',
+   202→        body: JSON.stringify({ action, ...body }),
+   203→      });
+   204→      const data = await res.json();
+   205→      if (!res.ok) throw new Error(data.error || 'Transition failed');
+   206→      toast.success(data.message || 'Action completed');
+   207→      setDialogType(null);
+   208→      setFormData({});
+   209→      setMaterials([]);
+   210→      await fetchComplaint();
+   211→    } catch (err) {
+   212→      toast.error(err instanceof Error ? err.message : 'Action failed');
+   213→    } finally {
+   214→      setTransitioning(false);
+   215→    }
+   216→  };
+   217→
+   218→  // ============ ACTION HANDLERS ============
+   219→  const openDialog = (action: WorkflowAction) => {
+   220→    setDialogType(action.action);
+   221→    setFormData({});
+   222→    setMaterials([{ name: '', qty: '1', unit: 'pcs', cost: '0' }]);
+   223→  };
+   224→
+   225→  const handleSubmitAction = () => {
+   226→    if (!dialogType) return;
+   227→    switch (dialogType) {
+   228→      case 'assigned':
+   229→        if (!formData.assignedToId) { toast.error('Select a technician'); return; }
+   230→        executeTransition('assign', { assignedToId: formData.assignedToId, supervisorId: formData.supervisorId });
+   231→        break;
+   232→      case 'accepted':
+   233→        executeTransition('accept', { eta: formData.eta });
+   234→        break;
+   235→      case 'assignment_rejected':
+   236→        if (!formData.rejectionReason) { toast.error('Provide a rejection reason'); return; }
+   237→        executeTransition('reject', { rejectionReason: formData.rejectionReason });
+   238→        break;
+   239→      case 'work_started':
+   240→        executeTransition('start');
+   241→        break;
+   242→      case 'work_completed':
+   243→        executeTransition('complete', {
+   244→          checklistData: formData.checklistData,
+   245→          laborHours: parseFloat(formData.laborHours) || 0,
+   246→          laborCost: parseFloat(formData.laborCost) || 0,
+   247→          materialCost: parseFloat(formData.materialCost) || 0,
+   248→          remarks: formData.remarks,
+   249→          materialsUsed: JSON.stringify(materials.filter(m => m.name)),
+   250→        });
+   251→        break;
+   252→      case 'client_confirmed':
+   253→        executeTransition('client_confirm');
+   254→        break;
+   255→      case 'rework_requested':
+   256→        if (!formData.reworkReason) { toast.error('Provide a reason for rework'); return; }
+   257→        executeTransition('client_reject', { reworkReason: formData.reworkReason });
+   258→        break;
+   259→      case 'rework_started':
+   260→        executeTransition('rework');
+   261→        break;
+   262→      case 'invoice_approved':
+   263→        executeTransition('approve_invoice');
+   264→        break;
+   265→      case 'invoice_sent':
+   266→        if (!formData.sentVia) { toast.error('Select a send method'); return; }
+   267→        executeTransition('send_invoice', { sentVia: formData.sentVia });
+   268→        break;
+   269→      case 'invoice_paid':
+   270→        if (!formData.paymentMethod) { toast.error('Select payment method'); return; }
+   271→        executeTransition('record_payment', {
+   272→          paymentMethod: formData.paymentMethod,
+   273→          paymentRef: formData.paymentRef,
+   274→          paidAt: formData.paidAt || new Date().toISOString(),
+   275→        });
+   276→        break;
+   277→      case 'complaint_closed':
+   278→        executeTransition('close');
+   279→        break;
+   280→      case 'status_override':
+   281→        if (!dialogData.targetStatus) { toast.error('Select a status'); return; }
+   282→        executeTransition('override', {
+   283→          targetStatus: dialogData.targetStatus,
+   284→          notes: formData.notes,
+   285→        });
+   286→        break;
+   287→    }
+   288→  };
+   289→
+   290→  const addMaterial = () => setMaterials(p => [...p, { name: '', qty: '1', unit: 'pcs', cost: '0' }]);
+   291→  const removeMaterial = (i: number) => setMaterials(p => p.filter((_, idx) => idx !== i));
+   292→  const updateMaterial = (i: number, field: string, value: string) => {
+   293→    setMaterials(p => p.map((m, idx) => idx === i ? { ...m, [field]: value } : m));
+   294→  };
+   295→
+   296→  // ============ RENDER: LOADING ============
+   297→  if (loading) {
+   298→    return (
+   299→      <div className="p-4 md:p-6 space-y-4">
+   300→        <Skeleton className="h-8 w-64" />
+   301→        <Skeleton className="h-16 w-full" />
+   302→        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+   303→          <div className="lg:col-span-2 space-y-4"><Skeleton className="h-48 w-full" /><Skeleton className="h-48 w-full" /></div>
+   304→          <Skeleton className="h-96 w-full" />
+   305→        </div>
+   306→      </div>
+   307→    );
+   308→  }
+   309→
+   310→  if (!complaint) return null;
+   311→
+   312→  const currentIdx = getStepIndex(complaint.status);
+   313→  const isRework = complaint.status === 'REWORK_REQUIRED';
+   314→
+   315→  // ============ RENDER ============
+   316→  return (
+   317→    <div className="p-4 md:p-6 space-y-5 max-w-7xl mx-auto">
+   318→      {/* HEADER */}
+   319→      <div className="flex items-start justify-between gap-4 flex-wrap">
+   320→        <div className="flex items-center gap-3">
+   321→          <Button variant="ghost" size="icon" onClick={() => setView('complaints')} className="shrink-0"><ArrowLeft className="h-5 w-5" /></Button>
+   322→          <div>
+   323→            <h1 className="text-xl font-bold text-gray-900">{complaint.title}</h1>
+   324→            <p className="text-sm text-gray-500 mt-0.5">ID: {complaint.id.substring(0, 12).toUpperCase()} · Created {fmtRelative(complaint.createdAt)}</p>
+   325→          </div>
+   326→        </div>
+   327→        <div className="flex items-center gap-2 flex-wrap">
+   328→          <StatusBadge status={complaint.status} />
+   329→          <PriorityBadge priority={complaint.priority} />
+   330→          {complaint.category && <Badge variant="outline" className="border-gray-300">{complaint.category}</Badge>}
+   331→        </div>
+   332→      </div>
+   333→
+   334→      {/* STATUS PROGRESS BAR */}
+   335→      <Card className="overflow-hidden">
+   336→        <CardContent className="p-4">
+   337→          <ScrollArea className="w-full">
+   338→            <div className="flex items-center min-w-max gap-0 py-2">
+   339→              {MAIN_FLOW.map((step, idx) => {
+   340→                const stepIdx = idx;
+   341→                const isCompleted = stepIdx < currentIdx;
+   342→                const isCurrent = step === complaint.status;
+   343→                const sc = STEP_COLORS[step] || STEP_COLORS.NEW;
+   344→                return (
+   345→                  <div key={step} className="flex items-center">
+   346→                    <div className="flex flex-col items-center gap-1.5 w-16">
+   347→                      <div className={cn(
+   348→                        'h-7 w-7 rounded-full flex items-center justify-center text-xs font-bold transition-all',
+   349→                        isCompleted ? 'bg-emerald-500 text-white' :
+   350→                        isCurrent ? cn(sc.dot, 'ring-4 ring-offset-1', sc.line.replace('bg-', 'ring-')) :
+   351→                        'bg-gray-100 text-gray-400 border border-gray-200',
+   352→                      )}>
+   353→                        {isCompleted ? <CheckCircle2 className="h-4 w-4" /> : isCurrent ? <Wrench className="h-3.5 w-3.5" /> : <span>{idx + 1}</span>}
+   354→                      </div>
+   355→                      <span className={cn('text-[10px] font-medium text-center leading-tight', isCurrent ? sc.text : isCompleted ? 'text-emerald-600' : 'text-gray-400')}>
+   356→                        {STEP_LABELS[step]}
+   357→                      </span>
+   358→                    </div>
+   359→                    {idx < MAIN_FLOW.length - 1 && (
+   360→                      <div className={cn('h-0.5 w-8 mx-0.5', stepIdx < currentIdx ? 'bg-emerald-400' : 'bg-gray-200')} />
+   361→                    )}
+   362→                  </div>
+   363→                );
+   364→              })}
+   365→              {/* Rework indicator */}
+   366→              {isRework && (
+   367→                <div className="flex items-center ml-4">
+   368→                  <div className="h-7 w-7 rounded-full bg-rose-500 text-white flex items-center justify-center"><RotateCcw className="h-3.5 w-3.5" /></div>
+   369→                  <span className="text-[10px] font-medium text-rose-600 ml-1.5">Rework</span>
+   370→                </div>
+   371→              )}
+   372→            </div>
+   373→          </ScrollArea>
+   374→        </CardContent>
+   375→      </Card>
+   376→
+   377→      {/* MAIN CONTENT */}
+   378→      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+   379→        {/* LEFT COLUMN */}
+   380→        <div className="lg:col-span-2 space-y-5">
+   381→          {/* Complaint Info */}
+   382→          <Card>
+   383→            <CardHeader className="pb-3"><CardTitle className="text-base font-semibold">Complaint Details</CardTitle></CardHeader>
+   384→            <CardContent className="space-y-4">
+   385→              <div>
+   386→                <h3 className="font-semibold text-gray-900">{complaint.title}</h3>
+   387→                <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{complaint.description}</p>
+   388→              </div>
+   389→              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+   390→                <div className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gray-400" /><span className="text-gray-500">Customer:</span><span className="font-medium">{complaint.customerName || '—'}</span></div>
+   391→                <div className="flex items-center gap-2"><Package className="h-4 w-4 text-gray-400" /><span className="text-gray-500">Equipment:</span><span className="font-medium">{complaint.equipmentName || '—'}</span></div>
+   392→                {complaint.assignedToName && <div className="flex items-center gap-2"><UserCheck className="h-4 w-4 text-blue-400" /><span className="text-gray-500">Technician:</span><span className="font-medium">{complaint.assignedToName}</span></div>}
+   393→                {complaint.supervisorName && <div className="flex items-center gap-2"><Eye className="h-4 w-4 text-gray-400" /><span className="text-gray-500">Supervisor:</span><span className="font-medium">{complaint.supervisorName}</span></div>}
+   394→                {complaint.eta && <div className="flex items-center gap-2"><Timer className="h-4 w-4 text-amber-400" /><span className="text-gray-500">ETA:</span><span className="font-medium">{complaint.eta}</span></div>}
+   395→              </div>
+   396→              {/* Timestamps */}
+   397→              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-gray-500">
+   398→                <div>Created: {fmtDate(complaint.createdAt)}</div>
+   399→                {complaint.acceptedAt && <div>Accepted: {fmtDate(complaint.acceptedAt)}</div>}
+   400→                {complaint.startedAt && <div>Started: {fmtDate(complaint.startedAt)}</div>}
+   401→                {complaint.completedAt && <div>Completed: {fmtDate(complaint.completedAt)}</div>}
+   402→                {complaint.clientConfirmedAt && <div>Confirmed: {fmtDate(complaint.clientConfirmedAt)}</div>}
+   403→                {complaint.closedAt && <div>Closed: {fmtDate(complaint.closedAt)}</div>}
+   404→              </div>
+   405→              {complaint.reworkReason && (
+   406→                <div className="bg-rose-50 border border-rose-200 rounded-lg p-3 text-sm">
+   407→                  <span className="font-medium text-rose-700">Rework Reason:</span>
+   408→                  <p className="text-rose-600 mt-1">{complaint.reworkReason}</p>
+   409→                </div>
+   410→              )}
+   411→              {complaint.rejectionReason && (
+   412→                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm">
+   413→                  <span className="font-medium text-amber-700">Rejection Reason:</span>
+   414→                  <p className="text-amber-600 mt-1">{complaint.rejectionReason}</p>
+   415→                </div>
+   416→              )}
+   417→            </CardContent>
+   418→          </Card>
+   419→
+   420→          {/* Work Order Card */}
+   421→          {complaint.workOrders && complaint.workOrders.length > 0 && (
+   422→            <Card>
+   423→              <CardHeader className="pb-3">
+   424→                <div className="flex items-center justify-between">
+   425→                  <CardTitle className="text-base font-semibold flex items-center gap-2">
+   426→                    <ClipboardList className="h-4 w-4" /> Work Order
+   427→                  </CardTitle>
+   428→                  <StatusBadge status={complaint.workOrders[0].status} />
+   429→                </div>
+   430→              </CardHeader>
+   431→              <CardContent className="space-y-3 text-sm">
+   432→                <div className="grid grid-cols-2 gap-3">
+   433→                  <div><span className="text-gray-500">Type:</span> <span className="font-medium capitalize">{complaint.workOrders[0].type}</span></div>
+   434→                  <div><span className="text-gray-500">Technician:</span> <span className="font-medium">{complaint.workOrders[0].assignedToName || '—'}</span></div>
+   435→                  {complaint.workOrders[0].laborHours != null && <div><span className="text-gray-500">Labor:</span> <span className="font-medium">{complaint.workOrders[0].laborHours}h</span></div>}
+   436→                  {complaint.workOrders[0].totalCost != null && <div><span className="text-gray-500">Total Cost:</span> <span className="font-bold text-emerald-700">${complaint.workOrders[0].totalCost?.toFixed(2)}</span></div>}
+   437→                </div>
+   438→                {complaint.workOrders[0].notes && <p className="text-gray-600 bg-gray-50 rounded p-2">{complaint.workOrders[0].notes}</p>}
+   439→              </CardContent>
+   440→            </Card>
+   441→          )}
+   442→        </div>
+   443→
+   444→        {/* RIGHT COLUMN */}
+   445→        <div className="space-y-5">
+   446→          {/* Action Panel */}
+   447→          {actions.filter(a => !a.isAutomatic).length > 0 && (
+   448→            <Card className="border-dashed border-2 border-emerald-200 bg-emerald-50/30">
+   449→              <CardHeader className="pb-3"><CardTitle className="text-base font-semibold flex items-center gap-2"><Play className="h-4 w-4 text-emerald-600" /> Available Actions</CardTitle></CardHeader>
+   450→              <CardContent className="space-y-2">
+   451→                {actions.filter(a => !a.isAutomatic).map((action, i) => (
+   452→                  <Button
+   453→                    key={i}
+   454→                    variant="outline"
+   455→                    className={cn('w-full justify-start gap-2 h-10', action.color, 'border-current/20 hover:opacity-80')}
+   456→                    onClick={() => openDialog(action)}
+   457→                    disabled={transitioning}
+   458→                  >
+   459→                    {action.label}
+   460→                    {transitioning && <Loader2 className="h-3.5 w-3.5 animate-spin ml-auto" />}
+   461→                  </Button>
+   462→                ))}
+   463→              </CardContent>
+   464→            </Card>
+   465→          )}
+   466→
+   467→          {/* Timeline */}
+   468→          <Card>
+   469→            <CardHeader className="pb-3"><CardTitle className="text-base font-semibold flex items-center gap-2"><Clock className="h-4 w-4" /> Activity Timeline</CardTitle></CardHeader>
+   470→            <CardContent>
+   471→              <ScrollArea className="max-h-[500px] pr-2">
+   472→                <div className="relative space-y-0">
+   473→                  {timeline.length === 0 && <p className="text-sm text-gray-400 py-4 text-center">No activity yet</p>}
+   474→                  {timeline.map((entry, idx) => (
+   475→                    <div key={entry.id} className="flex gap-3 pb-4 last:pb-0">
+   476→                      <div className="flex flex-col items-center">
+   477→                        <div className="mt-1"><TimelineIcon action={entry.action} /></div>
+   478→                        {idx < timeline.length - 1 && <div className="w-px flex-1 bg-gray-200 mt-1" />}
+   479→                      </div>
+   480→                      <div className="flex-1 min-w-0 pb-1">
+   481→                        <p className="text-sm font-medium text-gray-800">{entry.description}</p>
+   482→                        <div className="flex items-center gap-2 mt-1 flex-wrap">
+   483→                          {entry.performedByName && (
+   484→                            <span className="text-xs text-gray-500">{entry.performedByName}</span>
+   485→                          )}
+   486→                          {entry.performedByRole && (
+   487→                            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4">{entry.performedByRole}</Badge>
+   488→                          )}
+   489→                          <span className="text-[11px] text-gray-400">{fmtRelative(entry.createdAt)}</span>
+   490→                        </div>
+   491→                      </div>
+   492→                    </div>
+   493→                  ))}
+   494→                </div>
+   495→              </ScrollArea>
+   496→            </CardContent>
+   497→          </Card>
+   498→        </div>
+   499→      </div>
+   500→
+   501→      {/* ============ DIALOGS ============ */}
+   502→      <AnimatePresence>
+   503→        {/* ASSIGN DIALOG */}
+   504→        {dialogType === 'assigned' && (
+   505→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   506→            <DialogContent className="sm:max-w-md">
+   507→              <DialogHeader><DialogTitle>Assign Technician</DialogTitle><DialogDescription>Select a technician and supervisor for this complaint.</DialogDescription></DialogHeader>
+   508→              <div className="space-y-4 py-2">
+   509→                <div><Label>Technician *</Label><Select value={formData.assignedToId} onValueChange={v => setFormData(p => ({ ...p, assignedToId: v }))}><SelectTrigger><SelectValue placeholder="Select technician..." /></SelectTrigger><SelectContent>{technicians.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent></Select></div>
+   510→                <div><Label>Supervisor</Label><Select value={formData.supervisorId} onValueChange={v => setFormData(p => ({ ...p, supervisorId: v }))}><SelectTrigger><SelectValue placeholder="Select supervisor..." /></SelectTrigger><SelectContent>{supervisors.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent></Select></div>
+   511→              </div>
+   512→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Assign'}</Button></DialogFooter>
+   513→            </DialogContent>
+   514→          </Dialog>
+   515→        )}
+   516→
+   517→        {/* ACCEPT DIALOG */}
+   518→        {dialogType === 'accepted' && (
+   519→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   520→            <DialogContent className="sm:max-w-md">
+   521→              <DialogHeader><DialogTitle>Accept Assignment</DialogTitle><DialogDescription>Confirm you will handle this complaint.</DialogDescription></DialogHeader>
+   522→              <div className="space-y-4 py-2">
+   523→                <div><Label>Estimated Time of Arrival</Label><Input placeholder="e.g., 30 minutes" value={formData.eta} onChange={e => setFormData(p => ({ ...p, eta: e.target.value }))} /></div>
+   524→              </div>
+   525→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Accept'}</Button></DialogFooter>
+   526→            </DialogContent>
+   527→          </Dialog>
+   528→        )}
+   529→
+   530→        {/* REJECT DIALOG */}
+   531→        {dialogType === 'assignment_rejected' && (
+   532→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   533→            <DialogContent className="sm:max-w-md">
+   534→              <DialogHeader><DialogTitle>Reject Assignment</DialogTitle><DialogDescription>Provide a reason for rejecting this assignment.</DialogDescription></DialogHeader>
+   535→              <div className="py-2"><Label>Reason *</Label><Textarea rows={3} value={formData.rejectionReason} onChange={e => setFormData(p => ({ ...p, rejectionReason: e.target.value }))} placeholder="Why are you rejecting this assignment?" /></div>
+   536→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button variant="destructive" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Reject'}</Button></DialogFooter>
+   537→            </DialogContent>
+   538→          </Dialog>
+   539→        )}
+   540→
+   541→        {/* START DIALOG */}
+   542→        {dialogType === 'work_started' && (
+   543→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   544→            <DialogContent className="sm:max-w-md">
+   545→              <DialogHeader><DialogTitle>Start Work</DialogTitle><DialogDescription>Confirm you are starting work on this complaint.</DialogDescription></DialogHeader>
+   546→              <div className="py-2 text-sm text-gray-600">This will record the start time and notify the customer.</div>
+   547→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button className="bg-amber-600 hover:bg-amber-700" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Start Work'}</Button></DialogFooter>
+   548→            </DialogContent>
+   549→          </Dialog>
+   550→        )}
+   551→
+   552→        {/* COMPLETE WORK DIALOG */}
+   553→        {dialogType === 'work_completed' && (
+   554→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   555→            <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+   556→              <DialogHeader><DialogTitle>Complete Work</DialogTitle><DialogDescription>Fill in the work details, checklist, and costs.</DialogDescription></DialogHeader>
+   557→              <div className="space-y-4 py-2">
+   558→                <div><Label>Checklist / Completion Notes</Label><Textarea rows={4} value={formData.checklistData} onChange={e => setFormData(p => ({ ...p, checklistData: e.target.value }))} placeholder="List completed tasks and inspection results..." /></div>
+   559→                <div className="grid grid-cols-2 gap-3">
+   560→                  <div><Label>Labor Hours</Label><Input type="number" step="0.5" value={formData.laborHours} onChange={e => setFormData(p => ({ ...p, laborHours: e.target.value }))} /></div>
+   561→                  <div><Label>Labor Cost ($)</Label><Input type="number" step="0.01" value={formData.laborCost} onChange={e => setFormData(p => ({ ...p, laborCost: e.target.value }))} /></div>
+   562→                </div>
+   563→                <div><Label>Material Cost ($)</Label><Input type="number" step="0.01" value={formData.materialCost} onChange={e => setFormData(p => ({ ...p, materialCost: e.target.value }))} /></div>
+   564→                <div>
+   565→                  <div className="flex items-center justify-between mb-2"><Label>Materials Used</Label><Button size="sm" variant="outline" onClick={addMaterial}><Plus className="h-3 w-3 mr-1" />Add</Button></div>
+   566→                  <div className="space-y-2">
+   567→                    {materials.map((m, i) => (
+   568→                      <div key={i} className="flex gap-2 items-center">
+   569→                        <Input className="flex-1" placeholder="Item name" value={m.name} onChange={e => updateMaterial(i, 'name', e.target.value)} />
+   570→                        <Input className="w-16" placeholder="Qty" value={m.qty} onChange={e => updateMaterial(i, 'qty', e.target.value)} />
+   571→                        <Input className="w-16" placeholder="Unit" value={m.unit} onChange={e => updateMaterial(i, 'unit', e.target.value)} />
+   572→                        <Input className="w-20" placeholder="Cost" value={m.cost} onChange={e => updateMaterial(i, 'cost', e.target.value)} />
+   573→                        <Button size="icon" variant="ghost" className="shrink-0 h-8 w-8" onClick={() => removeMaterial(i)}><Trash2 className="h-3.5 w-3.5 text-rose-500" /></Button>
+   574→                      </div>
+   575→                    ))}
+   576→                  </div>
+   577→                </div>
+   578→                <div><Label>Remarks</Label><Textarea rows={2} value={formData.remarks} onChange={e => setFormData(p => ({ ...p, remarks: e.target.value }))} placeholder="Additional remarks..." /></div>
+   579→              </div>
+   580→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button className="bg-emerald-600 hover:bg-emerald-700" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Complete Work'}</Button></DialogFooter>
+   581→            </DialogContent>
+   582→          </Dialog>
+   583→        )}
+   584→
+   585→        {/* CLIENT CONFIRM DIALOG */}
+   586→        {dialogType === 'client_confirmed' && (
+   587→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   588→            <DialogContent className="sm:max-w-md">
+   589→              <DialogHeader><DialogTitle>Confirm Completion</DialogTitle><DialogDescription>Confirm the work has been completed to your satisfaction.</DialogDescription></DialogHeader>
+   590→              <div className="py-2 text-sm text-gray-600">This will generate a draft invoice and notify the finance team.</div>
+   591→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button className="bg-emerald-600 hover:bg-emerald-700" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Confirm Completion'}</Button></DialogFooter>
+   592→            </DialogContent>
+   593→          </Dialog>
+   594→        )}
+   595→
+   596→        {/* CLIENT REJECT / REWORK DIALOG */}
+   597→        {(dialogType === 'rework_requested' || dialogType === 'rework_started') && (
+   598→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   599→            <DialogContent className="sm:max-w-md">
+   600→              <DialogHeader>
+   601→                <DialogTitle>{dialogType === 'rework_requested' ? 'Request Rework' : 'Start Rework'}</DialogTitle>
+   602→                <DialogDescription>{dialogType === 'rework_requested' ? 'Describe what needs to be fixed.' : 'Confirm you are starting the rework.'}</DialogDescription>
+   603→              </DialogHeader>
+   604→              {dialogType === 'rework_requested' && (
+   605→                <div className="py-2"><Label>Reason *</Label><Textarea rows={3} value={formData.reworkReason} onChange={e => setFormData(p => ({ ...p, reworkReason: e.target.value }))} placeholder="What needs to be reworked?" /></div>
+   606→              )}
+   607→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button variant={dialogType === 'rework_requested' ? 'destructive' : 'default'} onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : dialogType === 'rework_requested' ? 'Request Rework' : 'Start Rework'}</Button></DialogFooter>
+   608→            </DialogContent>
+   609→          </Dialog>
+   610→        )}
+   611→
+   612→        {/* APPROVE INVOICE DIALOG */}
+   613→        {dialogType === 'invoice_approved' && (
+   614→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   615→            <DialogContent className="sm:max-w-md">
+   616→              <DialogHeader><DialogTitle>Approve Invoice</DialogTitle><DialogDescription>Review and approve the draft invoice.</DialogDescription></DialogHeader>
+   617→              <div className="py-2 text-sm text-gray-600">Once approved, the invoice can be sent to the customer.</div>
+   618→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Approve'}</Button></DialogFooter>
+   619→            </DialogContent>
+   620→          </Dialog>
+   621→        )}
+   622→
+   623→        {/* SEND INVOICE DIALOG */}
+   624→        {dialogType === 'invoice_sent' && (
+   625→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   626→            <DialogContent className="sm:max-w-md">
+   627→              <DialogHeader><DialogTitle>Send Invoice to Customer</DialogTitle><DialogDescription>Choose how to deliver the invoice.</DialogDescription></DialogHeader>
+   628→              <div className="py-2">
+   629→                <Label>Send Via *</Label>
+   630→                <Select value={formData.sentVia} onValueChange={v => setFormData(p => ({ ...p, sentVia: v }))}>
+   631→                  <SelectTrigger><SelectValue placeholder="Select method..." /></SelectTrigger>
+   632→                  <SelectContent>
+   633→                    <SelectItem value="email">Email</SelectItem>
+   634→                    <SelectItem value="whatsapp">WhatsApp</SelectItem>
+   635→                    <SelectItem value="portal">Customer Portal</SelectItem>
+   636→                  </SelectContent>
+   637→                </Select>
+   638→              </div>
+   639→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Send Invoice'}</Button></DialogFooter>
+   640→            </DialogContent>
+   641→          </Dialog>
+   642→        )}
+   643→
+   644→        {/* RECORD PAYMENT DIALOG */}
+   645→        {dialogType === 'invoice_paid' && (
+   646→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   647→            <DialogContent className="sm:max-w-md">
+   648→              <DialogHeader><DialogTitle>Record Payment</DialogTitle><DialogDescription>Record the payment received from the customer.</DialogDescription></DialogHeader>
+   649→              <div className="space-y-4 py-2">
+   650→                <div><Label>Payment Method *</Label><Select value={formData.paymentMethod} onValueChange={v => setFormData(p => ({ ...p, paymentMethod: v }))}><SelectTrigger><SelectValue placeholder="Select method..." /></SelectTrigger><SelectContent><SelectItem value="bank_transfer">Bank Transfer</SelectItem><SelectItem value="cash">Cash</SelectItem><SelectItem value="card">Card</SelectItem><SelectItem value="cheque">Cheque</SelectItem><SelectItem value="other">Other</SelectItem></SelectContent></Select></div>
+   651→                <div><Label>Payment Reference</Label><Input value={formData.paymentRef} onChange={e => setFormData(p => ({ ...p, paymentRef: e.target.value }))} placeholder="Transaction ID / Reference" /></div>
+   652→                <div><Label>Payment Date</Label><Input type="date" value={formData.paidAt ? formData.paidAt.split('T')[0] : ''} onChange={e => setFormData(p => ({ ...p, paidAt: e.target.value }))} /></div>
+   653→              </div>
+   654→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button className="bg-green-600 hover:bg-green-700" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Record Payment'}</Button></DialogFooter>
+   655→            </DialogContent>
+   656→          </Dialog>
+   657→        )}
+   658→
+   659→        {/* CLOSE DIALOG */}
+   660→        {dialogType === 'complaint_closed' && (
+   661→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   662→            <DialogContent className="sm:max-w-md">
+   663→              <DialogHeader><DialogTitle>Close Complaint</DialogTitle><DialogDescription>Are you sure you want to close this complaint? This action locks the work order and archives everything.</DialogDescription></DialogHeader>
+   664→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button variant="destructive" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Close Complaint'}</Button></DialogFooter>
+   665→            </DialogContent>
+   666→          </Dialog>
+   667→        )}
+   668→
+   669→        {/* STATUS OVERRIDE DIALOG */}
+   670→        {dialogType === 'status_override' && (
+   671→          <Dialog open onOpenChange={() => setDialogType(null)}>
+   672→            <DialogContent className="sm:max-w-md">
+   673→              <DialogHeader><DialogTitle className="flex items-center gap-2"><ShieldAlert className="h-5 w-5 text-amber-600" /> Override Status</DialogTitle><DialogDescription>Force-transition to any status. This will be audited.</DialogDescription></DialogHeader>
+   674→              <div className="space-y-4 py-2">
+   675→                <div><Label>Target Status *</Label><Select onValueChange={v => setDialogData(p => ({ ...p, targetStatus: v }))}><SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger><SelectContent>{[...MAIN_FLOW, 'REWORK_REQUIRED'].map(s => <SelectItem key={s} value={s}>{STEP_LABELS[s] || s}</SelectItem>)}</SelectContent></Select></div>
+   676→                <div><Label>Notes</Label><Textarea rows={2} value={formData.notes} onChange={e => setFormData(p => ({ ...p, notes: e.target.value }))} placeholder="Reason for override..." /></div>
+   677→              </div>
+   678→              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button variant="destructive" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Override'}</Button></DialogFooter>
+   679→            </DialogContent>
+   680→          </Dialog>
+   681→        )}
+   682→      </AnimatePresence>
+   683→    </div>
+   684→  );
+   685→}

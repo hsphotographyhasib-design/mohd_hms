@@ -114,3 +114,46 @@ Stage Summary:
 - Timeline + notification system for every action
 - Admin override capability with audit trail
 - All code lints cleanly, dev server compiles without errors
+---
+Task ID: 10
+Agent: Escalation Rules Builder
+Task: Build SLA-based escalation rules engine with auto-notification
+
+Work Log:
+- Created src/lib/workflow/escalation-rules.ts with 6 SLA rules
+- Created POST /api/complaints/escalation-check endpoint (also includes GET for rule definitions)
+- Created GET /api/complaints/escalation-rules endpoint
+- Lint passes clean
+
+Stage Summary:
+- 6 escalation rules covering all non-terminal statuses (NEW, ASSIGNED, WORK_ORDER_CREATED, IN_PROGRESS, WAITING_CLIENT_CONFIRMATION, INVOICE_SENT)
+- Idempotent: each rule fires at most once per complaint per status (checks ComplaintTimeline for existing escalation_triggered entries with matching rule label)
+- Creates timeline + notifications + audit log atomically via db.$transaction
+- Role-targeted notifications: supervisors, admins, finance, and customers as appropriate per rule
+- Admin-only API to trigger checks manually (super_admin can cross-tenant)
+- Read-only escalation-rules endpoint for admin dashboard visibility
+---
+Task ID: 11
+Agent: Main Agent (Verification & Bug Fixes)
+Task: End-to-end verification with Agent Browser, fix critical bugs
+
+Work Log:
+- Regenerated Prisma client (db.complaintTimeline was undefined due to stale cached client)
+- Restarted dev server with clean .next cache
+- Fixed escalation-rules.ts: AuditLog FK constraint violation (userId: 'system' → query valid admin user)
+- Fixed workflow route.ts: getComplaintTimeline() arguments were swapped (complaint.id, tenantId → tenantId, complaint.id) — both GET and POST handlers
+- Enhanced GET response to include source field and full workOrders array
+- Cleared stale escalation_triggered timeline entries and re-ran check
+- Agent Browser E2E verification: landing page → login → dashboard → complaints list → complaint detail → override dialog → timeline
+- Verified escalation check API: triggered 5 escalations (3 assigned_unaccepted, 2 work_stalled)
+- Verified escalation rules API: returns all 6 rule definitions
+- Screenshot captured: /home/z/my-project/tool-results/complaint-detail-with-timeline.png
+
+Stage Summary:
+- Critical bug fix: timeline was always empty due to swapped function arguments
+- Critical bug fix: escalation audit log FK violation due to 'system' userId
+- All 11 tasks now complete
+- Lint: 0 errors
+- Dev log: 0 errors
+- Browser: 0 console errors
+- Full workflow verified: status progress bar, complaint details, work order card, available actions, activity timeline with escalation entries
