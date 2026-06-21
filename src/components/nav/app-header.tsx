@@ -122,7 +122,7 @@ const glassStyles =
 export function AppHeader() {
   // ---- State & Stores ----
   const { setView } = useAppStore();
-  const { user, logout } = useAuthStore();
+  const { user, secureLogout } = useAuthStore();
   const { unreadCount, notifications, markAllAsRead } = useNotificationStore();
   const { theme, setTheme } = useTheme();
 
@@ -616,7 +616,7 @@ export function AppHeader() {
                       <button
                         onClick={() => {
                           setProfileOpen(false);
-                          logout();
+                          secureLogout('You have been logged out.');
                         }}
                         className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition-colors"
                       >

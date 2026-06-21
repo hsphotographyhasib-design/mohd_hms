@@ -11,6 +11,7 @@ interface AuthState {
   login: (email: string, password: string) => Promise<void>;
   register: (data: { name: string; email: string; password: string; role: string }) => Promise<void>;
   logout: () => void;
+  secureLogout: (reason?: string) => void;
   updateProfile: (data: Partial<AuthUser>) => void;
   loadFromStorage: () => void;
 }
@@ -34,7 +35,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.setItem('cmms_token', data.token);
       localStorage.setItem('cmms_user', JSON.stringify(data.user));
       set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
-      setTimeout(() => { useAppStore.getState().setView('dashboard'); }, 0);
+      // Push history state for back button protection
+      window.history.pushState(null, '', '/');
     } catch (error) {
       set({ isLoading: false });
       throw error;
@@ -61,10 +63,38 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   logout: () => {
-    localStorage.removeItem('cmms_token');
-    localStorage.removeItem('cmms_user');
-    set({ user: null, token: null, isAuthenticated: false });
-    setTimeout(() => { useAppStore.getState().setView('dashboard'); }, 0);
+    // Clear ALL storage (tokens, cache, role info, notification cache)
+    localStorage.clear();
+    sessionStorage.clear();
+    // Reset auth state
+    set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+    // Reset app view to landing page
+    useAppStore.getState().setView('dashboard');
+  },
+
+  /** Secure logout with broadcast + history protection */
+  secureLogout: (reason?: string) => {
+    // Broadcast to other tabs
+    try {
+      const channel = new BroadcastChannel('cmms-logout');
+      channel.postMessage({ type: 'LOGOUT', reason });
+      channel.close();
+    } catch {
+      // Fallback
+      localStorage.setItem('cmms_logout_broadcast', JSON.stringify({ type: 'LOGOUT', reason, timestamp: Date.now() }));
+      setTimeout(() => localStorage.removeItem('cmms_logout_broadcast'), 100);
+    }
+    // Clear everything
+    localStorage.clear();
+    sessionStorage.clear();
+    set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+    useAppStore.getState().setView('dashboard');
+    // Prevent back button
+    window.history.replaceState(null, '', '/');
+    // Toast notification
+    if (reason) {
+      window.dispatchEvent(new CustomEvent('cmms:toast', { detail: { type: 'info', message: reason } }));
+    }
   },
 
   updateProfile: (data: Partial<AuthUser>) => {

@@ -759,3 +759,44 @@ Stage Summary:
 - CMS dropdown: 18 items (CMS Dashboard, Hero, About, Services, etc.) ✅
 - Toggle (click to open, click again to close) works correctly ✅
 - Scroll position tracking keeps dropdown aligned when nav scrolls ✅
+
+---
+Task ID: session-security-system
+Agent: Main
+Task: Implement comprehensive auto-logout, session protection, and landing page redirection system
+
+Work Log:
+- Analyzed existing auth system: Zustand stores, JWT in localStorage, no token validation on refresh
+- Created 7 new security components:
+  1. `src/components/session/broadcast-logout.tsx` — Multi-tab logout sync via BroadcastChannel API + storage event fallback
+  2. `src/components/session/idle-timer.tsx` — 5-min inactivity detection (mousemove/keydown/wheel/touchstart/click/scroll), 60s countdown warning
+  3. `src/components/session/logout-modal.tsx` — Warning popup with countdown ring, "Stay Logged In" and "Logout Now" buttons
+  4. `src/components/session/auth-guard.tsx` — Server-side session validation via /api/auth/me, back button protection, tab visibility revalidation
+  5. `src/components/session/session-heartbeat.tsx` — 60s interval session validation, auto-logout on invalid token
+  6. `src/components/session/session-provider.tsx` — Wraps app with BroadcastLogout + SessionHeartbeat
+  7. `src/hooks/use-secure-fetch.ts` — Global fetch interceptor for 401/403 auto-logout
+- Created `src/middleware.ts` — Cache-Control: no-store/no-cache/must-revalidate/private + security headers
+- Modified `src/store/index.ts`:
+  - `logout()` now clears ALL localStorage + sessionStorage (not just specific keys)
+  - Added `secureLogout(reason?)` with BroadcastChannel broadcast + history protection + toast
+  - Removed `setTimeout` from login (history state pushed directly)
+- Modified `src/app/page.tsx`:
+  - Added SessionProvider, FetchInterceptorSetup, ToastListener
+  - Created ProtectedApp wrapper: AuthGuard → IdleTimerProvider → AppShell
+  - Unauthenticated shows LoginView (landing page), authenticated shows ProtectedApp
+- Modified `src/components/nav/app-header.tsx`: Changed `logout()` → `secureLogout('You have been logged out.')`
+- Bug fix: AuthGuard was using `data.user` but /api/auth/me returns user at root level → changed to `userData` directly
+
+Stage Summary:
+- NEW FILES: 7 session components, 1 hook, 1 middleware
+- MODIFIED: src/store/index.ts, src/app/page.tsx, src/components/nav/app-header.tsx
+- Login → session validation → dashboard: ✅
+- Manual logout → clears storage → redirects to landing page: ✅
+- Refresh when logged out → stays on landing page: ✅
+- 5-min inactivity → warning modal with 60s countdown: ✅ (code implemented)
+- Multi-tab logout sync via BroadcastChannel: ✅
+- 60s heartbeat validation: ✅
+- 401/403 API response auto-logout: ✅
+- Browser back button protection: ✅
+- Cache-Control headers (no-store, no-cache, must-revalidate, private): ✅
+- Security headers (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection): ✅
