@@ -45,7 +45,7 @@ export async function GET() {
     ] = await Promise.all([
       db.cmsBlog.count({ where: { tenantId, status: 'published' } }),
       db.cmsService.count({ where: { tenantId, status: 'active' } }),
-      db.cmsProject.count({ where: { tenantId, status: 'active' } }),
+      db.cmsProject.count({ where: { tenantId, status: { in: ['published', 'active'] } } }),
       db.cmsTestimonial.count({ where: { tenantId, status: 'active' } }),
       db.cmsContactMessage.count({ where: { tenantId } }),
       db.cmsCareerApplication.count({ where: { tenantId } }),
@@ -86,7 +86,7 @@ export async function GET() {
         userId: a.userId,
         action: a.action,
         section: a.section,
-        details: a.details,
+        description: a.details ?? '',
         ipAddress: a.ipAddress,
         createdAt: a.createdAt.toISOString(),
       })),

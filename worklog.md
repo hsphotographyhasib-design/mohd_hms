@@ -1063,3 +1063,28 @@ Stage Summary:
 - `src/app/api/cms/seed-landing/route.ts` — NEW: CMS seed endpoint
 - `public/landing.html` — MODIFIED: Fetches from CMS API, renders dynamic content with fallbacks
 - CMS Dashboard now drives: Hero, Services (15), Industries (14), Testimonials (3), Projects (6), About, Footer, Careers (4), Blogs (3), Announcements
+---
+Task ID: 1
+Agent: main
+Task: Seed CMS data for FacilityPro Services tenant and update CMS Dashboard
+
+Work Log:
+- Identified root cause: CMS data was seeded for tenant "MOHD.HMS ENTERPRISE" but user belongs to "FacilityPro Services" tenant, so dashboard showed all zeros
+- Seeded CMS data for tenant cmqnfygv10000p64koo63w5fs: Hero, 3 Blogs, 15 Services, 14 Industries, 3 Testimonials, 6 Projects, 4 About Settings, Footer, 4 Career Jobs, 2 Announcements, 3 Contact Messages, 8 Activity Logs
+- Fixed testimonial status (published→active) to match dashboard API filter
+- Fixed dashboard API: mapped `details` field to `description` for frontend compatibility
+- Fixed dashboard API: project count now includes both "published" and "active" statuses
+- Rewrote CMS Dashboard component with:
+  - 8 clickable KPI cards with real data
+  - Content Summary section (total items, blogs, media, careers)
+  - Landing Page Status section (connection status with green checkmarks)
+  - Quick Actions (Manage Services, New Blog Post, View Inbox, Edit Landing Page)
+  - Recent Activity table with action icons, section badges, and timestamps
+  - Preview Site button in header
+  - Single API call (removed redundant separate activity fetch)
+
+Stage Summary:
+- Dashboard now shows real metrics: 6 blogs, 15 services, 6 projects, 3 testimonials, 3 contacts, 2 unread, 2 announcements
+- Landing Page is connected via status section showing live content counts
+- All KPI cards are clickable and navigate to respective CMS management views
+- Agent Browser verified all sections render correctly with real data
