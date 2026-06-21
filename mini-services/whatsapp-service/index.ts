@@ -3,6 +3,29 @@ import cors from 'cors';
 import { createServer } from 'http';
 import path from 'path';
 import fs from 'fs';
+import { execSync, spawn } from 'child_process';
+
+// ============ VIRTUAL DISPLAY (Xvfb) ============
+let xvfbProcess: ReturnType<typeof spawn> | null = null;
+function startVirtualDisplay(): void {
+  if (process.env.DISPLAY) {
+    console.log(`[Xvfb] DISPLAY already set: ${process.env.DISPLAY}`);
+    return;
+  }
+  try {
+    xvfbProcess = spawn('Xvfb', [':99', '-screen', '0', '1920x1080x24', '-ac', '+extension', 'GLX', '+render', '-noreset'], {
+      stdio: 'ignore',
+      detached: true,
+    });
+    process.env.DISPLAY = ':99';
+    console.log('[Xvfb] Virtual display started on :99');
+  } catch (err) {
+    console.warn('[Xvfb] Failed to start virtual display:', err);
+  }
+}
+
+// Start virtual display before anything else
+startVirtualDisplay();
 
 // ============ CHROME PATH DETECTION ============
 function detectChromePath(): string | undefined {
@@ -386,27 +409,25 @@ async function startConnection(webhookUrl?: string): Promise<{ success: boolean;
     const client = await create({
       sessionId,
       sessionDataPath,
-      qrTimeout: 0, // infinite QR wait
-      qrRefreshS: 20, // refresh QR every 20s
+      qrTimeout: 0,
+      qrRefreshS: 20,
       killProcessOnBrowserClose: true,
-      chromiumArgs: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--disable-gpu',
-        '--window-size=1920,1080',
-        '--disable-extensions',
-      ],
-      headless: true,
+      headless: false, // Use real (virtual) display via Xvfb
       useChrome: true,
       executablePath: CHROME_PATH,
       autoRefresh: true,
       cacheEnabled: true,
       restartOnCrash: true,
-      disableSpins: true,
-      waitForLogin: true,
-      logLevel: 'WARN',
+      waitForLogin: false,
+      logLevel: 'ERROR',
+      popup: true,
+      browserArgs: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-blink-features=AutomationControlled',
+        '--window-size=1280,800',
+      ],
     });
 
     clientInstance = client;
