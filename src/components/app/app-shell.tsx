@@ -2,10 +2,9 @@
 
 import { lazy, Suspense } from 'react';
 import { useAppStore } from '@/store';
-import { cn } from '@/lib/utils';
-import { Sidebar } from './sidebar';
-import { Header } from './header';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AppHeader } from '@/components/nav/app-header';
+import { FloatingNavBar } from '@/components/nav/floating-nav-bar';
 
 // Lazy-loaded module views
 const DashboardView = lazy(() => import('@/components/modules/dashboard/dashboard-view').then(m => ({ default: m.DashboardView })));
@@ -113,23 +112,18 @@ function ViewRouter() {
 }
 
 export function AppShell() {
-  const { sidebarOpen } = useAppStore();
-
   return (
     <div className="min-h-screen bg-background">
-      <Sidebar />
-      <div
-        className={cn(
-          'transition-all duration-200',
-          'lg:ml-[256px]',
-          !sidebarOpen && 'lg:ml-[68px]'
-        )}
-      >
-        <Header />
-        <main className="min-h-[calc(100vh-4rem)]">
+      {/* Sticky Header */}
+      <AppHeader />
+      {/* Floating Navigation Bar */}
+      <FloatingNavBar />
+      {/* Main Content - full width, no sidebar margin */}
+      <main className="pt-28 pb-8">
+        <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
           <ViewRouter />
-        </main>
-      </div>
+        </div>
+      </main>
     </div>
   );
 }

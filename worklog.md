@@ -602,3 +602,114 @@ Stage Summary:
 - package.json: Removed `| tee dev.log` from dev script to prevent pipe-break crashes
 - Dev server now stays alive when backgrounded
 - File changed: /home/z/my-project/package.json (line 6)
+---
+Task ID: 5
+Agent: Main Architect
+Task: Build premium sticky AppHeader component (replaces old header + sidebar)
+
+Work Log:
+- Created `/home/z/my-project/src/components/nav/app-header.tsx` — full-featured AppHeader component
+- Layout: `[Logo + Name] [Search Bar] [QR] [Bell] [Moon] [Lang] [Avatar ▼]`
+- Logo: emerald rounded-lg Building2 icon + "FacilityPro" name
+- Search Bar: rounded-full, bg-muted/50, Cmd+K keyboard shortcut, expandable dropdown with quick links (Dashboard, Equipment, Complaints, Work Orders, Customers, Invoices)
+- QR Scanner button: placeholder with `toast.info('QR Scanner opened')`
+- Notification Bell: badge counter from `useNotificationStore`, toggles notification panel
+- Dark Mode Toggle: AnimatePresence with Sun/Moon rotation animation, uses `useTheme()` from next-themes
+- Language Switcher: Globe icon, cycles EN/MS with toast notification
+- Profile Dropdown: glass morphism (backdrop-blur-xl), Framer Motion scale+fade animation, user info + role badge, menu items (Profile, Settings, Theme, Language, Logout)
+- Quick Actions FAB: fixed bottom-right emerald "+" button, expands to glass panel with 5 quick actions (Complaint, Work Order, Invoice, Quotation, Equipment)
+- Notification Panel: glass popup below bell, "Mark all read" button, empty state with placeholder
+- ALL dropdowns: built with divs + Framer Motion (no shadcn DropdownMenu)
+- Keyboard: Cmd+K opens search, Esc closes all panels
+- Click-outside: closes profile, notification, quick actions panels
+- Responsive: search text hidden on mobile, name hidden on small screens
+- Hydration: uses `useSyncExternalStore` for safe theme icon mounting
+- ESLint: 0 errors in app-header.tsx (pre-existing errors in floating-nav-bar.tsx unrelated)
+
+Stage Summary:
+- Premium AppHeader component created at `/src/components/nav/app-header.tsx`
+- All interactions functional (except QR scanner placeholder)
+- Glass morphism on all dropdowns/panels
+- Framer Motion animations throughout
+- Responsive design for mobile/desktop
+- Keyboard shortcuts (Cmd+K, Esc) and click-outside handling
+---
+Task ID: 6
+Agent: Main Architect
+Task: Build premium FloatingNavBar component
+
+Work Log:
+- Created `/home/z/my-project/src/components/nav/floating-nav-bar.tsx`
+- Glassmorphism bar: `bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl` with rounded-2xl, centered max-w-5xl
+- Framer Motion: fade-in on mount, scale on hover per item, spring-animated active underline
+- 16 main nav items + CMS item (18 sub-items) filtered by `canAccess(user.role, feature)`
+- Equipment dropdown: Equipment Registry, Asset Categories, QR Codes
+- CMS section: separated by vertical divider, 18 sub-items (Dashboard, Hero, About, Services, Industries, Projects, Blog, Testimonials, Careers, Contact, Media, SEO, Header, Footer, Announcements, Popups, Form Builder, Activity Log)
+- Horizontal scroll: mouse wheel mapped to scrollLeft, left/right arrow buttons with `bg-white/60 backdrop-blur rounded-full`
+- Overflow detection via ResizeObserver — arrows show/hide based on scroll position
+- Active item: emerald underline with glow `shadow-[0_2px_8px_rgba(16,185,129,0.4)]` and spring layoutId animation
+- Active item auto-scrolled into view on view change
+- Dropdown: 200ms hover delay to open, 500ms leave delay to close, click to toggle
+- Dropdown styling: `bg-white/80 backdrop-blur-xl rounded-xl` with Framer Motion `AnimatePresence` (opacity, y, scale)
+- Active sub-item: emerald left border + bg highlight
+- Keyboard: Esc closes dropdown, ArrowUp/Down navigates submenu, Enter selects
+- Touch: tap toggles dropdown
+- Extracted `ArrowButton` as standalone component (fixed ESLint static-component rule)
+- ESLint: 0 errors, 0 warnings
+
+Stage Summary:
+- Premium FloatingNavBar at `/src/components/nav/floating-nav-bar.tsx`
+- Full role-based filtering, glassmorphism, horizontal scroll, keyboard/touch/mouse support
+- Custom dropdown with Framer Motion — no shadcn DropdownMenu used
+---
+Task ID: 6
+Agent: Main Architect
+Task: Replace sidebar with floating top navigation bar - UI overhaul
+
+Work Log:
+- Removed left sidebar completely from AppShell layout
+- Created /src/components/nav/ directory
+- Created /src/components/nav/floating-nav-bar.tsx (601 lines):
+  - Glassmorphism floating bar: bg-white/70 backdrop-blur-xl rounded-2xl shadow-lg
+  - 16 main nav items + CMS section with 18 sub-items, all filtered by role
+  - Horizontal scrolling with mouse wheel + arrow buttons
+  - Custom dropdown submenus with Framer Motion (fade/scale/slide)
+  - Active item: emerald underline with glow shadow-[0_2px_8px_rgba(16,185,129,0.4)]
+  - Hover delay 200ms to open, 500ms to close, click toggle
+  - Full keyboard: Esc closes, ArrowUp/Down navigates submenu, Enter selects
+  - Auto-scrolls active item into view with ResizeObserver
+- Created /src/components/nav/app-header.tsx (714 lines):
+  - Sticky header: Logo + Name, Search Bar, QR Scanner, Bell, Dark Mode, Language, Profile
+  - Search with Ctrl+K command palette shortcut, glass dropdown with quick links
+  - Notification bell with badge counter, glass notification panel
+  - Dark mode toggle with Framer Motion AnimatePresence (Sun/Moon rotation)
+  - Language switcher (EN/MS cycle)
+  - Profile dropdown: glass morphism, user info, role badge, menu items, rose logout
+  - Quick Actions FAB: floating emerald + button, glass panel with 5 quick actions
+  - Click-outside closes all panels, Esc closes all panels
+- Updated /src/components/app/app-shell.tsx:
+  - Removed Sidebar import and rendering
+  - Removed sidebar margin (lg:ml-[256px] / lg:ml-[68px])
+  - Added AppHeader + FloatingNavBar
+  - Main content: full width, max-w-7xl centered, pt-28 for header+nav spacing
+- Updated /src/store/index.ts:
+  - Removed sidebarOpen, toggleSidebar, setSidebarOpen from AppState
+  - Added searchOpen, quickActionsOpen, notificationPanelOpen to AppState
+  - Removed sidebar toggle from Header (no hamburger menu needed)
+
+Stage Summary:
+- Sidebar completely removed - zero references remain in rendered code
+- New layout: Sticky Header → Floating Nav Bar → Full-Width Content
+- All 18 CMS views + 16 CMMS views accessible via floating nav
+- Glassmorphism design: backdrop-blur-xl, transparent borders, rounded corners
+- Framer Motion animations on all interactive elements
+- Horizontal scroll navigation with wheel + arrow support
+- Keyboard accessible: Tab, Esc, Arrow keys
+- Responsive: icons-only on mobile, labels on sm+
+- ESLint: 0 errors, 0 warnings
+- API verified: Login OK, CMS Dashboard 200
+- Files changed:
+  - NEW: src/components/nav/floating-nav-bar.tsx
+  - NEW: src/components/nav/app-header.tsx
+  - MODIFIED: src/components/app/app-shell.tsx
+  - MODIFIED: src/store/index.ts
