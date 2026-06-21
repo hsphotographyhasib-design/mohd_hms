@@ -127,7 +127,7 @@ function ViewRouter() {
 
 export function AppShell() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #EEF2F6 0%, #E8EDF2 100%)', backgroundAttachment: 'fixed' }}>
       {/* Sticky Header */}
       <AppHeader />
       {/* Floating Navigation Bar */}

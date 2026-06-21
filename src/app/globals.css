@@ -44,38 +44,79 @@
 }
 
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --radius: 0.75rem;
+
+  /* PAGE BACKGROUND - muted canvas */
+  --background: #EEF2F6;
+
+  /* CONTENT PANELS - white and prominent */
+  --card: #FFFFFF;
+  --popover: #FFFFFF;
+
+  /* Keep foreground as dark text */
+  --foreground: #111827;
+  --card-foreground: #111827;
+  --popover-foreground: #111827;
+
+  /* Muted areas - slightly darker than before for contrast with bg */
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
+
+  /* Secondary */
+  --secondary: #F3F4F6;
+  --secondary-foreground: #111827;
+
+  /* Accent */
+  --accent: #F3F4F6;
+  --accent-foreground: #111827;
+
+  /* Borders - visible but soft */
+  --border: #E5E7EB;
+  --input: #D1D5DB;
+
+  /* Primary stays dark */
+  --primary: #111827;
+  --primary-foreground: #FFFFFF;
+
+  /* Ring */
+  --ring: #10B981;
+
+  /* Destructive */
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.696 0.17 162.48); /* teal/emerald */
-  --chart-2: oklch(0.769 0.188 70.08);  /* amber */
-  --chart-3: oklch(0.627 0.265 303.9);  /* rose */
-  --chart-4: oklch(0.645 0.246 16.439); /* orange */
-  --chart-5: oklch(0.488 0.243 264.376); /* purple */
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Charts */
+  --chart-1: oklch(0.696 0.17 162.48);
+  --chart-2: oklch(0.769 0.188 70.08);
+  --chart-3: oklch(0.627 0.265 303.9);
+  --chart-4: oklch(0.645 0.246 16.439);
+  --chart-5: oklch(0.488 0.243 264.376);
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #10B981;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F3F4F6;
+  --sidebar-accent-foreground: #111827;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #10B981;
+}
+
+/* Custom visual hierarchy tokens */
+:root {
+  --page-bg: #EEF2F6;
+  --page-bg-end: #E8EDF2;
+  --card-bg: #FFFFFF;
+  --header-bg: rgba(255,255,255,0.9);
+  --nav-bg: rgba(255,255,255,0.95);
+  --table-header-bg: #F8FAFC;
+  --table-row-hover: #F1F5F9;
+  --border-soft: #E5E7EB;
+  --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 15px rgba(0,0,0,0.05);
+  --shadow-strong: 0 8px 30px rgba(0,0,0,0.05);
+  --shadow-modal: 0 20px 60px rgba(0,0,0,0.15);
+  --overlay-bg: rgba(15,23,42,0.35);
 }
 
 .dark {
@@ -117,7 +158,42 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply text-foreground;
+    background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-end) 100%);
+    background-attachment: fixed;
+  }
+}
+
+/* Card elevation system */
+@layer components {
+  .card-elevated {
+    background: var(--card-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    box-shadow: var(--shadow-medium);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+  .card-elevated:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  }
+
+  /* Table styles */
+  .table-modern thead tr {
+    background: var(--table-header-bg);
+  }
+  .table-modern tbody tr {
+    border-bottom: 1px solid var(--border-soft);
+    transition: background 150ms ease;
+  }
+  .table-modern tbody tr:hover {
+    background: var(--table-row-hover);
+  }
+
+  /* Empty section fill */
+  .section-muted {
+    background: #F3F4F6;
+    border-radius: 16px;
   }
 }
 

@@ -35,3 +35,41 @@ Stage Summary:
 - Verified via Agent Browser: Connection tab (service status, QR code, action buttons, test message, recent messages), Settings tab (provider selection with OpenWA/Meta/Twilio, config forms, auto-reply, welcome message, emergency numbers), Logs tab (service logs, message queue status)
 - Error handling: Service offline warning banner, graceful degradation when service unreachable, Chrome detection error messages
 - Note: OpenWA service requires Chromium to be installed in the runtime environment. In the sandbox, the service starts and responds to health checks but cannot initialize WhatsApp sessions without Chrome.
+
+---
+Task ID: 2
+Agent: Main Agent + Frontend Styling Expert
+Task: Overhaul visual hierarchy - muted page background with white content panels
+
+Work Log:
+- Identified root issue: `--background: oklch(1 0 0)` (pure white) used for both page and content
+- Updated `:root` CSS variables in globals.css: `--background` → `#EEF2F6`, `--card`/`--popover`/`--sidebar` → `#FFFFFF`
+- Added 13 custom visual hierarchy tokens: --page-bg, --page-bg-end, --card-bg, --header-bg, --nav-bg, --table-header-bg, --table-row-hover, --border-soft, --shadow-soft/medium/strong/modal, --overlay-bg
+- Updated body to use fixed linear-gradient background
+- Added `.card-elevated`, `.table-modern`, `.section-muted` utility classes
+- Updated app-shell.tsx: inline gradient background instead of bg-background
+- Updated app-header.tsx: glass morphism (bg-white/90, backdrop-blur-xl, border-b border-gray-200/80)
+- Updated floating-nav-bar.tsx: bg-white/95, border-gray-200/80, shadow-[0_8px_30px_rgba(0,0,0,0.06)]
+- Updated card.tsx: rounded-2xl, border-gray-200/80, shadow-[0_2px_8px_rgba(0,0,0,0.04)]
+- Updated input.tsx: bg-white, border-gray-300, hover:border-gray-400, focus:ring-2 focus:ring-emerald-500
+- Updated textarea.tsx: bg-white, border-gray-300, hover:border-gray-400, focus:ring-emerald-500
+- Updated select.tsx: bg-white, border-gray-300, hover:border-gray-400, focus:ring-emerald-500
+- Updated dialog.tsx: overlay bg-black/35, content bg-white rounded-[20px] shadow-[0_20px_60px_rgba(0,0,0,0.15)]
+- Updated alert-dialog.tsx: same modal treatment
+- Updated sheet.tsx: overlay bg-black/35, content bg-white
+- Updated table.tsx: container bg-white rounded-2xl with border/shadow, thead tr bg-[#F8FAFC], row hover bg-[#F1F5F9], row border-gray-200/60
+- Updated toast.tsx: bg-white with shadow-[0_8px_30px_rgba(0,0,0,0.08)]
+- Updated switch.tsx: thumb bg-gray-200 (was bg-background)
+- Updated chart.tsx: tooltip bg-white with softer shadow
+- Updated command.tsx: search input bg-white
+- Updated navigation-menu.tsx: trigger bg-white with border
+- Updated menubar.tsx: bg-white with border and subtle shadow
+- Verified via Agent Browser: body bg=rgb(238,242,246), cards=rgb(255,255,255) - proper contrast
+
+Stage Summary:
+- Page background: #EEF2F6 → #E8EDF2 gradient (muted blue-grey canvas)
+- Content panels: Pure white with visible borders and soft shadows
+- 5-layer visual hierarchy: Page bg → Content containers → Cards → Buttons/Inputs → Text/Icons
+- 16 UI components updated with consistent theming
+- Zero lint errors
+- Dark mode preserved alongside all light mode changes

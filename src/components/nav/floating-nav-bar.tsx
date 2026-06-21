@@ -456,8 +456,8 @@ export function FloatingNavBar() {
         onMouseLeave={handleDropdownMouseLeave}
         className={cn(
           'fixed z-[100]',
-          'bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-xl',
-          'border border-white/20 dark:border-white/10 shadow-xl shadow-black/10',
+          'bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-xl',
+          'border border-gray-200/80 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)]',
           'py-1 min-w-[180px] max-h-80 overflow-y-auto',
           'scrollbar-thin'
         )}
@@ -582,9 +582,9 @@ export function FloatingNavBar() {
       <div
         className={cn(
           'relative flex items-center',
-          'bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl',
-          'border border-white/20 dark:border-white/10 rounded-2xl',
-          'shadow-lg shadow-black/5 dark:shadow-black/20',
+          'bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl',
+          'border border-gray-200/80 dark:border-white/10 rounded-2xl',
+          'shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-black/20',
           'px-2 py-1.5'
         )}
       >
