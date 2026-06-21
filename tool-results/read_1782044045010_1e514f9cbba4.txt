@@ -1,0 +1,666 @@
+    50→
+    51→const QUICK_ACTIONS: { label: string; icon: React.ReactNode; view: AppView }[] = [
+    52→  { label: 'Create Complaint', icon: <AlertTriangle className="h-4 w-4" />, view: 'complaints' },
+    53→  { label: 'Create Work Order', icon: <ClipboardList className="h-4 w-4" />, view: 'work-orders' },
+    54→  { label: 'Create Invoice', icon: <Receipt className="h-4 w-4" />, view: 'invoices' },
+    55→  { label: 'Create Quotation', icon: <FileText className="h-4 w-4" />, view: 'quotations' },
+    56→  { label: 'Add Equipment', icon: <Package className="h-4 w-4" />, view: 'equipment' },
+    57→];
+    58→
+    59→// ============================================================
+    60→// GLASS DROPDOWN ANIMATION VARIANTS
+    61→// ============================================================
+    62→
+    63→const glassDropdownVariants = {
+    64→  hidden: { opacity: 0, scale: 0.95, y: -8 },
+    65→  visible: {
+    66→    opacity: 1,
+    67→    scale: 1,
+    68→    y: 0,
+    69→    transition: { type: 'spring', stiffness: 400, damping: 30 },
+    70→  },
+    71→  exit: {
+    72→    opacity: 0,
+    73→    scale: 0.95,
+    74→    y: -8,
+    75→    transition: { duration: 0.15 },
+    76→  },
+    77→};
+    78→
+    79→const panelVariants = {
+    80→  hidden: { opacity: 0, scale: 0.9, y: -4 },
+    81→  visible: {
+    82→    opacity: 1,
+    83→    scale: 1,
+    84→    y: 0,
+    85→    transition: { type: 'spring', stiffness: 350, damping: 28 },
+    86→  },
+    87→  exit: {
+    88→    opacity: 0,
+    89→    scale: 0.9,
+    90→    y: -4,
+    91→    transition: { duration: 0.15 },
+    92→  },
+    93→};
+    94→
+    95→const fabVariants = {
+    96→  hidden: { opacity: 0, scale: 0 },
+    97→  visible: {
+    98→    opacity: 1,
+    99→    scale: 1,
+   100→    transition: { type: 'spring', stiffness: 400, damping: 25 },
+   101→  },
+   102→  exit: {
+   103→    opacity: 0,
+   104→    scale: 0,
+   105→    transition: { duration: 0.12 },
+   106→  },
+   107→};
+   108→
+   109→const iconTransition = { type: 'spring', stiffness: 500, damping: 30 };
+   110→
+   111→// ============================================================
+   112→// GLASS DROPDOWN STYLES
+   113→// ============================================================
+   114→
+   115→const glassStyles =
+   116→  'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-xl border border-white/20 dark:border-white/10 shadow-xl';
+   117→
+   118→// ============================================================
+   119→// MAIN COMPONENT
+   120→// ============================================================
+   121→
+   122→export function AppHeader() {
+   123→  // ---- State & Stores ----
+   124→  const { setView } = useAppStore();
+   125→  const { user, logout } = useAuthStore();
+   126→  const { unreadCount, notifications, markAllAsRead } = useNotificationStore();
+   127→  const { theme, setTheme } = useTheme();
+   128→
+   129→  const [searchOpen, setSearchOpen] = useState(false);
+   130→  const [searchQuery, setSearchQuery] = useState('');
+   131→  const [profileOpen, setProfileOpen] = useState(false);
+   132→  const [notifPanelOpen, setNotifPanelOpen] = useState(false);
+   133→  const [quickActionsOpen, setQuickActionsOpen] = useState(false);
+   134→  const [lang, setLang] = useState<'EN' | 'MS'>('EN');
+   135→
+   136→  // Hydration-safe mounted check
+   137→  const mounted = useSyncExternalStore(
+   138→    () => () => {},
+   139→    () => true,
+   140→    () => false
+   141→  );
+   142→
+   143→  // Refs
+   144→  const searchInputRef = useRef<HTMLInputElement>(null);
+   145→  const profileRef = useRef<HTMLDivElement>(null);
+   146→  const notifRef = useRef<HTMLDivElement>(null);
+   147→  const quickActionsRef = useRef<HTMLDivElement>(null);
+   148→  const headerRef = useRef<HTMLElement>(null);
+   149→
+   150→  // ---- Keyboard: Cmd/Ctrl+K opens search, Esc closes all ----
+   151→  useEffect(() => {
+   152→    const handleKeyDown = (e: KeyboardEvent) => {
+   153→      // Cmd+K or Ctrl+K
+   154→      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+   155→        e.preventDefault();
+   156→        setSearchOpen((prev) => !prev);
+   157→        setProfileOpen(false);
+   158→        setNotifPanelOpen(false);
+   159→        setQuickActionsOpen(false);
+   160→      }
+   161→      // Esc closes all panels
+   162→      if (e.key === 'Escape') {
+   163→        setSearchOpen(false);
+   164→        setProfileOpen(false);
+   165→        setNotifPanelOpen(false);
+   166→        setQuickActionsOpen(false);
+   167→        setSearchQuery('');
+   168→      }
+   169→    };
+   170→    document.addEventListener('keydown', handleKeyDown);
+   171→    return () => document.removeEventListener('keydown', handleKeyDown);
+   172→  }, []);
+   173→
+   174→  // ---- Click outside: close open panels ----
+   175→  useEffect(() => {
+   176→    const handleClickOutside = (e: MouseEvent) => {
+   177→      const target = e.target as Node;
+   178→      if (profileRef.current && !profileRef.current.contains(target)) {
+   179→        setProfileOpen(false);
+   180→      }
+   181→      if (notifRef.current && !notifRef.current.contains(target)) {
+   182→        setNotifPanelOpen(false);
+   183→      }
+   184→      if (quickActionsRef.current && !quickActionsRef.current.contains(target)) {
+   185→        setQuickActionsOpen(false);
+   186→      }
+   187→    };
+   188→    document.addEventListener('mousedown', handleClickOutside);
+   189→    return () => document.removeEventListener('mousedown', handleClickOutside);
+   190→  }, []);
+   191→
+   192→  // ---- Auto-focus search input when search panel opens ----
+   193→  useEffect(() => {
+   194→    if (searchOpen && searchInputRef.current) {
+   195→      setTimeout(() => searchInputRef.current?.focus(), 50);
+   196→    }
+   197→  }, [searchOpen]);
+   198→
+   199→  // ---- Helpers ----
+   200→  const getUserInitials = useCallback(() => {
+   201→    if (!user?.name) return '??';
+   202→    return user.name
+   203→      .split(' ')
+   204→      .map((n) => n[0])
+   205→      .join('')
+   206→      .toUpperCase()
+   207→      .slice(0, 2);
+   208→  }, [user]);
+   209→
+   210→  const handleSearchLinkClick = useCallback(
+   211→    (view: AppView) => {
+   212→      setView(view);
+   213→      setSearchOpen(false);
+   214→      setSearchQuery('');
+   215→    },
+   216→    [setView]
+   217→  );
+   218→
+   219→  const handleQuickActionClick = useCallback(
+   220→    (view: AppView) => {
+   221→      setView(view);
+   222→      setQuickActionsOpen(false);
+   223→    },
+   224→    [setView]
+   225→  );
+   226→
+   227→  const handleLanguageToggle = useCallback(() => {
+   228→    const next = lang === 'EN' ? 'MS' : 'EN';
+   229→    setLang(next);
+   230→    toast.info(`Language switched to ${next === 'EN' ? 'English' : 'Bahasa Melayu'}`);
+   231→  }, [lang]);
+   232→
+   233→  // ---- Don't render if no user ----
+   234→  if (!user) return null;
+   235→
+   236→  return (
+   237→    <>
+   238→      {/* ============================================================ */}
+   239→      {/* HEADER BAR                                                    */}
+   240→      {/* ============================================================ */}
+   241→      <header
+   242→        ref={headerRef}
+   243→        className="sticky top-0 z-50 w-full border-b border-border/40 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-950/60"
+   244→      >
+   245→        <div className="flex items-center justify-between h-16 px-4 lg:px-6 gap-4">
+   246→          {/* ---- LEFT: Logo + Company Name ---- */}
+   247→          <div className="flex items-center gap-2.5 shrink-0">
+   248→            <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-emerald-500 text-white shadow-md shadow-emerald-500/25">
+   249→              <Building2 className="h-5 w-5" />
+   250→            </div>
+   251→            <span className="font-semibold text-lg text-foreground tracking-tight">
+   252→              FacilityPro
+   253→            </span>
+   254→          </div>
+   255→
+   256→          {/* ---- CENTER: Search Bar ---- */}
+   257→          <div className="flex-1 flex justify-center max-w-xl mx-auto">
+   258→            <div className="relative w-full">
+   259→              <button
+   260→                type="button"
+   261→                onClick={() => {
+   262→                  setSearchOpen((prev) => !prev);
+   263→                  setProfileOpen(false);
+   264→                  setNotifPanelOpen(false);
+   265→                  setQuickActionsOpen(false);
+   266→                }}
+   267→                className={cn(
+   268→                  'flex items-center w-full h-10 rounded-full bg-muted/50 border-0',
+   269→                  'px-4 text-sm text-muted-foreground',
+   270→                  'hover:bg-muted/70 focus:bg-muted/80',
+   271→                  'transition-all duration-200 cursor-pointer',
+   272→                  'ring-0 focus:ring-2 focus:ring-emerald-500/30',
+   273→                  searchOpen && 'ring-2 ring-emerald-500/30 bg-muted/70'
+   274→                )}
+   275→              >
+   276→                <Search className="h-4 w-4 mr-2.5 shrink-0 text-muted-foreground/70" />
+   277→                <span className="hidden sm:inline truncate">
+   278→                  Search equipment, customers, work orders...
+   279→                </span>
+   280→                <span className="sm:hidden truncate">Search...</span>
+   281→                <kbd className="hidden md:flex items-center ml-auto gap-0.5 shrink-0 rounded-md border border-border/60 bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+   282→                  <span className="text-xs">⌘</span>K
+   283→                </kbd>
+   284→              </button>
+   285→
+   286→              {/* ---- SEARCH DROPDOWN PANEL ---- */}
+   287→              <AnimatePresence>
+   288→                {searchOpen && (
+   289→                  <motion.div
+   290→                    variants={glassDropdownVariants}
+   291→                    initial="hidden"
+   292→                    animate="visible"
+   293→                    exit="exit"
+   294→                    className={cn(
+   295→                      'absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[480px] max-w-[calc(100vw-2rem)]',
+   296→                      glassStyles,
+   297→                      'p-4 z-50'
+   298→                    )}
+   299→                    style={{ originY: 'top' }}
+   300→                  >
+   301→                    {/* Close button */}
+   302→                    <button
+   303→                      onClick={() => {
+   304→                        setSearchOpen(false);
+   305→                        setSearchQuery('');
+   306→                      }}
+   307→                      className="absolute top-3 right-3 p-1 rounded-md hover:bg-muted/50 text-muted-foreground transition-colors"
+   308→                    >
+   309→                      <X className="h-4 w-4" />
+   310→                    </button>
+   311→
+   312→                    {/* Search input */}
+   313→                    <div className="relative mb-3">
+   314→                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/70" />
+   315→                      <input
+   316→                        ref={searchInputRef}
+   317→                        type="text"
+   318→                        value={searchQuery}
+   319→                        onChange={(e) => setSearchQuery(e.target.value)}
+   320→                        placeholder="Type to search..."
+   321→                        className="w-full h-12 pl-11 pr-4 rounded-xl bg-muted/50 border border-border/40 text-base outline-none placeholder:text-muted-foreground/60 focus:ring-2 focus:ring-emerald-500/30 transition-all"
+   322→                      />
+   323→                    </div>
+   324→
+   325→                    {/* Quick links */}
+   326→                    <div className="space-y-1">
+   327→                      <p className="text-xs font-medium text-muted-foreground/70 uppercase tracking-wider px-2 mb-2">
+   328→                        Quick Navigation
+   329→                      </p>
+   330→                      {SEARCH_QUICK_LINKS.map((link) => (
+   331→                        <button
+   332→                          key={link.view}
+   333→                          onClick={() => handleSearchLinkClick(link.view)}
+   334→                          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors group"
+   335→                        >
+   336→                          <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-muted/60 text-muted-foreground group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:group-hover:bg-emerald-900/50 dark:group-hover:text-emerald-400 transition-colors">
+   337→                            {link.icon}
+   338→                          </span>
+   339→                          {link.label}
+   340→                          <ChevronRight className="h-3.5 w-3.5 ml-auto text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+   341→                        </button>
+   342→                      ))}
+   343→                    </div>
+   344→                  </motion.div>
+   345→                )}
+   346→              </AnimatePresence>
+   347→            </div>
+   348→          </div>
+   349→
+   350→          {/* ---- RIGHT: Action Buttons ---- */}
+   351→          <div className="flex items-center gap-1.5 shrink-0">
+   352→            {/* QR Scanner */}
+   353→            <Button
+   354→              variant="ghost"
+   355→              size="icon"
+   356→              className="h-9 w-9 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400"
+   357→              onClick={() => toast.info('QR Scanner opened')}
+   358→              aria-label="QR Scanner"
+   359→            >
+   360→              <QrCode className="h-[18px] w-[18px]" />
+   361→            </Button>
+   362→
+   363→            {/* ---- Notification Bell ---- */}
+   364→            <div ref={notifRef} className="relative">
+   365→              <Button
+   366→                variant="ghost"
+   367→                size="icon"
+   368→                className="relative h-9 w-9 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400"
+   369→                onClick={() => {
+   370→                  setNotifPanelOpen((prev) => !prev);
+   371→                  setProfileOpen(false);
+   372→                  setQuickActionsOpen(false);
+   373→                  setSearchOpen(false);
+   374→                }}
+   375→                aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount})` : ''}`}
+   376→              >
+   377→                <Bell className="h-[18px] w-[18px]" />
+   378→                {unreadCount > 0 && (
+   379→                  <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-[16px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold leading-none">
+   380→                    {unreadCount > 99 ? '99+' : unreadCount}
+   381→                  </span>
+   382→                )}
+   383→              </Button>
+   384→
+   385→              {/* ---- NOTIFICATION PANEL ---- */}
+   386→              <AnimatePresence>
+   387→                {notifPanelOpen && (
+   388→                  <motion.div
+   389→                    variants={glassDropdownVariants}
+   390→                    initial="hidden"
+   391→                    animate="visible"
+   392→                    exit="exit"
+   393→                    className={cn(
+   394→                      'absolute top-full right-0 mt-2 w-80',
+   395→                      glassStyles,
+   396→                      'overflow-hidden z-50'
+   397→                    )}
+   398→                    style={{ originY: 'top' }}
+   399→                  >
+   400→                    {/* Header */}
+   401→                    <div className="flex items-center justify-between px-4 py-3 border-b border-border/30">
+   402→                      <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
+   403→                      {unreadCount > 0 && (
+   404→                        <button
+   405→                          onClick={markAllAsRead}
+   406→                          className="text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:underline transition-colors"
+   407→                        >
+   408→                          Mark all read
+   409→                        </button>
+   410→                      )}
+   411→                    </div>
+   412→
+   413→                    {/* Content */}
+   414→                    <div className="max-h-80 overflow-y-auto">
+   415→                      {notifications.length === 0 ? (
+   416→                        <div className="flex flex-col items-center justify-center py-10 px-4">
+   417→                          <Bell className="h-8 w-8 text-muted-foreground/30 mb-3" />
+   418→                          <p className="text-sm text-muted-foreground/60">No new notifications</p>
+   419→                        </div>
+   420→                      ) : (
+   421→                        <div className="divide-y divide-border/20">
+   422→                          {notifications.slice(0, 10).map((notif) => (
+   423→                            <div
+   424→                              key={notif.id}
+   425→                              className={cn(
+   426→                                'px-4 py-3 hover:bg-muted/30 transition-colors cursor-pointer',
+   427→                                !notif.isRead && 'bg-emerald-50/30 dark:bg-emerald-950/10'
+   428→                              )}
+   429→                            >
+   430→                              <div className="flex items-start gap-2">
+   431→                                {!notif.isRead && (
+   432→                                  <span className="mt-1.5 h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
+   433→                                )}
+   434→                                <div className={cn('flex-1 min-w-0', notif.isRead && 'ml-4')}>
+   435→                                  <p className="text-sm font-medium text-foreground truncate">{notif.title}</p>
+   436→                                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{notif.message}</p>
+   437→                                </div>
+   438→                              </div>
+   439→                            </div>
+   440→                          ))}
+   441→                        </div>
+   442→                      )}
+   443→                    </div>
+   444→                  </motion.div>
+   445→                )}
+   446→              </AnimatePresence>
+   447→            </div>
+   448→
+   449→            {/* ---- Dark Mode Toggle ---- */}
+   450→            <Button
+   451→              variant="ghost"
+   452→              size="icon"
+   453→              className="h-9 w-9 text-muted-foreground hover:text-amber-500 dark:hover:text-amber-400 overflow-hidden"
+   454→              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+   455→              aria-label="Toggle theme"
+   456→            >
+   457→              <AnimatePresence mode="wait" initial={false}>
+   458→                {mounted && theme === 'dark' ? (
+   459→                  <motion.div
+   460→                    key="sun"
+   461→                    initial={{ rotate: -90, scale: 0, opacity: 0 }}
+   462→                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+   463→                    exit={{ rotate: 90, scale: 0, opacity: 0 }}
+   464→                    transition={iconTransition}
+   465→                  >
+   466→                    <Sun className="h-[18px] w-[18px]" />
+   467→                  </motion.div>
+   468→                ) : (
+   469→                  <motion.div
+   470→                    key="moon"
+   471→                    initial={{ rotate: 90, scale: 0, opacity: 0 }}
+   472→                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+   473→                    exit={{ rotate: -90, scale: 0, opacity: 0 }}
+   474→                    transition={iconTransition}
+   475→                  >
+   476→                    <Moon className="h-[18px] w-[18px]" />
+   477→                  </motion.div>
+   478→                )}
+   479→              </AnimatePresence>
+   480→            </Button>
+   481→
+   482→            {/* ---- Language Switcher ---- */}
+   483→            <Button
+   484→              variant="ghost"
+   485→              size="icon"
+   486→              className="h-9 w-9 text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 relative"
+   487→              onClick={handleLanguageToggle}
+   488→              aria-label="Switch language"
+   489→            >
+   490→              <Globe className="h-[18px] w-[18px]" />
+   491→              <span className="absolute bottom-0.5 right-0.5 text-[8px] font-bold text-muted-foreground/80">
+   492→                {lang}
+   493→              </span>
+   494→            </Button>
+   495→
+   496→            {/* ---- Profile Dropdown ---- */}
+   497→            <div ref={profileRef} className="relative">
+   498→              <button
+   499→                type="button"
+   500→                onClick={() => {
+   501→                  setProfileOpen((prev) => !prev);
+   502→                  setNotifPanelOpen(false);
+   503→                  setQuickActionsOpen(false);
+   504→                  setSearchOpen(false);
+   505→                }}
+   506→                className={cn(
+   507→                  'flex items-center gap-2 h-9 pl-1.5 pr-2.5 rounded-full',
+   508→                  'hover:bg-muted/50 transition-all duration-200',
+   509→                  profileOpen && 'bg-muted/60'
+   510→                )}
+   511→                aria-label="User menu"
+   512→                aria-expanded={profileOpen}
+   513→              >
+   514→                <Avatar className="h-7 w-7">
+   515→                  <AvatarFallback className="bg-emerald-500 text-white text-xs font-semibold shadow-sm">
+   516→                    {getUserInitials()}
+   517→                  </AvatarFallback>
+   518→                </Avatar>
+   519→                <span className="hidden lg:inline-block text-sm font-medium text-foreground max-w-[100px] truncate">
+   520→                  {user.name}
+   521→                </span>
+   522→              </button>
+   523→
+   524→              {/* ---- PROFILE DROPDOWN ---- */}
+   525→              <AnimatePresence>
+   526→                {profileOpen && (
+   527→                  <motion.div
+   528→                    variants={glassDropdownVariants}
+   529→                    initial="hidden"
+   530→                    animate="visible"
+   531→                    exit="exit"
+   532→                    className={cn(
+   533→                      'absolute top-full right-0 mt-2 w-64',
+   534→                      glassStyles,
+   535→                      'overflow-hidden z-50'
+   536→                    )}
+   537→                    style={{ originY: 'top' }}
+   538→                  >
+   539→                    {/* User Info */}
+   540→                    <div className="px-4 py-3 border-b border-border/20">
+   541→                      <div className="flex items-center gap-3">
+   542→                        <Avatar className="h-10 w-10">
+   543→                          <AvatarFallback className="bg-emerald-500 text-white text-sm font-semibold shadow-sm">
+   544→                            {getUserInitials()}
+   545→                          </AvatarFallback>
+   546→                        </Avatar>
+   547→                        <div className="min-w-0 flex-1">
+   548→                          <p className="text-sm font-semibold text-foreground truncate">{user.name}</p>
+   549→                          <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+   550→                        </div>
+   551→                      </div>
+   552→                      <div className="mt-2">
+   553→                        <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 border-0 text-[10px] font-semibold uppercase tracking-wider">
+   554→                          {user.role.replace('_', ' ')}
+   555→                        </Badge>
+   556→                      </div>
+   557→                    </div>
+   558→
+   559→                    {/* Menu Items */}
+   560→                    <div className="p-1.5 space-y-0.5">
+   561→                      {/* Profile */}
+   562→                      <button
+   563→                        onClick={() => {
+   564→                          setView('profile');
+   565→                          setProfileOpen(false);
+   566→                        }}
+   567→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors"
+   568→                      >
+   569→                        <User className="h-4 w-4 text-muted-foreground" />
+   570→                        Profile
+   571→                      </button>
+   572→
+   573→                      {/* Settings */}
+   574→                      <button
+   575→                        onClick={() => {
+   576→                          setView('settings');
+   577→                          setProfileOpen(false);
+   578→                        }}
+   579→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors"
+   580→                      >
+   581→                        <Settings className="h-4 w-4 text-muted-foreground" />
+   582→                        Settings
+   583→                      </button>
+   584→
+   585→                      {/* Theme */}
+   586→                      <button
+   587→                        onClick={() => {
+   588→                          setTheme(theme === 'dark' ? 'light' : 'dark');
+   589→                          setProfileOpen(false);
+   590→                        }}
+   591→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors"
+   592→                      >
+   593→                        {mounted && theme === 'dark' ? (
+   594→                          <Sun className="h-4 w-4 text-muted-foreground" />
+   595→                        ) : (
+   596→                          <Moon className="h-4 w-4 text-muted-foreground" />
+   597→                        )}
+   598→                        {mounted && theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+   599→                      </button>
+   600→
+   601→                      {/* Language */}
+   602→                      <button
+   603→                        onClick={() => {
+   604→                          handleLanguageToggle();
+   605→                          setProfileOpen(false);
+   606→                        }}
+   607→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors"
+   608→                      >
+   609→                        <Globe className="h-4 w-4 text-muted-foreground" />
+   610→                        Language
+   611→                      </button>
+   612→                    </div>
+   613→
+   614→                    {/* Separator + Logout */}
+   615→                    <div className="border-t border-border/20 p-1.5">
+   616→                      <button
+   617→                        onClick={() => {
+   618→                          setProfileOpen(false);
+   619→                          logout();
+   620→                        }}
+   621→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition-colors"
+   622→                      >
+   623→                        <LogOut className="h-4 w-4" />
+   624→                        Logout
+   625→                      </button>
+   626→                    </div>
+   627→                  </motion.div>
+   628→                )}
+   629→              </AnimatePresence>
+   630→            </div>
+   631→          </div>
+   632→        </div>
+   633→      </header>
+   634→
+   635→      {/* ============================================================ */}
+   636→      {/* QUICK ACTIONS FAB (Floating Action Button)                    */}
+   637→      {/* ============================================================ */}
+   638→      <div ref={quickActionsRef} className="fixed bottom-6 right-6 z-40">
+   639→        <AnimatePresence>
+   640→          {quickActionsOpen && (
+   641→            <motion.div
+   642→              variants={fabVariants}
+   643→              initial="hidden"
+   644→              animate="visible"
+   645→              exit="exit"
+   646→              className={cn('absolute bottom-16 right-0 w-56 mb-2', glassStyles, 'overflow-hidden p-2')}
+   647→              style={{ origin: 'bottom right' }}
+   648→            >
+   649→              <p className="text-xs font-medium text-muted-foreground/70 uppercase tracking-wider px-2 py-1.5">
+   650→                Quick Actions
+   651→              </p>
+   652→              {QUICK_ACTIONS.map((action) => (
+   653→                <button
+   654→                  key={action.view}
+   655→                  onClick={() => handleQuickActionClick(action.view)}
+   656→                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors group"
+   657→                >
+   658→                  <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-muted/60 text-muted-foreground group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:group-hover:bg-emerald-900/50 dark:group-hover:text-emerald-400 transition-colors">
+   659→                    {action.icon}
+   660→                  </span>
+   661→                  {action.label}
+   662→                </button>
+   663→              ))}
+   664→            </motion.div>
+   665→          )}
+   666→        </AnimatePresence>
+   667→
+   668→        {/* FAB Button */}
+   669→        <motion.button
+   670→          whileHover={{ scale: 1.08 }}
+   671→          whileTap={{ scale: 0.95 }}
+   672→          onClick={() => {
+   673→            setQuickActionsOpen((prev) => !prev);
+   674→            setSearchOpen(false);
+   675→            setProfileOpen(false);
+   676→            setNotifPanelOpen(false);
+   677→          }}
+   678→          className={cn(
+   679→            'relative h-14 w-14 rounded-full shadow-lg shadow-emerald-500/30',
+   680→            'flex items-center justify-center',
+   681→            'bg-emerald-500 hover:bg-emerald-600 text-white',
+   682→            'transition-colors duration-200'
+   683→          )}
+   684→          aria-label="Quick Actions"
+   685→          aria-expanded={quickActionsOpen}
+   686→        >
+   687→          <AnimatePresence mode="wait">
+   688→            {quickActionsOpen ? (
+   689→              <motion.div
+   690→                key="close"
+   691→                initial={{ rotate: 0 }}
+   692→                animate={{ rotate: 90 }}
+   693→                exit={{ rotate: 0 }}
+   694→                transition={{ duration: 0.15 }}
+   695→              >
+   696→                <X className="h-6 w-6" />
+   697→              </motion.div>
+   698→            ) : (
+   699→              <motion.div
+   700→                key="plus"
+   701→                initial={{ rotate: 90 }}
+   702→                animate={{ rotate: 0 }}
+   703→                exit={{ rotate: 0 }}
+   704→                transition={{ duration: 0.15 }}
+   705→              >
+   706→                <Plus className="h-6 w-6" />
+   707→              </motion.div>
+   708→            )}
+   709→          </AnimatePresence>
+   710→        </motion.button>
+   711→      </div>
+   712→    </>
+   713→  );
+   714→}
+   715→

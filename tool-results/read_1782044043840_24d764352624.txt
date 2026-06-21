@@ -1,0 +1,663 @@
+    40→
+    41→/* ------------------------------------------------------------------ */
+    42→/*  Sub-components                                                     */
+    43→/* ------------------------------------------------------------------ */
+    44→
+    45→/** Brand gauge monogram matching the uploaded design */
+    46→function BrandLogo({ className }: { className?: string }) {
+    47→  return (
+    48→    <svg
+    49→      viewBox="0 0 24 24"
+    50→      fill="none"
+    51→      xmlns="http://www.w3.org/2000/svg"
+    52→      className={className}
+    53→      aria-hidden="true"
+    54→    >
+    55→      <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.6" />
+    56→      <path d="M12 12 15 8.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    57→      <circle cx="12" cy="12" r="1.4" fill="currentColor" />
+    58→      <path
+    59→        d="M12 3.5v1.6M12 18.9v1.6M3.5 12h1.6M18.9 12h1.6"
+    60→        stroke="currentColor"
+    61→        strokeWidth="1.4"
+    62→        strokeLinecap="round"
+    63→      />
+    64→    </svg>
+    65→  );
+    66→}
+    67→
+    68→/** Google "G" icon (multi-color) */
+    69→function GoogleIcon({ className }: { className?: string }) {
+    70→  return (
+    71→    <svg className={className} viewBox="0 0 24 24" aria-hidden="true">
+    72→      <path
+    73→        fill="#4285F4"
+    74→        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.19 3.32v2.76h3.54c2.08-1.92 3.29-4.74 3.29-7.84Z"
+    75→      />
+    76→      <path
+    77→        fill="#34A853"
+    78→        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.76c-.98.66-2.24 1.05-3.73 1.05-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23Z"
+    79→      />
+    80→      <path
+    81→        fill="#FBBC05"
+    82→        d="M5.84 14.1A6.6 6.6 0 0 1 5.5 12c0-.73.13-1.44.34-2.1V7.06H2.18A11 11 0 0 0 1 12c0 1.77.42 3.44 1.18 4.94l3.66-2.84Z"
+    83→      />
+    84→      <path
+    85→        fill="#EA4335"
+    86→        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.46 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.3 9.14 5.38 12 5.38Z"
+    87→      />
+    88→    </svg>
+    89→  );
+    90→}
+    91→
+    92→/** WhatsApp icon */
+    93→function WhatsAppIcon({ className }: { className?: string }) {
+    94→  return (
+    95→    <svg className={className} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    96→      <path
+    97→        fill="currentColor"
+    98→        d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.004c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.8c2.16 0 4.18.84 5.71 2.37a8.04 8.04 0 0 1 2.37 5.72c0 4.46-3.63 8.1-8.1 8.1a8.1 8.1 0 0 1-4.12-1.13l-.3-.18-3.06.8.82-2.98-.2-.31a8.04 8.04 0 0 1-1.26-4.31c.01-4.47 3.64-8.1 8.11-8.1Z"
+    99→      />
+   100→      <path
+   101→        fill="currentColor"
+   102→        d="M9.3 7.13c-.18-.4-.36-.41-.53-.42l-.45-.01c-.16 0-.41.06-.63.3-.22.24-.83.81-.83 1.98s.85 2.3.97 2.46c.12.16 1.65 2.64 4.07 3.6 2.01.79 2.42.63 2.86.59.43-.04 1.4-.57 1.6-1.13.2-.55.2-1.02.14-1.12-.06-.1-.22-.16-.46-.28-.24-.12-1.4-.69-1.62-.77-.22-.08-.38-.12-.53.12-.16.24-.61.77-.74.93-.14.16-.27.18-.51.06-.24-.12-1-.37-1.91-1.18-.71-.63-1.18-1.41-1.32-1.65-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.53-1.3-.74-1.78Z"
+   103→      />
+   104→    </svg>
+   105→  );
+   106→}
+   107→
+   108→/* ------------------------------------------------------------------ */
+   109→/*  Main Login View                                                    */
+   110→/* ------------------------------------------------------------------ */
+   111→
+   112→export function LoginView() {
+   113→  const { login, isLoading } = useAuthStore();
+   114→
+   115→  /* ---- Panel navigation ---- */
+   116→  const [panel, setPanel] = useState<Panel>('choices');
+   117→  const [otpStep, setOtpStep] = useState<OtpStep>('phone');
+   118→
+   119→  /* ---- Email form ---- */
+   120→  const [email, setEmail] = useState('');
+   121→  const [password, setPassword] = useState('');
+   122→  const [showPassword, setShowPassword] = useState(false);
+   123→  const [emailError, setEmailError] = useState('');
+   124→  const [passwordError, setPasswordError] = useState('');
+   125→  const [formAlert, setFormAlert] = useState('');
+   126→
+   127→  /* ---- WhatsApp form ---- */
+   128→  const [phone, setPhone] = useState('');
+   129→  const [otpCode, setOtpCode] = useState('');
+   130→  const [phoneError, setPhoneError] = useState('');
+   131→  const [otpError, setOtpError] = useState('');
+   132→  const [whatsappAlert, setWhatsappAlert] = useState('');
+   133→  const [otpSentTo, setOtpSentTo] = useState('');
+   134→  const [resendCountdown, setResendCountdown] = useState(0);
+   135→  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+   136→
+   137→  /* ---- Refs for focus management ---- */
+   138→  const emailInputRef = useRef<HTMLInputElement>(null);
+   139→  const passwordInputRef = useRef<HTMLInputElement>(null);
+   140→  const phoneInputRef = useRef<HTMLInputElement>(null);
+   141→  const otpInputRef = useRef<HTMLInputElement>(null);
+   142→  const emailBackRef = useRef<HTMLButtonElement>(null);
+   143→  const whatsappBackRef = useRef<HTMLButtonElement>(null);
+   144→
+   145→  /* ---- Countdown timer ---- */
+   146→  const hasCountdown = resendCountdown > 0;
+   147→  useEffect(() => {
+   148→    if (!hasCountdown) {
+   149→      if (countdownRef.current) clearInterval(countdownRef.current);
+   150→      return;
+   151→    }
+   152→    countdownRef.current = setInterval(() => {
+   153→      setResendCountdown((prev) => {
+   154→        if (prev <= 1) {
+   155→          if (countdownRef.current) clearInterval(countdownRef.current);
+   156→          return 0;
+   157→        }
+   158→        return prev - 1;
+   159→      });
+   160→    }, 1000);
+   161→    return () => {
+   162→      if (countdownRef.current) clearInterval(countdownRef.current);
+   163→    };
+   164→  }, [hasCountdown]);
+   165→
+   166→  /* ---- Panel switching ---- */
+   167→  const showPanel = useCallback((name: Panel) => {
+   168→    setPanel(name);
+   169→    setFormAlert('');
+   170→    setEmailError('');
+   171→    setPasswordError('');
+   172→    setWhatsappAlert('');
+   173→    setPhoneError('');
+   174→    setOtpError('');
+   175→    // Focus management after panel switch
+   176→    requestAnimationFrame(() => {
+   177→      if (name === 'email') emailInputRef.current?.focus();
+   178→      if (name === 'whatsapp') phoneInputRef.current?.focus();
+   179→      if (name === 'choices') {
+   180→        if (panel === 'email') emailBackRef.current?.focus();
+   181→        if (panel === 'whatsapp') whatsappBackRef.current?.focus();
+   182→      }
+   183→    });
+   184→  }, [panel]);
+   185→
+   186→  /* ---- Email login ---- */
+   187→  const handleEmailSubmit = async (e: React.FormEvent) => {
+   188→    e.preventDefault();
+   189→    setFormAlert('');
+   190→    setEmailError('');
+   191→    setPasswordError('');
+   192→
+   193→    const validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+   194→    const hasPass = password.length > 0;
+   195→
+   196→    if (!validEmail) {
+   197→      setEmailError('Enter a valid email address.');
+   198→      emailInputRef.current?.focus();
+   199→      return;
+   200→    }
+   201→    if (!hasPass) {
+   202→      setPasswordError('Password is required.');
+   203→      passwordInputRef.current?.focus();
+   204→      return;
+   205→    }
+   206→
+   207→    try {
+   208→      await login(email.trim(), password);
+   209→      toast.success('Welcome back!');
+   210→    } catch (err) {
+   211→      setFormAlert(err instanceof Error ? err.message : "We couldn't sign you in. Check your details and try again.");
+   212→    }
+   213→  };
+   214→
+   215→  /* ---- WhatsApp OTP ---- */
+   216→  const validPhone = (v: string) => /^\+?[0-9][0-9 ]{7,16}$/.test(v.trim());
+   217→
+   218→  const handleSendCode = () => {
+   219→    setWhatsappAlert('');
+   220→    setPhoneError('');
+   221→    if (!validPhone(phone)) {
+   222→      setPhoneError('Enter a valid phone number with country code.');
+   223→      phoneInputRef.current?.focus();
+   224→      return;
+   225→    }
+   226→    // Simulate sending OTP
+   227→    setOtpSentTo(phone.trim());
+   228→    setOtpStep('code');
+   229→    setResendCountdown(30);
+   230→    requestAnimationFrame(() => otpInputRef.current?.focus());
+   231→  };
+   232→
+   233→  const handleVerifyOtp = (e: React.FormEvent) => {
+   234→    e.preventDefault();
+   235→    setWhatsappAlert('');
+   236→    setOtpError('');
+   237→    if (otpCode.length !== 6) {
+   238→      setOtpError('Enter the 6-digit code.');
+   239→      otpInputRef.current?.focus();
+   240→      return;
+   241→    }
+   242→    // TODO: Real WhatsApp OTP verification
+   243→    setWhatsappAlert("That code didn't match. Check it and try again, or resend.");
+   244→    otpInputRef.current?.focus();
+   245→  };
+   246→
+   247→  const handleResend = () => {
+   248→    if (resendCountdown > 0) return;
+   249→    // TODO: Re-trigger backend OTP send
+   250→    setResendCountdown(30);
+   251→  };
+   252→
+   253→  /* ---- Demo login ---- */
+   254→  const handleDemoLogin = async (account: DemoAccount) => {
+   255→    try {
+   256→      await login(account.email, account.password);
+   257→      toast.success(`Logged in as ${account.label}`);
+   258→    } catch (err) {
+   259→      toast.error(err instanceof Error ? err.message : 'Login failed');
+   260→    }
+   261→  };
+   262→
+   263→  /* ================================================================ */
+   264→  /*  RENDER                                                           */
+   265→  /* ================================================================ */
+   266→  return (
+   267→    <div className="min-h-dvh flex items-center justify-center bg-gray-100 dark:bg-gray-950 p-6">
+   268→      <main
+   269→        className="w-full max-w-[420px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-[20px] shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_rgba(16,24,40,0.08)] p-8 pb-6"
+   270→        role="main"
+   271→        aria-labelledby="auth-title"
+   272→      >
+   273→        {/* ---- Brand ---- */}
+   274→        <div className="flex flex-col items-center text-center gap-3 mb-6">
+   275→          <span
+   276→            className="w-14 h-14 rounded-xl bg-emerald-600 text-white grid place-items-center"
+   277→            aria-hidden="true"
+   278→          >
+   279→            <BrandLogo className="w-[30px] h-[30px]" />
+   280→          </span>
+   281→          <h1
+   282→            id="auth-title"
+   283→            className="text-[26px] leading-tight font-semibold text-gray-900 dark:text-gray-100 tracking-[-0.01em] m-0"
+   284→          >
+   285→            Welcome back
+   286→          </h1>
+   287→          <p className="text-base text-gray-500 dark:text-gray-400 m-0 max-w-[30ch]">
+   288→            Sign in to Smart Facility Maintenance Management
+   289→          </p>
+   290→        </div>
+   291→
+   292→        {/* ============================================================ */}
+   293→        {/*  PANEL: Choices (Google / Email / WhatsApp)                   */}
+   294→        {/* ============================================================ */}
+   295→        <div
+   296→          className={`flex flex-col gap-3 ${panel === 'choices' ? '' : 'hidden'}`}
+   297→          data-open={panel === 'choices'}
+   298→        >
+   299→          {/* Google */}
+   300→          <button
+   301→            type="button"
+   302→            onClick={() => {
+   303→              /* TODO: window.location = '/auth/google' */
+   304→              toast.info('Google sign-in coming soon');
+   305→            }}
+   306→            className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
+   307→          >
+   308→            <GoogleIcon className="w-5 h-5 shrink-0" />
+   309→            <span>Continue with Google</span>
+   310→          </button>
+   311→
+   312→          {/* Divider */}
+   313→          <div className="flex items-center gap-3 my-2 text-gray-500 dark:text-gray-400 text-sm font-medium">
+   314→            <span className="flex-1 h-px bg-gray-200 dark:bg-gray-800" />
+   315→            <span>or</span>
+   316→            <span className="flex-1 h-px bg-gray-200 dark:bg-gray-800" />
+   317→          </div>
+   318→
+   319→          {/* Email */}
+   320→          <button
+   321→            type="button"
+   322→            ref={emailBackRef}
+   323→            onClick={() => showPanel('email')}
+   324→            className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium text-base transition-colors duration-120 cursor-pointer border border-gray-200 dark:border-gray-700"
+   325→          >
+   326→            <Mail className="w-5 h-5 shrink-0" />
+   327→            <span>Continue with Email</span>
+   328→          </button>
+   329→
+   330→          {/* WhatsApp */}
+   331→          <button
+   332→            type="button"
+   333→            ref={whatsappBackRef}
+   334→            onClick={() => {
+   335→              setOtpStep('phone');
+   336→              showPanel('whatsapp');
+   337→            }}
+   338→            className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium text-base transition-colors duration-120 cursor-pointer border border-gray-200 dark:border-gray-700"
+   339→          >
+   340→            <WhatsAppIcon className="w-5 h-5 shrink-0 text-green-600" />
+   341→            <span>Continue with WhatsApp</span>
+   342→          </button>
+   343→
+   344→          {/* Skip */}
+   345→          <button
+   346→            type="button"
+   347→            onClick={() => {
+   348→              /* TODO: redirect to public dashboard */
+   349→              toast.info('Guest access coming soon');
+   350→            }}
+   351→            className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 font-medium text-base transition-colors duration-120 cursor-pointer border border-gray-200 dark:border-gray-700"
+   352→          >
+   353→            <span>Skip for now</span>
+   354→          </button>
+   355→
+   356→          {/* ---- Demo Accounts ---- */}
+   357→          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+   358→            <p className="text-xs font-medium text-gray-400 dark:text-gray-500 text-center mb-2.5">
+   359→              Quick Demo Access
+   360→            </p>
+   361→            <div className="flex flex-wrap justify-center gap-1.5">
+   362→              {demoAccounts.map((account) => (
+   363→                <button
+   364→                  key={account.label}
+   365→                  type="button"
+   366→                  onClick={() => handleDemoLogin(account)}
+   367→                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-transparent"
+   368→                  title={`Login as ${account.label}`}
+   369→                >
+   370→                  {account.icon}
+   371→                  {account.label}
+   372→                </button>
+   373→              ))}
+   374→            </div>
+   375→          </div>
+   376→        </div>
+   377→
+   378→        {/* ============================================================ */}
+   379→        {/*  PANEL: Email Form                                             */}
+   380→        {/* ============================================================ */}
+   381→        <form
+   382→          className={`flex flex-col gap-4 ${panel === 'email' ? '' : 'hidden'}`}
+   383→          onSubmit={handleEmailSubmit}
+   384→          noValidate
+   385→          aria-labelledby="auth-title"
+   386→        >
+   387→          {/* Alert */}
+   388→          {formAlert && (
+   389→            <div
+   390→              role="alert"
+   391→              aria-live="assertive"
+   392→              className="flex items-start gap-2 p-3 text-sm rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800"
+   393→            >
+   394→              <span>{formAlert}</span>
+   395→            </div>
+   396→          )}
+   397→
+   398→          {/* Email field */}
+   399→          <div className="flex flex-col gap-1">
+   400→            <label
+   401→              htmlFor="login-email"
+   402→              className="text-sm font-medium text-gray-900 dark:text-gray-100"
+   403→            >
+   404→              Email
+   405→            </label>
+   406→            <input
+   407→              ref={emailInputRef}
+   408→              id="login-email"
+   409→              name="email"
+   410→              type="email"
+   411→              inputMode="email"
+   412→              autoComplete="email"
+   413→              placeholder="you@company.com"
+   414→              value={email}
+   415→              onChange={(e) => {
+   416→                setEmail(e.target.value);
+   417→                if (emailError) setEmailError('');
+   418→                if (formAlert) setFormAlert('');
+   419→              }}
+   420→              aria-invalid={emailError ? 'true' : undefined}
+   421→              className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
+   422→                emailError
+   423→                  ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+   424→                  : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+   425→              }`}
+   426→            />
+   427→            {emailError && (
+   428→              <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">
+   429→                {emailError}
+   430→              </span>
+   431→            )}
+   432→          </div>
+   433→
+   434→          {/* Password field */}
+   435→          <div className="flex flex-col gap-1">
+   436→            <label
+   437→              htmlFor="login-password"
+   438→              className="text-sm font-medium text-gray-900 dark:text-gray-100"
+   439→            >
+   440→              Password
+   441→            </label>
+   442→            <div className="relative">
+   443→              <input
+   444→                ref={passwordInputRef}
+   445→                id="login-password"
+   446→                name="password"
+   447→                type={showPassword ? 'text' : 'password'}
+   448→                autoComplete="current-password"
+   449→                placeholder="Your password"
+   450→                value={password}
+   451→                onChange={(e) => {
+   452→                  setPassword(e.target.value);
+   453→                  if (passwordError) setPasswordError('');
+   454→                  if (formAlert) setFormAlert('');
+   455→                }}
+   456→                aria-invalid={passwordError ? 'true' : undefined}
+   457→                className={`w-full min-h-[48px] px-3 pr-10 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
+   458→                  passwordError
+   459→                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+   460→                    : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+   461→                }`}
+   462→              />
+   463→              <button
+   464→                type="button"
+   465→                onClick={() => setShowPassword(!showPassword)}
+   466→                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors bg-transparent border-none cursor-pointer p-0"
+   467→                aria-label={showPassword ? 'Hide password' : 'Show password'}
+   468→              >
+   469→                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+   470→              </button>
+   471→            </div>
+   472→            {passwordError && (
+   473→              <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">
+   474→                {passwordError}
+   475→              </span>
+   476→            )}
+   477→          </div>
+   478→
+   479→          {/* Submit */}
+   480→          <button
+   481→            type="submit"
+   482→            disabled={isLoading}
+   483→            className={`flex items-center justify-center gap-2 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none relative ${
+   484→              isLoading ? 'opacity-60 cursor-progress' : ''
+   485→            }`}
+   486→          >
+   487→            {isLoading && (
+   488→              <Loader2 className="w-[18px] h-[18px] animate-spin" />
+   489→            )}
+   490→            <span className={isLoading ? 'invisible' : ''}>Sign in</span>
+   491→          </button>
+   492→
+   493→          {/* Back */}
+   494→          <button
+   495→            type="button"
+   496→            onClick={() => showPanel('choices')}
+   497→            className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors"
+   498→          >
+   499→            <span className="inline-flex items-center gap-1">
+   500→              <ArrowLeft className="w-3.5 h-3.5" />
+   501→              Other sign-in options
+   502→            </span>
+   503→          </button>
+   504→        </form>
+   505→
+   506→        {/* ============================================================ */}
+   507→        {/*  PANEL: WhatsApp OTP                                           */}
+   508→        {/* ============================================================ */}
+   509→        <form
+   510→          className={`flex flex-col gap-4 ${panel === 'whatsapp' ? '' : 'hidden'}`}
+   511→          onSubmit={handleVerifyOtp}
+   512→          noValidate
+   513→          aria-labelledby="auth-title"
+   514→        >
+   515→          {/* Alert */}
+   516→          {whatsappAlert && (
+   517→            <div
+   518→              role="alert"
+   519→              aria-live="assertive"
+   520→              className="flex items-start gap-2 p-3 text-sm rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800"
+   521→            >
+   522→              <span>{whatsappAlert}</span>
+   523→            </div>
+   524→          )}
+   525→
+   526→          {/* ---- Step 1: Phone ---- */}
+   527→          <div className={`flex flex-col gap-4 ${otpStep === 'phone' ? '' : 'hidden'}`}>
+   528→            <div className="flex flex-col gap-1">
+   529→              <label
+   530→                htmlFor="wa-phone"
+   531→                className="text-sm font-medium text-gray-900 dark:text-gray-100"
+   532→              >
+   533→                WhatsApp phone number
+   534→              </label>
+   535→              <input
+   536→                ref={phoneInputRef}
+   537→                id="wa-phone"
+   538→                name="phone"
+   539→                type="tel"
+   540→                inputMode="tel"
+   541→                autoComplete="tel"
+   542→                placeholder="+673 712 3456"
+   543→                value={phone}
+   544→                onChange={(e) => {
+   545→                  setPhone(e.target.value);
+   546→                  if (phoneError) setPhoneError('');
+   547→                  if (whatsappAlert) setWhatsappAlert('');
+   548→                }}
+   549→                aria-invalid={phoneError ? 'true' : undefined}
+   550→                className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
+   551→                  phoneError
+   552→                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+   553→                    : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+   554→                }`}
+   555→              />
+   556→              <span className="text-sm text-gray-500 dark:text-gray-400">
+   557→                Include your country code. We&apos;ll send a 6-digit code on WhatsApp.
+   558→              </span>
+   559→              {phoneError && (
+   560→                <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">
+   561→                  {phoneError}
+   562→                </span>
+   563→              )}
+   564→            </div>
+   565→
+   566→            <button
+   567→              type="button"
+   568→              onClick={handleSendCode}
+   569→              className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
+   570→            >
+   571→              <WhatsAppIcon className="w-5 h-5 shrink-0" />
+   572→              <span>Send code via WhatsApp</span>
+   573→            </button>
+   574→
+   575→            <button
+   576→              type="button"
+   577→              onClick={() => showPanel('choices')}
+   578→              className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors"
+   579→            >
+   580→              <span className="inline-flex items-center gap-1">
+   581→                <ArrowLeft className="w-3.5 h-3.5" />
+   582→                Other sign-in options
+   583→              </span>
+   584→            </button>
+   585→          </div>
+   586→
+   587→          {/* ---- Step 2: OTP Code ---- */}
+   588→          <div className={`flex flex-col gap-4 ${otpStep === 'code' ? '' : 'hidden'}`}>
+   589→            <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
+   590→              Enter the 6-digit code we sent to{' '}
+   591→              <strong className="text-gray-900 dark:text-gray-100 font-semibold">
+   592→                {otpSentTo}
+   593→              </strong>
+   594→              .
+   595→            </p>
+   596→
+   597→            <div className="flex flex-col gap-1">
+   598→              <label
+   599→                htmlFor="wa-otp"
+   600→                className="text-sm font-medium text-gray-900 dark:text-gray-100"
+   601→              >
+   602→                Verification code
+   603→              </label>
+   604→              <input
+   605→                ref={otpInputRef}
+   606→                id="wa-otp"
+   607→                name="otp"
+   608→                type="text"
+   609→                inputMode="numeric"
+   610→                autoComplete="one-time-code"
+   611→                maxLength={6}
+   612→                placeholder="------"
+   613→                value={otpCode}
+   614→                onChange={(e) => {
+   615→                  setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6));
+   616→                  if (otpError) setOtpError('');
+   617→                  if (whatsappAlert) setWhatsappAlert('');
+   618→                }}
+   619→                aria-invalid={otpError ? 'true' : undefined}
+   620→                className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-lg text-center tracking-[0.5em] font-variant-numeric tabular-nums text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none pr-[calc(12px-0.5em)] ${
+   621→                  otpError
+   622→                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+   623→                    : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+   624→                }`}
+   625→              />
+   626→              {otpError && (
+   627→                <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">
+   628→                  {otpError}
+   629→                </span>
+   630→              )}
+   631→            </div>
+   632→
+   633→            <button
+   634→              type="submit"
+   635→              className="flex items-center justify-center gap-2 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
+   636→            >
+   637→              <span>Verify and sign in</span>
+   638→            </button>
+   639→
+   640→            <button
+   641→              type="button"
+   642→              onClick={handleResend}
+   643→              disabled={resendCountdown > 0}
+   644→              className={`self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm p-1 px-2 rounded-lg transition-colors ${
+   645→                resendCountdown > 0
+   646→                  ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
+   647→                  : 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline'
+   648→              }`}
+   649→            >
+   650→              {resendCountdown > 0
+   651→                ? `Resend code in ${resendCountdown}s`
+   652→                : 'Resend code'}
+   653→            </button>
+   654→
+   655→            <button
+   656→              type="button"
+   657→              onClick={() => {
+   658→                setOtpStep('phone');
+   659→                requestAnimationFrame(() => phoneInputRef.current?.focus());
+   660→                if (countdownRef.current) clearInterval(countdownRef.current);
+   661→                setResendCountdown(0);
+   662→              }}
+   663→              className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors"
+   664→            >
+   665→              <span className="inline-flex items-center gap-1">
+   666→                <ArrowLeft className="w-3.5 h-3.5" />
+   667→                Change number
+   668→              </span>
+   669→            </button>
+   670→          </div>
+   671→        </form>
+   672→
+   673→        {/* ---- Footer ---- */}
+   674→        <footer className="mt-6 text-center text-sm text-gray-400 dark:text-gray-500 leading-relaxed">
+   675→          <p>
+   676→            By continuing, you agree to our{' '}
+   677→            <a
+   678→              href="/terms"
+   679→              className="text-gray-600 dark:text-gray-400 underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100 rounded"
+   680→            >
+   681→              Terms of Service
+   682→            </a>{' '}
+   683→            and{' '}
+   684→            <a
+   685→              href="/privacy"
+   686→              className="text-gray-600 dark:text-gray-400 underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100 rounded"
+   687→            >
+   688→              Privacy Policy
+   689→            </a>
+   690→            .
+   691→          </p>
+   692→          <p className="mt-2 text-gray-400 dark:text-gray-500">
+   693→            &copy; {new Date().getFullYear()} Smart Facility Maintenance Management
+   694→          </p>
+   695→        </footer>
+   696→
+   697→        {/* Screen-reader live region */}
+   698→        <p className="sr-only" role="status" aria-live="polite" />
+   699→      </main>
+   700→    </div>
+   701→  );
+   702→}
