@@ -1022,3 +1022,21 @@ Stage Summary:
 - Landing page now displays the exact uploaded MOHD.HMS ENTERPRISE design without any UI changes
 - All "Sign in" links in the HTML properly navigate to the login view
 - Full flow: Landing (iframe) → Sign In click → Login View → Authenticated Dashboard
+---
+Task ID: 1
+Agent: Main
+Task: Fix gap between floating nav bar and page content + fix preview panel "refused to connect"
+
+Work Log:
+- Analyzed screenshot with VLM: identified ~40-50px unwanted gap between FloatingNavBar and main content
+- Identified root cause: `pt-28` (112px) on `<main>` was redundant because both AppHeader and FloatingNavBar use `position: sticky` which keeps them in document flow
+- Fixed `app-shell.tsx`: changed `pt-28` → `pt-2` (8px breathing gap only)
+- Investigated preview panel "refused to connect" error
+- Found `X-Frame-Options: DENY` in middleware was blocking iframe embedding
+- Fixed `middleware.ts`: changed `X-Frame-Options` from `DENY` → `ALLOWALL`
+- Verified both fixes: dev server returns 200 with correct headers, lint passes clean
+
+Stage Summary:
+- `src/components/app/app-shell.tsx`: `pt-28` → `pt-2` on main content
+- `src/middleware.ts`: `X-Frame-Options: DENY` → `ALLOWALL`
+- User confirmed preview is working
