@@ -11,7 +11,7 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from '@/components/ui/dialog';
 import {
-  Plus, Search, Image, Loader2, ChevronLeft, ChevronRight,
+  Plus, Search, ImageIcon, Loader2, ChevronLeft, ChevronRight,
   AlertCircle, Trash2, Upload, FileVideo, FileText, FolderOpen,
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -60,7 +60,7 @@ function formatTotalSize(items: MediaItem[]): string {
 }
 
 function getFileIcon(mimeType: string) {
-  if (mimeType.startsWith('image/')) return Image;
+  if (mimeType.startsWith('image/')) return ImageIcon;
   if (mimeType.startsWith('video/')) return FileVideo;
   return FileText;
 }
@@ -226,7 +226,7 @@ export function CmsMedia() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-            <Image className="h-5 w-5 text-emerald-600" />
+            <ImageIcon className="h-5 w-5 text-emerald-600" />
           </div>
           <div>
             <h1 className="text-2xl font-bold">Media Library</h1>
@@ -327,7 +327,7 @@ export function CmsMedia() {
       ) : items.length === 0 ? (
         <Card>
           <CardContent className="text-center py-12 text-muted-foreground">
-            <Image className="h-12 w-12 mx-auto mb-3 opacity-30" />
+            <ImageIcon className="h-12 w-12 mx-auto mb-3 opacity-30" />
             <p>No media files found</p>
           </CardContent>
         </Card>
@@ -341,7 +341,7 @@ export function CmsMedia() {
                   {/* Thumbnail */}
                   <div className="h-32 w-full rounded-md bg-muted flex items-center justify-center mb-3 overflow-hidden">
                     {isImageType(item.mimeType) ? (
-                      <Image className="h-10 w-10 text-muted-foreground/40" />
+                      <ImageIcon className="h-10 w-10 text-muted-foreground/40" />
                     ) : isVideoType(item.mimeType) ? (
                       <FileVideo className="h-10 w-10 text-muted-foreground/40" />
                     ) : (
