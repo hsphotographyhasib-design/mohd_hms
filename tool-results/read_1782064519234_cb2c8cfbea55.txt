@@ -1,0 +1,1117 @@
+     1→[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+     2→[log] [HMR] connected
+     3→[log] [Fast Refresh] rebuilding
+     4→[log] [Fast Refresh] done in 120ms
+     5→[log] [Fast Refresh] rebuilding
+     6→[error] ./node_modules/got/index.js:91:21
+     7→Module not found: Can't resolve 'electron'
+     8→  89 |
+     9→  90 |          if (opts.useElectronNet && process.versions.electron) {
+    10→> 91 |                  const electron = require('electron');
+    11→     |                                   ^^^^^^^^^^^^^^^^^^^
+    12→  92 |                  fn = electron.net || electron.remote.net;
+    13→  93 |          }
+    14→  94 |
+    15→
+    16→Import trace:
+    17→  App Route:
+    18→    ./node_modules/got/index.js
+    19→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+    20→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+    21→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+    22→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+    23→    ./node_modules/@open-wa/wa-automate/dist/index.js
+    24→    ./src/lib/whatsapp-service/manager.ts
+    25→    ./src/app/api/whatsapp/connection/route.ts
+    26→
+    27→https://nextjs.org/docs/messages/module-not-found
+    28→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+    29→Module not found: Can't resolve 'passport'
+    30→  2 |
+    31→  3 | // Imports.
+    32→> 4 | const passport  = require('passport');
+    33→    |                   ^^^^^^^^^^^^^^^^^^^
+    34→  5 | const util = require('util');
+    35→  6 |
+    36→  7 | // Define strategy.
+    37→
+    38→Import trace:
+    39→  App Route:
+    40→    ./node_modules/http-auth/src/server/passport.js
+    41→    ./node_modules/http-auth/src/http-auth.js
+    42→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+    43→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+    44→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+    45→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+    46→    ./node_modules/@open-wa/wa-automate/dist/index.js
+    47→    ./src/lib/whatsapp-service/manager.ts
+    48→    ./src/app/api/whatsapp/connection/route.ts
+    49→
+    50→https://nextjs.org/docs/messages/module-not-found
+    51→[error] ./node_modules/got/index.js:91:21
+    52→Module not found: Can't resolve 'electron'
+    53→  89 |
+    54→  90 |          if (opts.useElectronNet && process.versions.electron) {
+    55→> 91 |                  const electron = require('electron');
+    56→     |                                   ^^^^^^^^^^^^^^^^^^^
+    57→  92 |                  fn = electron.net || electron.remote.net;
+    58→  93 |          }
+    59→  94 |
+    60→
+    61→Import trace:
+    62→  App Route:
+    63→    ./node_modules/got/index.js
+    64→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+    65→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+    66→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+    67→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+    68→    ./node_modules/@open-wa/wa-automate/dist/index.js
+    69→    ./src/lib/whatsapp-service/manager.ts
+    70→    ./src/app/api/whatsapp/connection/route.ts
+    71→
+    72→https://nextjs.org/docs/messages/module-not-found
+    73→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+    74→Module not found: Can't resolve 'passport'
+    75→  2 |
+    76→  3 | // Imports.
+    77→> 4 | const passport  = require('passport');
+    78→    |                   ^^^^^^^^^^^^^^^^^^^
+    79→  5 | const util = require('util');
+    80→  6 |
+    81→  7 | // Define strategy.
+    82→
+    83→Import trace:
+    84→  App Route:
+    85→    ./node_modules/http-auth/src/server/passport.js
+    86→    ./node_modules/http-auth/src/http-auth.js
+    87→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+    88→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+    89→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+    90→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+    91→    ./node_modules/@open-wa/wa-automate/dist/index.js
+    92→    ./src/lib/whatsapp-service/manager.ts
+    93→    ./src/app/api/whatsapp/connection/route.ts
+    94→
+    95→https://nextjs.org/docs/messages/module-not-found
+    96→[log] [Fast Refresh] rebuilding
+    97→[error] ./node_modules/got/index.js:91:21
+    98→Module not found: Can't resolve 'electron'
+    99→  89 |
+   100→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   101→> 91 |                  const electron = require('electron');
+   102→     |                                   ^^^^^^^^^^^^^^^^^^^
+   103→  92 |                  fn = electron.net || electron.remote.net;
+   104→  93 |          }
+   105→  94 |
+   106→
+   107→Import trace:
+   108→  App Route:
+   109→    ./node_modules/got/index.js
+   110→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   111→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   112→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   113→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   114→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   115→    ./src/lib/whatsapp-service/manager.ts
+   116→    ./src/app/api/whatsapp/connection/route.ts
+   117→
+   118→https://nextjs.org/docs/messages/module-not-found
+   119→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   120→Module not found: Can't resolve 'passport'
+   121→  2 |
+   122→  3 | // Imports.
+   123→> 4 | const passport  = require('passport');
+   124→    |                   ^^^^^^^^^^^^^^^^^^^
+   125→  5 | const util = require('util');
+   126→  6 |
+   127→  7 | // Define strategy.
+   128→
+   129→Import trace:
+   130→  App Route:
+   131→    ./node_modules/http-auth/src/server/passport.js
+   132→    ./node_modules/http-auth/src/http-auth.js
+   133→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   134→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   135→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   136→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   137→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   138→    ./src/lib/whatsapp-service/manager.ts
+   139→    ./src/app/api/whatsapp/connection/route.ts
+   140→
+   141→https://nextjs.org/docs/messages/module-not-found
+   142→[log] [Fast Refresh] rebuilding
+   143→[error] ./node_modules/got/index.js:91:21
+   144→Module not found: Can't resolve 'electron'
+   145→  89 |
+   146→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   147→> 91 |                  const electron = require('electron');
+   148→     |                                   ^^^^^^^^^^^^^^^^^^^
+   149→  92 |                  fn = electron.net || electron.remote.net;
+   150→  93 |          }
+   151→  94 |
+   152→
+   153→Import trace:
+   154→  App Route:
+   155→    ./node_modules/got/index.js
+   156→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   157→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   158→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   159→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   160→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   161→    ./src/lib/whatsapp-service/manager.ts
+   162→    ./src/app/api/whatsapp/connection/route.ts
+   163→
+   164→https://nextjs.org/docs/messages/module-not-found
+   165→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   166→Module not found: Can't resolve 'passport'
+   167→  2 |
+   168→  3 | // Imports.
+   169→> 4 | const passport  = require('passport');
+   170→    |                   ^^^^^^^^^^^^^^^^^^^
+   171→  5 | const util = require('util');
+   172→  6 |
+   173→  7 | // Define strategy.
+   174→
+   175→Import trace:
+   176→  App Route:
+   177→    ./node_modules/http-auth/src/server/passport.js
+   178→    ./node_modules/http-auth/src/http-auth.js
+   179→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   180→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   181→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   182→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   183→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   184→    ./src/lib/whatsapp-service/manager.ts
+   185→    ./src/app/api/whatsapp/connection/route.ts
+   186→
+   187→https://nextjs.org/docs/messages/module-not-found
+   188→[log] [Fast Refresh] rebuilding
+   189→[log] [Fast Refresh] rebuilding
+   190→[error] ./node_modules/got/index.js:91:21
+   191→Module not found: Can't resolve 'electron'
+   192→  89 |
+   193→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   194→> 91 |                  const electron = require('electron');
+   195→     |                                   ^^^^^^^^^^^^^^^^^^^
+   196→  92 |                  fn = electron.net || electron.remote.net;
+   197→  93 |          }
+   198→  94 |
+   199→
+   200→Import trace:
+   201→  App Route:
+   202→    ./node_modules/got/index.js
+   203→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   204→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   205→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   206→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   207→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   208→    ./src/lib/whatsapp-service/manager.ts
+   209→    ./src/app/api/whatsapp/connection/route.ts
+   210→
+   211→https://nextjs.org/docs/messages/module-not-found
+   212→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   213→Module not found: Can't resolve 'passport'
+   214→  2 |
+   215→  3 | // Imports.
+   216→> 4 | const passport  = require('passport');
+   217→    |                   ^^^^^^^^^^^^^^^^^^^
+   218→  5 | const util = require('util');
+   219→  6 |
+   220→  7 | // Define strategy.
+   221→
+   222→Import trace:
+   223→  App Route:
+   224→    ./node_modules/http-auth/src/server/passport.js
+   225→    ./node_modules/http-auth/src/http-auth.js
+   226→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   227→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   228→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   229→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   230→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   231→    ./src/lib/whatsapp-service/manager.ts
+   232→    ./src/app/api/whatsapp/connection/route.ts
+   233→
+   234→https://nextjs.org/docs/messages/module-not-found
+   235→[error] ./node_modules/got/index.js:91:21
+   236→Module not found: Can't resolve 'electron'
+   237→  89 |
+   238→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   239→> 91 |                  const electron = require('electron');
+   240→     |                                   ^^^^^^^^^^^^^^^^^^^
+   241→  92 |                  fn = electron.net || electron.remote.net;
+   242→  93 |          }
+   243→  94 |
+   244→
+   245→Import trace:
+   246→  App Route:
+   247→    ./node_modules/got/index.js
+   248→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   249→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   250→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   251→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   252→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   253→    ./src/lib/whatsapp-service/manager.ts
+   254→    ./src/app/api/whatsapp/connection/route.ts
+   255→
+   256→https://nextjs.org/docs/messages/module-not-found
+   257→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   258→Module not found: Can't resolve 'passport'
+   259→  2 |
+   260→  3 | // Imports.
+   261→> 4 | const passport  = require('passport');
+   262→    |                   ^^^^^^^^^^^^^^^^^^^
+   263→  5 | const util = require('util');
+   264→  6 |
+   265→  7 | // Define strategy.
+   266→
+   267→Import trace:
+   268→  App Route:
+   269→    ./node_modules/http-auth/src/server/passport.js
+   270→    ./node_modules/http-auth/src/http-auth.js
+   271→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   272→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   273→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   274→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   275→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   276→    ./src/lib/whatsapp-service/manager.ts
+   277→    ./src/app/api/whatsapp/connection/route.ts
+   278→
+   279→https://nextjs.org/docs/messages/module-not-found
+   280→[log] [Fast Refresh] rebuilding
+   281→[error] ./node_modules/got/index.js:91:21
+   282→Module not found: Can't resolve 'electron'
+   283→  89 |
+   284→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   285→> 91 |                  const electron = require('electron');
+   286→     |                                   ^^^^^^^^^^^^^^^^^^^
+   287→  92 |                  fn = electron.net || electron.remote.net;
+   288→  93 |          }
+   289→  94 |
+   290→
+   291→Import trace:
+   292→  App Route:
+   293→    ./node_modules/got/index.js
+   294→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   295→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   296→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   297→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   298→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   299→    ./src/lib/whatsapp-service/manager.ts
+   300→    ./src/app/api/whatsapp/connection/route.ts
+   301→
+   302→https://nextjs.org/docs/messages/module-not-found
+   303→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   304→Module not found: Can't resolve 'passport'
+   305→  2 |
+   306→  3 | // Imports.
+   307→> 4 | const passport  = require('passport');
+   308→    |                   ^^^^^^^^^^^^^^^^^^^
+   309→  5 | const util = require('util');
+   310→  6 |
+   311→  7 | // Define strategy.
+   312→
+   313→Import trace:
+   314→  App Route:
+   315→    ./node_modules/http-auth/src/server/passport.js
+   316→    ./node_modules/http-auth/src/http-auth.js
+   317→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   318→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   319→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   320→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   321→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   322→    ./src/lib/whatsapp-service/manager.ts
+   323→    ./src/app/api/whatsapp/connection/route.ts
+   324→
+   325→https://nextjs.org/docs/messages/module-not-found
+   326→[log] [Fast Refresh] rebuilding
+   327→[error] ./node_modules/got/index.js:91:21
+   328→Module not found: Can't resolve 'electron'
+   329→  89 |
+   330→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   331→> 91 |                  const electron = require('electron');
+   332→     |                                   ^^^^^^^^^^^^^^^^^^^
+   333→  92 |                  fn = electron.net || electron.remote.net;
+   334→  93 |          }
+   335→  94 |
+   336→
+   337→Import trace:
+   338→  App Route:
+   339→    ./node_modules/got/index.js
+   340→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   341→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   342→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   343→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   344→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   345→    ./src/lib/whatsapp-service/manager.ts
+   346→    ./src/app/api/whatsapp/connection/route.ts
+   347→
+   348→https://nextjs.org/docs/messages/module-not-found
+   349→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   350→Module not found: Can't resolve 'passport'
+   351→  2 |
+   352→  3 | // Imports.
+   353→> 4 | const passport  = require('passport');
+   354→    |                   ^^^^^^^^^^^^^^^^^^^
+   355→  5 | const util = require('util');
+   356→  6 |
+   357→  7 | // Define strategy.
+   358→
+   359→Import trace:
+   360→  App Route:
+   361→    ./node_modules/http-auth/src/server/passport.js
+   362→    ./node_modules/http-auth/src/http-auth.js
+   363→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   364→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   365→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   366→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   367→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   368→    ./src/lib/whatsapp-service/manager.ts
+   369→    ./src/app/api/whatsapp/connection/route.ts
+   370→
+   371→https://nextjs.org/docs/messages/module-not-found
+   372→[log] [Fast Refresh] rebuilding
+   373→[error] ./node_modules/got/index.js:91:21
+   374→Module not found: Can't resolve 'electron'
+   375→  89 |
+   376→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   377→> 91 |                  const electron = require('electron');
+   378→     |                                   ^^^^^^^^^^^^^^^^^^^
+   379→  92 |                  fn = electron.net || electron.remote.net;
+   380→  93 |          }
+   381→  94 |
+   382→
+   383→Import trace:
+   384→  App Route:
+   385→    ./node_modules/got/index.js
+   386→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   387→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   388→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   389→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   390→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   391→    ./src/lib/whatsapp-service/manager.ts
+   392→    ./src/app/api/whatsapp/connection/route.ts
+   393→
+   394→https://nextjs.org/docs/messages/module-not-found
+   395→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   396→Module not found: Can't resolve 'passport'
+   397→  2 |
+   398→  3 | // Imports.
+   399→> 4 | const passport  = require('passport');
+   400→    |                   ^^^^^^^^^^^^^^^^^^^
+   401→  5 | const util = require('util');
+   402→  6 |
+   403→  7 | // Define strategy.
+   404→
+   405→Import trace:
+   406→  App Route:
+   407→    ./node_modules/http-auth/src/server/passport.js
+   408→    ./node_modules/http-auth/src/http-auth.js
+   409→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   410→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   411→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   412→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   413→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   414→    ./src/lib/whatsapp-service/manager.ts
+   415→    ./src/app/api/whatsapp/connection/route.ts
+   416→
+   417→https://nextjs.org/docs/messages/module-not-found
+   418→[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+   419→[log] [HMR] connected
+   420→[error] ./node_modules/got/index.js:91:21
+   421→Module not found: Can't resolve 'electron'
+   422→  89 |
+   423→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   424→> 91 |                  const electron = require('electron');
+   425→     |                                   ^^^^^^^^^^^^^^^^^^^
+   426→  92 |                  fn = electron.net || electron.remote.net;
+   427→  93 |          }
+   428→  94 |
+   429→
+   430→Import trace:
+   431→  App Route:
+   432→    ./node_modules/got/index.js
+   433→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   434→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   435→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   436→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   437→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   438→    ./src/lib/whatsapp-service/manager.ts
+   439→    ./src/app/api/whatsapp/connection/route.ts
+   440→
+   441→https://nextjs.org/docs/messages/module-not-found
+   442→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   443→Module not found: Can't resolve 'passport'
+   444→  2 |
+   445→  3 | // Imports.
+   446→> 4 | const passport  = require('passport');
+   447→    |                   ^^^^^^^^^^^^^^^^^^^
+   448→  5 | const util = require('util');
+   449→  6 |
+   450→  7 | // Define strategy.
+   451→
+   452→Import trace:
+   453→  App Route:
+   454→    ./node_modules/http-auth/src/server/passport.js
+   455→    ./node_modules/http-auth/src/http-auth.js
+   456→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   457→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   458→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   459→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   460→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   461→    ./src/lib/whatsapp-service/manager.ts
+   462→    ./src/app/api/whatsapp/connection/route.ts
+   463→
+   464→https://nextjs.org/docs/messages/module-not-found
+   465→[log] [Fast Refresh] rebuilding
+   466→[error] ./node_modules/got/index.js:91:21
+   467→Module not found: Can't resolve 'electron'
+   468→  89 |
+   469→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   470→> 91 |                  const electron = require('electron');
+   471→     |                                   ^^^^^^^^^^^^^^^^^^^
+   472→  92 |                  fn = electron.net || electron.remote.net;
+   473→  93 |          }
+   474→  94 |
+   475→
+   476→Import trace:
+   477→  App Route:
+   478→    ./node_modules/got/index.js
+   479→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   480→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   481→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   482→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   483→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   484→    ./src/lib/whatsapp-service/manager.ts
+   485→    ./src/app/api/whatsapp/connection/route.ts
+   486→
+   487→https://nextjs.org/docs/messages/module-not-found
+   488→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   489→Module not found: Can't resolve 'passport'
+   490→  2 |
+   491→  3 | // Imports.
+   492→> 4 | const passport  = require('passport');
+   493→    |                   ^^^^^^^^^^^^^^^^^^^
+   494→  5 | const util = require('util');
+   495→  6 |
+   496→  7 | // Define strategy.
+   497→
+   498→Import trace:
+   499→  App Route:
+   500→    ./node_modules/http-auth/src/server/passport.js
+   501→    ./node_modules/http-auth/src/http-auth.js
+   502→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   503→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   504→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   505→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   506→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   507→    ./src/lib/whatsapp-service/manager.ts
+   508→    ./src/app/api/whatsapp/connection/route.ts
+   509→
+   510→https://nextjs.org/docs/messages/module-not-found
+   511→[error] ./node_modules/got/index.js:91:21
+   512→Module not found: Can't resolve 'electron'
+   513→  89 |
+   514→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   515→> 91 |                  const electron = require('electron');
+   516→     |                                   ^^^^^^^^^^^^^^^^^^^
+   517→  92 |                  fn = electron.net || electron.remote.net;
+   518→  93 |          }
+   519→  94 |
+   520→
+   521→Import trace:
+   522→  App Route:
+   523→    ./node_modules/got/index.js
+   524→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   525→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   526→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   527→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   528→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   529→    ./src/lib/whatsapp-service/manager.ts
+   530→    ./src/app/api/whatsapp/connection/route.ts
+   531→
+   532→https://nextjs.org/docs/messages/module-not-found
+   533→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   534→Module not found: Can't resolve 'passport'
+   535→  2 |
+   536→  3 | // Imports.
+   537→> 4 | const passport  = require('passport');
+   538→    |                   ^^^^^^^^^^^^^^^^^^^
+   539→  5 | const util = require('util');
+   540→  6 |
+   541→  7 | // Define strategy.
+   542→
+   543→Import trace:
+   544→  App Route:
+   545→    ./node_modules/http-auth/src/server/passport.js
+   546→    ./node_modules/http-auth/src/http-auth.js
+   547→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   548→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   549→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   550→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   551→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   552→    ./src/lib/whatsapp-service/manager.ts
+   553→    ./src/app/api/whatsapp/connection/route.ts
+   554→
+   555→https://nextjs.org/docs/messages/module-not-found
+   556→[log] [Fast Refresh] rebuilding
+   557→[error] ./node_modules/got/index.js:91:21
+   558→Module not found: Can't resolve 'electron'
+   559→  89 |
+   560→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   561→> 91 |                  const electron = require('electron');
+   562→     |                                   ^^^^^^^^^^^^^^^^^^^
+   563→  92 |                  fn = electron.net || electron.remote.net;
+   564→  93 |          }
+   565→  94 |
+   566→
+   567→Import trace:
+   568→  App Route:
+   569→    ./node_modules/got/index.js
+   570→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   571→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   572→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   573→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   574→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   575→    ./src/lib/whatsapp-service/manager.ts
+   576→    ./src/app/api/whatsapp/connection/route.ts
+   577→
+   578→https://nextjs.org/docs/messages/module-not-found
+   579→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   580→Module not found: Can't resolve 'passport'
+   581→  2 |
+   582→  3 | // Imports.
+   583→> 4 | const passport  = require('passport');
+   584→    |                   ^^^^^^^^^^^^^^^^^^^
+   585→  5 | const util = require('util');
+   586→  6 |
+   587→  7 | // Define strategy.
+   588→
+   589→Import trace:
+   590→  App Route:
+   591→    ./node_modules/http-auth/src/server/passport.js
+   592→    ./node_modules/http-auth/src/http-auth.js
+   593→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   594→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   595→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   596→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   597→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   598→    ./src/lib/whatsapp-service/manager.ts
+   599→    ./src/app/api/whatsapp/connection/route.ts
+   600→
+   601→https://nextjs.org/docs/messages/module-not-found
+   602→[error] ./node_modules/got/index.js:91:21
+   603→Module not found: Can't resolve 'electron'
+   604→  89 |
+   605→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   606→> 91 |                  const electron = require('electron');
+   607→     |                                   ^^^^^^^^^^^^^^^^^^^
+   608→  92 |                  fn = electron.net || electron.remote.net;
+   609→  93 |          }
+   610→  94 |
+   611→
+   612→Import trace:
+   613→  App Route:
+   614→    ./node_modules/got/index.js
+   615→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   616→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   617→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   618→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   619→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   620→    ./src/lib/whatsapp-service/manager.ts
+   621→    ./src/app/api/whatsapp/connection/route.ts
+   622→
+   623→https://nextjs.org/docs/messages/module-not-found
+   624→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   625→Module not found: Can't resolve 'passport'
+   626→  2 |
+   627→  3 | // Imports.
+   628→> 4 | const passport  = require('passport');
+   629→    |                   ^^^^^^^^^^^^^^^^^^^
+   630→  5 | const util = require('util');
+   631→  6 |
+   632→  7 | // Define strategy.
+   633→
+   634→Import trace:
+   635→  App Route:
+   636→    ./node_modules/http-auth/src/server/passport.js
+   637→    ./node_modules/http-auth/src/http-auth.js
+   638→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   639→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   640→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   641→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   642→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   643→    ./src/lib/whatsapp-service/manager.ts
+   644→    ./src/app/api/whatsapp/connection/route.ts
+   645→
+   646→https://nextjs.org/docs/messages/module-not-found
+   647→[log] [Fast Refresh] rebuilding
+   648→[error] ./node_modules/got/index.js:91:21
+   649→Module not found: Can't resolve 'electron'
+   650→  89 |
+   651→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   652→> 91 |                  const electron = require('electron');
+   653→     |                                   ^^^^^^^^^^^^^^^^^^^
+   654→  92 |                  fn = electron.net || electron.remote.net;
+   655→  93 |          }
+   656→  94 |
+   657→
+   658→Import trace:
+   659→  App Route:
+   660→    ./node_modules/got/index.js
+   661→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   662→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   663→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   664→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   665→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   666→    ./src/lib/whatsapp-service/manager.ts
+   667→    ./src/app/api/whatsapp/connection/route.ts
+   668→
+   669→https://nextjs.org/docs/messages/module-not-found
+   670→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   671→Module not found: Can't resolve 'passport'
+   672→  2 |
+   673→  3 | // Imports.
+   674→> 4 | const passport  = require('passport');
+   675→    |                   ^^^^^^^^^^^^^^^^^^^
+   676→  5 | const util = require('util');
+   677→  6 |
+   678→  7 | // Define strategy.
+   679→
+   680→Import trace:
+   681→  App Route:
+   682→    ./node_modules/http-auth/src/server/passport.js
+   683→    ./node_modules/http-auth/src/http-auth.js
+   684→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   685→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   686→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   687→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   688→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   689→    ./src/lib/whatsapp-service/manager.ts
+   690→    ./src/app/api/whatsapp/connection/route.ts
+   691→
+   692→https://nextjs.org/docs/messages/module-not-found
+   693→[log] [Fast Refresh] rebuilding
+   694→[error] ./node_modules/got/index.js:91:21
+   695→Module not found: Can't resolve 'electron'
+   696→  89 |
+   697→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   698→> 91 |                  const electron = require('electron');
+   699→     |                                   ^^^^^^^^^^^^^^^^^^^
+   700→  92 |                  fn = electron.net || electron.remote.net;
+   701→  93 |          }
+   702→  94 |
+   703→
+   704→Import trace:
+   705→  App Route:
+   706→    ./node_modules/got/index.js
+   707→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   708→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   709→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   710→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   711→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   712→    ./src/lib/whatsapp-service/manager.ts
+   713→    ./src/app/api/whatsapp/connection/route.ts
+   714→
+   715→https://nextjs.org/docs/messages/module-not-found
+   716→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   717→Module not found: Can't resolve 'passport'
+   718→  2 |
+   719→  3 | // Imports.
+   720→> 4 | const passport  = require('passport');
+   721→    |                   ^^^^^^^^^^^^^^^^^^^
+   722→  5 | const util = require('util');
+   723→  6 |
+   724→  7 | // Define strategy.
+   725→
+   726→Import trace:
+   727→  App Route:
+   728→    ./node_modules/http-auth/src/server/passport.js
+   729→    ./node_modules/http-auth/src/http-auth.js
+   730→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   731→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   732→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   733→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   734→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   735→    ./src/lib/whatsapp-service/manager.ts
+   736→    ./src/app/api/whatsapp/connection/route.ts
+   737→
+   738→https://nextjs.org/docs/messages/module-not-found
+   739→[log] [Fast Refresh] rebuilding
+   740→[error] ./node_modules/got/index.js:91:21
+   741→Module not found: Can't resolve 'electron'
+   742→  89 |
+   743→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   744→> 91 |                  const electron = require('electron');
+   745→     |                                   ^^^^^^^^^^^^^^^^^^^
+   746→  92 |                  fn = electron.net || electron.remote.net;
+   747→  93 |          }
+   748→  94 |
+   749→
+   750→Import trace:
+   751→  App Route:
+   752→    ./node_modules/got/index.js
+   753→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   754→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   755→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   756→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   757→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   758→    ./src/lib/whatsapp-service/manager.ts
+   759→    ./src/app/api/whatsapp/connection/route.ts
+   760→
+   761→https://nextjs.org/docs/messages/module-not-found
+   762→[error] ./node_modules/http-auth/src/server/passport.js:4:19
+   763→Module not found: Can't resolve 'passport'
+   764→  2 |
+   765→  3 | // Imports.
+   766→> 4 | const passport  = require('passport');
+   767→    |                   ^^^^^^^^^^^^^^^^^^^
+   768→  5 | const util = require('util');
+   769→  6 |
+   770→  7 | // Define strategy.
+   771→
+   772→Import trace:
+   773→  App Route:
+   774→    ./node_modules/http-auth/src/server/passport.js
+   775→    ./node_modules/http-auth/src/http-auth.js
+   776→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   777→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   778→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   779→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   780→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   781→    ./src/lib/whatsapp-service/manager.ts
+   782→    ./src/app/api/whatsapp/connection/route.ts
+   783→
+   784→https://nextjs.org/docs/messages/module-not-found
+   785→[log] [Fast Refresh] rebuilding
+   786→[log] [HMR] connected
+   787→[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+   788→[log] [HMR] connected
+   789→[log] [Fast Refresh] rebuilding
+   790→[log] [Fast Refresh] done in 159ms
+   791→[log] [Fast Refresh] rebuilding
+   792→[error] ./node_modules/got/index.js:91:21
+   793→Module not found: Can't resolve 'electron'
+   794→  89 |
+   795→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   796→> 91 |                  const electron = require('electron');
+   797→     |                                   ^^^^^^^^^^^^^^^^^^^
+   798→  92 |                  fn = electron.net || electron.remote.net;
+   799→  93 |          }
+   800→  94 |
+   801→
+   802→Import trace:
+   803→  App Route:
+   804→    ./node_modules/got/index.js
+   805→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   806→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   807→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   808→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   809→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   810→    ./src/lib/whatsapp-service/manager.ts
+   811→    ./src/app/api/whatsapp/connection/route.ts
+   812→
+   813→https://nextjs.org/docs/messages/module-not-found
+   814→[log] [Fast Refresh] rebuilding
+   815→[error] ./node_modules/got/index.js:91:21
+   816→Module not found: Can't resolve 'electron'
+   817→  89 |
+   818→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   819→> 91 |                  const electron = require('electron');
+   820→     |                                   ^^^^^^^^^^^^^^^^^^^
+   821→  92 |                  fn = electron.net || electron.remote.net;
+   822→  93 |          }
+   823→  94 |
+   824→
+   825→Import trace:
+   826→  App Route:
+   827→    ./node_modules/got/index.js
+   828→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   829→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   830→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   831→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   832→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   833→    ./src/lib/whatsapp-service/manager.ts
+   834→    ./src/app/api/whatsapp/connection/route.ts
+   835→
+   836→https://nextjs.org/docs/messages/module-not-found
+   837→[error] ./node_modules/got/index.js:91:21
+   838→Module not found: Can't resolve 'electron'
+   839→  89 |
+   840→  90 |          if (opts.useElectronNet && process.versions.electron) {
+   841→> 91 |                  const electron = require('electron');
+   842→     |                                   ^^^^^^^^^^^^^^^^^^^
+   843→  92 |                  fn = electron.net || electron.remote.net;
+   844→  93 |          }
+   845→  94 |
+   846→
+   847→Import trace:
+   848→  App Route:
+   849→    ./node_modules/got/index.js
+   850→    ./node_modules/puppeteer-extra-plugin-devtools/lib/RemoteDevTools.js
+   851→    ./node_modules/puppeteer-extra-plugin-devtools/index.js
+   852→    ./node_modules/@open-wa/wa-automate/dist/controllers/browser.js
+   853→    ./node_modules/@open-wa/wa-automate/dist/controllers/initializer.js
+   854→    ./node_modules/@open-wa/wa-automate/dist/index.js
+   855→    ./src/lib/whatsapp-service/manager.ts
+   856→    ./src/app/api/whatsapp/connection/route.ts
+   857→
+   858→https://nextjs.org/docs/messages/module-not-found
+   859→[log] [Fast Refresh] rebuilding
+   860→[log] [HMR] connected
+   861→[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+   862→[log] [HMR] connected
+   863→[log] [Fast Refresh] rebuilding
+   864→[log] [Fast Refresh] done in 107ms
+   865→[log] [Fast Refresh] rebuilding
+   866→[log] [Fast Refresh] done in 168ms
+   867→[log] [Fast Refresh] rebuilding
+   868→[log] [Fast Refresh] done in 117ms
+   869→[log] [Fast Refresh] rebuilding
+   870→[log] [Fast Refresh] done in 111ms
+   871→[log] [Fast Refresh] rebuilding
+   872→[log] [Fast Refresh] done in 262ms
+   873→[log] [Fast Refresh] rebuilding
+   874→[log] [Fast Refresh] done in 110ms
+   875→[log] [Fast Refresh] rebuilding
+   876→[log] [Fast Refresh] done in 197ms
+   877→[log] [Fast Refresh] rebuilding
+   878→[log] [Fast Refresh] done in 326ms
+   879→[log] [Fast Refresh] rebuilding
+   880→[log] [Fast Refresh] done in 245ms
+   881→[log] [Fast Refresh] rebuilding
+   882→[log] [Fast Refresh] done in 1354ms
+   883→[log] [HMR] connected
+   884→[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+   885→[log] [HMR] connected
+   886→[log] [Fast Refresh] rebuilding
+   887→[log] [Fast Refresh] done in 341ms
+   888→[log] [Fast Refresh] rebuilding
+   889→[log] [Fast Refresh] done in 104ms
+   890→[log] [Fast Refresh] rebuilding
+   891→[log] [Fast Refresh] done in 167ms
+   892→[log] [Fast Refresh] rebuilding
+   893→[log] [Fast Refresh] done in 393ms
+   894→[log] [Fast Refresh] rebuilding
+   895→[log] [Fast Refresh] done in 165ms
+   896→[log] [Fast Refresh] rebuilding
+   897→[log] [Fast Refresh] done in 400ms
+   898→[log] [Fast Refresh] rebuilding
+   899→[log] [Fast Refresh] done in 214ms
+   900→[log] [Fast Refresh] rebuilding
+   901→[log] [Fast Refresh] done in 767ms
+   902→[log] [Fast Refresh] rebuilding
+   903→[log] [Fast Refresh] done in 163ms
+   904→[log] [Fast Refresh] rebuilding
+   905→[log] [Fast Refresh] done in 130ms
+   906→[log] [Fast Refresh] rebuilding
+   907→[log] [Fast Refresh] done in 214ms
+   908→[log] [Fast Refresh] rebuilding
+   909→[log] [Fast Refresh] done in 235ms
+   910→[log] [Fast Refresh] rebuilding
+   911→[log] [Fast Refresh] done in 212ms
+   912→[log] [Fast Refresh] rebuilding
+   913→[log] [Fast Refresh] done in 206ms
+   914→[log] [Fast Refresh] rebuilding
+   915→[log] [Fast Refresh] done in 230ms
+   916→[log] [Fast Refresh] rebuilding
+   917→[log] [Fast Refresh] done in 227ms
+   918→[log] [Fast Refresh] rebuilding
+   919→[log] [Fast Refresh] done in 262ms
+   920→[log] [Fast Refresh] rebuilding
+   921→[log] [Fast Refresh] done in 124ms
+   922→[log] [Fast Refresh] rebuilding
+   923→[log] [Fast Refresh] done in 187ms
+   924→[log] [Fast Refresh] rebuilding
+   925→[log] [Fast Refresh] done in 108ms
+   926→[log] [Fast Refresh] rebuilding
+   927→[log] [Fast Refresh] done in 291ms
+   928→[log] [Fast Refresh] rebuilding
+   929→[log] [Fast Refresh] done in 257ms
+   930→[log] [Fast Refresh] rebuilding
+   931→[log] [Fast Refresh] done in 555ms
+   932→[log] [Fast Refresh] rebuilding
+   933→[log] [Fast Refresh] done in 330ms
+   934→[log] [Fast Refresh] rebuilding
+   935→[log] [Fast Refresh] done in 282ms
+   936→[log] [Fast Refresh] rebuilding
+   937→[log] [Fast Refresh] done in 322ms
+   938→[log] [Fast Refresh] rebuilding
+   939→[log] [Fast Refresh] done in 385ms
+   940→[log] [Fast Refresh] rebuilding
+   941→[log] [Fast Refresh] done in 201ms
+   942→[log] [Fast Refresh] rebuilding
+   943→[log] [Fast Refresh] done in 181ms
+   944→[log] [Fast Refresh] rebuilding
+   945→[log] [Fast Refresh] done in 156ms
+   946→[log] [Fast Refresh] rebuilding
+   947→[log] [Fast Refresh] done in 123ms
+   948→[log] [Fast Refresh] rebuilding
+   949→[log] [Fast Refresh] done in 266ms
+   950→[log] [Fast Refresh] rebuilding
+   951→[log] [Fast Refresh] done in 254ms
+   952→[log] [Fast Refresh] rebuilding
+   953→[log] [Fast Refresh] done in 227ms
+   954→[log] [Fast Refresh] rebuilding
+   955→[log] [Fast Refresh] done in 208ms
+   956→[log] [Fast Refresh] rebuilding
+   957→[log] [Fast Refresh] done in 127ms
+   958→[log] [Fast Refresh] rebuilding
+   959→[log] [Fast Refresh] done in 222ms
+   960→[log] [Fast Refresh] rebuilding
+   961→[log] [Fast Refresh] done in 247ms
+   962→[log] [Fast Refresh] rebuilding
+   963→[log] [Fast Refresh] done in 203ms
+   964→[log] [Fast Refresh] rebuilding
+   965→[log] [Fast Refresh] done in 226ms
+   966→[log] [Fast Refresh] rebuilding
+   967→[log] [Fast Refresh] done in 1290ms
+   968→[log] [Fast Refresh] rebuilding
+   969→[log] [Fast Refresh] done in 304ms
+   970→[log] [Fast Refresh] rebuilding
+   971→[log] [Fast Refresh] done in 257ms
+   972→[log] [Fast Refresh] rebuilding
+   973→[log] [Fast Refresh] done in 122ms
+   974→[log] [Fast Refresh] rebuilding
+   975→[log] [Fast Refresh] done in 462ms
+   976→[log] [Fast Refresh] rebuilding
+   977→[log] [Fast Refresh] done in 434ms
+   978→[log] [Fast Refresh] rebuilding
+   979→[log] [Fast Refresh] done in 307ms
+   980→[log] [Fast Refresh] rebuilding
+   981→[log] [Fast Refresh] done in 195ms
+   982→[log] [Fast Refresh] rebuilding
+   983→[log] [Fast Refresh] done in 268ms
+   984→[log] [Fast Refresh] rebuilding
+   985→[log] [Fast Refresh] done in 320ms
+   986→[log] [Fast Refresh] rebuilding
+   987→[log] [Fast Refresh] done in 219ms
+   988→[log] [Fast Refresh] rebuilding
+   989→[log] [Fast Refresh] done in 205ms
+   990→[log] [Fast Refresh] rebuilding
+   991→[log] [Fast Refresh] done in 1230ms
+   992→[log] [Fast Refresh] rebuilding
+   993→[log] [Fast Refresh] done in 455ms
+   994→[log] [Fast Refresh] rebuilding
+   995→[log] [Fast Refresh] done in 222ms
+   996→[log] [Fast Refresh] rebuilding
+   997→[log] [Fast Refresh] done in 231ms
+   998→[log] [Fast Refresh] rebuilding
+   999→[log] [Fast Refresh] done in 254ms
+  1000→[log] [Fast Refresh] rebuilding
+  1001→[log] [Fast Refresh] done in 136ms
+  1002→[log] [Fast Refresh] rebuilding
+  1003→[log] [Fast Refresh] done in 280ms
+  1004→[log] [Fast Refresh] rebuilding
+  1005→[log] [Fast Refresh] done in 134ms
+  1006→[log] [Fast Refresh] rebuilding
+  1007→[log] [Fast Refresh] done in 259ms
+  1008→[log] [Fast Refresh] rebuilding
+  1009→[log] [Fast Refresh] done in 154ms
+  1010→[log] [Fast Refresh] rebuilding
+  1011→[log] [Fast Refresh] done in 248ms
+  1012→[log] [Fast Refresh] rebuilding
+  1013→[log] [Fast Refresh] done in 141ms
+  1014→[log] [Fast Refresh] rebuilding
+  1015→[log] [Fast Refresh] done in 265ms
+  1016→[log] [Fast Refresh] rebuilding
+  1017→[log] [Fast Refresh] done in 226ms
+  1018→[log] [Fast Refresh] rebuilding
+  1019→[log] [Fast Refresh] done in 127ms
+  1020→[log] [Fast Refresh] rebuilding
+  1021→[log] [Fast Refresh] done in 131ms
+  1022→[log] [Fast Refresh] rebuilding
+  1023→[log] [Fast Refresh] done in 211ms
+  1024→[log] [Fast Refresh] rebuilding
+  1025→[log] [Fast Refresh] done in 244ms
+  1026→[log] [Fast Refresh] rebuilding
+  1027→[log] [Fast Refresh] done in 139ms
+  1028→[log] [Fast Refresh] rebuilding
+  1029→[log] [Fast Refresh] done in 109ms
+  1030→[log] [Fast Refresh] rebuilding
+  1031→[log] [Fast Refresh] done in 230ms
+  1032→[log] [Fast Refresh] rebuilding
+  1033→[log] [Fast Refresh] done in 405ms
+  1034→[log] [Fast Refresh] rebuilding
+  1035→[log] [Fast Refresh] done in 141ms
+  1036→[log] [Fast Refresh] rebuilding
+  1037→[log] [Fast Refresh] done in 215ms
+  1038→[log] [Fast Refresh] rebuilding
+  1039→[log] [Fast Refresh] done in 103ms
+  1040→[log] [Fast Refresh] rebuilding
+  1041→[log] [Fast Refresh] done in 222ms
+  1042→[log] [Fast Refresh] rebuilding
+  1043→[log] [Fast Refresh] done in 130ms
+  1044→[log] [Fast Refresh] rebuilding
+  1045→[log] [Fast Refresh] done in 137ms
+  1046→[log] [Fast Refresh] rebuilding
+  1047→[log] [Fast Refresh] done in 314ms
+  1048→[log] [Fast Refresh] rebuilding
+  1049→[log] [Fast Refresh] done in 310ms
+  1050→[log] [Fast Refresh] rebuilding
+  1051→[log] [Fast Refresh] done in 335ms
+  1052→[log] [Fast Refresh] rebuilding
+  1053→[log] [Fast Refresh] done in 223ms
+  1054→[log] [Fast Refresh] rebuilding
+  1055→[log] [Fast Refresh] done in 221ms
+  1056→[log] [Fast Refresh] rebuilding
+  1057→[log] [Fast Refresh] done in 296ms
+  1058→[log] [Fast Refresh] rebuilding
+  1059→[log] [Fast Refresh] done in 269ms
+  1060→[log] [Fast Refresh] rebuilding
+  1061→[log] [Fast Refresh] done in 248ms
+  1062→[log] [Fast Refresh] rebuilding
+  1063→[log] [Fast Refresh] done in 264ms
+  1064→[log] [Fast Refresh] rebuilding
+  1065→[log] [Fast Refresh] done in 246ms
+  1066→[log] [Fast Refresh] rebuilding
+  1067→[log] [Fast Refresh] done in 237ms
+  1068→[log] [Fast Refresh] rebuilding
+  1069→[log] [Fast Refresh] done in 242ms
+  1070→[log] [Fast Refresh] rebuilding
+  1071→[log] [Fast Refresh] done in 224ms
+  1072→[log] [Fast Refresh] rebuilding
+  1073→[log] [Fast Refresh] done in 260ms
+  1074→[log] [Fast Refresh] rebuilding
+  1075→[log] [Fast Refresh] done in 206ms
+  1076→[log] [Fast Refresh] rebuilding
+  1077→[log] [Fast Refresh] done in 223ms
+  1078→[log] [Fast Refresh] rebuilding
+  1079→[log] [Fast Refresh] done in 208ms
+  1080→[log] [Fast Refresh] rebuilding
+  1081→[log] [Fast Refresh] done in 213ms
+  1082→[log] [Fast Refresh] rebuilding
+  1083→[log] [Fast Refresh] done in 135ms
+  1084→[log] [Fast Refresh] rebuilding
+  1085→[log] [Fast Refresh] done in 216ms
+  1086→[log] [Fast Refresh] rebuilding
+  1087→[log] [Fast Refresh] done in 223ms
+  1088→[log] [Fast Refresh] rebuilding
+  1089→[log] [Fast Refresh] done in 260ms
+  1090→[log] [Fast Refresh] rebuilding
+  1091→[log] [Fast Refresh] done in 251ms
+  1092→[log] [Fast Refresh] rebuilding
+  1093→[log] [Fast Refresh] done in 251ms
+  1094→[log] [Fast Refresh] rebuilding
+  1095→[log] [Fast Refresh] done in 109ms
+  1096→[log] [Fast Refresh] rebuilding
+  1097→[log] [Fast Refresh] done in 224ms
+  1098→[log] [Fast Refresh] rebuilding
+  1099→[log] [Fast Refresh] done in 209ms
+  1100→[log] [Fast Refresh] rebuilding
+  1101→[log] [Fast Refresh] done in 136ms
+  1102→[log] [Fast Refresh] rebuilding
+  1103→[log] [Fast Refresh] done in 267ms
+  1104→[log] [Fast Refresh] rebuilding
+  1105→[log] [Fast Refresh] done in 249ms
+  1106→[log] [Fast Refresh] rebuilding
+  1107→[log] [Fast Refresh] done in 148ms
+  1108→[log] [Fast Refresh] rebuilding
+  1109→[log] [Fast Refresh] done in 130ms
+  1110→[log] [Fast Refresh] rebuilding
+  1111→[log] [Fast Refresh] done in 232ms
+  1112→[log] [Fast Refresh] rebuilding
+  1113→[log] [Fast Refresh] done in 230ms
+  1114→[log] [Fast Refresh] rebuilding
+  1115→[log] [Fast Refresh] done in 219ms
+  1116→[info] %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+  1117→[log] [HMR] connected

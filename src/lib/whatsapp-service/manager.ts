@@ -1,26 +1,50 @@
 import path from 'path';
 import fs from 'fs';
-import { spawn, ChildProcess } from 'child_process';
+import { spawn, ChildProcess, execSync } from 'child_process';
+
+// ============ CONFIGURATION ============
+const SERVICE_URL = process.env.WHATSAPP_SERVICE_URL || 'http://127.0.0.1:3001';
+const SERVICE_DIR = path.resolve(process.cwd(), 'mini-services', 'whatsapp-service');
 
 // ============ CHROME PATH ============
 function detectChromePath(): string {
+  const envPath = process.env.CHROME_PATH;
+  if (envPath && fs.existsSync(envPath)) return envPath;
+
   const home = process.env.HOME || '/root';
-  const pb = path.join(home, '.cache/puppeteer/chrome');
-  if (fs.existsSync(pb)) {
+  const candidates = [
+    path.join(home, '.cache/puppeteer/chrome'),
+  ];
+
+  for (const base of candidates) {
+    if (!fs.existsSync(base)) continue;
     try {
-      const dirs = fs.readdirSync(pb).sort().reverse();
+      const dirs = fs.readdirSync(base).sort().reverse();
       for (const d of dirs) {
-        const cp = path.join(pb, d, 'chrome-linux64', 'chrome');
+        const cp = path.join(base, d, 'chrome-linux64', 'chrome');
         if (fs.existsSync(cp)) return cp;
+        // Also try without chrome-linux64
+        const cp2 = path.join(base, d, 'chrome');
+        if (fs.existsSync(cp2)) return cp2;
       }
     } catch {}
   }
+
+  const linuxPaths = [
+    '/usr/bin/chromium',
+    '/usr/bin/chromium-browser',
+    '/usr/bin/google-chrome',
+    '/usr/bin/google-chrome-stable',
+    '/snap/bin/chromium',
+  ];
+  for (const p of linuxPaths) {
+    if (fs.existsSync(p)) return p;
+  }
+
   return '/usr/bin/chromium-browser';
 }
 
 const CHROME_PATH = detectChromePath();
-const SESSION_DIR = path.resolve(process.cwd(), 'storage', 'whatsapp', 'sessions');
-if (!fs.existsSync(SESSION_DIR)) fs.mkdirSync(SESSION_DIR, { recursive: true });
 
 // ============ TYPES ============
 export type WAStatus = 'offline' | 'connecting' | 'generating_qr' | 'connected' | 'disconnected' | 'reconnecting';
@@ -42,12 +66,11 @@ class WhatsAppServiceManager {
   private messageCount = 0;
   private lastHeartbeat: string | null = null;
   private logs: WALog[] = [];
-  private onStdout: Buffer | null = null;
-
-  private outBuffer = '';
-  private outResolve: ((data: Buffer | null) => void = undefined;
+  private connecting = false;
+  private pollTimer: ReturnType<typeof setInterval> | null = null;
 
   constructor() {
+    this.log('info', 'INIT', `Service URL: ${SERVICE_URL}`);
     this.log('info', 'INIT', `Chrome: ${CHROME_PATH}`);
   }
 
@@ -55,100 +78,172 @@ class WhatsAppServiceManager {
     const entry: WALog = { timestamp: new Date().toISOString(), level, event, message };
     this.logs.push(entry);
     if (this.logs.length > 500) this.logs.splice(0, this.logs.length - 500);
-    console.log(`[WA Service] [${entry.timestamp.split('T')[1].split('.')[0]}] [${event}] ${message}`);
+    console.log(`[WA Manager] [${entry.timestamp.split('T')[1].split('.')[0]}] [${event}] ${message}`);
+  }
+
+  // ============ HTTP HELPERS ============
+  private async httpGet<T>(endpoint: string, timeoutMs = 5000): Promise<T | null> {
+    try {
+      const res = await fetch(`${SERVICE_URL}${endpoint}`, {
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      if (res.ok) return (await res.json()) as T;
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  private async httpPost<T>(endpoint: string, body?: Record<string, unknown>, timeoutMs = 15000): Promise<T | null> {
+    try {
+      const res = await fetch(`${SERVICE_URL}${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: body ? JSON.stringify(body) : undefined,
+        signal: AbortSignal.timeout(timeoutMs),
+      });
+      if (res.ok) return (await res.json()) as T;
+      const err = await res.json().catch(() => null);
+      this.log('error', 'HTTP_POST', `${endpoint} → ${res.status}: ${JSON.stringify(err)}`);
+      return null;
+    } catch (err) {
+      this.log('error', 'HTTP_POST', `${endpoint} → ${err instanceof Error ? err.message : 'Network error'}`);
+      return null;
+    }
   }
 
   // ============ ENSURE SERVICE IS RUNNING ============
   private async ensureService(): Promise<boolean> {
-    // Check if already running
+    // Check if service is already healthy
+    const health = await this.httpGet<{ status: string }>('/health', 3000);
+    if (health && health.status === 'online') {
+      this.log('info', 'SERVICE_CHECK', 'Service already running');
+      return true;
+    }
+
+    this.log('info', 'SERVICE_START', 'Starting WhatsApp service...');
+
+    // Kill any existing process on port 3001
     try {
-      const res = await fetch('http://127.0.0.1:3001/health', {
-        signal: AbortSignal.timeout(3000),
-      });
-      if (res.ok) return true;
+      execSync(`fuser -k 3001/tcp 2>/dev/null || true`, { timeout: 5000 });
     } catch {}
 
-    this.log('info', 'SERVICE_START', 'Starting WhatsApp service on port 3001...');
-
-    // Kill any existing process on the port
-    try { execSync(`kill $(lsof -ti:3001 -t) 2>/dev/null || 'false').toString(); } catch {}
-
-    // Check if Chrome exists
-    if (!fs.existsSync(CHROME_PATH)) {
-      this.log('error', 'SERVICE_START', `Chrome not found at ${CHROME_PATH}`);
+    // Check if index.ts exists
+    const indexPath = path.join(SERVICE_DIR, 'index.ts');
+    if (!fs.existsSync(indexPath)) {
+      this.log('error', 'SERVICE_START', `Service not found at ${SERVICE_DIR}`);
       return false;
     }
 
-    // Ensure session directory exists
-    if (!fs.existsSync(SESSION_DIR)) fs.mkdirSync(SESSION_DIR, { recursive: true });
-
-    // Clean corrupted sessions
-    try {
-      const dirs = fs.readdirSync(SESSION_DIR);
-      for (const dir of dirs) {
-        const dirPath = path.join(SESSION_DIR, dir);
-        if (dir !== '.' && fs.statSync(dirPath).isDirectory()) {
-          fs.rmSync(dirPath, { recursive: true });
-          this.log('info', 'SESSION_CLEAN', `Cleaned session: ${dir}`);
-        }
-      }
-    } catch {}
-
     // Start the service
     this.serviceProcess = spawn('bun', ['run', 'index.ts'], {
-      cwd: path.resolve(process.cwd(), 'mini-services', 'whatsapp-service'),
+      cwd: SERVICE_DIR,
       env: {
         ...process.env,
         CHROME_PATH,
         PORT: '3001',
-        DISPLAY: process.env.DISPLAY || ':98',
+        SESSION_ID: 'MOHDHMS',
+        DISPLAY: process.env.DISPLAY || ':99',
       },
-      stdio: ['pipe', 'stderr', 'inherit'],
+      stdio: ['pipe', 'pipe', 'pipe'],
       detached: true,
     });
 
-    this.log('info', 'SERVICE_START', `Process PID: ${this.serviceProcess.pid}`);
+    const pid = this.serviceProcess.pid;
+    this.log('info', 'SERVICE_START', `Process started, PID: ${pid}`);
+
+    // Log service output
+    this.serviceProcess.stdout?.on('data', (data: Buffer) => {
+      const text = data.toString().trim();
+      if (text) {
+        this.log('info', 'SERVICE_STDOUT', text.substring(0, 200));
+      }
+    });
+
+    this.serviceProcess.stderr?.on('data', (data: Buffer) => {
+      const text = data.toString().trim();
+      if (text) {
+        this.log('warn', 'SERVICE_STDERR', text.substring(0, 200));
+      }
+    });
+
+    this.serviceProcess.on('exit', (code) => {
+      this.log('warn', 'SERVICE_EXIT', `Process exited with code ${code}`);
+      if (this.status === 'connected') {
+        this.status = 'disconnected';
+      }
+      this.serviceProcess = null;
+    });
 
     // Wait for service to be healthy
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 20; i++) {
       await new Promise(r => setTimeout(r, 1000));
-      try {
-        const res = await fetch('http://127.0.0.1:3001/health', {
-          signal: AbortSignal.timeout(3000),
-        });
-        if (res.ok) {
-          this.log('info', 'SERVICE_START', 'Service is healthy');
-          return true;
-        }
-      } catch {}
+      const h = await this.httpGet<{ status: string }>('/health', 2000);
+      if (h && h.status === 'online') {
+        this.log('info', 'SERVICE_START', 'Service is healthy');
+        return true;
+      }
     }
 
-    this.log('error', 'SERVICE_START', 'Service failed to start after 15s');
+    this.log('error', 'SERVICE_START', 'Service failed to start after 20s');
     return false;
   }
 
-  private sendMessageToService(data: Record<string, unknown>): Promise<void> {
-    if (!this.outBuffer || !this.serviceProcess) return;
+  // ============ POLL SERVICE STATE ============
+  private startPolling(): void {
+    if (this.pollTimer) return;
+    this.pollTimer = setInterval(async () => {
+      try {
+        const statusData = await this.httpGet<{
+          status: WAStatus;
+          connected: boolean;
+          phoneInfo: { phoneNumber?: string; pushName?: string } | null;
+          connectedAt: string | null;
+          lastHeartbeat: string | null;
+          messageCount: number;
+          qrAvailable: boolean;
+        }>('/status', 3000);
 
-    try {
-      const jsonStr = JSON.stringify(data);
-      if (this.outBuffer.length > 100000) this.outBuffer = Buffer.alloc(0);
-      this.outBuffer.write(jsonStr + '\n');
-      this.outBuffer.push('\n');
-      fs.appendFileSync(path.join(process.cwd(), 'mini-services/whatsapp-service/stdout.log'), jsonStr + '\n');
+        if (!statusData) return;
 
-      const written = fs.writeFileSyncSync(path.join(process.cwd(), 'mini-services/whatsapp-service/stdout.log'), this.outBuffer);
+        // Update local state from service
+        if (statusData.status !== this.status) {
+          this.log('info', 'STATE_SYNC', `${this.status} → ${statusData.status}`);
+          this.status = statusData.status;
+        }
+        this.phoneInfo = statusData.phoneInfo;
+        this.connectedAt = statusData.connectedAt;
+        this.lastHeartbeat = statusData.lastHeartbeat;
+        this.messageCount = statusData.messageCount;
 
-      // Flush stdout
-      if (this.outBuffer.includes('\n')) {
-        const lines = this.outBuffer.toString().split('\n');
-        for (const line of lines) {
-          if (line.includes('QR_GENERATED') || line.includes('QR_EXTRACTED') || line.includes('CONNECTED') || line.includes('SCREENSHOT') || line.includes('Waiting') || line.includes('ERROR')) {
-            console.log(`[Service] ${line.trim()}`);
+        // Fetch QR if status indicates it should be available
+        if ((this.status === 'generating_qr' || this.status === 'connecting') && statusData.qrAvailable && !this.qrBase64) {
+          const qrData = await this.httpGet<{ connected: boolean; qr: string | null }>('/qr', 3000);
+          if (qrData && qrData.qr) {
+            this.qrBase64 = qrData.qr;
+            this.log('info', 'QR_FETCHED', 'QR code retrieved from service');
           }
         }
-      }
-    } catch {}
+
+        // Clear QR when connected
+        if (this.status === 'connected') {
+          this.qrBase64 = null;
+          this.connecting = false;
+        }
+
+        // If disconnected while we were connecting, stop polling
+        if (this.status === 'disconnected' || this.status === 'offline') {
+          this.connecting = false;
+        }
+      } catch {}
+    }, 3000);
+  }
+
+  private stopPolling(): void {
+    if (this.pollTimer) {
+      clearInterval(this.pollTimer);
+      this.pollTimer = null;
+    }
   }
 
   // ============ PUBLIC API ============
@@ -189,130 +284,104 @@ class WhatsAppServiceManager {
   }
 
   // ============ CONNECT ============
-  async connect(): Promise<{ success: boolean; status: WAStatus; message: string }> {
-    if (this.status === 'connected') return { success: true, status: 'connected', message: 'Already connected' };
-    if (this.connecting) return { success: true, status: this.status, message: 'Connection in progress' };
+  async connect(webhookUrl?: string): Promise<{ success: boolean; status: WAStatus; message: string }> {
+    if (this.status === 'connected') {
+      return { success: true, status: 'connected', message: 'Already connected' };
+    }
+    if (this.connecting) {
+      return { success: true, status: this.status, message: 'Connection in progress' };
+    }
 
     this.connecting = true;
     this.status = 'connecting';
 
     const started = await this.ensureService();
     if (!started) {
+      this.connecting = false;
+      this.status = 'offline';
       this.log('error', 'CONNECT', 'Failed to start WhatsApp service');
       return { success: false, status: 'offline', message: 'Failed to start WhatsApp service. Check logs for details.' };
     }
 
-    this.log('info', 'CONNECT', 'Service started, sending start command...');
+    this.log('info', 'CONNECT', 'Service running, sending connect command...');
 
-    // Send start command via stdio
-    this.sendMessageToService({ session: 'MOHDHMS' });
+    // Send connect via HTTP
+    const wUrl = webhookUrl || `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/whatsapp/webhook`;
+    const result = await this.httpPost<{
+      success: boolean;
+      status: string;
+      message: string;
+      qr?: string | null;
+    }>('/connect', { webhookUrl: wUrl });
 
-    return { success: true, status: 'connecting', message: 'Connection initiated. QR code will appear shortly.' };
+    if (!result) {
+      this.connecting = false;
+      this.status = 'offline';
+      return { success: false, status: 'offline', message: 'Failed to reach WhatsApp service' };
+    }
+
+    // If QR came back immediately
+    if (result.qr) {
+      this.qrBase64 = result.qr;
+      this.status = 'generating_qr';
+    }
+
+    // Start polling for status/QR updates
+    this.startPolling();
+
+    return {
+      success: result.success,
+      status: result.status as WAStatus,
+      message: result.message,
+    };
   }
 
   // ============ DISCONNECT ============
   async disconnect(): Promise<{ success: boolean; message: string }> {
-    this.sendMessageToService({ session: 'MOHDHMS', action: 'close' });
+    this.stopPolling();
 
-    // Wait for service to stop
-    await new Promise(r => setTimeout(r, 3000));
+    const result = await this.httpPost<{ success: boolean; message: string }>('/disconnect');
 
     this.status = 'disconnected';
     this.qrBase64 = null;
     this.connectedAt = null;
     this.phoneInfo = null;
     this.connecting = false;
-    this.log('info', 'DISCONNECT', 'Session stopped');
-    return { success: true, message: 'Disconnected' };
+
+    this.log('info', 'DISCONNECT', result ? result.message : 'Session stopped');
+    return { success: result?.success ?? true, message: result?.message ?? 'Disconnected' };
   }
 
+  // ============ SEND MESSAGE ============
   async send(chatId: string, text: string): Promise<{ success: boolean; id?: string; error?: string }> {
-    return this.sendMessageToService({ session: 'MOHDHMS', type: 'text', chatId, text });
+    const result = await this.httpPost<{ success: boolean; id?: string; error?: string; timestamp: string }>(
+      '/send',
+      { chatId, text },
+    );
+    if (!result) return { success: false, error: 'Service unreachable' };
+    return result;
   }
 
   async sendTestMessage(chatId?: string): Promise<{ success: boolean; message: string; timestamp: string }> {
-    return this.sendMessageToService({ session: 'MOHDHMS', action: 'test-message', chatId });
-  }
-
-  // ============ PRIVATE ============
-  private sendMessageToService(data: Record<string, unknown>): Promise<void> {
-    try {
-      if (!this.outBuffer || !this.serviceProcess) {
-        this.outBuffer = Buffer.alloc(0);
-      }
-
-      const jsonStr = JSON.stringify(data);
-      this.outBuffer.write(jsonStr + '\n');
-      this.outBuffer.push('\n');
-
-      const written = fs.writeFileSyncSync(
-        path.join(process.cwd(), 'mini-services/whatsapp-service/stdout.log'),
-        this.outBuffer,
-      );
-
-      // Flush stdout
-      if (this.outBuffer.includes('\n')) {
-        const lines = this.outBuffer.toString().split('\n');
-        for (const line of lines) {
-          if (line.includes('GENERATED') || line.includes('EXTRACTED') || line.includes('SCREENSHOT') || line.includes('Waiting') || line.includes('ERROR')) {
-            console.log(`[Service] ${line.trim()}`);
-          }
-        }
-      }
-    } catch {}
+    const result = await this.httpPost<{
+      success: boolean;
+      message: string;
+      timestamp: string;
+    }>('/api/sendTestMessage', { session: 'MOHDHMS', chatId });
+    if (!result) return { success: false, message: 'Service unreachable', timestamp: new Date().toISOString() };
+    return result;
   }
 
   // ============ CLEANUP ============
-  private cleanup(): Promise<void> {
+  async cleanup(): Promise<void> {
+    this.stopPolling();
     try {
       if (this.serviceProcess) {
         this.serviceProcess.kill('SIGTERM');
         await new Promise(r => setTimeout(r, 5000));
       }
     } catch {}
-
-    if (this.outBuffer) this.outBuffer = Buffer.alloc(0);
-    try { fs.unlinkSync(path.join(process.cwd(), 'mini-services/whatsapp-service/stdout.log')); } catch {}
-  }
-
-  // ============ GRACEFUL SHUTDOWN ============
-  private async gracefulShutdown(): Promise<void> {
-    this.log('info', 'SHUTDOWN', 'Graceful shutdown starting...');
-
-    // 1. Send disconnect
-    try { await this.disconnect(); } catch {}
-
-    // 2. Save session data
-    this.saveSessionData();
-
-    // 3. Close browser
-    try { if (this.browser) await this.browser.close(); } catch {}
-
-    // 4. Kill service process
-    if (this.serviceProcess) {
-      try { this.serviceProcess.kill('SIGTERM'); } catch {}
-      await new Promise(r => setTimeout(r, 3000));
-    }
-
-    // 5. Kill Xvfb
-    if (this.xvfbProcess) {
-      try { this.xvfbProcess.kill('SIGTERM'); } catch {}
-    }
-
-    process.exit(0);
-  }
-
-  private saveSessionData(): void {
-    try {
-      const sessionDataPath = path.join(SESSION_DIR, 'MOHDHMS');
-      const dataPath = path.join(sessionDataPath, 'sessionData.json');
-      if (fs.existsSync(dataPath)) {
-        const prev = fs.readFileSync(dataPath, 'utf-8');
-        this.log('info', 'SESSION_SAVE', `Restoring session from ${dataPath}`);
-        // In production, parse and use the saved session data
-      }
-    } catch {}
-  }
+    this.serviceProcess = null;
   }
 }
 

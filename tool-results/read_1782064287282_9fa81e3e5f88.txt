@@ -1,0 +1,763 @@
+     1→'use client';
+     2→
+     3→import { useState, useEffect, useCallback, useRef } from 'react';
+     4→import QRCode from 'qrcode';
+     5→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+     6→import { Button } from '@/components/ui/button';
+     7→import { Badge } from '@/components/ui/badge';
+     8→import { Input } from '@/components/ui/input';
+     9→import { Textarea } from '@/components/ui/textarea';
+    10→import { Skeleton } from '@/components/ui/skeleton';
+    11→import { Switch } from '@/components/ui/switch';
+    12→import { Label } from '@/components/ui/label';
+    13→import { Separator } from '@/components/ui/separator';
+    14→import { ScrollArea } from '@/components/ui/scroll-area';
+    15→import {
+    16→  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+    17→} from '@/components/ui/select';
+    18→import {
+    19→  Settings, Wifi, WifiOff, Loader2, Check, Plug, Cloud, Phone,
+    20→  MessageSquare, Key, Globe, Shield, Eye, EyeOff, QrCode,
+    21→  RefreshCw, Zap, Send, Activity, Server, Clock,
+    22→  AlertCircle, Radio,
+    23→} from 'lucide-react';
+    24→import { useAppStore } from '@/store';
+    25→import { toast } from 'sonner';
+    26→import type { WhatsAppProvider, WhatsAppConnectionStatus } from '@/types';
+    27→import { cn } from '@/lib/utils';
+    28→import { motion, AnimatePresence } from 'framer-motion';
+    29→
+    30→// ============ HELPERS ============
+    31→function getToken(): string {
+    32→  return localStorage.getItem('cmms_token') || '';
+    33→}
+    34→
+    35→const PROVIDERS = [
+    36→  { id: 'openwa' as WhatsAppProvider, name: 'OpenWA', description: 'Open-source WhatsApp Web API. Free, self-hosted.', icon: MessageSquare },
+    37→  { id: 'meta' as WhatsAppProvider, name: 'Meta Cloud API', description: 'Official WhatsApp Business API by Meta.', icon: Cloud },
+    38→  { id: 'twilio' as WhatsAppProvider, name: 'Twilio', description: 'Third-party messaging API. Global coverage.', icon: Phone },
+    39→];
+    40→
+    41→// ============ TYPES ============
+    42→interface ConnectionData {
+    43→  serviceRunning: boolean;
+    44→  connectionState: string;
+    45→  qr: string | null;
+    46→  qrAvailable: boolean;
+    47→  serviceInfo: {
+    48→    session: string;
+    49→    status: string;
+    50→    qrAvailable: boolean;
+    51→    phoneInfo: { phoneNumber?: string; pushName?: string } | null;
+    52→    connectedAt: string | null;
+    53→    lastHeartbeat: string | null;
+    54→    messageCount: number;
+    55→    uptime: number;
+    56→  } | null;
+    57→  logs: Array<{ timestamp: string; level: string; event: string; message: string }>;
+    58→  config: {
+    59→    id: string;
+    60→    provider: string;
+    61→    isEnabled: boolean;
+    62→    phoneNumber: string | null;
+    63→    businessName: string | null;
+    64→    openwaStatus: string;
+    65→    autoReplyEnabled: boolean;
+    66→    welcomeMessage: string;
+    67→  } | null;
+    68→  stats: { messagesToday: number; sentToday: number; deliveredToday: number; failedToday: number };
+    69→  recentMessages: Array<{
+    70→    id: string; direction: string; messageType: string; content: string;
+    71→    status: string; isFromBot: boolean; fromNumber: string | null;
+    72→    customerName: string | null; createdAt: string;
+    73→  }>;
+    74→}
+    75→
+    76→// ============ STATUS BADGE ============
+    77→function StatusBadge({ status }: { status: string }) {
+    78→  const configs: Record<string, { color: string; bg: string; label: string }> = {
+    79→    CONNECTED: { color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200', label: 'Connected' },
+    80→    connected: { color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200', label: 'Connected' },
+    81→    QR_READY: { color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200', label: 'QR Ready' },
+    82→    generating_qr: { color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200', label: 'Generating QR...' },
+    83→    CONNECTING: { color: 'text-sky-600', bg: 'bg-sky-50 border-sky-200', label: 'Connecting...' },
+    84→    connecting: { color: 'text-sky-600', bg: 'bg-sky-50 border-sky-200', label: 'Connecting...' },
+    85→    RECONNECTING: { color: 'text-orange-600', bg: 'bg-orange-50 border-orange-200', label: 'Reconnecting...' },
+    86→    reconnecting: { color: 'text-orange-600', bg: 'bg-orange-50 border-orange-200', label: 'Reconnecting...' },
+    87→    DISCONNECTED: { color: 'text-red-600', bg: 'bg-red-50 border-red-200', label: 'Disconnected' },
+    88→    disconnected: { color: 'text-red-600', bg: 'bg-red-50 border-red-200', label: 'Disconnected' },
+    89→    offline: { color: 'text-gray-600', bg: 'bg-gray-50 border-gray-200', label: 'Offline' },
+    90→  };
+    91→  const c = configs[status] || configs.disconnected;
+    92→  const isSpinning = ['CONNECTING', 'connecting', 'RECONNECTING', 'reconnecting', 'generating_qr'].includes(status);
+    93→
+    94→  return (
+    95→    <Badge variant="outline" className={cn('px-3 py-1.5 gap-2 font-medium border', c.bg, c.color)}>
+    96→      {isSpinning ? (
+    97→        <Loader2 className="h-3 w-3 animate-spin" />
+    98→      ) : (
+    99→        <span className={cn('h-2 w-2 rounded-full', status === 'CONNECTED' || status === 'connected' ? 'bg-emerald-500' : 'bg-red-500')} />
+   100→      )}
+   101→      {c.label}
+   102→    </Badge>
+   103→  );
+   104→}
+   105→
+   106→// ============ MAIN COMPONENT ============
+   107→export function WhatsAppSettings() {
+   108→  const { setView } = useAppStore();
+   109→  const [data, setData] = useState<ConnectionData | null>(null);
+   110→  const [loading, setLoading] = useState(true);
+   111→  const [actionLoading, setActionLoading] = useState<string | null>(null);
+   112→  const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
+   113→  const [selectedProvider, setSelectedProvider] = useState<WhatsAppProvider>('openwa');
+   114→  const [activeTab, setActiveTab] = useState<'connection' | 'settings' | 'logs'>('connection');
+   115→
+   116→  // Settings form
+   117→  const [openwaBaseUrl, setOpenwaBaseUrl] = useState('http://localhost:3001');
+   118→  const [openwaApiKey, setOpenwaApiKey] = useState('');
+   119→  const [openwaSession, setOpenwaSession] = useState('MOHDHMS');
+   120→  const [metaAccessToken, setMetaAccessToken] = useState('');
+   121→  const [metaPhoneNumberId, setMetaPhoneNumberId] = useState('');
+   122→  const [metaVerifyToken, setMetaVerifyToken] = useState('');
+   123→  const [metaWebhookSecret, setMetaWebhookSecret] = useState('');
+   124→  const [metaBusinessAccountId, setMetaBusinessAccountId] = useState('');
+   125→  const [twilioAccountSid, setTwilioAccountSid] = useState('');
+   126→  const [twilioAuthToken, setTwilioAuthToken] = useState('');
+   127→  const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('');
+   128→  const [autoReplyEnabled, setAutoReplyEnabled] = useState(true);
+   129→  const [welcomeMessage, setWelcomeMessage] = useState('');
+   130→  const [emergencyNumbers, setEmergencyNumbers] = useState('');
+   131→  const [defaultPriority, setDefaultPriority] = useState('medium');
+   132→  const [testChatId, setTestChatId] = useState('');
+   133→  const [showPw, setShowPw] = useState<Record<string, boolean>>({});
+   134→  const [saving, setSaving] = useState(false);
+   135→
+   136→  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+   137→  const qrPollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+   138→
+   139→  // ============ FETCH STATUS ============
+   140→  const fetchStatus = useCallback(async () => {
+   141→    try {
+   142→      const res = await fetch('/api/whatsapp/connection', {
+   143→        headers: { Authorization: `Bearer ${getToken()}` },
+   144→      });
+   145→      if (res.ok) {
+   146→        const json = await res.json() as ConnectionData;
+   147→        setData(json);
+   148→
+   149→        // Convert QR if available
+   150→        if (json.qr) {
+   151→          const url = await QRCode.toDataURL(json.qr, { width: 280, margin: 2 });
+   152→          setQrImageUrl(url);
+   153→        } else if (json.connectionState === 'CONNECTED' || json.connectionState === 'connected') {
+   154→          setQrImageUrl(null);
+   155→        }
+   156→
+   157→        return json;
+   158→      }
+   159→    } catch {}
+   160→    return null;
+   161→  }, []);
+   162→
+   163→  // ============ QR POLLING ============
+   164→  useEffect(() => {
+   165→    const state = data?.connectionState;
+   166→    const isWaiting = ['CONNECTING', 'connecting', 'QR_READY', 'generating_qr', 'RECONNECTING', 'reconnecting'].includes(state || '');
+   167→
+   168→    if (isWaiting) {
+   169→      // Poll QR every 2 seconds when waiting
+   170→      if (!qrPollRef.current) {
+   171→        qrPollRef.current = setInterval(async () => {
+   172→          try {
+   173→            const token = getToken();
+   174→            const res = await fetch('/api/whatsapp/connection', {
+   175→              method: 'POST',
+   176→              headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+   177→              body: JSON.stringify({ action: 'get-qr' }),
+   178→            });
+   179→            if (res.ok) {
+   180→              const qrData = await res.json() as { qr: string | null; connected: boolean };
+   181→              if (qrData.connected) {
+   182→                setQrImageUrl(null);
+   183→                // Connected! Refresh full status
+   184→                fetchStatus();
+   185→                if (qrPollRef.current) { clearInterval(qrPollRef.current); qrPollRef.current = null; }
+   186→              } else if (qrData.qr) {
+   187→                const url = await QRCode.toDataURL(qrData.qr, { width: 280, margin: 2 });
+   188→                setQrImageUrl(url);
+   189→              }
+   190→            }
+   191→          } catch {}
+   192→        }, 2000);
+   193→      }
+   194→    } else {
+   195→      if (qrPollRef.current) { clearInterval(qrPollRef.current); qrPollRef.current = null; }
+   196→    }
+   197→
+   198→    return () => {
+   199→      if (qrPollRef.current) { clearInterval(qrPollRef.current); qrPollRef.current = null; }
+   200→    };
+   201→  }, [data?.connectionState, fetchStatus]);
+   202→
+   203→  // ============ STATUS POLLING ============
+   204→  useEffect(() => {
+   205→    const state = data?.connectionState;
+   206→    const isActive = ['CONNECTING', 'connecting', 'QR_READY', 'generating_qr', 'RECONNECTING', 'reconnecting'].includes(state || '');
+   207→
+   208→    if (isActive && !pollRef.current) {
+   209→      pollRef.current = setInterval(fetchStatus, 5000);
+   210→    } else if (!isActive && pollRef.current) {
+   211→      clearInterval(pollRef.current);
+   212→      pollRef.current = null;
+   213→    }
+   214→
+   215→    return () => { if (pollRef.current) { clearInterval(pollRef.current); pollRef.current = null; } };
+   216→  }, [data?.connectionState, fetchStatus]);
+   217→
+   218→  // ============ INITIAL LOAD ============
+   219→  useEffect(() => {
+   220→    const init = async () => {
+   221→      setLoading(true);
+   222→      // Load config
+   223→      try {
+   224→        const res = await fetch('/api/whatsapp/config', {
+   225→          headers: { Authorization: `Bearer ${getToken()}` },
+   226→        });
+   227→        if (res.ok) {
+   228→          const d = await res.json();
+   229→          setSelectedProvider(d.provider || 'openwa');
+   230→          setOpenwaBaseUrl(d.openwaBaseUrl || 'http://localhost:3001');
+   231→          setOpenwaApiKey(d.openwaApiKey || '');
+   232→          setOpenwaSession(d.openwaSession || 'MOHDHMS');
+   233→          setMetaAccessToken(d.metaAccessToken || '');
+   234→          setMetaPhoneNumberId(d.metaPhoneNumberId || '');
+   235→          setMetaVerifyToken(d.metaVerifyToken || '');
+   236→          setMetaWebhookSecret(d.metaWebhookSecret || '');
+   237→          setMetaBusinessAccountId(d.metaBusinessAccountId || '');
+   238→          setTwilioAccountSid(d.twilioAccountSid || '');
+   239→          setTwilioAuthToken(d.twilioAuthToken || '');
+   240→          setTwilioPhoneNumber(d.twilioPhoneNumber || '');
+   241→          setAutoReplyEnabled(d.autoReplyEnabled ?? true);
+   242→          setWelcomeMessage(d.welcomeMessage || '');
+   243→          setEmergencyNumbers(d.emergencyNumbers || '');
+   244→          setDefaultPriority(d.defaultPriority || 'medium');
+   245→        }
+   246→      } catch {}
+   247→
+   248→      await fetchStatus();
+   249→      setLoading(false);
+   250→    };
+   251→    init();
+   252→  }, [fetchStatus]);
+   253→
+   254→  // ============ HANDLE ACTION ============
+   255→  const handleAction = async (action: string) => {
+   256→    setActionLoading(action);
+   257→    try {
+   258→      const res = await fetch('/api/whatsapp/connection', {
+   259→        method: 'POST',
+   260→        headers: { Authorization: `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
+   261→        body: JSON.stringify({ action, chatId: testChatId || undefined }),
+   262→      });
+   263→      const result = await res.json();
+   264→
+   265→      if (action === 'connect') {
+   266→        if (result.state === 'CONNECTED') {
+   267→          toast.success('WhatsApp connected successfully!');
+   268→          setQrImageUrl(null);
+   269→        } else {
+   270→          toast.info('Connecting to WhatsApp... QR code will appear shortly.');
+   271→        }
+   272→      } else if (action === 'disconnect') {
+   273→        toast.success('WhatsApp disconnected');
+   274→        setQrImageUrl(null);
+   275→      } else if (action === 'reconnect') {
+   276→        toast.info('Reconnecting...');
+   277→        setQrImageUrl(null);
+   278→      } else if (action === 'test-message') {
+   279→        toast[result.success ? 'success' : 'error'](result.message || 'Test failed');
+   280→      } else if (action === 'get-qr') {
+   281→        if (result.qr) {
+   282→          const url = await QRCode.toDataURL(result.qr, { width: 280, margin: 2 });
+   283→          setQrImageUrl(url);
+   284→        }
+   285→      }
+   286→
+   287→      if (!result.success && result.error) {
+   288→        toast.error(result.error);
+   289→      }
+   290→
+   291→      await fetchStatus();
+   292→    } catch (err) {
+   293→      toast.error(err instanceof Error ? err.message : 'Action failed');
+   294→    } finally {
+   295→      setActionLoading(null);
+   296→    }
+   297→  };
+   298→
+   299→  // ============ SAVE SETTINGS ============
+   300→  const handleSave = async () => {
+   301→    setSaving(true);
+   302→    try {
+   303→      const res = await fetch('/api/whatsapp/config', {
+   304→        method: 'PUT',
+   305→        headers: { Authorization: `Bearer ${getToken()}`, 'Content-Type': 'application/json' },
+   306→        body: JSON.stringify({
+   307→          provider: selectedProvider, openwaBaseUrl, openwaApiKey, openwaSession,
+   308→          metaAccessToken, metaPhoneNumberId, metaVerifyToken, metaWebhookSecret, metaBusinessAccountId,
+   309→          twilioAccountSid, twilioAuthToken, twilioPhoneNumber,
+   310→          autoReplyEnabled, welcomeMessage, emergencyNumbers, defaultPriority,
+   311→        }),
+   312→      });
+   313→      if (res.ok) toast.success('Settings saved');
+   314→      else toast.error('Save failed');
+   315→    } catch { toast.error('Save failed'); }
+   316→    finally { setSaving(false); }
+   317→  };
+   318→
+   319→  const connState = data?.connectionState || 'DISCONNECTED';
+   320→  const isConnected = connState === 'CONNECTED' || connState === 'connected';
+   321→  const isConnecting = ['CONNECTING', 'connecting', 'QR_READY', 'generating_qr', 'RECONNECTING', 'reconnecting'].includes(connState);
+   322→  const info = data?.serviceInfo;
+   323→  const stats = data?.stats;
+   324→
+   325→  const formatUptime = (s: number) => {
+   326→    if (s < 60) return `${s}s`;
+   327→    if (s < 3600) return `${Math.floor(s / 60)}m ${s % 60}s`;
+   328→    return `${Math.floor(s / 3600)}h ${Math.floor((s % 3600) / 60)}m`;
+   329→  };
+   330→
+   331→  // ============ LOADING STATE ============
+   332→  if (loading) {
+   333→    return (
+   334→      <div className="space-y-6">
+   335→        <div className="flex items-center gap-3">
+   336→          <Skeleton className="h-8 w-8 rounded-lg" />
+   337→          <Skeleton className="h-8 w-48" />
+   338→        </div>
+   339→        <div className="grid gap-4 md:grid-cols-4">
+   340→          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28 rounded-xl" />)}
+   341→        </div>
+   342→        <Skeleton className="h-96 rounded-xl" />
+   343→      </div>
+   344→    );
+   345→  }
+   346→
+   347→  // ============ RENDER ============
+   348→  return (
+   349→    <div className="space-y-6">
+   350→      {/* Header */}
+   351→      <div className="flex items-center justify-between flex-wrap gap-3">
+   352→        <div className="flex items-center gap-3">
+   353→          <div className="rounded-lg bg-emerald-100 p-2">
+   354→            <Settings className="h-6 w-6 text-emerald-600" />
+   355→          </div>
+   356→          <div>
+   357→            <h1 className="text-2xl font-bold tracking-tight">WhatsApp Settings</h1>
+   358→            <p className="text-sm text-muted-foreground">Configure and manage your WhatsApp integration</p>
+   359→          </div>
+   360→        </div>
+   361→        <StatusBadge status={connState} />
+   362→      </div>
+   363→
+   364→      {/* Stats Cards */}
+   365→      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+   366→        {[
+   367→          { label: 'Messages Today', value: stats?.messagesToday || 0, icon: MessageSquare, color: 'text-sky-600', bg: 'bg-sky-50' },
+   368→          { label: 'Sent', value: stats?.sentToday || 0, icon: Send, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+   369→          { label: 'Delivered', value: stats?.deliveredToday || 0, icon: Check, color: 'text-teal-600', bg: 'bg-teal-50' },
+   370→          { label: 'Failed', value: stats?.failedToday || 0, icon: AlertCircle, color: 'text-red-600', bg: 'bg-red-50' },
+   371→        ].map(item => (
+   372→          <Card key={item.label}>
+   373→            <CardContent className="p-4 flex items-center gap-3">
+   374→              <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center shrink-0', item.bg)}>
+   375→                <item.icon className={cn('h-5 w-5', item.color)} />
+   376→              </div>
+   377→              <div>
+   378→                <p className="text-xs text-muted-foreground">{item.label}</p>
+   379→                <p className="text-xl font-bold">{item.value}</p>
+   380→              </div>
+   381→            </CardContent>
+   382→          </Card>
+   383→        ))}
+   384→      </div>
+   385→
+   386→      {/* Tab Navigation */}
+   387→      <div className="flex gap-1 bg-muted p-1 rounded-lg w-fit">
+   388→        {(['connection', 'settings', 'logs'] as const).map(tab => (
+   389→          <button
+   390→            key={tab}
+   391→            onClick={() => setActiveTab(tab)}
+   392→            className={cn(
+   393→              'px-4 py-1.5 rounded-md text-sm font-medium transition-colors capitalize',
+   394→              activeTab === tab ? 'bg-background shadow-sm text-foreground' : 'text-muted-foreground hover:text-foreground'
+   395→            )}
+   396→          >
+   397→            {tab}
+   398→          </button>
+   399→        ))}
+   400→      </div>
+   401→
+   402→      {/* CONNECTION TAB */}
+   403→      {activeTab === 'connection' && (
+   404→        <div className="grid gap-4 lg:grid-cols-2">
+   405→          {/* Connection Card */}
+   406→          <Card>
+   407→            <CardHeader className="pb-3">
+   408→              <CardTitle className="text-base flex items-center gap-2">
+   409→                <Radio className="h-4 w-4 text-emerald-600" />
+   410→                Connection
+   411→              </CardTitle>
+   412→            </CardHeader>
+   413→            <CardContent className="space-y-4">
+   414→              {/* Status Info */}
+   415→              {isConnected && info && (
+   416→                <div className="space-y-2 p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+   417→                  <div className="flex items-center gap-2">
+   418→                    <Wifi className="h-4 w-4 text-emerald-600" />
+   419→                    <span className="font-medium text-emerald-700">Connected</span>
+   420→                  </div>
+   421→                  <div className="grid grid-cols-2 gap-2 text-sm">
+   422→                    <div>
+   423→                      <span className="text-muted-foreground">Phone:</span>{' '}
+   424→                      <span className="font-medium">{info.phoneInfo?.phoneNumber || info.phoneInfo?.pushName || 'N/A'}</span>
+   425→                    </div>
+   426→                    <div>
+   427→                      <span className="text-muted-foreground">Uptime:</span>{' '}
+   428→                      <span className="font-medium">{formatUptime(info.uptime)}</span>
+   429→                    </div>
+   430→                    <div>
+   431→                      <span className="text-muted-foreground">Messages:</span>{' '}
+   432→                      <span className="font-medium">{info.messageCount}</span>
+   433→                    </div>
+   434→                    <div>
+   435→                      <span className="text-muted-foreground">Last Heartbeat:</span>{' '}
+   436→                      <span className="font-medium">{info.lastHeartbeat ? new Date(info.lastHeartbeat).toLocaleTimeString() : 'N/A'}</span>
+   437→                    </div>
+   438→                  </div>
+   439→                </div>
+   440→              )}
+   441→
+   442→              {/* QR Code Display */}
+   443→              <AnimatePresence mode="wait">
+   444→                {qrImageUrl && (
+   445→                  <motion.div
+   446→                    initial={{ opacity: 0, scale: 0.95 }}
+   447→                    animate={{ opacity: 1, scale: 1 }}
+   448→                    exit={{ opacity: 0, scale: 0.95 }}
+   449→                    className="flex flex-col items-center gap-3 p-4 bg-white rounded-xl border border-dashed border-amber-300"
+   450→                  >
+   451→                    <p className="text-sm font-medium text-amber-700">Scan with WhatsApp</p>
+   452→                    <img src={qrImageUrl} alt="WhatsApp QR Code" className="w-64 h-64 rounded-lg" />
+   453→                    <p className="text-xs text-muted-foreground">QR refreshes every 20 seconds. Scan quickly!</p>
+   454→                  </motion.div>
+   455→                )}
+   456→              </AnimatePresence>
+   457→
+   458→              {/* Connecting indicator (no QR yet) */}
+   459→              {isConnecting && !qrImageUrl && (
+   460→                <div className="flex flex-col items-center gap-3 p-8 bg-sky-50 rounded-xl border border-sky-200">
+   461→                  <Loader2 className="h-8 w-8 text-sky-600 animate-spin" />
+   462→                  <p className="text-sm font-medium text-sky-700">
+   463→                    {connState === 'generating_qr' || connState === 'QR_READY'
+   464→                      ? 'Generating QR code...'
+   465→                      : 'Launching WhatsApp Web...'}
+   466→                  </p>
+   467→                  <p className="text-xs text-sky-500">This may take 15-30 seconds</p>
+   468→                </div>
+   469→              )}
+   470→
+   471→              {/* Action Buttons */}
+   472→              <div className="flex flex-wrap gap-2">
+   473→                {!isConnected && !isConnecting && (
+   474→                  <Button
+   475→                    onClick={() => handleAction('connect')}
+   476→                    disabled={actionLoading === 'connect'}
+   477→                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   478→                  >
+   479→                    {actionLoading === 'connect' ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Wifi className="h-4 w-4 mr-2" />}
+   480→                    Connect WhatsApp
+   481→                  </Button>
+   482→                )}
+   483→
+   484→                {isConnecting && (
+   485→                  <Button variant="outline" onClick={() => handleAction('disconnect')} className="text-red-600 border-red-200 hover:bg-red-50">
+   486→                    <WifiOff className="h-4 w-4 mr-2" />
+   487→                    Cancel
+   488→                  </Button>
+   489→                )}
+   490→
+   491→                {isConnected && (
+   492→                  <>
+   493→                    <Button variant="outline" onClick={() => handleAction('test-message')} disabled={actionLoading === 'test-message'}>
+   494→                      {actionLoading === 'test-message' ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Send className="h-4 w-4 mr-2" />}
+   495→                      Send Test
+   496→                    </Button>
+   497→                    <Button variant="outline" onClick={() => handleAction('disconnect')} disabled={actionLoading === 'disconnect'} className="text-red-600 border-red-200 hover:bg-red-50">
+   498→                      <WifiOff className="h-4 w-4 mr-2" />
+   499→                      Disconnect
+   500→                    </Button>
+   501→                  </>
+   502→                )}
+   503→
+   504→                {isConnected && (
+   505→                  <Button variant="outline" size="sm" onClick={fetchStatus}>
+   506→                    <RefreshCw className="h-3 w-3 mr-1" /> Refresh
+   507→                  </Button>
+   508→                )}
+   509→              </div>
+   510→
+   511→              {/* Test Message Input */}
+   512→              {isConnected && (
+   513→                <div className="flex gap-2">
+   514→                  <Input
+   515→                    placeholder="Phone number (e.g. 60123456789@s.whatsapp.net)"
+   516→                    value={testChatId}
+   517→                    onChange={(e) => setTestChatId(e.target.value)}
+   518→                    className="text-sm"
+   519→                  />
+   520→                  <Button size="sm" variant="outline" onClick={() => handleAction('test-message')}>
+   521→                    Send
+   522→                  </Button>
+   523→                </div>
+   524→              )}
+   525→            </CardContent>
+   526→          </Card>
+   527→
+   528→          {/* Provider Selection */}
+   529→          <Card>
+   530→            <CardHeader className="pb-3">
+   531→              <CardTitle className="text-base flex items-center gap-2">
+   532→                <Plug className="h-4 w-4 text-emerald-600" />
+   533→                Provider
+   534→              </CardTitle>
+   535→            </CardHeader>
+   536→            <CardContent className="space-y-4">
+   537→              <div className="grid gap-3">
+   538→                {PROVIDERS.map(p => (
+   539→                  <button
+   540→                    key={p.id}
+   541→                    onClick={() => setSelectedProvider(p.id)}
+   542→                    className={cn(
+   543→                      'flex items-start gap-3 p-3 rounded-xl border-2 text-left transition-all',
+   544→                      selectedProvider === p.id
+   545→                        ? 'border-emerald-500 bg-emerald-50/50'
+   546→                        : 'border-transparent bg-muted/50 hover:bg-muted'
+   547→                    )}
+   548→                  >
+   549→                    <div className={cn(
+   550→                      'w-10 h-10 rounded-xl flex items-center justify-center shrink-0',
+   551→                      selectedProvider === p.id ? 'bg-emerald-100 text-emerald-600' : 'bg-gray-100 text-gray-500'
+   552→                    )}>
+   553→                      <p.icon className="h-5 w-5" />
+   554→                    </div>
+   555→                    <div className="flex-1 min-w-0">
+   556→                      <div className="flex items-center justify-between">
+   557→                        <p className="font-medium text-sm">{p.name}</p>
+   558→                        {selectedProvider === p.id && <Check className="h-4 w-4 text-emerald-600" />}
+   559→                      </div>
+   560→                      <p className="text-xs text-muted-foreground mt-0.5">{p.description}</p>
+   561→                    </div>
+   562→                  </button>
+   563→                ))}
+   564→              </div>
+   565→
+   566→              {/* Session Info */}
+   567→              <Separator />
+   568→              <div className="space-y-2 text-sm">
+   569→                <h4 className="font-medium">Session Details</h4>
+   570→                <div className="grid grid-cols-2 gap-2">
+   571→                  <div>
+   572→                    <p className="text-muted-foreground text-xs">Session ID</p>
+   573→                    <p className="font-mono text-xs">{info?.session || 'MOHDHMS'}</p>
+   574→                  </div>
+   575→                  <div>
+   576→                    <p className="text-muted-foreground text-xs">Status</p>
+   577→                    <p className="font-medium">{info?.status || 'DISCONNECTED'}</p>
+   578→                  </div>
+   579→                  <div>
+   580→                    <p className="text-muted-foreground text-xs">Connected At</p>
+   581→                    <p className="font-medium">{info?.connectedAt ? new Date(info.connectedAt).toLocaleString() : 'N/A'}</p>
+   582→                  </div>
+   583→                  <div>
+   584→                    <p className="text-muted-foreground text-xs">Chrome</p>
+   585→                    <p className="font-medium text-xs">{data?.serviceInfo ? 'Found' : 'N/A'}</p>
+   586→                  </div>
+   587→                </div>
+   588→              </div>
+   589→            </CardContent>
+   590→          </Card>
+   591→        </div>
+   592→      )}
+   593→
+   594→      {/* SETTINGS TAB */}
+   595→      {activeTab === 'settings' && (
+   596→        <Card>
+   597→          <CardHeader>
+   598→            <CardTitle className="text-base flex items-center gap-2">
+   599→              <Key className="h-4 w-4 text-emerald-600" />
+   600→              Provider Configuration
+   601→            </CardTitle>
+   602→          </CardHeader>
+   603→          <CardContent className="space-y-6">
+   604→            {selectedProvider === 'openwa' && (
+   605→              <div className="space-y-4">
+   606→                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   607→                  <div>
+   608→                    <Label>Service URL</Label>
+   609→                    <Input className="mt-1" value={openwaBaseUrl} onChange={(e) => setOpenwaBaseUrl(e.target.value)} placeholder="http://localhost:3001" />
+   610→                  </div>
+   611→                  <div>
+   612→                    <Label>Session Name</Label>
+   613→                    <Input className="mt-1" value={openwaSession} onChange={(e) => setOpenwaSession(e.target.value)} placeholder="MOHDHMS" />
+   614→                  </div>
+   615→                </div>
+   616→                <div>
+   617→                  <Label>API Key (optional)</Label>
+   618→                  <div className="relative mt-1">
+   619→                    <Input type={showPw.openwaApiKey ? 'text' : 'password'} value={openwaApiKey} onChange={(e) => setOpenwaApiKey(e.target.value)} placeholder="Optional API key" />
+   620→                    <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2" onClick={() => setShowPw(p => ({ ...p, openwaApiKey: !p.openwaApiKey }))}>
+   621→                      {showPw.openwaApiKey ? <EyeOff className="h-4 w-4 text-muted-foreground" /> : <Eye className="h-4 w-4 text-muted-foreground" />}
+   622→                    </button>
+   623→                  </div>
+   624→                </div>
+   625→              </div>
+   626→            )}
+   627→
+   628→            {selectedProvider === 'meta' && (
+   629→              <div className="space-y-4">
+   630→                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   631→                  <div>
+   632→                    <Label>Access Token</Label>
+   633→                    <Input className="mt-1" type="password" value={metaAccessToken} onChange={(e) => setMetaAccessToken(e.target.value)} />
+   634→                  </div>
+   635→                  <div>
+   636→                    <Label>Phone Number ID</Label>
+   637→                    <Input className="mt-1" value={metaPhoneNumberId} onChange={(e) => setMetaPhoneNumberId(e.target.value)} />
+   638→                  </div>
+   639→                  <div>
+   640→                    <Label>Verify Token</Label>
+   641→                    <Input className="mt-1" value={metaVerifyToken} onChange={(e) => setMetaVerifyToken(e.target.value)} />
+   642→                  </div>
+   643→                  <div>
+   644→                    <Label>Webhook Secret</Label>
+   645→                    <Input className="mt-1" type="password" value={metaWebhookSecret} onChange={(e) => setMetaWebhookSecret(e.target.value)} />
+   646→                  </div>
+   647→                  <div className="md:col-span-2">
+   648→                    <Label>Business Account ID</Label>
+   649→                    <Input className="mt-1" value={metaBusinessAccountId} onChange={(e) => setMetaBusinessAccountId(e.target.value)} />
+   650→                  </div>
+   651→                </div>
+   652→              </div>
+   653→            )}
+   654→
+   655→            {selectedProvider === 'twilio' && (
+   656→              <div className="space-y-4">
+   657→                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   658→                  <div>
+   659→                    <Label>Account SID</Label>
+   660→                    <Input className="mt-1" value={twilioAccountSid} onChange={(e) => setTwilioAccountSid(e.target.value)} />
+   661→                  </div>
+   662→                  <div>
+   663→                    <Label>Auth Token</Label>
+   664→                    <Input className="mt-1" type="password" value={twilioAuthToken} onChange={(e) => setTwilioAuthToken(e.target.value)} />
+   665→                  </div>
+   666→                  <div className="md:col-span-2">
+   667→                    <Label>Twilio Phone Number</Label>
+   668→                    <Input className="mt-1" value={twilioPhoneNumber} onChange={(e) => setTwilioPhoneNumber(e.target.value)} placeholder="+1234567890" />
+   669→                  </div>
+   670→                </div>
+   671→              </div>
+   672→            )}
+   673→
+   674→            <Separator />
+   675→
+   676→            {/* General Settings */}
+   677→            <div className="space-y-4">
+   678→              <h3 className="font-medium">General Settings</h3>
+   679→              <div className="flex items-center justify-between">
+   680→                <div>
+   681→                  <Label>Auto-Reply</Label>
+   682→                  <p className="text-xs text-muted-foreground">Automatically respond to incoming messages</p>
+   683→                </div>
+   684→                <Switch checked={autoReplyEnabled} onCheckedChange={setAutoReplyEnabled} />
+   685→              </div>
+   686→              <div>
+   687→                <Label>Welcome Message</Label>
+   688→                <Textarea className="mt-1" rows={4} value={welcomeMessage} onChange={(e) => setWelcomeMessage(e.target.value)} placeholder="Welcome message..." />
+   689→              </div>
+   690→              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   691→                <div>
+   692→                  <Label>Emergency Numbers</Label>
+   693→                  <Input className="mt-1" value={emergencyNumbers} onChange={(e) => setEmergencyNumbers(e.target.value)} placeholder='["+60123456789"]' />
+   694→                </div>
+   695→                <div>
+   696→                  <Label>Default Priority</Label>
+   697→                  <Select value={defaultPriority} onValueChange={setDefaultPriority}>
+   698→                    <SelectTrigger className="mt-1"><SelectValue /></SelectTrigger>
+   699→                    <SelectContent>
+   700→                      {['low', 'medium', 'high', 'critical'].map(p => (
+   701→                        <SelectItem key={p} value={p} className="capitalize">{p}</SelectItem>
+   702→                      ))}
+   703→                    </SelectContent>
+   704→                  </Select>
+   705→                </div>
+   706→              </div>
+   707→            </div>
+   708→
+   709→            <div className="flex justify-end pt-2">
+   710→              <Button onClick={handleSave} disabled={saving} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+   711→                {saving && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+   712→                Save Settings
+   713→              </Button>
+   714→            </div>
+   715→          </CardContent>
+   716→        </Card>
+   717→      )}
+   718→
+   719→      {/* LOGS TAB */}
+   720→      {activeTab === 'logs' && (
+   721→        <Card>
+   722→          <CardHeader className="pb-3">
+   723→            <div className="flex items-center justify-between">
+   724→              <CardTitle className="text-base flex items-center gap-2">
+   725→                <Activity className="h-4 w-4 text-emerald-600" />
+   726→                Service Logs
+   727→              </CardTitle>
+   728→              <Button variant="outline" size="sm" onClick={fetchStatus}>
+   729→                <RefreshCw className="h-3 w-3 mr-1" /> Refresh
+   730→              </Button>
+   731→            </div>
+   732→          </CardHeader>
+   733→          <CardContent>
+   734→            <ScrollArea className="max-h-96">
+   735→              {(!data?.logs || data.logs.length === 0) ? (
+   736→                <p className="text-sm text-muted-foreground text-center py-8">No logs yet</p>
+   737→              ) : (
+   738→                <div className="space-y-1 font-mono text-xs">
+   739→                  {data.logs.map((log, i) => (
+   740→                    <div key={i} className={cn(
+   741→                      'flex gap-2 px-2 py-1.5 rounded',
+   742→                      log.level === 'error' ? 'bg-red-50 text-red-700' :
+   743→                      log.level === 'warn' ? 'bg-amber-50 text-amber-700' :
+   744→                      'text-muted-foreground'
+   745→                    )}>
+   746→                      <span className="shrink-0 opacity-60">{log.timestamp.split('T')[1]?.split('.')[0] || ''}</span>
+   747→                      <span className={cn(
+   748→                        'shrink-0 font-bold uppercase w-12',
+   749→                        log.level === 'error' ? 'text-red-500' : log.level === 'warn' ? 'text-amber-500' : 'text-sky-500'
+   750→                      )}>{log.level}</span>
+   751→                      <span className="shrink-0 text-foreground/70">{log.event}</span>
+   752→                      <span className="truncate">{log.message}</span>
+   753→                    </div>
+   754→                  ))}
+   755→                </div>
+   756→              )}
+   757→            </ScrollArea>
+   758→          </CardContent>
+   759→        </Card>
+   760→      )}
+   761→    </div>
+   762→  );
+   763→}
