@@ -12,6 +12,7 @@ const EquipmentList = lazy(() => import('@/components/modules/equipment/equipmen
 const EquipmentDetail = lazy(() => import('@/components/modules/equipment/equipment-detail').then(m => ({ default: m.EquipmentDetail })));
 const ComplaintList = lazy(() => import('@/components/modules/complaints/complaint-list').then(m => ({ default: m.ComplaintList })));
 const ComplaintDetail = lazy(() => import('@/components/modules/complaints/complaint-detail').then(m => ({ default: m.ComplaintDetail })));
+const NewComplaint = lazy(() => import('@/components/modules/complaints/new-complaint').then(m => ({ default: m.NewComplaint })));
 const WorkOrderList = lazy(() => import('@/components/modules/work-orders/work-order-list').then(m => ({ default: m.WorkOrderList })));
 const WorkOrderDetail = lazy(() => import('@/components/modules/work-orders/work-order-detail').then(m => ({ default: m.WorkOrderDetail })));
 const InvoiceList = lazy(() => import('@/components/modules/invoices/invoice-list').then(m => ({ default: m.InvoiceList })));
@@ -80,6 +81,7 @@ function ViewRouter() {
       {currentView === 'equipment-detail' && <EquipmentDetail />}
       {currentView === 'complaints' && <ComplaintList />}
       {currentView === 'complaint-detail' && <ComplaintDetail />}
+      {currentView === 'new-complaint' && <NewComplaint />}
       {currentView === 'work-orders' && <WorkOrderList />}
       {currentView === 'work-order-detail' && <WorkOrderDetail />}
       {currentView === 'invoices' && <InvoiceList />}

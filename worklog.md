@@ -1088,3 +1088,31 @@ Stage Summary:
 - Landing Page is connected via status section showing live content counts
 - All KPI cards are clickable and navigate to respective CMS management views
 - Agent Browser verified all sections render correctly with real data
+---
+Task ID: 2
+Agent: main
+Task: Build New Complaint page with 4-step wizard form
+
+Work Log:
+- Analyzed uploaded design screenshot (complaints page.png) with VLM
+- Explored existing complaint system: complaint-list.tsx, complaint-detail.tsx, API routes, Prisma model
+- Registered "new-complaint" in AppView type union (src/types/index.ts)
+- Added lazy import + view routing in app-shell.tsx
+- Added Complaints sub-items (All Complaints, New Complaint) in floating-nav-bar.tsx
+- Created new-complaint.tsx with 4-step wizard:
+  - Step 1: Complaint Details (title, description, priority, category, subcategory, contact method, response time, request type)
+  - Step 2: Equipment & Location (customer, equipment, building, floor, room, GPS)
+  - Step 3: Attachments (drag/drop upload, image previews, PDF support)
+  - Step 4: Review & Submit (summary of all entered data)
+- Left sidebar: How it works (3 steps), emergency phone, security note
+- Connected to POST /api/complaints API
+- Updated complaint-list.tsx "New Complaint" button to navigate to new page instead of dialog
+- Verified with Agent Browser: all elements rendering correctly
+
+Stage Summary:
+- New standalone complaint page created at src/components/modules/complaints/new-complaint.tsx
+- Navigation: Complaints dropdown now has "All Complaints" and "New Complaint"
+- Form validation: Step 1 requires title, description, category; Step 2 requires customer
+- Request type "Emergency" auto-sets priority to critical
+- Extra metadata (subcategory, contact method, response time, location) appended to description field
+

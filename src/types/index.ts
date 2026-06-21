@@ -45,6 +45,7 @@ export type AppView =
   | 'equipment-detail'
   | 'complaints'
   | 'complaint-detail'
+  | 'new-complaint'
   | 'work-orders'
   | 'work-order-detail'
   | 'invoices'

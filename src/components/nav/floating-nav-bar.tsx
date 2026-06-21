@@ -64,7 +64,16 @@ const NAV_ITEMS: NavItemConfig[] = [
       { id: 'equipment', label: 'QR Codes' },
     ],
   },
-  { id: 'complaints', label: 'Complaints', icon: AlertTriangle, feature: 'complaints' },
+  {
+    id: 'complaints',
+    label: 'Complaints',
+    icon: AlertTriangle,
+    feature: 'complaints',
+    subItems: [
+      { id: 'complaints', label: 'All Complaints' },
+      { id: 'new-complaint', label: 'New Complaint' },
+    ],
+  },
   { id: 'work-orders', label: 'Work Orders', icon: ClipboardList, feature: 'work-orders' },
   { id: 'pm', label: 'Preventive Maint.', icon: CalendarClock, feature: 'pm' },
   { id: 'inventory', label: 'Inventory', icon: Package, feature: 'inventory' },

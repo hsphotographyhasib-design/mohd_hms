@@ -226,9 +226,7 @@ export function ComplaintList() {
   const totalPages = Math.ceil(total / pageSize);
 
   const openAddForm = () => {
-    setFormData(defaultFormData);
-    setEquipmentList([]);
-    setFormOpen(true);
+    setView('new-complaint');
   };
 
   const handleSubmit = async () => {
