@@ -731,3 +731,31 @@ Work Log:
 Stage Summary:
 - File changed: src/components/nav/floating-nav-bar.tsx (line 553: added `sticky top-[68px] z-40` classes)
 - Both header (z-50) and nav bar (z-40) now stay pinned at viewport top during scroll
+
+---
+Task ID: submenu-fix
+Agent: Main
+Task: Fix sub-menu dropdowns not appearing when clicking nav items (Equipment, CMS)
+
+Work Log:
+- Root cause 1: The scroll container's `overflow-x-auto` CSS clipped the absolutely-positioned dropdown (it was rendered inside the overflow container)
+- Root cause 2: The `onFocus` handler opened the dropdown before the click event fired, causing the click to toggle it closed immediately
+- Root cause 3: The `onBlur` handler fired on click (before dropdown mounted) and closed the just-opened dropdown
+
+Fix applied:
+- Added `dropdownRect` state to track the button's viewport position
+- Added `updateDropdownPosition()` callback that reads `getBoundingClientRect()` from the nav button
+- Changed dropdown rendering from `absolute top-full` (inside overflow container) to `fixed` position (outside overflow container, rendered at component level after the nav)
+- Moved `updateDropdownPosition` declaration before all callbacks that depend on it (fixed lint error)
+- Added scroll listener to update dropdown position when nav scrolls horizontally
+- Removed `onFocus` handler that was causing race condition with click
+- Removed `onBlur` handler that was closing dropdown before it mounted
+- `handleDropdownMouseLeave` now also clears `dropdownRect` state
+
+Stage Summary:
+- File changed: src/components/nav/floating-nav-bar.tsx
+- Dropdowns now render as `position: fixed z-[100]` elements at component level, escaping the `overflow-x-auto` clip
+- Equipment dropdown: 3 items (Equipment Registry, Asset Categories, QR Codes) ✅
+- CMS dropdown: 18 items (CMS Dashboard, Hero, About, Services, etc.) ✅
+- Toggle (click to open, click again to close) works correctly ✅
+- Scroll position tracking keeps dropdown aligned when nav scrolls ✅

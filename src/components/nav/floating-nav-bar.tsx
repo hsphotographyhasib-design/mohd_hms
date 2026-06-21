@@ -158,6 +158,7 @@ export function FloatingNavBar() {
 
   // ---- Local State ----
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
+  const [dropdownRect, setDropdownRect] = useState<{ top: number; left: number } | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const [focusedSubIndex, setFocusedSubIndex] = useState(-1);
@@ -262,9 +263,28 @@ export function FloatingNavBar() {
     }
   }, []);
 
+  // Calculate dropdown position from button rect (declared early for dependency order)
+  const updateDropdownPosition = useCallback((itemId: string) => {
+    const btn = navItemRefs.current.get(itemId);
+    if (btn) {
+      const rect = btn.getBoundingClientRect();
+      setDropdownRect({ top: rect.bottom + 4, left: rect.left + rect.width / 2 - 90 });
+    }
+  }, []);
+
+  // Update dropdown position when nav scrolls
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el || !openDropdownId) return;
+    const onScroll = () => updateDropdownPosition(openDropdownId);
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [openDropdownId, updateDropdownPosition]);
+
   const closeDropdown = useCallback(() => {
     clearCloseTimeout();
     setOpenDropdownId(null);
+    setDropdownRect(null);
     setFocusedSubIndex(-1);
   }, [clearCloseTimeout]);
 
@@ -275,9 +295,10 @@ export function FloatingNavBar() {
       hoverTimeoutRef.current = setTimeout(() => {
         setOpenDropdownId(itemId);
         setFocusedSubIndex(-1);
+        updateDropdownPosition(itemId);
       }, 200);
     },
-    [clearHoverTimeout, clearCloseTimeout]
+    [clearHoverTimeout, clearCloseTimeout, updateDropdownPosition]
   );
 
   const handleItemMouseLeave = useCallback(() => {
@@ -292,6 +313,7 @@ export function FloatingNavBar() {
     clearHoverTimeout();
     closeTimeoutRef.current = setTimeout(() => {
       setOpenDropdownId(null);
+      setDropdownRect(null);
       setFocusedSubIndex(-1);
     }, 500);
   }, [clearHoverTimeout]);
@@ -307,13 +329,14 @@ export function FloatingNavBar() {
           clearCloseTimeout();
           setOpenDropdownId(item.id);
           setFocusedSubIndex(-1);
+          updateDropdownPosition(item.id);
         }
       } else {
         closeDropdown();
         setView(item.id as AppView);
       }
     },
-    [openDropdownId, closeDropdown, clearHoverTimeout, clearCloseTimeout, setView]
+    [openDropdownId, closeDropdown, clearHoverTimeout, clearCloseTimeout, setView, updateDropdownPosition]
   );
 
   const handleSubItemClick = useCallback(
@@ -394,32 +417,31 @@ export function FloatingNavBar() {
 
 
   // ============================================================
-  // RENDER: DROPDOWN SUBMENU
+  // RENDER: DROPDOWN SUBMENU (fixed position to escape overflow)
   // ============================================================
 
   const renderDropdown = (item: NavItemConfig) => {
-    if (!item.subItems || openDropdownId !== item.id) return null;
+    if (!item.subItems || openDropdownId !== item.id || !dropdownRect) return null;
 
     return (
-      <AnimatePresence>
-        <motion.div
-          ref={dropdownRef}
-          initial={{ opacity: 0, y: -4, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -4, scale: 0.98 }}
-          transition={{ duration: 0.15, ease: 'easeOut' }}
-          onMouseEnter={handleDropdownMouseEnter}
-          onMouseLeave={handleDropdownMouseLeave}
-          className={cn(
-            'absolute top-full left-0 mt-1 z-50',
-            'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-xl',
-            'border border-white/20 dark:border-white/10 shadow-xl',
-            'py-1 min-w-[180px] max-h-80 overflow-y-auto',
-            'scrollbar-thin'
-          )}
-          role="menu"
-          aria-label={`${item.label} submenu`}
-        >
+      <motion.div
+        ref={dropdownRef}
+        initial={{ opacity: 0, y: -4, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.15, ease: 'easeOut' }}
+        onMouseEnter={handleDropdownMouseEnter}
+        onMouseLeave={handleDropdownMouseLeave}
+        className={cn(
+          'fixed z-[100]',
+          'bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl rounded-xl',
+          'border border-white/20 dark:border-white/10 shadow-xl shadow-black/10',
+          'py-1 min-w-[180px] max-h-80 overflow-y-auto',
+          'scrollbar-thin'
+        )}
+        style={{ top: dropdownRect.top, left: dropdownRect.left }}
+        role="menu"
+        aria-label={`${item.label} submenu`}
+      >
           {item.subItems.map((sub, idx) => {
             const isSubActive = currentView === sub.id;
             return (
@@ -447,7 +469,6 @@ export function FloatingNavBar() {
             );
           })}
         </motion.div>
-      </AnimatePresence>
     );
   };
 
@@ -472,23 +493,6 @@ export function FloatingNavBar() {
         onMouseEnter={() => hasSub && handleItemMouseEnter(item.id)}
         onMouseLeave={() => hasSub && handleItemMouseLeave()}
         onClick={() => handleItemClick(item)}
-        onFocus={() => {
-          if (hasSub) {
-            clearHoverTimeout();
-            clearCloseTimeout();
-            setOpenDropdownId(item.id);
-          }
-        }}
-        onBlur={(e) => {
-          // Close dropdown only if focus leaves the item and doesn't go to the dropdown
-          if (
-            hasSub &&
-            !e.relatedTarget?.closest('[role="menu"]') &&
-            !navItemRefs.current.get(item.id)?.contains(e.relatedTarget as Node)
-          ) {
-            closeDropdown();
-          }
-        }}
         aria-expanded={hasSub ? isOpen : undefined}
         aria-haspopup={hasSub ? 'true' : undefined}
         className={cn(
@@ -529,8 +533,6 @@ export function FloatingNavBar() {
           </svg>
         )}
 
-        {/* Dropdown */}
-        {renderDropdown(item)}
       </motion.button>
     );
   };
@@ -546,6 +548,7 @@ export function FloatingNavBar() {
   // ============================================================
 
   return (
+    <>
     <motion.nav
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -598,5 +601,16 @@ export function FloatingNavBar() {
         </AnimatePresence>
       </div>
     </motion.nav>
+
+    {/* Portal dropdown - rendered outside overflow container */}
+    {openDropdownId && (() => {
+      const allItems = [
+        ...filteredItems.mainItems,
+        ...(filteredItems.showCms ? [CMS_ITEM] : []),
+      ];
+      const activeItem = allItems.find((i) => i.id === openDropdownId);
+      return activeItem ? renderDropdown(activeItem) : null;
+    })()}
+    </>
   );
 }
