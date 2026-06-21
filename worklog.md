@@ -227,3 +227,28 @@ Stage Summary:
 - Desktop sidebar navigation works without Sheet overlay interference
 - View resets to Dashboard on login/logout for clean UX
 - All 16 modules + detail views + role switching verified end-to-end
+
+---
+Task ID: Login-Redesign
+Agent: Main Architect
+Task: Rebuild login page based on uploaded smartfm-login-sample.html design
+
+Work Log:
+- Analyzed uploaded HTML: multi-panel card design with Google/Email/WhatsApp sign-in, dark mode, WCAG 2.2 accessibility
+- Completely rewrote login-view.tsx (252 lines → ~430 lines) matching the design
+- Implemented 3-panel navigation: Choices → Email Form → WhatsApp OTP (phone → code)
+- Added brand gauge monogram SVG (from uploaded design), "Welcome back" title, subtitle
+- Implemented Google OAuth button, Email/Password form, WhatsApp OTP flow with countdown timer
+- Added inline form validation with error messages (not toasts) matching design patterns
+- Added "Skip for now" ghost button, Terms of Service / Privacy Policy footer
+- Maintained all 5 demo account quick-login buttons as subtle pills
+- Full dark mode support via Tailwind dark: classes
+- Accessibility: aria attributes, focus management, role="alert" for errors, sr-only live region
+- Browser verified all flows: demo login ✅, email login ✅, panel switching ✅, WhatsApp phone validation ✅, OTP step with countdown ✅, back navigation ✅, dark mode ✅
+
+Stage Summary:
+- Login page completely redesigned to match uploaded smartfm-login-sample.html
+- Multi-panel navigation (Choices/Email/WhatsApp) with smooth transitions
+- Emerald-600 primary color replacing the original dark/accent blue
+- Zero lint errors, zero console errors
+- All sign-in flows verified end-to-end in browser (light + dark mode)

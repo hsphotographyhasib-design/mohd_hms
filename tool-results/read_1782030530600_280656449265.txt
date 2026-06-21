@@ -1,0 +1,731 @@
+    50→      /* Color — borders */
+    51→      --color-border:          #e3e5e8;
+    52→      --color-border-strong:   #d0d3d8;
+    53→
+    54→      /* Focus ring (must stay >=3:1 vs adjacent colors — WCAG 2.2 focus appearance) */
+    55→      --focus-ring:            0 0 0 3px rgba(37, 99, 235, 0.45);
+    56→      --focus-ring-offset:     0 0 0 2px var(--color-surface-card);
+    57→
+    58→      /* Typography */
+    59→      --font-stack: "Geist", "PingFang SC", -apple-system, BlinkMacSystemFont,
+    60→                    "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans",
+    61→                    "Droid Sans", "Helvetica Neue", "Microsoft YaHei", sans-serif;
+    62→      --fs-xs: 12px;
+    63→      --fs-sm: 14px;   /* base */
+    64→      --fs-md: 16px;
+    65→      --fs-lg: 18px;
+    66→      --fs-xl: 26px;   /* heading */
+    67→      --lh-base: 20px;
+    68→      --fw-regular: 400;
+    69→      --fw-medium: 500;
+    70→      --fw-semibold: 600;
+    71→
+    72→      /* Spacing scale (8px rhythm) */
+    73→      --space-1: 8px;
+    74→      --space-2: 10px;
+    75→      --space-3: 12px;
+    76→      --space-4: 16px;
+    77→      --space-5: 20px;
+    78→      --space-6: 24px;
+    79→      --space-8: 32px;
+    80→
+    81→      /* Radius / shadow / motion */
+    82→      --radius-sm: 8px;
+    83→      --radius-md: 12px;
+    84→      --radius-lg: 20px;
+    85→      --shadow-card: 0 1px 2px rgba(16,24,40,0.04),
+    86→                     0 12px 32px rgba(16,24,40,0.08);
+    87→      --control-h: 48px;
+    88→      --motion-fast: 120ms;
+    89→      --motion-base: 180ms;
+    90→      --ease: cubic-bezier(0.2, 0, 0.2, 1);
+    91→    }
+    92→
+    93→    @media (prefers-color-scheme: dark) {
+    94→      :root {
+    95→        --color-surface-page:    #0c0e12;
+    96→        --color-surface-card:    #16191f;
+    97→        --color-surface-muted:   #1f242c;
+    98→        --color-surface-muted-2: #272d36;
+    99→        --color-text-primary:    #f3f4f6;
+   100→        --color-text-secondary:  #c2c7cf;
+   101→        --color-text-tertiary:   #8b919b;
+   102→        --color-action:          #f3f4f6;
+   103→        --color-action-hover:    #e4e6ea;
+   104→        --color-action-active:   #ffffff;
+   105→        --color-on-action:       #14181f;
+   106→        --color-accent:          #6b9bff;
+   107→        --color-accent-strong:   #8fb3ff;
+   108→        --color-error:           #f97066;
+   109→        --color-error-surface:   #2a1414;
+   110→        --color-error-border:    #5b2120;
+   111→        --color-success:         #75e0a7;
+   112→        --color-success-surface: #11261b;
+   113→        --color-border:          #2a2f38;
+   114→        --color-border-strong:   #3a414c;
+   115→        --focus-ring:            0 0 0 3px rgba(107, 155, 255, 0.5);
+   116→        --focus-ring-offset:     0 0 0 2px var(--color-surface-card);
+   117→        --shadow-card:           0 1px 2px rgba(0,0,0,0.4),
+   118→                                 0 16px 40px rgba(0,0,0,0.5);
+   119→      }
+   120→    }
+   121→
+   122→    /* =========================================================================
+   123→       RESET / BASE
+   124→       ========================================================================= */
+   125→    *, *::before, *::after { box-sizing: border-box; }
+   126→    html, body { height: 100%; }
+   127→    body {
+   128→      margin: 0;
+   129→      font-family: var(--font-stack);
+   130→      font-size: var(--fs-sm);
+   131→      line-height: var(--lh-base);
+   132→      font-weight: var(--fw-regular);
+   133→      color: var(--color-text-secondary);
+   134→      background: var(--color-surface-page);
+   135→      -webkit-font-smoothing: antialiased;
+   136→      text-rendering: optimizeLegibility;
+   137→      display: flex;
+   138→      align-items: center;
+   139→      justify-content: center;
+   140→      min-height: 100dvh;
+   141→      padding: var(--space-6);
+   142→    }
+   143→
+   144→    /* Visible focus only for keyboard users; never remove the indicator. */
+   145→    :focus-visible {
+   146→      outline: none;
+   147→      box-shadow: var(--focus-ring-offset), var(--focus-ring);
+   148→      border-radius: var(--radius-sm);
+   149→    }
+   150→
+   151→    /* =========================================================================
+   152→       AUTH CARD
+   153→       ========================================================================= */
+   154→    .auth {
+   155→      width: 100%;
+   156→      max-width: 420px;
+   157→      background: var(--color-surface-card);
+   158→      border: 1px solid var(--color-border);
+   159→      border-radius: var(--radius-lg);
+   160→      box-shadow: var(--shadow-card);
+   161→      padding: var(--space-8) var(--space-8) var(--space-6);
+   162→    }
+   163→
+   164→    .auth__brand {
+   165→      display: flex;
+   166→      flex-direction: column;
+   167→      align-items: center;
+   168→      text-align: center;
+   169→      gap: var(--space-3);
+   170→      margin-bottom: var(--space-6);
+   171→    }
+   172→    .auth__logo {
+   173→      width: 56px;
+   174→      height: 56px;
+   175→      border-radius: var(--radius-md);
+   176→      background: var(--color-action);
+   177→      color: var(--color-on-action);
+   178→      display: grid;
+   179→      place-items: center;
+   180→    }
+   181→    .auth__logo svg { width: 30px; height: 30px; display: block; }
+   182→    .auth__title {
+   183→      margin: 0;
+   184→      font-size: var(--fs-xl);
+   185→      line-height: 1.15;
+   186→      font-weight: var(--fw-semibold);
+   187→      color: var(--color-text-primary);
+   188→      letter-spacing: -0.01em;
+   189→    }
+   190→    .auth__subtitle {
+   191→      margin: 0;
+   192→      max-width: 30ch;
+   193→      font-size: var(--fs-md);
+   194→      color: var(--color-text-tertiary);
+   195→    }
+   196→
+   197→    /* Stack of actions */
+   198→    .auth__actions { display: flex; flex-direction: column; gap: var(--space-3); }
+   199→
+   200→    /* =========================================================================
+   201→       BUTTON  — base + variants + full state matrix
+   202→       ========================================================================= */
+   203→    .btn {
+   204→      appearance: none;
+   205→      -webkit-appearance: none;
+   206→      font-family: inherit;
+   207→      font-size: var(--fs-md);
+   208→      font-weight: var(--fw-medium);
+   209→      line-height: 1;
+   210→      width: 100%;
+   211→      min-height: var(--control-h);
+   212→      padding: 0 var(--space-4);
+   213→      display: inline-flex;
+   214→      align-items: center;
+   215→      justify-content: center;
+   216→      gap: var(--space-2);
+   217→      border: 1px solid transparent;
+   218→      border-radius: var(--radius-sm);
+   219→      cursor: pointer;
+   220→      position: relative;
+   221→      transition: background-color var(--motion-fast) var(--ease),
+   222→                  border-color var(--motion-fast) var(--ease),
+   223→                  transform var(--motion-fast) var(--ease),
+   224→                  color var(--motion-fast) var(--ease);
+   225→    }
+   226→    .btn:active { transform: translateY(1px); }
+   227→    .btn[disabled],
+   228→    .btn[aria-disabled="true"] {
+   229→      cursor: not-allowed;
+   230→      opacity: 0.55;
+   231→      transform: none;
+   232→    }
+   233→    .btn__icon { width: 20px; height: 20px; flex: 0 0 auto; display: block; }
+   234→
+   235→    /* Primary (filled) */
+   236→    .btn--primary {
+   237→      background: var(--color-action);
+   238→      color: var(--color-on-action);
+   239→    }
+   240→    .btn--primary:hover:not([disabled]):not([aria-disabled="true"]) {
+   241→      background: var(--color-action-hover);
+   242→    }
+   243→    .btn--primary:active:not([disabled]) { background: var(--color-action-active); }
+   244→
+   245→    /* Secondary (muted) */
+   246→    .btn--secondary {
+   247→      background: var(--color-surface-muted);
+   248→      color: var(--color-text-primary);
+   249→      border-color: var(--color-border);
+   250→    }
+   251→    .btn--secondary:hover:not([disabled]):not([aria-disabled="true"]) {
+   252→      background: var(--color-surface-muted-2);
+   253→    }
+   254→    .btn--secondary:active:not([disabled]) { background: var(--color-surface-muted-2); }
+   255→
+   256→    /* Tertiary (ghost) */
+   257→    .btn--ghost {
+   258→      background: transparent;
+   259→      color: var(--color-text-secondary);
+   260→      border-color: var(--color-border);
+   261→    }
+   262→    .btn--ghost:hover:not([disabled]):not([aria-disabled="true"]) {
+   263→      background: var(--color-surface-muted);
+   264→    }
+   265→
+   266→    /* Loading: hide label, show spinner. Set aria-busy="true" + disabled in JS. */
+   267→    .btn[aria-busy="true"] { cursor: progress; color: transparent; }
+   268→    .btn[aria-busy="true"] .btn__icon,
+   269→    .btn[aria-busy="true"] .btn__label { visibility: hidden; }
+   270→    .btn[aria-busy="true"]::after {
+   271→      content: "";
+   272→      position: absolute;
+   273→      width: 18px; height: 18px;
+   274→      border-radius: 50%;
+   275→      border: 2px solid currentColor;
+   276→      border-top-color: transparent;
+   277→      color: var(--color-on-action);
+   278→      animation: spin 0.6s linear infinite;
+   279→    }
+   280→    .btn--secondary[aria-busy="true"]::after,
+   281→    .btn--ghost[aria-busy="true"]::after { color: var(--color-text-primary); }
+   282→    @keyframes spin { to { transform: rotate(360deg); } }
+   283→
+   284→    /* =========================================================================
+   285→       DIVIDER
+   286→       ========================================================================= */
+   287→    .divider {
+   288→      display: flex;
+   289→      align-items: center;
+   290→      gap: var(--space-3);
+   291→      margin: var(--space-5) 0;
+   292→      color: var(--color-text-tertiary);
+   293→      font-size: var(--fs-sm);
+   294→      font-weight: var(--fw-medium);
+   295→    }
+   296→    .divider::before, .divider::after {
+   297→      content: "";
+   298→      flex: 1;
+   299→      height: 1px;
+   300→      background: var(--color-border);
+   301→    }
+   302→
+   303→    /* =========================================================================
+   304→       PANELS (choices / email / whatsapp) — one visible at a time
+   305→       ========================================================================= */
+   306→    .panel { display: none; flex-direction: column; gap: var(--space-4); }
+   307→    .panel[data-open="true"] { display: flex; }
+   308→
+   309→    .field { display: flex; flex-direction: column; gap: var(--space-1); }
+   310→    .field__label {
+   311→      font-size: var(--fs-sm);
+   312→      font-weight: var(--fw-medium);
+   313→      color: var(--color-text-primary);
+   314→    }
+   315→    .field__hint { font-size: var(--fs-sm); color: var(--color-text-tertiary); }
+   316→    .input {
+   317→      font-family: inherit;
+   318→      font-size: var(--fs-md);
+   319→      color: var(--color-text-primary);
+   320→      background: var(--color-surface-card);
+   321→      width: 100%;
+   322→      min-height: var(--control-h);
+   323→      padding: 0 var(--space-3);
+   324→      border: 1px solid var(--color-border-strong);
+   325→      border-radius: var(--radius-sm);
+   326→      transition: border-color var(--motion-fast) var(--ease),
+   327→                  box-shadow var(--motion-fast) var(--ease);
+   328→    }
+   329→    .input::placeholder { color: var(--color-text-tertiary); }
+   330→    .input:hover { border-color: var(--color-text-tertiary); }
+   331→    .input:focus-visible {
+   332→      border-color: var(--color-accent);
+   333→      box-shadow: var(--focus-ring);
+   334→    }
+   335→    .input[aria-invalid="true"] {
+   336→      border-color: var(--color-error);
+   337→      background: var(--color-error-surface);
+   338→    }
+   339→    .input[disabled] { opacity: 0.6; cursor: not-allowed; }
+   340→
+   341→    /* OTP code input: monospaced, spaced digits */
+   342→    .input--code {
+   343→      text-align: center;
+   344→      letter-spacing: 0.5em;
+   345→      font-variant-numeric: tabular-nums;
+   346→      font-size: var(--fs-lg);
+   347→      padding-right: calc(var(--space-3) - 0.5em);
+   348→    }
+   349→
+   350→    .field__error {
+   351→      display: none;
+   352→      font-size: var(--fs-sm);
+   353→      color: var(--color-error);
+   354→    }
+   355→    .field__error[data-show="true"] { display: block; }
+   356→
+   357→    /* Form-level banners */
+   358→    .form__alert {
+   359→      display: none;
+   360→      align-items: flex-start;
+   361→      gap: var(--space-2);
+   362→      padding: var(--space-3);
+   363→      font-size: var(--fs-sm);
+   364→      border-radius: var(--radius-sm);
+   365→    }
+   366→    .form__alert[data-show="true"] { display: flex; }
+   367→    .form__alert--error {
+   368→      color: var(--color-error);
+   369→      background: var(--color-error-surface);
+   370→      border: 1px solid var(--color-error-border);
+   371→    }
+   372→    .form__alert--success {
+   373→      color: var(--color-success);
+   374→      background: var(--color-success-surface);
+   375→      border: 1px solid var(--color-success);
+   376→    }
+   377→
+   378→    .otp__sent {
+   379→      font-size: var(--fs-sm);
+   380→      color: var(--color-text-secondary);
+   381→      text-align: center;
+   382→    }
+   383→    .otp__sent strong { color: var(--color-text-primary); font-weight: var(--fw-semibold); }
+   384→
+   385→    .resend {
+   386→      align-self: center;
+   387→      background: none;
+   388→      border: none;
+   389→      cursor: pointer;
+   390→      font: inherit;
+   391→      font-size: var(--fs-sm);
+   392→      color: var(--color-accent);
+   393→      padding: var(--space-1) var(--space-2);
+   394→      border-radius: var(--radius-sm);
+   395→    }
+   396→    .resend:hover:not([disabled]) { color: var(--color-accent-strong); text-decoration: underline; }
+   397→    .resend[disabled] { color: var(--color-text-tertiary); cursor: not-allowed; }
+   398→
+   399→    .form__back {
+   400→      align-self: center;
+   401→      background: none;
+   402→      border: none;
+   403→      cursor: pointer;
+   404→      font: inherit;
+   405→      font-size: var(--fs-sm);
+   406→      color: var(--color-accent);
+   407→      padding: var(--space-1) var(--space-2);
+   408→      border-radius: var(--radius-sm);
+   409→    }
+   410→    .form__back:hover { color: var(--color-accent-strong); text-decoration: underline; }
+   411→
+   412→    .otp__step { display: none; flex-direction: column; gap: var(--space-4); }
+   413→    .otp__step[data-active="true"] { display: flex; }
+   414→
+   415→    /* =========================================================================
+   416→       FOOTER
+   417→       ========================================================================= */
+   418→    .auth__footer {
+   419→      margin-top: var(--space-6);
+   420→      text-align: center;
+   421→      font-size: var(--fs-sm);
+   422→      color: var(--color-text-tertiary);
+   423→      line-height: 1.6;
+   424→    }
+   425→    .auth__footer a {
+   426→      color: var(--color-text-secondary);
+   427→      text-decoration: underline;
+   428→      text-underline-offset: 2px;
+   429→      border-radius: 4px;
+   430→    }
+   431→    .auth__footer a:hover { color: var(--color-text-primary); }
+   432→    .auth__copyright { margin-top: var(--space-2); color: var(--color-text-tertiary); }
+   433→
+   434→    /* Visually-hidden but available to screen readers */
+   435→    .sr-only {
+   436→      position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+   437→      overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+   438→    }
+   439→
+   440→    /* Respect reduced-motion preferences */
+   441→    @media (prefers-reduced-motion: reduce) {
+   442→      *, *::before, *::after {
+   443→        animation-duration: 0.001ms !important;
+   444→        animation-iteration-count: 1 !important;
+   445→        transition-duration: 0.001ms !important;
+   446→      }
+   447→    }
+   448→
+   449→    /* Narrow screens */
+   450→    @media (max-width: 480px) {
+   451→      body { padding: var(--space-4); align-items: flex-start; }
+   452→      .auth { padding: var(--space-6) var(--space-5) var(--space-5); border-radius: var(--radius-md); }
+   453→    }
+   454→  </style>
+   455→</head>
+   456→<body>
+   457→  <main class="auth" aria-labelledby="auth-title">
+   458→    <div class="auth__brand">
+   459→      <span class="auth__logo" aria-hidden="true">
+   460→        <!-- Brand monogram: a maintenance gauge. Swap for your own logo SVG. -->
+   461→        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+   462→          <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.6"/>
+   463→          <path d="M12 12 15 8.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+   464→          <circle cx="12" cy="12" r="1.4" fill="currentColor"/>
+   465→          <path d="M12 3.5v1.6M12 18.9v1.6M3.5 12h1.6M18.9 12h1.6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+   466→        </svg>
+   467→      </span>
+   468→      <h1 class="auth__title" id="auth-title">Welcome back</h1>
+   469→      <p class="auth__subtitle">Sign in to Smart Facility Maintenance Management</p>
+   470→    </div>
+   471→
+   472→    <!-- Provider + email choices -->
+   473→    <div class="auth__actions panel" id="choices" data-open="true">
+   474→      <button type="button" class="btn btn--primary" data-action="oauth-google">
+   475→        <svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true">
+   476→          <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.19 3.32v2.76h3.54c2.08-1.92 3.29-4.74 3.29-7.84Z"/>
+   477→          <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.55-2.76c-.98.66-2.24 1.05-3.73 1.05-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84A11 11 0 0 0 12 23Z"/>
+   478→          <path fill="#FBBC05" d="M5.84 14.1A6.6 6.6 0 0 1 5.5 12c0-.73.13-1.44.34-2.1V7.06H2.18A11 11 0 0 0 1 12c0 1.77.42 3.44 1.18 4.94l3.66-2.84Z"/>
+   479→          <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.46 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84C6.71 7.3 9.14 5.38 12 5.38Z"/>
+   480→        </svg>
+   481→        <span class="btn__label">Continue with Google</span>
+   482→      </button>
+   483→
+   484→      <div class="divider" role="separator" aria-orientation="horizontal"><span>or</span></div>
+   485→
+   486→      <button type="button" class="btn btn--secondary" data-action="show-email">
+   487→        <svg class="btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+   488→          <rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.6"/>
+   489→          <path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+   490→        </svg>
+   491→        <span class="btn__label">Continue with Email</span>
+   492→      </button>
+   493→
+   494→      <button type="button" class="btn btn--secondary" data-action="show-whatsapp">
+   495→        <svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true">
+   496→          <path fill="var(--color-whatsapp)" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.004c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.8c2.16 0 4.18.84 5.71 2.37a8.04 8.04 0 0 1 2.37 5.72c0 4.46-3.63 8.1-8.1 8.1a8.1 8.1 0 0 1-4.12-1.13l-.3-.18-3.06.8.82-2.98-.2-.31a8.04 8.04 0 0 1-1.26-4.31c.01-4.47 3.64-8.1 8.11-8.1Z"/>
+   497→          <path fill="var(--color-whatsapp)" d="M9.3 7.13c-.18-.4-.36-.41-.53-.42l-.45-.01c-.16 0-.41.06-.63.3-.22.24-.83.81-.83 1.98s.85 2.3.97 2.46c.12.16 1.65 2.64 4.07 3.6 2.01.79 2.42.63 2.86.59.43-.04 1.4-.57 1.6-1.13.2-.55.2-1.02.14-1.12-.06-.1-.22-.16-.46-.28-.24-.12-1.4-.69-1.62-.77-.22-.08-.38-.12-.53.12-.16.24-.61.77-.74.93-.14.16-.27.18-.51.06-.24-.12-1-.37-1.91-1.18-.71-.63-1.18-1.41-1.32-1.65-.14-.24-.01-.37.1-.49.11-.11.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.53-1.3-.74-1.78Z"/>
+   498→        </svg>
+   499→        <span class="btn__label">Continue with WhatsApp</span>
+   500→      </button>
+   501→
+   502→      <button type="button" class="btn btn--ghost" data-action="skip">
+   503→        <span class="btn__label">Skip for now</span>
+   504→      </button>
+   505→    </div>
+   506→
+   507→    <!-- Email form (revealed) -->
+   508→    <form class="panel" id="emailForm" novalidate aria-labelledby="auth-title">
+   509→      <div class="form__alert form__alert--error" id="emailAlert" role="alert" aria-live="assertive">
+   510→        <span id="emailAlertText"></span>
+   511→      </div>
+   512→
+   513→      <div class="field">
+   514→        <label class="field__label" for="email">Email</label>
+   515→        <input class="input" id="email" name="email" type="email" inputmode="email"
+   516→               autocomplete="email" placeholder="you@company.com"
+   517→               aria-describedby="emailError" required />
+   518→        <span class="field__error" id="emailError" data-show="false">Enter a valid email address.</span>
+   519→      </div>
+   520→
+   521→      <div class="field">
+   522→        <label class="field__label" for="password">Password</label>
+   523→        <input class="input" id="password" name="password" type="password"
+   524→               autocomplete="current-password" placeholder="Your password"
+   525→               aria-describedby="passwordError" required />
+   526→        <span class="field__error" id="passwordError" data-show="false">Password is required.</span>
+   527→      </div>
+   528→
+   529→      <button type="submit" class="btn btn--primary" id="emailSubmit">
+   530→        <span class="btn__label">Sign in</span>
+   531→      </button>
+   532→      <button type="button" class="form__back" data-action="back">← Other sign-in options</button>
+   533→    </form>
+   534→
+   535→    <!-- WhatsApp OTP flow (revealed): step 1 phone → step 2 code -->
+   536→    <form class="panel" id="whatsappForm" novalidate aria-labelledby="auth-title">
+   537→      <!-- Step 1: phone number -->
+   538→      <div class="otp__step" data-step="phone" data-active="true">
+   539→        <div class="form__alert form__alert--error" id="phoneAlert" role="alert" aria-live="assertive">
+   540→          <span id="phoneAlertText"></span>
+   541→        </div>
+   542→        <div class="field">
+   543→          <label class="field__label" for="phone">WhatsApp phone number</label>
+   544→          <input class="input" id="phone" name="phone" type="tel" inputmode="tel"
+   545→                 autocomplete="tel" placeholder="+673 712 3456"
+   546→                 aria-describedby="phoneHint phoneError" required />
+   547→          <span class="field__hint" id="phoneHint">Include your country code. We'll send a 6-digit code on WhatsApp.</span>
+   548→          <span class="field__error" id="phoneError" data-show="false">Enter a valid phone number with country code.</span>
+   549→        </div>
+   550→        <button type="button" class="btn btn--primary" id="sendCode" data-action="send-code">
+   551→          <svg class="btn__icon" viewBox="0 0 24 24" aria-hidden="true">
+   552→            <path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 1.8c2.16 0 4.18.84 5.71 2.37a8.04 8.04 0 0 1 2.37 5.72c0 4.46-3.63 8.1-8.1 8.1a8.1 8.1 0 0 1-4.12-1.13l-.3-.18-3.06.8.82-2.98-.2-.31a8.04 8.04 0 0 1-1.26-4.31c.01-4.47 3.64-8.1 8.11-8.1Z"/>
+   553→          </svg>
+   554→          <span class="btn__label">Send code via WhatsApp</span>
+   555→        </button>
+   556→        <button type="button" class="form__back" data-action="back">← Other sign-in options</button>
+   557→      </div>
+   558→
+   559→      <!-- Step 2: enter code -->
+   560→      <div class="otp__step" data-step="code">
+   561→        <div class="form__alert form__alert--error" id="codeAlert" role="alert" aria-live="assertive">
+   562→          <span id="codeAlertText"></span>
+   563→        </div>
+   564→        <p class="otp__sent">Enter the 6-digit code we sent to <strong id="sentTo">your number</strong>.</p>
+   565→        <div class="field">
+   566→          <label class="field__label" for="otp">Verification code</label>
+   567→          <input class="input input--code" id="otp" name="otp" type="text"
+   568→                 inputmode="numeric" autocomplete="one-time-code" maxlength="6"
+   569→                 placeholder="••••••" aria-describedby="otpError" required />
+   570→          <span class="field__error" id="otpError" data-show="false">Enter the 6-digit code.</span>
+   571→        </div>
+   572→        <button type="submit" class="btn btn--primary" id="verifyCode">
+   573→          <span class="btn__label">Verify and sign in</span>
+   574→        </button>
+   575→        <button type="button" class="resend" id="resend" data-action="resend" disabled>
+   576→          Resend code in <span id="resendTimer">30</span>s
+   577→        </button>
+   578→        <button type="button" class="form__back" data-action="change-number">← Change number</button>
+   579→      </div>
+   580→    </form>
+   581→
+   582→    <footer class="auth__footer">
+   583→      <p>By continuing, you agree to our
+   584→        <a href="/terms">Terms of Service</a> and
+   585→        <a href="/privacy">Privacy Policy</a>.
+   586→      </p>
+   587→      <p class="auth__copyright">© <span id="year">2026</span> Smart Facility Maintenance Management</p>
+   588→    </footer>
+   589→
+   590→    <!-- Polite live region for status messages (e.g. "Code sent") -->
+   591→    <p class="sr-only" role="status" aria-live="polite" id="liveStatus"></p>
+   592→  </main>
+   593→
+   594→  <script>
+   595→    // Minimal, dependency-free behavior. Wire real auth where marked TODO.
+   596→    (function () {
+   597→      var live   = document.getElementById('liveStatus');
+   598→      var panels = {
+   599→        choices:  document.getElementById('choices'),
+   600→        email:    document.getElementById('emailForm'),
+   601→        whatsapp: document.getElementById('whatsappForm')
+   602→      };
+   603→      document.getElementById('year').textContent = new Date().getFullYear();
+   604→
+   605→      function showPanel(name) {
+   606→        Object.keys(panels).forEach(function (k) {
+   607→          panels[k].setAttribute('data-open', k === name ? 'true' : 'false');
+   608→        });
+   609→      }
+   610→      function setError(input, errEl, show, msg) {
+   611→        input.setAttribute('aria-invalid', show ? 'true' : 'false');
+   612→        errEl.setAttribute('data-show', show ? 'true' : 'false');
+   613→        if (msg) errEl.textContent = msg;
+   614→      }
+   615→      function showAlert(box, textEl, msg) {
+   616→        textEl.textContent = msg || '';
+   617→        box.setAttribute('data-show', msg ? 'true' : 'false');
+   618→      }
+   619→      function setLoading(btn, on, status) {
+   620→        btn.setAttribute('aria-busy', on ? 'true' : 'false');
+   621→        btn.disabled = on;
+   622→        if (status) live.textContent = on ? status : '';
+   623→      }
+   624→
+   625→      /* ---------- Email panel ---------- */
+   626→      var email = document.getElementById('email');
+   627→      var password = document.getElementById('password');
+   628→      var emailErr = document.getElementById('emailError');
+   629→      var passErr = document.getElementById('passwordError');
+   630→      var emailAlert = document.getElementById('emailAlert');
+   631→      var emailAlertText = document.getElementById('emailAlertText');
+   632→      var emailSubmit = document.getElementById('emailSubmit');
+   633→
+   634→      [email, password].forEach(function (input) {
+   635→        input.addEventListener('input', function () {
+   636→          if (input.getAttribute('aria-invalid') === 'true') {
+   637→            setError(input, input === email ? emailErr : passErr, false);
+   638→          }
+   639→          showAlert(emailAlert, emailAlertText, '');
+   640→        });
+   641→      });
+   642→
+   643→      document.getElementById('emailForm').addEventListener('submit', function (e) {
+   644→        e.preventDefault();
+   645→        var validEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+   646→        var hasPass = password.value.length > 0;
+   647→        setError(email, emailErr, !validEmail, 'Enter a valid email address.');
+   648→        setError(password, passErr, !hasPass, 'Password is required.');
+   649→        if (!validEmail) { email.focus(); return; }
+   650→        if (!hasPass) { password.focus(); return; }
+   651→        setLoading(emailSubmit, true, 'Signing in…');
+   652→        // TODO: replace with real auth request. Demo simulates a failure.
+   653→        setTimeout(function () {
+   654→          setLoading(emailSubmit, false);
+   655→          showAlert(emailAlert, emailAlertText, 'We couldn’t sign you in. Check your details and try again.');
+   656→        }, 1100);
+   657→      });
+   658→
+   659→      /* ---------- WhatsApp OTP panel ---------- */
+   660→      var phone = document.getElementById('phone');
+   661→      var phoneErr = document.getElementById('phoneError');
+   662→      var phoneAlert = document.getElementById('phoneAlert');
+   663→      var phoneAlertText = document.getElementById('phoneAlertText');
+   664→      var sendCode = document.getElementById('sendCode');
+   665→      var otp = document.getElementById('otp');
+   666→      var otpErr = document.getElementById('otpError');
+   667→      var codeAlert = document.getElementById('codeAlert');
+   668→      var codeAlertText = document.getElementById('codeAlertText');
+   669→      var verifyCode = document.getElementById('verifyCode');
+   670→      var resend = document.getElementById('resend');
+   671→      var resendTimer = document.getElementById('resendTimer');
+   672→      var sentTo = document.getElementById('sentTo');
+   673→      var stepPhone = document.querySelector('#whatsappForm [data-step="phone"]');
+   674→      var stepCode = document.querySelector('#whatsappForm [data-step="code"]');
+   675→      var countdown = null;
+   676→
+   677→      function gotoStep(step) {
+   678→        stepPhone.setAttribute('data-active', step === 'phone' ? 'true' : 'false');
+   679→        stepCode.setAttribute('data-active', step === 'code' ? 'true' : 'false');
+   680→        (step === 'phone' ? phone : otp).focus();
+   681→      }
+   682→      function validPhone(v) {
+   683→        // Lenient E.164-ish check: optional +, 8–15 digits.
+   684→        return /^\+?[0-9][0-9 ]{7,16}$/.test(v.trim());
+   685→      }
+   686→      function startResendTimer() {
+   687→        var t = 30;
+   688→        resend.disabled = true;
+   689→        resend.innerHTML = 'Resend code in <span id="resendTimer">30</span>s';
+   690→        var timerEl = resend.querySelector('#resendTimer');
+   691→        timerEl.textContent = t;
+   692→        clearInterval(countdown);
+   693→        countdown = setInterval(function () {
+   694→          t -= 1;
+   695→          if (t <= 0) {
+   696→            clearInterval(countdown);
+   697→            resend.disabled = false;
+   698→            resend.textContent = 'Resend code';
+   699→          } else {
+   700→            timerEl.textContent = t;
+   701→          }
+   702→        }, 1000);
+   703→      }
+   704→      function doSendCode() {
+   705→        if (!validPhone(phone.value)) {
+   706→          setError(phone, phoneErr, true, 'Enter a valid phone number with country code.');
+   707→          phone.focus();
+   708→          return;
+   709→        }
+   710→        setError(phone, phoneErr, false);
+   711→        showAlert(phoneAlert, phoneAlertText, '');
+   712→        setLoading(sendCode, true, 'Sending code on WhatsApp…');
+   713→        // TODO: call your backend to send the WhatsApp OTP to phone.value.
+   714→        setTimeout(function () {
+   715→          setLoading(sendCode, false);
+   716→          sentTo.textContent = phone.value.trim();
+   717→          gotoStep('code');
+   718→          live.textContent = 'Code sent to ' + phone.value.trim();
+   719→          startResendTimer();
+   720→        }, 1100);
+   721→      }
+   722→
+   723→      phone.addEventListener('input', function () {
+   724→        if (phone.getAttribute('aria-invalid') === 'true') setError(phone, phoneErr, false);
+   725→        showAlert(phoneAlert, phoneAlertText, '');
+   726→      });
+   727→      otp.addEventListener('input', function () {
+   728→        otp.value = otp.value.replace(/\D/g, '').slice(0, 6);
+   729→        if (otp.getAttribute('aria-invalid') === 'true') setError(otp, otpErr, false);
+   730→        showAlert(codeAlert, codeAlertText, '');
+   731→      });
+   732→
+   733→      sendCode.addEventListener('click', doSendCode);
+   734→      resend.addEventListener('click', function () {
+   735→        if (resend.disabled) return;
+   736→        live.textContent = 'Sending a new code…';
+   737→        // TODO: re-trigger backend OTP send.
+   738→        startResendTimer();
+   739→      });
+   740→
+   741→      document.getElementById('whatsappForm').addEventListener('submit', function (e) {
+   742→        e.preventDefault();
+   743→        if (otp.value.length !== 6) {
+   744→          setError(otp, otpErr, true, 'Enter the 6-digit code.');
+   745→          otp.focus();
+   746→          return;
+   747→        }
+   748→        setError(otp, otpErr, false);
+   749→        setLoading(verifyCode, true, 'Verifying…');
+   750→        // TODO: verify otp.value against your backend. Demo simulates a wrong code.
+   751→        setTimeout(function () {
+   752→          setLoading(verifyCode, false);
+   753→          showAlert(codeAlert, codeAlertText, 'That code didn’t match. Check it and try again, or resend.');
+   754→          otp.focus();
+   755→        }, 1100);
+   756→      });
+   757→
+   758→      /* ---------- Global navigation ---------- */
+   759→      document.addEventListener('click', function (e) {
+   760→        var el = e.target.closest('[data-action]');
+   761→        if (!el) return;
+   762→        switch (el.getAttribute('data-action')) {
+   763→          case 'show-email':    showPanel('email'); email.focus(); break;
+   764→          case 'show-whatsapp': showPanel('whatsapp'); gotoStep('phone'); break;
+   765→          case 'change-number': gotoStep('phone'); clearInterval(countdown); break;
+   766→          case 'back':
+   767→            showPanel('choices');
+   768→            var origin = el.closest('#emailForm') ? 'show-email' : 'show-whatsapp';
+   769→            document.querySelector('[data-action="' + origin + '"]').focus();
+   770→            break;
+   771→          // TODO: replace with real provider redirects.
+   772→          case 'oauth-google': /* window.location = '/auth/google' */ break;
+   773→          case 'skip':         /* window.location = '/' */ break;
+   774→        }
+   775→      });
+   776→    })();
+   777→  </script>
+   778→</body>
+   779→</html>
+   780→
