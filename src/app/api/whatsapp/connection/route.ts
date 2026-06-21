@@ -1,20 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth';
+import { waManager } from '@/lib/whatsapp-service/manager';
 
-// Helper: Get OpenWA service URL from DB config or default
-async function getOpenWaBaseUrl(tenantId: string): Promise<string> {
-  const { db } = await import('@/lib/db');
-  const config = await db.whatsAppConfig.findUnique({ where: { tenantId } });
-  return config?.openwaBaseUrl || 'http://localhost:3001';
-}
-
-async function getOpenWaSession(tenantId: string): Promise<string> {
-  const { db } = await import('@/lib/db');
-  const config = await db.whatsAppConfig.findUnique({ where: { tenantId } });
-  return config?.openwaSession || 'default';
-}
-
-// POST - Connect WhatsApp (start session, get QR)
+// POST - Connect/Disconnect/Reconnect/GetQR/SendTest
 export async function POST(req: NextRequest) {
   try {
     const token = req.headers.get('authorization')?.replace('Bearer ', '');
@@ -25,177 +13,93 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const action = body.action as string || 'connect';
 
-    const baseUrl = await getOpenWaBaseUrl(tenantId);
-    const sessionName = await getOpenWaSession(tenantId);
-
     const { db } = await import('@/lib/db');
 
     switch (action) {
       case 'connect': {
-        // Update status to connecting
-        await db.whatsAppConfig.update({
-          where: { tenantId },
-          data: { openwaStatus: 'connecting' },
-        });
-
         const webhookUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/whatsapp/webhook`;
-
-        let res: Response;
-        try {
-          res = await fetch(`${baseUrl}/api/startSession`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ session: sessionName, webhookUrl }),
-            signal: AbortSignal.timeout(130000), // 130s timeout for QR wait
-          });
-        } catch (fetchErr) {
-          const msg = fetchErr instanceof Error ? fetchErr.message : 'Service unreachable';
-          await db.whatsAppConfig.update({
-            where: { tenantId },
-            data: { openwaStatus: 'disconnected' },
-          });
-          return NextResponse.json({
-            success: false,
-            state: 'ERROR',
-            error: `Cannot reach WhatsApp service at ${baseUrl}. ${msg}. Ensure the OpenWA service is running.`,
-            message: `Service not running at ${baseUrl}`,
-          });
-        }
-
-        const data = await res.json() as Record<string, unknown>;
+        const result = await waManager.connect(webhookUrl);
 
         // Update DB status
-        const newStatus = (data.state as string) === 'CONNECTED' ? 'connected' :
-                          (data.state as string) === 'QR_READY' ? 'connecting' :
-                          (data.state as string) === 'ERROR' ? 'disconnected' : 'connecting';
+        const newStatus = result.status === 'connected' ? 'connected' :
+                          result.status === 'generating_qr' ? 'connecting' :
+                          result.status === 'connecting' ? 'connecting' : 'disconnected';
 
-        const updateData: Record<string, unknown> = { openwaStatus: newStatus };
-        if (data.qr) updateData.openwaQrCode = data.qr as string;
-        if (data.phoneInfo) {
-          const pi = data.phoneInfo as Record<string, unknown>;
-          updateData.phoneNumber = pi.phoneNumber as string || null;
-          updateData.businessName = pi.pushName as string || null;
+        await db.whatsAppConfig.update({
+          where: { tenantId },
+          data: { openwaStatus: newStatus },
+        }).catch(() => {});
+
+        // If we already have QR from a previous connection attempt, include it
+        const qrData = waManager.getQr();
+        if (qrData.qr) {
+          await db.whatsAppConfig.update({
+            where: { tenantId },
+            data: { openwaQrCode: qrData.qr },
+          }).catch(() => {});
         }
 
-        await db.whatsAppConfig.update({ where: { tenantId }, data: updateData });
-
         return NextResponse.json({
-          success: (data.state as string) === 'CONNECTED',
-          state: data.state,
-          qr: data.qr || null,
-          phoneInfo: data.phoneInfo || null,
-          message: data.message || null,
+          success: result.success,
+          state: result.status === 'connected' ? 'CONNECTED' :
+                 result.status === 'generating_qr' ? 'QR_READY' :
+                 result.status === 'connecting' ? 'CONNECTING' : 'DISCONNECTED',
+          qr: qrData.qr,
+          message: result.message,
         });
       }
 
       case 'disconnect': {
-        const res = await fetch(`${baseUrl}/api/closeSession?session=${sessionName}`, {
-          method: 'DELETE',
-        });
-        await res.json();
-
+        const result = await waManager.disconnect();
         await db.whatsAppConfig.update({
           where: { tenantId },
           data: { openwaStatus: 'disconnected', openwaQrCode: null },
-        });
+        }).catch(() => {});
 
-        return NextResponse.json({ success: true, state: 'DISCONNECTED', message: 'Session disconnected' });
+        return NextResponse.json({ success: result.success, state: 'DISCONNECTED', message: result.message });
       }
 
       case 'reconnect': {
-        // Stop then restart
-        await fetch(`${baseUrl}/api/closeSession?session=${sessionName}`, { method: 'DELETE' }).catch(() => {});
-
-        await db.whatsAppConfig.update({
-          where: { tenantId },
-          data: { openwaStatus: 'connecting', openwaQrCode: null },
-        });
-
-        // Wait 2s
+        await waManager.disconnect();
         await new Promise(r => setTimeout(r, 2000));
 
         const webhookUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/whatsapp/webhook`;
-        const res = await fetch(`${baseUrl}/api/startSession`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ session: sessionName, webhookUrl }),
-          signal: AbortSignal.timeout(130000),
-        });
+        const result = await waManager.connect(webhookUrl);
 
-        const data = await res.json() as Record<string, unknown>;
-        const newStatus = (data.state as string) === 'CONNECTED' ? 'connected' :
-                          (data.state as string) === 'QR_READY' ? 'connecting' :
-                          (data.state as string) === 'ERROR' ? 'disconnected' : 'connecting';
-
-        const updateData: Record<string, unknown> = { openwaStatus: newStatus };
-        if (data.qr) updateData.openwaQrCode = data.qr as string;
-        await db.whatsAppConfig.update({ where: { tenantId }, data: updateData });
-
-        return NextResponse.json({
-          success: (data.state as string) === 'CONNECTED',
-          state: data.state,
-          qr: data.qr || null,
-          message: data.message || null,
-        });
-      }
-
-      case 'restart': {
-        const res = await fetch(`${baseUrl}/api/restartSession`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ session: sessionName }),
-          signal: AbortSignal.timeout(130000),
-        });
-
-        const data = await res.json() as Record<string, unknown>;
-        const newStatus = (data.state as string) === 'CONNECTED' ? 'connected' :
-                          (data.state as string) === 'ERROR' ? 'disconnected' : 'connecting';
+        const newStatus = result.status === 'connected' ? 'connected' :
+                          result.status === 'generating_qr' ? 'connecting' : 'disconnected';
 
         await db.whatsAppConfig.update({
           where: { tenantId },
-          data: { openwaStatus: newStatus, openwaQrCode: data.qr || null },
-        });
+          data: { openwaStatus: newStatus, openwaQrCode: null },
+        }).catch(() => {});
 
         return NextResponse.json({
-          success: (data.state as string) === 'CONNECTED',
-          state: data.state,
-          message: data.message || null,
+          success: result.success,
+          state: result.status === 'connected' ? 'CONNECTED' : 'CONNECTING',
+          message: result.message,
         });
+      }
+
+      case 'get-qr': {
+        const qrData = waManager.getQr();
+        if (qrData.qr) {
+          await db.whatsAppConfig.update({
+            where: { tenantId },
+            data: { openwaQrCode: qrData.qr, openwaStatus: 'connecting' },
+          }).catch(() => {});
+        }
+        return NextResponse.json(qrData);
       }
 
       case 'test-message': {
         const { chatId } = body as { chatId?: string };
-        const res = await fetch(`${baseUrl}/api/sendTestMessage`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ session: sessionName, chatId }),
-        });
-        const data = await res.json();
-        return NextResponse.json(data);
+        const result = await waManager.sendTestMessage(chatId);
+        return NextResponse.json(result);
       }
 
       case 'sync-conversations': {
-        const res = await fetch(`${baseUrl}/api/syncConversations`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ session: sessionName }),
-        });
-        const data = await res.json();
-        return NextResponse.json(data);
-      }
-
-      case 'get-qr': {
-        const res = await fetch(`${baseUrl}/api/getQrCode?key=&session=${sessionName}`);
-        const data = await res.json();
-
-        if (data.qr) {
-          await db.whatsAppConfig.update({
-            where: { tenantId },
-            data: { openwaQrCode: data.qr, openwaStatus: 'connecting' },
-          });
-        }
-
-        return NextResponse.json(data);
+        return NextResponse.json({ success: false, count: 0, message: 'Sync not available in embedded mode' });
       }
 
       default:
@@ -217,40 +121,19 @@ export async function GET(req: NextRequest) {
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
-    const baseUrl = await getOpenWaBaseUrl(tenantId);
-    const sessionName = await getOpenWaSession(tenantId);
 
-    // Get session info from the WA service
-    let serviceInfo: Record<string, unknown> | null = null;
-    try {
-      const res = await fetch(`${baseUrl}/api/sessionInfo?session=${sessionName}`, {
-        signal: AbortSignal.timeout(5000),
-      });
-      if (res.ok) serviceInfo = await res.json() as Record<string, unknown>;
-    } catch {
-      // Service might be down
-    }
+    // Get manager status (always available since it's in-process)
+    const managerStatus = waManager.getStatus();
+    const sessionInfo = waManager.getSessionInfo();
+    const qrData = waManager.getQr();
+    const managerLogs = waManager.getLogs(20);
 
-    // Get queue status
-    let queueStatus: Record<string, unknown> | null = null;
-    try {
-      const res = await fetch(`${baseUrl}/api/queueStatus`, {
-        signal: AbortSignal.timeout(3000),
-      });
-      if (res.ok) queueStatus = await res.json() as Record<string, unknown>;
-    } catch {}
-
-    // Get logs
-    let logs: unknown[] = [];
-    try {
-      const res = await fetch(`${baseUrl}/api/logs?limit=20`, {
-        signal: AbortSignal.timeout(3000),
-      });
-      if (res.ok) {
-        const data = await res.json() as { logs: unknown[] };
-        logs = data.logs || [];
-      }
-    } catch {}
+    // Map status for frontend
+    const connectionState = managerStatus.status === 'connected' ? 'CONNECTED' :
+                            managerStatus.status === 'generating_qr' ? 'QR_READY' :
+                            managerStatus.status === 'connecting' ? 'CONNECTING' :
+                            managerStatus.status === 'reconnecting' ? 'RECONNECTING' :
+                            'DISCONNECTED';
 
     // Get DB config
     const { db } = await import('@/lib/db');
@@ -277,11 +160,16 @@ export async function GET(req: NextRequest) {
     });
 
     return NextResponse.json({
-      // Service status
-      serviceRunning: !!serviceInfo,
-      serviceInfo,
-      queueStatus,
-      logs,
+      // Service status (always true since in-process)
+      serviceRunning: true,
+      serviceInfo: sessionInfo,
+      queueStatus: { total: 0, pending: 0, processing: 0, failed: 0, items: [] },
+      logs: managerLogs,
+
+      // Connection state
+      connectionState,
+      qr: qrData.qr,
+      qrAvailable: qrData.qr ? true : false,
 
       // DB config
       config: config ? {
@@ -298,12 +186,7 @@ export async function GET(req: NextRequest) {
       } : null,
 
       // Stats
-      stats: {
-        messagesToday,
-        sentToday,
-        deliveredToday,
-        failedToday,
-      },
+      stats: { messagesToday, sentToday, deliveredToday, failedToday },
 
       // Recent messages
       recentMessages: recentMessages.map(m => ({

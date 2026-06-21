@@ -1,0 +1,1152 @@
+     1→'use client';
+     2→
+     3→import { useState, useEffect, useCallback, useRef } from 'react';
+     4→import QRCode from 'qrcode';
+     5→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+     6→import { Button } from '@/components/ui/button';
+     7→import { Badge } from '@/components/ui/badge';
+     8→import { Input } from '@/components/ui/input';
+     9→import { Textarea } from '@/components/ui/textarea';
+    10→import { Skeleton } from '@/components/ui/skeleton';
+    11→import { Switch } from '@/components/ui/switch';
+    12→import { Label } from '@/components/ui/label';
+    13→import { Separator } from '@/components/ui/separator';
+    14→import { ScrollArea } from '@/components/ui/scroll-area';
+    15→import {
+    16→  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+    17→} from '@/components/ui/select';
+    18→import {
+    19→  Settings, Wifi, WifiOff, Loader2, Check, Plug, Cloud, Phone,
+    20→  MessageSquare, Key, Globe, Shield, Eye, EyeOff, QrCode,
+    21→  RefreshCw, Zap, PhoneCall, Send, Activity, Server, Clock,
+    22→  AlertCircle, ArrowDownUp, Database, Radio, Trash2,
+    23→} from 'lucide-react';
+    24→import { useAppStore } from '@/store';
+    25→import { toast } from 'sonner';
+    26→import type { WhatsAppProvider, WhatsAppConnectionStatus } from '@/types';
+    27→import { cn } from '@/lib/utils';
+    28→import { motion, AnimatePresence } from 'framer-motion';
+    29→
+    30→// ============ HELPERS ============
+    31→function getToken(): string {
+    32→  return localStorage.getItem('cmms_token') || '';
+    33→}
+    34→
+    35→// ============ PROVIDER CONFIG ============
+    36→interface ProviderCardConfig {
+    37→  id: WhatsAppProvider;
+    38→  name: string;
+    39→  description: string;
+    40→  icon: React.ElementType;
+    41→}
+    42→
+    43→const PROVIDERS: ProviderCardConfig[] = [
+    44→  {
+    45→    id: 'openwa',
+    46→    name: 'OpenWA',
+    47→    description: 'Open-source WhatsApp Web API. Free, self-hosted with QR code pairing.',
+    48→    icon: MessageSquare,
+    49→  },
+    50→  {
+    51→    id: 'meta',
+    52→    name: 'Meta Cloud API',
+    53→    description: 'Official WhatsApp Business API by Meta. Requires business verification.',
+    54→    icon: Cloud,
+    55→  },
+    56→  {
+    57→    id: 'twilio',
+    58→    name: 'Twilio',
+    59→    description: 'Third-party messaging API. Global coverage with reliable delivery.',
+    60→    icon: Phone,
+    61→  },
+    62→];
+    63→
+    64→// ============ TYPES ============
+    65→interface ServiceInfo {
+    66→  session: string;
+    67→  status: string;
+    68→  qrAvailable: boolean;
+    69→  phoneInfo: { phoneNumber?: string; pushName?: string; platform?: string } | null;
+    70→  connectedAt: string | null;
+    71→  lastHeartbeat: string | null;
+    72→  messageCount: number;
+    73→  errorCount: number;
+    74→  lastError?: string;
+    75→  uptime: number;
+    76→}
+    77→
+    78→interface ConnectionData {
+    79→  serviceRunning: boolean;
+    80→  serviceInfo: ServiceInfo | null;
+    81→  queueStatus: { total: number; pending: number; processing: number; failed: number } | null;
+    82→  logs: Array<{
+    83→    id: string;
+    84→    timestamp: string;
+    85→    level: string;
+    86→    event: string;
+    87→    message: string;
+    88→  }>;
+    89→  config: {
+    90→    id: string;
+    91→    provider: string;
+    92→    isEnabled: boolean;
+    93→    phoneNumber: string | null;
+    94→    businessName: string | null;
+    95→    openwaBaseUrl: string | null;
+    96→    openwaSession: string | null;
+    97→    openwaStatus: string;
+    98→    autoReplyEnabled: boolean;
+    99→    welcomeMessage: string;
+   100→  } | null;
+   101→  stats: {
+   102→    messagesToday: number;
+   103→    sentToday: number;
+   104→    deliveredToday: number;
+   105→    failedToday: number;
+   106→  };
+   107→  recentMessages: Array<{
+   108→    id: string;
+   109→    direction: string;
+   110→    messageType: string;
+   111→    content: string;
+   112→    status: string;
+   113→    isFromBot: boolean;
+   114→    fromNumber: string | null;
+   115→    toNumber: string | null;
+   116→    customerName: string | null;
+   117→    customerPhone: string | null;
+   118→    createdAt: string;
+   119→    errorMessage: string | null;
+   120→  }>;
+   121→}
+   122→
+   123→// ============ CONNECTION STATUS BADGE ============
+   124→function ConnectionBadge({ status }: { status: WhatsAppConnectionStatus }) {
+   125→  const config: Record<string, { color: string; bg: string; dot: string; label: string }> = {
+   126→    connected: { color: 'text-emerald-700', bg: 'bg-emerald-50 border-emerald-200', dot: 'bg-emerald-500', label: 'Connected' },
+   127→    disconnected: { color: 'text-red-600', bg: 'bg-red-50 border-red-200', dot: 'bg-red-500', label: 'Disconnected' },
+   128→    connecting: { color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200', dot: 'bg-amber-500', label: 'Connecting...' },
+   129→  };
+   130→  const c = config[status] || config.disconnected;
+   131→
+   132→  return (
+   133→    <Badge variant="outline" className={cn('px-3 py-1.5 gap-2 font-medium border', c.bg, c.color)}>
+   134→      {status === 'connecting' ? (
+   135→        <Loader2 className="h-3 w-3 animate-spin" />
+   136→      ) : (
+   137→        <span className={cn('h-2 w-2 rounded-full', c.dot)} />
+   138→      )}
+   139→      {c.label}
+   140→    </Badge>
+   141→  );
+   142→}
+   143→
+   144→// ============ MAIN COMPONENT ============
+   145→export function WhatsAppSettings() {
+   146→  const { setView } = useAppStore();
+   147→  const [connectionData, setConnectionData] = useState<ConnectionData | null>(null);
+   148→  const [isLoading, setIsLoading] = useState(true);
+   149→  const [isActionLoading, setIsActionLoading] = useState<string | null>(null);
+   150→  const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string | null>(null);
+   151→  const [selectedProvider, setSelectedProvider] = useState<WhatsAppProvider>('openwa');
+   152→  const [showPasswordFields, setShowPasswordFields] = useState<Record<string, boolean>>({});
+   153→  const [isSaving, setIsSaving] = useState(false);
+   154→  const [activeTab, setActiveTab] = useState<'connection' | 'settings' | 'logs'>('connection');
+   155→
+   156→  // Form state
+   157→  const [openwaBaseUrl, setOpenwaBaseUrl] = useState('http://localhost:3001');
+   158→  const [openwaApiKey, setOpenwaApiKey] = useState('');
+   159→  const [openwaSession, setOpenwaSession] = useState('default');
+   160→  const [metaAccessToken, setMetaAccessToken] = useState('');
+   161→  const [metaPhoneNumberId, setMetaPhoneNumberId] = useState('');
+   162→  const [metaVerifyToken, setMetaVerifyToken] = useState('');
+   163→  const [metaWebhookSecret, setMetaWebhookSecret] = useState('');
+   164→  const [metaBusinessAccountId, setMetaBusinessAccountId] = useState('');
+   165→  const [twilioAccountSid, setTwilioAccountSid] = useState('');
+   166→  const [twilioAuthToken, setTwilioAuthToken] = useState('');
+   167→  const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('');
+   168→  const [autoReplyEnabled, setAutoReplyEnabled] = useState(true);
+   169→  const [welcomeMessage, setWelcomeMessage] = useState('');
+   170→  const [emergencyNumbers, setEmergencyNumbers] = useState('');
+   171→  const [defaultPriority, setDefaultPriority] = useState('medium');
+   172→  const [testChatId, setTestChatId] = useState('');
+   173→
+   174→  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+   175→
+   176→  // Fetch connection status
+   177→  const fetchConnectionStatus = useCallback(async () => {
+   178→    try {
+   179→      const token = getToken();
+   180→      const res = await fetch('/api/whatsapp/connection', {
+   181→        headers: { Authorization: `Bearer ${token}` },
+   182→      });
+   183→      if (res.ok) {
+   184→        const data = await res.json() as ConnectionData;
+   185→        setConnectionData(data);
+   186→
+   187→        // Update QR if available from service
+   188→        if (data.config?.openwaStatus === 'connecting') {
+   189→          // Poll QR from the service
+   190→          try {
+   191→            const qrRes = await fetch('/api/whatsapp/connection', {
+   192→              method: 'POST',
+   193→              headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+   194→              body: JSON.stringify({ action: 'get-qr' }),
+   195→            });
+   196→            if (qrRes.ok) {
+   197→              const qrData = await qrRes.json() as { qr: string | null };
+   198→              if (qrData.qr) {
+   199→                // Convert raw QR string to data URL
+   200→                const url = await QRCode.toDataURL(qrData.qr, { width: 256, margin: 2 });
+   201→                setQrCodeDataUrl(url);
+   202→              }
+   203→            }
+   204→          } catch {}
+   205→        }
+   206→
+   207→        // Clear QR when connected
+   208→        if (data.config?.openwaStatus === 'connected') {
+   209→          setQrCodeDataUrl(null);
+   210→        }
+   211→      }
+   212→    } catch {
+   213→      // Silent fail on polling
+   214→    }
+   215→  }, []);
+   216→
+   217→  // Initial load
+   218→  useEffect(() => {
+   219→    const init = async () => {
+   220→      setIsLoading(true);
+   221→      // First fetch config for form fields
+   222→      try {
+   223→        const token = getToken();
+   224→        const res = await fetch('/api/whatsapp/config', {
+   225→          headers: { Authorization: `Bearer ${token}` },
+   226→        });
+   227→        if (res.ok) {
+   228→          const data = await res.json();
+   229→          setSelectedProvider(data.provider || 'openwa');
+   230→          setOpenwaBaseUrl(data.openwaBaseUrl || 'http://localhost:3001');
+   231→          setOpenwaApiKey(data.openwaApiKey || '');
+   232→          setOpenwaSession(data.openwaSession || 'default');
+   233→          setMetaAccessToken(data.metaAccessToken || '');
+   234→          setMetaPhoneNumberId(data.metaPhoneNumberId || '');
+   235→          setMetaVerifyToken(data.metaVerifyToken || '');
+   236→          setMetaWebhookSecret(data.metaWebhookSecret || '');
+   237→          setMetaBusinessAccountId(data.metaBusinessAccountId || '');
+   238→          setTwilioAccountSid(data.twilioAccountSid || '');
+   239→          setTwilioAuthToken(data.twilioAuthToken || '');
+   240→          setTwilioPhoneNumber(data.twilioPhoneNumber || '');
+   241→          setAutoReplyEnabled(data.autoReplyEnabled ?? true);
+   242→          setWelcomeMessage(data.welcomeMessage || '');
+   243→          setEmergencyNumbers(data.emergencyNumbers || '');
+   244→          setDefaultPriority(data.defaultPriority || 'medium');
+   245→        }
+   246→      } catch {}
+   247→
+   248→      await fetchConnectionStatus();
+   249→      setIsLoading(false);
+   250→    };
+   251→
+   252→    init();
+   253→  }, [fetchConnectionStatus]);
+   254→
+   255→  // Poll connection status every 5s when connecting
+   256→  useEffect(() => {
+   257→    const status = connectionData?.config?.openwaStatus;
+   258→    if (status === 'connecting') {
+   259→      pollRef.current = setInterval(fetchConnectionStatus, 5000);
+   260→    } else {
+   261→      if (pollRef.current) {
+   262→        clearInterval(pollRef.current);
+   263→        pollRef.current = null;
+   264→      }
+   265→    }
+   266→    return () => {
+   267→      if (pollRef.current) clearInterval(pollRef.current);
+   268→    };
+   269→  }, [connectionData?.config?.openwaStatus, fetchConnectionStatus]);
+   270→
+   271→  // Handle connection actions
+   272→  const handleAction = async (action: string) => {
+   273→    setIsActionLoading(action);
+   274→    try {
+   275→      const token = getToken();
+   276→      const res = await fetch('/api/whatsapp/connection', {
+   277→        method: 'POST',
+   278→        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+   279→        body: JSON.stringify({ action, chatId: testChatId || undefined }),
+   280→      });
+   281→      const data = await res.json();
+   282→
+   283→      if (data.success) {
+   284→        switch (action) {
+   285→          case 'connect':
+   286→            if (data.qr) {
+   287→              const url = await QRCode.toDataURL(data.qr, { width: 256, margin: 2 });
+   288→              setQrCodeDataUrl(url);
+   289→              toast.success('QR code generated. Scan with your WhatsApp app.');
+   290→            } else if (data.state === 'CONNECTED') {
+   291→              toast.success('WhatsApp connected successfully!');
+   292→            } else {
+   293→              toast.info(data.message || 'Connecting...');
+   294→            }
+   295→            break;
+   296→          case 'disconnect':
+   297→            toast.success('WhatsApp disconnected');
+   298→            setQrCodeDataUrl(null);
+   299→            break;
+   300→          case 'reconnect':
+   301→            if (data.qr) {
+   302→              const url = await QRCode.toDataURL(data.qr, { width: 256, margin: 2 });
+   303→              setQrCodeDataUrl(url);
+   304→            }
+   305→            toast.success('Reconnecting...');
+   306→            break;
+   307→          case 'restart':
+   308→            toast.success('Service restarting...');
+   309→            break;
+   310→          case 'test-message':
+   311→            toast.success(data.message || 'Test message sent!');
+   312→            break;
+   313→          case 'sync-conversations':
+   314→            toast.success(data.message || 'Conversations synced!');
+   315→            break;
+   316→          case 'get-qr':
+   317→            if (data.qr) {
+   318→              const url = await QRCode.toDataURL(data.qr, { width: 256, margin: 2 });
+   319→              setQrCodeDataUrl(url);
+   320→            }
+   321→            break;
+   322→        }
+   323→      } else {
+   324→        toast.error(data.error || data.message || 'Action failed');
+   325→        if (action === 'connect' && data.error) {
+   326→          // Show specific error for Chrome not found
+   327→          if (data.error.includes('Chrome') || data.error.includes('chromium')) {
+   328→            toast.error('Chromium browser not found. Install it or set CHROME_PATH.', { duration: 8000 });
+   329→          }
+   330→        }
+   331→      }
+   332→      // Refresh status
+   333→      await fetchConnectionStatus();
+   334→    } catch (err) {
+   335→      toast.error(err instanceof Error ? err.message : 'Action failed');
+   336→    } finally {
+   337→      setIsActionLoading(null);
+   338→    }
+   339→  };
+   340→
+   341→  // Save settings
+   342→  const handleSave = async () => {
+   343→    setIsSaving(true);
+   344→    try {
+   345→      const token = getToken();
+   346→      const res = await fetch('/api/whatsapp/config', {
+   347→        method: 'PUT',
+   348→        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+   349→        body: JSON.stringify({
+   350→          provider: selectedProvider,
+   351→          openwaBaseUrl,
+   352→          openwaApiKey,
+   353→          openwaSession,
+   354→          metaAccessToken,
+   355→          metaPhoneNumberId,
+   356→          metaVerifyToken,
+   357→          metaWebhookSecret,
+   358→          metaBusinessAccountId,
+   359→          twilioAccountSid,
+   360→          twilioAuthToken,
+   361→          twilioPhoneNumber,
+   362→          autoReplyEnabled,
+   363→          welcomeMessage,
+   364→          emergencyNumbers,
+   365→          defaultPriority,
+   366→        }),
+   367→      });
+   368→      if (res.ok) {
+   369→        toast.success('Settings saved successfully');
+   370→      } else {
+   371→        toast.error('Failed to save settings');
+   372→      }
+   373→    } catch {
+   374→      toast.error('Failed to save settings');
+   375→    } finally {
+   376→      setIsSaving(false);
+   377→    }
+   378→  };
+   379→
+   380→  const togglePasswordVisibility = (field: string) => {
+   381→    setShowPasswordFields(prev => ({ ...prev, [field]: !prev[field] }));
+   382→  };
+   383→
+   384→  const status: WhatsAppConnectionStatus = (connectionData?.config?.openwaStatus as WhatsAppConnectionStatus) || 'disconnected';
+   385→  const serviceInfo = connectionData?.serviceInfo;
+   386→  const stats = connectionData?.stats;
+   387→  const recentMessages = connectionData?.recentMessages || [];
+   388→  const logs = connectionData?.logs || [];
+   389→
+   390→  // Format uptime
+   391→  const formatUptime = (seconds: number) => {
+   392→    if (seconds < 60) return `${seconds}s`;
+   393→    if (seconds < 3600) return `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
+   394→    const h = Math.floor(seconds / 3600);
+   395→    const m = Math.floor((seconds % 3600) / 60);
+   396→    return `${h}h ${m}m`;
+   397→  };
+   398→
+   399→  // Format relative time
+   400→  const formatTime = (iso: string) => {
+   401→    const diff = Date.now() - new Date(iso).getTime();
+   402→    if (diff < 60000) return 'Just now';
+   403→    if (diff < 3600000) return `${Math.floor(diff / 60000)}m ago`;
+   404→    if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ago`;
+   405→    return new Date(iso).toLocaleDateString();
+   406→  };
+   407→
+   408→  if (isLoading) {
+   409→    return (
+   410→      <div className="space-y-6">
+   411→        <div className="flex items-center gap-3">
+   412→          <Skeleton className="h-8 w-8 rounded-lg" />
+   413→          <Skeleton className="h-8 w-48" />
+   414→        </div>
+   415→        <div className="grid gap-4 md:grid-cols-4">
+   416→          {[...Array(4)].map((_, i) => <Skeleton key={i} className="h-28 rounded-xl" />)}
+   417→        </div>
+   418→        <div className="grid gap-4 md:grid-cols-2">
+   419→          <Skeleton className="h-96 rounded-xl" />
+   420→          <Skeleton className="h-96 rounded-xl" />
+   421→        </div>
+   422→      </div>
+   423→    );
+   424→  }
+   425→
+   426→  return (
+   427→    <div className="space-y-6">
+   428→      {/* Page Header */}
+   429→      <div className="flex items-center justify-between">
+   430→        <div className="flex items-center gap-3">
+   431→          <div className="rounded-lg bg-emerald-100 p-2">
+   432→            <Settings className="h-6 w-6 text-emerald-600" />
+   433→          </div>
+   434→          <div>
+   435→            <h1 className="text-2xl font-bold tracking-tight">WhatsApp Settings</h1>
+   436→            <p className="text-sm text-muted-foreground">Configure and manage your WhatsApp integration</p>
+   437→          </div>
+   438→        </div>
+   439→        <ConnectionBadge status={status} />
+   440→      </div>
+   441→
+   442→      {/* Tab Navigation */}
+   443→      <div className="flex gap-1 bg-muted p-1 rounded-lg w-fit">
+   444→        {(['connection', 'settings', 'logs'] as const).map(tab => (
+   445→          <button
+   446→            key={tab}
+   447→            onClick={() => setActiveTab(tab)}
+   448→            className={cn(
+   449→              'px-4 py-2 rounded-md text-sm font-medium transition-colors',
+   450→              activeTab === tab
+   451→                ? 'bg-background shadow-sm text-foreground'
+   452→                : 'text-muted-foreground hover:text-foreground'
+   453→            )}
+   454→          >
+   455→            {tab === 'connection' && <Radio className="h-3.5 w-3.5 inline mr-1.5" />}
+   456→            {tab === 'settings' && <Settings className="h-3.5 w-3.5 inline mr-1.5" />}
+   457→            {tab === 'logs' && <Activity className="h-3.5 w-3.5 inline mr-1.5" />}
+   458→            {tab.charAt(0).toUpperCase() + tab.slice(1)}
+   459→          </button>
+   460→        ))}
+   461→      </div>
+   462→
+   463→      <AnimatePresence mode="wait">
+   464→        {/* ============ CONNECTION TAB ============ */}
+   465→        {activeTab === 'connection' && (
+   466→          <motion.div key="connection" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+   467→            {/* Stats Row */}
+   468→            <div className="grid gap-4 grid-cols-2 md:grid-cols-4">
+   469→              <Card>
+   470→                <CardContent className="p-4">
+   471→                  <div className="flex items-center justify-between">
+   472→                    <div>
+   473→                      <p className="text-xs text-muted-foreground">Service Status</p>
+   474→                      <div className="flex items-center gap-2 mt-1">
+   475→                        {connectionData?.serviceRunning ? (
+   476→                          <Server className="h-4 w-4 text-emerald-500" />
+   477→                        ) : (
+   478→                          <Server className="h-4 w-4 text-red-500" />
+   479→                        )}
+   480→                        <span className="text-sm font-semibold">
+   481→                          {connectionData?.serviceRunning ? 'Running' : 'Offline'}
+   482→                        </span>
+   483→                      </div>
+   484→                    </div>
+   485→                    <div className={cn(
+   486→                      'h-9 w-9 rounded-lg flex items-center justify-center',
+   487→                      connectionData?.serviceRunning ? 'bg-emerald-50' : 'bg-red-50'
+   488→                    )}>
+   489→                      <Activity className={cn(
+   490→                        'h-4 w-4',
+   491→                        connectionData?.serviceRunning ? 'text-emerald-600' : 'text-red-500'
+   492→                      )} />
+   493→                    </div>
+   494→                  </div>
+   495→                </CardContent>
+   496→              </Card>
+   497→
+   498→              <Card>
+   499→                <CardContent className="p-4">
+   500→                  <div className="flex items-center justify-between">
+   501→                    <div>
+   502→                      <p className="text-xs text-muted-foreground">Messages Today</p>
+   503→                      <p className="text-lg font-bold mt-0.5">{stats?.messagesToday || 0}</p>
+   504→                    </div>
+   505→                    <div className="h-9 w-9 rounded-lg bg-blue-50 flex items-center justify-center">
+   506→                      <Send className="h-4 w-4 text-blue-600" />
+   507→                    </div>
+   508→                  </div>
+   509→                </CardContent>
+   510→              </Card>
+   511→
+   512→              <Card>
+   513→                <CardContent className="p-4">
+   514→                  <div className="flex items-center justify-between">
+   515→                    <div>
+   516→                      <p className="text-xs text-muted-foreground">Queue</p>
+   517→                      <p className="text-lg font-bold mt-0.5">{connectionData?.queueStatus?.pending || 0}</p>
+   518→                    </div>
+   519→                    <div className="h-9 w-9 rounded-lg bg-amber-50 flex items-center justify-center">
+   520→                      <ArrowDownUp className="h-4 w-4 text-amber-600" />
+   521→                    </div>
+   522→                  </div>
+   523→                </CardContent>
+   524→              </Card>
+   525→
+   526→              <Card>
+   527→                <CardContent className="p-4">
+   528→                  <div className="flex items-center justify-between">
+   529→                    <div>
+   530→                      <p className="text-xs text-muted-foreground">Uptime</p>
+   531→                      <p className="text-lg font-bold mt-0.5">
+   532→                        {serviceInfo?.uptime ? formatUptime(serviceInfo.uptime) : '—'}
+   533→                      </p>
+   534→                    </div>
+   535→                    <div className="h-9 w-9 rounded-lg bg-purple-50 flex items-center justify-center">
+   536→                      <Clock className="h-4 w-4 text-purple-600" />
+   537→                    </div>
+   538→                  </div>
+   539→                </CardContent>
+   540→              </Card>
+   541→            </div>
+   542→
+   543→            {/* Service offline warning */}
+   544→            {!connectionData?.serviceRunning && (
+   545→              <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+   546→                <div className="flex items-start gap-3">
+   547→                  <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+   548→                  <div className="space-y-1.5">
+   549→                    <p className="text-sm font-semibold text-amber-800">OpenWA Service Not Running</p>
+   550→                    <p className="text-xs text-amber-700">
+   551→                      The WhatsApp service at <code className="bg-amber-100 px-1 rounded text-xs">{openwaBaseUrl}</code> is not reachable.
+   552→                      Start it with: <code className="bg-amber-100 px-1.5 py-0.5 rounded text-xs">cd mini-services/whatsapp-service &amp;&amp; bun index.ts</code>
+   553→                    </p>
+   554→                    <p className="text-xs text-amber-600">
+   555→                      The service requires <strong>Chromium</strong> to be installed. In production, set the <code className="bg-amber-100 px-1 rounded text-xs">CHROME_PATH</code> environment variable.
+   556→                    </p>
+   557→                  </div>
+   558→                </div>
+   559→              </div>
+   560→            )}
+   561→
+   562→            <div className="grid gap-6 md:grid-cols-2">
+   563→              {/* QR Code & Connection Card */}
+   564→              <Card>
+   565→                <CardHeader>
+   566→                  <div className="flex items-center justify-between">
+   567→                    <CardTitle className="text-base flex items-center gap-2">
+   568→                      <QrCode className="h-4 w-4 text-emerald-600" />
+   569→                      Connection & QR Code
+   570→                    </CardTitle>
+   571→                    <ConnectionBadge status={status} />
+   572→                  </div>
+   573→                </CardHeader>
+   574→                <CardContent className="space-y-5">
+   575→                  {/* QR Code Display */}
+   576→                  <div className="flex flex-col items-center gap-4">
+   577→                    {status === 'connecting' && qrCodeDataUrl ? (
+   578→                      <div className="relative">
+   579→                        <div className="w-56 h-56 border-2 border-emerald-200 rounded-xl overflow-hidden bg-white p-2">
+   580→                          <img src={qrCodeDataUrl} alt="WhatsApp QR Code" className="w-full h-full object-contain" />
+   581→                        </div>
+   582→                        <div className="absolute -top-2 -right-2">
+   583→                          <Badge className="bg-amber-500 text-white text-[10px] animate-pulse">LIVE</Badge>
+   584→                        </div>
+   585→                        <p className="text-xs text-center text-muted-foreground mt-2 max-w-xs">
+   586→                          Scan with your WhatsApp app. QR refreshes automatically every 20 seconds.
+   587→                        </p>
+   588→                      </div>
+   589→                    ) : status === 'connected' ? (
+   590→                      <div className="w-56 h-56 border-2 border-emerald-200 rounded-xl bg-emerald-50 flex flex-col items-center justify-center gap-3">
+   591→                        <div className="h-16 w-16 rounded-full bg-emerald-100 flex items-center justify-center">
+   592→                          <Check className="h-8 w-8 text-emerald-600" />
+   593→                        </div>
+   594→                        <p className="text-sm font-medium text-emerald-700">Connected</p>
+   595→                        {serviceInfo?.phoneInfo?.pushName && (
+   596→                          <p className="text-xs text-emerald-600">{serviceInfo.phoneInfo.pushName}</p>
+   597→                        )}
+   598→                        {serviceInfo?.phoneInfo?.phoneNumber && (
+   599→                          <p className="text-xs text-muted-foreground">{serviceInfo.phoneInfo.phoneNumber}</p>
+   600→                        )}
+   601→                      </div>
+   602→                    ) : (
+   603→                      <div className="w-56 h-56 border-2 border-dashed border-gray-200 rounded-xl flex flex-col items-center justify-center gap-3 bg-gray-50">
+   604→                        <QrCode className="h-12 w-12 text-gray-300" />
+   605→                        <p className="text-xs text-gray-400 text-center px-4">
+   606→                          Click &ldquo;Connect WhatsApp&rdquo; to generate QR code
+   607→                        </p>
+   608→                      </div>
+   609→                    )}
+   610→                  </div>
+   611→
+   612→                  {/* Connection Buttons */}
+   613→                  <div className="flex flex-wrap gap-2">
+   614→                    {status !== 'connected' && (
+   615→                      <Button
+   616→                        onClick={() => handleAction('connect')}
+   617→                        disabled={isActionLoading === 'connect'}
+   618→                        className="bg-emerald-600 hover:bg-emerald-700"
+   619→                      >
+   620→                        {isActionLoading === 'connect' ? (
+   621→                          <><Loader2 className="h-4 w-4 mr-1.5 animate-spin" />Connecting...</>
+   622→                        ) : (
+   623→                          <><Plug className="h-4 w-4 mr-1.5" />Connect WhatsApp</>
+   624→                        )}
+   625→                      </Button>
+   626→                    )}
+   627→
+   628→                    {status === 'connecting' && (
+   629→                      <Button
+   630→                        variant="outline"
+   631→                        onClick={() => handleAction('get-qr')}
+   632→                        disabled={isActionLoading === 'get-qr'}
+   633→                        className="border-amber-200 text-amber-700 hover:bg-amber-50"
+   634→                      >
+   635→                        {isActionLoading === 'get-qr' ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <QrCode className="h-4 w-4 mr-1.5" />}
+   636→                        Refresh QR
+   637→                      </Button>
+   638→                    )}
+   639→
+   640→                    {status === 'connected' && (
+   641→                      <Button
+   642→                        variant="outline"
+   643→                        onClick={() => handleAction('disconnect')}
+   644→                        disabled={isActionLoading === 'disconnect'}
+   645→                        className="border-red-200 text-red-600 hover:bg-red-50"
+   646→                      >
+   647→                        {isActionLoading === 'disconnect' ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <WifiOff className="h-4 w-4 mr-1.5" />}
+   648→                        Disconnect
+   649→                      </Button>
+   650→                    )}
+   651→
+   652→                    <Button
+   653→                      variant="outline"
+   654→                      onClick={() => handleAction('reconnect')}
+   655→                      disabled={isActionLoading === 'reconnect'}
+   656→                      className="border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+   657→                    >
+   658→                      {isActionLoading === 'reconnect' ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <RefreshCw className="h-4 w-4 mr-1.5" />}
+   659→                      Reconnect
+   660→                    </Button>
+   661→
+   662→                    <Button
+   663→                      variant="outline"
+   664→                      onClick={() => handleAction('restart')}
+   665→                      disabled={isActionLoading === 'restart'}
+   666→                    >
+   667→                      {isActionLoading === 'restart' ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Zap className="h-4 w-4 mr-1.5" />}
+   668→                      Restart
+   669→                    </Button>
+   670→
+   671→                    <Button
+   672→                      variant="outline"
+   673→                      onClick={() => handleAction('sync-conversations')}
+   674→                      disabled={isActionLoading === 'sync-conversations'}
+   675→                    >
+   676→                      {isActionLoading === 'sync-conversations' ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Database className="h-4 w-4 mr-1.5" />}
+   677→                      Sync
+   678→                    </Button>
+   679→                  </div>
+   680→
+   681→                  {/* Session Info */}
+   682→                  {serviceInfo && (
+   683→                    <div className="bg-muted/50 rounded-lg p-3 space-y-1.5 text-xs">
+   684→                      <div className="flex justify-between">
+   685→                        <span className="text-muted-foreground">Session</span>
+   686→                        <span className="font-mono">{serviceInfo.session}</span>
+   687→                      </div>
+   688→                      <div className="flex justify-between">
+   689→                        <span className="text-muted-foreground">Service Status</span>
+   690→                        <span className="font-mono">{serviceInfo.status}</span>
+   691→                      </div>
+   692→                      {serviceInfo.connectedAt && (
+   693→                        <div className="flex justify-between">
+   694→                          <span className="text-muted-foreground">Connected At</span>
+   695→                          <span>{new Date(serviceInfo.connectedAt).toLocaleString()}</span>
+   696→                        </div>
+   697→                      )}
+   698→                      {serviceInfo.lastHeartbeat && (
+   699→                        <div className="flex justify-between">
+   700→                          <span className="text-muted-foreground">Last Heartbeat</span>
+   701→                          <span>{formatTime(serviceInfo.lastHeartbeat)}</span>
+   702→                        </div>
+   703→                      )}
+   704→                      <div className="flex justify-between">
+   705→                        <span className="text-muted-foreground">Messages Processed</span>
+   706→                        <span className="font-semibold">{serviceInfo.messageCount}</span>
+   707→                      </div>
+   708→                      {serviceInfo.lastError && (
+   709→                        <div className="flex justify-between text-red-600">
+   710→                          <span>Last Error</span>
+   711→                          <span className="truncate max-w-[200px]">{serviceInfo.lastError}</span>
+   712→                        </div>
+   713→                      )}
+   714→                    </div>
+   715→                  )}
+   716→                </CardContent>
+   717→              </Card>
+   718→
+   719→              {/* Right Column: Test Message + Recent Messages */}
+   720→              <div className="space-y-6">
+   721→                {/* Test Message */}
+   722→                <Card>
+   723→                  <CardHeader>
+   724→                    <CardTitle className="text-base flex items-center gap-2">
+   725→                      <Send className="h-4 w-4 text-emerald-600" />
+   726→                      Test Message
+   727→                    </CardTitle>
+   728→                  </CardHeader>
+   729→                  <CardContent className="space-y-3">
+   730→                    <p className="text-xs text-muted-foreground">
+   731→                      Send a test message to verify your WhatsApp connection is working.
+   732→                    </p>
+   733→                    <div className="flex gap-2">
+   734→                      <Input
+   735→                        placeholder="Phone number (optional, sends to self)"
+   736→                        value={testChatId}
+   737→                        onChange={e => setTestChatId(e.target.value)}
+   738→                        className="flex-1"
+   739→                      />
+   740→                      <Button
+   741→                        onClick={() => handleAction('test-message')}
+   742→                        disabled={isActionLoading === 'test-message' || status !== 'connected'}
+   743→                        className="bg-emerald-600 hover:bg-emerald-700 whitespace-nowrap"
+   744→                      >
+   745→                        {isActionLoading === 'test-message' ? (
+   746→                          <Loader2 className="h-4 w-4 animate-spin" />
+   747→                        ) : (
+   748→                          <Zap className="h-4 w-4 mr-1.5" />
+   749→                        )}
+   750→                        Test
+   751→                      </Button>
+   752→                    </div>
+   753→                    {status !== 'connected' && (
+   754→                      <p className="text-xs text-amber-600 flex items-center gap-1">
+   755→                        <AlertCircle className="h-3 w-3" />
+   756→                        Connect WhatsApp first before sending test messages
+   757→                      </p>
+   758→                    )}
+   759→                  </CardContent>
+   760→                </Card>
+   761→
+   762→                {/* Recent Message Logs */}
+   763→                <Card>
+   764→                  <CardHeader>
+   765→                    <div className="flex items-center justify-between">
+   766→                      <CardTitle className="text-base flex items-center gap-2">
+   767→                        <Activity className="h-4 w-4 text-emerald-600" />
+   768→                        Recent Messages
+   769→                      </CardTitle>
+   770→                      <Badge variant="secondary" className="text-xs">{recentMessages.length} recent</Badge>
+   771→                    </div>
+   772→                  </CardHeader>
+   773→                  <CardContent className="p-0">
+   774→                    <ScrollArea className="max-h-80">
+   775→                      {recentMessages.length === 0 ? (
+   776→                        <div className="flex flex-col items-center justify-center py-10 text-muted-foreground">
+   777→                          <MessageSquare className="h-8 w-8 mb-2 opacity-30" />
+   778→                          <p className="text-sm">No messages yet</p>
+   779→                        </div>
+   780→                      ) : (
+   781→                        <div className="divide-y">
+   782→                          {recentMessages.map(msg => (
+   783→                            <div key={msg.id} className="px-4 py-3 hover:bg-muted/30 transition-colors">
+   784→                              <div className="flex items-center justify-between mb-1">
+   785→                                <div className="flex items-center gap-2">
+   786→                                  <Badge variant={msg.direction === 'inbound' ? 'secondary' : 'outline'} className="text-[10px] px-1.5">
+   787→                                    {msg.direction === 'inbound' ? '↓ IN' : '↑ OUT'}
+   788→                                  </Badge>
+   789→                                  <span className="text-xs font-medium">
+   790→                                    {msg.customerName || msg.fromNumber || msg.toNumber}
+   791→                                  </span>
+   792→                                  {msg.isFromBot && (
+   793→                                    <Badge variant="outline" className="text-[10px] px-1.5 text-purple-600 border-purple-200">BOT</Badge>
+   794→                                  )}
+   795→                                </div>
+   796→                                <div className="flex items-center gap-1.5">
+   797→                                  <Badge
+   798→                                    variant="outline"
+   799→                                    className={cn(
+   800→                                      'text-[10px] px-1.5',
+   801→                                      msg.status === 'sent' && 'border-emerald-200 text-emerald-600',
+   802→                                      msg.status === 'delivered' && 'border-blue-200 text-blue-600',
+   803→                                      msg.status === 'read' && 'border-violet-200 text-violet-600',
+   804→                                      msg.status === 'failed' && 'border-red-200 text-red-600',
+   805→                                    )}
+   806→                                  >
+   807→                                    {msg.status}
+   808→                                  </Badge>
+   809→                                  <span className="text-[10px] text-muted-foreground">{formatTime(msg.createdAt)}</span>
+   810→                                </div>
+   811→                              </div>
+   812→                              <p className="text-xs text-muted-foreground truncate">{msg.content || `[${msg.messageType}]`}</p>
+   813→                            </div>
+   814→                          ))}
+   815→                        </div>
+   816→                      )}
+   817→                    </ScrollArea>
+   818→                  </CardContent>
+   819→                </Card>
+   820→              </div>
+   821→            </div>
+   822→          </motion.div>
+   823→        )}
+   824→
+   825→        {/* ============ SETTINGS TAB ============ */}
+   826→        {activeTab === 'settings' && (
+   827→          <motion.div key="settings" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-6">
+   828→            {/* Provider Selection */}
+   829→            <div>
+   830→              <h2 className="text-lg font-semibold mb-4">Provider Selection</h2>
+   831→              <div className="grid gap-4 md:grid-cols-3">
+   832→                {PROVIDERS.map(provider => {
+   833→                  const Icon = provider.icon;
+   834→                  const isSelected = selectedProvider === provider.id;
+   835→                  return (
+   836→                    <motion.div key={provider.id} whileHover={{ scale: 1.02 }} transition={{ type: 'spring', stiffness: 300, damping: 20 }}>
+   837→                      <Card
+   838→                        className={cn(
+   839→                          'cursor-pointer transition-all',
+   840→                          isSelected ? 'border-2 border-emerald-500 bg-emerald-50/30 shadow-sm' : 'hover:border-emerald-200'
+   841→                        )}
+   842→                        onClick={() => setSelectedProvider(provider.id)}
+   843→                      >
+   844→                        <CardContent className="p-5">
+   845→                          <div className="flex items-start gap-3">
+   846→                            <div className={cn('rounded-lg p-2.5', isSelected ? 'bg-emerald-100' : 'bg-gray-100')}>
+   847→                              <Icon className={cn('h-5 w-5', isSelected ? 'text-emerald-600' : 'text-gray-500')} />
+   848→                            </div>
+   849→                            <div className="flex-1 space-y-1">
+   850→                              <div className="flex items-center justify-between">
+   851→                                <h3 className="font-semibold text-sm">{provider.name}</h3>
+   852→                                {isSelected && <Check className="h-4 w-4 text-emerald-600" />}
+   853→                              </div>
+   854→                              <p className="text-xs text-muted-foreground leading-relaxed">{provider.description}</p>
+   855→                            </div>
+   856→                          </div>
+   857→                        </CardContent>
+   858→                      </Card>
+   859→                    </motion.div>
+   860→                  );
+   861→                })}
+   862→              </div>
+   863→            </div>
+   864→
+   865→            {/* Provider Config */}
+   866→            {selectedProvider === 'openwa' && (
+   867→              <Card>
+   868→                <CardHeader>
+   869→                  <CardTitle className="text-base">OpenWA Configuration</CardTitle>
+   870→                </CardHeader>
+   871→                <CardContent className="space-y-4">
+   872→                  <div className="grid gap-4 md:grid-cols-2">
+   873→                    <div className="space-y-2">
+   874→                      <Label className="flex items-center gap-1.5">
+   875→                        <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+   876→                        Service URL
+   877→                      </Label>
+   878→                      <Input
+   879→                        placeholder="http://localhost:3001"
+   880→                        value={openwaBaseUrl}
+   881→                        onChange={e => setOpenwaBaseUrl(e.target.value)}
+   882→                      />
+   883→                      <p className="text-[10px] text-muted-foreground">URL of the OpenWA service (usually localhost:3001)</p>
+   884→                    </div>
+   885→                    <div className="space-y-2">
+   886→                      <Label className="flex items-center gap-1.5">
+   887→                        <Plug className="h-3.5 w-3.5 text-muted-foreground" />
+   888→                        Session Name
+   889→                      </Label>
+   890→                      <Input
+   891→                        placeholder="default"
+   892→                        value={openwaSession}
+   893→                        onChange={e => setOpenwaSession(e.target.value)}
+   894→                      />
+   895→                      <p className="text-[10px] text-muted-foreground">Unique session name for this tenant</p>
+   896→                    </div>
+   897→                    <div className="space-y-2 md:col-span-2">
+   898→                      <Label className="flex items-center gap-1.5">
+   899→                        <Key className="h-3.5 w-3.5 text-muted-foreground" />
+   900→                        API Key (optional)
+   901→                      </Label>
+   902→                      <div className="relative max-w-md">
+   903→                        <Input
+   904→                          type={showPasswordFields.apiKey ? 'text' : 'password'}
+   905→                          placeholder="Enter API key if configured"
+   906→                          value={openwaApiKey}
+   907→                          onChange={e => setOpenwaApiKey(e.target.value)}
+   908→                        />
+   909→                        <button
+   910→                          type="button"
+   911→                          onClick={() => togglePasswordVisibility('apiKey')}
+   912→                          className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+   913→                        >
+   914→                          {showPasswordFields.apiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   915→                        </button>
+   916→                      </div>
+   917→                    </div>
+   918→                  </div>
+   919→                </CardContent>
+   920→              </Card>
+   921→            )}
+   922→
+   923→            {selectedProvider === 'meta' && (
+   924→              <Card>
+   925→                <CardHeader>
+   926→                  <CardTitle className="text-base">Meta Cloud API Configuration</CardTitle>
+   927→                </CardHeader>
+   928→                <CardContent className="space-y-4">
+   929→                  <div className="grid gap-4 md:grid-cols-2">
+   930→                    <div className="space-y-2">
+   931→                      <Label className="flex items-center gap-1.5"><Key className="h-3.5 w-3.5 text-muted-foreground" />Access Token</Label>
+   932→                      <div className="relative">
+   933→                        <Input
+   934→                          type={showPasswordFields.metaToken ? 'text' : 'password'}
+   935→                          placeholder="EAAxxxxx..."
+   936→                          value={metaAccessToken}
+   937→                          onChange={e => setMetaAccessToken(e.target.value)}
+   938→                        />
+   939→                        <button type="button" onClick={() => togglePasswordVisibility('metaToken')} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+   940→                          {showPasswordFields.metaToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   941→                        </button>
+   942→                      </div>
+   943→                    </div>
+   944→                    <div className="space-y-2">
+   945→                      <Label className="flex items-center gap-1.5"><Phone className="h-3.5 w-3.5 text-muted-foreground" />Phone Number ID</Label>
+   946→                      <Input placeholder="Enter Phone Number ID" value={metaPhoneNumberId} onChange={e => setMetaPhoneNumberId(e.target.value)} />
+   947→                    </div>
+   948→                    <div className="space-y-2">
+   949→                      <Label className="flex items-center gap-1.5"><Shield className="h-3.5 w-3.5 text-muted-foreground" />Verify Token</Label>
+   950→                      <Input placeholder="Webhook verify token" value={metaVerifyToken} onChange={e => setMetaVerifyToken(e.target.value)} />
+   951→                    </div>
+   952→                    <div className="space-y-2">
+   953→                      <Label className="flex items-center gap-1.5"><Key className="h-3.5 w-3.5 text-muted-foreground" />Webhook Secret</Label>
+   954→                      <div className="relative">
+   955→                        <Input
+   956→                          type={showPasswordFields.webhookSecret ? 'text' : 'password'}
+   957→                          placeholder="App secret"
+   958→                          value={metaWebhookSecret}
+   959→                          onChange={e => setMetaWebhookSecret(e.target.value)}
+   960→                        />
+   961→                        <button type="button" onClick={() => togglePasswordVisibility('webhookSecret')} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+   962→                          {showPasswordFields.webhookSecret ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   963→                        </button>
+   964→                      </div>
+   965→                    </div>
+   966→                    <div className="space-y-2 md:col-span-2">
+   967→                      <Label className="flex items-center gap-1.5"><Globe className="h-3.5 w-3.5 text-muted-foreground" />Business Account ID</Label>
+   968→                      <Input placeholder="Enter Business Account ID" value={metaBusinessAccountId} onChange={e => setMetaBusinessAccountId(e.target.value)} />
+   969→                    </div>
+   970→                  </div>
+   971→                </CardContent>
+   972→              </Card>
+   973→            )}
+   974→
+   975→            {selectedProvider === 'twilio' && (
+   976→              <Card>
+   977→                <CardHeader>
+   978→                  <CardTitle className="text-base">Twilio Configuration</CardTitle>
+   979→                </CardHeader>
+   980→                <CardContent className="space-y-4">
+   981→                  <div className="grid gap-4 md:grid-cols-2">
+   982→                    <div className="space-y-2">
+   983→                      <Label className="flex items-center gap-1.5"><Globe className="h-3.5 w-3.5 text-muted-foreground" />Account SID</Label>
+   984→                      <Input placeholder="ACxxxxx..." value={twilioAccountSid} onChange={e => setTwilioAccountSid(e.target.value)} />
+   985→                    </div>
+   986→                    <div className="space-y-2">
+   987→                      <Label className="flex items-center gap-1.5"><Key className="h-3.5 w-3.5 text-muted-foreground" />Auth Token</Label>
+   988→                      <div className="relative">
+   989→                        <Input
+   990→                          type={showPasswordFields.twilioToken ? 'text' : 'password'}
+   991→                          placeholder="Enter auth token"
+   992→                          value={twilioAuthToken}
+   993→                          onChange={e => setTwilioAuthToken(e.target.value)}
+   994→                        />
+   995→                        <button type="button" onClick={() => togglePasswordVisibility('twilioToken')} className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+   996→                          {showPasswordFields.twilioToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   997→                        </button>
+   998→                      </div>
+   999→                    </div>
+  1000→                    <div className="space-y-2 md:col-span-2">
+  1001→                      <Label className="flex items-center gap-1.5"><PhoneCall className="h-3.5 w-3.5 text-muted-foreground" />WhatsApp Phone Number</Label>
+  1002→                      <Input placeholder="whatsapp:+1234567890" value={twilioPhoneNumber} onChange={e => setTwilioPhoneNumber(e.target.value)} />
+  1003→                    </div>
+  1004→                  </div>
+  1005→                </CardContent>
+  1006→              </Card>
+  1007→            )}
+  1008→
+  1009→            {/* General Settings */}
+  1010→            <Card>
+  1011→              <CardHeader>
+  1012→                <CardTitle className="text-base">General Settings</CardTitle>
+  1013→              </CardHeader>
+  1014→              <CardContent className="space-y-5">
+  1015→                <div className="flex items-center justify-between">
+  1016→                  <div className="space-y-0.5">
+  1017→                    <Label>Auto-Reply</Label>
+  1018→                    <p className="text-xs text-muted-foreground">Automatically respond to customer messages</p>
+  1019→                  </div>
+  1020→                  <Switch checked={autoReplyEnabled} onCheckedChange={setAutoReplyEnabled} className="data-[state=checked]:bg-emerald-600" />
+  1021→                </div>
+  1022→                <Separator />
+  1023→                <div className="space-y-2">
+  1024→                  <Label>Welcome Message</Label>
+  1025→                  <Textarea
+  1026→                    placeholder="Enter the welcome message sent to new customers..."
+  1027→                    value={welcomeMessage}
+  1028→                    onChange={e => setWelcomeMessage(e.target.value)}
+  1029→                    className="min-h-[100px]"
+  1030→                  />
+  1031→                  <p className="text-xs text-muted-foreground">
+  1032→                    Supports variables: {'{{company_name}}'}, {'{{customer_name}}'}
+  1033→                  </p>
+  1034→                </div>
+  1035→                <Separator />
+  1036→                <div className="space-y-2">
+  1037→                  <Label className="flex items-center gap-1.5">
+  1038→                    <PhoneCall className="h-3.5 w-3.5 text-red-500" />
+  1039→                    Emergency Numbers
+  1040→                  </Label>
+  1041→                  <Input placeholder="+60119991111, +60118882222" value={emergencyNumbers} onChange={e => setEmergencyNumbers(e.target.value)} />
+  1042→                  <p className="text-xs text-muted-foreground">Comma-separated phone numbers for emergency escalation</p>
+  1043→                </div>
+  1044→                <Separator />
+  1045→                <div className="space-y-2">
+  1046→                  <Label>Default Priority for WhatsApp Complaints</Label>
+  1047→                  <Select value={defaultPriority} onValueChange={setDefaultPriority}>
+  1048→                    <SelectTrigger className="max-w-xs">
+  1049→                      <SelectValue placeholder="Select priority" />
+  1050→                    </SelectTrigger>
+  1051→                    <SelectContent>
+  1052→                      <SelectItem value="low">Low</SelectItem>
+  1053→                      <SelectItem value="medium">Medium</SelectItem>
+  1054→                      <SelectItem value="high">High</SelectItem>
+  1055→                      <SelectItem value="critical">Critical</SelectItem>
+  1056→                    </SelectContent>
+  1057→                  </Select>
+  1058→                </div>
+  1059→              </CardContent>
+  1060→            </Card>
+  1061→
+  1062→            {/* Save Button */}
+  1063→            <Button onClick={handleSave} disabled={isSaving} className="w-full bg-emerald-600 hover:bg-emerald-700 py-6 text-base">
+  1064→              {isSaving ? <><Loader2 className="h-5 w-5 mr-2 animate-spin" />Saving...</> : <><Check className="h-5 w-5 mr-2" />Save Settings</>}
+  1065→            </Button>
+  1066→          </motion.div>
+  1067→        )}
+  1068→
+  1069→        {/* ============ LOGS TAB ============ */}
+  1070→        {activeTab === 'logs' && (
+  1071→          <motion.div key="logs" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-4">
+  1072→            <Card>
+  1073→              <CardHeader>
+  1074→                <div className="flex items-center justify-between">
+  1075→                  <CardTitle className="text-base flex items-center gap-2">
+  1076→                    <Activity className="h-4 w-4 text-emerald-600" />
+  1077→                    Service Logs
+  1078→                  </CardTitle>
+  1079→                  <Badge variant="secondary">{logs.length} entries</Badge>
+  1080→                </div>
+  1081→              </CardHeader>
+  1082→              <CardContent className="p-0">
+  1083→                <ScrollArea className="max-h-[500px]">
+  1084→                  {logs.length === 0 ? (
+  1085→                    <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+  1086→                      <Activity className="h-8 w-8 mb-2 opacity-30" />
+  1087→                      <p className="text-sm">No logs yet. Start the WhatsApp service to see logs.</p>
+  1088→                    </div>
+  1089→                  ) : (
+  1090→                    <div className="divide-y">
+  1091→                      {logs.map((log, i) => (
+  1092→                        <div key={log.id || i} className="px-4 py-2.5 hover:bg-muted/30 transition-colors font-mono text-xs">
+  1093→                          <div className="flex items-center gap-3">
+  1094→                            <span className="text-muted-foreground whitespace-nowrap">
+  1095→                              {new Date(log.timestamp).toLocaleTimeString()}
+  1096→                            </span>
+  1097→                            <Badge
+  1098→                              variant="outline"
+  1099→                              className={cn(
+  1100→                                'text-[10px] px-1.5 shrink-0',
+  1101→                                log.level === 'error' && 'border-red-200 text-red-600 bg-red-50',
+  1102→                                log.level === 'warn' && 'border-amber-200 text-amber-600 bg-amber-50',
+  1103→                                log.level === 'info' && 'border-blue-200 text-blue-600 bg-blue-50',
+  1104→                                log.level === 'debug' && 'border-gray-200 text-gray-500 bg-gray-50',
+  1105→                              )}
+  1106→                            >
+  1107→                              {log.level.toUpperCase()}
+  1108→                            </Badge>
+  1109→                            <span className="truncate">{log.event}</span>
+  1110→                            {log.data && typeof log.data === 'object' && (
+  1111→                              <span className="text-muted-foreground truncate ml-auto">
+  1112→                                {JSON.stringify(log.data).slice(0, 60)}
+  1113→                              </span>
+  1114→                            )}
+  1115→                          </div>
+  1116→                        </div>
+  1117→                      ))}
+  1118→                    </div>
+  1119→                  )}
+  1120→                </ScrollArea>
+  1121→              </CardContent>
+  1122→            </Card>
+  1123→
+  1124→            {/* Service Health */}
+  1125→            {connectionData?.queueStatus && (
+  1126→              <Card>
+  1127→                <CardHeader>
+  1128→                  <CardTitle className="text-base">Message Queue</CardTitle>
+  1129→                </CardHeader>
+  1130→                <CardContent>
+  1131→                  <div className="grid grid-cols-4 gap-4">
+  1132→                    {[
+  1133→                      { label: 'Total', value: connectionData.queueStatus.total, color: 'text-foreground' },
+  1134→                      { label: 'Pending', value: connectionData.queueStatus.pending, color: 'text-amber-600' },
+  1135→                      { label: 'Processing', value: connectionData.queueStatus.processing, color: 'text-blue-600' },
+  1136→                      { label: 'Failed', value: connectionData.queueStatus.failed, color: 'text-red-600' },
+  1137→                    ].map(item => (
+  1138→                      <div key={item.label} className="text-center p-3 bg-muted/50 rounded-lg">
+  1139→                        <p className={cn('text-2xl font-bold', item.color)}>{item.value}</p>
+  1140→                        <p className="text-xs text-muted-foreground mt-0.5">{item.label}</p>
+  1141→                      </div>
+  1142→                    ))}
+  1143→                  </div>
+  1144→                </CardContent>
+  1145→              </Card>
+  1146→            )}
+  1147→          </motion.div>
+  1148→        )}
+  1149→      </AnimatePresence>
+  1150→    </div>
+  1151→  );
+  1152→}
