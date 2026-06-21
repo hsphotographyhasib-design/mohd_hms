@@ -587,3 +587,18 @@ CMS API Endpoints Verified:
   18. GET /api/cms/activity - Activity audit log
   19. GET /api/cms/analytics - Analytics data
   20. GET /api/cms/settings - Global CMS settings
+---
+Task ID: 4
+Agent: Main Architect
+Task: Fix dev server stability - preview not showing
+
+Work Log:
+- Diagnosed issue: `package.json` dev script used `tee dev.log` which breaks the pipe when backgrounded, killing the Next.js process
+- Fixed: Changed `"dev": "next dev -p 3000 2>&1 | tee dev.log"` → `"dev": "next dev -p 3000"`
+- Server now runs stably via `node node_modules/.bin/next dev -p 3000` with nohup
+- Verified: server returns 200, stays alive, compiles pages successfully
+
+Stage Summary:
+- package.json: Removed `| tee dev.log` from dev script to prevent pipe-break crashes
+- Dev server now stays alive when backgrounded
+- File changed: /home/z/my-project/package.json (line 6)
