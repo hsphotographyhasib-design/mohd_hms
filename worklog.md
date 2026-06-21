@@ -999,3 +999,26 @@ Stage Summary:
 - Conversation engine creates real CMMS complaints with auto-category detection
 - All 5 UI views show real API data (not mock)
 - End-to-end flow verified: webhook → conversation engine → complaint creation → CMMS integration → admin dashboard
+---
+Task ID: 7
+Agent: Main Architect
+Task: Replace landing page with uploaded MOHD.HMS ENTERPRISE HTML
+
+Work Log:
+- Read uploaded file: `upload/mohd-hms-enterprise (4).html` (885 lines, 713KB, fully custom design)
+  - Custom CSS variables, Google Fonts (Bricolage Grotesque, IBM Plex Sans/Mono)
+  - Sticky header, utility bar, hero, services, projects, testimonials, contact, footer
+  - Sign in links using `href="#"` — needs bridge to React app
+- Copied HTML to `public/landing.html` (served as static file, same-origin)
+- Rewrote `src/components/app/landing-page.tsx` to use iframe approach:
+  - Full-viewport iframe (`fixed inset-0`) loading `/landing.html`
+  - `postMessage` listener for 'signin' and 'getStarted' events from iframe
+  - Script injection into iframe on load (with retry at 500ms, 1500ms, 3000ms)
+  - Injected script intercepts all click events on `.signin`, `a[href="#"]`, `.mp-act a` elements
+  - Clicking any "Sign in" link inside the landing page calls `window.parent.postMessage('signin', '*')`
+- Verified: landing page renders in iframe (1280x577), signin flow works, authenticated dashboard shows correctly
+
+Stage Summary:
+- Landing page now displays the exact uploaded MOHD.HMS ENTERPRISE design without any UI changes
+- All "Sign in" links in the HTML properly navigate to the login view
+- Full flow: Landing (iframe) → Sign In click → Login View → Authenticated Dashboard
