@@ -157,3 +157,54 @@ Stage Summary:
 - Dev log: 0 errors
 - Browser: 0 console errors
 - Full workflow verified: status progress bar, complaint details, work order card, available actions, activity timeline with escalation entries
+
+---
+Task ID: q2
+Agent: API Builder
+Task: Build quotation CRUD API routes
+
+Work Log:
+- Rewrote GET /api/quotations: added customerId filter, quotationNo/referenceNo/projectName/site/currency/taxRate/shipping/sentAt/acceptedAt to response, search on quotationNo & referenceNo
+- Rewrote POST /api/quotations: auto-generate quotationNo (QTN/{tenant_code}/{MM}/{0001}), compute subtotal/tax/total from items array, support all fields (referenceNo, projectName, site, preparedBy, terms, currency, taxRate, discount, shipping)
+- Rewrote GET /api/quotations/[id]: include customer (name, phone, email, address), preparedBy user (name), all fields
+- Rewrote PUT /api/quotations/[id]: auto-recalculate subtotal/tax/total when items/taxRate/discount/shipping change, support all updatable fields
+- DELETE /api/quotations/[id]: actual delete (unchanged)
+- Created POST /api/quotations/[id]/status: validated state machine transitions (DRAFT→REVIEW→APPROVED→SENT→ACCEPTED, DRAFT→REJECTED, SENT→EXPIRED), set sentAt/acceptedAt/approvedAt automatically
+- Created GET /api/quotations/next-number: generate next sequential quotation number for current tenant+month
+- Lint passes clean
+
+Stage Summary:
+- Full CRUD + status transitions + auto quotation number generation
+- Multi-tenant isolation on all endpoints
+- Computed financial fields (subtotal, tax, total) from line items
+
+---
+Task ID: q3
+Agent: Frontend Builder
+Task: Build quotation form page UI
+
+Work Log:
+- Created src/components/modules/quotations/quotation-form.tsx (1053 lines)
+- 3-column responsive layout: left (customer info + terms), center (quotation header + line items table), right (summary + workflow + attachments)
+- Customer search with dropdown results, showing company name, address, phone, email, customer number
+- Tax rate and currency selection in customer info card
+- Quotation info header: back arrow, status badge, auto-generated quotation no., date, valid until, prepared by, reference no., project name, site, description
+- Line items table with SL#, item title, unit dropdown (10 units), quantity, rate, auto-calculated amount
+- 3 pre-filled sample rows + 1 empty row, Insert/Duplicate/Delete row action buttons
+- Summary panel: subtotal, editable discount, tax rate dropdown, auto-calculated tax, editable shipping, grand total in emerald-600
+- Amount-in-words conversion with currency name (BND/USD/SGD/MYR)
+- Workflow status vertical list with 9 steps (Draft→Closed), green filled circles for completed, gray empty circles for future
+- Attachments placeholder with dashed border upload area
+- Sticky footer: Preview, Generate PDF, Print, Send Email, Send WhatsApp, Duplicate, Cancel, Save, Convert to Work Order
+- Save handler validates customer, line items, project name, then POST/PUT to API
+- Editing mode loads existing quotation data when quotationId is provided
+- Number-to-words helper function (supports up to millions with cents)
+- Restored q2 agent's next-number API route (tenant-aware, month-based sequential)
+- Removed unused imports (GripVertical, ChevronDown, useAuthStore, user)
+- Lint passes clean (0 errors, 0 warnings)
+
+Stage Summary:
+- Professional quotation form matching Fleetio/SAP-style design
+- ~1050 lines of React component
+- Responsive: 3-column on lg+, stacked on mobile
+- All shadcn/ui components used, consistent with project visual hierarchy

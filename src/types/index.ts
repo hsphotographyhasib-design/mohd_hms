@@ -52,6 +52,8 @@ export type AppView =
   | 'invoice-detail'
   | 'pm'
   | 'quotations'
+  | 'quotation-detail'
+  | 'new-quotation'
   | 'inventory'
   | 'customers'
   | 'employees'
@@ -265,22 +267,44 @@ export interface InvoiceItem {
 
 // ============ QUOTATIONS ============
 
-export type QuotationStatus = 'DRAFT' | 'SENT' | 'APPROVED' | 'REJECTED' | 'EXPIRED';
+export type QuotationStatus = 'DRAFT' | 'REVIEW' | 'APPROVED' | 'SENT' | 'ACCEPTED' | 'REJECTED' | 'EXPIRED' | 'CONVERTED_WO' | 'CONVERTED_INVOICE' | 'PAID' | 'CLOSED';
+
+export interface QuotationLineItem {
+  id?: string;
+  title: string;
+  unit: string;
+  quantity: number;
+  rate: number;
+  amount: number;
+}
 
 export interface QuotationItem {
   id: string;
   tenantId: string;
   customerId: string;
   customerName?: string;
+  quotationNo?: string;
   title: string;
   description?: string;
+  referenceNo?: string;
+  projectName?: string;
+  site?: string;
+  preparedByName?: string;
+  preparedBy?: string;
   items?: string;
+  terms?: string;
+  currency?: string;
   subtotal: number;
+  taxRate: number;
   tax: number;
   discount: number;
+  shipping: number;
   total: number;
   status: QuotationStatus;
   validUntil?: string;
+  sentAt?: string;
+  acceptedAt?: string;
+  approvedAt?: string;
   createdAt: string;
   updatedAt: string;
 }

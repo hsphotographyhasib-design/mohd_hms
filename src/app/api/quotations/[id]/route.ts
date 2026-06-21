@@ -2,6 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 
+interface QuotationItem {
+  description?: string;
+  quantity?: number;
+  unitPrice?: number;
+  amount?: number;
+  [key: string]: unknown;
+}
+
+function computeTotals(items: QuotationItem[], taxRate = 0, discount = 0, shipping = 0) {
+  const subtotal = items.reduce((sum, item) => sum + (item.amount || 0), 0);
+  const tax = subtotal * (taxRate / 100);
+  const total = subtotal + tax - discount + shipping;
+  return { subtotal, tax, discount, shipping, total };
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -18,7 +33,7 @@ export async function GET(
     const quotation = await db.quotation.findFirst({
       where: { id, tenantId },
       include: {
-        customer: { select: { name: true } },
+        customer: { select: { name: true, phone: true, email: true, address: true } },
       },
     });
 
@@ -26,23 +41,49 @@ export async function GET(
       return NextResponse.json({ error: 'Quotation not found' }, { status: 404 });
     }
 
+    let preparedByName: string | null = null;
+    if (quotation.preparedBy) {
+      const user = await db.user.findUnique({
+        where: { id: quotation.preparedBy },
+        select: { name: true },
+      });
+      if (user) preparedByName = user.name;
+    }
+
     return NextResponse.json({
       id: quotation.id,
       tenantId: quotation.tenantId,
       customerId: quotation.customerId,
-      customerName: quotation.customer.name,
+      customer: {
+        name: quotation.customer.name,
+        phone: quotation.customer.phone,
+        email: quotation.customer.email,
+        address: quotation.customer.address,
+      },
       complaintId: quotation.complaintId,
+      quotationNo: quotation.quotationNo,
       title: quotation.title,
       description: quotation.description,
+      referenceNo: quotation.referenceNo,
+      projectName: quotation.projectName,
+      site: quotation.site,
+      preparedBy: quotation.preparedBy,
+      preparedByName,
       items: quotation.items,
+      terms: quotation.terms,
+      currency: quotation.currency,
       subtotal: quotation.subtotal,
+      taxRate: quotation.taxRate,
       tax: quotation.tax,
       discount: quotation.discount,
+      shipping: quotation.shipping,
       total: quotation.total,
       status: quotation.status,
       validUntil: quotation.validUntil?.toISOString(),
       approvedBy: quotation.approvedBy,
       approvedAt: quotation.approvedAt?.toISOString(),
+      sentAt: quotation.sentAt?.toISOString(),
+      acceptedAt: quotation.acceptedAt?.toISOString(),
       pdfUrl: quotation.pdfUrl,
       notes: quotation.notes,
       createdAt: quotation.createdAt.toISOString(),
@@ -72,49 +113,97 @@ export async function PUT(
     if (!existing) return NextResponse.json({ error: 'Quotation not found' }, { status: 404 });
 
     const updateData: Record<string, unknown> = {};
+
     if (body.title !== undefined) updateData.title = body.title;
     if (body.description !== undefined) updateData.description = body.description || null;
-    if (body.items !== undefined) updateData.items = body.items ? JSON.stringify(body.items) : null;
-    if (body.subtotal !== undefined) updateData.subtotal = body.subtotal;
-    if (body.tax !== undefined) updateData.tax = body.tax;
-    if (body.discount !== undefined) updateData.discount = body.discount;
-    if (body.total !== undefined) updateData.total = body.total;
+    if (body.referenceNo !== undefined) updateData.referenceNo = body.referenceNo || null;
+    if (body.projectName !== undefined) updateData.projectName = body.projectName || null;
+    if (body.site !== undefined) updateData.site = body.site || null;
+    if (body.preparedBy !== undefined) updateData.preparedBy = body.preparedBy || null;
+    if (body.terms !== undefined) updateData.terms = body.terms ? JSON.stringify(body.terms) : null;
+    if (body.currency !== undefined) updateData.currency = body.currency || 'BND';
     if (body.validUntil !== undefined) updateData.validUntil = body.validUntil ? new Date(body.validUntil) : null;
     if (body.pdfUrl !== undefined) updateData.pdfUrl = body.pdfUrl || null;
     if (body.notes !== undefined) updateData.notes = body.notes || null;
+    if (body.complaintId !== undefined) updateData.complaintId = body.complaintId || null;
 
-    if (body.status) {
-      updateData.status = body.status;
-      if (body.status === 'APPROVED') {
-        updateData.approvedAt = new Date();
-        updateData.approvedBy = payload.userId;
-      }
+    // Recalculate totals if items, taxRate, discount, or shipping change
+    const needsRecalc = body.items !== undefined || body.taxRate !== undefined || body.discount !== undefined || body.shipping !== undefined;
+
+    if (body.items !== undefined) {
+      const parsedItems: QuotationItem[] = Array.isArray(body.items) ? body.items : [];
+      updateData.items = JSON.stringify(parsedItems);
+    }
+
+    if (body.taxRate !== undefined) updateData.taxRate = body.taxRate;
+    if (body.discount !== undefined) updateData.discount = body.discount;
+    if (body.shipping !== undefined) updateData.shipping = body.shipping;
+
+    if (needsRecalc) {
+      const currentItems: QuotationItem[] = body.items !== undefined
+        ? (Array.isArray(body.items) ? body.items : [])
+        : JSON.parse(existing.items || '[]');
+      const currentTaxRate = body.taxRate !== undefined ? body.taxRate : existing.taxRate;
+      const currentDiscount = body.discount !== undefined ? body.discount : existing.discount;
+      const currentShipping = body.shipping !== undefined ? body.shipping : existing.shipping;
+
+      const { subtotal, tax, total } = computeTotals(currentItems, currentTaxRate, currentDiscount, currentShipping);
+      updateData.subtotal = subtotal;
+      updateData.tax = tax;
+      updateData.total = total;
     }
 
     const updated = await db.quotation.update({
       where: { id },
       data: updateData,
       include: {
-        customer: { select: { name: true } },
+        customer: { select: { name: true, phone: true, email: true, address: true } },
       },
     });
+
+    let preparedByName: string | null = null;
+    if (updated.preparedBy) {
+      const user = await db.user.findUnique({
+        where: { id: updated.preparedBy },
+        select: { name: true },
+      });
+      if (user) preparedByName = user.name;
+    }
 
     return NextResponse.json({
       id: updated.id,
       tenantId: updated.tenantId,
       customerId: updated.customerId,
-      customerName: updated.customer.name,
+      customer: {
+        name: updated.customer.name,
+        phone: updated.customer.phone,
+        email: updated.customer.email,
+        address: updated.customer.address,
+      },
+      complaintId: updated.complaintId,
+      quotationNo: updated.quotationNo,
       title: updated.title,
       description: updated.description,
+      referenceNo: updated.referenceNo,
+      projectName: updated.projectName,
+      site: updated.site,
+      preparedBy: updated.preparedBy,
+      preparedByName,
       items: updated.items,
+      terms: updated.terms,
+      currency: updated.currency,
       subtotal: updated.subtotal,
+      taxRate: updated.taxRate,
       tax: updated.tax,
       discount: updated.discount,
+      shipping: updated.shipping,
       total: updated.total,
       status: updated.status,
       validUntil: updated.validUntil?.toISOString(),
       approvedBy: updated.approvedBy,
       approvedAt: updated.approvedAt?.toISOString(),
+      sentAt: updated.sentAt?.toISOString(),
+      acceptedAt: updated.acceptedAt?.toISOString(),
       pdfUrl: updated.pdfUrl,
       notes: updated.notes,
       createdAt: updated.createdAt.toISOString(),

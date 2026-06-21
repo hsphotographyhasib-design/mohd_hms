@@ -318,25 +318,36 @@ model PmSchedule {
 // ============ QUOTATIONS ============
 
 model Quotation {
-  id            String   @id @default(cuid())
-  tenantId      String
-  customerId    String
-  complaintId   String?
-  title         String
-  description   String?
-  items         String   // JSON array of line items
-  subtotal      Float
-  tax           Float    @default(0)
-  discount      Float    @default(0)
-  total         Float
-  status        String   @default("DRAFT") // DRAFT, SENT, APPROVED, REJECTED, EXPIRED
-  validUntil    DateTime?
-  approvedBy    String?
-  approvedAt    DateTime?
-  pdfUrl        String?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(cuid())
+  tenantId        String
+  customerId      String
+  complaintId     String?
+  quotationNo     String?  // e.g. QTN/SMSB/01/4529
+  title           String
+  description     String?
+  referenceNo     String?  // internal reference
+  projectName     String?
+  site            String?
+  preparedBy      String?  // userId
+  items           String   // JSON array of line items
+  terms           String?  // JSON array of terms & conditions
+  currency        String   @default("BND")
+  subtotal        Float
+  taxRate         Float    @default(0)
+  tax             Float    @default(0)
+  discount        Float    @default(0)
+  shipping        Float    @default(0)
+  total           Float
+  status          String   @default("DRAFT") // DRAFT, REVIEW, APPROVED, SENT, ACCEPTED, REJECTED, EXPIRED, CONVERTED_WO, CONVERTED_INVOICE, PAID, CLOSED
+  validUntil      DateTime?
+  approvedBy      String?
+  approvedAt      DateTime?
+  sentAt          DateTime?
+  acceptedAt      DateTime?
+  pdfUrl          String?
+  notes           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
   customer      Customer @relation(fields: [customerId], references: [id])

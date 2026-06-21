@@ -19,6 +19,7 @@ const InvoiceList = lazy(() => import('@/components/modules/invoices/invoice-lis
 const InvoiceDetail = lazy(() => import('@/components/modules/invoices/invoice-detail').then(m => ({ default: m.InvoiceDetail })));
 const PmList = lazy(() => import('@/components/modules/pm/pm-list').then(m => ({ default: m.PmList })));
 const QuotationList = lazy(() => import('@/components/modules/quotations/quotation-list').then(m => ({ default: m.QuotationList })));
+const QuotationForm = lazy(() => import('@/components/modules/quotations/quotation-form').then(m => ({ default: m.QuotationForm })));
 const InventoryList = lazy(() => import('@/components/modules/inventory/inventory-list').then(m => ({ default: m.InventoryList })));
 const CustomerList = lazy(() => import('@/components/modules/customers/customer-list').then(m => ({ default: m.CustomerList })));
 const EmployeeList = lazy(() => import('@/components/modules/employees/employee-list').then(m => ({ default: m.EmployeeList })));
@@ -88,6 +89,8 @@ function ViewRouter() {
       {currentView === 'invoice-detail' && <InvoiceDetail />}
       {currentView === 'pm' && <PmList />}
       {currentView === 'quotations' && <QuotationList />}
+      {currentView === 'quotation-detail' && <QuotationForm quotationId={useAppStore.getState().viewParams?.id} />}
+      {currentView === 'new-quotation' && <QuotationForm />}
       {currentView === 'inventory' && <InventoryList />}
       {currentView === 'customers' && <CustomerList />}
       {currentView === 'employees' && <EmployeeList />}
