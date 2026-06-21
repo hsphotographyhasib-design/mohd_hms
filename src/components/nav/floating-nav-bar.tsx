@@ -550,7 +550,7 @@ export function FloatingNavBar() {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="w-full max-w-5xl mx-auto px-4 mt-2"
+      className="sticky top-[68px] z-40 w-full max-w-5xl mx-auto px-4 mt-2"
       aria-label="Main navigation"
     >
       <div

@@ -713,3 +713,21 @@ Stage Summary:
   - NEW: src/components/nav/app-header.tsx
   - MODIFIED: src/components/app/app-shell.tsx
   - MODIFIED: src/store/index.ts
+
+---
+Task ID: nav-sticky-fix
+Agent: Main
+Task: Fix navigation bar to stay visible when scrolling (don't hide on scroll)
+
+Work Log:
+- Identified issue: FloatingNavBar had no sticky positioning — it was a static flow element that scrolled away with page content
+- AppHeader was already `sticky top-0 z-50` (correct)
+- FloatingNavBar was missing sticky — added `sticky top-[68px] z-40` to the outer `<motion.nav>` element
+- top-[68px] aligns it right below the 64px header with a 4px gap
+- z-40 ensures it stays above main content but below the header (z-50)
+- Verified via agent-browser: nav bar stays at y=68 after scrolling 2000px
+- Screenshot saved to nav-sticky-check.png for verification
+
+Stage Summary:
+- File changed: src/components/nav/floating-nav-bar.tsx (line 553: added `sticky top-[68px] z-40` classes)
+- Both header (z-50) and nav bar (z-40) now stay pinned at viewport top during scroll

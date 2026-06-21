@@ -1,0 +1,715 @@
+     1→     1→'use client';
+     2→     2→
+     3→     3→import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
+     4→     4→import { motion, AnimatePresence } from 'framer-motion';
+     5→     5→import { useAppStore, useAuthStore, useNotificationStore } from '@/store';
+     6→     6→import type { AppView } from '@/types';
+     7→     7→import { cn } from '@/lib/utils';
+     8→     8→import { useTheme } from 'next-themes';
+     9→     9→import { toast } from 'sonner';
+    10→    10→import {
+    11→    11→  Building2,
+    12→    12→  Search,
+    13→    13→  QrCode,
+    14→    14→  Bell,
+    15→    15→  Sun,
+    16→    16→  Moon,
+    17→    17→  Globe,
+    18→    18→  User,
+    19→    19→  Settings,
+    20→    20→  LogOut,
+    21→    21→  Plus,
+    22→    22→  LayoutDashboard,
+    23→    23→  Wrench,
+    24→    24→  AlertTriangle,
+    25→    25→  ClipboardList,
+    26→    26→  Receipt,
+    27→    27→  FileText,
+    28→    28→  Package,
+    29→    29→  Users,
+    30→    30→  ChevronRight,
+    31→    31→  Check,
+    32→    32→  X,
+    33→    33→} from 'lucide-react';
+    34→    34→import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+    35→    35→import { Badge } from '@/components/ui/badge';
+    36→    36→import { Button } from '@/components/ui/button';
+    37→    37→
+    38→    38→// ============================================================
+    39→    39→// CONSTANTS
+    40→    40→// ============================================================
+    41→    41→
+    42→    42→const SEARCH_QUICK_LINKS: { label: string; icon: React.ReactNode; view: AppView }[] = [
+    43→    43→  { label: 'Dashboard', icon: <LayoutDashboard className="h-4 w-4" />, view: 'dashboard' },
+    44→    44→  { label: 'Equipment', icon: <Wrench className="h-4 w-4" />, view: 'equipment' },
+    45→    45→  { label: 'Complaints', icon: <AlertTriangle className="h-4 w-4" />, view: 'complaints' },
+    46→    46→  { label: 'Work Orders', icon: <ClipboardList className="h-4 w-4" />, view: 'work-orders' },
+    47→    47→  { label: 'Customers', icon: <Users className="h-4 w-4" />, view: 'customers' },
+    48→    48→  { label: 'Invoices', icon: <Receipt className="h-4 w-4" />, view: 'invoices' },
+    49→    49→];
+    50→    50→
+    51→    51→const QUICK_ACTIONS: { label: string; icon: React.ReactNode; view: AppView }[] = [
+    52→    52→  { label: 'Create Complaint', icon: <AlertTriangle className="h-4 w-4" />, view: 'complaints' },
+    53→    53→  { label: 'Create Work Order', icon: <ClipboardList className="h-4 w-4" />, view: 'work-orders' },
+    54→    54→  { label: 'Create Invoice', icon: <Receipt className="h-4 w-4" />, view: 'invoices' },
+    55→    55→  { label: 'Create Quotation', icon: <FileText className="h-4 w-4" />, view: 'quotations' },
+    56→    56→  { label: 'Add Equipment', icon: <Package className="h-4 w-4" />, view: 'equipment' },
+    57→    57→];
+    58→    58→
+    59→    59→// ============================================================
+    60→    60→// GLASS DROPDOWN ANIMATION VARIANTS
+    61→    61→// ============================================================
+    62→    62→
+    63→    63→const glassDropdownVariants = {
+    64→    64→  hidden: { opacity: 0, scale: 0.95, y: -8 },
+    65→    65→  visible: {
+    66→    66→    opacity: 1,
+    67→    67→    scale: 1,
+    68→    68→    y: 0,
+    69→    69→    transition: { type: 'spring', stiffness: 400, damping: 30 },
+    70→    70→  },
+    71→    71→  exit: {
+    72→    72→    opacity: 0,
+    73→    73→    scale: 0.95,
+    74→    74→    y: -8,
+    75→    75→    transition: { duration: 0.15 },
+    76→    76→  },
+    77→    77→};
+    78→    78→
+    79→    79→const panelVariants = {
+    80→    80→  hidden: { opacity: 0, scale: 0.9, y: -4 },
+    81→    81→  visible: {
+    82→    82→    opacity: 1,
+    83→    83→    scale: 1,
+    84→    84→    y: 0,
+    85→    85→    transition: { type: 'spring', stiffness: 350, damping: 28 },
+    86→    86→  },
+    87→    87→  exit: {
+    88→    88→    opacity: 0,
+    89→    89→    scale: 0.9,
+    90→    90→    y: -4,
+    91→    91→    transition: { duration: 0.15 },
+    92→    92→  },
+    93→    93→};
+    94→    94→
+    95→    95→const fabVariants = {
+    96→    96→  hidden: { opacity: 0, scale: 0 },
+    97→    97→  visible: {
+    98→    98→    opacity: 1,
+    99→    99→    scale: 1,
+   100→   100→    transition: { type: 'spring', stiffness: 400, damping: 25 },
+   101→   101→  },
+   102→   102→  exit: {
+   103→   103→    opacity: 0,
+   104→   104→    scale: 0,
+   105→   105→    transition: { duration: 0.12 },
+   106→   106→  },
+   107→   107→};
+   108→   108→
+   109→   109→const iconTransition = { type: 'spring', stiffness: 500, damping: 30 };
+   110→   110→
+   111→   111→// ============================================================
+   112→   112→// GLASS DROPDOWN STYLES
+   113→   113→// ============================================================
+   114→   114→
+   115→   115→const glassStyles =
+   116→   116→  'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-xl border border-white/20 dark:border-white/10 shadow-xl';
+   117→   117→
+   118→   118→// ============================================================
+   119→   119→// MAIN COMPONENT
+   120→   120→// ============================================================
+   121→   121→
+   122→   122→export function AppHeader() {
+   123→   123→  // ---- State & Stores ----
+   124→   124→  const { setView } = useAppStore();
+   125→   125→  const { user, logout } = useAuthStore();
+   126→   126→  const { unreadCount, notifications, markAllAsRead } = useNotificationStore();
+   127→   127→  const { theme, setTheme } = useTheme();
+   128→   128→
+   129→   129→  const [searchOpen, setSearchOpen] = useState(false);
+   130→   130→  const [searchQuery, setSearchQuery] = useState('');
+   131→   131→  const [profileOpen, setProfileOpen] = useState(false);
+   132→   132→  const [notifPanelOpen, setNotifPanelOpen] = useState(false);
+   133→   133→  const [quickActionsOpen, setQuickActionsOpen] = useState(false);
+   134→   134→  const [lang, setLang] = useState<'EN' | 'MS'>('EN');
+   135→   135→
+   136→   136→  // Hydration-safe mounted check
+   137→   137→  const mounted = useSyncExternalStore(
+   138→   138→    () => () => {},
+   139→   139→    () => true,
+   140→   140→    () => false
+   141→   141→  );
+   142→   142→
+   143→   143→  // Refs
+   144→   144→  const searchInputRef = useRef<HTMLInputElement>(null);
+   145→   145→  const profileRef = useRef<HTMLDivElement>(null);
+   146→   146→  const notifRef = useRef<HTMLDivElement>(null);
+   147→   147→  const quickActionsRef = useRef<HTMLDivElement>(null);
+   148→   148→  const headerRef = useRef<HTMLElement>(null);
+   149→   149→
+   150→   150→  // ---- Keyboard: Cmd/Ctrl+K opens search, Esc closes all ----
+   151→   151→  useEffect(() => {
+   152→   152→    const handleKeyDown = (e: KeyboardEvent) => {
+   153→   153→      // Cmd+K or Ctrl+K
+   154→   154→      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+   155→   155→        e.preventDefault();
+   156→   156→        setSearchOpen((prev) => !prev);
+   157→   157→        setProfileOpen(false);
+   158→   158→        setNotifPanelOpen(false);
+   159→   159→        setQuickActionsOpen(false);
+   160→   160→      }
+   161→   161→      // Esc closes all panels
+   162→   162→      if (e.key === 'Escape') {
+   163→   163→        setSearchOpen(false);
+   164→   164→        setProfileOpen(false);
+   165→   165→        setNotifPanelOpen(false);
+   166→   166→        setQuickActionsOpen(false);
+   167→   167→        setSearchQuery('');
+   168→   168→      }
+   169→   169→    };
+   170→   170→    document.addEventListener('keydown', handleKeyDown);
+   171→   171→    return () => document.removeEventListener('keydown', handleKeyDown);
+   172→   172→  }, []);
+   173→   173→
+   174→   174→  // ---- Click outside: close open panels ----
+   175→   175→  useEffect(() => {
+   176→   176→    const handleClickOutside = (e: MouseEvent) => {
+   177→   177→      const target = e.target as Node;
+   178→   178→      if (profileRef.current && !profileRef.current.contains(target)) {
+   179→   179→        setProfileOpen(false);
+   180→   180→      }
+   181→   181→      if (notifRef.current && !notifRef.current.contains(target)) {
+   182→   182→        setNotifPanelOpen(false);
+   183→   183→      }
+   184→   184→      if (quickActionsRef.current && !quickActionsRef.current.contains(target)) {
+   185→   185→        setQuickActionsOpen(false);
+   186→   186→      }
+   187→   187→    };
+   188→   188→    document.addEventListener('mousedown', handleClickOutside);
+   189→   189→    return () => document.removeEventListener('mousedown', handleClickOutside);
+   190→   190→  }, []);
+   191→   191→
+   192→   192→  // ---- Auto-focus search input when search panel opens ----
+   193→   193→  useEffect(() => {
+   194→   194→    if (searchOpen && searchInputRef.current) {
+   195→   195→      setTimeout(() => searchInputRef.current?.focus(), 50);
+   196→   196→    }
+   197→   197→  }, [searchOpen]);
+   198→   198→
+   199→   199→  // ---- Helpers ----
+   200→   200→  const getUserInitials = useCallback(() => {
+   201→   201→    if (!user?.name) return '??';
+   202→   202→    return user.name
+   203→   203→      .split(' ')
+   204→   204→      .map((n) => n[0])
+   205→   205→      .join('')
+   206→   206→      .toUpperCase()
+   207→   207→      .slice(0, 2);
+   208→   208→  }, [user]);
+   209→   209→
+   210→   210→  const handleSearchLinkClick = useCallback(
+   211→   211→    (view: AppView) => {
+   212→   212→      setView(view);
+   213→   213→      setSearchOpen(false);
+   214→   214→      setSearchQuery('');
+   215→   215→    },
+   216→   216→    [setView]
+   217→   217→  );
+   218→   218→
+   219→   219→  const handleQuickActionClick = useCallback(
+   220→   220→    (view: AppView) => {
+   221→   221→      setView(view);
+   222→   222→      setQuickActionsOpen(false);
+   223→   223→    },
+   224→   224→    [setView]
+   225→   225→  );
+   226→   226→
+   227→   227→  const handleLanguageToggle = useCallback(() => {
+   228→   228→    const next = lang === 'EN' ? 'MS' : 'EN';
+   229→   229→    setLang(next);
+   230→   230→    toast.info(`Language switched to ${next === 'EN' ? 'English' : 'Bahasa Melayu'}`);
+   231→   231→  }, [lang]);
+   232→   232→
+   233→   233→  // ---- Don't render if no user ----
+   234→   234→  if (!user) return null;
+   235→   235→
+   236→   236→  return (
+   237→   237→    <>
+   238→   238→      {/* ============================================================ */}
+   239→   239→      {/* HEADER BAR                                                    */}
+   240→   240→      {/* ============================================================ */}
+   241→   241→      <header
+   242→   242→        ref={headerRef}
+   243→   243→        className="sticky top-0 z-50 w-full border-b border-border/40 bg-white/70 dark:bg-gray-950/70 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-gray-950/60"
+   244→   244→      >
+   245→   245→        <div className="flex items-center justify-between h-16 px-4 lg:px-6 gap-4">
+   246→   246→          {/* ---- LEFT: Logo + Company Name ---- */}
+   247→   247→          <div className="flex items-center gap-2.5 shrink-0">
+   248→   248→            <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-emerald-500 text-white shadow-md shadow-emerald-500/25">
+   249→   249→              <Building2 className="h-5 w-5" />
+   250→   250→            </div>
+   251→   251→            <span className="font-semibold text-lg text-foreground tracking-tight">
+   252→   252→              FacilityPro
+   253→   253→            </span>
+   254→   254→          </div>
+   255→   255→
+   256→   256→          {/* ---- CENTER: Search Bar ---- */}
+   257→   257→          <div className="flex-1 flex justify-center max-w-xl mx-auto">
+   258→   258→            <div className="relative w-full">
+   259→   259→              <button
+   260→   260→                type="button"
+   261→   261→                onClick={() => {
+   262→   262→                  setSearchOpen((prev) => !prev);
+   263→   263→                  setProfileOpen(false);
+   264→   264→                  setNotifPanelOpen(false);
+   265→   265→                  setQuickActionsOpen(false);
+   266→   266→                }}
+   267→   267→                className={cn(
+   268→   268→                  'flex items-center w-full h-10 rounded-full bg-muted/50 border-0',
+   269→   269→                  'px-4 text-sm text-muted-foreground',
+   270→   270→                  'hover:bg-muted/70 focus:bg-muted/80',
+   271→   271→                  'transition-all duration-200 cursor-pointer',
+   272→   272→                  'ring-0 focus:ring-2 focus:ring-emerald-500/30',
+   273→   273→                  searchOpen && 'ring-2 ring-emerald-500/30 bg-muted/70'
+   274→   274→                )}
+   275→   275→              >
+   276→   276→                <Search className="h-4 w-4 mr-2.5 shrink-0 text-muted-foreground/70" />
+   277→   277→                <span className="hidden sm:inline truncate">
+   278→   278→                  Search equipment, customers, work orders...
+   279→   279→                </span>
+   280→   280→                <span className="sm:hidden truncate">Search...</span>
+   281→   281→                <kbd className="hidden md:flex items-center ml-auto gap-0.5 shrink-0 rounded-md border border-border/60 bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+   282→   282→                  <span className="text-xs">⌘</span>K
+   283→   283→                </kbd>
+   284→   284→              </button>
+   285→   285→
+   286→   286→              {/* ---- SEARCH DROPDOWN PANEL ---- */}
+   287→   287→              <AnimatePresence>
+   288→   288→                {searchOpen && (
+   289→   289→                  <motion.div
+   290→   290→                    variants={glassDropdownVariants}
+   291→   291→                    initial="hidden"
+   292→   292→                    animate="visible"
+   293→   293→                    exit="exit"
+   294→   294→                    className={cn(
+   295→   295→                      'absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[480px] max-w-[calc(100vw-2rem)]',
+   296→   296→                      glassStyles,
+   297→   297→                      'p-4 z-50'
+   298→   298→                    )}
+   299→   299→                    style={{ originY: 'top' }}
+   300→   300→                  >
+   301→   301→                    {/* Close button */}
+   302→   302→                    <button
+   303→   303→                      onClick={() => {
+   304→   304→                        setSearchOpen(false);
+   305→   305→                        setSearchQuery('');
+   306→   306→                      }}
+   307→   307→                      className="absolute top-3 right-3 p-1 rounded-md hover:bg-muted/50 text-muted-foreground transition-colors"
+   308→   308→                    >
+   309→   309→                      <X className="h-4 w-4" />
+   310→   310→                    </button>
+   311→   311→
+   312→   312→                    {/* Search input */}
+   313→   313→                    <div className="relative mb-3">
+   314→   314→                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground/70" />
+   315→   315→                      <input
+   316→   316→                        ref={searchInputRef}
+   317→   317→                        type="text"
+   318→   318→                        value={searchQuery}
+   319→   319→                        onChange={(e) => setSearchQuery(e.target.value)}
+   320→   320→                        placeholder="Type to search..."
+   321→   321→                        className="w-full h-12 pl-11 pr-4 rounded-xl bg-muted/50 border border-border/40 text-base outline-none placeholder:text-muted-foreground/60 focus:ring-2 focus:ring-emerald-500/30 transition-all"
+   322→   322→                      />
+   323→   323→                    </div>
+   324→   324→
+   325→   325→                    {/* Quick links */}
+   326→   326→                    <div className="space-y-1">
+   327→   327→                      <p className="text-xs font-medium text-muted-foreground/70 uppercase tracking-wider px-2 mb-2">
+   328→   328→                        Quick Navigation
+   329→   329→                      </p>
+   330→   330→                      {SEARCH_QUICK_LINKS.map((link) => (
+   331→   331→                        <button
+   332→   332→                          key={link.view}
+   333→   333→                          onClick={() => handleSearchLinkClick(link.view)}
+   334→   334→                          className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors group"
+   335→   335→                        >
+   336→   336→                          <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-muted/60 text-muted-foreground group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:group-hover:bg-emerald-900/50 dark:group-hover:text-emerald-400 transition-colors">
+   337→   337→                            {link.icon}
+   338→   338→                          </span>
+   339→   339→                          {link.label}
+   340→   340→                          <ChevronRight className="h-3.5 w-3.5 ml-auto text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+   341→   341→                        </button>
+   342→   342→                      ))}
+   343→   343→                    </div>
+   344→   344→                  </motion.div>
+   345→   345→                )}
+   346→   346→              </AnimatePresence>
+   347→   347→            </div>
+   348→   348→          </div>
+   349→   349→
+   350→   350→          {/* ---- RIGHT: Action Buttons ---- */}
+   351→   351→          <div className="flex items-center gap-1.5 shrink-0">
+   352→   352→            {/* QR Scanner */}
+   353→   353→            <Button
+   354→   354→              variant="ghost"
+   355→   355→              size="icon"
+   356→   356→              className="h-9 w-9 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400"
+   357→   357→              onClick={() => toast.info('QR Scanner opened')}
+   358→   358→              aria-label="QR Scanner"
+   359→   359→            >
+   360→   360→              <QrCode className="h-[18px] w-[18px]" />
+   361→   361→            </Button>
+   362→   362→
+   363→   363→            {/* ---- Notification Bell ---- */}
+   364→   364→            <div ref={notifRef} className="relative">
+   365→   365→              <Button
+   366→   366→                variant="ghost"
+   367→   367→                size="icon"
+   368→   368→                className="relative h-9 w-9 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400"
+   369→   369→                onClick={() => {
+   370→   370→                  setNotifPanelOpen((prev) => !prev);
+   371→   371→                  setProfileOpen(false);
+   372→   372→                  setQuickActionsOpen(false);
+   373→   373→                  setSearchOpen(false);
+   374→   374→                }}
+   375→   375→                aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount})` : ''}`}
+   376→   376→              >
+   377→   377→                <Bell className="h-[18px] w-[18px]" />
+   378→   378→                {unreadCount > 0 && (
+   379→   379→                  <span className="absolute top-1 right-1 flex items-center justify-center min-w-[16px] h-[16px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-bold leading-none">
+   380→   380→                    {unreadCount > 99 ? '99+' : unreadCount}
+   381→   381→                  </span>
+   382→   382→                )}
+   383→   383→              </Button>
+   384→   384→
+   385→   385→              {/* ---- NOTIFICATION PANEL ---- */}
+   386→   386→              <AnimatePresence>
+   387→   387→                {notifPanelOpen && (
+   388→   388→                  <motion.div
+   389→   389→                    variants={glassDropdownVariants}
+   390→   390→                    initial="hidden"
+   391→   391→                    animate="visible"
+   392→   392→                    exit="exit"
+   393→   393→                    className={cn(
+   394→   394→                      'absolute top-full right-0 mt-2 w-80',
+   395→   395→                      glassStyles,
+   396→   396→                      'overflow-hidden z-50'
+   397→   397→                    )}
+   398→   398→                    style={{ originY: 'top' }}
+   399→   399→                  >
+   400→   400→                    {/* Header */}
+   401→   401→                    <div className="flex items-center justify-between px-4 py-3 border-b border-border/30">
+   402→   402→                      <h3 className="text-sm font-semibold text-foreground">Notifications</h3>
+   403→   403→                      {unreadCount > 0 && (
+   404→   404→                        <button
+   405→   405→                          onClick={markAllAsRead}
+   406→   406→                          className="text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:underline transition-colors"
+   407→   407→                        >
+   408→   408→                          Mark all read
+   409→   409→                        </button>
+   410→   410→                      )}
+   411→   411→                    </div>
+   412→   412→
+   413→   413→                    {/* Content */}
+   414→   414→                    <div className="max-h-80 overflow-y-auto">
+   415→   415→                      {notifications.length === 0 ? (
+   416→   416→                        <div className="flex flex-col items-center justify-center py-10 px-4">
+   417→   417→                          <Bell className="h-8 w-8 text-muted-foreground/30 mb-3" />
+   418→   418→                          <p className="text-sm text-muted-foreground/60">No new notifications</p>
+   419→   419→                        </div>
+   420→   420→                      ) : (
+   421→   421→                        <div className="divide-y divide-border/20">
+   422→   422→                          {notifications.slice(0, 10).map((notif) => (
+   423→   423→                            <div
+   424→   424→                              key={notif.id}
+   425→   425→                              className={cn(
+   426→   426→                                'px-4 py-3 hover:bg-muted/30 transition-colors cursor-pointer',
+   427→   427→                                !notif.isRead && 'bg-emerald-50/30 dark:bg-emerald-950/10'
+   428→   428→                              )}
+   429→   429→                            >
+   430→   430→                              <div className="flex items-start gap-2">
+   431→   431→                                {!notif.isRead && (
+   432→   432→                                  <span className="mt-1.5 h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
+   433→   433→                                )}
+   434→   434→                                <div className={cn('flex-1 min-w-0', notif.isRead && 'ml-4')}>
+   435→   435→                                  <p className="text-sm font-medium text-foreground truncate">{notif.title}</p>
+   436→   436→                                  <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">{notif.message}</p>
+   437→   437→                                </div>
+   438→   438→                              </div>
+   439→   439→                            </div>
+   440→   440→                          ))}
+   441→   441→                        </div>
+   442→   442→                      )}
+   443→   443→                    </div>
+   444→   444→                  </motion.div>
+   445→   445→                )}
+   446→   446→              </AnimatePresence>
+   447→   447→            </div>
+   448→   448→
+   449→   449→            {/* ---- Dark Mode Toggle ---- */}
+   450→   450→            <Button
+   451→   451→              variant="ghost"
+   452→   452→              size="icon"
+   453→   453→              className="h-9 w-9 text-muted-foreground hover:text-amber-500 dark:hover:text-amber-400 overflow-hidden"
+   454→   454→              onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+   455→   455→              aria-label="Toggle theme"
+   456→   456→            >
+   457→   457→              <AnimatePresence mode="wait" initial={false}>
+   458→   458→                {mounted && theme === 'dark' ? (
+   459→   459→                  <motion.div
+   460→   460→                    key="sun"
+   461→   461→                    initial={{ rotate: -90, scale: 0, opacity: 0 }}
+   462→   462→                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+   463→   463→                    exit={{ rotate: 90, scale: 0, opacity: 0 }}
+   464→   464→                    transition={iconTransition}
+   465→   465→                  >
+   466→   466→                    <Sun className="h-[18px] w-[18px]" />
+   467→   467→                  </motion.div>
+   468→   468→                ) : (
+   469→   469→                  <motion.div
+   470→   470→                    key="moon"
+   471→   471→                    initial={{ rotate: 90, scale: 0, opacity: 0 }}
+   472→   472→                    animate={{ rotate: 0, scale: 1, opacity: 1 }}
+   473→   473→                    exit={{ rotate: -90, scale: 0, opacity: 0 }}
+   474→   474→                    transition={iconTransition}
+   475→   475→                  >
+   476→   476→                    <Moon className="h-[18px] w-[18px]" />
+   477→   477→                  </motion.div>
+   478→   478→                )}
+   479→   479→              </AnimatePresence>
+   480→   480→            </Button>
+   481→   481→
+   482→   482→            {/* ---- Language Switcher ---- */}
+   483→   483→            <Button
+   484→   484→              variant="ghost"
+   485→   485→              size="icon"
+   486→   486→              className="h-9 w-9 text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 relative"
+   487→   487→              onClick={handleLanguageToggle}
+   488→   488→              aria-label="Switch language"
+   489→   489→            >
+   490→   490→              <Globe className="h-[18px] w-[18px]" />
+   491→   491→              <span className="absolute bottom-0.5 right-0.5 text-[8px] font-bold text-muted-foreground/80">
+   492→   492→                {lang}
+   493→   493→              </span>
+   494→   494→            </Button>
+   495→   495→
+   496→   496→            {/* ---- Profile Dropdown ---- */}
+   497→   497→            <div ref={profileRef} className="relative">
+   498→   498→              <button
+   499→   499→                type="button"
+   500→   500→                onClick={() => {
+   501→   501→                  setProfileOpen((prev) => !prev);
+   502→   502→                  setNotifPanelOpen(false);
+   503→   503→                  setQuickActionsOpen(false);
+   504→   504→                  setSearchOpen(false);
+   505→   505→                }}
+   506→   506→                className={cn(
+   507→   507→                  'flex items-center gap-2 h-9 pl-1.5 pr-2.5 rounded-full',
+   508→   508→                  'hover:bg-muted/50 transition-all duration-200',
+   509→   509→                  profileOpen && 'bg-muted/60'
+   510→   510→                )}
+   511→   511→                aria-label="User menu"
+   512→   512→                aria-expanded={profileOpen}
+   513→   513→              >
+   514→   514→                <Avatar className="h-7 w-7">
+   515→   515→                  <AvatarFallback className="bg-emerald-500 text-white text-xs font-semibold shadow-sm">
+   516→   516→                    {getUserInitials()}
+   517→   517→                  </AvatarFallback>
+   518→   518→                </Avatar>
+   519→   519→                <span className="hidden lg:inline-block text-sm font-medium text-foreground max-w-[100px] truncate">
+   520→   520→                  {user.name}
+   521→   521→                </span>
+   522→   522→              </button>
+   523→   523→
+   524→   524→              {/* ---- PROFILE DROPDOWN ---- */}
+   525→   525→              <AnimatePresence>
+   526→   526→                {profileOpen && (
+   527→   527→                  <motion.div
+   528→   528→                    variants={glassDropdownVariants}
+   529→   529→                    initial="hidden"
+   530→   530→                    animate="visible"
+   531→   531→                    exit="exit"
+   532→   532→                    className={cn(
+   533→   533→                      'absolute top-full right-0 mt-2 w-64',
+   534→   534→                      glassStyles,
+   535→   535→                      'overflow-hidden z-50'
+   536→   536→                    )}
+   537→   537→                    style={{ originY: 'top' }}
+   538→   538→                  >
+   539→   539→                    {/* User Info */}
+   540→   540→                    <div className="px-4 py-3 border-b border-border/20">
+   541→   541→                      <div className="flex items-center gap-3">
+   542→   542→                        <Avatar className="h-10 w-10">
+   543→   543→                          <AvatarFallback className="bg-emerald-500 text-white text-sm font-semibold shadow-sm">
+   544→   544→                            {getUserInitials()}
+   545→   545→                          </AvatarFallback>
+   546→   546→                        </Avatar>
+   547→   547→                        <div className="min-w-0 flex-1">
+   548→   548→                          <p className="text-sm font-semibold text-foreground truncate">{user.name}</p>
+   549→   549→                          <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+   550→   550→                        </div>
+   551→   551→                      </div>
+   552→   552→                      <div className="mt-2">
+   553→   553→                        <Badge className="bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 border-0 text-[10px] font-semibold uppercase tracking-wider">
+   554→   554→                          {user.role.replace('_', ' ')}
+   555→   555→                        </Badge>
+   556→   556→                      </div>
+   557→   557→                    </div>
+   558→   558→
+   559→   559→                    {/* Menu Items */}
+   560→   560→                    <div className="p-1.5 space-y-0.5">
+   561→   561→                      {/* Profile */}
+   562→   562→                      <button
+   563→   563→                        onClick={() => {
+   564→   564→                          setView('profile');
+   565→   565→                          setProfileOpen(false);
+   566→   566→                        }}
+   567→   567→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors"
+   568→   568→                      >
+   569→   569→                        <User className="h-4 w-4 text-muted-foreground" />
+   570→   570→                        Profile
+   571→   571→                      </button>
+   572→   572→
+   573→   573→                      {/* Settings */}
+   574→   574→                      <button
+   575→   575→                        onClick={() => {
+   576→   576→                          setView('settings');
+   577→   577→                          setProfileOpen(false);
+   578→   578→                        }}
+   579→   579→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors"
+   580→   580→                      >
+   581→   581→                        <Settings className="h-4 w-4 text-muted-foreground" />
+   582→   582→                        Settings
+   583→   583→                      </button>
+   584→   584→
+   585→   585→                      {/* Theme */}
+   586→   586→                      <button
+   587→   587→                        onClick={() => {
+   588→   588→                          setTheme(theme === 'dark' ? 'light' : 'dark');
+   589→   589→                          setProfileOpen(false);
+   590→   590→                        }}
+   591→   591→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors"
+   592→   592→                      >
+   593→   593→                        {mounted && theme === 'dark' ? (
+   594→   594→                          <Sun className="h-4 w-4 text-muted-foreground" />
+   595→   595→                        ) : (
+   596→   596→                          <Moon className="h-4 w-4 text-muted-foreground" />
+   597→   597→                        )}
+   598→   598→                        {mounted && theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+   599→   599→                      </button>
+   600→   600→
+   601→   601→                      {/* Language */}
+   602→   602→                      <button
+   603→   603→                        onClick={() => {
+   604→   604→                          handleLanguageToggle();
+   605→   605→                          setProfileOpen(false);
+   606→   606→                        }}
+   607→   607→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors"
+   608→   608→                      >
+   609→   609→                        <Globe className="h-4 w-4 text-muted-foreground" />
+   610→   610→                        Language
+   611→   611→                      </button>
+   612→   612→                    </div>
+   613→   613→
+   614→   614→                    {/* Separator + Logout */}
+   615→   615→                    <div className="border-t border-border/20 p-1.5">
+   616→   616→                      <button
+   617→   617→                        onClick={() => {
+   618→   618→                          setProfileOpen(false);
+   619→   619→                          logout();
+   620→   620→                        }}
+   621→   621→                        className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50/50 dark:hover:bg-rose-950/20 transition-colors"
+   622→   622→                      >
+   623→   623→                        <LogOut className="h-4 w-4" />
+   624→   624→                        Logout
+   625→   625→                      </button>
+   626→   626→                    </div>
+   627→   627→                  </motion.div>
+   628→   628→                )}
+   629→   629→              </AnimatePresence>
+   630→   630→            </div>
+   631→   631→          </div>
+   632→   632→        </div>
+   633→   633→      </header>
+   634→   634→
+   635→   635→      {/* ============================================================ */}
+   636→   636→      {/* QUICK ACTIONS FAB (Floating Action Button)                    */}
+   637→   637→      {/* ============================================================ */}
+   638→   638→      <div ref={quickActionsRef} className="fixed bottom-6 right-6 z-40">
+   639→   639→        <AnimatePresence>
+   640→   640→          {quickActionsOpen && (
+   641→   641→            <motion.div
+   642→   642→              variants={fabVariants}
+   643→   643→              initial="hidden"
+   644→   644→              animate="visible"
+   645→   645→              exit="exit"
+   646→   646→              className={cn('absolute bottom-16 right-0 w-56 mb-2', glassStyles, 'overflow-hidden p-2')}
+   647→   647→              style={{ origin: 'bottom right' }}
+   648→   648→            >
+   649→   649→              <p className="text-xs font-medium text-muted-foreground/70 uppercase tracking-wider px-2 py-1.5">
+   650→   650→                Quick Actions
+   651→   651→              </p>
+   652→   652→              {QUICK_ACTIONS.map((action) => (
+   653→   653→                <button
+   654→   654→                  key={action.view}
+   655→   655→                  onClick={() => handleQuickActionClick(action.view)}
+   656→   656→                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors group"
+   657→   657→                >
+   658→   658→                  <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-muted/60 text-muted-foreground group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:group-hover:bg-emerald-900/50 dark:group-hover:text-emerald-400 transition-colors">
+   659→   659→                    {action.icon}
+   660→   660→                  </span>
+   661→   661→                  {action.label}
+   662→   662→                </button>
+   663→   663→              ))}
+   664→   664→            </motion.div>
+   665→   665→          )}
+   666→   666→        </AnimatePresence>
+   667→   667→
+   668→   668→        {/* FAB Button */}
+   669→   669→        <motion.button
+   670→   670→          whileHover={{ scale: 1.08 }}
+   671→   671→          whileTap={{ scale: 0.95 }}
+   672→   672→          onClick={() => {
+   673→   673→            setQuickActionsOpen((prev) => !prev);
+   674→   674→            setSearchOpen(false);
+   675→   675→            setProfileOpen(false);
+   676→   676→            setNotifPanelOpen(false);
+   677→   677→          }}
+   678→   678→          className={cn(
+   679→   679→            'relative h-14 w-14 rounded-full shadow-lg shadow-emerald-500/30',
+   680→   680→            'flex items-center justify-center',
+   681→   681→            'bg-emerald-500 hover:bg-emerald-600 text-white',
+   682→   682→            'transition-colors duration-200'
+   683→   683→          )}
+   684→   684→          aria-label="Quick Actions"
+   685→   685→          aria-expanded={quickActionsOpen}
+   686→   686→        >
+   687→   687→          <AnimatePresence mode="wait">
+   688→   688→            {quickActionsOpen ? (
+   689→   689→              <motion.div
+   690→   690→                key="close"
+   691→   691→                initial={{ rotate: 0 }}
+   692→   692→                animate={{ rotate: 90 }}
+   693→   693→                exit={{ rotate: 0 }}
+   694→   694→                transition={{ duration: 0.15 }}
+   695→   695→              >
+   696→   696→                <X className="h-6 w-6" />
+   697→   697→              </motion.div>
+   698→   698→            ) : (
+   699→   699→              <motion.div
+   700→   700→                key="plus"
+   701→   701→                initial={{ rotate: 90 }}
+   702→   702→                animate={{ rotate: 0 }}
+   703→   703→                exit={{ rotate: 0 }}
+   704→   704→                transition={{ duration: 0.15 }}
+   705→   705→              >
+   706→   706→                <Plus className="h-6 w-6" />
+   707→   707→              </motion.div>
+   708→   708→            )}
+   709→   709→          </AnimatePresence>
+   710→   710→        </motion.button>
+   711→   711→      </div>
+   712→   712→    </>
+   713→   713→  );
+   714→   714→}
+   715→   715→
