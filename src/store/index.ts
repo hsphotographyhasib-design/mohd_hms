@@ -220,6 +220,7 @@ export function canAccess(userRole: UserRole, feature: string): boolean {
     notifications: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
     settings: ['super_admin', 'admin'],
     cms: ['super_admin', 'admin'],
+    whatsapp: ['super_admin', 'admin', 'manager', 'supervisor'],
   };
   return (permissions[feature] || []).includes(userRole);
 }

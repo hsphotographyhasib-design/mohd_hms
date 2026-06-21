@@ -26,6 +26,7 @@ import {
   type LucideIcon,
   Receipt,
   FileText,
+  MessageCircle,
 } from 'lucide-react';
 
 // ============================================================
@@ -76,6 +77,19 @@ const NAV_ITEMS: NavItemConfig[] = [
   { id: 'vehicles', label: 'Vehicles', icon: Truck, feature: 'vehicles' },
   { id: 'reports', label: 'Reports', icon: BarChart3, feature: 'reports' },
   { id: 'notifications', label: 'Notifications', icon: Bell, feature: 'notifications' },
+  {
+    id: 'whatsapp',
+    label: 'WhatsApp',
+    icon: MessageCircle,
+    feature: 'whatsapp',
+    subItems: [
+      { id: 'whatsapp', label: 'WhatsApp Dashboard' },
+      { id: 'whatsapp-chats', label: 'Live Chats' },
+      { id: 'whatsapp-templates', label: 'Templates' },
+      { id: 'whatsapp-campaigns', label: 'Campaigns' },
+      { id: 'whatsapp-settings', label: 'Settings' },
+    ],
+  },
   { id: 'settings', label: 'Settings', icon: Settings, feature: 'settings' },
 ];
 

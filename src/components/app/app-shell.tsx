@@ -48,6 +48,13 @@ const CmsPopups = lazy(() => import('@/components/modules/cms/cms-popups').then(
 const CmsForms = lazy(() => import('@/components/modules/cms/cms-forms').then(m => ({ default: m.CmsForms })));
 const CmsActivity = lazy(() => import('@/components/modules/cms/cms-activity').then(m => ({ default: m.CmsActivity })));
 
+// WhatsApp views
+const WhatsAppDashboard = lazy(() => import('@/components/modules/whatsapp/whatsapp-dashboard').then(m => ({ default: m.WhatsAppDashboard })));
+const WhatsAppChats = lazy(() => import('@/components/modules/whatsapp/whatsapp-chats').then(m => ({ default: m.WhatsAppChats })));
+const WhatsAppTemplates = lazy(() => import('@/components/modules/whatsapp/whatsapp-templates').then(m => ({ default: m.WhatsAppTemplates })));
+const WhatsAppCampaigns = lazy(() => import('@/components/modules/whatsapp/whatsapp-campaigns').then(m => ({ default: m.WhatsAppCampaigns })));
+const WhatsAppSettings = lazy(() => import('@/components/modules/whatsapp/whatsapp-settings').then(m => ({ default: m.WhatsAppSettings })));
+
 function ViewLoader() {
   return (
     <div className="p-6 space-y-4">
@@ -107,6 +114,11 @@ function ViewRouter() {
       {currentView === 'cms-popups' && <CmsPopups />}
       {currentView === 'cms-forms' && <CmsForms />}
       {currentView === 'cms-activity' && <CmsActivity />}
+      {currentView === 'whatsapp' && <WhatsAppDashboard />}
+      {currentView === 'whatsapp-chats' && <WhatsAppChats />}
+      {currentView === 'whatsapp-templates' && <WhatsAppTemplates />}
+      {currentView === 'whatsapp-campaigns' && <WhatsAppCampaigns />}
+      {currentView === 'whatsapp-settings' && <WhatsAppSettings />}
     </Suspense>
   );
 }

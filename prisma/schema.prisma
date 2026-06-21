@@ -38,6 +38,15 @@ model Tenant {
   notifications Notification[]
   auditLogs   AuditLog[]
   checklistTemplates ChecklistTemplate[]
+  whatsappConfigs      WhatsAppConfig[]
+  whatsappSessions     WhatsAppSession[]
+  whatsappMessages     WhatsAppMessage[]
+  conversationThreads  ConversationThread[]
+  whatsappTemplates    WhatsAppTemplate[]
+  broadcastLogs        BroadcastLog[]
+  whatsappDeliveryLogs WhatsAppDeliveryLog[]
+  customerFeedbacks    CustomerFeedback[]
+  customerReports      CustomerReport[]
 }
 
 // ============ USERS & AUTH ============
@@ -105,6 +114,10 @@ model Customer {
   customerNumber String @unique
   photo       String?
   isActive    Boolean  @default(true)
+  isWhatsappVerified  Boolean  @default(false)
+  whatsappId          String?
+  whatsappPhone       String?
+  lastWhatsappActivity DateTime?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
@@ -113,6 +126,10 @@ model Customer {
   complaints  Complaint[]
   invoices    Invoice[]
   quotations  Quotation[]
+  conversationThreads ConversationThread[]
+  whatsappSessions     WhatsAppSession[]
+  customerFeedbacks    CustomerFeedback[]
+  customerReports      CustomerReport[]
 }
 
 // ============ EQUIPMENT ============
@@ -858,4 +875,237 @@ model CmsActivityLog {
   createdAt     DateTime @default(now())
 
   @@index([tenantId])
+}
+
+// ============ WHATSAPP SYSTEM ============
+
+// 19. WhatsApp Config - Provider settings per tenant
+model WhatsAppConfig {
+  id              String   @id @default(cuid())
+  tenantId        String
+  provider        String   @default("openwa") // openwa, meta, twilio
+  isEnabled       Boolean  @default(false)
+  phoneNumber     String?
+  businessName    String?
+  // OpenWA config
+  openwaBaseUrl   String?  // e.g. http://localhost:3001
+  openwaSession   String?
+  openwaApiKey    String?
+  openwaQrCode    String?  // base64 QR image
+  openwaStatus    String   @default("disconnected") // connected, disconnected, connecting
+  // Meta Cloud API config
+  metaAccessToken String?
+  metaPhoneNumberId String?
+  metaVerifyToken String?
+  metaWebhookSecret String?
+  metaBusinessAccountId String?
+  // Twilio config
+  twilioAccountSid  String?
+  twilioAuthToken   String?
+  twilioPhoneNumber String?
+  // General
+  autoReplyEnabled  Boolean @default(true)
+  welcomeMessage    String  @default("Welcome to MOHD.HMS ENTERPRISE!\n\nPlease choose:\n1️⃣ New Complaint\n2️⃣ Service Request\n3️⃣ Complaint Status\n4️⃣ My Equipment\n5️⃣ Work Order Status\n6️⃣ Invoices\n7️⃣ Emergency Service\n8️⃣ Speak to Customer Support")
+  emergencyNumbers  String?  // JSON array of phone numbers
+  defaultPriority   String  @default("medium")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  sessions        WhatsAppSession[]
+
+  @@unique([tenantId])
+}
+
+// 20. WhatsApp Session - Per-customer conversation session
+model WhatsAppSession {
+  id              String   @id @default(cuid())
+  tenantId        String
+  configId        String
+  phoneNumber     String   // customer WhatsApp number (international format)
+  customerId      String?  // linked CMMS customer
+  sessionId       String?  // provider session ID
+  state           String   @default("menu") // menu, new_complaint_desc, new_complaint_media, new_complaint_equipment, service_request_desc, status_query, invoice_query, equipment_list, emergency_desc, feedback_rating, feedback_comment, escalation_desc, chat, appointment_date, appointment_time, appointment_location
+  stateData       String?  // JSON - temp data for current flow step
+  lastMessageAt   DateTime @default(now())
+  messageCount    Int      @default(0)
+  isActive        Boolean  @default(true)
+  isBlocked       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  config          WhatsAppConfig @relation(fields: [configId], references: [id])
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  messages        WhatsAppMessage[]
+  threads         ConversationThread[]
+
+  @@index([tenantId, phoneNumber])
+  @@index([phoneNumber])
+  @@index([state])
+}
+
+// 21. WhatsApp Message - All messages (inbound + outbound)
+model WhatsAppMessage {
+  id              String   @id @default(cuid())
+  tenantId        String
+  sessionId       String
+  threadId        String?
+  direction       String   // inbound, outbound
+  messageType     String   @default("text") // text, image, video, audio, document, location, contact, sticker
+  content         String?  // text content
+  mediaUrl        String?
+  mediaType       String?
+  thumbnailUrl    String?
+  caption         String?
+  location        String?  // JSON: {lat, lng, address}
+  fromNumber      String?
+  toNumber        String?
+  providerMessageId String? // WhatsApp message ID from provider
+  status          String   @default("sent") // sent, delivered, read, failed
+  errorMessage    String?
+  isFromBot       Boolean  @default(false)
+  isTemplate      Boolean  @default(false)
+  metadata        String?  // JSON - extra data
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  session         WhatsAppSession @relation(fields: [sessionId], references: [id])
+  thread          ConversationThread? @relation(fields: [threadId], references: [id])
+  deliveryLogs    WhatsAppDeliveryLog[]
+
+  @@index([tenantId, sessionId])
+  @@index([sessionId])
+  @@index([providerMessageId])
+  @@index([createdAt])
+}
+
+// 22. Conversation Thread - Grouped conversations
+model ConversationThread {
+  id              String   @id @default(cuid())
+  tenantId        String
+  sessionId       String
+  subject         String?
+  status          String   @default("active") // active, resolved, archived
+  assignedToId    String?  // staff member handling this thread
+  lastMessageAt   DateTime @default(now())
+  messageCount    Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  session         WhatsAppSession @relation(fields: [sessionId], references: [id])
+  customer        Customer? @relation(fields: [customerId], references: [id])
+  customerId      String?
+  messages        WhatsAppMessage[]
+
+  @@index([tenantId, status])
+  @@index([sessionId])
+  @@index([assignedToId])
+}
+
+// 23. WhatsApp Template - Message templates
+model WhatsAppTemplate {
+  id              String   @id @default(cuid())
+  tenantId        String
+  name            String
+  category        String   // welcome, complaint_created, assigned, in_progress, completed, invoice, feedback, emergency, appointment, notification, custom
+  content         String   // template body with {{variables}}
+  variables        String?  // JSON array of variable names
+  mediaType       String?  // text, image, document
+  mediaUrl        String?  // URL for template media
+  isActive        Boolean  @default(true)
+  isSystem        Boolean  @default(false) // system templates can't be deleted
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, name])
+  @@index([tenantId, category])
+}
+
+// 24. Customer Feedback via WhatsApp
+model CustomerFeedback {
+  id              String   @id @default(cuid())
+  tenantId        String
+  customerId      String
+  complaintId     String?
+  workOrderId     String?
+  rating          Int      // 1-5
+  comment         String?
+  source          String   @default("whatsapp") // whatsapp, portal, email
+  createdAt       DateTime @default(now())
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  customer        Customer @relation(fields: [customerId], references: [id])
+
+  @@index([tenantId, customerId])
+}
+
+// 25. Customer Report/Escalation via WhatsApp
+model CustomerReport {
+  id              String   @id @default(cuid())
+  tenantId        String
+  customerId      String
+  sessionId       String?
+  type            String   @default("escalation") // escalation, complaint, suggestion, other
+  subject         String
+  description     String
+  priority        String   @default("medium")
+  status          String   @default("OPEN") // OPEN, IN_REVIEW, RESOLVED, DISMISSED
+  resolvedById    String?
+  resolvedAt      DateTime?
+  resolutionNotes String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  customer        Customer @relation(fields: [customerId], references: [id])
+
+  @@index([tenantId, status])
+}
+
+// 26. Broadcast Log - Mass message campaigns
+model BroadcastLog {
+  id              String   @id @default(cuid())
+  tenantId        String
+  title           String
+  content         String
+  templateId      String?
+  recipientCount  Int      @default(0)
+  sentCount       Int      @default(0)
+  deliveredCount  Int      @default(0)
+  failedCount     Int      @default(0)
+  readCount       Int      @default(0)
+  status          String   @default("draft") // draft, scheduled, sending, completed, failed
+  scheduledAt     DateTime?
+  sentAt          DateTime?
+  completedAt     DateTime?
+  createdBy       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+}
+
+// 27. WhatsApp Delivery Log - Per-message delivery tracking
+model WhatsAppDeliveryLog {
+  id              String   @id @default(cuid())
+  tenantId        String
+  messageId       String
+  direction       String   // inbound, outbound
+  status          String   // sent, delivered, read, failed, deleted
+  providerStatus  String?  // raw provider status
+  timestamp       DateTime @default(now())
+  errorMessage    String?
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  message         WhatsAppMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, messageId])
+  @@index([messageId])
 }

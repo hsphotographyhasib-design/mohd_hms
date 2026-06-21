@@ -79,7 +79,13 @@ export type AppView =
   | 'cms-announcements'
   | 'cms-popups'
   | 'cms-forms'
-  | 'cms-activity';
+  | 'cms-activity'
+  // WhatsApp views
+  | 'whatsapp'
+  | 'whatsapp-chats'
+  | 'whatsapp-templates'
+  | 'whatsapp-campaigns'
+  | 'whatsapp-settings';
 
 // ============ EQUIPMENT ============
 
@@ -417,4 +423,206 @@ export interface ApiError {
 export interface SelectOption {
   label: string;
   value: string;
+}
+
+// ============ WHATSAPP ============
+
+export type WhatsAppProvider = 'openwa' | 'meta' | 'twilio';
+export type WhatsAppConnectionStatus = 'connected' | 'disconnected' | 'connecting';
+export type SessionState =
+  | 'menu'
+  | 'new_complaint_desc'
+  | 'new_complaint_media'
+  | 'new_complaint_equipment'
+  | 'service_request_desc'
+  | 'status_query'
+  | 'invoice_query'
+  | 'equipment_list'
+  | 'emergency_desc'
+  | 'feedback_rating'
+  | 'feedback_comment'
+  | 'escalation_desc'
+  | 'chat'
+  | 'appointment_date'
+  | 'appointment_time'
+  | 'appointment_location';
+
+export type WhatsAppMessageDirection = 'inbound' | 'outbound';
+export type WhatsAppMessageType = 'text' | 'image' | 'video' | 'audio' | 'document' | 'location' | 'contact' | 'sticker';
+export type WhatsAppMessageStatus = 'sent' | 'delivered' | 'read' | 'failed';
+export type TemplateCategory = 'welcome' | 'complaint_created' | 'assigned' | 'in_progress' | 'completed' | 'invoice' | 'feedback' | 'emergency' | 'appointment' | 'notification' | 'custom';
+export type BroadcastStatus = 'draft' | 'scheduled' | 'sending' | 'completed' | 'failed';
+export type ThreadStatus = 'active' | 'resolved' | 'archived';
+export type ReportStatus = 'OPEN' | 'IN_REVIEW' | 'RESOLVED' | 'DISMISSED';
+
+export interface WhatsAppConfigData {
+  id: string;
+  tenantId: string;
+  provider: WhatsAppProvider;
+  isEnabled: boolean;
+  phoneNumber?: string;
+  businessName?: string;
+  openwaBaseUrl?: string;
+  openwaSession?: string;
+  openwaApiKey?: string;
+  openwaQrCode?: string;
+  openwaStatus: WhatsAppConnectionStatus;
+  metaAccessToken?: string;
+  metaPhoneNumberId?: string;
+  metaVerifyToken?: string;
+  metaWebhookSecret?: string;
+  metaBusinessAccountId?: string;
+  twilioAccountSid?: string;
+  twilioAuthToken?: string;
+  twilioPhoneNumber?: string;
+  autoReplyEnabled: boolean;
+  welcomeMessage: string;
+  emergencyNumbers?: string;
+  defaultPriority: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WhatsAppSessionData {
+  id: string;
+  tenantId: string;
+  configId: string;
+  phoneNumber: string;
+  customerId?: string;
+  customerName?: string;
+  state: SessionState;
+  stateData?: string;
+  lastMessageAt: string;
+  messageCount: number;
+  isActive: boolean;
+  isBlocked: boolean;
+  createdAt: string;
+  updatedAt: string;
+  _count?: { messages: number };
+}
+
+export interface WhatsAppMessageData {
+  id: string;
+  tenantId: string;
+  sessionId: string;
+  threadId?: string;
+  direction: WhatsAppMessageDirection;
+  messageType: WhatsAppMessageType;
+  content?: string;
+  mediaUrl?: string;
+  mediaType?: string;
+  thumbnailUrl?: string;
+  caption?: string;
+  location?: string;
+  fromNumber?: string;
+  toNumber?: string;
+  providerMessageId?: string;
+  status: WhatsAppMessageStatus;
+  errorMessage?: string;
+  isFromBot: boolean;
+  isTemplate: boolean;
+  metadata?: string;
+  createdAt: string;
+  updatedAt: string;
+  session?: WhatsAppSessionData;
+}
+
+export interface ConversationThreadData {
+  id: string;
+  tenantId: string;
+  sessionId: string;
+  subject?: string;
+  status: ThreadStatus;
+  assignedToId?: string;
+  assignedToName?: string;
+  lastMessageAt: string;
+  messageCount: number;
+  createdAt: string;
+  updatedAt: string;
+  customerName?: string;
+  customerPhone?: string;
+  lastMessage?: string;
+}
+
+export interface WhatsAppTemplateData {
+  id: string;
+  tenantId: string;
+  name: string;
+  category: TemplateCategory;
+  content: string;
+  variables?: string;
+  mediaType?: string;
+  mediaUrl?: string;
+  isActive: boolean;
+  isSystem: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BroadcastLogData {
+  id: string;
+  tenantId: string;
+  title: string;
+  content: string;
+  templateId?: string;
+  recipientCount: number;
+  sentCount: number;
+  deliveredCount: number;
+  failedCount: number;
+  readCount: number;
+  status: BroadcastStatus;
+  scheduledAt?: string;
+  sentAt?: string;
+  completedAt?: string;
+  createdBy?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CustomerFeedbackData {
+  id: string;
+  tenantId: string;
+  customerId: string;
+  customerName?: string;
+  complaintId?: string;
+  workOrderId?: string;
+  rating: number;
+  comment?: string;
+  source: string;
+  createdAt: string;
+}
+
+export interface CustomerReportData {
+  id: string;
+  tenantId: string;
+  customerId: string;
+  customerName?: string;
+  sessionId?: string;
+  type: string;
+  subject: string;
+  description: string;
+  priority: string;
+  status: ReportStatus;
+  resolvedById?: string;
+  resolvedAt?: string;
+  resolutionNotes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WhatsAppDashboardStats {
+  totalSessions: number;
+  activeSessions: number;
+  totalMessages: number;
+  messagesToday: number;
+  inboundToday: number;
+  outboundToday: number;
+  complaintsViaWhatsapp: number;
+  avgResponseTime: number;
+  unresolvedThreads: number;
+  connectionStatus: WhatsAppConnectionStatus;
+  provider: WhatsAppProvider;
+  recentSessions: WhatsAppSessionData[];
+  recentMessages: WhatsAppMessageData[];
+  messageTrend: { date: string; inbound: number; outbound: number }[];
 }
