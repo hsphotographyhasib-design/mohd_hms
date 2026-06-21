@@ -263,12 +263,11 @@ async function createComplaintFromDescription(ctx: StateContext): Promise<Respon
       customerId,
       equipmentId,
       title: `WhatsApp: ${description.slice(0, 80)}`,
-      description,
+      description: `[WhatsApp] ${description}`,
       priority,
       status: 'OPEN',
       category,
       supervisorId: supervisor?.id || null,
-      metadata: JSON.stringify({ source: 'whatsapp', sessionId: ctx.session.id }),
     },
   });
 
@@ -312,11 +311,10 @@ async function handleServiceRequestDesc(ctx: StateContext): Promise<ResponseItem
       tenantId: ctx.tenantId,
       customerId,
       title: `Service Request: ${description.slice(0, 80)}`,
-      description,
+      description: `[WhatsApp Service Request] ${description}`,
       priority: 'medium',
       status: 'OPEN',
       category,
-      metadata: JSON.stringify({ source: 'whatsapp', type: 'service_request', sessionId: ctx.session.id }),
     },
   });
 
@@ -481,11 +479,10 @@ async function handleEmergencyDesc(ctx: StateContext): Promise<ResponseItem[]> {
       tenantId: ctx.tenantId,
       customerId,
       title: `🚨 EMERGENCY: ${description.slice(0, 80)}`,
-      description,
+      description: `[WhatsApp Emergency] ${description}`,
       priority: 'critical',
       status: 'OPEN',
       category: detectCategory(description),
-      metadata: JSON.stringify({ source: 'whatsapp', type: 'emergency', sessionId: ctx.session.id }),
     },
   });
 

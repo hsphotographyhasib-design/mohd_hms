@@ -52,12 +52,12 @@ export async function GET(req: NextRequest) {
       }),
     ]);
 
-    // Complaints created today via WhatsApp
+    // Complaints created today via WhatsApp (check by source in description or title)
     const complaintsToday = await db.complaint.count({
       where: {
         tenantId,
         createdAt: { gte: todayStart },
-        metadata: { contains: 'whatsapp' },
+        description: { contains: 'WhatsApp' },
       },
     });
 

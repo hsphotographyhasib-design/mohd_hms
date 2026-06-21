@@ -1,0 +1,756 @@
+     1→import { db } from '@/lib/db';
+     2→import type { WhatsAppSession, WhatsAppConfig } from '@prisma/client';
+     3→import { renderTemplate } from './provider';
+     4→
+     5→// ============ Types ============
+     6→
+     7→export interface ResponseItem {
+     8→  content: string;
+     9→  messageType?: string;
+    10→  isTemplate?: boolean;
+    11→}
+    12→
+    13→type SessionState = WhatsAppSession['state'];
+    14→
+    15→interface StateContext {
+    16→  session: WhatsAppSession;
+    17→  config: WhatsAppConfig;
+    18→  message: string;
+    19→  tenantId: string;
+    20→  customerId: string | null;
+    21→  stateData: Record<string, unknown>;
+    22→}
+    23→
+    24→// ============ Main Entry Point ============
+    25→
+    26→export async function processIncomingMessage(
+    27→  session: WhatsAppSession,
+    28→  message: string,
+    29→  tenantId: string,
+    30→  _providerMessageId?: string
+    31→): Promise<ResponseItem[]> {
+    32→  // Refresh session from DB to get latest state
+    33→  const freshSession = await db.whatsAppSession.findUnique({
+    34→    where: { id: session.id },
+    35→  });
+    36→  if (!freshSession) return [];
+    37→
+    38→  const config = await db.whatsAppConfig.findUnique({ where: { tenantId } });
+    39→  if (!config) return [];
+    40→
+    41→  const stateData = parseJson(freshSession.stateData);
+    42→  const ctx: StateContext = {
+    43→    session: freshSession,
+    44→    config,
+    45→    message: message.trim(),
+    46→    tenantId,
+    47→    customerId: freshSession.customerId,
+    48→    stateData,
+    49→  };
+    50→
+    51→  // Check for global commands first
+    52→  const cmd = matchCommand(ctx.message);
+    53→  if (cmd) {
+    54→    return handleCommand(cmd, ctx);
+    55→  }
+    56→
+    57→  // Route to state handler
+    58→  const handler = stateHandlers[ctx.session.state as SessionState];
+    59→  if (handler) {
+    60→    return handler(ctx);
+    61→  }
+    62→
+    63→  // Default: return to menu
+    64→  return showMenu(ctx);
+    65→}
+    66→
+    67→// ============ Command Matching ============
+    68→
+    69→function matchCommand(text: string): string | null {
+    70→  const t = text.toLowerCase().trim();
+    71→  const commands: Record<string, string[]> = {
+    72→    menu: ['menu', '0', 'main menu', 'help'],
+    73→    new_complaint: ['1', 'new complaint', 'complaint', 'report issue', 'raise complaint'],
+    74→    service_request: ['2', 'service', 'service request', 'maintenance'],
+    75→    status_query: ['3', 'status', 'complaint status', 'track', 'track complaint'],
+    76→    equipment_list: ['4', 'equipment', 'my equipment', 'assets'],
+    77→    work_order_status: ['5', 'work order', 'wo status', 'work order status'],
+    78→    invoice_query: ['6', 'invoice', 'invoices', 'bill', 'billing'],
+    79→    emergency: ['7', 'emergency', 'urgent', 'sos', 'help emergency'],
+    80→    chat: ['8', 'chat', 'agent', 'speak', 'talk', 'human', 'support', 'customer support', 'live agent'],
+    81→    hi: ['hi', 'hello', 'hey', 'hola', 'good morning', 'good afternoon', 'good evening', 'start'],
+    82→    thanks: ['thanks', 'thank you', 'thx', 'ty', 'appreciate'],
+    83→  };
+    84→
+    85→  for (const [cmd, keywords] of Object.entries(commands)) {
+    86→    if (keywords.includes(t)) return cmd;
+    87→  }
+    88→  return null;
+    89→}
+    90→
+    91→function handleCommand(cmd: string, ctx: StateContext): ResponseItem[] {
+    92→  switch (cmd) {
+    93→    case 'hi':
+    94→      return showWelcome(ctx);
+    95→    case 'menu':
+    96→    case 'help':
+    97→      return showMenu(ctx);
+    98→    case 'new_complaint':
+    99→      return transitionTo(ctx, 'new_complaint_desc', 'Please describe your issue or complaint in detail.\n\nYou can also send a photo/video of the problem.');
+   100→    case 'service_request':
+   101→      return transitionTo(ctx, 'service_request_desc', 'Please describe the service you need.\n\nExamples:\n- AC maintenance\n- Electrical inspection\n- Plumbing repair\n- Generator servicing');
+   102→    case 'status_query':
+   103→      return transitionTo(ctx, 'status_query', 'Please enter your complaint ID (e.g., CMP-XXXXXX) to check its status.');
+   104→    case 'equipment_list':
+   105→      return handleEquipmentList(ctx);
+   106→    case 'work_order_status':
+   107→      return transitionTo(ctx, 'status_query', 'Please enter your complaint or work order ID to check the status.');
+   108→    case 'invoice_query':
+   109→      return handleInvoiceQuery(ctx);
+   110→    case 'emergency':
+   111→      return transitionTo(ctx, 'emergency_desc', '🚨 *EMERGENCY SERVICE*\n\nPlease describe the emergency situation.\nOur team will be alerted immediately.\n\nExpected response time: 15 minutes');
+   112→    case 'chat':
+   113→      return transitionTo(ctx, 'chat', '📞 Connecting you with a customer support agent...\n\nPlease describe your issue and an agent will assist you shortly.');
+   114→    case 'thanks':
+   115→      return [{ content: "You're welcome! Is there anything else I can help you with?\n\nReply *menu* to see all options.", isTemplate: false }];
+   116→    default:
+   117→      return showMenu(ctx);
+   118→  }
+   119→}
+   120→
+   121→// ============ State Handlers ============
+   122→
+   123→const stateHandlers: Record<string, (ctx: StateContext) => Promise<ResponseItem[]>> = {
+   124→  menu: async (ctx) => showMenu(ctx),
+   125→  new_complaint_desc: handleNewComplaintDesc,
+   126→  new_complaint_media: handleNewComplaintMedia,
+   127→  new_complaint_equipment: handleNewComplaintEquipment,
+   128→  service_request_desc: handleServiceRequestDesc,
+   129→  status_query: handleStatusQuery,
+   130→  invoice_query: handleInvoiceQuery,
+   131→  equipment_list: handleEquipmentList,
+   132→  emergency_desc: handleEmergencyDesc,
+   133→  feedback_rating: handleFeedbackRating,
+   134→  feedback_comment: handleFeedbackComment,
+   135→  escalation_desc: handleEscalationDesc,
+   136→  chat: handleChat,
+   137→  appointment_date: handleAppointmentDate,
+   138→  appointment_time: handleAppointmentTime,
+   139→  appointment_location: handleAppointmentLocation,
+   140→};
+   141→
+   142→// ============ Menu & Welcome ============
+   143→
+   144→function showWelcome(ctx: StateContext): ResponseItem[] {
+   145→  const companyName = ctx.config.businessName || 'MOHD.HMS ENTERPRISE';
+   146→  const welcome = renderTemplate(ctx.config.welcomeMessage, { company_name: companyName });
+   147→  updateState(ctx, 'menu', {});
+   148→  return [{ content: welcome, isTemplate: true }];
+   149→}
+   150→
+   151→function showMenu(ctx: StateContext): ResponseItem[] {
+   152→  updateState(ctx, 'menu', {});
+   153→  return [{
+   154→    content: `*Main Menu*\n\n1️⃣ New Complaint\n2️⃣ Service Request\n3️⃣ Complaint Status\n4️⃣ My Equipment\n5️⃣ Work Order Status\n6️⃣ Invoices\n7️⃣ Emergency Service\n8️⃣ Speak to Customer Support\n\nReply with a number or keyword.`,
+   155→    isTemplate: false,
+   156→  }];
+   157→}
+   158→
+   159→// ============ New Complaint Flow ============
+   160→
+   161→async function handleNewComplaintDesc(ctx: StateContext): Promise<ResponseItem[]> {
+   162→  const description = ctx.message;
+   163→  if (description.length < 5) {
+   164→    return [{ content: 'Please provide more details about your issue (at least a few words).' }];
+   165→  }
+   166→
+   167→  // Save description in state data
+   168→  ctx.stateData.complaintDescription = description;
+   169→  updateState(ctx, 'new_complaint_equipment', ctx.stateData);
+   170→
+   171→  // Get customer equipment for selection
+   172→  if (ctx.customerId) {
+   173→    const equipment = await db.equipment.findMany({
+   174→      where: { tenantId: ctx.tenantId, customerId: ctx.customerId, status: 'active' },
+   175→      select: { id: true, name: true, assetNumber: true, category: true },
+   176→      take: 10,
+   177→    });
+   178→
+   179→    if (equipment.length > 0) {
+   180→      let msg = 'Which equipment is this related to?\n\n';
+   181→      equipment.forEach((eq, i) => {
+   182→        msg += `${i + 1}. ${eq.name} (${eq.assetNumber}) - ${eq.category}\n`;
+   183→      });
+   184→      msg += `\n${equipment.length + 1}. None / General\n\nReply with a number.`;
+   185→      ctx.stateData.equipmentList = equipment.map((e) => ({ id: e.id, name: e.name, assetNumber: e.assetNumber }));
+   186→      updateState(ctx, 'new_complaint_equipment', ctx.stateData);
+   187→      return [{ content: msg }];
+   188→    }
+   189→  }
+   190→
+   191→  // No equipment — create complaint directly
+   192→  return createComplaintFromDescription(ctx);
+   193→}
+   194→
+   195→async function handleNewComplaintEquipment(ctx: StateContext): Promise<ResponseItem[]> {
+   196→  const input = ctx.message.trim();
+   197→
+   198→  if (input === '0' || input.toLowerCase() === 'none' || input.toLowerCase() === 'general') {
+   199→    ctx.stateData.equipmentId = null;
+   200→    return createComplaintFromDescription(ctx);
+   201→  }
+   202→
+   203→  const idx = parseInt(input) - 1;
+   204→  const equipmentList = ctx.stateData.equipmentList as Array<{ id: string; name: string }> | undefined;
+   205→
+   206→  if (equipmentList && idx >= 0 && idx < equipmentList.length) {
+   207→    ctx.stateData.equipmentId = equipmentList[idx].id;
+   208→    return createComplaintFromDescription(ctx);
+   209→  }
+   210→
+   211→  // If it doesn't look like a number, treat as "none"
+   212→  if (isNaN(parseInt(input))) {
+   213→    ctx.stateData.equipmentId = null;
+   214→    return createComplaintFromDescription(ctx);
+   215→  }
+   216→
+   217→  return [{ content: 'Invalid selection. Please choose a number from the list or reply "none".' }];
+   218→}
+   219→
+   220→async function handleNewComplaintMedia(_ctx: StateContext): Promise<ResponseItem[]> {
+   221→  // Media messages are handled by the webhook — we store them and continue the flow
+   222→  return [{ content: 'Media received. Continue describing your issue or reply *done* when finished.' }];
+   223→}
+   224→
+   225→async function createComplaintFromDescription(ctx: StateContext): Promise<ResponseItem[]> {
+   226→  const description = ctx.stateData.complaintDescription as string;
+   227→  const equipmentId = ctx.stateData.equipmentId as string | null;
+   228→
+   229→  if (!description) {
+   230→    return showMenu(ctx);
+   231→  }
+   232→
+   233→  // Determine category from keywords
+   234→  const category = detectCategory(description);
+   235→  const priority = ctx.config.defaultPriority || 'medium';
+   236→
+   237→  // Create customer if needed
+   238→  let customerId = ctx.customerId;
+   239→  if (!customerId) {
+   240→    const customer = await db.customer.create({
+   241→      data: {
+   242→        tenantId: ctx.tenantId,
+   243→        name: `WhatsApp User ${ctx.session.phoneNumber.slice(-4)}`,
+   244→        phone: ctx.session.phoneNumber,
+   245→        customerNumber: `CUST-${Math.random().toString(36).toUpperCase().slice(2, 8)}`,
+   246→        isActive: true,
+   247→      },
+   248→    });
+   249→    customerId = customer.id;
+   250→    await db.whatsAppSession.update({
+   251→      where: { id: ctx.session.id },
+   252→      data: { customerId },
+   253→    });
+   254→  }
+   255→
+   256→  // Auto-route: find supervisor by category
+   257→  const supervisor = await findSupervisorByCategory(category, ctx.tenantId);
+   258→
+   259→  // Create complaint
+   260→  const complaint = await db.complaint.create({
+   261→    data: {
+   262→      tenantId: ctx.tenantId,
+   263→      customerId,
+   264→      equipmentId,
+   265→      title: `WhatsApp: ${description.slice(0, 80)}`,
+   266→      description,
+   267→      priority,
+   268→      status: 'OPEN',
+   269→      category,
+   270→      supervisorId: supervisor?.id || null,
+   271→      metadata: JSON.stringify({ source: 'whatsapp', sessionId: ctx.session.id }),
+   272→    },
+   273→  });
+   274→
+   275→  updateState(ctx, 'menu', {});
+   276→
+   277→  return [
+   278→    {
+   279→      content: `✅ *Complaint Created Successfully!*\n\n📋 ID: ${complaint.id.slice(-8).toUpperCase()}\n📝 ${description.slice(0, 100)}${description.length > 100 ? '...' : ''}\n⚠️ Priority: ${priority.toUpperCase()}\n📁 Category: ${category || 'General'}\n\nWe'll process this shortly. Reply *3* to check status.`,
+   280→      isTemplate: false,
+   281→    },
+   282→  ];
+   283→}
+   284→
+   285→// ============ Service Request ============
+   286→
+   287→async function handleServiceRequestDesc(ctx: StateContext): Promise<ResponseItem[]> {
+   288→  const description = ctx.message;
+   289→  if (description.length < 5) {
+   290→    return [{ content: 'Please provide more details about the service you need.' }];
+   291→  }
+   292→
+   293→  let customerId = ctx.customerId;
+   294→  if (!customerId) {
+   295→    const customer = await db.customer.create({
+   296→      data: {
+   297→        tenantId: ctx.tenantId,
+   298→        name: `WhatsApp User ${ctx.session.phoneNumber.slice(-4)}`,
+   299→        phone: ctx.session.phoneNumber,
+   300→        customerNumber: `CUST-${Math.random().toString(36).toUpperCase().slice(2, 8)}`,
+   301→        isActive: true,
+   302→      },
+   303→    });
+   304→    customerId = customer.id;
+   305→    await db.whatsAppSession.update({ where: { id: ctx.session.id }, data: { customerId } });
+   306→  }
+   307→
+   308→  const category = detectCategory(description);
+   309→
+   310→  const complaint = await db.complaint.create({
+   311→    data: {
+   312→      tenantId: ctx.tenantId,
+   313→      customerId,
+   314→      title: `Service Request: ${description.slice(0, 80)}`,
+   315→      description,
+   316→      priority: 'medium',
+   317→      status: 'OPEN',
+   318→      category,
+   319→      metadata: JSON.stringify({ source: 'whatsapp', type: 'service_request', sessionId: ctx.session.id }),
+   320→    },
+   321→  });
+   322→
+   323→  updateState(ctx, 'menu', {});
+   324→
+   325→  return [
+   326→    {
+   327→      content: `✅ *Service Request Created!*\n\n📋 ID: ${complaint.id.slice(-8).toUpperCase()}\n📝 ${description.slice(0, 100)}\n📁 Category: ${category || 'General'}\n\nOur team will review and contact you soon.\nReply *3* to check status.`,
+   328→      isTemplate: false,
+   329→    },
+   330→  ];
+   331→}
+   332→
+   333→// ============ Status Query ============
+   334→
+   335→async function handleStatusQuery(ctx: StateContext): Promise<ResponseItem[]> {
+   336→  const query = ctx.message.trim().toUpperCase();
+   337→
+   338→  // Try to find complaint by ID fragment
+   339→  const complaints = await db.complaint.findMany({
+   340→    where: {
+   341→      tenantId: ctx.tenantId,
+   342→      customerId: ctx.customerId || undefined,
+   343→      OR: [
+   344→        { id: { contains: query } },
+   345→        { title: { contains: query } },
+   346→      ],
+   347→    },
+   348→    orderBy: { createdAt: 'desc' },
+   349→    take: 5,
+   350→    include: {
+   351→      assignedTo: { select: { name: true } },
+   352→    },
+   353→  });
+   354→
+   355→  if (complaints.length === 0) {
+   356→    updateState(ctx, 'menu', {});
+   357→    return [{ content: 'No complaints found matching your query.\n\nPlease check the ID and try again, or reply *menu*.' }];
+   358→  }
+   359→
+   360→  updateState(ctx, 'menu', {});
+   361→
+   362→  const statusEmoji: Record<string, string> = {
+   363→    OPEN: '🟡',
+   364→    ASSIGNED: '🔵',
+   365→    IN_PROGRESS: '🟠',
+   366→    RESOLVED: '🟢',
+   367→    CLOSED: '✅',
+   368→  };
+   369→
+   370→  let msg = `📋 *Found ${complaints.length} complaint(s):*\n\n`;
+   371→  complaints.forEach((c, i) => {
+   372→    const emoji = statusEmoji[c.status] || '⚪';
+   373→    const tech = c.assignedTo ? `🔧 ${c.assignedTo.name}` : '';
+   374→    msg += `${emoji} *${c.id.slice(-8).toUpperCase()}* — ${c.status}\n   ${c.title.slice(0, 60)}\n   ${tech}\n\n`;
+   375→  });
+   376→
+   377→  msg += 'Reply *menu* for more options.';
+   378→  return [{ content: msg }];
+   379→}
+   380→
+   381→// ============ Invoice Query ============
+   382→
+   383→async function handleInvoiceQuery(ctx: StateContext): Promise<ResponseItem[]> {
+   384→  if (!ctx.customerId) {
+   385→    return [{ content: 'Please register first by creating a complaint.\nReply *1* to create a new complaint.' }];
+   386→  }
+   387→
+   388→  const invoices = await db.invoice.findMany({
+   389→    where: { tenantId: ctx.tenantId, customerId: ctx.customerId },
+   390→    orderBy: { createdAt: 'desc' },
+   391→    take: 5,
+   392→  });
+   393→
+   394→  updateState(ctx, 'menu', {});
+   395→
+   396→  if (invoices.length === 0) {
+   397→    return [{ content: 'No invoices found for your account.\nReply *menu* for more options.' }];
+   398→  }
+   399→
+   400→  const statusEmoji: Record<string, string> = {
+   401→    DRAFT: '📝',
+   402→    PENDING: '🟡',
+   403→    APPROVED: '🔵',
+   404→    PAID: '✅',
+   405→    CANCELLED: '❌',
+   406→    OVERDUE: '🔴',
+   407→  };
+   408→
+   409→  let msg = `💰 *Your Recent Invoices:*\n\n`;
+   410→  invoices.forEach((inv) => {
+   411→    const emoji = statusEmoji[inv.status] || '⚪';
+   412→    msg += `${emoji} *${inv.invoiceNumber}*\n   Amount: $${inv.total.toFixed(2)}\n   Status: ${inv.status}\n   Due: ${inv.dueDate ? new Date(inv.dueDate).toLocaleDateString() : 'N/A'}\n\n`;
+   413→  });
+   414→
+   415→  msg += 'Reply *menu* for more options.';
+   416→  return [{ content: msg }];
+   417→}
+   418→
+   419→// ============ Equipment List ============
+   420→
+   421→async function handleEquipmentList(ctx: StateContext): Promise<ResponseItem[]> {
+   422→  if (!ctx.customerId) {
+   423→    return [{ content: 'Please register first by creating a complaint.\nReply *1* to create a new complaint.' }];
+   424→  }
+   425→
+   426→  const equipment = await db.equipment.findMany({
+   427→    where: { tenantId: ctx.tenantId, customerId: ctx.customerId },
+   428→    select: { name: true, assetNumber: true, category: true, status: true, location: true },
+   429→    take: 15,
+   430→  });
+   431→
+   432→  updateState(ctx, 'menu', {});
+   433→
+   434→  if (equipment.length === 0) {
+   435→    return [{ content: 'No equipment registered to your account.\nReply *menu* for more options.' }];
+   436→  }
+   437→
+   438→  const statusEmoji: Record<string, string> = {
+   439→    active: '🟢',
+   440→    inactive: '🔴',
+   441→    under_maintenance: '🟠',
+   442→    decommissioned: '⚫',
+   443→  };
+   444→
+   445→  let msg = `🔧 *Your Equipment (${equipment.length}):*\n\n`;
+   446→  equipment.forEach((eq) => {
+   447→    const emoji = statusEmoji[eq.status] || '⚪';
+   448→    msg += `${emoji} *${eq.assetNumber}*\n   ${eq.name} (${eq.category})\n   Location: ${eq.location || 'N/A'}\n\n`;
+   449→  });
+   450→
+   451→  msg += 'Reply *menu* for more options.';
+   452→  return [{ content: msg }];
+   453→}
+   454→
+   455→// ============ Emergency ============
+   456→
+   457→async function handleEmergencyDesc(ctx: StateContext): Promise<ResponseItem[]> {
+   458→  const description = ctx.message;
+   459→  if (description.length < 5) {
+   460→    return [{ content: 'Please describe the emergency in detail.' }];
+   461→  }
+   462→
+   463→  let customerId = ctx.customerId;
+   464→  if (!customerId) {
+   465→    const customer = await db.customer.create({
+   466→      data: {
+   467→        tenantId: ctx.tenantId,
+   468→        name: `WhatsApp User ${ctx.session.phoneNumber.slice(-4)}`,
+   469→        phone: ctx.session.phoneNumber,
+   470→        customerNumber: `CUST-${Math.random().toString(36).toUpperCase().slice(2, 8)}`,
+   471→        isActive: true,
+   472→      },
+   473→    });
+   474→    customerId = customer.id;
+   475→    await db.whatsAppSession.update({ where: { id: ctx.session.id }, data: { customerId } });
+   476→  }
+   477→
+   478→  // Create high-priority complaint
+   479→  const complaint = await db.complaint.create({
+   480→    data: {
+   481→      tenantId: ctx.tenantId,
+   482→      customerId,
+   483→      title: `🚨 EMERGENCY: ${description.slice(0, 80)}`,
+   484→      description,
+   485→      priority: 'critical',
+   486→      status: 'OPEN',
+   487→      category: detectCategory(description),
+   488→      metadata: JSON.stringify({ source: 'whatsapp', type: 'emergency', sessionId: ctx.session.id }),
+   489→    },
+   490→  });
+   491→
+   492→  // Create escalation report
+   493→  await db.customerReport.create({
+   494→    data: {
+   495→      tenantId: ctx.tenantId,
+   496→      customerId,
+   497→      sessionId: ctx.session.id,
+   498→      type: 'escalation',
+   499→      subject: `Emergency via WhatsApp: ${description.slice(0, 60)}`,
+   500→      description,
+   501→      priority: 'high',
+   502→      status: 'OPEN',
+   503→    },
+   504→  });
+   505→
+   506→  updateState(ctx, 'menu', {});
+   507→
+   508→  const responses: ResponseItem[] = [
+   509→    {
+   510→      content: `🚨 *EMERGENCY ACKNOWLEDGED*\n\nYour emergency report has been received.\n\n📋 ID: ${complaint.id.slice(-8).toUpperCase()}\n⚠️ Priority: CRITICAL\n\nOur emergency response team has been alerted.\nExpected response time: 15 minutes\n\nIf you need immediate assistance, call our emergency line.`,
+   511→      isTemplate: false,
+   512→    },
+   513→  ];
+   514→
+   515→  // Send to emergency numbers if configured
+   516→  if (ctx.config.emergencyNumbers) {
+   517→    try {
+   518→      const numbers = JSON.parse(ctx.config.emergencyNumbers) as string[];
+   519→      if (numbers.length > 0) {
+   520→        responses.push({
+   521→          content: `⚠️ Emergency alert from ${ctx.session.phoneNumber}:\n\n${description}\n\nComplaint: ${complaint.id}`,
+   522→          isTemplate: false,
+   523→        });
+   524→      }
+   525→    } catch {
+   526→      // Invalid JSON in emergency numbers
+   527→    }
+   528→  }
+   529→
+   530→  return responses;
+   531→}
+   532→
+   533→// ============ Feedback ============
+   534→
+   535→async function handleFeedbackRating(ctx: StateContext): Promise<ResponseItem[]> {
+   536→  const rating = parseInt(ctx.message.trim());
+   537→
+   538→  if (isNaN(rating) || rating < 1 || rating > 5) {
+   539→    return [{ content: 'Please reply with a number between 1 and 5.\n1 = Very Poor, 5 = Excellent' }];
+   540→  }
+   541→
+   542→  ctx.stateData.feedbackRating = rating;
+   543→
+   544→  if (rating >= 4) {
+   545→    // Happy path — optional comment
+   546→    updateState(ctx, 'feedback_comment', ctx.stateData);
+   547→    return [{ content: `Thank you for the ${rating} ⭐ rating!\n\nWould you like to leave a comment? (optional — reply *skip* to finish)` }];
+   548→  }
+   549→
+   550→  // Low rating — ask for comment
+   551→  updateState(ctx, 'feedback_comment', ctx.stateData);
+   552→  return [{ content: `We're sorry for the ${rating} ⭐ experience.\n\nPlease tell us what went wrong so we can improve.` }];
+   553→}
+   554→
+   555→async function handleFeedbackComment(ctx: StateContext): Promise<ResponseItem[]> {
+   556→  const rating = ctx.stateData.feedbackRating as number;
+   557→  const comment = ctx.message.toLowerCase().trim() === 'skip' ? null : ctx.message;
+   558→
+   559→  // Save feedback if we have a complaint ID
+   560→  const complaintId = ctx.stateData.complaintId as string | undefined;
+   561→  if (complaintId && ctx.customerId) {
+   562→    try {
+   563→      await db.customerFeedback.create({
+   564→        data: {
+   565→          tenantId: ctx.tenantId,
+   566→          customerId: ctx.customerId,
+   567→          complaintId,
+   568→          rating,
+   569→          comment,
+   570→          source: 'whatsapp',
+   571→        },
+   572→      });
+   573→
+   574→      // Update complaint with rating
+   575→      await db.complaint.update({
+   576→        where: { id: complaintId },
+   577→        data: { customerRating: rating, customerFeedback: comment },
+   578→      });
+   579→    } catch {
+   580→      // Feedback save failed — non-critical
+   581→    }
+   582→  }
+   583→
+   584→  updateState(ctx, 'menu', {});
+   585→
+   586→  if (rating >= 4) {
+   587→    return [{ content: 'Thank you for your feedback! 🎉\nWe appreciate your time.\n\nReply *menu* for more options.' }];
+   588→  }
+   589→
+   590→  return [{ content: 'Thank you for your feedback. We take your concerns seriously and will work to improve.\n\nReply *menu* for more options.' }];
+   591→}
+   592→
+   593→// ============ Escalation ============
+   594→
+   595→async function handleEscalationDesc(ctx: StateContext): Promise<ResponseItem[]> {
+   596→  const description = ctx.message;
+   597→  if (description.length < 5) {
+   598→    return [{ content: 'Please describe your concern in detail.' }];
+   599→  }
+   600→
+   601→  if (ctx.customerId) {
+   602→    await db.customerReport.create({
+   603→      data: {
+   604→        tenantId: ctx.tenantId,
+   605→        customerId: ctx.customerId,
+   606→        sessionId: ctx.session.id,
+   607→        type: 'escalation',
+   608→        subject: `Escalation via WhatsApp`,
+   609→        description,
+   610→        priority: 'high',
+   611→        status: 'OPEN',
+   612→      },
+   613→    });
+   614→  }
+   615→
+   616→  updateState(ctx, 'menu', {});
+   617→  return [{ content: '✅ Your escalation has been submitted. A manager will review it and get back to you.\n\nReply *menu* for more options.' }];
+   618→}
+   619→
+   620→// ============ Chat ============
+   621→
+   622→async function handleChat(ctx: StateContext): Promise<ResponseItem[]> {
+   623→  // In chat mode, we just acknowledge and wait for agent
+   624→  // The message is already saved by the webhook
+   625→  // Agent will respond via the admin panel
+   626→  return [{
+   627→    content: 'Your message has been received. An agent will respond shortly.\n\nReply *menu* to return to the main menu.',
+   628→  }];
+   629→}
+   630→
+   631→// ============ Appointment Flow ============
+   632→
+   633→async function handleAppointmentDate(ctx: StateContext): Promise<ResponseItem[]> {
+   634→  const dateStr = ctx.message.trim();
+   635→  // Try to parse the date
+   636→  const parsed = new Date(dateStr);
+   637→  if (isNaN(parsed.getTime())) {
+   638→    return [{ content: 'Please provide a valid date (e.g., 2024-12-25 or "next Monday").' }];
+   639→  }
+   640→
+   641→  ctx.stateData.appointmentDate = parsed.toISOString().split('T')[0];
+   642→  updateState(ctx, 'appointment_time', ctx.stateData);
+   643→  return [{ content: `Date: ${parsed.toLocaleDateString()}\n\nPlease provide your preferred time (e.g., 10:00 AM, 2:30 PM).` }];
+   644→}
+   645→
+   646→async function handleAppointmentTime(ctx: StateContext): Promise<ResponseItem[]> {
+   647→  const time = ctx.message.trim();
+   648→  ctx.stateData.appointmentTime = time;
+   649→  updateState(ctx, 'appointment_location', ctx.stateData);
+   650→  return [{ content: `Time: ${time}\n\nPlease provide the location/address for the appointment.` }];
+   651→}
+   652→
+   653→async function handleAppointmentLocation(ctx: StateContext): Promise<ResponseItem[]> {
+   654→  const location = ctx.message.trim();
+   655→  const date = ctx.stateData.appointmentDate as string;
+   656→  const time = ctx.stateData.appointmentTime as string;
+   657→
+   658→  updateState(ctx, 'menu', {});
+   659→
+   660→  // Store as a notification/work order for the team
+   661→  if (ctx.customerId) {
+   662→    await db.notification.create({
+   663→      data: {
+   664→        tenantId: ctx.tenantId,
+   665→        type: 'appointment',
+   666→        title: 'New Appointment Request via WhatsApp',
+   667→        message: `Customer: ${ctx.session.phoneNumber}\nDate: ${date}\nTime: ${time}\nLocation: ${location}`,
+   668→        data: JSON.stringify({ date, time, location, sessionId: ctx.session.id, source: 'whatsapp' }),
+   669→      },
+   670→    });
+   671→  }
+   672→
+   673→  return [{
+   674→    content: `✅ *Appointment Request Submitted*\n\n📅 Date: ${date}\n🕐 Time: ${time}\n📍 Location: ${location}\n\nWe will confirm your appointment shortly.\nReply *menu* for more options.`,
+   675→  }];
+   676→}
+   677→
+   678→// ============ Helpers ============
+   679→
+   680→function transitionTo(ctx: StateContext, newState: string, message: string): ResponseItem[] {
+   681→  updateState(ctx, newState, ctx.stateData);
+   682→  return [{ content: message }];
+   683→}
+   684→
+   685→function updateState(ctx: StateContext, state: string, stateData: Record<string, unknown>): void {
+   686→  // Fire and forget — don't await in state handlers
+   687→  db.whatsAppSession.update({
+   688→    where: { id: ctx.session.id },
+   689→    data: {
+   690→      state,
+   691→      stateData: Object.keys(stateData).length > 0 ? JSON.stringify(stateData) : null,
+   692→    },
+   693→  }).catch(() => {});
+   694→}
+   695→
+   696→function parseJson(str: string | null | undefined): Record<string, unknown> {
+   697→  if (!str) return {};
+   698→  try {
+   699→    return JSON.parse(str) as Record<string, unknown>;
+   700→  } catch {
+   701→    return {};
+   702→  }
+   703→}
+   704→
+   705→function detectCategory(text: string): string {
+   706→  const t = text.toLowerCase();
+   707→  const patterns: Record<string, string[]> = {
+   708→    HVAC: ['ac', 'air con', 'aircond', 'cooling', 'heating', 'thermostat', 'duct', 'ventilation', 'fan', 'compressor', 'refrigeration', 'chiller', 'furnace'],
+   709→    Electrical: ['electric', 'power', 'light', 'switch', 'outlet', 'circuit', 'wiring', 'generator', 'ups', 'voltage', 'fuse', 'panel', 'breaker'],
+   710→    Plumbing: ['plumb', 'pipe', 'drain', 'leak', 'water', 'faucet', 'toilet', 'sewage', 'bathroom', 'sink', 'valve', 'pump', 'tank'],
+   711→    Mechanical: ['mechanical', 'motor', 'pump', 'belt', 'bearing', 'gear', 'shaft', 'hydraulic', 'pneumatic', 'elevator', 'lift', 'escalator'],
+   712→    FireProtection: ['fire', 'alarm', 'sprinkler', 'extinguisher', 'smoke', 'detector', 'fire suppression', 'fire escape'],
+   713→  };
+   714→
+   715→  for (const [category, keywords] of Object.entries(patterns)) {
+   716→    if (keywords.some((kw) => t.includes(kw))) {
+   717→      return category;
+   718→    }
+   719→  }
+   720→
+   721→  return 'General';
+   722→}
+   723→
+   724→async function findSupervisorByCategory(category: string, tenantId: string) {
+   725→  // Find a supervisor or manager in the same department (or any active supervisor)
+   726→  const supervisors = await db.user.findMany({
+   727→    where: {
+   728→      tenantId,
+   729→      role: { in: ['supervisor', 'manager'] },
+   730→      isActive: true,
+   731→    },
+   732→    take: 5,
+   733→  });
+   734→
+   735→  if (supervisors.length === 0) {
+   736→    // Fallback: find any admin
+   737→    const admins = await db.user.findMany({
+   738→      where: { tenantId, role: 'admin', isActive: true },
+   739→      take: 1,
+   740→    });
+   741→    return admins[0] || null;
+   742→  }
+   743→
+   744→  // Simple round-robin based on current complaint count
+   745→  const supervisorCounts = await Promise.all(
+   746→    supervisors.map(async (s) => {
+   747→      const count = await db.complaint.count({
+   748→        where: { tenantId, supervisorId: s.id, status: { in: ['OPEN', 'ASSIGNED', 'IN_PROGRESS'] } },
+   749→      });
+   750→      return { supervisor: s, count };
+   751→    })
+   752→  );
+   753→
+   754→  supervisorCounts.sort((a, b) => a.count - b.count);
+   755→  return supervisorCounts[0]?.supervisor || null;
+   756→}
