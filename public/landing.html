@@ -453,17 +453,17 @@ footer{background:var(--forest-2);color:rgba(247,248,243,.78);padding:80px 0 30p
 <section class="hero" id="home"><div class="container hero-grid">
   <div class="reveal in">
     <div class="kicker">Facility maintenance &amp; engineering</div>
-    <h1>Engineered upkeep for <em>serious facilities</em>.</h1>
-    <p class="lead">MOHD.HMS ENTERPRISE keeps buildings and plants running — HVAC, electrical, plumbing, mechanical and fire protection, delivered by certified teams and tracked through a modern maintenance system.</p>
+    <h1 id="heroHeadline">Engineered upkeep for <em>serious facilities</em>.</h1>
+    <p class="lead" id="heroSub">MOHD.HMS ENTERPRISE keeps buildings and plants running — HVAC, electrical, plumbing, mechanical and fire protection, delivered by certified teams and tracked through a modern maintenance system.</p>
     <div class="hero-cta">
-      <a href="#contact" class="btn btn-fill">Contact us
+      <a href="#contact" id="heroCta1" class="btn btn-fill">Contact us
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      <a href="#services" class="btn btn-out">Our services</a>
+      <a href="#services" id="heroCta2" class="btn btn-out">Our services</a>
     </div>
     <div class="hero-meta">
-      <div class="m"><div class="mn">15+</div><div class="ml">Years experience</div></div>
-      <div class="m"><div class="mn">24/7</div><div class="ml">Emergency cover</div></div>
-      <div class="m"><div class="mn">1,200+</div><div class="ml">Assets maintained</div></div>
+      <div class="m"><div class="mn" id="hs1">15+</div><div class="ml" id="hl1">Years experience</div></div>
+      <div class="m"><div class="mn" id="hs2">24/7</div><div class="ml" id="hl2">Emergency cover</div></div>
+      <div class="m"><div class="mn" id="hs3">1,200+</div><div class="ml" id="hl3">Assets maintained</div></div>
     </div>
   </div>
   <div class="hero-figs reveal in d2">
@@ -478,7 +478,7 @@ footer{background:var(--forest-2);color:rgba(247,248,243,.78);padding:80px 0 30p
     </div>
     <div class="hero-chip">
       <span class="hc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></span>
-      <div><b>98% SLA met</b><span>across active contracts</span></div>
+      <div><b id="chipB">98% SLA met</b><span id="chipS">across active contracts</span></div>
     </div>
   </div>
 </div></section>
@@ -505,8 +505,8 @@ footer{background:var(--forest-2);color:rgba(247,248,243,.78);padding:80px 0 30p
     </div>
     <div class="reveal d1">
       <p class="about-lead">We are a multi-disciplinary engineering and maintenance company serving commercial, industrial, healthcare and government facilities.</p>
-      <p class="about-body">From routine preventive maintenance to emergency breakdowns, our certified technicians respond fast and document every job through our maintenance management system — so clients always know exactly what was done, when, and by whom.</p>
-      <div class="mvv">
+      <p class="about-body" id="aboutDesc">From routine preventive maintenance to emergency breakdowns, our certified technicians respond fast and document every job through our maintenance management system — so clients always know exactly what was done, when, and by whom.</p>
+      <div class="mvv" id="mvvContainer">
         <div class="mvv-item"><span class="k">Mission</span><p>To deliver reliable, safe and efficient maintenance that protects our clients' assets and uptime.</p></div>
         <div class="mvv-item"><span class="k">Vision</span><p>To be the region's most trusted facility maintenance and engineering partner.</p></div>
         <div class="mvv-item"><span class="k">Values</span><p><b>Safety first.</b> Integrity, craftsmanship, responsiveness and continuous improvement.</p></div>
@@ -707,7 +707,7 @@ footer{background:var(--forest-2);color:rgba(247,248,243,.78);padding:80px 0 30p
     <div class="foot-grid">
       <div class="foot-brand">
         <div class="brand"><span class="bmark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9z"/><path d="M12 7v6M9 9l3-2 3 2"/></svg></span><span><span class="bname">MOHD.HMS</span><br><span class="bsub" style="color:rgba(247,248,243,.45)">Enterprise</span></span></div>
-        <p>Facility maintenance and engineering services — keeping your assets safe, compliant and running.</p>
+        <p id="footerDesc">Facility maintenance and engineering services — keeping your assets safe, compliant and running.</p>
         <div class="foot-c">
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg> Bandar Seri Begawan, Brunei</span>
           <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-14.6-9 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.4 2.4 1.3 4 .2 5.2L8.1 9.9a16 16 0 0 0 6 6"/></svg> +673 000 0000</span>
@@ -826,20 +826,147 @@ const MHMS=(()=>{
   const fl=(w,h,kw,lk,sd)=>`<img src="https://loremflickr.com/${w}/${h}/${kw}?lock=${lk}" data-fb="https://picsum.photos/seed/${sd}/${w}/${h}" loading="lazy" onerror="imgErr(this)" alt="">`;
   const up=k=>`<img src="${(window.UP&&window.UP[k])||''}" loading="lazy" alt="">`;
 
+  // CMS data — populated from API, falls back to defaults
+  let cmsData = null;
+
+  async function loadCMS(){
+    try {
+      const res = await fetch('/api/cms/public/landing');
+      if (!res.ok) return;
+      const json = await res.json();
+      if (json.success && json.data) cmsData = json.data;
+    } catch(e) { /* silent — use defaults */ }
+  }
+
+  function getServices(){
+    if (!cmsData || !cmsData.services || !cmsData.services.length) return caps;
+    const grouped = {};
+    cmsData.services.forEach(s => {
+      const cat = s.category || 'Services';
+      if (!grouped[cat]) grouped[cat] = [];
+      const iconPath = I[s.icon] || I.gear;
+      grouped[cat].push([s.name, s.description || '', iconPath]);
+    });
+    return Object.entries(grouped);
+  }
+
+  function getIndustries(){
+    if (!cmsData || !cmsData.industries || !cmsData.industries.length) return industries;
+    return cmsData.industries.map(i => [i.name, I[i.icon] || I.building]);
+  }
+
+  function getTestimonials(){
+    if (!cmsData || !cmsData.testimonials || !cmsData.testimonials.length) return quotes;
+    return cmsData.testimonials.map(t => ({
+      q: t.comment,
+      n: t.customerName,
+      r: t.company,
+      im: Math.floor(Math.random() * 50) + 1
+    }));
+  }
+
+  function getProjects(){
+    if (!cmsData || !cmsData.projects || !cmsData.projects.length) return projects;
+    return cmsData.projects.map(p => ({
+      t: p.title,
+      m: p.description || '',
+      cat: p.category || 'other',
+      st: p.completionStatus === 'completed' ? 'done' : 'live',
+      meta: [p.category ? p.category.charAt(0).toUpperCase() + p.category.slice(1) : '', p.completionStatus === 'completed' ? 'Completed' : 'Ongoing'],
+      kw: (p.category || 'maintenance') + ',project',
+      lk: 80 + Math.floor(Math.random() * 20),
+      sd: 'p' + (p.displayOrder || 1)
+    }));
+  }
+
+  function getBlogs(){
+    if (!cmsData || !cmsData.blogs || !cmsData.blogs.length) return posts;
+    return cmsData.blogs.map((b, i) => [
+      b.category?.name || 'Insights',
+      b.title,
+      b.excerpt || '',
+      b.publishedAt ? new Date(b.publishedAt).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) + ' · ' + Math.ceil((b.excerpt || '').split(' ').length / 200) + ' min read' : '',
+      (b.category?.name || 'blog').toLowerCase(),
+      null, null, null
+    ]);
+  }
+
+  function getCareers(){
+    if (!cmsData || !cmsData.careers || !cmsData.careers.length) return vacs;
+    return cmsData.careers.map(c => [c.title, c.type === 'fulltime' ? 'Full-time · ' + (c.department || '') : c.type]);
+  }
+
+  function getAbout(){
+    if (!cmsData || !cmsData.about) return null;
+    return cmsData.about;
+  }
+
+  function getHero(){
+    if (!cmsData || !cmsData.hero) return null;
+    return cmsData.hero;
+  }
+
+  function getFooter(){
+    if (!cmsData || !cmsData.footer) return null;
+    return cmsData.footer;
+  }
+
   function build(){
+    // Hero — use CMS if available
+    const hero = getHero();
+    if (hero) {
+      const h1 = $('#heroHeadline');
+      const sub = $('#heroSub');
+      if (h1) h1.innerHTML = hero.headline;
+      if (sub) sub.textContent = hero.subheadline || '';
+      const cta1 = $('#heroCta1');
+      if (cta1 && hero.cta1Text) { cta1.textContent = hero.cta1Text; if (hero.cta1Link) cta1.href = hero.cta1Link; }
+      const cta2 = $('#heroCta2');
+      if (cta2 && hero.cta2Text) { cta2.textContent = hero.cta2Text; if (hero.cta2Link) cta2.href = hero.cta2Link; }
+      if (hero.stat1Value) { const e = $('#hs1'); if(e) e.textContent = hero.stat1Value; const l = $('#hl1'); if(l) l.textContent = hero.stat1Label || ''; }
+      if (hero.stat2Value) { const e = $('#hs2'); if(e) e.textContent = hero.stat2Value; const l = $('#hl2'); if(l) l.textContent = hero.stat2Label || ''; }
+      if (hero.stat3Value) { const e = $('#hs3'); if(e) e.textContent = hero.stat3Value; const l = $('#hl3'); if(l) l.textContent = hero.stat3Label || ''; }
+      if (hero.chipText) { const b = $('#chipB'); if(b) b.textContent = hero.chipText; const s = $('#chipS'); if(s) s.textContent = hero.chipSubtext || ''; }
+    }
+
+    // About — use CMS if available
+    const about = getAbout();
+    if (about) {
+      const el = $('#aboutDesc');
+      if (el) el.textContent = about.description || '';
+      const mvv = $('#mvvContainer');
+      if (mvv) {
+        mvv.innerHTML = '';
+        [['Mission', about.mission], ['Vision', about.vision], ['Values', about.values]].forEach(([k, v]) => {
+          if (v) mvv.innerHTML += `<div class="mvv-item"><span class="k">${k}</span><p>${v}</p></div>`;
+        });
+        if (!about.mission && !about.vision && !about.values) mvv.innerHTML = '';
+      }
+    }
+
+    // Sectors
     $('#sectors').innerHTML=sectors.map(([t,p])=>`<span>${ic(p,1.9)}${t}</span>`).join('');
     $('#whyRow').innerHTML=why.map(([t,d,p],i)=>`<div class="why-cell reveal ${i?'d'+i:''}"><span class="wi">${ic(p)}</span><b>${t}</b><p>${d}</p></div>`).join('');
-    $('#capGrid').innerHTML=caps.map(([cl,items])=>`<div class="cap-col reveal"><div class="cl">${cl}</div>${items.map(([n,d,p])=>`<div class="cap-item"><span class="cci">${ic(p)}</span><div><b>${n}</b><span>${d}</span></div></div>`).join('')}</div>`).join('');
-    $('#indGrid').innerHTML=industries.map(([t,p],i)=>`<div class="ind reveal ${i%4?'d'+(i%4):''}"><span class="ii">${ic(p)}</span><span>${t}</span></div>`).join('');
+
+    // Services — CMS-driven
+    const svcData = getServices();
+    $('#capGrid').innerHTML=svcData.map(([cl,items])=>`<div class="cap-col reveal"><div class="cl">${cl}</div>${items.map(([n,d,p])=>`<div class="cap-item"><span class="cci">${ic(p)}</span><div><b>${n}</b><span>${d}</span></div></div>`).join('')}</div>`).join('');
+
+    // Industries — CMS-driven
+    const indData = getIndustries();
+    $('#indGrid').innerHTML=indData.map(([t,p],i)=>`<div class="ind reveal ${i%4?'d'+(i%4):''}"><span class="ii">${ic(p)}</span><span>${t}</span></div>`).join('');
+
     $('#opsStats').innerHTML=opsStats.map(([n,l])=>`<div class="ops-stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
     const max=Math.max(...[62,74,58,83,71,92,88]);const data=[['Sep',62],['Oct',74],['Nov',58],['Dec',83],['Jan',71],['Feb',92],['Mar',88]];
     $('#bars').innerHTML=data.map(([m,v])=>`<div class="col"><div class="bar" style="height:${Math.round(v/max*120)}px"></div><div class="bl">${m}</div></div>`).join('');
     $('#feed').innerHTML=feed.map(([t,c,tm])=>`<div class="frow"><span class="fk" style="background:${c}"></span>${t}<small>${tm}</small></div>`).join('');
     $('#flow').innerHTML=steps.map(([t,d,p],i)=>`<div class="fstep reveal"><span class="num">0${i+1}</span><span class="fic">${ic(p)}</span><h4>${t}</h4><p>${d}</p></div>`).join('');
-    // projects
+
+    // Projects — CMS-driven
+    const projData = getProjects();
     const cats=[['all','All'],['hvac','HVAC'],['electrical','Electrical'],['fire','Fire'],['civil','Civil']];
     $('#pfilter').innerHTML=cats.map(([c,l],i)=>`<button class="${i?'':'active'}" data-c="${c}">${l}</button>`).join('');
-    $('#projGrid').innerHTML=projects.map((p,i)=>{
+    $('#projGrid').innerHTML=projData.map((p,i)=>{
       const media=`<div class="fig"><span class="ico">${ic(IMG,1.4)}</span>${p.up?up(p.up):fl(600,450,p.kw,p.lk,p.sd)}</div>`;
       return `<article class="proj reveal" data-cat="${p.cat}"><div style="position:relative"><span class="ptag">${p.meta[0]}</span><span class="pst ${p.st}">${p.st==='done'?'Completed':'Ongoing'}</span>${media}</div><h4>${p.t}</h4><div class="pm">${p.m}</div><div class="pmeta"><span>${p.meta[0]}</span><span>${p.meta[1]}</span></div></article>`;
     }).join('');
@@ -848,19 +975,55 @@ const MHMS=(()=>{
     $('#pfList').innerHTML=pfeats.map(([t,p])=>`<div class="pf"><span class="pi">${ic(p)}</span><b>${t}</b></div>`).join('');
     $('#digGrid').innerHTML=dig.map(([t,d,p],i)=>`<div class="dig reveal ${i%4?'d'+(i%4):''}"><span class="di">${ic(p)}</span><b>${t}</b><p>${d}</p></div>`).join('');
     $('#teamGrid').innerHTML=team.map(([n,r,im,d],i)=>`<div class="member reveal ${i?'d'+i:''}"><div class="fig"><span class="ico">${ic(I.user,1.5)}</span><img src="https://i.pravatar.cc/320?img=${im}" data-fb="https://picsum.photos/seed/tm${im}/320/360" loading="lazy" onerror="imgErr(this)" alt="${n}"></div><b>${n}</b><div class="role">${r}</div><p>${d}</p></div>`).join('');
-    // quotes
-    $('#quotes').innerHTML=quotes.map((q,i)=>`<div class="qbody ${i?'':'show'}" data-q="${i}"><blockquote>${q.q}</blockquote><div class="qwho"><img src="https://i.pravatar.cc/120?img=${q.im}" data-fb="https://picsum.photos/seed/q${q.im}/120/120" onerror="imgErr(this)" alt="${q.n}"><div style="text-align:left"><b>${q.n}</b><span>${q.r}</span></div></div></div>`).join('');
-    $('#qnav').innerHTML=quotes.map((_,i)=>`<button class="qdot ${i?'':'active'}" data-i="${i}" aria-label="Quote ${i+1}"></button>`).join('');
+
+    // Testimonials — CMS-driven
+    const qData = getTestimonials();
+    $('#quotes').innerHTML=qData.map((q,i)=>`<div class="qbody ${i?'':'show'}" data-q="${i}"><blockquote>${q.q}</blockquote><div class="qwho"><img src="https://i.pravatar.cc/120?img=${q.im}" data-fb="https://picsum.photos/seed/q${q.im}/120/120" onerror="imgErr(this)" alt="${q.n}"><div style="text-align:left"><b>${q.n}</b><span>${q.r}</span></div></div></div>`).join('');
+    $('#qnav').innerHTML=qData.map((_,i)=>`<button class="qdot ${i?'':'active'}" data-i="${i}" aria-label="Quote ${i+1}"></button>`).join('');
     let qi=0,qt;const go=i=>{qi=i;$$('.qbody').forEach(e=>e.classList.remove('show'));$$('.qdot').forEach(e=>e.classList.remove('active'));$(`.qbody[data-q="${i}"]`).classList.add('show');$$('.qdot')[i].classList.add('active');};
     $('#qnav').addEventListener('click',e=>{const d=e.target.closest('.qdot');if(d){go(+d.dataset.i);reset();}});
-    const reset=()=>{clearInterval(qt);qt=setInterval(()=>go((qi+1)%quotes.length),5500);};reset();
-    // blog
-    const f=posts[0];
-    $('#feature').innerHTML=`<div class="fig imgrise"><span class="ico">${ic(IMG,1.4)}</span>${f[7]?up(f[7]):fl(820,460,f[4],f[5],f[6])}</div><span class="cat">${f[0]}</span><h3>${f[1]}</h3><p>${f[2]}</p><div class="meta">${f[3]}</div>`;
-    $('#blogSide').innerHTML=posts.slice(1).map(p=>`<div class="mini"><div class="fig"><span class="ico">${ic(IMG,1.4)}</span>${p[7]?up(p[7]):fl(200,200,p[4],p[5],p[6])}</div><div><span class="cat">${p[0]}</span><h4>${p[1]}</h4><div class="meta">${p[3]}</div></div></div>`).join('');
-    // careers
-    $('#vacancies').innerHTML=vacs.map(([t,m])=>`<div class="vac reveal"><div><b>${t}</b><br><span>${m}</span></div><a href="#contact" class="btn btn-out btn-sm vb">Apply now</a></div>`).join('');
+    const reset=()=>{clearInterval(qt);qt=setInterval(()=>go((qi+1)%qData.length),5500);};reset();
+
+    // Blog — CMS-driven
+    const blogData = getBlogs();
+    const f=blogData[0];
+    if (f) {
+      $('#feature').innerHTML=`<div class="fig imgrise"><span class="ico">${ic(IMG,1.4)}</span>${f[7]?up(f[7]):fl(820,460,f[4]||'maintenance',f[5]||81,f[6]||'b1')}</div><span class="cat">${f[0]}</span><h3>${f[1]}</h3><p>${f[2]}</p><div class="meta">${f[3]}</div>`;
+      $('#blogSide').innerHTML=blogData.slice(1).map(p=>`<div class="mini"><div class="fig"><span class="ico">${ic(IMG,1.4)}</span>${p[7]?up(p[7]):fl(200,200,p[4]||'maintenance',p[5]||82,p[6]||'b2')}</div><div><span class="cat">${p[0]}</span><h4>${p[1]}</h4><div class="meta">${p[3]}</div></div></div>`).join('');
+    }
+
+    // Careers — CMS-driven
+    const careerData = getCareers();
+    $('#vacancies').innerHTML=careerData.map(([t,m])=>`<div class="vac reveal"><div><b>${t}</b><br><span>${m}</span></div><a href="#contact" class="btn btn-out btn-sm vb">Apply now</a></div>`).join('');
     $('#benefits').innerHTML=benefits.map(([t,d,p])=>`<div class="ben-item"><span class="bi">${ic(p)}</span><div><b>${t}</b><p>${d}</p></div></div>`).join('');
+
+    // Footer — CMS-driven
+    const footer = getFooter();
+    if (footer) {
+      const fd = $('#footerDesc');
+      if (fd) fd.textContent = footer.companyDescription || '';
+      const cp = $('#footerCopy');
+      if (cp) cp.textContent = footer.copyrightText || '';
+      if (footer.phone) {
+        const fp = $('#footerPhone');
+        if (fp) fp.textContent = footer.phone;
+      }
+      if (footer.email) {
+        const fe = $('#footerEmail');
+        if (fe) fe.textContent = footer.email;
+      }
+    }
+
+    // Announcements
+    if (cmsData && cmsData.announcements && cmsData.announcements.length) {
+      const bar = $('#announceBar');
+      if (bar) {
+        bar.style.display = '';
+        bar.innerHTML = cmsData.announcements.map(a => 
+          a.link ? `<a href="${a.link}">${a.text}</a>` : `<span>${a.text}</span>`
+        ).join(' · ');
+      }
+    }
   }
 
   function reveal(){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.1,rootMargin:'0px 0px -50px 0px'});$$('.reveal,.imgrise').forEach(el=>io.observe(el));}
@@ -872,10 +1035,16 @@ const MHMS=(()=>{
     b.addEventListener('click',()=>{const o=p.classList.toggle('open');b.setAttribute('aria-expanded',o);});
     $$('#mpanel a').forEach(a=>a.addEventListener('click',()=>{p.classList.remove('open');b.setAttribute('aria-expanded',false);}));
   }
-  function contact(e){e.preventDefault();$('#cfOk').classList.add('show');e.target.reset();return false;}
+  function contact(e){e.preventDefault();
+    // Submit to CMS contact API
+    const fd = new FormData(e.target);
+    const data = { name: fd.get('fullname')||$('#cn').value, email: $('#ce').value, phone: $('#cp').value, subject: 'Website enquiry', message: $('#cmsg').value, source: 'website' };
+    fetch('/api/cms/contact', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(data) }).catch(()=>{});
+    $('#cfOk').classList.add('show');e.target.reset();return false;
+  }
   async function loadOverview(){ /* const d=await fetch('/api/overview').then(r=>r.json()); map -> #opsStats; */ return null; }
   function applyUploads(){$$('[data-up]').forEach(el=>{const k=el.dataset.up;if(window.UP&&window.UP[k])el.src=window.UP[k];});}
-  function init(){build();applyUploads();reveal();chrome();}
+  async function init(){ await loadCMS(); build(); applyUploads(); reveal(); chrome(); }
   return {init,contact,loadOverview};
 })();
 document.addEventListener('DOMContentLoaded',MHMS.init);

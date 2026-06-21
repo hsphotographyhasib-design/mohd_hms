@@ -1040,3 +1040,26 @@ Stage Summary:
 - `src/components/app/app-shell.tsx`: `pt-28` → `pt-2` on main content
 - `src/middleware.ts`: `X-Frame-Options: DENY` → `ALLOWALL`
 - User confirmed preview is working
+---
+Task ID: 2
+Agent: Main
+Task: Connect CMS Dashboard to Landing Page
+
+Work Log:
+- Analyzed landing.html (884 lines) — all content hardcoded in JS arrays (sectors, services, industries, projects, testimonials, blogs, careers, etc.)
+- Analyzed 18 CMS Prisma models and 34 API routes
+- Created `/api/cms/public/landing` — public GET endpoint serving all landing page CMS data in parallel (10 queries)
+- Created `/api/cms/seed-landing` — POST endpoint to seed CMS with landing page content (idempotent upserts in transaction)
+- Seeded database: 1 hero, 15 services, 14 industries, 3 testimonials, 6 projects, 4 about settings, 1 footer, 4 careers, 3 blogs
+- Modified landing.html `init()` to be async: `await loadCMS()` before `build()`
+- Added 10 CMS getter functions (getHero, getServices, getIndustries, getTestimonials, getProjects, getBlogs, getCareers, getAbout, getFooter) with fallback to hardcoded defaults
+- Added HTML IDs to hero (headline, subheadline, CTAs, stats, chip), about section, and footer for CMS updates
+- Connected contact form to `/api/cms/contact` API endpoint
+- Fixed CmsBlog upsert error (no displayOrder field)
+- Fixed public API tenant resolution (domain-based lookup, fallback to hero tenant)
+
+Stage Summary:
+- `src/app/api/cms/public/landing/route.ts` — NEW: Public landing page data API (no auth)
+- `src/app/api/cms/seed-landing/route.ts` — NEW: CMS seed endpoint
+- `public/landing.html` — MODIFIED: Fetches from CMS API, renders dynamic content with fallbacks
+- CMS Dashboard now drives: Hero, Services (15), Industries (14), Testimonials (3), Projects (6), About, Footer, Careers (4), Blogs (3), Announcements
