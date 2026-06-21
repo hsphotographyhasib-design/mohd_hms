@@ -1,0 +1,19 @@
+{
+  "cookies": [],
+  "origins": [
+    {
+      "origin": "http://localhost:3000",
+      "localStorage": [
+        {
+          "name": "cmms_token",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbXFuZnloM2EwMDBjcDY0a3F6ZTV3ZjZ0IiwidGVuYW50SWQiOiJjbXFuZnlndjEwMDAwcDY0a29vNjN3NWZzIiwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBmYWNpbGl0eXByby5jb20iLCJpYXQiOjE3ODIwNTc5MzcsImV4cCI6MTc4MjY2MjczN30.oML2h183bExhBEiD-i7GwT0pqCdCVDNTf4vhLgi_LnM"
+        },
+        {
+          "name": "cmms_user",
+          "value": "{\"id\":\"cmqnfyh3a000cp64kqze5wf6t\",\"email\":\"admin@facilitypro.com\",\"name\":\"Ahmed Al-Rashid\",\"phone\":\"+1-555-0101\",\"avatar\":null,\"role\":\"admin\",\"tenantId\":\"cmqnfygv10000p64koo63w5fs\",\"tenantName\":\"FacilityPro Services\",\"tenantDomain\":\"demo.facilitypro.com\",\"employeeNumber\":\"EMP-001\",\"departmentId\":\"cmqnfygv40006p64k45tjaoxk\",\"profileCompleted\":true}"
+        }
+      ],
+      "sessionStorage": []
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "whatsapp-service",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "bun --hot index.ts",
+    "start": "bun index.ts"
+  },
+  "dependencies": {
+    "@open-wa/wa-automate": "^4.8.3",
+    "express": "^4.21.0",
+    "qrcode": "^1.5.4",
+    "uuid": "^11.1.0",
+    "cors": "^2.8.5"
+  }
+}
