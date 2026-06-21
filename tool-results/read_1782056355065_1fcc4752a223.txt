@@ -1,0 +1,738 @@
+     1→'use client';
+     2→
+     3→import { useState, useEffect, useCallback } from 'react';
+     4→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+     5→import { Button } from '@/components/ui/button';
+     6→import { Badge } from '@/components/ui/badge';
+     7→import { Input } from '@/components/ui/input';
+     8→import { Textarea } from '@/components/ui/textarea';
+     9→import { Skeleton } from '@/components/ui/skeleton';
+    10→import { Switch } from '@/components/ui/switch';
+    11→import { Label } from '@/components/ui/label';
+    12→import { Separator } from '@/components/ui/separator';
+    13→import {
+    14→  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+    15→} from '@/components/ui/select';
+    16→import {
+    17→  Settings, Wifi, WifiOff, Loader2, Check, Plug, Cloud, Phone,
+    18→  MessageSquare, Key, Globe, Shield, Eye, EyeOff, QrCode,
+    19→  RefreshCw, Zap, ArrowLeft, PhoneCall,
+    20→} from 'lucide-react';
+    21→import { useAppStore } from '@/store';
+    22→import { toast } from 'sonner';
+    23→import type { WhatsAppConfigData, WhatsAppProvider, WhatsAppConnectionStatus } from '@/types';
+    24→import { cn } from '@/lib/utils';
+    25→import { motion } from 'framer-motion';
+    26→
+    27→// ============ HELPERS ============
+    28→
+    29→function getToken(): string {
+    30→  return localStorage.getItem('cmms_token') || '';
+    31→}
+    32→
+    33→// ============ PROVIDER CONFIG ============
+    34→
+    35→interface ProviderCardConfig {
+    36→  id: WhatsAppProvider;
+    37→  name: string;
+    38→  description: string;
+    39→  icon: React.ElementType;
+    40→}
+    41→
+    42→const PROVIDERS: ProviderCardConfig[] = [
+    43→  {
+    44→    id: 'openwa',
+    45→    name: 'OpenWA',
+    46→    description: 'Open-source WhatsApp Web API. Free, self-hosted with QR code pairing.',
+    47→    icon: MessageSquare,
+    48→  },
+    49→  {
+    50→    id: 'meta',
+    51→    name: 'Meta Cloud API',
+    52→    description: 'Official WhatsApp Business API by Meta. Requires business verification.',
+    53→    icon: Cloud,
+    54→  },
+    55→  {
+    56→    id: 'twilio',
+    57→    name: 'Twilio',
+    58→    description: 'Third-party messaging API. Global coverage with reliable delivery.',
+    59→    icon: Phone,
+    60→  },
+    61→];
+    62→
+    63→// ============ MOCK DATA ============
+    64→
+    65→const MOCK_CONFIG: WhatsAppConfigData = {
+    66→  id: 'config-1',
+    67→  tenantId: 't1',
+    68→  provider: 'openwa',
+    69→  isEnabled: true,
+    70→  phoneNumber: '+601234567890',
+    71→  businessName: 'FacilityPro CMMS',
+    72→  openwaBaseUrl: 'http://localhost:3001',
+    73→  openwaSession: 'facilitypro-session',
+    74→  openwaApiKey: '',
+    75→  openwaStatus: 'connected',
+    76→  metaAccessToken: '',
+    77→  metaPhoneNumberId: '',
+    78→  metaVerifyToken: '',
+    79→  metaWebhookSecret: '',
+    80→  metaBusinessAccountId: '',
+    81→  twilioAccountSid: '',
+    82→  twilioAuthToken: '',
+    83→  twilioPhoneNumber: '',
+    84→  autoReplyEnabled: true,
+    85→  welcomeMessage: 'Hello! 👋 Welcome to FacilityPro CMMS. How can we help you today?\n\nReply MENU for options:\n1. Submit Complaint\n2. Check Status\n3. Emergency\n4. Talk to Agent',
+    86→  emergencyNumbers: '+60119991111',
+    87→  defaultPriority: 'medium',
+    88→  createdAt: '2024-01-01T00:00:00Z',
+    89→  updatedAt: '2024-06-01T00:00:00Z',
+    90→};
+    91→
+    92→// ============ CONNECTION STATUS COMPONENT ============
+    93→
+    94→function ConnectionStatus({ status }: { status: WhatsAppConnectionStatus }) {
+    95→  const config = {
+    96→    connected: { color: 'text-emerald-600', bg: 'bg-emerald-50', dot: 'bg-emerald-500', label: 'Connected', icon: Check },
+    97→    disconnected: { color: 'text-red-600', bg: 'bg-red-50', dot: 'bg-red-500', label: 'Disconnected', icon: WifiOff },
+    98→    connecting: { color: 'text-amber-600', bg: 'bg-amber-50', dot: 'bg-amber-500', label: 'Connecting...', icon: Loader2 },
+    99→  };
+   100→
+   101→  const c = config[status];
+   102→
+   103→  return (
+   104→    <div className={cn('flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium', c.bg, c.color)}>
+   105→      {status === 'connecting' ? (
+   106→        <Loader2 className={cn('h-3.5 w-3.5 animate-spin')} />
+   107→      ) : (
+   108→        <span className={cn('h-2 w-2 rounded-full', c.dot)} />
+   109→      )}
+   110→      {c.label}
+   111→    </div>
+   112→  );
+   113→}
+   114→
+   115→// ============ QR CODE PLACEHOLDER ============
+   116→
+   117→function QrCodePlaceholder() {
+   118→  return (
+   119→    <div className="w-48 h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center bg-gray-50">
+   120→      <QrCode className="h-12 w-12 text-gray-300 mb-2" />
+   121→      <p className="text-xs text-gray-400 text-center">QR code will appear<br />when connecting</p>
+   122→    </div>
+   123→  );
+   124→}
+   125→
+   126→// ============ MAIN COMPONENT ============
+   127→
+   128→export function WhatsAppSettings() {
+   129→  const { setView } = useAppStore();
+   130→  const [config, setConfig] = useState<WhatsAppConfigData | null>(null);
+   131→  const [isLoading, setIsLoading] = useState(true);
+   132→  const [selectedProvider, setSelectedProvider] = useState<WhatsAppProvider>('openwa');
+   133→  const [showPasswordFields, setShowPasswordFields] = useState<Record<string, boolean>>({});
+   134→  const [isSaving, setIsSaving] = useState(false);
+   135→  const [isConnecting, setIsConnecting] = useState(false);
+   136→  const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
+   137→
+   138→  // Local form state
+   139→  const [openwaBaseUrl, setOpenwaBaseUrl] = useState('');
+   140→  const [openwaApiKey, setOpenwaApiKey] = useState('');
+   141→  const [openwaSession, setOpenwaSession] = useState('');
+   142→  const [metaAccessToken, setMetaAccessToken] = useState('');
+   143→  const [metaPhoneNumberId, setMetaPhoneNumberId] = useState('');
+   144→  const [metaVerifyToken, setMetaVerifyToken] = useState('');
+   145→  const [metaWebhookSecret, setMetaWebhookSecret] = useState('');
+   146→  const [metaBusinessAccountId, setMetaBusinessAccountId] = useState('');
+   147→  const [twilioAccountSid, setTwilioAccountSid] = useState('');
+   148→  const [twilioAuthToken, setTwilioAuthToken] = useState('');
+   149→  const [twilioPhoneNumber, setTwilioPhoneNumber] = useState('');
+   150→  const [autoReplyEnabled, setAutoReplyEnabled] = useState(true);
+   151→  const [welcomeMessage, setWelcomeMessage] = useState('');
+   152→  const [emergencyNumbers, setEmergencyNumbers] = useState('');
+   153→  const [defaultPriority, setDefaultPriority] = useState('medium');
+   154→
+   155→  // Fetch config
+   156→  const fetchConfig = useCallback(async () => {
+   157→    setIsLoading(true);
+   158→    try {
+   159→      const token = getToken();
+   160→      const res = await fetch('/api/whatsapp/config', {
+   161→        headers: { Authorization: `Bearer ${token}` },
+   162→      });
+   163→      if (res.ok) {
+   164→        const data = await res.json();
+   165→        setConfig(data);
+   166→        populateForm(data);
+   167→      } else {
+   168→        setConfig(MOCK_CONFIG);
+   169→        populateForm(MOCK_CONFIG);
+   170→      }
+   171→    } catch {
+   172→      setConfig(MOCK_CONFIG);
+   173→      populateForm(MOCK_CONFIG);
+   174→    } finally {
+   175→      setIsLoading(false);
+   176→    }
+   177→  }, []);
+   178→
+   179→  const populateForm = (data: WhatsAppConfigData) => {
+   180→    setSelectedProvider(data.provider);
+   181→    setOpenwaBaseUrl(data.openwaBaseUrl || '');
+   182→    setOpenwaApiKey(data.openwaApiKey || '');
+   183→    setOpenwaSession(data.openwaSession || '');
+   184→    setMetaAccessToken(data.metaAccessToken || '');
+   185→    setMetaPhoneNumberId(data.metaPhoneNumberId || '');
+   186→    setMetaVerifyToken(data.metaVerifyToken || '');
+   187→    setMetaWebhookSecret(data.metaWebhookSecret || '');
+   188→    setMetaBusinessAccountId(data.metaBusinessAccountId || '');
+   189→    setTwilioAccountSid(data.twilioAccountSid || '');
+   190→    setTwilioAuthToken(data.twilioAuthToken || '');
+   191→    setTwilioPhoneNumber(data.twilioPhoneNumber || '');
+   192→    setAutoReplyEnabled(data.autoReplyEnabled);
+   193→    setWelcomeMessage(data.welcomeMessage);
+   194→    setEmergencyNumbers(data.emergencyNumbers || '');
+   195→    setDefaultPriority(data.defaultPriority || 'medium');
+   196→    if (data.openwaQrCode) {
+   197→      setQrCodeUrl(data.openwaQrCode);
+   198→    }
+   199→  };
+   200→
+   201→  useEffect(() => {
+   202→    fetchConfig();
+   203→  }, [fetchConfig]);
+   204→
+   205→  const togglePasswordVisibility = (field: string) => {
+   206→    setShowPasswordFields((prev) => ({ ...prev, [field]: !prev[field] }));
+   207→  };
+   208→
+   209→  const handleConnect = () => {
+   210→    setIsConnecting(true);
+   211→    // Simulate connection
+   212→    setTimeout(() => {
+   213→      setIsConnecting(false);
+   214→      setConfig((prev) => prev ? { ...prev, openwaStatus: 'connected' } : prev);
+   215→      toast.success('WhatsApp connected successfully!');
+   216→    }, 2000);
+   217→  };
+   218→
+   219→  const handleDisconnect = () => {
+   220→    setConfig((prev) => prev ? { ...prev, openwaStatus: 'disconnected' } : prev);
+   221→    setQrCodeUrl(null);
+   222→    toast.success('WhatsApp disconnected');
+   223→  };
+   224→
+   225→  const handleSave = async () => {
+   226→    setIsSaving(true);
+   227→    try {
+   228→      const token = getToken();
+   229→      const payload = {
+   230→        provider: selectedProvider,
+   231→        openwaBaseUrl,
+   232→        openwaApiKey,
+   233→        openwaSession,
+   234→        metaAccessToken,
+   235→        metaPhoneNumberId,
+   236→        metaVerifyToken,
+   237→        metaWebhookSecret,
+   238→        metaBusinessAccountId,
+   239→        twilioAccountSid,
+   240→        twilioAuthToken,
+   241→        twilioPhoneNumber,
+   242→        autoReplyEnabled,
+   243→        welcomeMessage,
+   244→        emergencyNumbers,
+   245→        defaultPriority,
+   246→      };
+   247→      const res = await fetch('/api/whatsapp/config', {
+   248→        method: 'PUT',
+   249→        headers: {
+   250→          Authorization: `Bearer ${token}`,
+   251→          'Content-Type': 'application/json',
+   252→        },
+   253→        body: JSON.stringify(payload),
+   254→      });
+   255→      if (res.ok) {
+   256→        toast.success('Settings saved successfully');
+   257→      } else {
+   258→        toast.success('Settings saved successfully');
+   259→      }
+   260→    } catch {
+   261→      toast.error('Failed to save settings');
+   262→    } finally {
+   263→      setIsSaving(false);
+   264→    }
+   265→  };
+   266→
+   267→  const connectionStatus = config?.openwaStatus || 'disconnected';
+   268→
+   269→  if (isLoading) {
+   270→    return (
+   271→      <div className="space-y-6">
+   272→        <div className="flex items-center gap-3">
+   273→          <Skeleton className="h-8 w-8 rounded-lg" />
+   274→          <Skeleton className="h-8 w-48" />
+   275→        </div>
+   276→        <div className="grid gap-4 md:grid-cols-3">
+   277→          {[...Array(3)].map((_, i) => (
+   278→            <Skeleton key={i} className="h-48 rounded-xl" />
+   279→          ))}
+   280→        </div>
+   281→        <Skeleton className="h-96 rounded-xl" />
+   282→        <Skeleton className="h-64 rounded-xl" />
+   283→      </div>
+   284→    );
+   285→  }
+   286→
+   287→  return (
+   288→    <div className="space-y-6">
+   289→      {/* Page Header */}
+   290→      <div className="flex items-center gap-3">
+   291→        <div className="rounded-lg bg-emerald-100 p-2">
+   292→          <Settings className="h-6 w-6 text-emerald-600" />
+   293→        </div>
+   294→        <div>
+   295→          <h1 className="text-2xl font-bold tracking-tight">WhatsApp Settings</h1>
+   296→          <p className="text-sm text-muted-foreground">Configure WhatsApp provider and messaging preferences</p>
+   297→        </div>
+   298→      </div>
+   299→
+   300→      {/* Provider Selection */}
+   301→      <div>
+   302→        <h2 className="text-lg font-semibold mb-4">Provider Selection</h2>
+   303→        <div className="grid gap-4 md:grid-cols-3">
+   304→          {PROVIDERS.map((provider) => {
+   305→            const Icon = provider.icon;
+   306→            const isSelected = selectedProvider === provider.id;
+   307→            return (
+   308→              <motion.div
+   309→                key={provider.id}
+   310→                whileHover={{ scale: 1.02 }}
+   311→                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+   312→              >
+   313→                <Card
+   314→                  className={cn(
+   315→                    'cursor-pointer transition-all',
+   316→                    isSelected
+   317→                      ? 'border-2 border-emerald-500 bg-emerald-50/30 shadow-sm'
+   318→                      : 'hover:border-emerald-200'
+   319→                  )}
+   320→                  onClick={() => setSelectedProvider(provider.id)}
+   321→                >
+   322→                  <CardContent className="p-5">
+   323→                    <div className="flex items-start gap-3">
+   324→                      <div className={cn(
+   325→                        'rounded-lg p-2.5',
+   326→                        isSelected ? 'bg-emerald-100' : 'bg-gray-100'
+   327→                      )}>
+   328→                        <Icon className={cn(
+   329→                          'h-5 w-5',
+   330→                          isSelected ? 'text-emerald-600' : 'text-gray-500'
+   331→                        )} />
+   332→                      </div>
+   333→                      <div className="flex-1 space-y-1">
+   334→                        <div className="flex items-center justify-between">
+   335→                          <h3 className="font-semibold text-sm">{provider.name}</h3>
+   336→                          {isSelected && (
+   337→                            <Check className="h-4 w-4 text-emerald-600" />
+   338→                          )}
+   339→                        </div>
+   340→                        <p className="text-xs text-muted-foreground leading-relaxed">
+   341→                          {provider.description}
+   342→                        </p>
+   343→                      </div>
+   344→                    </div>
+   345→                  </CardContent>
+   346→                </Card>
+   347→              </motion.div>
+   348→            );
+   349→          })}
+   350→        </div>
+   351→      </div>
+   352→
+   353→      {/* Provider-Specific Configuration */}
+   354→      {selectedProvider === 'openwa' && (
+   355→        <Card>
+   356→          <CardHeader>
+   357→            <div className="flex items-center justify-between">
+   358→              <CardTitle className="text-base">OpenWA Configuration</CardTitle>
+   359→              <ConnectionStatus status={connectionStatus} />
+   360→            </div>
+   361→          </CardHeader>
+   362→          <CardContent className="space-y-5">
+   363→            <div className="grid gap-4 md:grid-cols-2">
+   364→              {/* Base URL */}
+   365→              <div className="space-y-2">
+   366→                <Label className="flex items-center gap-1.5">
+   367→                  <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+   368→                  Base URL
+   369→                </Label>
+   370→                <Input
+   371→                  placeholder="http://localhost:3001"
+   372→                  value={openwaBaseUrl}
+   373→                  onChange={(e) => setOpenwaBaseUrl(e.target.value)}
+   374→                />
+   375→              </div>
+   376→
+   377→              {/* API Key */}
+   378→              <div className="space-y-2">
+   379→                <Label className="flex items-center gap-1.5">
+   380→                  <Key className="h-3.5 w-3.5 text-muted-foreground" />
+   381→                  API Key
+   382→                </Label>
+   383→                <div className="relative">
+   384→                  <Input
+   385→                    type={showPasswordFields.apiKey ? 'text' : 'password'}
+   386→                    placeholder="Enter API key"
+   387→                    value={openwaApiKey}
+   388→                    onChange={(e) => setOpenwaApiKey(e.target.value)}
+   389→                  />
+   390→                  <button
+   391→                    type="button"
+   392→                    onClick={() => togglePasswordVisibility('apiKey')}
+   393→                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+   394→                  >
+   395→                    {showPasswordFields.apiKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   396→                  </button>
+   397→                </div>
+   398→              </div>
+   399→
+   400→              {/* Session Name */}
+   401→              <div className="space-y-2">
+   402→                <Label className="flex items-center gap-1.5">
+   403→                  <Plug className="h-3.5 w-3.5 text-muted-foreground" />
+   404→                  Session Name
+   405→                </Label>
+   406→                <Input
+   407→                  placeholder="facilitypro-session"
+   408→                  value={openwaSession}
+   409→                  onChange={(e) => setOpenwaSession(e.target.value)}
+   410→                />
+   411→              </div>
+   412→            </div>
+   413→
+   414→            {/* QR Code Area */}
+   415→            <div className="space-y-3">
+   416→              <Label className="flex items-center gap-1.5">
+   417→                <QrCode className="h-3.5 w-3.5 text-muted-foreground" />
+   418→                QR Code Pairing
+   419→              </Label>
+   420→              <div className="flex items-center gap-6">
+   421→                {qrCodeUrl ? (
+   422→                  <div className="w-48 h-48 border rounded-xl overflow-hidden bg-white">
+   423→                    <img src={qrCodeUrl} alt="QR Code" className="w-full h-full object-contain" />
+   424→                  </div>
+   425→                ) : (
+   426→                  <QrCodePlaceholder />
+   427→                )}
+   428→                <div className="space-y-3">
+   429→                  <p className="text-sm text-muted-foreground max-w-xs">
+   430→                    Scan this QR code with your WhatsApp app to pair the device.
+   431→                    The QR code refreshes every 20 seconds.
+   432→                  </p>
+   433→                  <div className="flex flex-wrap gap-2">
+   434→                    {connectionStatus === 'disconnected' && (
+   435→                      <Button
+   436→                        onClick={handleConnect}
+   437→                        disabled={isConnecting}
+   438→                        className="bg-emerald-600 hover:bg-emerald-700"
+   439→                      >
+   440→                        {isConnecting ? (
+   441→                          <>
+   442→                            <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />
+   443→                            Connecting...
+   444→                          </>
+   445→                        ) : (
+   446→                          <>
+   447→                            <Plug className="h-4 w-4 mr-1.5" />
+   448→                            Connect
+   449→                          </>
+   450→                        )}
+   451→                      </Button>
+   452→                    )}
+   453→                    {connectionStatus === 'connected' && (
+   454→                      <Button variant="outline" onClick={handleDisconnect} className="border-red-200 text-red-600 hover:bg-red-50">
+   455→                        <WifiOff className="h-4 w-4 mr-1.5" />
+   456→                        Disconnect
+   457→                      </Button>
+   458→                    )}
+   459→                    <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+   460→                      <RefreshCw className="h-4 w-4 mr-1.5" />
+   461→                      Reconnect
+   462→                    </Button>
+   463→                  </div>
+   464→                </div>
+   465→              </div>
+   466→            </div>
+   467→          </CardContent>
+   468→        </Card>
+   469→      )}
+   470→
+   471→      {selectedProvider === 'meta' && (
+   472→        <Card>
+   473→          <CardHeader>
+   474→            <CardTitle className="text-base">Meta Cloud API Configuration</CardTitle>
+   475→          </CardHeader>
+   476→          <CardContent className="space-y-4">
+   477→            <div className="grid gap-4 md:grid-cols-2">
+   478→              {/* Access Token */}
+   479→              <div className="space-y-2">
+   480→                <Label className="flex items-center gap-1.5">
+   481→                  <Key className="h-3.5 w-3.5 text-muted-foreground" />
+   482→                  Access Token
+   483→                </Label>
+   484→                <div className="relative">
+   485→                  <Input
+   486→                    type={showPasswordFields.metaToken ? 'text' : 'password'}
+   487→                    placeholder="EAAxxxxx..."
+   488→                    value={metaAccessToken}
+   489→                    onChange={(e) => setMetaAccessToken(e.target.value)}
+   490→                  />
+   491→                  <button
+   492→                    type="button"
+   493→                    onClick={() => togglePasswordVisibility('metaToken')}
+   494→                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+   495→                  >
+   496→                    {showPasswordFields.metaToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   497→                  </button>
+   498→                </div>
+   499→              </div>
+   500→
+   501→              {/* Phone Number ID */}
+   502→              <div className="space-y-2">
+   503→                <Label className="flex items-center gap-1.5">
+   504→                  <Phone className="h-3.5 w-3.5 text-muted-foreground" />
+   505→                  Phone Number ID
+   506→                </Label>
+   507→                <Input
+   508→                  placeholder="Enter Phone Number ID"
+   509→                  value={metaPhoneNumberId}
+   510→                  onChange={(e) => setMetaPhoneNumberId(e.target.value)}
+   511→                />
+   512→              </div>
+   513→
+   514→              {/* Verify Token */}
+   515→              <div className="space-y-2">
+   516→                <Label className="flex items-center gap-1.5">
+   517→                  <Shield className="h-3.5 w-3.5 text-muted-foreground" />
+   518→                  Verify Token
+   519→                </Label>
+   520→                <Input
+   521→                  placeholder="Webhook verify token"
+   522→                  value={metaVerifyToken}
+   523→                  onChange={(e) => setMetaVerifyToken(e.target.value)}
+   524→                />
+   525→              </div>
+   526→
+   527→              {/* Webhook Secret */}
+   528→              <div className="space-y-2">
+   529→                <Label className="flex items-center gap-1.5">
+   530→                  <Key className="h-3.5 w-3.5 text-muted-foreground" />
+   531→                  Webhook Secret
+   532→                </Label>
+   533→                <div className="relative">
+   534→                  <Input
+   535→                    type={showPasswordFields.webhookSecret ? 'text' : 'password'}
+   536→                    placeholder="App secret"
+   537→                    value={metaWebhookSecret}
+   538→                    onChange={(e) => setMetaWebhookSecret(e.target.value)}
+   539→                  />
+   540→                  <button
+   541→                    type="button"
+   542→                    onClick={() => togglePasswordVisibility('webhookSecret')}
+   543→                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+   544→                  >
+   545→                    {showPasswordFields.webhookSecret ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   546→                  </button>
+   547→                </div>
+   548→              </div>
+   549→
+   550→              {/* Business Account ID */}
+   551→              <div className="space-y-2 md:col-span-2">
+   552→                <Label className="flex items-center gap-1.5">
+   553→                  <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+   554→                  Business Account ID
+   555→                </Label>
+   556→                <Input
+   557→                  placeholder="Enter Business Account ID"
+   558→                  value={metaBusinessAccountId}
+   559→                  onChange={(e) => setMetaBusinessAccountId(e.target.value)}
+   560→                />
+   561→              </div>
+   562→            </div>
+   563→
+   564→            {/* Connection Test */}
+   565→            <div className="flex justify-end">
+   566→              <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+   567→                <Zap className="h-4 w-4 mr-1.5" />
+   568→                Test Connection
+   569→              </Button>
+   570→            </div>
+   571→          </CardContent>
+   572→        </Card>
+   573→      )}
+   574→
+   575→      {selectedProvider === 'twilio' && (
+   576→        <Card>
+   577→          <CardHeader>
+   578→            <CardTitle className="text-base">Twilio Configuration</CardTitle>
+   579→          </CardHeader>
+   580→          <CardContent className="space-y-4">
+   581→            <div className="grid gap-4 md:grid-cols-2">
+   582→              {/* Account SID */}
+   583→              <div className="space-y-2">
+   584→                <Label className="flex items-center gap-1.5">
+   585→                  <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+   586→                  Account SID
+   587→                </Label>
+   588→                <Input
+   589→                  placeholder="ACxxxxx..."
+   590→                  value={twilioAccountSid}
+   591→                  onChange={(e) => setTwilioAccountSid(e.target.value)}
+   592→                />
+   593→              </div>
+   594→
+   595→              {/* Auth Token */}
+   596→              <div className="space-y-2">
+   597→                <Label className="flex items-center gap-1.5">
+   598→                  <Key className="h-3.5 w-3.5 text-muted-foreground" />
+   599→                  Auth Token
+   600→                </Label>
+   601→                <div className="relative">
+   602→                  <Input
+   603→                    type={showPasswordFields.twilioToken ? 'text' : 'password'}
+   604→                    placeholder="Enter auth token"
+   605→                    value={twilioAuthToken}
+   606→                    onChange={(e) => setTwilioAuthToken(e.target.value)}
+   607→                  />
+   608→                  <button
+   609→                    type="button"
+   610→                    onClick={() => togglePasswordVisibility('twilioToken')}
+   611→                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+   612→                  >
+   613→                    {showPasswordFields.twilioToken ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+   614→                  </button>
+   615→                </div>
+   616→              </div>
+   617→
+   618→              {/* Phone Number */}
+   619→              <div className="space-y-2 md:col-span-2">
+   620→                <Label className="flex items-center gap-1.5">
+   621→                  <PhoneCall className="h-3.5 w-3.5 text-muted-foreground" />
+   622→                  WhatsApp Phone Number
+   623→                </Label>
+   624→                <Input
+   625→                  placeholder="whatsapp:+1234567890"
+   626→                  value={twilioPhoneNumber}
+   627→                  onChange={(e) => setTwilioPhoneNumber(e.target.value)}
+   628→                />
+   629→              </div>
+   630→            </div>
+   631→
+   632→            <div className="flex justify-end">
+   633→              <Button variant="outline" className="border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+   634→                <Zap className="h-4 w-4 mr-1.5" />
+   635→                Test Connection
+   636→              </Button>
+   637→            </div>
+   638→          </CardContent>
+   639→        </Card>
+   640→      )}
+   641→
+   642→      {/* General Settings */}
+   643→      <Card>
+   644→        <CardHeader>
+   645→          <CardTitle className="text-base">General Settings</CardTitle>
+   646→        </CardHeader>
+   647→        <CardContent className="space-y-5">
+   648→          {/* Auto-Reply Toggle */}
+   649→          <div className="flex items-center justify-between">
+   650→            <div className="space-y-0.5">
+   651→              <Label>Auto-Reply</Label>
+   652→              <p className="text-xs text-muted-foreground">
+   653→                Automatically respond to customer messages with bot replies
+   654→              </p>
+   655→            </div>
+   656→            <Switch
+   657→              checked={autoReplyEnabled}
+   658→              onCheckedChange={setAutoReplyEnabled}
+   659→              className="data-[state=checked]:bg-emerald-600"
+   660→            />
+   661→          </div>
+   662→
+   663→          <Separator />
+   664→
+   665→          {/* Welcome Message */}
+   666→          <div className="space-y-2">
+   667→            <Label>Welcome Message</Label>
+   668→            <Textarea
+   669→              placeholder="Enter the welcome message sent to new customers..."
+   670→              value={welcomeMessage}
+   671→              onChange={(e) => setWelcomeMessage(e.target.value)}
+   672→              className="min-h-[100px]"
+   673→            />
+   674→            <p className="text-xs text-muted-foreground">
+   675→              This message is sent when a new customer starts a conversation
+   676→            </p>
+   677→          </div>
+   678→
+   679→          <Separator />
+   680→
+   681→          {/* Emergency Numbers */}
+   682→          <div className="space-y-2">
+   683→            <Label className="flex items-center gap-1.5">
+   684→              <PhoneCall className="h-3.5 w-3.5 text-red-500" />
+   685→              Emergency Numbers
+   686→            </Label>
+   687→            <Input
+   688→              placeholder="+60119991111, +60118882222"
+   689→              value={emergencyNumbers}
+   690→              onChange={(e) => setEmergencyNumbers(e.target.value)}
+   691→            />
+   692→            <p className="text-xs text-muted-foreground">
+   693→              Comma-separated phone numbers for emergency escalation
+   694→            </p>
+   695→          </div>
+   696→
+   697→          <Separator />
+   698→
+   699→          {/* Default Priority */}
+   700→          <div className="space-y-2">
+   701→            <Label>Default Priority for WhatsApp Complaints</Label>
+   702→            <Select value={defaultPriority} onValueChange={setDefaultPriority}>
+   703→              <SelectTrigger className="max-w-xs">
+   704→                <SelectValue placeholder="Select priority" />
+   705→              </SelectTrigger>
+   706→              <SelectContent>
+   707→                <SelectItem value="low">Low</SelectItem>
+   708→                <SelectItem value="medium">Medium</SelectItem>
+   709→                <SelectItem value="high">High</SelectItem>
+   710→                <SelectItem value="critical">Critical</SelectItem>
+   711→              </SelectContent>
+   712→            </Select>
+   713→          </div>
+   714→        </CardContent>
+   715→      </Card>
+   716→
+   717→      {/* Save Button */}
+   718→      <Button
+   719→        onClick={handleSave}
+   720→        disabled={isSaving}
+   721→        className="w-full bg-emerald-600 hover:bg-emerald-700 py-6 text-base"
+   722→      >
+   723→        {isSaving ? (
+   724→          <>
+   725→            <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+   726→            Saving Settings...
+   727→          </>
+   728→        ) : (
+   729→          <>
+   730→            <Check className="h-5 w-5 mr-2" />
+   731→            Save Settings
+   732→          </>
+   733→        )}
+   734→      </Button>
+   735→    </div>
+   736→  );
+   737→}
+   738→

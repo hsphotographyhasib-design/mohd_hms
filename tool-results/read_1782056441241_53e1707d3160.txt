@@ -1,0 +1,689 @@
+     1→     1→'use client';
+     2→     2→
+     3→     3→import { useState, useEffect, useCallback } from 'react';
+     4→     4→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+     5→     5→import { Button } from '@/components/ui/button';
+     6→     6→import { Badge } from '@/components/ui/badge';
+     7→     7→import { Input } from '@/components/ui/input';
+     8→     8→import { Textarea } from '@/components/ui/textarea';
+     9→     9→import { Skeleton } from '@/components/ui/skeleton';
+    10→    10→import { Progress } from '@/components/ui/progress';
+    11→    11→import { Label } from '@/components/ui/label';
+    12→    12→import {
+    13→    13→  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+    14→    14→} from '@/components/ui/table';
+    15→    15→import {
+    16→    16→  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose,
+    17→    17→} from '@/components/ui/dialog';
+    18→    18→import {
+    19→    19→  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+    20→    20→} from '@/components/ui/select';
+    21→    21→import {
+    22→    22→  Megaphone, Plus, Eye, CalendarClock, XCircle, Trash2, Send,
+    23→    23→  Users, CheckCircle2, AlertCircle, Clock, BarChart3, Zap,
+    24→    24→} from 'lucide-react';
+    25→    25→import { useAppStore } from '@/store';
+    26→    26→import { toast } from 'sonner';
+    27→    27→import type { BroadcastLogData, BroadcastStatus } from '@/types';
+    28→    28→import { cn } from '@/lib/utils';
+    29→    29→import { motion } from 'framer-motion';
+    30→    30→
+    31→    31→// ============ HELPERS ============
+    32→    32→
+    33→    33→function getToken(): string {
+    34→    34→  return localStorage.getItem('cmms_token') || '';
+    35→    35→}
+    36→    36→
+    37→    37→function formatRelativeTime(dateStr: string): string {
+    38→    38→  try {
+    39→    39→    const now = new Date();
+    40→    40→    const then = new Date(dateStr);
+    41→    41→    const diffMs = now.getTime() - then.getTime();
+    42→    42→    const diffMin = Math.floor(diffMs / 60000);
+    43→    43→    if (diffMin < 1) return 'just now';
+    44→    44→    if (diffMin < 60) return `${diffMin}m ago`;
+    45→    45→    const diffHr = Math.floor(diffMin / 60);
+    46→    46→    if (diffHr < 24) return `${diffHr}h ago`;
+    47→    47→    const diffDay = Math.floor(diffHr / 24);
+    48→    48→    if (diffDay < 7) return `${diffDay}d ago`;
+    49→    49→    return then.toLocaleDateString();
+    50→    50→  } catch {
+    51→    51→    return dateStr;
+    52→    52→  }
+    53→    53→}
+    54→    54→
+    55→    55→// ============ CONSTANTS ============
+    56→    56→
+    57→    57→const STATUS_CONFIG: Record<BroadcastStatus, { label: string; color: string; dotColor: string }> = {
+    58→    58→  draft: { label: 'Draft', color: 'bg-gray-100 text-gray-700', dotColor: 'bg-gray-400' },
+    59→    59→  scheduled: { label: 'Scheduled', color: 'bg-amber-100 text-amber-700', dotColor: 'bg-amber-500' },
+    60→    60→  sending: { label: 'Sending', color: 'bg-sky-100 text-sky-700', dotColor: 'bg-sky-500' },
+    61→    61→  completed: { label: 'Completed', color: 'bg-emerald-100 text-emerald-700', dotColor: 'bg-emerald-500' },
+    62→    62→  failed: { label: 'Failed', color: 'bg-red-100 text-red-700', dotColor: 'bg-red-500' },
+    63→    63→};
+    64→    64→
+    65→    65→const RECIPIENT_GROUPS = [
+    66→    66→  { value: 'all', label: 'All Customers' },
+    67→    67→  { value: 'verified', label: 'WhatsApp Verified Only' },
+    68→    68→  { value: 'active', label: 'Active Accounts Only' },
+    69→    69→  { value: 'custom', label: 'Custom List' },
+    70→    70→];
+    71→    71→
+    72→    72→// ============ MOCK DATA ============
+    73→    73→
+    74→    74→const MOCK_CAMPAIGNS: BroadcastLogData[] = [
+    75→    75→  {
+    76→    76→    id: '1', tenantId: 't1', title: 'Monthly Maintenance Reminder', content: 'Dear customer, your monthly maintenance is scheduled. Reply to confirm.',
+    77→    77→    recipientCount: 156, sentCount: 156, deliveredCount: 148, failedCount: 8, readCount: 120,
+    78→    78→    status: 'completed', sentAt: '2024-06-01T10:00:00Z', completedAt: '2024-06-01T10:05:00Z',
+    79→    79→    createdAt: '2024-06-01T09:00:00Z', updatedAt: '2024-06-01T10:05:00Z',
+    80→    80→  },
+    81→    81→  {
+    82→    82→    id: '2', tenantId: 't1', title: 'Holiday Greetings 2024', content: 'Happy Hari Raya! We wish you and your family joy and prosperity. 🎉',
+    83→    83→    recipientCount: 320, sentCount: 318, deliveredCount: 310, failedCount: 8, readCount: 280,
+    84→    84→    status: 'completed', sentAt: '2024-06-15T08:00:00Z', completedAt: '2024-06-15T08:12:00Z',
+    85→    85→    createdAt: '2024-06-10T00:00:00Z', updatedAt: '2024-06-15T08:12:00Z',
+    86→    86→  },
+    87→    87→  {
+    88→    88→    id: '3', tenantId: 't1', title: 'Emergency Contact Update', content: 'Update: Our emergency hotline has changed. Save this number for future reference.',
+    89→    89→    recipientCount: 245, sentCount: 0, deliveredCount: 0, failedCount: 0, readCount: 0,
+    90→    90→    status: 'scheduled', scheduledAt: '2024-07-01T09:00:00Z',
+    91→    91→    createdAt: '2024-06-20T00:00:00Z', updatedAt: '2024-06-20T00:00:00Z',
+    92→    92→  },
+    93→    93→  {
+    94→    94→    id: '4', tenantId: 't1', title: 'New Service Announcement', content: 'We now offer 24/7 HVAC emergency services! Book your slot now.',
+    95→    95→    recipientCount: 100, sentCount: 0, deliveredCount: 0, failedCount: 0, readCount: 0,
+    96→    96→    status: 'draft',
+    97→    97→    createdAt: '2024-06-25T00:00:00Z', updatedAt: '2024-06-25T00:00:00Z',
+    98→    98→  },
+    99→    99→  {
+   100→   100→    id: '5', tenantId: 't1', title: 'Invoice Due Reminder Batch', content: 'You have outstanding invoices. Please remit payment before the due date.',
+   101→   101→    recipientCount: 45, sentCount: 45, deliveredCount: 44, failedCount: 1, readCount: 38,
+   102→   102→    status: 'completed', sentAt: '2024-06-20T14:00:00Z', completedAt: '2024-06-20T14:02:00Z',
+   103→   103→    createdAt: '2024-06-19T00:00:00Z', updatedAt: '2024-06-20T14:02:00Z',
+   104→   104→  },
+   105→   105→  {
+   106→   106→    id: '6', tenantId: 't1', title: 'System Downtime Notice', content: 'Our CMMS portal will undergo maintenance on July 5th from 2-4 AM.',
+   107→   107→    recipientCount: 180, sentCount: 180, deliveredCount: 175, failedCount: 5, readCount: 160,
+   108→   108→    status: 'completed', sentAt: '2024-06-28T11:00:00Z', completedAt: '2024-06-28T11:08:00Z',
+   109→   109→    createdAt: '2024-06-27T00:00:00Z', updatedAt: '2024-06-28T11:08:00Z',
+   110→   110→  },
+   111→   111→  {
+   112→   112→    id: '7', tenantId: 't1', title: 'Failed Test Broadcast', content: 'Test message for API connectivity check.',
+   113→   113→    recipientCount: 10, sentCount: 2, deliveredCount: 0, failedCount: 2, readCount: 0,
+   114→   114→    status: 'failed', sentAt: '2024-06-15T16:00:00Z',
+   115→   115→    createdAt: '2024-06-15T15:55:00Z', updatedAt: '2024-06-15T16:00:00Z',
+   116→   116→  },
+   117→   117→];
+   118→   118→
+   119→   119→// ============ FORM DEFAULTS ============
+   120→   120→
+   121→   121→interface CampaignFormData {
+   122→   122→  title: string;
+   123→   123→  content: string;
+   124→   124→  recipientGroup: string;
+   125→   125→  scheduledAt: string;
+   126→   126→  sendNow: boolean;
+   127→   127→}
+   128→   128→
+   129→   129→const FORM_DEFAULTS: CampaignFormData = {
+   130→   130→  title: '',
+   131→   131→  content: '',
+   132→   132→  recipientGroup: 'all',
+   133→   133→  scheduledAt: '',
+   134→   134→  sendNow: true,
+   135→   135→};
+   136→   136→
+   137→   137→// ============ STAT CARD ============
+   138→   138→
+   139→   139→interface CampaignStatCardProps {
+   140→   140→  label: string;
+   141→   141→  value: number;
+   142→   142→  icon: React.ElementType;
+   143→   143→  color: string;
+   144→   144→  iconBg: string;
+   145→   145→}
+   146→   146→
+   147→   147→function CampaignStatCard({ label, value, icon, color, iconBg }: CampaignStatCardProps) {
+   148→   148→  const Icon = icon;
+   149→   149→  return (
+   150→   150→    <motion.div
+   151→   151→      whileHover={{ scale: 1.02 }}
+   152→   152→      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+   153→   153→    >
+   154→   154→      <Card>
+   155→   155→        <CardContent className="p-4">
+   156→   156→          <div className="flex items-center justify-between">
+   157→   157→            <div>
+   158→   158→              <p className="text-xs font-medium text-muted-foreground">{label}</p>
+   159→   159→              <p className={`text-xl font-bold ${color}`}>{value.toLocaleString()}</p>
+   160→   160→            </div>
+   161→   161→            <div className={cn('rounded-lg p-2', iconBg)}>
+   162→   162→              <Icon className={cn('h-4 w-4', color)} />
+   163→   163→            </div>
+   164→   164→          </div>
+   165→   165→        </CardContent>
+   166→   166→      </Card>
+   167→   167→    </motion.div>
+   168→   168→  );
+   169→   169→}
+   170→   170→
+   171→   171→// ============ CAMPAIGN DETAIL DIALOG ============
+   172→   172→
+   173→   173→function CampaignDetailDialog({
+   174→   174→  campaign,
+   175→   175→  open,
+   176→   176→  onOpenChange,
+   177→   177→}: {
+   178→   178→  campaign: BroadcastLogData | null;
+   179→   179→  open: boolean;
+   180→   180→  onOpenChange: (open: boolean) => void;
+   181→   181→}) {
+   182→   182→  if (!campaign) return null;
+   183→   183→
+   184→   184→  const deliveryRate = campaign.sentCount > 0
+   185→   185→    ? Math.round((campaign.deliveredCount / campaign.sentCount) * 100)
+   186→   186→    : 0;
+   187→   187→  const readRate = campaign.sentCount > 0
+   188→   188→    ? Math.round((campaign.readCount / campaign.sentCount) * 100)
+   189→   189→    : 0;
+   190→   190→
+   191→   191→  return (
+   192→   192→    <Dialog open={open} onOpenChange={onOpenChange}>
+   193→   193→      <DialogContent className="max-w-lg">
+   194→   194→        <DialogHeader>
+   195→   195→          <DialogTitle className="flex items-center gap-2">{campaign.title}</DialogTitle>
+   196→   196→          <DialogDescription>Campaign performance details</DialogDescription>
+   197→   197→        </DialogHeader>
+   198→   198→        <div className="space-y-4 py-2">
+   199→   199→          {/* Status */}
+   200→   200→          <div className="flex items-center gap-2">
+   201→   201→            <span className="text-sm text-muted-foreground">Status:</span>
+   202→   202→            <Badge variant="secondary" className={STATUS_CONFIG[campaign.status].color}>
+   203→   203→              <span className={cn('h-1.5 w-1.5 rounded-full mr-1', STATUS_CONFIG[campaign.status].dotColor)} />
+   204→   204→              {STATUS_CONFIG[campaign.status].label}
+   205→   205→            </Badge>
+   206→   206→          </div>
+   207→   207→
+   208→   208→          {/* Content Preview */}
+   209→   209→          <div className="bg-gray-100 rounded-lg p-3">
+   210→   210→            <p className="text-sm text-gray-700">{campaign.content}</p>
+   211→   211→          </div>
+   212→   212→
+   213→   213→          {/* Stats Grid */}
+   214→   214→          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+   215→   215→            <div className="bg-gray-50 rounded-lg p-3 text-center">
+   216→   216→              <p className="text-lg font-bold text-gray-900">{campaign.recipientCount}</p>
+   217→   217→              <p className="text-xs text-muted-foreground">Recipients</p>
+   218→   218→            </div>
+   219→   219→            <div className="bg-gray-50 rounded-lg p-3 text-center">
+   220→   220→              <p className="text-lg font-bold text-emerald-600">{campaign.sentCount}</p>
+   221→   221→              <p className="text-xs text-muted-foreground">Sent</p>
+   222→   222→            </div>
+   223→   223→            <div className="bg-gray-50 rounded-lg p-3 text-center">
+   224→   224→              <p className="text-lg font-bold text-emerald-600">{campaign.deliveredCount}</p>
+   225→   225→              <p className="text-xs text-muted-foreground">Delivered</p>
+   226→   226→            </div>
+   227→   227→            <div className="bg-gray-50 rounded-lg p-3 text-center">
+   228→   228→              <p className="text-lg font-bold text-red-500">{campaign.failedCount}</p>
+   229→   229→              <p className="text-xs text-muted-foreground">Failed</p>
+   230→   230→            </div>
+   231→   231→            <div className="bg-gray-50 rounded-lg p-3 text-center">
+   232→   232→              <p className="text-lg font-bold text-teal-600">{campaign.readCount}</p>
+   233→   233→              <p className="text-xs text-muted-foreground">Read</p>
+   234→   234→            </div>
+   235→   235→            <div className="bg-gray-50 rounded-lg p-3 text-center">
+   236→   236→              <p className="text-lg font-bold text-gray-900">{deliveryRate}%</p>
+   237→   237→              <p className="text-xs text-muted-foreground">Delivery Rate</p>
+   238→   238→            </div>
+   239→   239→          </div>
+   240→   240→
+   241→   241→          {/* Delivery Progress */}
+   242→   242→          <div className="space-y-2">
+   243→   243→            <div className="flex justify-between text-xs">
+   244→   244→              <span className="text-muted-foreground">Delivery Rate</span>
+   245→   245→              <span className="font-medium">{deliveryRate}%</span>
+   246→   246→            </div>
+   247→   247→            <Progress value={deliveryRate} className="h-2" />
+   248→   248→          </div>
+   249→   249→
+   250→   250→          {/* Read Progress */}
+   251→   251→          <div className="space-y-2">
+   252→   252→            <div className="flex justify-between text-xs">
+   253→   253→              <span className="text-muted-foreground">Read Rate</span>
+   254→   254→              <span className="font-medium">{readRate}%</span>
+   255→   255→            </div>
+   256→   256→            <Progress value={readRate} className="h-2" />
+   257→   257→          </div>
+   258→   258→
+   259→   259→          {/* Timestamps */}
+   260→   260→          <div className="text-xs text-muted-foreground space-y-1 pt-2 border-t">
+   261→   261→            <p>Created: {new Date(campaign.createdAt).toLocaleString()}</p>
+   262→   262→            {campaign.scheduledAt && <p>Scheduled: {new Date(campaign.scheduledAt).toLocaleString()}</p>}
+   263→   263→            {campaign.sentAt && <p>Sent: {new Date(campaign.sentAt).toLocaleString()}</p>}
+   264→   264→            {campaign.completedAt && <p>Completed: {new Date(campaign.completedAt).toLocaleString()}</p>}
+   265→   265→          </div>
+   266→   266→        </div>
+   267→   267→        <DialogFooter>
+   268→   268→          <DialogClose asChild>
+   269→   269→            <Button variant="outline">Close</Button>
+   270→   270→          </DialogClose>
+   271→   271→        </DialogFooter>
+   272→   272→      </DialogContent>
+   273→   273→    </Dialog>
+   274→   274→  );
+   275→   275→}
+   276→   276→
+   277→   277→// ============ MAIN COMPONENT ============
+   278→   278→
+   279→   279→export function WhatsAppCampaigns() {
+   280→   280→  const [campaigns, setCampaigns] = useState<BroadcastLogData[]>([]);
+   281→   281→  const [isLoading, setIsLoading] = useState(true);
+   282→   282→  const [dialogOpen, setDialogOpen] = useState(false);
+   283→   283→  const [detailCampaign, setDetailCampaign] = useState<BroadcastLogData | null>(null);
+   284→   284→  const [detailOpen, setDetailOpen] = useState(false);
+   285→   285→  const [formData, setFormData] = useState<CampaignFormData>(FORM_DEFAULTS);
+   286→   286→  const [isCreating, setIsCreating] = useState(false);
+   287→   287→
+   288→   288→  // Fetch campaigns
+   289→   289→  const fetchCampaigns = useCallback(async () => {
+   290→   290→    setIsLoading(true);
+   291→   291→    try {
+   292→   292→      const token = getToken();
+   293→   293→      const res = await fetch('/api/whatsapp/campaigns', {
+   294→   294→        headers: { Authorization: `Bearer ${token}` },
+   295→   295→      });
+   296→   296→      if (res.ok) {
+   297→   297→        const data = await res.json();
+   298→   298→        setCampaigns(Array.isArray(data) ? data : data.data || []);
+   299→   299→      } else {
+   300→   300→        setCampaigns(MOCK_CAMPAIGNS);
+   301→   301→      }
+   302→   302→    } catch {
+   303→   303→      setCampaigns(MOCK_CAMPAIGNS);
+   304→   304→    } finally {
+   305→   305→      setIsLoading(false);
+   306→   306→    }
+   307→   307→  }, []);
+   308→   308→
+   309→   309→  useEffect(() => {
+   310→   310→    fetchCampaigns();
+   311→   311→  }, [fetchCampaigns]);
+   312→   312→
+   313→   313→  const handleCreate = async () => {
+   314→   314→    if (!formData.title.trim() || !formData.content.trim()) {
+   315→   315→      toast.error('Title and content are required');
+   316→   316→      return;
+   317→   317→    }
+   318→   318→    setIsCreating(true);
+   319→   319→    try {
+   320→   320→      const token = getToken();
+   321→   321→      const res = await fetch('/api/whatsapp/campaigns', {
+   322→   322→        method: 'POST',
+   323→   323→        headers: {
+   324→   324→          Authorization: `Bearer ${token}`,
+   325→   325→          'Content-Type': 'application/json',
+   326→   326→        },
+   327→   327→        body: JSON.stringify(formData),
+   328→   328→      });
+   329→   329→      if (res.ok) {
+   330→   330→        toast.success(formData.sendNow ? 'Campaign sent' : 'Campaign created');
+   331→   331→        setDialogOpen(false);
+   332→   332→        setFormData(FORM_DEFAULTS);
+   333→   333→        fetchCampaigns();
+   334→   334→      } else {
+   335→   335→        // Optimistically add
+   336→   336→        const newCampaign: BroadcastLogData = {
+   337→   337→          id: `local-${Date.now()}`,
+   338→   338→          tenantId: '',
+   339→   339→          title: formData.title,
+   340→   340→          content: formData.content,
+   341→   341→          recipientCount: 0,
+   342→   342→          sentCount: formData.sendNow ? 0 : 0,
+   343→   343→          deliveredCount: 0,
+   344→   344→          failedCount: 0,
+   345→   345→          readCount: 0,
+   346→   346→          status: formData.sendNow ? 'sending' : 'draft',
+   347→   347→          scheduledAt: formData.sendNow ? undefined : formData.scheduledAt || undefined,
+   348→   348→          createdAt: new Date().toISOString(),
+   349→   349→          updatedAt: new Date().toISOString(),
+   350→   350→        };
+   351→   351→        setCampaigns((prev) => [newCampaign, ...prev]);
+   352→   352→        toast.success(formData.sendNow ? 'Campaign is being sent' : 'Campaign saved as draft');
+   353→   353→        setDialogOpen(false);
+   354→   354→        setFormData(FORM_DEFAULTS);
+   355→   355→      }
+   356→   356→    } catch {
+   357→   357→      toast.error('Failed to create campaign');
+   358→   358→    } finally {
+   359→   359→      setIsCreating(false);
+   360→   360→    }
+   361→   361→  };
+   362→   362→
+   363→   363→  const handleCancelCampaign = (campaign: BroadcastLogData) => {
+   364→   364→    setCampaigns((prev) =>
+   365→   365→      prev.map((c) => (c.id === campaign.id ? { ...c, status: 'draft' as BroadcastStatus } : c))
+   366→   366→    );
+   367→   367→    toast.success('Campaign cancelled');
+   368→   368→  };
+   369→   369→
+   370→   370→  const handleDeleteCampaign = (campaign: BroadcastLogData) => {
+   371→   371→    if (campaign.status !== 'draft') {
+   372→   372→      toast.error('Only draft campaigns can be deleted');
+   373→   373→      return;
+   374→   374→    }
+   375→   375→    setCampaigns((prev) => prev.filter((c) => c.id !== campaign.id));
+   376→   376→    toast.success('Campaign deleted');
+   377→   377→  };
+   378→   378→
+   379→   379→  // Compute stats
+   380→   380→  const stats = {
+   381→   381→    total: campaigns.length,
+   382→   382→    active: campaigns.filter((c) => c.status === 'sending' || c.status === 'scheduled').length,
+   383→   383→    completed: campaigns.filter((c) => c.status === 'completed').length,
+   384→   384→    totalRecipients: campaigns.reduce((sum, c) => sum + c.recipientCount, 0),
+   385→   385→  };
+   386→   386→
+   387→   387→  return (
+   388→   388→    <div className="space-y-6">
+   389→   389→      {/* Page Header */}
+   390→   390→      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+   391→   391→        <div className="flex items-center gap-3">
+   392→   392→          <div className="rounded-lg bg-emerald-100 p-2">
+   393→   393→            <Megaphone className="h-6 w-6 text-emerald-600" />
+   394→   394→          </div>
+   395→   395→          <div>
+   396→   396→            <h1 className="text-2xl font-bold tracking-tight">Broadcast Campaigns</h1>
+   397→   397→            <p className="text-sm text-muted-foreground">Send bulk messages to customer groups</p>
+   398→   398→          </div>
+   399→   399→        </div>
+   400→   400→        <Button onClick={() => { setFormData(FORM_DEFAULTS); setDialogOpen(true); }} className="bg-emerald-600 hover:bg-emerald-700">
+   401→   401→          <Plus className="h-4 w-4 mr-1.5" />
+   402→   402→          New Campaign
+   403→   403→        </Button>
+   404→   404→      </div>
+   405→   405→
+   406→   406→      {/* Stats Row */}
+   407→   407→      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
+   408→   408→        <CampaignStatCard
+   409→   409→          label="Total Campaigns"
+   410→   410→          value={stats.total}
+   411→   411→          icon={BarChart3}
+   412→   412→          color="text-emerald-600"
+   413→   413→          iconBg="bg-emerald-100"
+   414→   414→        />
+   415→   415→        <CampaignStatCard
+   416→   416→          label="Active"
+   417→   417→          value={stats.active}
+   418→   418→          icon={Send}
+   419→   419→          color="text-amber-600"
+   420→   420→          iconBg="bg-amber-100"
+   421→   421→        />
+   422→   422→        <CampaignStatCard
+   423→   423→          label="Completed"
+   424→   424→          value={stats.completed}
+   425→   425→          icon={CheckCircle2}
+   426→   426→          color="text-emerald-600"
+   427→   427→          iconBg="bg-emerald-100"
+   428→   428→        />
+   429→   429→        <CampaignStatCard
+   430→   430→          label="Total Recipients"
+   431→   431→          value={stats.totalRecipients}
+   432→   432→          icon={Users}
+   433→   433→          color="text-teal-600"
+   434→   434→          iconBg="bg-teal-100"
+   435→   435→        />
+   436→   436→      </div>
+   437→   437→
+   438→   438→      {/* Campaign Table */}
+   439→   439→      <Card>
+   440→   440→        <CardContent className="p-0">
+   441→   441→          {isLoading ? (
+   442→   442→            <div className="space-y-4 p-6">
+   443→   443→              {[...Array(5)].map((_, i) => (
+   444→   444→                <Skeleton key={i} className="h-14 w-full rounded-lg" />
+   445→   445→              ))}
+   446→   446→            </div>
+   447→   447→          ) : campaigns.length === 0 ? (
+   448→   448→            <div className="text-center py-16 text-muted-foreground">
+   449→   449→              <Megaphone className="h-12 w-12 mx-auto mb-3 opacity-30" />
+   450→   450→              <p className="text-lg font-medium">No campaigns yet</p>
+   451→   451→              <p className="text-sm">Create your first broadcast campaign</p>
+   452→   452→            </div>
+   453→   453→          ) : (
+   454→   454→            <div className="max-h-96 overflow-y-auto">
+   455→   455→              <Table>
+   456→   456→                <TableHeader>
+   457→   457→                  <TableRow>
+   458→   458→                    <TableHead>Title</TableHead>
+   459→   459→                    <TableHead>Status</TableHead>
+   460→   460→                    <TableHead className="hidden sm:table-cell">Recipients</TableHead>
+   461→   461→                    <TableHead className="hidden md:table-cell">Sent</TableHead>
+   462→   462→                    <TableHead className="hidden md:table-cell">Delivered</TableHead>
+   463→   463→                    <TableHead className="hidden lg:table-cell">Failed</TableHead>
+   464→   464→                    <TableHead className="hidden lg:table-cell">Date</TableHead>
+   465→   465→                    <TableHead className="w-[160px]">Actions</TableHead>
+   466→   466→                  </TableRow>
+   467→   467→                </TableHeader>
+   468→   468→                <TableBody>
+   469→   469→                  {campaigns.map((campaign) => (
+   470→   470→                    <TableRow key={campaign.id}>
+   471→   471→                      <TableCell>
+   472→   472→                        <div>
+   473→   473→                          <p className="font-medium text-sm">{campaign.title}</p>
+   474→   474→                          <p className="text-xs text-muted-foreground truncate max-w-[200px]">
+   475→   475→                            {campaign.content.slice(0, 60)}...
+   476→   476→                          </p>
+   477→   477→                        </div>
+   478→   478→                      </TableCell>
+   479→   479→                      <TableCell>
+   480→   480→                        <Badge
+   481→   481→                          variant="secondary"
+   482→   482→                          className={cn('text-[10px]', STATUS_CONFIG[campaign.status].color)}
+   483→   483→                        >
+   484→   484→                          <span className={cn('h-1.5 w-1.5 rounded-full mr-1', STATUS_CONFIG[campaign.status].dotColor)} />
+   485→   485→                          {STATUS_CONFIG[campaign.status].label}
+   486→   486→                        </Badge>
+   487→   487→                      </TableCell>
+   488→   488→                      <TableCell className="hidden sm:table-cell">{campaign.recipientCount}</TableCell>
+   489→   489→                      <TableCell className="hidden md:table-cell">{campaign.sentCount}</TableCell>
+   490→   490→                      <TableCell className="hidden md:table-cell text-emerald-600 font-medium">{campaign.deliveredCount}</TableCell>
+   491→   491→                      <TableCell className="hidden lg:table-cell text-red-500 font-medium">{campaign.failedCount}</TableCell>
+   492→   492→                      <TableCell className="hidden lg:table-cell text-muted-foreground text-xs">
+   493→   493→                        {campaign.sentAt ? formatRelativeTime(campaign.sentAt) : campaign.scheduledAt ? formatRelativeTime(campaign.scheduledAt) : formatRelativeTime(campaign.createdAt)}
+   494→   494→                      </TableCell>
+   495→   495→                      <TableCell>
+   496→   496→                        <div className="flex items-center gap-1">
+   497→   497→                          <Button
+   498→   498→                            variant="ghost"
+   499→   499→                            size="icon"
+   500→   500→                            className="h-8 w-8"
+   501→   501→                            onClick={() => { setDetailCampaign(campaign); setDetailOpen(true); }}
+   502→   502→                          >
+   503→   503→                            <Eye className="h-3.5 w-3.5" />
+   504→   504→                          </Button>
+   505→   505→                          {(campaign.status === 'draft') && (
+   506→   506→                            <>
+   507→   507→                              <Button
+   508→   508→                                variant="ghost"
+   509→   509→                                size="icon"
+   510→   510→                                className="h-8 w-8 text-amber-600 hover:bg-amber-50"
+   511→   511→                                onClick={() => {
+   512→   512→                                  setCampaigns((prev) => prev.map((c) => (c.id === campaign.id ? { ...c, status: 'scheduled' as BroadcastStatus, scheduledAt: new Date(Date.now() + 3600000).toISOString() } : c)));
+   513→   513→                                  toast.success('Campaign scheduled');
+   514→   514→                                }}
+   515→   515→                              >
+   516→   516→                                <CalendarClock className="h-3.5 w-3.5" />
+   517→   517→                              </Button>
+   518→   518→                              <Button
+   519→   519→                                variant="ghost"
+   520→   520→                                size="icon"
+   521→   521→                                className="h-8 w-8 text-red-500 hover:bg-red-50"
+   522→   522→                                onClick={() => handleDeleteCampaign(campaign)}
+   523→   523→                              >
+   524→   524→                                <Trash2 className="h-3.5 w-3.5" />
+   525→   525→                              </Button>
+   526→   526→                            </>
+   527→   527→                          )}
+   528→   528→                          {(campaign.status === 'scheduled') && (
+   529→   529→                            <Button
+   530→   530→                              variant="ghost"
+   531→   531→                              size="icon"
+   532→   532→                              className="h-8 w-8 text-amber-600 hover:bg-amber-50"
+   533→   533→                              onClick={() => handleCancelCampaign(campaign)}
+   534→   534→                            >
+   535→   535→                              <XCircle className="h-3.5 w-3.5" />
+   536→   536→                            </Button>
+   537→   537→                          )}
+   538→   538→                        </div>
+   539→   539→                      </TableCell>
+   540→   540→                    </TableRow>
+   541→   541→                  ))}
+   542→   542→                </TableBody>
+   543→   543→              </Table>
+   544→   544→            </div>
+   545→   545→          )}
+   546→   546→        </CardContent>
+   547→   547→      </Card>
+   548→   548→
+   549→   549→      {/* Create Campaign Dialog */}
+   550→   550→      <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+   551→   551→        <DialogContent className="max-w-lg">
+   552→   552→          <DialogHeader>
+   553→   553→            <DialogTitle>New Campaign</DialogTitle>
+   554→   554→            <DialogDescription>Create a new broadcast campaign to send messages to customers</DialogDescription>
+   555→   555→          </DialogHeader>
+   556→   556→
+   557→   557→          <div className="space-y-4 py-2">
+   558→   558→            {/* Title */}
+   559→   559→            <div className="space-y-2">
+   560→   560→              <Label htmlFor="camp-title">Campaign Title</Label>
+   561→   561→              <Input
+   562→   562→                id="camp-title"
+   563→   563→                placeholder="e.g., Monthly Maintenance Reminder"
+   564→   564→                value={formData.title}
+   565→   565→                onChange={(e) => setFormData((prev) => ({ ...prev, title: e.target.value }))}
+   566→   566→              />
+   567→   567→            </div>
+   568→   568→
+   569→   569→            {/* Content */}
+   570→   570→            <div className="space-y-2">
+   571→   571→              <Label>Message Content</Label>
+   572→   572→              <Textarea
+   573→   573→                placeholder="Type the broadcast message..."
+   574→   574→                value={formData.content}
+   575→   575→                onChange={(e) => setFormData((prev) => ({ ...prev, content: e.target.value }))}
+   576→   576→                className="min-h-[100px]"
+   577→   577→              />
+   578→   578→            </div>
+   579→   579→
+   580→   580→            {/* Recipient Group */}
+   581→   581→            <div className="space-y-2">
+   582→   582→              <Label>Recipient Group</Label>
+   583→   583→              <Select
+   584→   584→                value={formData.recipientGroup}
+   585→   585→                onValueChange={(v) => setFormData((prev) => ({ ...prev, recipientGroup: v }))}
+   586→   586→              >
+   587→   587→                <SelectTrigger>
+   588→   588→                  <SelectValue placeholder="Select recipients" />
+   589→   589→                </SelectTrigger>
+   590→   590→                <SelectContent>
+   591→   591→                  {RECIPIENT_GROUPS.map((g) => (
+   592→   592→                    <SelectItem key={g.value} value={g.value}>
+   593→   593→                      {g.label}
+   594→   594→                    </SelectItem>
+   595→   595→                  ))}
+   596→   596→                </SelectContent>
+   597→   597→              </Select>
+   598→   598→            </div>
+   599→   599→
+   600→   600→            {/* Schedule */}
+   601→   601→            <div className="space-y-3">
+   602→   602→              <Label>Schedule</Label>
+   603→   603→              <div className="flex gap-3">
+   604→   604→                <Button
+   605→   605→                  type="button"
+   606→   606→                  variant={formData.sendNow ? 'default' : 'outline'}
+   607→   607→                  size="sm"
+   608→   608→                  className={cn(
+   609→   609→                    formData.sendNow ? 'bg-emerald-600 hover:bg-emerald-700' : '',
+   610→   610→                    !formData.sendNow && 'border-emerald-200'
+   611→   611→                  )}
+   612→   612→                  onClick={() => setFormData((prev) => ({ ...prev, sendNow: true }))}
+   613→   613→                >
+   614→   614→                  <Send className="h-3.5 w-3.5 mr-1.5" />
+   615→   615→                  Send Now
+   616→   616→                </Button>
+   617→   617→                <Button
+   618→   618→                  type="button"
+   619→   619→                  variant={!formData.sendNow ? 'default' : 'outline'}
+   620→   620→                  size="sm"
+   621→   621→                  className={cn(
+   622→   622→                    !formData.sendNow ? 'bg-emerald-600 hover:bg-emerald-700' : '',
+   623→   623→                    formData.sendNow && 'border-emerald-200'
+   624→   624→                  )}
+   625→   625→                  onClick={() => setFormData((prev) => ({ ...prev, sendNow: false }))}
+   626→   626→                >
+   627→   627→                  <CalendarClock className="h-3.5 w-3.5 mr-1.5" />
+   628→   628→                  Schedule
+   629→   629→                </Button>
+   630→   630→              </div>
+   631→   631→              {!formData.sendNow && (
+   632→   632→                <Input
+   633→   633→                  type="datetime-local"
+   634→   634→                  value={formData.scheduledAt}
+   635→   635→                  onChange={(e) => setFormData((prev) => ({ ...prev, scheduledAt: e.target.value }))}
+   636→   636→                />
+   637→   637→              )}
+   638→   638→            </div>
+   639→   639→
+   640→   640→            {/* Preview */}
+   641→   641→            {formData.content && (
+   642→   642→              <div className="space-y-2">
+   643→   643→                <Label className="flex items-center gap-1.5 text-sm">
+   644→   644→                  <Eye className="h-3.5 w-3.5" />
+   645→   645→                  Preview
+   646→   646→                </Label>
+   647→   647→                <div className="bg-emerald-600 text-white rounded-xl p-3 max-w-xs ml-auto">
+   648→   648→                  <p className="text-sm">{formData.content}</p>
+   649→   649→                  <p className="text-xs opacity-70 mt-1 text-right">12:00 PM</p>
+   650→   650→                </div>
+   651→   651→              </div>
+   652→   652→            )}
+   653→   653→          </div>
+   654→   654→
+   655→   655→          <DialogFooter>
+   656→   656→            <DialogClose asChild>
+   657→   657→              <Button variant="outline">Cancel</Button>
+   658→   658→            </DialogClose>
+   659→   659→            <Button
+   660→   660→              onClick={handleCreate}
+   661→   661→              disabled={isCreating || !formData.title.trim() || !formData.content.trim()}
+   662→   662→              className="bg-emerald-600 hover:bg-emerald-700"
+   663→   663→            >
+   664→   664→              {isCreating ? (
+   665→   665→                <>
+   666→   666→                  <Zap className="h-4 w-4 mr-1.5 animate-pulse" />
+   667→   667→                  {formData.sendNow ? 'Sending...' : 'Saving...'}
+   668→   668→                </>
+   669→   669→              ) : (
+   670→   670→                <>
+   671→   671→                  <Send className="h-4 w-4 mr-1.5" />
+   672→   672→                  {formData.sendNow ? 'Send Now' : 'Create Draft'}
+   673→   673→                </>
+   674→   674→              )}
+   675→   675→            </Button>
+   676→   676→          </DialogFooter>
+   677→   677→        </DialogContent>
+   678→   678→      </Dialog>
+   679→   679→
+   680→   680→      {/* Campaign Detail Dialog */}
+   681→   681→      <CampaignDetailDialog
+   682→   682→        campaign={detailCampaign}
+   683→   683→        open={detailOpen}
+   684→   684→        onOpenChange={setDetailOpen}
+   685→   685→      />
+   686→   686→    </div>
+   687→   687→  );
+   688→   688→}
+   689→   689→

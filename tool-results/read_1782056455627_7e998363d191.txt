@@ -1,0 +1,601 @@
+     1→     1→'use client';
+     2→     2→
+     3→     3→import { useState, useEffect, useCallback, useRef } from 'react';
+     4→     4→import { Card, CardContent, CardHeader } from '@/components/ui/card';
+     5→     5→import { Button } from '@/components/ui/button';
+     6→     6→import { Badge } from '@/components/ui/badge';
+     7→     7→import { Input } from '@/components/ui/input';
+     8→     8→import { Textarea } from '@/components/ui/textarea';
+     9→     9→import { Skeleton } from '@/components/ui/skeleton';
+    10→    10→import { ScrollArea } from '@/components/ui/scroll-area';
+    11→    11→import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+    12→    12→import { Separator } from '@/components/ui/separator';
+    13→    13→import {
+    14→    14→  Search, Send, Paperclip, ArrowLeft, User, MoreVertical,
+    15→    15→  Check, CheckCheck, Clock, ImageIcon, FileIcon,
+    16→    16→} from 'lucide-react';
+    17→    17→import { useAppStore, useAuthStore } from '@/store';
+    18→    18→import { toast } from 'sonner';
+    19→    19→import type {
+    20→    20→  ConversationThreadData,
+    21→    21→  WhatsAppMessageData,
+    22→    22→  WhatsAppSessionData,
+    23→    23→  WhatsAppMessageDirection,
+    24→    24→} from '@/types';
+    25→    25→import { cn } from '@/lib/utils';
+    26→    26→import { motion, AnimatePresence } from 'framer-motion';
+    27→    27→
+    28→    28→// ============ HELPERS ============
+    29→    29→
+    30→    30→function getToken(): string {
+    31→    31→  return localStorage.getItem('cmms_token') || '';
+    32→    32→}
+    33→    33→
+    34→    34→function formatRelativeTime(dateStr: string): string {
+    35→    35→  try {
+    36→    36→    const now = new Date();
+    37→    37→    const then = new Date(dateStr);
+    38→    38→    const diffMs = now.getTime() - then.getTime();
+    39→    39→    const diffMin = Math.floor(diffMs / 60000);
+    40→    40→    if (diffMin < 1) return 'just now';
+    41→    41→    if (diffMin < 60) return `${diffMin}m ago`;
+    42→    42→    const diffHr = Math.floor(diffMin / 60);
+    43→    43→    if (diffHr < 24) return `${diffHr}h ago`;
+    44→    44→    const diffDay = Math.floor(diffHr / 24);
+    45→    45→    if (diffDay < 7) return `${diffDay}d ago`;
+    46→    46→    return then.toLocaleDateString();
+    47→    47→  } catch {
+    48→    48→    return dateStr;
+    49→    49→  }
+    50→    50→}
+    51→    51→
+    52→    52→function formatMessageTime(dateStr: string): string {
+    53→    53→  try {
+    54→    54→    const d = new Date(dateStr);
+    55→    55→    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    56→    56→  } catch {
+    57→    57→    return '';
+    58→    58→  }
+    59→    59→}
+    60→    60→
+    61→    61→function getInitials(name: string | undefined): string {
+    62→    62→  if (!name) return '??';
+    63→    63→  return name
+    64→    64→    .split(' ')
+    65→    65→    .map((n) => n[0])
+    66→    66→    .join('')
+    67→    67→    .toUpperCase()
+    68→    68→    .slice(0, 2);
+    69→    69→}
+    70→    70→
+    71→    71→// ============ MOCK DATA ============
+    72→    72→
+    73→    73→const MOCK_THREADS: ConversationThreadData[] = [
+    74→    74→  { id: '1', tenantId: 't1', sessionId: 's1', subject: 'AC not cooling', status: 'active', assignedToName: 'Admin', lastMessageAt: new Date(Date.now() - 60000).toISOString(), messageCount: 15, createdAt: new Date(Date.now() - 86400000).toISOString(), updatedAt: new Date().toISOString(), customerName: 'Ahmad Razak', customerPhone: '+6012345678', lastMessage: 'My air conditioning is still not working properly.' },
+    75→    75→  { id: '2', tenantId: 't1', sessionId: 's2', subject: 'Leaking pipe', status: 'active', lastMessageAt: new Date(Date.now() - 300000).toISOString(), messageCount: 8, createdAt: new Date(Date.now() - 172800000).toISOString(), updatedAt: new Date().toISOString(), customerName: 'Sarah Lee', customerPhone: '+6012345679', lastMessage: 'The leak is getting worse, please help urgently.' },
+    76→    76→  { id: '3', tenantId: 't1', sessionId: 's3', subject: 'Equipment check', status: 'resolved', assignedToName: 'Tech A', lastMessageAt: new Date(Date.now() - 900000).toISOString(), messageCount: 22, createdAt: new Date(Date.now() - 259200000).toISOString(), updatedAt: new Date().toISOString(), customerName: 'Kumar Nair', customerPhone: '+6012345680', lastMessage: 'Thank you, the issue has been resolved.' },
+    77→    77→  { id: '4', tenantId: 't1', sessionId: 's4', subject: 'Invoice inquiry', status: 'active', lastMessageAt: new Date(Date.now() - 1800000).toISOString(), messageCount: 5, createdAt: new Date(Date.now() - 43200000).toISOString(), updatedAt: new Date().toISOString(), customerName: 'Lim Wei Ming', customerPhone: '+6012345681', lastMessage: 'Can you send me the invoice for last month?' },
+    78→    78→  { id: '5', tenantId: 't1', sessionId: 's5', subject: 'Emergency power outage', status: 'active', lastMessageAt: new Date(Date.now() - 3600000).toISOString(), messageCount: 3, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(), customerName: 'Omar Hassan', customerPhone: '+6012345683', lastMessage: 'We have a complete power outage at building B!' },
+    79→    79→  { id: '6', tenantId: 't1', sessionId: 's6', subject: 'Service feedback', status: 'resolved', lastMessageAt: new Date(Date.now() - 7200000).toISOString(), messageCount: 6, createdAt: new Date(Date.now() - 345600000).toISOString(), updatedAt: new Date().toISOString(), customerName: 'Priya Sharma', customerPhone: '+6012345682', lastMessage: 'Great service! Rating: 5/5' },
+    80→    80→  { id: '7', tenantId: 't1', sessionId: 's7', subject: 'Maintenance request', status: 'active', lastMessageAt: new Date(Date.now() - 14400000).toISOString(), messageCount: 11, createdAt: new Date(Date.now() - 518400000).toISOString(), updatedAt: new Date().toISOString(), customerName: 'Tan Mei Ling', customerPhone: '+6012345684', lastMessage: 'When can the technician come for the annual maintenance?' },
+    81→    81→  { id: '8', tenantId: 't1', sessionId: 's8', subject: 'General inquiry', status: 'active', lastMessageAt: new Date(Date.now() - 28800000).toISOString(), messageCount: 2, createdAt: new Date(Date.now() - 86400000).toISOString(), updatedAt: new Date().toISOString(), customerName: 'Nurul Aisyah', customerPhone: '+6012345686', lastMessage: 'Hi, what are your operating hours?' },
+    82→    82→];
+    83→    83→
+    84→    84→const MOCK_MESSAGES: WhatsAppMessageData[] = [
+    85→    85→  { id: '1', tenantId: 't1', sessionId: 's1', direction: 'inbound', messageType: 'text', content: 'Hi, I need help with my AC unit at level 3.', fromNumber: '+6012345678', status: 'read', isFromBot: false, isTemplate: false, createdAt: new Date(Date.now() - 3600000).toISOString(), updatedAt: new Date().toISOString() },
+    86→    86→  { id: '2', tenantId: 't1', sessionId: 's1', direction: 'outbound', messageType: 'text', content: 'Hello Ahmad! I\'ll help you with your AC unit. Can you describe the issue?', toNumber: '+6012345678', status: 'read', isFromBot: true, isTemplate: false, createdAt: new Date(Date.now() - 3500000).toISOString(), updatedAt: new Date().toISOString() },
+    87→    87→  { id: '3', tenantId: 't1', sessionId: 's1', direction: 'inbound', messageType: 'text', content: 'It\'s making a loud noise and not cooling properly. The room temperature is not going below 28°C.', fromNumber: '+6012345678', status: 'read', isFromBot: false, isTemplate: false, createdAt: new Date(Date.now() - 3400000).toISOString(), updatedAt: new Date().toISOString() },
+    88→    88→  { id: '4', tenantId: 't1', sessionId: 's1', direction: 'outbound', messageType: 'text', content: 'I understand, a technician has been assigned. Your complaint #CMP-2024-089 has been created. Technician Raj will contact you within 2 hours.', toNumber: '+6012345678', status: 'delivered', isFromBot: true, isTemplate: false, createdAt: new Date(Date.now() - 3300000).toISOString(), updatedAt: new Date().toISOString() },
+    89→    89→  { id: '5', tenantId: 't1', sessionId: 's1', direction: 'inbound', messageType: 'text', content: 'Thank you! How long will it take?', fromNumber: '+6012345678', status: 'read', isFromBot: false, isTemplate: false, createdAt: new Date(Date.now() - 3200000).toISOString(), updatedAt: new Date().toISOString() },
+    90→    90→  { id: '6', tenantId: 't1', sessionId: 's1', direction: 'outbound', messageType: 'text', content: 'Estimated arrival time is within 2 hours. You\'ll receive updates via WhatsApp.', toNumber: '+6012345678', status: 'read', isFromBot: true, isTemplate: false, createdAt: new Date(Date.now() - 3100000).toISOString(), updatedAt: new Date().toISOString() },
+    91→    91→  { id: '7', tenantId: 't1', sessionId: 's1', direction: 'inbound', messageType: 'image', content: null, mediaUrl: '/placeholder.jpg', mediaType: 'image/jpeg', caption: 'This is the noise it makes', fromNumber: '+6012345678', status: 'read', isFromBot: false, isTemplate: false, createdAt: new Date(Date.now() - 3000000).toISOString(), updatedAt: new Date().toISOString() },
+    92→    92→  { id: '8', tenantId: 't1', sessionId: 's1', direction: 'inbound', messageType: 'text', content: 'My air conditioning is still not working properly. The technician came but the issue persists.', fromNumber: '+6012345678', status: 'delivered', isFromBot: false, isTemplate: false, createdAt: new Date(Date.now() - 60000).toISOString(), updatedAt: new Date().toISOString() },
+    93→    93→];
+    94→    94→
+    95→    95→// ============ SUB-COMPONENTS ============
+    96→    96→
+    97→    97→const FILTER_TABS = [
+    98→    98→  { value: 'all', label: 'All' },
+    99→    99→  { value: 'active', label: 'Active' },
+   100→   100→  { value: 'resolved', label: 'Resolved' },
+   101→   101→  { value: 'blocked', label: 'Blocked' },
+   102→   102→] as const;
+   103→   103→
+   104→   104→type FilterTab = typeof FILTER_TABS[number]['value'];
+   105→   105→
+   106→   106→function ThreadItem({
+   107→   107→  thread,
+   108→   108→  isSelected,
+   109→   109→  hasUnread,
+   110→   110→  onClick,
+   111→   111→}: {
+   112→   112→  thread: ConversationThreadData;
+   113→   113→  isSelected: boolean;
+   114→   114→  hasUnread: boolean;
+   115→   115→  onClick: () => void;
+   116→   116→}) {
+   117→   117→  return (
+   118→   118→    <motion.div
+   119→   119→      initial={{ opacity: 0, x: -10 }}
+   120→   120→      animate={{ opacity: 1, x: 0 }}
+   121→   121→      transition={{ duration: 0.15 }}
+   122→   122→    >
+   123→   123→      <button
+   124→   124→        onClick={onClick}
+   125→   125→        className={cn(
+   126→   126→          'w-full flex items-start gap-3 p-3 text-left transition-colors rounded-lg',
+   127→   127→          isSelected
+   128→   128→            ? 'bg-emerald-50 border border-emerald-200'
+   129→   129→            : 'hover:bg-muted/50 border border-transparent'
+   130→   130→        )}
+   131→   131→      >
+   132→   132→        <div className="relative shrink-0">
+   133→   133→          <Avatar className="h-10 w-10 bg-emerald-600">
+   134→   134→            <AvatarFallback className="text-white text-xs font-medium">
+   135→   135→              {getInitials(thread.customerName)}
+   136→   136→            </AvatarFallback>
+   137→   137→          </Avatar>
+   138→   138→          {hasUnread && (
+   139→   139→            <span className="absolute -top-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-500 border-2 border-background" />
+   140→   140→          )}
+   141→   141→        </div>
+   142→   142→        <div className="flex-1 min-w-0 space-y-1">
+   143→   143→          <div className="flex items-center justify-between gap-2">
+   144→   144→            <span className="font-medium text-sm truncate">
+   145→   145→              {thread.customerName || thread.customerPhone}
+   146→   146→            </span>
+   147→   147→            <span className="text-xs text-muted-foreground whitespace-nowrap">
+   148→   148→              {formatRelativeTime(thread.lastMessageAt)}
+   149→   149→            </span>
+   150→   150→          </div>
+   151→   151→          <p className="text-xs text-muted-foreground truncate">{thread.lastMessage || 'No messages'}</p>
+   152→   152→          <div className="flex items-center gap-1.5">
+   153→   153→            <Badge
+   154→   154→              variant="secondary"
+   155→   155→              className={cn(
+   156→   156→                'text-[10px] px-1.5 py-0',
+   157→   157→                thread.status === 'active'
+   158→   158→                  ? 'bg-emerald-100 text-emerald-700'
+   159→   159→                  : 'bg-gray-100 text-gray-600'
+   160→   160→              )}
+   161→   161→            >
+   162→   162→              {thread.status}
+   163→   163→            </Badge>
+   164→   164→            {thread.subject && (
+   165→   165→              <span className="text-[10px] text-muted-foreground truncate">{thread.subject}</span>
+   166→   166→            )}
+   167→   167→          </div>
+   168→   168→        </div>
+   169→   169→      </button>
+   170→   170→    </motion.div>
+   171→   171→  );
+   172→   172→}
+   173→   173→
+   174→   174→function MessageBubble({ message }: { message: WhatsAppMessageData }) {
+   175→   175→  const isOutbound = message.direction === 'outbound';
+   176→   176→  const isBot = message.isFromBot;
+   177→   177→  const isMedia = message.messageType !== 'text' && message.messageType !== 'sticker';
+   178→   178→
+   179→   179→  return (
+   180→   180→    <motion.div
+   181→   181→      initial={{ opacity: 0, y: 5 }}
+   182→   182→      animate={{ opacity: 1, y: 0 }}
+   183→   183→      transition={{ duration: 0.15 }}
+   184→   184→      className={cn('flex gap-2 max-w-[80%]', isOutbound ? 'ml-auto flex-row-reverse' : 'mr-auto')}
+   185→   185→    >
+   186→   186→      <div className="space-y-1">
+   187→   187→        {isBot && (
+   188→   188→          <span className="flex items-center gap-1 text-[10px] text-muted-foreground ml-1">
+   189→   189→            🤖 Bot
+   190→   190→          </span>
+   191→   191→        )}
+   192→   192→        <div
+   193→   193→          className={cn(
+   194→   194→            'rounded-2xl px-4 py-2.5 relative',
+   195→   195→            isOutbound
+   196→   196→              ? 'bg-emerald-600 text-white rounded-br-sm'
+   197→   197→              : 'bg-gray-100 text-gray-900 rounded-bl-sm'
+   198→   198→          )}
+   199→   199→        >
+   200→   200→          {isMedia && message.mediaType?.startsWith('image') && (
+   201→   201→            <div className="mb-2 rounded-lg overflow-hidden bg-gray-200">
+   202→   202→              <div className="w-48 h-36 flex items-center justify-center text-gray-400">
+   203→   203→                <ImageIcon className="h-8 w-8" />
+   204→   204→              </div>
+   205→   205→            </div>
+   206→   206→          )}
+   207→   207→          {isMedia && !message.mediaType?.startsWith('image') && (
+   208→   208→            <div className="mb-2 flex items-center gap-2 text-sm opacity-80">
+   209→   209→              <FileIcon className="h-4 w-4" />
+   210→   210→              <span>{message.messageType}</span>
+   211→   211→            </div>
+   212→   212→          )}
+   213→   213→          {message.content && (
+   214→   214→            <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
+   215→   215→          )}
+   216→   216→          {message.caption && (
+   217→   217→            <p className="text-xs opacity-80 mt-1">{message.caption}</p>
+   218→   218→          )}
+   219→   219→        </div>
+   220→   220→        <div className={cn('flex items-center gap-1 text-[10px] text-muted-foreground', isOutbound ? 'justify-end mr-1' : 'ml-1')}>
+   221→   221→          <Clock className="h-3 w-3" />
+   222→   222→          <span>{formatMessageTime(message.createdAt)}</span>
+   223→   223→          {isOutbound && (
+   224→   224→            <>
+   225→   225→              {message.status === 'sent' && <Check className="h-3 w-3" />}
+   226→   226→              {message.status === 'delivered' && <CheckCheck className="h-3 w-3" />}
+   227→   227→              {message.status === 'read' && <CheckCheck className="h-3 w-3 text-emerald-500" />}
+   228→   228→            </>
+   229→   229→          )}
+   230→   230→        </div>
+   231→   231→      </div>
+   232→   232→    </motion.div>
+   233→   233→  );
+   234→   234→}
+   235→   235→
+   236→   236→// ============ MAIN COMPONENT ============
+   237→   237→
+   238→   238→export function WhatsAppChats() {
+   239→   239→  const { viewParams, setView } = useAppStore();
+   240→   240→  const [threads, setThreads] = useState<ConversationThreadData[]>([]);
+   241→   241→  const [messages, setMessages] = useState<WhatsAppMessageData[]>([]);
+   242→   242→  const [selectedThread, setSelectedThread] = useState<ConversationThreadData | null>(null);
+   243→   243→  const [searchQuery, setSearchQuery] = useState('');
+   244→   244→  const [filterTab, setFilterTab] = useState<FilterTab>('all');
+   245→   245→  const [messageInput, setMessageInput] = useState('');
+   246→   246→  const [isLoadingThreads, setIsLoadingThreads] = useState(true);
+   247→   247→  const [isLoadingMessages, setIsLoadingMessages] = useState(false);
+   248→   248→  const [isSending, setIsSending] = useState(false);
+   249→   249→  const messagesEndRef = useRef<HTMLDivElement>(null);
+   250→   250→  const textareaRef = useRef<HTMLTextAreaElement>(null);
+   251→   251→
+   252→   252→  // Fetch threads
+   253→   253→  useEffect(() => {
+   254→   254→    async function fetchThreads() {
+   255→   255→      setIsLoadingThreads(true);
+   256→   256→      try {
+   257→   257→        const token = getToken();
+   258→   258→        const statusParam = filterTab === 'all' ? 'active' : filterTab;
+   259→   259→        const res = await fetch(`/api/whatsapp/threads?status=${statusParam}`, {
+   260→   260→          headers: { Authorization: `Bearer ${token}` },
+   261→   261→        });
+   262→   262→        if (res.ok) {
+   263→   263→          const data = await res.json();
+   264→   264→          setThreads(Array.isArray(data) ? data : data.data || []);
+   265→   265→        } else {
+   266→   266→          setThreads(MOCK_THREADS);
+   267→   267→        }
+   268→   268→      } catch {
+   269→   269→        setThreads(MOCK_THREADS);
+   270→   270→      } finally {
+   271→   271→        setIsLoadingThreads(false);
+   272→   272→      }
+   273→   273→    }
+   274→   274→    fetchThreads();
+   275→   275→  }, [filterTab]);
+   276→   276→
+   277→   277→  // Fetch messages for selected thread
+   278→   278→  const fetchMessages = useCallback(async (thread: ConversationThreadData) => {
+   279→   279→    setIsLoadingMessages(true);
+   280→   280→    try {
+   281→   281→      const token = getToken();
+   282→   282→      const res = await fetch(`/api/whatsapp/sessions/${thread.sessionId}/messages`, {
+   283→   283→        headers: { Authorization: `Bearer ${token}` },
+   284→   284→      });
+   285→   285→      if (res.ok) {
+   286→   286→        const data = await res.json();
+   287→   287→        setMessages(Array.isArray(data) ? data : data.data || []);
+   288→   288→      } else {
+   289→   289→        setMessages(MOCK_MESSAGES);
+   290→   290→      }
+   291→   291→    } catch {
+   292→   292→      setMessages(MOCK_MESSAGES);
+   293→   293→    } finally {
+   294→   294→      setIsLoadingMessages(false);
+   295→   295→    }
+   296→   296→  }, []);
+   297→   297→
+   298→   298→  // Select thread from param or first thread
+   299→   299→  useEffect(() => {
+   300→   300→    if (viewParams?.sessionId && threads.length > 0) {
+   301→   301→      const t = threads.find((th) => th.sessionId === viewParams.sessionId);
+   302→   302→      if (t) {
+   303→   303→        setSelectedThread(t);
+   304→   304→        fetchMessages(t);
+   305→   305→      }
+   306→   306→    }
+   307→   307→  }, [viewParams, threads, fetchMessages]);
+   308→   308→
+   309→   309→  // Auto-scroll to bottom
+   310→   310→  useEffect(() => {
+   311→   311→    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+   312→   312→  }, [messages]);
+   313→   313→
+   314→   314→  const handleSelectThread = (thread: ConversationThreadData) => {
+   315→   315→    setSelectedThread(thread);
+   316→   316→    setView('whatsapp-chats', { sessionId: thread.sessionId });
+   317→   317→    fetchMessages(thread);
+   318→   318→  };
+   319→   319→
+   320→   320→  const handleSendMessage = async () => {
+   321→   321→    if (!messageInput.trim() || !selectedThread || isSending) return;
+   322→   322→    setIsSending(true);
+   323→   323→    try {
+   324→   324→      const token = getToken();
+   325→   325→      const res = await fetch(`/api/whatsapp/sessions/${selectedThread.sessionId}/messages`, {
+   326→   326→        method: 'POST',
+   327→   327→        headers: {
+   328→   328→          Authorization: `Bearer ${token}`,
+   329→   329→          'Content-Type': 'application/json',
+   330→   330→        },
+   331→   331→        body: JSON.stringify({ content: messageInput.trim(), messageType: 'text' }),
+   332→   332→      });
+   333→   333→      if (res.ok) {
+   334→   334→        setMessageInput('');
+   335→   335→        // Optimistically add message
+   336→   336→        const newMsg: WhatsAppMessageData = {
+   337→   337→          id: `temp-${Date.now()}`,
+   338→   338→          tenantId: '',
+   339→   339→          sessionId: selectedThread.sessionId,
+   340→   340→          direction: 'outbound',
+   341→   341→          messageType: 'text',
+   342→   342→          content: messageInput.trim(),
+   343→   343→          status: 'sent',
+   344→   344→          isFromBot: false,
+   345→   345→          isTemplate: false,
+   346→   346→          createdAt: new Date().toISOString(),
+   347→   347→          updatedAt: new Date().toISOString(),
+   348→   348→        };
+   349→   349→        setMessages((prev) => [...prev, newMsg]);
+   350→   350→      } else {
+   351→   351→        toast.error('Failed to send message');
+   352→   352→      }
+   353→   353→    } catch {
+   354→   354→      toast.error('Failed to send message');
+   355→   355→    } finally {
+   356→   356→      setIsSending(false);
+   357→   357→      if (textareaRef.current) {
+   358→   358→        textareaRef.current.style.height = 'auto';
+   359→   359→      }
+   360→   360→    }
+   361→   361→  };
+   362→   362→
+   363→   363→  const handleTextareaKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+   364→   364→    if (e.key === 'Enter' && !e.shiftKey) {
+   365→   365→      e.preventDefault();
+   366→   366→      handleSendMessage();
+   367→   367→    }
+   368→   368→  };
+   369→   369→
+   370→   370→  const handleTextareaInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+   371→   371→    setMessageInput(e.target.value);
+   372→   372→    // Auto-grow
+   373→   373→    const el = e.target;
+   374→   374→    el.style.height = 'auto';
+   375→   375→    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+   376→   376→  };
+   377→   377→
+   378→   378→  // Filter threads
+   379→   379→  const filteredThreads = threads.filter((t) => {
+   380→   380→    const matchesSearch =
+   381→   381→      !searchQuery ||
+   382→   382→      (t.customerName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+   383→   383→      (t.customerPhone || '').includes(searchQuery) ||
+   384→   384→      (t.lastMessage || '').toLowerCase().includes(searchQuery.toLowerCase());
+   385→   385→
+   386→   386→    const matchesFilter =
+   387→   387→      filterTab === 'all' ||
+   388→   388→      (filterTab === 'active' && t.status === 'active') ||
+   389→   389→      (filterTab === 'resolved' && t.status === 'resolved');
+   390→   390→
+   391→   391→    return matchesSearch && matchesFilter;
+   392→   392→  });
+   393→   393→
+   394→   394→  return (
+   395→   395→    <div className="space-y-4">
+   396→   396→      {/* Page Header */}
+   397→   397→      <div className="flex items-center gap-3">
+   398→   398→        <div className="rounded-lg bg-emerald-100 p-2">
+   399→   399→          <Send className="h-6 w-6 text-emerald-600" />
+   400→   400→        </div>
+   401→   401→        <div>
+   402→   402→          <h1 className="text-2xl font-bold tracking-tight">WhatsApp Chats</h1>
+   403→   403→          <p className="text-sm text-muted-foreground">Live conversations with customers</p>
+   404→   404→        </div>
+   405→   405→      </div>
+   406→   406→
+   407→   407→      {/* Split Panel */}
+   408→   408→      <Card className="overflow-hidden">
+   409→   409→        <div className="flex flex-col md:flex-row h-[calc(100vh-220px)] min-h-[500px]">
+   410→   410→          {/* Left Panel - Thread List */}
+   411→   411→          <div className="w-full md:w-1/3 border-r border-border flex flex-col">
+   412→   412→            {/* Search */}
+   413→   413→            <div className="p-3 border-b border-border">
+   414→   414→              <div className="relative">
+   415→   415→                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   416→   416→                <Input
+   417→   417→                  placeholder="Search by name or phone..."
+   418→   418→                  value={searchQuery}
+   419→   419→                  onChange={(e) => setSearchQuery(e.target.value)}
+   420→   420→                  className="pl-9 h-9"
+   421→   421→                />
+   422→   422→              </div>
+   423→   423→            </div>
+   424→   424→
+   425→   425→            {/* Filter Tabs */}
+   426→   426→            <div className="flex border-b border-border">
+   427→   427→              {FILTER_TABS.map((tab) => (
+   428→   428→                <button
+   429→   429→                  key={tab.value}
+   430→   430→                  onClick={() => setFilterTab(tab.value)}
+   431→   431→                  className={cn(
+   432→   432→                    'flex-1 px-3 py-2 text-xs font-medium transition-colors',
+   433→   433→                    filterTab === tab.value
+   434→   434→                      ? 'text-emerald-700 border-b-2 border-emerald-500 bg-emerald-50/50'
+   435→   435→                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+   436→   436→                  )}
+   437→   437→                >
+   438→   438→                  {tab.label}
+   439→   439→                </button>
+   440→   440→              ))}
+   441→   441→            </div>
+   442→   442→
+   443→   443→            {/* Thread List */}
+   444→   444→            <ScrollArea className="flex-1">
+   445→   445→              <div className="p-2 space-y-1">
+   446→   446→                {isLoadingThreads ? (
+   447→   447→                  <div className="space-y-3 p-2">
+   448→   448→                    {[...Array(6)].map((_, i) => (
+   449→   449→                      <div key={i} className="flex items-center gap-3">
+   450→   450→                        <Skeleton className="h-10 w-10 rounded-full" />
+   451→   451→                        <div className="flex-1 space-y-2">
+   452→   452→                          <Skeleton className="h-3 w-24" />
+   453→   453→                          <Skeleton className="h-3 w-40" />
+   454→   454→                        </div>
+   455→   455→                      </div>
+   456→   456→                    ))}
+   457→   457→                  </div>
+   458→   458→                ) : filteredThreads.length === 0 ? (
+   459→   459→                  <div className="text-center py-12 text-sm text-muted-foreground">
+   460→   460→                    No conversations found
+   461→   461→                  </div>
+   462→   462→                ) : (
+   463→   463→                  filteredThreads.map((thread) => (
+   464→   464→                    <ThreadItem
+   465→   465→                      key={thread.id}
+   466→   466→                      thread={thread}
+   467→   467→                      isSelected={selectedThread?.id === thread.id}
+   468→   468→                      hasUnread={thread.status === 'active' && thread.id !== selectedThread?.id}
+   469→   469→                      onClick={() => handleSelectThread(thread)}
+   470→   470→                    />
+   471→   471→                  ))
+   472→   472→                )}
+   473→   473→              </div>
+   474→   474→            </ScrollArea>
+   475→   475→          </div>
+   476→   476→
+   477→   477→          {/* Right Panel - Messages */}
+   478→   478→          <div className="flex-1 flex flex-col">
+   479→   479→            {selectedThread ? (
+   480→   480→              <>
+   481→   481→                {/* Chat Header */}
+   482→   482→                <div className="flex items-center justify-between p-3 border-b border-border bg-muted/30">
+   483→   483→                  <div className="flex items-center gap-3">
+   484→   484→                    <Button
+   485→   485→                      variant="ghost"
+   486→   486→                      size="icon"
+   487→   487→                      className="md:hidden h-8 w-8"
+   488→   488→                      onClick={() => setSelectedThread(null)}
+   489→   489→                    >
+   490→   490→                      <ArrowLeft className="h-4 w-4" />
+   491→   491→                    </Button>
+   492→   492→                    <Avatar className="h-9 w-9 bg-emerald-600">
+   493→   493→                      <AvatarFallback className="text-white text-xs font-medium">
+   494→   494→                        {getInitials(selectedThread.customerName)}
+   495→   495→                      </AvatarFallback>
+   496→   496→                    </Avatar>
+   497→   497→                    <div>
+   498→   498→                      <p className="font-medium text-sm">{selectedThread.customerName || selectedThread.customerPhone}</p>
+   499→   499→                      <p className="text-xs text-muted-foreground">{selectedThread.customerPhone}</p>
+   500→   500→                    </div>
+   501→   501→                  </div>
+   502→   502→                  <div className="flex items-center gap-2">
+   503→   503→                    <Badge
+   504→   504→                      variant="secondary"
+   505→   505→                      className={cn(
+   506→   506→                        'text-[10px]',
+   507→   507→                        selectedThread.status === 'active'
+   508→   508→                          ? 'bg-emerald-100 text-emerald-700'
+   509→   509→                          : 'bg-gray-100 text-gray-600'
+   510→   510→                      )}
+   511→   511→                    >
+   512→   512→                      {selectedThread.status}
+   513→   513→                    </Badge>
+   514→   514→                    <Button variant="ghost" size="icon" className="h-8 w-8">
+   515→   515→                      <User className="h-4 w-4" />
+   516→   516→                    </Button>
+   517→   517→                    <Button variant="ghost" size="icon" className="h-8 w-8">
+   518→   518→                      <MoreVertical className="h-4 w-4" />
+   519→   519→                    </Button>
+   520→   520→                  </div>
+   521→   521→                </div>
+   522→   522→
+   523→   523→                {/* Message List */}
+   524→   524→                <ScrollArea className="flex-1">
+   525→   525→                  <div className="p-4 space-y-3">
+   526→   526→                    {isLoadingMessages ? (
+   527→   527→                      <div className="space-y-4">
+   528→   528→                        {[...Array(5)].map((_, i) => (
+   529→   529→                          <div key={i} className={cn('flex', i % 2 === 0 ? 'justify-start' : 'justify-end')}>
+   530→   530→                            <Skeleton className="h-16 w-48 rounded-2xl" />
+   531→   531→                          </div>
+   532→   532→                        ))}
+   533→   533→                      </div>
+   534→   534→                    ) : (
+   535→   535→                      <AnimatePresence initial={false}>
+   536→   536→                        {messages.map((msg, idx) => (
+   537→   537→                          <div key={msg.id}>
+   538→   538→                            {/* New messages separator */}
+   539→   539→                            {idx === 5 && (
+   540→   540→                              <div className="flex items-center gap-3 my-4">
+   541→   541→                                <Separator className="flex-1" />
+   542→   542→                                <span className="text-xs text-muted-foreground bg-background px-2">New</span>
+   543→   543→                                <Separator className="flex-1" />
+   544→   544→                              </div>
+   545→   545→                            )}
+   546→   546→                            <MessageBubble message={msg} />
+   547→   547→                          </div>
+   548→   548→                        ))}
+   549→   549→                      </AnimatePresence>
+   550→   550→                    )}
+   551→   551→                    <div ref={messagesEndRef} />
+   552→   552→                  </div>
+   553→   553→                </ScrollArea>
+   554→   554→
+   555→   555→                {/* Message Input */}
+   556→   556→                <div className="border-t border-border p-3">
+   557→   557→                  <div className="flex items-end gap-2">
+   558→   558→                    <Button variant="ghost" size="icon" className="h-9 w-9 shrink-0 text-muted-foreground">
+   559→   559→                      <Paperclip className="h-4 w-4" />
+   560→   560→                    </Button>
+   561→   561→                    <div className="flex-1 relative">
+   562→   562→                      <Textarea
+   563→   563→                        ref={textareaRef}
+   564→   564→                        placeholder="Type a message..."
+   565→   565→                        value={messageInput}
+   566→   566→                        onChange={handleTextareaInput}
+   567→   567→                        onKeyDown={handleTextareaKeyDown}
+   568→   568→                        className="min-h-[36px] max-h-[120px] resize-none pr-12 py-2 text-sm rounded-xl"
+   569→   569→                        rows={1}
+   570→   570→                      />
+   571→   571→                    </div>
+   572→   572→                    <Button
+   573→   573→                      size="icon"
+   574→   574→                      className="h-9 w-9 shrink-0 bg-emerald-600 hover:bg-emerald-700"
+   575→   575→                      onClick={handleSendMessage}
+   576→   576→                      disabled={!messageInput.trim() || isSending}
+   577→   577→                    >
+   578→   578→                      <Send className="h-4 w-4" />
+   579→   579→                    </Button>
+   580→   580→                  </div>
+   581→   581→                </div>
+   582→   582→              </>
+   583→   583→            ) : (
+   584→   584→              /* Empty state */
+   585→   585→              <div className="flex-1 flex flex-col items-center justify-center text-center p-6">
+   586→   586→                <div className="rounded-full bg-emerald-100 p-4 mb-4">
+   587→   587→                  <Send className="h-8 w-8 text-emerald-600" />
+   588→   588→                </div>
+   589→   589→                <h3 className="text-lg font-semibold mb-1">Select a conversation</h3>
+   590→   590→                <p className="text-sm text-muted-foreground max-w-sm">
+   591→   591→                  Choose a conversation from the list to view and respond to messages
+   592→   592→                </p>
+   593→   593→              </div>
+   594→   594→            )}
+   595→   595→          </div>
+   596→   596→        </div>
+   597→   597→      </Card>
+   598→   598→    </div>
+   599→   599→  );
+   600→   600→}
+   601→   601→
