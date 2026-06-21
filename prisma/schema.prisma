@@ -1,0 +1,502 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ============ TENANT & MULTI-TENANCY ============
+
+model Tenant {
+  id          String   @id @default(cuid())
+  name        String
+  domain      String   @unique
+  logo        String?
+  address     String?
+  phone       String?
+  email       String?
+  isActive    Boolean  @default(true)
+  plan        String   @default("professional") // free, professional, enterprise
+  maxUsers    Int      @default(50)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       User[]
+  customers   Customer[]
+  equipment   Equipment[]
+  complaints  Complaint[]
+  workOrders  WorkOrder[]
+  invoices    Invoice[]
+  quotations  Quotation[]
+  pmSchedules PmSchedule[]
+  inventory   InventoryItem[]
+  purchaseOrders PurchaseOrder[]
+  vehicles    Vehicle[]
+  departments Department[]
+  notifications Notification[]
+  auditLogs   AuditLog[]
+  checklistTemplates ChecklistTemplate[]
+}
+
+// ============ USERS & AUTH ============
+
+model User {
+  id            String   @id @default(cuid())
+  tenantId      String
+  email         String
+  passwordHash  String?
+  name          String
+  phone         String?
+  avatar        String?
+  role          String   @default("technician") // super_admin, admin, manager, supervisor, technician, finance, customer
+  employeeNumber String?
+  departmentId  String?
+  isActive      Boolean  @default(true)
+  isOnline      Boolean  @default(false)
+  lastLogin     DateTime?
+  gpsLocation   String?  // JSON: {lat, lng}
+  profileCompleted Boolean @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  department    Department? @relation(fields: [departmentId], references: [id])
+  assignedComplaints  Complaint[]  @relation("TechnicianComplaints")
+  assignedWorkOrders  WorkOrder[]  @relation("TechnicianWorkOrders")
+  createdWorkOrders   WorkOrder[]  @relation("CreatorWorkOrders")
+  createdInvoices     Invoice[]    @relation("CreatorInvoices")
+  pmSchedules   PmSchedule[] @relation("PmScheduleAssignee")
+  supervisorComplaints Complaint[] @relation("SupervisorComplaints")
+  auditLogs    AuditLog[]
+  vehicleLogs  VehicleLog[]
+
+  @@unique([tenantId, email])
+}
+
+// ============ DEPARTMENTS ============
+
+model Department {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  description String?
+  headId      String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  users       User[]
+}
+
+// ============ CUSTOMERS ============
+
+model Customer {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  email       String?
+  phone       String
+  address     String?
+  gpsLocation String?  // JSON: {lat, lng}
+  companyName String?
+  customerNumber String @unique
+  photo       String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  equipment   Equipment[]
+  complaints  Complaint[]
+  invoices    Invoice[]
+  quotations  Quotation[]
+}
+
+// ============ EQUIPMENT ============
+
+model Equipment {
+  id            String   @id @default(cuid())
+  tenantId      String
+  customerId    String?
+  name          String
+  category      String   // HVAC, Electrical, Plumbing, Generator, Mechanical, FireProtection
+  assetNumber   String   @unique
+  qrCode        String   @unique
+  brand         String?
+  model         String?
+  serialNumber  String?
+  location      String?
+  installDate   DateTime?
+  warrantyExpiry DateTime?
+  status        String   @default("active") // active, inactive, under_maintenance, decommissioned
+  photos        String?  // JSON array of URLs
+  documents     String?  // JSON array of URLs
+  specifications String? // JSON object
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  customer      Customer? @relation(fields: [customerId], references: [id])
+  complaints    Complaint[]
+  workOrders    WorkOrder[]
+  pmSchedules   PmSchedule[]
+}
+
+// ============ COMPLAINTS ============
+
+model Complaint {
+  id            String   @id @default(cuid())
+  tenantId      String
+  customerId    String
+  equipmentId   String?
+  title         String
+  description   String
+  priority      String   @default("medium") // low, medium, high, critical
+  status        String   @default("OPEN") // OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED
+  category      String?  // HVAC, Electrical, Plumbing, etc.
+  photos        String?  // JSON array
+  gpsLocation   String?  // JSON: {lat, lng}
+  assignedToId  String?  // technician
+  supervisorId  String?
+  resolutionNotes String?
+  customerRating Int?
+  customerFeedback String?
+  resolvedAt    DateTime?
+  closedAt      DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  customer      Customer @relation(fields: [customerId], references: [id])
+  equipment     Equipment? @relation(fields: [equipmentId], references: [id])
+  assignedTo    User?    @relation("TechnicianComplaints", fields: [assignedToId], references: [id])
+  supervisor    User?    @relation("SupervisorComplaints", fields: [supervisorId], references: [id])
+  workOrders    WorkOrder[]
+  notifications Notification[]
+
+  @@index([tenantId, status])
+  @@index([tenantId, assignedToId])
+}
+
+// ============ WORK ORDERS ============
+
+model WorkOrder {
+  id              String   @id @default(cuid())
+  tenantId        String
+  complaintId     String?
+  equipmentId     String?
+  title           String
+  description     String
+  status          String   @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+  priority        String   @default("medium")
+  type            String   @default("corrective") // corrective, preventive, emergency
+  assignedToId    String?
+  createdBy       String?
+  scheduledDate   DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  checkInGps      String?  // JSON: {lat, lng, timestamp}
+  checkOutGps     String?  // JSON: {lat, lng, timestamp}
+  laborHours      Float?
+  laborCost       Float?
+  materialCost    Float?
+  totalCost       Float?
+  notes           String?
+  photos          String?  // JSON array
+  checklistData   String?  // JSON: completed checklist
+  technicianSignature String?
+  customerSignature   String?
+  serviceReportPdf   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  complaint       Complaint? @relation(fields: [complaintId], references: [id])
+  equipment       Equipment? @relation(fields: [equipmentId], references: [id])
+  assignedTo      User?    @relation("TechnicianWorkOrders", fields: [assignedToId], references: [id])
+  creator         User?    @relation("CreatorWorkOrders", fields: [createdBy], references: [id])
+  materials       WorkOrderMaterial[]
+  invoices        Invoice[]
+
+  @@index([tenantId, status])
+  @@index([tenantId, assignedToId])
+}
+
+model WorkOrderMaterial {
+  id            String   @id @default(cuid())
+  workOrderId   String
+  inventoryItemId String
+  quantity      Int
+  unitCost      Float
+  totalCost     Float
+
+  workOrder     WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
+}
+
+// ============ CHECKLIST TEMPLATES ============
+
+model ChecklistTemplate {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  category    String   // HVAC, Electrical, Plumbing, Generator, etc.
+  description String?
+  items       String   // JSON array of checklist items
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+// ============ PREVENTIVE MAINTENANCE ============
+
+model PmSchedule {
+  id            String   @id @default(cuid())
+  tenantId      String
+  equipmentId   String
+  title         String
+  description   String?
+  frequency     String   // monthly, quarterly, half_yearly, yearly, custom
+  customDays    Int?
+  lastExecuted  DateTime?
+  nextDueDate   DateTime
+  assignedToId  String?
+  status        String   @default("active") // active, paused, completed
+  checklistTemplateId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  equipment     Equipment @relation(fields: [equipmentId], references: [id])
+  assignedTo    User?    @relation("PmScheduleAssignee", fields: [assignedToId], references: [id])
+}
+
+// ============ QUOTATIONS ============
+
+model Quotation {
+  id            String   @id @default(cuid())
+  tenantId      String
+  customerId    String
+  complaintId   String?
+  title         String
+  description   String?
+  items         String   // JSON array of line items
+  subtotal      Float
+  tax           Float    @default(0)
+  discount      Float    @default(0)
+  total         Float
+  status        String   @default("DRAFT") // DRAFT, SENT, APPROVED, REJECTED, EXPIRED
+  validUntil    DateTime?
+  approvedBy    String?
+  approvedAt    DateTime?
+  pdfUrl        String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  customer      Customer @relation(fields: [customerId], references: [id])
+}
+
+// ============ INVOICES ============
+
+model Invoice {
+  id            String   @id @default(cuid())
+  tenantId      String
+  customerId    String
+  workOrderId   String?
+  quotationId   String?
+  invoiceNumber String   @unique
+  title         String
+  description   String?
+  items         String   // JSON array of line items
+  subtotal      Float
+  tax           Float    @default(0)
+  discount      Float    @default(0)
+  total         Float
+  status        String   @default("DRAFT") // DRAFT, PENDING, APPROVED, PAID, CANCELLED, OVERDUE
+  dueDate       DateTime?
+  paidAt        DateTime?
+  paymentMethod String?
+  paymentRef    String?
+  sentVia       String?  // email, whatsapp, portal
+  pdfUrl        String?
+  createdBy     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  customer      Customer @relation(fields: [customerId], references: [id])
+  workOrder     WorkOrder? @relation(fields: [workOrderId], references: [id])
+  creator       User?    @relation("CreatorInvoices", fields: [createdBy], references: [id])
+
+  @@index([tenantId, status])
+}
+
+// ============ INVENTORY ============
+
+model InventoryItem {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  sku           String?
+  category      String?
+  description   String?
+  unit          String   @default("pcs")
+  quantity      Int      @default(0)
+  minStock      Int      @default(0)
+  unitCost      Float    @default(0)
+  supplier      String?
+  location      String?
+  photos        String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  workOrderMaterials WorkOrderMaterial[]
+}
+
+// ============ PURCHASE ORDERS ============
+
+model PurchaseOrder {
+  id            String   @id @default(cuid())
+  tenantId      String
+  poNumber      String   @unique
+  supplier      String
+  supplierContact String?
+  items         String   // JSON array
+  subtotal      Float
+  tax           Float    @default(0)
+  total         Float
+  status        String   @default("DRAFT") // DRAFT, SENT, APPROVED, RECEIVED, CANCELLED
+  expectedDate  DateTime?
+  receivedAt    DateTime?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+}
+
+// ============ VEHICLES ============
+
+model Vehicle {
+  id            String   @id @default(cuid())
+  tenantId      String
+  plateNumber   String
+  make          String
+  model         String
+  year          Int?
+  vin           String?
+  fuelType      String?
+  status        String   @default("active") // active, maintenance, decommissioned
+  currentMileage Float?
+  nextServiceDate DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  logs          VehicleLog[]
+}
+
+model VehicleLog {
+  id            String   @id @default(cuid())
+  vehicleId     String
+  userId        String?
+  type          String   // fuel, maintenance, repair
+  date          DateTime
+  odometer      Float?
+  quantity      Float?   // liters for fuel
+  cost          Float
+  description   String?
+  location      String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+  user          User?    @relation(fields: [userId], references: [id])
+}
+
+// ============ NOTIFICATIONS ============
+
+model Notification {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String?
+  type          String   // complaint_assigned, status_update, pm_reminder, invoice_reminder, eta_update
+  title         String
+  message       String
+  data          String?  // JSON: related entity IDs
+  isRead        Boolean  @default(false)
+  relatedEntityType String? // complaint, work_order, invoice, pm_schedule
+  relatedEntityId   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  complaint     Complaint? @relation(fields: [relatedEntityId], references: [id])
+}
+
+// ============ AUDIT LOGS ============
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String
+  action        String
+  entity        String
+  entityId      String?
+  details       String?  // JSON
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@index([tenantId, entity])
+}
+
+// ============ LEAVE & ATTENDANCE ============
+
+model LeaveRequest {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String
+  type          String   // sick, annual, emergency, personal
+  startDate     DateTime
+  endDate       DateTime
+  days          Float
+  reason        String?
+  status        String   @default("PENDING") // PENDING, APPROVED, REJECTED, CANCELLED
+  approvedBy    String?
+  approvedAt    DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Attendance {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String
+  date          DateTime
+  checkIn       DateTime?
+  checkOut      DateTime?
+  checkInGps    String?
+  checkOutGps   String?
+  hoursWorked   Float?
+  status        String   @default("present") // present, absent, late, half_day, leave
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([tenantId, userId, date])
+}
