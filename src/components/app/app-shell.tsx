@@ -29,6 +29,26 @@ const ReportView = lazy(() => import('@/components/modules/reports/report-view')
 const NotificationList = lazy(() => import('@/components/modules/notifications/notification-list').then(m => ({ default: m.NotificationList })));
 const SettingsView = lazy(() => import('@/components/modules/settings/settings-view').then(m => ({ default: m.SettingsView })));
 
+// CMS views
+const CmsDashboard = lazy(() => import('@/components/modules/cms/cms-dashboard').then(m => ({ default: m.CmsDashboard })));
+const CmsServices = lazy(() => import('@/components/modules/cms/cms-services').then(m => ({ default: m.CmsServices })));
+const CmsIndustries = lazy(() => import('@/components/modules/cms/cms-industries').then(m => ({ default: m.CmsIndustries })));
+const CmsProjects = lazy(() => import('@/components/modules/cms/cms-projects').then(m => ({ default: m.CmsProjects })));
+const CmsBlogs = lazy(() => import('@/components/modules/cms/cms-blogs').then(m => ({ default: m.CmsBlogs })));
+const CmsTestimonials = lazy(() => import('@/components/modules/cms/cms-testimonials').then(m => ({ default: m.CmsTestimonials })));
+const CmsCareers = lazy(() => import('@/components/modules/cms/cms-careers').then(m => ({ default: m.CmsCareers })));
+const CmsContact = lazy(() => import('@/components/modules/cms/cms-contact').then(m => ({ default: m.CmsContact })));
+const CmsMedia = lazy(() => import('@/components/modules/cms/cms-media').then(m => ({ default: m.CmsMedia })));
+const CmsSeo = lazy(() => import('@/components/modules/cms/cms-seo').then(m => ({ default: m.CmsSeo })));
+const CmsHero = lazy(() => import('@/components/modules/cms/cms-hero').then(m => ({ default: m.CmsHero })));
+const CmsAbout = lazy(() => import('@/components/modules/cms/cms-about').then(m => ({ default: m.CmsAbout })));
+const CmsHeader = lazy(() => import('@/components/modules/cms/cms-header').then(m => ({ default: m.CmsHeader })));
+const CmsFooter = lazy(() => import('@/components/modules/cms/cms-footer').then(m => ({ default: m.CmsFooter })));
+const CmsAnnouncements = lazy(() => import('@/components/modules/cms/cms-announcements').then(m => ({ default: m.CmsAnnouncements })));
+const CmsPopups = lazy(() => import('@/components/modules/cms/cms-popups').then(m => ({ default: m.CmsPopups })));
+const CmsForms = lazy(() => import('@/components/modules/cms/cms-forms').then(m => ({ default: m.CmsForms })));
+const CmsActivity = lazy(() => import('@/components/modules/cms/cms-activity').then(m => ({ default: m.CmsActivity })));
+
 function ViewLoader() {
   return (
     <div className="p-6 space-y-4">
@@ -70,6 +90,24 @@ function ViewRouter() {
       {currentView === 'notifications' && <NotificationList />}
       {currentView === 'settings' && <SettingsView />}
       {currentView === 'profile' && <SettingsView />}
+      {currentView === 'cms-dashboard' && <CmsDashboard />}
+      {currentView === 'cms-services' && <CmsServices />}
+      {currentView === 'cms-industries' && <CmsIndustries />}
+      {currentView === 'cms-projects' && <CmsProjects />}
+      {currentView === 'cms-blogs' && <CmsBlogs />}
+      {currentView === 'cms-testimonials' && <CmsTestimonials />}
+      {currentView === 'cms-careers' && <CmsCareers />}
+      {currentView === 'cms-contact' && <CmsContact />}
+      {currentView === 'cms-media' && <CmsMedia />}
+      {currentView === 'cms-seo' && <CmsSeo />}
+      {currentView === 'cms-hero' && <CmsHero />}
+      {currentView === 'cms-about' && <CmsAbout />}
+      {currentView === 'cms-header' && <CmsHeader />}
+      {currentView === 'cms-footer' && <CmsFooter />}
+      {currentView === 'cms-announcements' && <CmsAnnouncements />}
+      {currentView === 'cms-popups' && <CmsPopups />}
+      {currentView === 'cms-forms' && <CmsForms />}
+      {currentView === 'cms-activity' && <CmsActivity />}
     </Suspense>
   );
 }

@@ -500,3 +500,362 @@ model Attendance {
 
   @@unique([tenantId, userId, date])
 }
+
+// ============ CMS - CONTENT MANAGEMENT SYSTEM ============
+
+// 1. CMS Settings - Global CMS settings (JSON blobs)
+model CmsSetting {
+  id          String   @id @default(cuid())
+  tenantId    String
+  key         String
+  value       String   // JSON blob
+  category    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([tenantId, key])
+  @@index([tenantId])
+}
+
+// 2. CMS Hero - Hero section content
+model CmsHero {
+  id              String    @id @default(cuid())
+  tenantId        String
+  headline        String?
+  subheadline     String?
+  backgroundImage String?
+  backgroundVideo String?
+  cta1Text        String?
+  cta1Link        String?
+  cta2Text        String?
+  cta2Link        String?
+  stat1Value      String?
+  stat1Label      String?
+  stat2Value      String?
+  stat2Label      String?
+  stat3Value      String?
+  stat3Label      String?
+  chipText        String?
+  chipSubtext     String?
+  isActive        Boolean   @default(true)
+  publishedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([tenantId])
+}
+
+// 3. CMS Service - Services
+model CmsService {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  slug          String
+  description   String?
+  image         String?
+  icon          String?
+  category      String?  // HVAC, Electrical, Plumbing, etc.
+  status        String   @default("draft") // active, draft
+  seoTitle      String?
+  seoDescription String?
+  displayOrder  Int      @default(0)
+  isEnabled     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+// 4. CMS Industry - Industries served
+model CmsIndustry {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  description   String?
+  image         String?
+  icon          String?
+  displayOrder  Int      @default(0)
+  isEnabled     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+// 5. CMS Project - Portfolio projects
+model CmsProject {
+  id                String    @id @default(cuid())
+  tenantId          String
+  title             String
+  slug              String
+  description       String?
+  category          String?
+  featuredImage     String?
+  images            String?   // JSON array
+  beforeAfterImages String?   // JSON
+  completionStatus  String    @default("planned") // planned, in_progress, completed
+  isFeatured        Boolean   @default(false)
+  galleryImages     String?   // JSON
+  seoTitle          String?
+  seoDescription    String?
+  displayOrder      Int       @default(0)
+  status            String    @default("draft") // active, draft
+  publishedAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+// 6. CMS Blog Category - Blog categories
+model CmsBlogCategory {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  slug        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  blogs       CmsBlog[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+// 7. CMS Blog - Blog posts
+model CmsBlog {
+  id            String    @id @default(cuid())
+  tenantId      String
+  title         String
+  slug          String
+  excerpt       String?
+  content       String?   // rich text
+  featuredImage String?
+  categoryId    String?
+  authorId      String?   // User
+  status        String    @default("draft") // draft, published, scheduled
+  seoTitle      String?
+  seoDescription String?
+  seoKeywords   String?
+  isFeatured    Boolean   @default(false)
+  publishedAt   DateTime?
+  scheduledAt   DateTime?
+  viewCount     Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  category      CmsBlogCategory? @relation(fields: [categoryId], references: [id])
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+// 8. CMS Testimonial - Customer testimonials
+model CmsTestimonial {
+  id            String   @id @default(cuid())
+  tenantId      String
+  customerName  String
+  company       String?
+  photo         String?
+  rating        Int      // 1-5
+  comment       String
+  status        String   @default("draft") // active, draft
+  displayOrder  Int      @default(0)
+  isEnabled     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+// 9. CMS Career Job - Career positions
+model CmsCareerJob {
+  id                String    @id @default(cuid())
+  tenantId          String
+  title             String
+  department        String?
+  description       String?
+  requirements      String?   // JSON
+  salary            String?
+  status            String    @default("open") // open, closed, filled
+  applicationDeadline DateTime?
+  location          String?
+  type              String    @default("fulltime") // fulltime, parttime, contract
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  applications      CmsCareerApplication[]
+
+  @@index([tenantId])
+}
+
+// 10. CMS Career Application - Job applications
+model CmsCareerApplication {
+  id            String   @id @default(cuid())
+  tenantId      String
+  jobId         String
+  fullName      String
+  email         String
+  phone         String?
+  resumeUrl     String?
+  coverLetter   String?
+  status        String   @default("new") // new, reviewed, shortlisted, rejected, hired
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  job          CmsCareerJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}
+
+// 11. CMS Contact Message - Contact form submissions
+model CmsContactMessage {
+  id            String    @id @default(cuid())
+  tenantId      String
+  name          String
+  email         String
+  phone         String?
+  subject       String?
+  message       String
+  source        String    @default("website") // website, whatsapp, email, emergency
+  status        String    @default("new") // new, read, replied, archived
+  assignedToId  String?   // User
+  reply         String?
+  replyAt       DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([tenantId])
+}
+
+// 12. CMS Media - Media library
+model CmsMedia {
+  id            String   @id @default(cuid())
+  tenantId      String
+  fileName      String
+  originalName  String
+  mimeType      String
+  size          Int
+  url           String
+  thumbnailUrl  String?
+  folder        String?
+  category      String?
+  alt           String?
+  width         Int?
+  height        Int?
+  uploadedById  String?  // User
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+// 13. CMS SEO - SEO settings per page
+model CmsSeo {
+  id            String   @id @default(cuid())
+  tenantId      String
+  pagePath      String
+  title         String?
+  description   String?
+  keywords      String?
+  ogTitle       String?
+  ogDescription String?
+  ogImage       String?
+  schemaMarkup  String?  // JSON
+  canonicalUrl  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([tenantId, pagePath])
+  @@index([tenantId])
+}
+
+// 14. CMS Footer - Footer settings
+model CmsFooter {
+  id                String   @id @default(cuid())
+  tenantId          String
+  companyDescription String?
+  address           String?
+  phone             String?
+  email             String?
+  whatsapp          String?
+  facebook          String?
+  instagram         String?
+  linkedin          String?
+  twitter           String?
+  youtube           String?
+  copyrightText     String?
+  privacyPolicyLink String?
+  termsLink         String?
+  menuLinks         String?  // JSON
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+// 15. CMS Announcement - Announcement bar
+model CmsAnnouncement {
+  id            String    @id @default(cuid())
+  tenantId      String
+  text          String
+  type          String    @default("info") // maintenance, holiday, emergency, info
+  link          String?
+  isEnabled     Boolean   @default(true)
+  scheduledFrom DateTime?
+  scheduledTo   DateTime?
+  displayOrder  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([tenantId])
+}
+
+// 16. CMS Popup - Popup management
+model CmsPopup {
+  id            String    @id @default(cuid())
+  tenantId      String
+  title         String
+  content       String?
+  type          String    @default("welcome") // welcome, alert, promotional, newsletter
+  imageUrl      String?
+  frequency     String    @default("once") // once, session, once/day, always
+  isEnabled     Boolean   @default(true)
+  scheduledFrom DateTime?
+  scheduledTo   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([tenantId])
+}
+
+// 17. CMS Form - Form builder
+model CmsForm {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  formType      String   @default("contact") // contact, career, feedback, survey, custom
+  fields        String   // JSON
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+// 18. CMS Activity Log - CMS audit log
+model CmsActivityLog {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String?
+  action        String
+  section       String?
+  details       String?  // JSON
+  ipAddress     String?
+  createdAt     DateTime @default(now())
+
+  @@index([tenantId])
+}

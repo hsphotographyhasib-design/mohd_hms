@@ -60,7 +60,26 @@ export type AppView =
   | 'reports'
   | 'notifications'
   | 'settings'
-  | 'profile';
+  | 'profile'
+  // CMS views
+  | 'cms-dashboard'
+  | 'cms-services'
+  | 'cms-industries'
+  | 'cms-projects'
+  | 'cms-blogs'
+  | 'cms-testimonials'
+  | 'cms-careers'
+  | 'cms-contact'
+  | 'cms-media'
+  | 'cms-seo'
+  | 'cms-hero'
+  | 'cms-about'
+  | 'cms-header'
+  | 'cms-footer'
+  | 'cms-announcements'
+  | 'cms-popups'
+  | 'cms-forms'
+  | 'cms-activity';
 
 // ============ EQUIPMENT ============
 

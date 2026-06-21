@@ -185,6 +185,7 @@ export function canAccess(userRole: UserRole, feature: string): boolean {
     reports: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
     notifications: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
     settings: ['super_admin', 'admin'],
+    cms: ['super_admin', 'admin'],
   };
   return (permissions[feature] || []).includes(userRole);
 }
