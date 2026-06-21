@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useSyncExternalStore } from 'react';
+import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import { Building2 } from 'lucide-react';
 import { useAuthStore } from '@/store';
+import { LandingPage } from '@/components/app/landing-page';
 import { LoginView } from '@/components/app/login-view';
 import { AppShell } from '@/components/app/app-shell';
 import { AuthGuard } from '@/components/session/auth-guard';
@@ -72,6 +73,7 @@ function ProtectedApp() {
 export default function Home() {
   const { isAuthenticated } = useAuthStore();
   const hydrated = useHydrated();
+  const [showLogin, setShowLogin] = useState(false);
 
   // On first hydration, load stored session (for initial render)
   // The AuthGuard will then validate it with the server
@@ -107,7 +109,16 @@ export default function Home() {
     <SessionProvider>
       <FetchInterceptorSetup />
       <ToastListener />
-      {isAuthenticated ? <ProtectedApp /> : <LoginView />}
+      {isAuthenticated ? (
+        <ProtectedApp />
+      ) : showLogin ? (
+        <LoginView />
+      ) : (
+        <LandingPage
+          onSignIn={() => setShowLogin(true)}
+          onGetStarted={() => setShowLogin(true)}
+        />
+      )}
     </SessionProvider>
   );
 }

@@ -800,3 +800,55 @@ Stage Summary:
 - Browser back button protection: ✅
 - Cache-Control headers (no-store, no-cache, must-revalidate, private): ✅
 - Security headers (X-Content-Type-Options, X-Frame-Options, X-XSS-Protection): ✅
+
+---
+Task ID: 2
+Agent: Landing Page Builder
+Task: Create professional landing page for FacilityPro CMMS SaaS platform
+
+Work Log:
+- Created `/src/components/app/landing-page.tsx` — full-featured SaaS landing page component
+- Implemented 8 sections: Navbar, Hero, Stats, Features (6 cards), Industries (6 badges), Pricing (3 tiers), CTA, Footer
+- Emerald/green color scheme with white background, subtle gradient hero section
+- Fully responsive (mobile-first): hamburger menu via Sheet, grid breakpoints for all sections
+- Sticky navigation bar with backdrop blur
+- Framer Motion scroll-triggered fade-up animations with stagger children
+- Sticky footer pattern: `min-h-screen flex flex-col` wrapper + `mt-auto` on footer
+- Props: `onSignIn` and `onGetStarted` callbacks for navigation to LoginView
+- Updated `/src/app/page.tsx` to show LandingPage for unauthenticated users, LoginView when Sign In/Get Started clicked
+- ESLint passed cleanly, dev server compiled with 0 errors
+
+Stage Summary:
+- Professional SaaS landing page with 8 sections, emerald theme, framer-motion animations
+- Mobile-responsive with Sheet-based hamburger nav
+- LandingPage now shown before LoginView for unauthenticated users
+- All CTA buttons route to LoginView via callbacks
+---
+Task ID: 4
+Agent: Main Architect
+Task: Fix landing page not showing - was showing login page directly instead
+
+Work Log:
+- Diagnosed: page.tsx rendered LoginView directly when not authenticated, no landing page existed
+- Created `/src/components/app/landing-page.tsx` - full professional SaaS landing page with:
+  - Sticky navbar with logo, anchor links, Sign In / Get Started buttons, mobile hamburger
+  - Hero section with gradient background, headline, CTA buttons
+  - Stats section (500+ Facilities, 50K+ Work Orders, 99.9% Uptime, 40% Cost Reduction)
+  - Features grid (6 cards: PM, Work Orders, Asset Tracking, Inventory, Complaints, Dashboard)
+  - Industries section (6 badges)
+  - Pricing section (3 tiers: Starter $49, Professional $99, Enterprise Custom)
+  - CTA section with emerald gradient
+  - Full footer with 4 columns + copyright
+  - Framer Motion scroll animations
+- Updated `/src/app/page.tsx`:
+  - Added `showLogin` state
+  - When not authenticated: shows LandingPage (not LoginView)
+  - LandingPage `onSignIn`/`onGetStarted` callbacks set `showLogin=true`
+  - When `showLogin=true`: shows LoginView
+  - When authenticated: shows ProtectedApp (unchanged)
+- Verified with agent-browser: landing page renders correctly, Sign In transitions to login, footer is visible
+
+Stage Summary:
+- Landing page now shows as the home page for unauthenticated users
+- Login view is accessible via Sign In / Get Started buttons
+- All existing authenticated flow preserved
