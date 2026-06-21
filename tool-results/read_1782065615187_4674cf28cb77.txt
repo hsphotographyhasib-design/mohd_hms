@@ -1,0 +1,671 @@
+     1→'use client';
+     2→
+     3→import { useState, useEffect, useCallback } from 'react';
+     4→import {
+     5→  Plus, Search, X, Eye, AlertTriangle, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight,
+     6→  MessageSquare, CircleDot, UserCheck, Play, CheckCircle2, XCircle, Circle,
+     7→} from 'lucide-react';
+     8→import { toast } from 'sonner';
+     9→import { useAuthStore, useAppStore } from '@/store';
+    10→import { cn } from '@/lib/utils';
+    11→import { format } from 'date-fns';
+    12→import type {
+    13→  ComplaintItem, ComplaintStatus, ComplaintPriority, PaginatedResponse, CustomerData, EquipmentItem,
+    14→} from '@/types';
+    15→import { Button } from '@/components/ui/button';
+    16→import { Input } from '@/components/ui/input';
+    17→import { Card, CardContent } from '@/components/ui/card';
+    18→import { Badge } from '@/components/ui/badge';
+    19→import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+    20→import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+    21→import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+    22→import { Label } from '@/components/ui/label';
+    23→import { Textarea } from '@/components/ui/textarea';
+    24→import { Skeleton } from '@/components/ui/skeleton';
+    25→import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+    26→
+    27→// ============ HELPERS ============
+    28→
+    29→const STATUS_PIPELINE: ComplaintStatus[] = ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
+    30→
+    31→const PRIORITY_OPTIONS: ComplaintPriority[] = ['low', 'medium', 'high', 'critical'];
+    32→
+    33→function getPriorityColor(priority: ComplaintPriority) {
+    34→  const colors: Record<string, string> = {
+    35→    low: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700',
+    36→    medium: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    37→    high: 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300 border-orange-200 dark:border-orange-800',
+    38→    critical: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200 dark:border-rose-800',
+    39→  };
+    40→  return colors[priority] || colors.low;
+    41→}
+    42→
+    43→function getStatusColor(status: ComplaintStatus) {
+    44→  const colors: Record<string, string> = {
+    45→    OPEN: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    46→    ASSIGNED: 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border-sky-200 dark:border-sky-800',
+    47→    IN_PROGRESS: 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+    48→    RESOLVED: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+    49→    CLOSED: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700',
+    50→  };
+    51→  return colors[status] || '';
+    52→}
+    53→
+    54→function getStatusIcon(status: ComplaintStatus) {
+    55→  const icons: Record<string, typeof Circle> = {
+    56→    OPEN: CircleDot,
+    57→    ASSIGNED: UserCheck,
+    58→    IN_PROGRESS: Play,
+    59→    RESOLVED: CheckCircle2,
+    60→    CLOSED: XCircle,
+    61→  };
+    62→  return icons[status] || Circle;
+    63→}
+    64→
+    65→function getStatusBgColor(status: string) {
+    66→  const colors: Record<string, string> = {
+    67→    OPEN: 'bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
+    68→    ASSIGNED: 'bg-sky-50 dark:bg-sky-950/50 border-sky-200 dark:border-sky-800',
+    69→    IN_PROGRESS: 'bg-purple-50 dark:bg-purple-950/50 border-purple-200 dark:border-purple-800',
+    70→    RESOLVED: 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
+    71→    CLOSED: 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700',
+    72→  };
+    73→  return colors[status] || 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700';
+    74→}
+    75→
+    76→function getStatusActiveBg(status: string, isActive: boolean) {
+    77→  if (!isActive) return 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700';
+    78→  return getStatusBgColor(status);
+    79→}
+    80→
+    81→// ============ MAIN COMPONENT ============
+    82→
+    83→interface ComplaintFormData {
+    84→  title: string;
+    85→  description: string;
+    86→  priority: ComplaintPriority;
+    87→  category: string;
+    88→  customerId: string;
+    89→  equipmentId: string;
+    90→}
+    91→
+    92→const defaultFormData: ComplaintFormData = {
+    93→  title: '',
+    94→  description: '',
+    95→  priority: 'medium',
+    96→  category: '',
+    97→  customerId: '',
+    98→  equipmentId: '',
+    99→};
+   100→
+   101→export function ComplaintList() {
+   102→  const { user } = useAuthStore();
+   103→  const { setView } = useAppStore();
+   104→  const token = typeof window !== 'undefined' ? localStorage.getItem('cmms_token') : null;
+   105→
+   106→  // Data state
+   107→  const [complaints, setComplaints] = useState<ComplaintItem[]>([]);
+   108→  const [total, setTotal] = useState(0);
+   109→  const [page, setPage] = useState(1);
+   110→  const [pageSize] = useState(20);
+   111→  const [loading, setLoading] = useState(true);
+   112→
+   113→  // Filter state
+   114→  const [search, setSearch] = useState('');
+   115→  const [statusFilter, setStatusFilter] = useState('');
+   116→  const [priorityFilter, setPriorityFilter] = useState('');
+   117→
+   118→  // Status counts
+   119→  const [statusCounts, setStatusCounts] = useState<Record<string, number>>({
+   120→    OPEN: 0, ASSIGNED: 0, IN_PROGRESS: 0, RESOLVED: 0, CLOSED: 0,
+   121→  });
+   122→
+   123→  // New complaint dialog
+   124→  const [formOpen, setFormOpen] = useState(false);
+   125→  const [formData, setFormData] = useState<ComplaintFormData>(defaultFormData);
+   126→  const [formSaving, setFormSaving] = useState(false);
+   127→
+   128→  // Customers & Equipment
+   129→  const [customers, setCustomers] = useState<CustomerData[]>([]);
+   130→  const [equipmentList, setEquipmentList] = useState<EquipmentItem[]>([]);
+   131→
+   132→  const canAdd = user?.role && ['super_admin', 'admin', 'manager', 'supervisor', 'customer'].includes(user.role);
+   133→  const canManage = user?.role && ['super_admin', 'admin', 'manager', 'supervisor'].includes(user.role);
+   134→
+   135→  // Fetch customers
+   136→  const fetchCustomers = useCallback(async () => {
+   137→    if (!token) return;
+   138→    try {
+   139→      const res = await fetch('/api/customers?pageSize=100', {
+   140→        headers: { Authorization: `Bearer ${token}` },
+   141→      });
+   142→      const data: PaginatedResponse<CustomerData> = await res.json();
+   143→      if (data.data) setCustomers(data.data);
+   144→    } catch {
+   145→      // ignore
+   146→    }
+   147→  }, [token]);
+   148→
+   149→  // Fetch complaints
+   150→  const fetchComplaints = useCallback(async () => {
+   151→    if (!token) return;
+   152→    setLoading(true);
+   153→    try {
+   154→      const params = new URLSearchParams({
+   155→        page: String(page),
+   156→        pageSize: String(pageSize),
+   157→      });
+   158→      if (search) params.set('search', search);
+   159→      if (statusFilter) params.set('status', statusFilter);
+   160→      if (priorityFilter) params.set('priority', priorityFilter);
+   161→
+   162→      const res = await fetch(`/api/complaints?${params}`, {
+   163→        headers: { Authorization: `Bearer ${token}` },
+   164→      });
+   165→      const data: PaginatedResponse<ComplaintItem> = await res.json();
+   166→      if (data.data) {
+   167→        setComplaints(data.data);
+   168→        setTotal(data.total);
+   169→      }
+   170→    } catch {
+   171→      toast.error('Failed to load complaints');
+   172→    } finally {
+   173→      setLoading(false);
+   174→    }
+   175→  }, [token, page, pageSize, search, statusFilter, priorityFilter]);
+   176→
+   177→  // Fetch status counts
+   178→  const fetchStatusCounts = useCallback(async () => {
+   179→    if (!token) return;
+   180→    try {
+   181→      const counts: Record<string, number> = {};
+   182→      for (const status of STATUS_PIPELINE) {
+   183→        const res = await fetch(`/api/complaints?status=${status}&pageSize=1`, {
+   184→          headers: { Authorization: `Bearer ${token}` },
+   185→        });
+   186→        const data = await res.json();
+   187→        counts[status] = data.total || 0;
+   188→      }
+   189→      setStatusCounts(counts);
+   190→    } catch {
+   191→      // ignore
+   192→    }
+   193→  }, [token]);
+   194→
+   195→  // Fetch equipment for selected customer
+   196→  const fetchEquipmentForCustomer = useCallback(async (customerId: string) => {
+   197→    if (!token || !customerId) {
+   198→      setEquipmentList([]);
+   199→      return;
+   200→    }
+   201→    try {
+   202→      const res = await fetch(`/api/equipment?customerId=${customerId}&pageSize=100`, {
+   203→        headers: { Authorization: `Bearer ${token}` },
+   204→      });
+   205→      const data: PaginatedResponse<EquipmentItem> = await res.json();
+   206→      if (data.data) setEquipmentList(data.data);
+   207→    } catch {
+   208→      setEquipmentList([]);
+   209→    }
+   210→  }, [token]);
+   211→
+   212→  useEffect(() => {
+   213→    fetchComplaints();
+   214→  }, [fetchComplaints]);
+   215→
+   216→  useEffect(() => {
+   217→    fetchStatusCounts();
+   218→    fetchCustomers();
+   219→  }, [fetchStatusCounts, fetchCustomers]);
+   220→
+   221→  // Reset page on filter change
+   222→  useEffect(() => {
+   223→    setPage(1);
+   224→  }, [search, statusFilter, priorityFilter]);
+   225→
+   226→  const totalPages = Math.ceil(total / pageSize);
+   227→
+   228→  const openAddForm = () => {
+   229→    setView('new-complaint');
+   230→  };
+   231→
+   232→  const handleSubmit = async () => {
+   233→    if (!token || !formData.title.trim()) {
+   234→      toast.error('Title is required');
+   235→      return;
+   236→    }
+   237→    setFormSaving(true);
+   238→    try {
+   239→      const res = await fetch('/api/complaints', {
+   240→        method: 'POST',
+   241→        headers: {
+   242→          'Content-Type': 'application/json',
+   243→          Authorization: `Bearer ${token}`,
+   244→        },
+   245→        body: JSON.stringify({
+   246→          title: formData.title,
+   247→          description: formData.description || undefined,
+   248→          priority: formData.priority,
+   249→          category: formData.category || undefined,
+   250→          customerId: formData.customerId || undefined,
+   251→          equipmentId: formData.equipmentId || undefined,
+   252→        }),
+   253→      });
+   254→      if (!res.ok) {
+   255→        const err = await res.json();
+   256→        throw new Error(err.error || 'Failed to create complaint');
+   257→      }
+   258→      toast.success('Complaint created');
+   259→      setFormOpen(false);
+   260→      fetchComplaints();
+   261→      fetchStatusCounts();
+   262→    } catch (err) {
+   263→      toast.error(err instanceof Error ? err.message : 'Failed to create complaint');
+   264→    } finally {
+   265→      setFormSaving(false);
+   266→    }
+   267→  };
+   268→
+   269→  const handleCustomerChange = (val: string) => {
+   270→    const customerId = val === 'none' ? '' : val;
+   271→    setFormData((f) => ({ ...f, customerId, equipmentId: '' }));
+   272→    fetchEquipmentForCustomer(customerId);
+   273→  };
+   274→
+   275→  const clearFilters = () => {
+   276→    setSearch('');
+   277→    setStatusFilter('');
+   278→    setPriorityFilter('');
+   279→    setPage(1);
+   280→  };
+   281→
+   282→  const hasFilters = search || statusFilter || priorityFilter;
+   283→
+   284→  // ============ RENDER ============
+   285→
+   286→  return (
+   287→    <div className="p-4 md:p-6 space-y-6">
+   288→      {/* Page Header */}
+   289→      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+   290→        <div>
+   291→          <h1 className="text-2xl font-bold tracking-tight">Complaint Management</h1>
+   292→          <p className="text-muted-foreground text-sm mt-1">
+   293→            Track and manage customer complaints and service requests
+   294→          </p>
+   295→        </div>
+   296→        {canAdd && (
+   297→          <Button onClick={openAddForm} className="shrink-0">
+   298→            <Plus className="h-4 w-4" />
+   299→            New Complaint
+   300→          </Button>
+   301→        )}
+   302→      </div>
+   303→
+   304→      {/* Status Pipeline */}
+   305→      <Card>
+   306→        <CardContent className="p-4">
+   307→          <ScrollArea className="w-full">
+   308→            <div className="flex gap-3 pb-2 min-w-max">
+   309→              <button
+   310→                onClick={() => setStatusFilter('')}
+   311→                className={cn(
+   312→                  'flex items-center gap-2 px-4 py-3 rounded-lg border-2 transition-all text-left shrink-0',
+   313→                  !statusFilter
+   314→                    ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/50'
+   315→                    : 'border-transparent bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800'
+   316→                )}
+   317→              >
+   318→                <MessageSquare className={cn('h-4 w-4', !statusFilter ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground')} />
+   319→                <div>
+   320→                  <p className="text-xs font-medium">All</p>
+   321→                  <p className="text-lg font-bold leading-tight">{Object.values(statusCounts).reduce((a, b) => a + b, 0)}</p>
+   322→                </div>
+   323→              </button>
+   324→              {STATUS_PIPELINE.map((status) => {
+   325→                const Icon = getStatusIcon(status);
+   326→                return (
+   327→                  <button
+   328→                    key={status}
+   329→                    onClick={() => setStatusFilter(status === statusFilter ? '' : status)}
+   330→                    className={cn(
+   331→                      'flex items-center gap-2 px-4 py-3 rounded-lg border-2 transition-all text-left shrink-0',
+   332→                      statusFilter === status
+   333→                        ? getStatusBgColor(status).replace('border-', 'border-emerald-500 border-2 ')
+   334→                        : 'border-transparent bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-800'
+   335→                    )}
+   336→                  >
+   337→                    <Icon className={cn(
+   338→                      'h-4 w-4',
+   339→                      statusFilter === status ? 'text-foreground' : 'text-muted-foreground'
+   340→                    )} />
+   341→                    <div>
+   342→                      <p className="text-xs font-medium">{status.replace(/_/g, ' ')}</p>
+   343→                      <p className="text-lg font-bold leading-tight">{statusCounts[status] || 0}</p>
+   344→                    </div>
+   345→                  </button>
+   346→                );
+   347→              })}
+   348→            </div>
+   349→            <ScrollBar orientation="horizontal" />
+   350→          </ScrollArea>
+   351→        </CardContent>
+   352→      </Card>
+   353→
+   354→      {/* Search & Filter */}
+   355→      <Card>
+   356→        <CardContent className="p-4">
+   357→          <div className="flex flex-col sm:flex-row gap-3">
+   358→            <div className="relative flex-1">
+   359→              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   360→              <Input
+   361→                placeholder="Search complaints..."
+   362→                value={search}
+   363→                onChange={(e) => setSearch(e.target.value)}
+   364→                className="pl-9"
+   365→              />
+   366→            </div>
+   367→            <Select value={priorityFilter} onValueChange={(v) => setPriorityFilter(v === 'all' ? '' : v)}>
+   368→              <SelectTrigger className="w-full sm:w-[150px]">
+   369→                <SelectValue placeholder="Priority" />
+   370→              </SelectTrigger>
+   371→              <SelectContent>
+   372→                <SelectItem value="all">All Priorities</SelectItem>
+   373→                {PRIORITY_OPTIONS.map((p) => (
+   374→                  <SelectItem key={p} value={p}>
+   375→                    {p.charAt(0).toUpperCase() + p.slice(1)}
+   376→                  </SelectItem>
+   377→                ))}
+   378→              </SelectContent>
+   379→            </Select>
+   380→            {hasFilters && (
+   381→              <Button variant="ghost" onClick={clearFilters} className="shrink-0">
+   382→                <X className="h-4 w-4" />
+   383→                Clear
+   384→              </Button>
+   385→            )}
+   386→          </div>
+   387→        </CardContent>
+   388→      </Card>
+   389→
+   390→      {/* Complaints Table (Desktop) */}
+   391→      <Card className="hidden md:block">
+   392→        <CardContent className="p-0">
+   393→          {loading ? (
+   394→            <div className="p-4 space-y-3">
+   395→              {[...Array(5)].map((_, i) => (
+   396→                <Skeleton key={i} className="h-12 w-full" />
+   397→              ))}
+   398→            </div>
+   399→          ) : complaints.length === 0 ? (
+   400→            <div className="flex flex-col items-center justify-center py-16 gap-3">
+   401→              <AlertTriangle className="h-12 w-12 text-muted-foreground/30" />
+   402→              <p className="text-muted-foreground text-sm">No complaints found</p>
+   403→            </div>
+   404→          ) : (
+   405→            <Table>
+   406→              <TableHeader>
+   407→                <TableRow>
+   408→                  <TableHead>ID</TableHead>
+   409→                  <TableHead>Title</TableHead>
+   410→                  <TableHead>Customer</TableHead>
+   411→                  <TableHead>Equipment</TableHead>
+   412→                  <TableHead>Priority</TableHead>
+   413→                  <TableHead>Status</TableHead>
+   414→                  <TableHead>Assigned To</TableHead>
+   415→                  <TableHead>Date</TableHead>
+   416→                  <TableHead className="text-right">Actions</TableHead>
+   417→                </TableRow>
+   418→              </TableHeader>
+   419→              <TableBody>
+   420→                {complaints.map((item) => (
+   421→                  <TableRow
+   422→                    key={item.id}
+   423→                    className="cursor-pointer"
+   424→                    onClick={() => setView('complaint-detail', { id: item.id })}
+   425→                  >
+   426→                    <TableCell className="font-mono text-xs">{item.id.slice(0, 8)}...</TableCell>
+   427→                    <TableCell>
+   428→                      <div className="flex items-center gap-2">
+   429→                        <span className="font-medium text-sm truncate max-w-[200px]">{item.title}</span>
+   430→                      </div>
+   431→                    </TableCell>
+   432→                    <TableCell className="text-sm text-muted-foreground">{item.customerName || '—'}</TableCell>
+   433→                    <TableCell className="text-sm text-muted-foreground">{item.equipmentName || '—'}</TableCell>
+   434→                    <TableCell>
+   435→                      <Badge variant="outline" className={cn('text-xs', getPriorityColor(item.priority))}>
+   436→                        {item.priority}
+   437→                      </Badge>
+   438→                    </TableCell>
+   439→                    <TableCell>
+   440→                      <Badge variant="outline" className={cn('text-xs', getStatusColor(item.status))}>
+   441→                        {item.status}
+   442→                      </Badge>
+   443→                    </TableCell>
+   444→                    <TableCell className="text-sm text-muted-foreground">{item.assignedToName || '—'}</TableCell>
+   445→                    <TableCell className="text-sm text-muted-foreground">
+   446→                      {item.createdAt ? format(new Date(item.createdAt), 'MMM d, yyyy') : '—'}
+   447→                    </TableCell>
+   448→                    <TableCell className="text-right">
+   449→                      <Button
+   450→                        variant="ghost"
+   451→                        size="icon"
+   452→                        className="h-8 w-8"
+   453→                        onClick={(e) => {
+   454→                          e.stopPropagation();
+   455→                          setView('complaint-detail', { id: item.id });
+   456→                        }}
+   457→                      >
+   458→                        <Eye className="h-4 w-4" />
+   459→                      </Button>
+   460→                    </TableCell>
+   461→                  </TableRow>
+   462→                ))}
+   463→              </TableBody>
+   464→            </Table>
+   465→          )}
+   466→        </CardContent>
+   467→      </Card>
+   468→
+   469→      {/* Complaints Cards (Mobile) */}
+   470→      <div className="md:hidden space-y-3">
+   471→        {loading ? (
+   472→          [...Array(3)].map((_, i) => (
+   473→            <Skeleton key={i} className="h-40 rounded-xl" />
+   474→          ))
+   475→        ) : complaints.length === 0 ? (
+   476→          <Card>
+   477→            <CardContent className="flex flex-col items-center justify-center py-12 gap-3">
+   478→              <AlertTriangle className="h-12 w-12 text-muted-foreground/30" />
+   479→              <p className="text-muted-foreground text-sm">No complaints found</p>
+   480→            </CardContent>
+   481→          </Card>
+   482→        ) : (
+   483→          complaints.map((item) => (
+   484→            <Card
+   485→              key={item.id}
+   486→              className="cursor-pointer hover:border-emerald-200 dark:hover:border-emerald-800 transition-colors"
+   487→              onClick={() => setView('complaint-detail', { id: item.id })}
+   488→            >
+   489→              <CardContent className="p-4 space-y-3">
+   490→                <div className="flex items-start justify-between gap-2">
+   491→                  <div className="space-y-1 min-w-0 flex-1">
+   492→                    <p className="font-medium text-sm truncate">{item.title}</p>
+   493→                    <p className="text-xs text-muted-foreground">{item.customerName || 'No customer'}</p>
+   494→                  </div>
+   495→                  <div className="flex items-center gap-1 shrink-0">
+   496→                    <Badge variant="outline" className={cn('text-xs', getPriorityColor(item.priority))}>
+   497→                      {item.priority}
+   498→                    </Badge>
+   499→                    <Badge variant="outline" className={cn('text-xs', getStatusColor(item.status))}>
+   500→                      {item.status}
+   501→                    </Badge>
+   502→                  </div>
+   503→                </div>
+   504→                <div className="flex items-center justify-between pt-2 border-t">
+   505→                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+   506→                    {item.equipmentName && <span>{item.equipmentName}</span>}
+   507→                    <span className="font-mono">{item.id.slice(0, 8)}</span>
+   508→                  </div>
+   509→                  <div className="text-xs text-muted-foreground">
+   510→                    {item.createdAt ? format(new Date(item.createdAt), 'MMM d, yyyy') : ''}
+   511→                  </div>
+   512→                </div>
+   513→              </CardContent>
+   514→            </Card>
+   515→          ))
+   516→        )}
+   517→      </div>
+   518→
+   519→      {/* Pagination */}
+   520→      {totalPages > 1 && (
+   521→        <div className="flex items-center justify-center gap-2">
+   522→          <Button
+   523→            variant="outline"
+   524→            size="icon"
+   525→            className="h-8 w-8"
+   526→            disabled={page <= 1}
+   527→            onClick={() => setPage(1)}
+   528→          >
+   529→            <ChevronsLeft className="h-4 w-4" />
+   530→          </Button>
+   531→          <Button
+   532→            variant="outline"
+   533→            size="icon"
+   534→            className="h-8 w-8"
+   535→            disabled={page <= 1}
+   536→            onClick={() => setPage((p) => p - 1)}
+   537→          >
+   538→            <ChevronLeft className="h-4 w-4" />
+   539→          </Button>
+   540→          <span className="text-sm text-muted-foreground px-3">
+   541→            Page {page} of {totalPages} ({total} items)
+   542→          </span>
+   543→          <Button
+   544→            variant="outline"
+   545→            size="icon"
+   546→            className="h-8 w-8"
+   547→            disabled={page >= totalPages}
+   548→            onClick={() => setPage((p) => p + 1)}
+   549→          >
+   550→            <ChevronRight className="h-4 w-4" />
+   551→          </Button>
+   552→          <Button
+   553→            variant="outline"
+   554→            size="icon"
+   555→            className="h-8 w-8"
+   556→            disabled={page >= totalPages}
+   557→            onClick={() => setPage(totalPages)}
+   558→          >
+   559→            <ChevronsRight className="h-4 w-4" />
+   560→          </Button>
+   561→        </div>
+   562→      )}
+   563→
+   564→      {/* New Complaint Dialog */}
+   565→      <Dialog open={formOpen} onOpenChange={setFormOpen}>
+   566→        <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+   567→          <DialogHeader>
+   568→            <DialogTitle>New Complaint</DialogTitle>
+   569→            <DialogDescription>Submit a new complaint or service request.</DialogDescription>
+   570→          </DialogHeader>
+   571→          <div className="grid gap-4 py-2">
+   572→            <div className="grid gap-2">
+   573→              <Label htmlFor="comp-title">Title *</Label>
+   574→              <Input
+   575→                id="comp-title"
+   576→                placeholder="Brief title for the complaint"
+   577→                value={formData.title}
+   578→                onChange={(e) => setFormData((f) => ({ ...f, title: e.target.value }))}
+   579→              />
+   580→            </div>
+   581→            <div className="grid gap-2">
+   582→              <Label htmlFor="comp-desc">Description</Label>
+   583→              <Textarea
+   584→                id="comp-desc"
+   585→                placeholder="Describe the issue in detail..."
+   586→                value={formData.description}
+   587→                onChange={(e) => setFormData((f) => ({ ...f, description: e.target.value }))}
+   588→                rows={4}
+   589→              />
+   590→            </div>
+   591→            <div className="grid grid-cols-2 gap-4">
+   592→              <div className="grid gap-2">
+   593→                <Label>Priority</Label>
+   594→                <Select
+   595→                  value={formData.priority}
+   596→                  onValueChange={(v) => setFormData((f) => ({ ...f, priority: v as ComplaintPriority }))}
+   597→                >
+   598→                  <SelectTrigger><SelectValue /></SelectTrigger>
+   599→                  <SelectContent>
+   600→                    {PRIORITY_OPTIONS.map((p) => (
+   601→                      <SelectItem key={p} value={p}>
+   602→                        {p.charAt(0).toUpperCase() + p.slice(1)}
+   603→                      </SelectItem>
+   604→                    ))}
+   605→                  </SelectContent>
+   606→                </Select>
+   607→              </div>
+   608→              <div className="grid gap-2">
+   609→                <Label>Category</Label>
+   610→                <Select
+   611→                  value={formData.category}
+   612→                  onValueChange={(v) => setFormData((f) => ({ ...f, category: v === 'none' ? '' : v }))}
+   613→                >
+   614→                  <SelectTrigger><SelectValue placeholder="Select" /></SelectTrigger>
+   615→                  <SelectContent>
+   616→                    <SelectItem value="none">None</SelectItem>
+   617→                    <SelectItem value="HVAC">HVAC</SelectItem>
+   618→                    <SelectItem value="Electrical">Electrical</SelectItem>
+   619→                    <SelectItem value="Plumbing">Plumbing</SelectItem>
+   620→                    <SelectItem value="Generator">Generator</SelectItem>
+   621→                    <SelectItem value="Mechanical">Mechanical</SelectItem>
+   622→                    <SelectItem value="FireProtection">Fire Protection</SelectItem>
+   623→                    <SelectItem value="General">General</SelectItem>
+   624→                  </SelectContent>
+   625→                </Select>
+   626→              </div>
+   627→            </div>
+   628→            <div className="grid gap-2">
+   629→              <Label>Customer</Label>
+   630→              <Select value={formData.customerId} onValueChange={handleCustomerChange}>
+   631→                <SelectTrigger><SelectValue placeholder="Select customer" /></SelectTrigger>
+   632→                <SelectContent>
+   633→                  <SelectItem value="none">None</SelectItem>
+   634→                  {customers.map((c) => (
+   635→                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+   636→                  ))}
+   637→                </SelectContent>
+   638→              </Select>
+   639→            </div>
+   640→            {formData.customerId && equipmentList.length > 0 && (
+   641→              <div className="grid gap-2">
+   642→                <Label>Equipment</Label>
+   643→                <Select
+   644→                  value={formData.equipmentId}
+   645→                  onValueChange={(v) => setFormData((f) => ({ ...f, equipmentId: v === 'none' ? '' : v }))}
+   646→                >
+   647→                  <SelectTrigger><SelectValue placeholder="Select equipment" /></SelectTrigger>
+   648→                  <SelectContent>
+   649→                    <SelectItem value="none">None</SelectItem>
+   650→                    {equipmentList.map((eq) => (
+   651→                      <SelectItem key={eq.id} value={eq.id}>
+   652→                        {eq.name} ({eq.assetNumber})
+   653→                      </SelectItem>
+   654→                    ))}
+   655→                  </SelectContent>
+   656→                </Select>
+   657→              </div>
+   658→            )}
+   659→          </div>
+   660→          <DialogFooter>
+   661→            <Button variant="outline" onClick={() => setFormOpen(false)}>Cancel</Button>
+   662→            <Button onClick={handleSubmit} disabled={formSaving}>
+   663→              {formSaving ? 'Submitting...' : 'Submit Complaint'}
+   664→            </Button>
+   665→          </DialogFooter>
+   666→        </DialogContent>
+   667→      </Dialog>
+   668→    </div>
+   669→  );
+   670→}
+   671→

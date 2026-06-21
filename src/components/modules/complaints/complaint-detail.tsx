@@ -1,620 +1,685 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { format } from 'date-fns';
+import { formatDistanceToNow, format } from 'date-fns';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ArrowLeft, UserCheck, AlertCircle, FileText, Wrench, Star,
   CheckCircle2, Clock, Play, Ban, ChevronDown, Loader2,
-  MessageSquare, MapPin, Phone, Building2, Package,
+  MessageSquare, MapPin, Phone, Building2, Package, Send,
+  ShieldAlert, Banknote, Lock, RotateCcw, ThumbsUp, ClipboardList,
+  CirclePlus, BadgeCheck, Eye, Camera, PenTool, Timer, X, Plus, Trash2,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from '@/components/ui/table';
-import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/components/ui/dialog';
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { useAuthStore, useAppStore } from '@/store';
-import type { ComplaintItem, WorkOrderItem, SelectOption } from '@/types';
+import type { ComplaintItem, ComplaintTimelineEntry, WorkflowAction } from '@/types';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 
 // ============ HELPERS ============
+function getToken(): string { return localStorage.getItem('cmms_token') || ''; }
+const API = (url: string, opts?: RequestInit) => fetch(url, {
+  ...opts,
+  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}`, ...opts?.headers },
+});
+
+const MAIN_FLOW = [
+  'NEW', 'ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS',
+  'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED', 'DRAFT_INVOICE',
+  'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED',
+] as const;
+
+const STEP_LABELS: Record<string, string> = {
+  NEW: 'New', ASSIGNED: 'Assigned', ACCEPTED: 'Accepted',
+  WORK_ORDER_CREATED: 'WO Created', IN_PROGRESS: 'In Progress',
+  WAITING_CLIENT_CONFIRMATION: 'Confirmation', CLIENT_CONFIRMED: 'Confirmed',
+  DRAFT_INVOICE: 'Draft Invoice', INVOICE_APPROVED: 'Approved',
+  INVOICE_SENT: 'Sent', PAID: 'Paid', CLOSED: 'Closed',
+  REWORK_REQUIRED: 'Rework',
+};
+
+const STEP_COLORS: Record<string, { dot: string; line: string; text: string }> = {
+  NEW: { dot: 'bg-slate-400', line: 'bg-slate-200', text: 'text-slate-600' },
+  ASSIGNED: { dot: 'bg-blue-500', line: 'bg-blue-200', text: 'text-blue-700' },
+  ACCEPTED: { dot: 'bg-cyan-500', line: 'bg-cyan-200', text: 'text-cyan-700' },
+  WORK_ORDER_CREATED: { dot: 'bg-indigo-500', line: 'bg-indigo-200', text: 'text-indigo-700' },
+  IN_PROGRESS: { dot: 'bg-amber-500', line: 'bg-amber-200', text: 'text-amber-700' },
+  WAITING_CLIENT_CONFIRMATION: { dot: 'bg-orange-500', line: 'bg-orange-200', text: 'text-orange-700' },
+  CLIENT_CONFIRMED: { dot: 'bg-emerald-500', line: 'bg-emerald-200', text: 'text-emerald-700' },
+  DRAFT_INVOICE: { dot: 'bg-violet-500', line: 'bg-violet-200', text: 'text-violet-700' },
+  INVOICE_APPROVED: { dot: 'bg-purple-500', line: 'bg-purple-200', text: 'text-purple-700' },
+  INVOICE_SENT: { dot: 'bg-sky-500', line: 'bg-sky-200', text: 'text-sky-700' },
+  PAID: { dot: 'bg-green-500', line: 'bg-green-200', text: 'text-green-700' },
+  CLOSED: { dot: 'bg-zinc-500', line: 'bg-zinc-200', text: 'text-zinc-500' },
+  REWORK_REQUIRED: { dot: 'bg-rose-500', line: 'bg-rose-200', text: 'text-rose-700' },
+};
+
+function getStepIndex(status: string): number {
+  const idx = MAIN_FLOW.indexOf(status as typeof MAIN_FLOW[number]);
+  return idx >= 0 ? idx : -1;
+}
 
 function StatusBadge({ status }: { status: string }) {
-  const v: Record<string, string> = {
-    OPEN: 'bg-amber-100 text-amber-800', ASSIGNED: 'bg-sky-100 text-sky-800',
-    IN_PROGRESS: 'bg-purple-100 text-purple-800', RESOLVED: 'bg-emerald-100 text-emerald-800',
-    CLOSED: 'bg-gray-100 text-gray-600', COMPLETED: 'bg-emerald-100 text-emerald-800',
-    PENDING: 'bg-amber-100 text-amber-800', PAID: 'bg-emerald-100 text-emerald-800',
-    OVERDUE: 'bg-rose-100 text-rose-800', DRAFT: 'bg-gray-100 text-gray-600',
-  };
-  return <Badge variant="outline" className={v[status] || ''}>{status.replace(/_/g, ' ')}</Badge>;
+  const c = STEP_COLORS[status] || STEP_COLORS.NEW;
+  return (
+    <Badge variant="outline" className={cn('px-3 py-1.5 font-semibold border', c.text, STEP_COLORS[status]?.line || 'bg-slate-100')}>
+      {STEP_LABELS[status] || status.replace(/_/g, ' ')}
+    </Badge>
+  );
 }
 
 function PriorityBadge({ priority }: { priority: string }) {
   const v: Record<string, string> = {
-    low: 'bg-gray-100 text-gray-700',
-    medium: 'bg-amber-100 text-amber-700',
-    high: 'bg-orange-100 text-orange-700',
-    critical: 'bg-rose-100 text-rose-700',
+    low: 'bg-gray-100 text-gray-700 border-gray-300',
+    medium: 'bg-amber-100 text-amber-700 border-amber-300',
+    high: 'bg-orange-100 text-orange-700 border-orange-300',
+    critical: 'bg-rose-100 text-rose-700 border-rose-300',
   };
-  return <Badge variant="outline" className={v[priority] || ''}>{priority.charAt(0).toUpperCase() + priority.slice(1)}</Badge>;
+  return <Badge variant="outline" className={cn('px-2.5 py-1 font-medium border', v[priority] || '')}>{priority.charAt(0).toUpperCase() + priority.slice(1)}</Badge>;
 }
 
-function formatDate(dateStr: string): string {
-  try { return format(new Date(dateStr), 'MMM d, yyyy h:mm a'); } catch { return dateStr; }
-}
+function fmtDate(d?: string) { return d ? format(new Date(d), 'MMM d, yyyy HH:mm') : '—'; }
+function fmtRelative(d?: string) { return d ? formatDistanceToNow(new Date(d), { addSuffix: true }) : ''; }
 
-function truncateId(id: string): string {
-  return id.length > 8 ? id.substring(0, 8) + '...' : id;
-}
-
-const token = () => localStorage.getItem('cmms_token') || '';
-
-const WORKFLOW_STEPS = [
-  { key: 'OPEN', label: 'Open', icon: AlertCircle },
-  { key: 'ASSIGNED', label: 'Assigned', icon: UserCheck },
-  { key: 'IN_PROGRESS', label: 'In Progress', icon: Play },
-  { key: 'RESOLVED', label: 'Resolved', icon: CheckCircle2 },
-  { key: 'CLOSED', label: 'Closed', icon: Ban },
-];
-
-// ============ WORKFLOW STEPPER ============
-
-function WorkflowStepper({ status }: { status: string }) {
-  const currentIndex = WORKFLOW_STEPS.findIndex((s) => s.key === status);
-
-  return (
-    <div className="flex items-center justify-between w-full px-2 py-4">
-      {WORKFLOW_STEPS.map((step, idx) => {
-        const Icon = step.icon;
-        const isCompleted = idx < currentIndex;
-        const isCurrent = idx === currentIndex;
-        const isFuture = idx > currentIndex;
-
-        return (
-          <div key={step.key} className="flex items-center flex-1 last:flex-none">
-            <div className="flex flex-col items-center gap-2">
-              <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                  isCompleted
-                    ? 'bg-emerald-600 border-emerald-600 text-white'
-                    : isCurrent
-                      ? 'bg-emerald-50 border-emerald-600 text-emerald-600 ring-4 ring-emerald-100'
-                      : 'bg-gray-100 border-gray-300 text-gray-400'
-                }`}
-              >
-                {isCompleted ? (
-                  <CheckCircle2 className="h-5 w-5" />
-                ) : (
-                  <Icon className="h-5 w-5" />
-                )}
-              </div>
-              <span
-                className={`text-xs font-medium whitespace-nowrap ${
-                  isCompleted || isCurrent ? 'text-emerald-700' : 'text-gray-400'
-                }`}
-              >
-                {step.label}
-              </span>
-            </div>
-            {idx < WORKFLOW_STEPS.length - 1 && (
-              <div
-                className={`flex-1 h-0.5 mx-2 mt-[-20px] ${
-                  idx < currentIndex ? 'bg-emerald-500' : 'bg-gray-200'
-                }`}
-              />
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-// ============ LOADING SKELETON ============
-
-function DetailSkeleton() {
-  return (
-    <div className="p-4 md:p-6 space-y-4">
-      <Skeleton className="h-8 w-48" />
-      <Skeleton className="h-40 w-full" />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Skeleton className="h-48 w-full" />
-        <Skeleton className="h-48 w-full" />
-      </div>
-      <Skeleton className="h-64 w-full" />
-    </div>
-  );
+function TimelineIcon({ action }: { action: string }) {
+  const icons: Record<string, React.ReactNode> = {
+    created: <CirclePlus className="h-4 w-4 text-slate-500" />,
+    assigned: <UserCheck className="h-4 w-4 text-blue-500" />,
+    accepted: <CheckCircle2 className="h-4 w-4 text-cyan-500" />,
+    rejected: <Ban className="h-4 w-4 text-rose-500" />,
+    started: <Play className="h-4 w-4 text-amber-500" />,
+    completed: <CheckCircle2 className="h-4 w-4 text-emerald-500" />,
+    client_confirmed: <ThumbsUp className="h-4 w-4 text-emerald-500" />,
+    client_rejected: <RotateCcw className="h-4 w-4 text-rose-500" />,
+    rework_required: <RotateCcw className="h-4 w-4 text-rose-500" />,
+    invoice_generated: <FileText className="h-4 w-4 text-violet-500" />,
+    invoice_approved: <BadgeCheck className="h-4 w-4 text-purple-500" />,
+    invoice_sent: <Send className="h-4 w-4 text-sky-500" />,
+    payment_received: <Banknote className="h-4 w-4 text-green-500" />,
+    closed: <Lock className="h-4 w-4 text-zinc-500" />,
+    status_override: <ShieldAlert className="h-4 w-4 text-amber-500" />,
+  };
+  return icons[action] || <Clock className="h-4 w-4 text-gray-400" />;
 }
 
 // ============ MAIN COMPONENT ============
-
 export function ComplaintDetail() {
-  const setView = useAppStore((s) => s.setView);
-  const viewParams = useAppStore((s) => s.viewParams);
-  const user = useAuthStore((s) => s.user);
-  const complaintId = viewParams?.id;
+  const { user } = useAuthStore();
+  const { viewParams, setView } = useAppStore();
+  const complaintId = viewParams?.id as string;
 
   const [complaint, setComplaint] = useState<ComplaintItem | null>(null);
+  const [timeline, setTimeline] = useState<ComplaintTimelineEntry[]>([]);
+  const [actions, setActions] = useState<WorkflowAction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [actionLoading, setActionLoading] = useState(false);
+  const [transitioning, setTransitioning] = useState(false);
 
-  // Assign dialog
-  const [assignDialogOpen, setAssignDialogOpen] = useState(false);
-  const [technicians, setTechnicians] = useState<SelectOption[]>([]);
-  const [selectedTech, setSelectedTech] = useState('');
+  // Dialogs
+  const [dialogType, setDialogType] = useState<string | null>(null);
+  const [dialogData, setDialogData] = useState<Record<string, unknown>>({});
 
-  // Status dropdown
-  const [statusDropdownOpen, setStatusDropdownOpen] = useState(false);
+  // Form state
+  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [materials, setMaterials] = useState<Array<{ name: string; qty: string; unit: string; cost: string }>>([]);
+  const [technicians, setTechnicians] = useState<Array<{ id: string; name: string }>>([]);
+  const [supervisors, setSupervisors] = useState<Array<{ id: string; name: string }>>([]);
+
+  // ============ FETCH ============
+  const fetchWorkflow = useCallback(async () => {
+    if (!complaintId) return;
+    try {
+      const res = await fetch(`/api/complaints/${complaintId}/workflow`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      setActions(data.availableActions || []);
+      setTimeline(data.timeline || []);
+      // Merge workflow data into complaint
+      if (data.complaint) {
+        setComplaint(prev => prev ? { ...prev, ...data.complaint } : prev);
+      }
+    } catch {
+      toast.error('Failed to load workflow data');
+    }
+  }, [complaintId]);
 
   const fetchComplaint = useCallback(async () => {
     if (!complaintId) return;
     setLoading(true);
-    setError(null);
     try {
       const res = await fetch(`/api/complaints/${complaintId}`, {
-        headers: { Authorization: `Bearer ${token()}` },
+        headers: { Authorization: `Bearer ${getToken()}` },
       });
-      if (!res.ok) throw new Error('Failed to load complaint');
-      const json = await res.json();
-      setComplaint(json);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
+      if (!res.ok) throw new Error('Not found');
+      const data = await res.json();
+      setComplaint(data);
+      // Fetch workflow actions + timeline
+      await fetchWorkflow();
+    } catch {
+      toast.error('Failed to load complaint');
+      setView('complaints');
     } finally {
       setLoading(false);
     }
-  }, [complaintId]);
+  }, [complaintId, fetchWorkflow, setView]);
 
-  useEffect(() => { fetchComplaint(); }, [fetchComplaint]);
-
-  const fetchTechnicians = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
-      const res = await fetch('/api/employees?role=technician&pageSize=100', {
-        headers: { Authorization: `Bearer ${token()}` },
-      });
-      const json = await res.json();
-      setTechnicians(
-        (json.data || []).map((e: { id: string; name: string }) => ({
-          label: e.name,
-          value: e.id,
-        }))
-      );
-    } catch {
-      toast.error('Failed to load technicians');
-    }
-  };
+      const [techRes, supRes] = await Promise.all([
+        fetch(`/api/employees?role=technician&pageSize=100`, { headers: { Authorization: `Bearer ${getToken()}` } }),
+        fetch(`/api/employees?role=supervisor&pageSize=100`, { headers: { Authorization: `Bearer ${getToken()}` } }),
+      ]);
+      if (techRes.ok) { const d = await techRes.json(); setTechnicians((d.data || []).map((u: { id: string; name: string }) => ({ id: u.id, name: u.name }))); }
+      if (supRes.ok) { const d = await supRes.json(); setSupervisors((d.data || []).map((u: { id: string; name: string }) => ({ id: u.id, name: u.name }))); }
+    } catch {}
+  }, []);
 
-  const handleAssign = async () => {
-    if (!selectedTech) { toast.error('Select a technician'); return; }
-    setActionLoading(true);
+  useEffect(() => { fetchComplaint(); fetchUsers(); }, [fetchComplaint, fetchUsers]);
+
+  // ============ TRANSITION ============
+  const executeTransition = async (action: string, body: Record<string, unknown> = {}) => {
+    if (!complaintId || transitioning) return;
+    setTransitioning(true);
     try {
-      const res = await fetch(`/api/complaints/${complaintId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token()}`,
-        },
-        body: JSON.stringify({ assignedToId: selectedTech, status: 'ASSIGNED' }),
+      const res = await API(`/api/complaints/${complaintId}/workflow`, {
+        method: 'POST',
+        body: JSON.stringify({ action, ...body }),
       });
-      if (!res.ok) throw new Error();
-      toast.success('Technician assigned successfully');
-      setAssignDialogOpen(false);
-      setSelectedTech('');
-      fetchComplaint();
-    } catch {
-      toast.error('Failed to assign technician');
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Transition failed');
+      toast.success(data.message || 'Action completed');
+      setDialogType(null);
+      setFormData({});
+      setMaterials([]);
+      await fetchComplaint();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Action failed');
     } finally {
-      setActionLoading(false);
+      setTransitioning(false);
     }
   };
 
-  const handleStatusChange = async (newStatus: string) => {
-    setActionLoading(true);
-    setStatusDropdownOpen(false);
-    try {
-      const body: Record<string, string> = { status: newStatus };
-      const res = await fetch(`/api/complaints/${complaintId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token()}`,
-        },
-        body: JSON.stringify(body),
-      });
-      if (!res.ok) throw new Error();
-      toast.success(`Status updated to ${newStatus.replace(/_/g, ' ')}`);
-      fetchComplaint();
-    } catch {
-      toast.error('Failed to update status');
-    } finally {
-      setActionLoading(false);
+  // ============ ACTION HANDLERS ============
+  const openDialog = (action: WorkflowAction) => {
+    setDialogType(action.action);
+    setFormData({});
+    setMaterials([{ name: '', qty: '1', unit: 'pcs', cost: '0' }]);
+  };
+
+  const handleSubmitAction = () => {
+    if (!dialogType) return;
+    switch (dialogType) {
+      case 'assigned':
+        if (!formData.assignedToId) { toast.error('Select a technician'); return; }
+        executeTransition('assign', { assignedToId: formData.assignedToId, supervisorId: formData.supervisorId });
+        break;
+      case 'accepted':
+        executeTransition('accept', { eta: formData.eta });
+        break;
+      case 'assignment_rejected':
+        if (!formData.rejectionReason) { toast.error('Provide a rejection reason'); return; }
+        executeTransition('reject', { rejectionReason: formData.rejectionReason });
+        break;
+      case 'work_started':
+        executeTransition('start');
+        break;
+      case 'work_completed':
+        executeTransition('complete', {
+          checklistData: formData.checklistData,
+          laborHours: parseFloat(formData.laborHours) || 0,
+          laborCost: parseFloat(formData.laborCost) || 0,
+          materialCost: parseFloat(formData.materialCost) || 0,
+          remarks: formData.remarks,
+          materialsUsed: JSON.stringify(materials.filter(m => m.name)),
+        });
+        break;
+      case 'client_confirmed':
+        executeTransition('client_confirm');
+        break;
+      case 'rework_requested':
+        if (!formData.reworkReason) { toast.error('Provide a reason for rework'); return; }
+        executeTransition('client_reject', { reworkReason: formData.reworkReason });
+        break;
+      case 'rework_started':
+        executeTransition('rework');
+        break;
+      case 'invoice_approved':
+        executeTransition('approve_invoice');
+        break;
+      case 'invoice_sent':
+        if (!formData.sentVia) { toast.error('Select a send method'); return; }
+        executeTransition('send_invoice', { sentVia: formData.sentVia });
+        break;
+      case 'invoice_paid':
+        if (!formData.paymentMethod) { toast.error('Select payment method'); return; }
+        executeTransition('record_payment', {
+          paymentMethod: formData.paymentMethod,
+          paymentRef: formData.paymentRef,
+          paidAt: formData.paidAt || new Date().toISOString(),
+        });
+        break;
+      case 'complaint_closed':
+        executeTransition('close');
+        break;
+      case 'status_override':
+        if (!dialogData.targetStatus) { toast.error('Select a status'); return; }
+        executeTransition('override', {
+          targetStatus: dialogData.targetStatus,
+          notes: formData.notes,
+        });
+        break;
     }
   };
 
-  const role = user?.role || '';
-  const isSupervisor = ['super_admin', 'admin', 'manager', 'supervisor'].includes(role);
-  const isTechnician = role === 'technician';
-  const isAssignedToMe = complaint?.assignedToId === user?.id;
+  const addMaterial = () => setMaterials(p => [...p, { name: '', qty: '1', unit: 'pcs', cost: '0' }]);
+  const removeMaterial = (i: number) => setMaterials(p => p.filter((_, idx) => idx !== i));
+  const updateMaterial = (i: number, field: string, value: string) => {
+    setMaterials(p => p.map((m, idx) => idx === i ? { ...m, [field]: value } : m));
+  };
 
-  if (loading) return <DetailSkeleton />;
-  if (error) {
+  // ============ RENDER: LOADING ============
+  if (loading) {
     return (
-      <div className="p-4 md:p-6">
-        <Card className="max-w-md mx-auto">
-          <CardContent className="flex flex-col items-center justify-center py-16 gap-4">
-            <AlertCircle className="h-12 w-12 text-rose-500" />
-            <p className="text-lg font-medium text-rose-600">{error}</p>
-            <Button variant="outline" onClick={() => setView('complaints')}>Go Back</Button>
-          </CardContent>
-        </Card>
+      <div className="p-4 md:p-6 space-y-4">
+        <Skeleton className="h-8 w-64" />
+        <Skeleton className="h-16 w-full" />
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2 space-y-4"><Skeleton className="h-48 w-full" /><Skeleton className="h-48 w-full" /></div>
+          <Skeleton className="h-96 w-full" />
+        </div>
       </div>
     );
   }
+
   if (!complaint) return null;
 
-  const nextStatuses: string[] = [];
-  if (isSupervisor) {
-    if (complaint.status === 'OPEN') nextStatuses.push('ASSIGNED');
-    if (complaint.status === 'ASSIGNED' || complaint.status === 'IN_PROGRESS') nextStatuses.push('IN_PROGRESS', 'RESOLVED');
-    if (complaint.status === 'RESOLVED') nextStatuses.push('CLOSED');
-  }
+  const currentIdx = getStepIndex(complaint.status);
+  const isRework = complaint.status === 'REWORK_REQUIRED';
 
+  // ============ RENDER ============
   return (
-    <div className="p-4 md:p-6 space-y-4">
-      {/* Back Button + Header */}
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" onClick={() => setView('complaints')}>
-          <ArrowLeft className="h-5 w-5" />
-        </Button>
-        <h1 className="text-2xl font-bold">Complaint Details</h1>
+    <div className="p-4 md:p-6 space-y-5 max-w-7xl mx-auto">
+      {/* HEADER */}
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="flex items-center gap-3">
+          <Button variant="ghost" size="icon" onClick={() => setView('complaints')} className="shrink-0"><ArrowLeft className="h-5 w-5" /></Button>
+          <div>
+            <h1 className="text-xl font-bold text-gray-900">{complaint.title}</h1>
+            <p className="text-sm text-gray-500 mt-0.5">ID: {complaint.id.substring(0, 12).toUpperCase()} · Created {fmtRelative(complaint.createdAt)}</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 flex-wrap">
+          <StatusBadge status={complaint.status} />
+          <PriorityBadge priority={complaint.priority} />
+          {complaint.category && <Badge variant="outline" className="border-gray-300">{complaint.category}</Badge>}
+        </div>
       </div>
 
-      {/* Complaint Header Card */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xs text-muted-foreground">ID: {truncateId(complaint.id)}</span>
-              </div>
-              <h2 className="text-xl font-semibold">{complaint.title}</h2>
-              <div className="flex flex-wrap items-center gap-2">
-                <StatusBadge status={complaint.status} />
-                <PriorityBadge priority={complaint.priority} />
-                <span className="text-sm text-muted-foreground">
-                  {formatDate(complaint.createdAt)}
-                </span>
-              </div>
-            </div>
-            {complaint.category && (
-              <Badge variant="outline" className="text-xs">
-                {complaint.category}
-              </Badge>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Workflow Stepper */}
-      <Card>
+      {/* STATUS PROGRESS BAR */}
+      <Card className="overflow-hidden">
         <CardContent className="p-4">
-          <h3 className="text-sm font-medium text-muted-foreground mb-2">Progress</h3>
-          <WorkflowStepper status={complaint.status} />
-        </CardContent>
-      </Card>
-
-      {/* Details Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Description */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <FileText className="h-4 w-4 text-emerald-600" />
-              Description
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground whitespace-pre-wrap">{complaint.description || 'No description provided.'}</p>
-          </CardContent>
-        </Card>
-
-        {/* Customer Info */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-emerald-600" />
-              Customer Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">Name:</span>
-                <span className="text-sm text-muted-foreground">{complaint.customerName || '—'}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">ID:</span>
-                <span className="font-mono text-xs text-muted-foreground">{complaint.customerId ? truncateId(complaint.customerId) : '—'}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Equipment Info */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <Wrench className="h-4 w-4 text-emerald-600" />
-              Equipment
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-medium">Name:</span>
-                <span className="text-sm text-muted-foreground">{complaint.equipmentName || 'Not linked'}</span>
-              </div>
-              {complaint.equipmentId && (
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium">ID:</span>
-                  <span className="font-mono text-xs text-muted-foreground">{truncateId(complaint.equipmentId)}</span>
+          <ScrollArea className="w-full">
+            <div className="flex items-center min-w-max gap-0 py-2">
+              {MAIN_FLOW.map((step, idx) => {
+                const stepIdx = idx;
+                const isCompleted = stepIdx < currentIdx;
+                const isCurrent = step === complaint.status;
+                const sc = STEP_COLORS[step] || STEP_COLORS.NEW;
+                return (
+                  <div key={step} className="flex items-center">
+                    <div className="flex flex-col items-center gap-1.5 w-16">
+                      <div className={cn(
+                        'h-7 w-7 rounded-full flex items-center justify-center text-xs font-bold transition-all',
+                        isCompleted ? 'bg-emerald-500 text-white' :
+                        isCurrent ? cn(sc.dot, 'ring-4 ring-offset-1', sc.line.replace('bg-', 'ring-')) :
+                        'bg-gray-100 text-gray-400 border border-gray-200',
+                      )}>
+                        {isCompleted ? <CheckCircle2 className="h-4 w-4" /> : isCurrent ? <Wrench className="h-3.5 w-3.5" /> : <span>{idx + 1}</span>}
+                      </div>
+                      <span className={cn('text-[10px] font-medium text-center leading-tight', isCurrent ? sc.text : isCompleted ? 'text-emerald-600' : 'text-gray-400')}>
+                        {STEP_LABELS[step]}
+                      </span>
+                    </div>
+                    {idx < MAIN_FLOW.length - 1 && (
+                      <div className={cn('h-0.5 w-8 mx-0.5', stepIdx < currentIdx ? 'bg-emerald-400' : 'bg-gray-200')} />
+                    )}
+                  </div>
+                );
+              })}
+              {/* Rework indicator */}
+              {isRework && (
+                <div className="flex items-center ml-4">
+                  <div className="h-7 w-7 rounded-full bg-rose-500 text-white flex items-center justify-center"><RotateCcw className="h-3.5 w-3.5" /></div>
+                  <span className="text-[10px] font-medium text-rose-600 ml-1.5">Rework</span>
                 </div>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </ScrollArea>
+        </CardContent>
+      </Card>
 
-        {/* Assignment Section */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2">
-              <UserCheck className="h-4 w-4 text-emerald-600" />
-              Assignment
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {complaint.assignedToName ? (
-              <div className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <UserCheck className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-medium">{complaint.assignedToName}</span>
-                  <Badge variant="outline" className="bg-sky-50 text-sky-700 text-xs">Technician</Badge>
-                </div>
-                {complaint.supervisorName && (
-                  <div className="flex items-center gap-2">
-                    <UserCheck className="h-4 w-4 text-teal-600" />
-                    <span className="text-sm text-muted-foreground">
-                      Supervisor: {complaint.supervisorName}
-                    </span>
-                  </div>
-                )}
+      {/* MAIN CONTENT */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        {/* LEFT COLUMN */}
+        <div className="lg:col-span-2 space-y-5">
+          {/* Complaint Info */}
+          <Card>
+            <CardHeader className="pb-3"><CardTitle className="text-base font-semibold">Complaint Details</CardTitle></CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-gray-900">{complaint.title}</h3>
+                <p className="text-sm text-gray-600 mt-1 whitespace-pre-wrap">{complaint.description}</p>
               </div>
-            ) : (
-              <p className="text-sm text-muted-foreground">Not yet assigned</p>
-            )}
-          </CardContent>
-        </Card>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div className="flex items-center gap-2"><Building2 className="h-4 w-4 text-gray-400" /><span className="text-gray-500">Customer:</span><span className="font-medium">{complaint.customerName || '—'}</span></div>
+                <div className="flex items-center gap-2"><Package className="h-4 w-4 text-gray-400" /><span className="text-gray-500">Equipment:</span><span className="font-medium">{complaint.equipmentName || '—'}</span></div>
+                {complaint.assignedToName && <div className="flex items-center gap-2"><UserCheck className="h-4 w-4 text-blue-400" /><span className="text-gray-500">Technician:</span><span className="font-medium">{complaint.assignedToName}</span></div>}
+                {complaint.supervisorName && <div className="flex items-center gap-2"><Eye className="h-4 w-4 text-gray-400" /><span className="text-gray-500">Supervisor:</span><span className="font-medium">{complaint.supervisorName}</span></div>}
+                {complaint.eta && <div className="flex items-center gap-2"><Timer className="h-4 w-4 text-amber-400" /><span className="text-gray-500">ETA:</span><span className="font-medium">{complaint.eta}</span></div>}
+              </div>
+              {/* Timestamps */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-gray-500">
+                <div>Created: {fmtDate(complaint.createdAt)}</div>
+                {complaint.acceptedAt && <div>Accepted: {fmtDate(complaint.acceptedAt)}</div>}
+                {complaint.startedAt && <div>Started: {fmtDate(complaint.startedAt)}</div>}
+                {complaint.completedAt && <div>Completed: {fmtDate(complaint.completedAt)}</div>}
+                {complaint.clientConfirmedAt && <div>Confirmed: {fmtDate(complaint.clientConfirmedAt)}</div>}
+                {complaint.closedAt && <div>Closed: {fmtDate(complaint.closedAt)}</div>}
+              </div>
+              {complaint.reworkReason && (
+                <div className="bg-rose-50 border border-rose-200 rounded-lg p-3 text-sm">
+                  <span className="font-medium text-rose-700">Rework Reason:</span>
+                  <p className="text-rose-600 mt-1">{complaint.reworkReason}</p>
+                </div>
+              )}
+              {complaint.rejectionReason && (
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm">
+                  <span className="font-medium text-amber-700">Rejection Reason:</span>
+                  <p className="text-amber-600 mt-1">{complaint.rejectionReason}</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Work Order Card */}
+          {complaint.workOrders && complaint.workOrders.length > 0 && (
+            <Card>
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-base font-semibold flex items-center gap-2">
+                    <ClipboardList className="h-4 w-4" /> Work Order
+                  </CardTitle>
+                  <StatusBadge status={complaint.workOrders[0].status} />
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3 text-sm">
+                <div className="grid grid-cols-2 gap-3">
+                  <div><span className="text-gray-500">Type:</span> <span className="font-medium capitalize">{complaint.workOrders[0].type}</span></div>
+                  <div><span className="text-gray-500">Technician:</span> <span className="font-medium">{complaint.workOrders[0].assignedToName || '—'}</span></div>
+                  {complaint.workOrders[0].laborHours != null && <div><span className="text-gray-500">Labor:</span> <span className="font-medium">{complaint.workOrders[0].laborHours}h</span></div>}
+                  {complaint.workOrders[0].totalCost != null && <div><span className="text-gray-500">Total Cost:</span> <span className="font-bold text-emerald-700">${complaint.workOrders[0].totalCost?.toFixed(2)}</span></div>}
+                </div>
+                {complaint.workOrders[0].notes && <p className="text-gray-600 bg-gray-50 rounded p-2">{complaint.workOrders[0].notes}</p>}
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="space-y-5">
+          {/* Action Panel */}
+          {actions.filter(a => !a.isAutomatic).length > 0 && (
+            <Card className="border-dashed border-2 border-emerald-200 bg-emerald-50/30">
+              <CardHeader className="pb-3"><CardTitle className="text-base font-semibold flex items-center gap-2"><Play className="h-4 w-4 text-emerald-600" /> Available Actions</CardTitle></CardHeader>
+              <CardContent className="space-y-2">
+                {actions.filter(a => !a.isAutomatic).map((action, i) => (
+                  <Button
+                    key={i}
+                    variant="outline"
+                    className={cn('w-full justify-start gap-2 h-10', action.color, 'border-current/20 hover:opacity-80')}
+                    onClick={() => openDialog(action)}
+                    disabled={transitioning}
+                  >
+                    {action.label}
+                    {transitioning && <Loader2 className="h-3.5 w-3.5 animate-spin ml-auto" />}
+                  </Button>
+                ))}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Timeline */}
+          <Card>
+            <CardHeader className="pb-3"><CardTitle className="text-base font-semibold flex items-center gap-2"><Clock className="h-4 w-4" /> Activity Timeline</CardTitle></CardHeader>
+            <CardContent>
+              <ScrollArea className="max-h-[500px] pr-2">
+                <div className="relative space-y-0">
+                  {timeline.length === 0 && <p className="text-sm text-gray-400 py-4 text-center">No activity yet</p>}
+                  {timeline.map((entry, idx) => (
+                    <div key={entry.id} className="flex gap-3 pb-4 last:pb-0">
+                      <div className="flex flex-col items-center">
+                        <div className="mt-1"><TimelineIcon action={entry.action} /></div>
+                        {idx < timeline.length - 1 && <div className="w-px flex-1 bg-gray-200 mt-1" />}
+                      </div>
+                      <div className="flex-1 min-w-0 pb-1">
+                        <p className="text-sm font-medium text-gray-800">{entry.description}</p>
+                        <div className="flex items-center gap-2 mt-1 flex-wrap">
+                          {entry.performedByName && (
+                            <span className="text-xs text-gray-500">{entry.performedByName}</span>
+                          )}
+                          {entry.performedByRole && (
+                            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-4">{entry.performedByRole}</Badge>
+                          )}
+                          <span className="text-[11px] text-gray-400">{fmtRelative(entry.createdAt)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
-      {/* Work Orders Table */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium flex items-center gap-2">
-            <Package className="h-4 w-4 text-emerald-600" />
-            Related Work Orders
-            {(complaint.workOrders || []).length > 0 && (
-              <Badge variant="secondary" className="ml-1">{complaint.workOrders!.length}</Badge>
-            )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="p-0">
-          {(complaint.workOrders || []).length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground text-sm">No work orders linked</div>
-          ) : (
-            <div className="overflow-x-auto max-h-96 overflow-y-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Title</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Date</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {(complaint.workOrders || []).map((wo: WorkOrderItem) => (
-                    <TableRow
-                      key={wo.id}
-                      className="cursor-pointer hover:bg-muted/50"
-                      onClick={() => setView('work-order-detail', { id: wo.id })}
-                    >
-                      <TableCell className="font-medium max-w-[250px] truncate">{wo.title}</TableCell>
-                      <TableCell><StatusBadge status={wo.status} /></TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className={
-                          wo.type === 'corrective' ? 'bg-amber-50 text-amber-700' :
-                          wo.type === 'preventive' ? 'bg-emerald-50 text-emerald-700' :
-                          'bg-rose-50 text-rose-700'
-                        }>
-                          {wo.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-sm text-muted-foreground">
-                        {format(new Date(wo.createdAt), 'MMM d, yyyy')}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Resolution Notes (if resolved/closed) */}
-      {(complaint.status === 'RESOLVED' || complaint.status === 'CLOSED') && (
-        <Card className="border-emerald-200 bg-emerald-50/50">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium flex items-center gap-2 text-emerald-700">
-              <MessageSquare className="h-4 w-4" />
-              Resolution Notes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {complaint.resolutionNotes ? (
-              <p className="text-sm text-muted-foreground whitespace-pre-wrap">{complaint.resolutionNotes}</p>
-            ) : (
-              <p className="text-sm text-muted-foreground italic">No resolution notes recorded.</p>
-            )}
-            {complaint.resolvedAt && (
-              <p className="text-xs text-muted-foreground mt-2">
-                Resolved: {formatDate(complaint.resolvedAt)}
-              </p>
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Customer Rating (if closed with rating) */}
-      {complaint.status === 'CLOSED' && complaint.customerRating != null && (
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <span className="text-sm font-medium">Customer Rating:</span>
-              <div className="flex items-center gap-1">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star
-                    key={i}
-                    className={`h-5 w-5 ${
-                      i < (complaint.customerRating || 0)
-                        ? 'fill-amber-400 text-amber-400'
-                        : 'text-gray-300'
-                    }`}
-                  />
-                ))}
+      {/* ============ DIALOGS ============ */}
+      <AnimatePresence>
+        {/* ASSIGN DIALOG */}
+        {dialogType === 'assigned' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Assign Technician</DialogTitle><DialogDescription>Select a technician and supervisor for this complaint.</DialogDescription></DialogHeader>
+              <div className="space-y-4 py-2">
+                <div><Label>Technician *</Label><Select value={formData.assignedToId} onValueChange={v => setFormData(p => ({ ...p, assignedToId: v }))}><SelectTrigger><SelectValue placeholder="Select technician..." /></SelectTrigger><SelectContent>{technicians.map(t => <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>)}</SelectContent></Select></div>
+                <div><Label>Supervisor</Label><Select value={formData.supervisorId} onValueChange={v => setFormData(p => ({ ...p, supervisorId: v }))}><SelectTrigger><SelectValue placeholder="Select supervisor..." /></SelectTrigger><SelectContent>{supervisors.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent></Select></div>
               </div>
-              <span className="text-sm text-muted-foreground">({complaint.customerRating}/5)</span>
-            </div>
-          </CardContent>
-        </Card>
-      )}
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Assign'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
 
-      {/* Actions Panel */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-sm font-medium">Actions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-3">
-            {/* Supervisor/Admin: Assign Technician */}
-            {isSupervisor && !complaint.assignedToId && (
-              <Button
-                variant="outline"
-                onClick={() => { fetchTechnicians(); setAssignDialogOpen(true); }}
-                disabled={actionLoading}
-              >
-                <UserCheck className="h-4 w-4 mr-2" />
-                Assign Technician
-              </Button>
-            )}
+        {/* ACCEPT DIALOG */}
+        {dialogType === 'accepted' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Accept Assignment</DialogTitle><DialogDescription>Confirm you will handle this complaint.</DialogDescription></DialogHeader>
+              <div className="space-y-4 py-2">
+                <div><Label>Estimated Time of Arrival</Label><Input placeholder="e.g., 30 minutes" value={formData.eta} onChange={e => setFormData(p => ({ ...p, eta: e.target.value }))} /></div>
+              </div>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Accept'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
 
-            {/* Supervisor/Admin: Status Change Dropdown */}
-            {isSupervisor && nextStatuses.length > 0 && (
-              <div className="relative">
-                <Button variant="outline" onClick={() => setStatusDropdownOpen(!statusDropdownOpen)} disabled={actionLoading}>
-                  <ChevronDown className="h-4 w-4 mr-2" />
-                  Change Status
-                </Button>
-                {statusDropdownOpen && (
-                  <div className="absolute top-full left-0 mt-1 z-50 bg-white border rounded-lg shadow-lg py-1 min-w-[180px]">
-                    {nextStatuses.map((s) => (
-                      <button
-                        key={s}
-                        className="w-full text-left px-4 py-2 text-sm hover:bg-muted transition-colors"
-                        onClick={() => handleStatusChange(s)}
-                      >
-                        Mark {s.replace(/_/g, ' ')}
-                      </button>
+        {/* REJECT DIALOG */}
+        {dialogType === 'assignment_rejected' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Reject Assignment</DialogTitle><DialogDescription>Provide a reason for rejecting this assignment.</DialogDescription></DialogHeader>
+              <div className="py-2"><Label>Reason *</Label><Textarea rows={3} value={formData.rejectionReason} onChange={e => setFormData(p => ({ ...p, rejectionReason: e.target.value }))} placeholder="Why are you rejecting this assignment?" /></div>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button variant="destructive" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Reject'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* START DIALOG */}
+        {dialogType === 'work_started' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Start Work</DialogTitle><DialogDescription>Confirm you are starting work on this complaint.</DialogDescription></DialogHeader>
+              <div className="py-2 text-sm text-gray-600">This will record the start time and notify the customer.</div>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button className="bg-amber-600 hover:bg-amber-700" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Start Work'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* COMPLETE WORK DIALOG */}
+        {dialogType === 'work_completed' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-y-auto">
+              <DialogHeader><DialogTitle>Complete Work</DialogTitle><DialogDescription>Fill in the work details, checklist, and costs.</DialogDescription></DialogHeader>
+              <div className="space-y-4 py-2">
+                <div><Label>Checklist / Completion Notes</Label><Textarea rows={4} value={formData.checklistData} onChange={e => setFormData(p => ({ ...p, checklistData: e.target.value }))} placeholder="List completed tasks and inspection results..." /></div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div><Label>Labor Hours</Label><Input type="number" step="0.5" value={formData.laborHours} onChange={e => setFormData(p => ({ ...p, laborHours: e.target.value }))} /></div>
+                  <div><Label>Labor Cost ($)</Label><Input type="number" step="0.01" value={formData.laborCost} onChange={e => setFormData(p => ({ ...p, laborCost: e.target.value }))} /></div>
+                </div>
+                <div><Label>Material Cost ($)</Label><Input type="number" step="0.01" value={formData.materialCost} onChange={e => setFormData(p => ({ ...p, materialCost: e.target.value }))} /></div>
+                <div>
+                  <div className="flex items-center justify-between mb-2"><Label>Materials Used</Label><Button size="sm" variant="outline" onClick={addMaterial}><Plus className="h-3 w-3 mr-1" />Add</Button></div>
+                  <div className="space-y-2">
+                    {materials.map((m, i) => (
+                      <div key={i} className="flex gap-2 items-center">
+                        <Input className="flex-1" placeholder="Item name" value={m.name} onChange={e => updateMaterial(i, 'name', e.target.value)} />
+                        <Input className="w-16" placeholder="Qty" value={m.qty} onChange={e => updateMaterial(i, 'qty', e.target.value)} />
+                        <Input className="w-16" placeholder="Unit" value={m.unit} onChange={e => updateMaterial(i, 'unit', e.target.value)} />
+                        <Input className="w-20" placeholder="Cost" value={m.cost} onChange={e => updateMaterial(i, 'cost', e.target.value)} />
+                        <Button size="icon" variant="ghost" className="shrink-0 h-8 w-8" onClick={() => removeMaterial(i)}><Trash2 className="h-3.5 w-3.5 text-rose-500" /></Button>
+                      </div>
                     ))}
                   </div>
-                )}
+                </div>
+                <div><Label>Remarks</Label><Textarea rows={2} value={formData.remarks} onChange={e => setFormData(p => ({ ...p, remarks: e.target.value }))} placeholder="Additional remarks..." /></div>
               </div>
-            )}
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button className="bg-emerald-600 hover:bg-emerald-700" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Complete Work'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
 
-            {/* Technician: Accept & Start */}
-            {isTechnician && isAssignedToMe && complaint.status === 'ASSIGNED' && (
-              <Button
-                className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                onClick={() => handleStatusChange('IN_PROGRESS')}
-                disabled={actionLoading}
-              >
-                {actionLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                <Play className="h-4 w-4 mr-2" />
-                Accept & Start
-              </Button>
-            )}
+        {/* CLIENT CONFIRM DIALOG */}
+        {dialogType === 'client_confirmed' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Confirm Completion</DialogTitle><DialogDescription>Confirm the work has been completed to your satisfaction.</DialogDescription></DialogHeader>
+              <div className="py-2 text-sm text-gray-600">This will generate a draft invoice and notify the finance team.</div>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button className="bg-emerald-600 hover:bg-emerald-700" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Confirm Completion'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
 
-            {/* Technician: Complete */}
-            {isTechnician && isAssignedToMe && complaint.status === 'IN_PROGRESS' && (
-              <Button
-                className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                onClick={() => handleStatusChange('RESOLVED')}
-                disabled={actionLoading}
-              >
-                {actionLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-                <CheckCircle2 className="h-4 w-4 mr-2" />
-                Complete
-              </Button>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+        {/* CLIENT REJECT / REWORK DIALOG */}
+        {(dialogType === 'rework_requested' || dialogType === 'rework_started') && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>{dialogType === 'rework_requested' ? 'Request Rework' : 'Start Rework'}</DialogTitle>
+                <DialogDescription>{dialogType === 'rework_requested' ? 'Describe what needs to be fixed.' : 'Confirm you are starting the rework.'}</DialogDescription>
+              </DialogHeader>
+              {dialogType === 'rework_requested' && (
+                <div className="py-2"><Label>Reason *</Label><Textarea rows={3} value={formData.reworkReason} onChange={e => setFormData(p => ({ ...p, reworkReason: e.target.value }))} placeholder="What needs to be reworked?" /></div>
+              )}
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button variant={dialogType === 'rework_requested' ? 'destructive' : 'default'} onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : dialogType === 'rework_requested' ? 'Request Rework' : 'Start Rework'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
 
-      {/* Assign Technician Dialog */}
-      <Dialog open={assignDialogOpen} onOpenChange={setAssignDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Assign Technician</DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
-            <p className="text-sm text-muted-foreground">
-              Select a technician to assign to this complaint. The complaint status will be changed to ASSIGNED.
-            </p>
-            <div>
-              <label className="text-sm font-medium">Technician</label>
-              <Select value={selectedTech} onValueChange={setSelectedTech}>
-                <SelectTrigger className="mt-1.5">
-                  <SelectValue placeholder="Select a technician" />
-                </SelectTrigger>
-                <SelectContent>
-                  {technicians.map((t) => (
-                    <SelectItem key={t.value} value={t.value}>{t.label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setAssignDialogOpen(false)}>Cancel</Button>
-            <Button
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-              onClick={handleAssign}
-              disabled={actionLoading || !selectedTech}
-            >
-              {actionLoading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              Assign
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        {/* APPROVE INVOICE DIALOG */}
+        {dialogType === 'invoice_approved' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Approve Invoice</DialogTitle><DialogDescription>Review and approve the draft invoice.</DialogDescription></DialogHeader>
+              <div className="py-2 text-sm text-gray-600">Once approved, the invoice can be sent to the customer.</div>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Approve'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* SEND INVOICE DIALOG */}
+        {dialogType === 'invoice_sent' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Send Invoice to Customer</DialogTitle><DialogDescription>Choose how to deliver the invoice.</DialogDescription></DialogHeader>
+              <div className="py-2">
+                <Label>Send Via *</Label>
+                <Select value={formData.sentVia} onValueChange={v => setFormData(p => ({ ...p, sentVia: v }))}>
+                  <SelectTrigger><SelectValue placeholder="Select method..." /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="email">Email</SelectItem>
+                    <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                    <SelectItem value="portal">Customer Portal</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Send Invoice'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* RECORD PAYMENT DIALOG */}
+        {dialogType === 'invoice_paid' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Record Payment</DialogTitle><DialogDescription>Record the payment received from the customer.</DialogDescription></DialogHeader>
+              <div className="space-y-4 py-2">
+                <div><Label>Payment Method *</Label><Select value={formData.paymentMethod} onValueChange={v => setFormData(p => ({ ...p, paymentMethod: v }))}><SelectTrigger><SelectValue placeholder="Select method..." /></SelectTrigger><SelectContent><SelectItem value="bank_transfer">Bank Transfer</SelectItem><SelectItem value="cash">Cash</SelectItem><SelectItem value="card">Card</SelectItem><SelectItem value="cheque">Cheque</SelectItem><SelectItem value="other">Other</SelectItem></SelectContent></Select></div>
+                <div><Label>Payment Reference</Label><Input value={formData.paymentRef} onChange={e => setFormData(p => ({ ...p, paymentRef: e.target.value }))} placeholder="Transaction ID / Reference" /></div>
+                <div><Label>Payment Date</Label><Input type="date" value={formData.paidAt ? formData.paidAt.split('T')[0] : ''} onChange={e => setFormData(p => ({ ...p, paidAt: e.target.value }))} /></div>
+              </div>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button className="bg-green-600 hover:bg-green-700" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Record Payment'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* CLOSE DIALOG */}
+        {dialogType === 'complaint_closed' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle>Close Complaint</DialogTitle><DialogDescription>Are you sure you want to close this complaint? This action locks the work order and archives everything.</DialogDescription></DialogHeader>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button variant="destructive" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Close Complaint'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* STATUS OVERRIDE DIALOG */}
+        {dialogType === 'status_override' && (
+          <Dialog open onOpenChange={() => setDialogType(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader><DialogTitle className="flex items-center gap-2"><ShieldAlert className="h-5 w-5 text-amber-600" /> Override Status</DialogTitle><DialogDescription>Force-transition to any status. This will be audited.</DialogDescription></DialogHeader>
+              <div className="space-y-4 py-2">
+                <div><Label>Target Status *</Label><Select onValueChange={v => setDialogData(p => ({ ...p, targetStatus: v }))}><SelectTrigger><SelectValue placeholder="Select status..." /></SelectTrigger><SelectContent>{[...MAIN_FLOW, 'REWORK_REQUIRED'].map(s => <SelectItem key={s} value={s}>{STEP_LABELS[s] || s}</SelectItem>)}</SelectContent></Select></div>
+                <div><Label>Notes</Label><Textarea rows={2} value={formData.notes} onChange={e => setFormData(p => ({ ...p, notes: e.target.value }))} placeholder="Reason for override..." /></div>
+              </div>
+              <DialogFooter><Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button><Button variant="destructive" onClick={handleSubmitAction} disabled={transitioning}>{transitioning ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Override'}</Button></DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

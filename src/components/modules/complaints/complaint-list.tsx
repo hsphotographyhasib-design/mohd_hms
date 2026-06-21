@@ -26,7 +26,11 @@ import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 // ============ HELPERS ============
 
-const STATUS_PIPELINE: ComplaintStatus[] = ['OPEN', 'ASSIGNED', 'IN_PROGRESS', 'RESOLVED', 'CLOSED'];
+const STATUS_PIPELINE: ComplaintStatus[] = [
+  'NEW', 'ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS',
+  'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED', 'DRAFT_INVOICE',
+  'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED', 'REWORK_REQUIRED',
+];
 
 const PRIORITY_OPTIONS: ComplaintPriority[] = ['low', 'medium', 'high', 'critical'];
 
@@ -42,33 +46,66 @@ function getPriorityColor(priority: ComplaintPriority) {
 
 function getStatusColor(status: ComplaintStatus) {
   const colors: Record<string, string> = {
-    OPEN: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    NEW: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border-slate-200 dark:border-slate-700',
     ASSIGNED: 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border-sky-200 dark:border-sky-800',
-    IN_PROGRESS: 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
-    RESOLVED: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+    ACCEPTED: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800',
+    WORK_ORDER_CREATED: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
+    IN_PROGRESS: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    WAITING_CLIENT_CONFIRMATION: 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300 border-orange-200 dark:border-orange-800',
+    CLIENT_CONFIRMED: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+    DRAFT_INVOICE: 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300 border-violet-200 dark:border-violet-800',
+    INVOICE_APPROVED: 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+    INVOICE_SENT: 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border-sky-200 dark:border-sky-800',
+    PAID: 'bg-green-100 text-green-700 dark:bg-green-950 dark:text-green-300 border-green-200 dark:border-green-800',
     CLOSED: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300 border-gray-200 dark:border-gray-700',
+    REWORK_REQUIRED: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200 dark:border-rose-800',
   };
   return colors[status] || '';
 }
 
 function getStatusIcon(status: ComplaintStatus) {
   const icons: Record<string, typeof Circle> = {
-    OPEN: CircleDot,
+    NEW: CircleDot,
     ASSIGNED: UserCheck,
+    ACCEPTED: CheckCircle2,
+    WORK_ORDER_CREATED: Circle,
     IN_PROGRESS: Play,
-    RESOLVED: CheckCircle2,
+    WAITING_CLIENT_CONFIRMATION: Circle,
+    CLIENT_CONFIRMED: CheckCircle2,
+    DRAFT_INVOICE: Circle,
+    INVOICE_APPROVED: Circle,
+    INVOICE_SENT: Circle,
+    PAID: CheckCircle2,
     CLOSED: XCircle,
+    REWORK_REQUIRED: Circle,
   };
   return icons[status] || Circle;
 }
 
+const SHORT_STATUS: Record<string, string> = {
+  NEW: 'New', ASSIGNED: 'Assigned', ACCEPTED: 'Accepted',
+  WORK_ORDER_CREATED: 'WO Created', IN_PROGRESS: 'In Progress',
+  WAITING_CLIENT_CONFIRMATION: 'Confirmation', CLIENT_CONFIRMED: 'Confirmed',
+  DRAFT_INVOICE: 'Draft Inv.', INVOICE_APPROVED: 'Inv. Approved',
+  INVOICE_SENT: 'Inv. Sent', PAID: 'Paid', CLOSED: 'Closed',
+  REWORK_REQUIRED: 'Rework',
+};
+
 function getStatusBgColor(status: string) {
   const colors: Record<string, string> = {
-    OPEN: 'bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
+    NEW: 'bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700',
     ASSIGNED: 'bg-sky-50 dark:bg-sky-950/50 border-sky-200 dark:border-sky-800',
-    IN_PROGRESS: 'bg-purple-50 dark:bg-purple-950/50 border-purple-200 dark:border-purple-800',
-    RESOLVED: 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
+    ACCEPTED: 'bg-cyan-50 dark:bg-cyan-950/50 border-cyan-200 dark:border-cyan-800',
+    WORK_ORDER_CREATED: 'bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800',
+    IN_PROGRESS: 'bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
+    WAITING_CLIENT_CONFIRMATION: 'bg-orange-50 dark:bg-orange-950/50 border-orange-200 dark:border-orange-800',
+    CLIENT_CONFIRMED: 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
+    DRAFT_INVOICE: 'bg-violet-50 dark:bg-violet-950/50 border-violet-200 dark:border-violet-800',
+    INVOICE_APPROVED: 'bg-purple-50 dark:bg-purple-950/50 border-purple-200 dark:border-purple-800',
+    INVOICE_SENT: 'bg-sky-50 dark:bg-sky-950/50 border-sky-200 dark:border-sky-800',
+    PAID: 'bg-green-50 dark:bg-green-950/50 border-green-200 dark:border-green-800',
     CLOSED: 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700',
+    REWORK_REQUIRED: 'bg-rose-50 dark:bg-rose-950/50 border-rose-200 dark:border-rose-800',
   };
   return colors[status] || 'bg-gray-50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-700';
 }
@@ -117,7 +154,7 @@ export function ComplaintList() {
 
   // Status counts
   const [statusCounts, setStatusCounts] = useState<Record<string, number>>({
-    OPEN: 0, ASSIGNED: 0, IN_PROGRESS: 0, RESOLVED: 0, CLOSED: 0,
+    NEW: 0, ASSIGNED: 0, ACCEPTED: 0, WORK_ORDER_CREATED: 0, IN_PROGRESS: 0, WAITING_CLIENT_CONFIRMATION: 0, CLIENT_CONFIRMED: 0, DRAFT_INVOICE: 0, INVOICE_APPROVED: 0, INVOICE_SENT: 0, PAID: 0, CLOSED: 0, REWORK_REQUIRED: 0,
   });
 
   // New complaint dialog
@@ -438,7 +475,7 @@ export function ComplaintList() {
                     </TableCell>
                     <TableCell>
                       <Badge variant="outline" className={cn('text-xs', getStatusColor(item.status))}>
-                        {item.status}
+                        {SHORT_STATUS[item.status] || item.status}
                       </Badge>
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">{item.assignedToName || '—'}</TableCell>
@@ -497,7 +534,7 @@ export function ComplaintList() {
                       {item.priority}
                     </Badge>
                     <Badge variant="outline" className={cn('text-xs', getStatusColor(item.status))}>
-                      {item.status}
+                      {SHORT_STATUS[item.status] || item.status}
                     </Badge>
                   </div>
                 </div>

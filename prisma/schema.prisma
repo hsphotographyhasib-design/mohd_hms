@@ -47,6 +47,7 @@ model Tenant {
   whatsappDeliveryLogs WhatsAppDeliveryLog[]
   customerFeedbacks    CustomerFeedback[]
   customerReports      CustomerReport[]
+  complaintTimelines   ComplaintTimeline[]
 }
 
 // ============ USERS & AUTH ============
@@ -166,26 +167,39 @@ model Equipment {
 // ============ COMPLAINTS ============
 
 model Complaint {
-  id            String   @id @default(cuid())
-  tenantId      String
-  customerId    String
-  equipmentId   String?
-  title         String
-  description   String
-  priority      String   @default("medium") // low, medium, high, critical
-  status        String   @default("OPEN") // OPEN, ASSIGNED, IN_PROGRESS, RESOLVED, CLOSED
-  category      String?  // HVAC, Electrical, Plumbing, etc.
-  photos        String?  // JSON array
-  gpsLocation   String?  // JSON: {lat, lng}
-  assignedToId  String?  // technician
-  supervisorId  String?
+  id              String   @id @default(cuid())
+  tenantId        String
+  customerId      String
+  equipmentId     String?
+  title           String
+  description     String
+  priority        String   @default("medium") // low, medium, high, critical
+  status          String   @default("NEW")
+  // Workflow: NEW, ASSIGNED, ACCEPTED, WORK_ORDER_CREATED, IN_PROGRESS,
+  //           WAITING_CLIENT_CONFIRMATION, CLIENT_CONFIRMED, DRAFT_INVOICE,
+  //           INVOICE_APPROVED, INVOICE_SENT, PAID, CLOSED, REWORK_REQUIRED
+  source          String   @default("admin") // portal, whatsapp, admin, qr_scan, mobile_app
+  category        String?  // HVAC, Electrical, Plumbing, etc.
+  photos          String?  // JSON array
+  gpsLocation     String?  // JSON: {lat, lng}
+  assignedToId    String?
+  supervisorId    String?
+  workOrderId     String?  // linked work order (generated on ACCEPTED)
+  invoiceId       String?  // linked invoice (generated on CLIENT_CONFIRMED)
+  eta             String?  // technician ETA
+  rejectionReason String?  // if technician rejects
+  reworkReason    String?  // if customer requests rework
   resolutionNotes String?
-  customerRating Int?
+  customerRating  Int?
   customerFeedback String?
-  resolvedAt    DateTime?
-  closedAt      DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  acceptedAt      DateTime?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  clientConfirmedAt DateTime?
+  resolvedAt      DateTime?
+  closedAt        DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
   customer      Customer @relation(fields: [customerId], references: [id])
@@ -194,6 +208,7 @@ model Complaint {
   supervisor    User?    @relation("SupervisorComplaints", fields: [supervisorId], references: [id])
   workOrders    WorkOrder[]
   notifications Notification[]
+  timeline      ComplaintTimeline[]
 
   @@index([tenantId, status])
   @@index([tenantId, assignedToId])
@@ -208,7 +223,7 @@ model WorkOrder {
   equipmentId     String?
   title           String
   description     String
-  status          String   @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, CANCELLED
+  status          String   @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, READONLY, CANCELLED
   priority        String   @default("medium")
   type            String   @default("corrective") // corrective, preventive, emergency
   assignedToId    String?
@@ -224,10 +239,16 @@ model WorkOrder {
   totalCost       Float?
   notes           String?
   photos          String?  // JSON array
+  beforePhotos    String?  // JSON array
+  afterPhotos     String?  // JSON array
+  videoUrl        String?
+  materialsUsed   String?  // JSON: [{name, qty, unit, cost}]
   checklistData   String?  // JSON: completed checklist
+  remarks         String?
   technicianSignature String?
   customerSignature   String?
   serviceReportPdf   String?
+  isLocked        Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -441,13 +462,35 @@ model VehicleLog {
   user          User?    @relation(fields: [userId], references: [id])
 }
 
+// ============ COMPLAINT TIMELINE ============
+
+model ComplaintTimeline {
+  id              String   @id @default(cuid())
+  tenantId        String
+  complaintId     String
+  action          String   // created, assigned, accepted, rejected, started, checklist_updated, completed, client_confirmed, client_rejected, rework_required, invoice_generated, invoice_approved, invoice_sent, payment_received, closed, status_override
+  fromStatus      String?
+  toStatus        String?
+  description     String
+  performedBy     String?  // userId
+  performedByRole String?
+  metadata        String?  // JSON: extra data (technician name, ETA, etc.)
+  createdAt       DateTime @default(now())
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  complaint       Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, complaintId])
+  @@index([complaintId, createdAt])
+}
+
 // ============ NOTIFICATIONS ============
 
 model Notification {
   id            String   @id @default(cuid())
   tenantId      String
   userId        String?
-  type          String   // complaint_assigned, status_update, pm_reminder, invoice_reminder, eta_update
+  type          String   // complaint_assigned, status_update, pm_reminder, invoice_reminder, eta_update, workflow_transition, escalation
   title         String
   message       String
   data          String?  // JSON: related entity IDs
@@ -470,9 +513,12 @@ model AuditLog {
   action        String
   entity        String
   entityId      String?
+  oldValue      String?  // JSON: previous value
+  newValue      String?  // JSON: new value
   details       String?  // JSON
   ipAddress     String?
   userAgent     String?
+  device        String?
   createdAt     DateTime @default(now())
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
@@ -480,6 +526,7 @@ model AuditLog {
 
   @@index([tenantId, createdAt])
   @@index([tenantId, entity])
+  @@index([tenantId, entityId])
 }
 
 // ============ LEAVE & ATTENDANCE ============

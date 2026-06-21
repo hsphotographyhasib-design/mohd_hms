@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
         title,
         description,
         priority: priority || 'medium',
-        status: 'OPEN',
+        status: 'NEW',
         category: category || null,
         photos: photos || null,
         gpsLocation: gpsLocation || null,

@@ -121,7 +121,34 @@ export interface EquipmentItem {
 // ============ COMPLAINTS ============
 
 export type ComplaintPriority = 'low' | 'medium' | 'high' | 'critical';
-export type ComplaintStatus = 'OPEN' | 'ASSIGNED' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED';
+export type ComplaintStatus =
+  | 'NEW' | 'ASSIGNED' | 'ACCEPTED' | 'WORK_ORDER_CREATED' | 'IN_PROGRESS'
+  | 'WAITING_CLIENT_CONFIRMATION' | 'CLIENT_CONFIRMED' | 'DRAFT_INVOICE'
+  | 'INVOICE_APPROVED' | 'INVOICE_SENT' | 'PAID' | 'CLOSED' | 'REWORK_REQUIRED';
+
+export type ComplaintSource = 'portal' | 'whatsapp' | 'admin' | 'qr_scan' | 'mobile_app';
+
+export interface ComplaintTimelineEntry {
+  id: string;
+  action: string;
+  fromStatus: string | null;
+  toStatus: string | null;
+  description: string;
+  performedBy: string | null;
+  performedByRole: string | null;
+  performedByName?: string;
+  metadata: Record<string, unknown> | null;
+  createdAt: string;
+}
+
+export interface WorkflowAction {
+  action: string;
+  targetStatus: ComplaintStatus;
+  label: string;
+  icon: string;
+  color: string;
+  requiredFields?: string[];
+}
 
 export interface ComplaintItem {
   id: string;
@@ -134,24 +161,37 @@ export interface ComplaintItem {
   description: string;
   priority: ComplaintPriority;
   status: ComplaintStatus;
+  source?: ComplaintSource;
   category?: string;
   photos?: string;
   assignedToId?: string;
   assignedToName?: string;
   supervisorId?: string;
   supervisorName?: string;
+  workOrderId?: string;
+  invoiceId?: string;
+  eta?: string;
+  rejectionReason?: string;
+  reworkReason?: string;
   resolutionNotes?: string;
   customerRating?: number;
+  customerFeedback?: string;
+  acceptedAt?: string;
+  startedAt?: string;
+  completedAt?: string;
+  clientConfirmedAt?: string;
   resolvedAt?: string;
   closedAt?: string;
   createdAt: string;
   updatedAt: string;
   workOrders?: WorkOrderItem[];
+  timeline?: ComplaintTimelineEntry[];
+  availableActions?: WorkflowAction[];
 }
 
 // ============ WORK ORDERS ============
 
-export type WorkOrderStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
+export type WorkOrderStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'READONLY' | 'CANCELLED';
 export type WorkOrderType = 'corrective' | 'preventive' | 'emergency';
 
 export interface WorkOrderItem {

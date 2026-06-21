@@ -1,0 +1,1158 @@
+     1→     1→generator client {
+     2→     2→  provider = "prisma-client-js"
+     3→     3→}
+     4→     4→
+     5→     5→datasource db {
+     6→     6→  provider = "sqlite"
+     7→     7→  url      = env("DATABASE_URL")
+     8→     8→}
+     9→     9→
+    10→    10→// ============ TENANT & MULTI-TENANCY ============
+    11→    11→
+    12→    12→model Tenant {
+    13→    13→  id          String   @id @default(cuid())
+    14→    14→  name        String
+    15→    15→  domain      String   @unique
+    16→    16→  logo        String?
+    17→    17→  address     String?
+    18→    18→  phone       String?
+    19→    19→  email       String?
+    20→    20→  isActive    Boolean  @default(true)
+    21→    21→  plan        String   @default("professional") // free, professional, enterprise
+    22→    22→  maxUsers    Int      @default(50)
+    23→    23→  createdAt   DateTime @default(now())
+    24→    24→  updatedAt   DateTime @updatedAt
+    25→    25→
+    26→    26→  users       User[]
+    27→    27→  customers   Customer[]
+    28→    28→  equipment   Equipment[]
+    29→    29→  complaints  Complaint[]
+    30→    30→  workOrders  WorkOrder[]
+    31→    31→  invoices    Invoice[]
+    32→    32→  quotations  Quotation[]
+    33→    33→  pmSchedules PmSchedule[]
+    34→    34→  inventory   InventoryItem[]
+    35→    35→  purchaseOrders PurchaseOrder[]
+    36→    36→  vehicles    Vehicle[]
+    37→    37→  departments Department[]
+    38→    38→  notifications Notification[]
+    39→    39→  auditLogs   AuditLog[]
+    40→    40→  checklistTemplates ChecklistTemplate[]
+    41→    41→  whatsappConfigs      WhatsAppConfig[]
+    42→    42→  whatsappSessions     WhatsAppSession[]
+    43→    43→  whatsappMessages     WhatsAppMessage[]
+    44→    44→  conversationThreads  ConversationThread[]
+    45→    45→  whatsappTemplates    WhatsAppTemplate[]
+    46→    46→  broadcastLogs        BroadcastLog[]
+    47→    47→  whatsappDeliveryLogs WhatsAppDeliveryLog[]
+    48→    48→  customerFeedbacks    CustomerFeedback[]
+    49→    49→  customerReports      CustomerReport[]
+    50→    50→  complaintTimelines   ComplaintTimeline[]
+    51→    51→}
+    52→    52→
+    53→    53→// ============ USERS & AUTH ============
+    54→    54→
+    55→    55→model User {
+    56→    56→  id            String   @id @default(cuid())
+    57→    57→  tenantId      String
+    58→    58→  email         String
+    59→    59→  passwordHash  String?
+    60→    60→  name          String
+    61→    61→  phone         String?
+    62→    62→  avatar        String?
+    63→    63→  role          String   @default("technician") // super_admin, admin, manager, supervisor, technician, finance, customer
+    64→    64→  employeeNumber String?
+    65→    65→  departmentId  String?
+    66→    66→  isActive      Boolean  @default(true)
+    67→    67→  isOnline      Boolean  @default(false)
+    68→    68→  lastLogin     DateTime?
+    69→    69→  gpsLocation   String?  // JSON: {lat, lng}
+    70→    70→  profileCompleted Boolean @default(false)
+    71→    71→  createdAt     DateTime @default(now())
+    72→    72→  updatedAt     DateTime @updatedAt
+    73→    73→
+    74→    74→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+    75→    75→  department    Department? @relation(fields: [departmentId], references: [id])
+    76→    76→  assignedComplaints  Complaint[]  @relation("TechnicianComplaints")
+    77→    77→  assignedWorkOrders  WorkOrder[]  @relation("TechnicianWorkOrders")
+    78→    78→  createdWorkOrders   WorkOrder[]  @relation("CreatorWorkOrders")
+    79→    79→  createdInvoices     Invoice[]    @relation("CreatorInvoices")
+    80→    80→  pmSchedules   PmSchedule[] @relation("PmScheduleAssignee")
+    81→    81→  supervisorComplaints Complaint[] @relation("SupervisorComplaints")
+    82→    82→  auditLogs    AuditLog[]
+    83→    83→  vehicleLogs  VehicleLog[]
+    84→    84→
+    85→    85→  @@unique([tenantId, email])
+    86→    86→}
+    87→    87→
+    88→    88→// ============ DEPARTMENTS ============
+    89→    89→
+    90→    90→model Department {
+    91→    91→  id          String   @id @default(cuid())
+    92→    92→  tenantId    String
+    93→    93→  name        String
+    94→    94→  description String?
+    95→    95→  headId      String?
+    96→    96→  isActive    Boolean  @default(true)
+    97→    97→  createdAt   DateTime @default(now())
+    98→    98→  updatedAt   DateTime @updatedAt
+    99→    99→
+   100→   100→  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+   101→   101→  users       User[]
+   102→   102→}
+   103→   103→
+   104→   104→// ============ CUSTOMERS ============
+   105→   105→
+   106→   106→model Customer {
+   107→   107→  id          String   @id @default(cuid())
+   108→   108→  tenantId    String
+   109→   109→  name        String
+   110→   110→  email       String?
+   111→   111→  phone       String
+   112→   112→  address     String?
+   113→   113→  gpsLocation String?  // JSON: {lat, lng}
+   114→   114→  companyName String?
+   115→   115→  customerNumber String @unique
+   116→   116→  photo       String?
+   117→   117→  isActive    Boolean  @default(true)
+   118→   118→  isWhatsappVerified  Boolean  @default(false)
+   119→   119→  whatsappId          String?
+   120→   120→  whatsappPhone       String?
+   121→   121→  lastWhatsappActivity DateTime?
+   122→   122→  createdAt   DateTime @default(now())
+   123→   123→  updatedAt   DateTime @updatedAt
+   124→   124→
+   125→   125→  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+   126→   126→  equipment   Equipment[]
+   127→   127→  complaints  Complaint[]
+   128→   128→  invoices    Invoice[]
+   129→   129→  quotations  Quotation[]
+   130→   130→  conversationThreads ConversationThread[]
+   131→   131→  whatsappSessions     WhatsAppSession[]
+   132→   132→  customerFeedbacks    CustomerFeedback[]
+   133→   133→  customerReports      CustomerReport[]
+   134→   134→}
+   135→   135→
+   136→   136→// ============ EQUIPMENT ============
+   137→   137→
+   138→   138→model Equipment {
+   139→   139→  id            String   @id @default(cuid())
+   140→   140→  tenantId      String
+   141→   141→  customerId    String?
+   142→   142→  name          String
+   143→   143→  category      String   // HVAC, Electrical, Plumbing, Generator, Mechanical, FireProtection
+   144→   144→  assetNumber   String   @unique
+   145→   145→  qrCode        String   @unique
+   146→   146→  brand         String?
+   147→   147→  model         String?
+   148→   148→  serialNumber  String?
+   149→   149→  location      String?
+   150→   150→  installDate   DateTime?
+   151→   151→  warrantyExpiry DateTime?
+   152→   152→  status        String   @default("active") // active, inactive, under_maintenance, decommissioned
+   153→   153→  photos        String?  // JSON array of URLs
+   154→   154→  documents     String?  // JSON array of URLs
+   155→   155→  specifications String? // JSON object
+   156→   156→  notes         String?
+   157→   157→  createdAt     DateTime @default(now())
+   158→   158→  updatedAt     DateTime @updatedAt
+   159→   159→
+   160→   160→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   161→   161→  customer      Customer? @relation(fields: [customerId], references: [id])
+   162→   162→  complaints    Complaint[]
+   163→   163→  workOrders    WorkOrder[]
+   164→   164→  pmSchedules   PmSchedule[]
+   165→   165→}
+   166→   166→
+   167→   167→// ============ COMPLAINTS ============
+   168→   168→
+   169→   169→model Complaint {
+   170→   170→  id              String   @id @default(cuid())
+   171→   171→  tenantId        String
+   172→   172→  customerId      String
+   173→   173→  equipmentId     String?
+   174→   174→  title           String
+   175→   175→  description     String
+   176→   176→  priority        String   @default("medium") // low, medium, high, critical
+   177→   177→  status          String   @default("NEW")
+   178→   178→  // Workflow: NEW, ASSIGNED, ACCEPTED, WORK_ORDER_CREATED, IN_PROGRESS,
+   179→   179→  //           WAITING_CLIENT_CONFIRMATION, CLIENT_CONFIRMED, DRAFT_INVOICE,
+   180→   180→  //           INVOICE_APPROVED, INVOICE_SENT, PAID, CLOSED, REWORK_REQUIRED
+   181→   181→  source          String   @default("admin") // portal, whatsapp, admin, qr_scan, mobile_app
+   182→   182→  category        String?  // HVAC, Electrical, Plumbing, etc.
+   183→   183→  photos          String?  // JSON array
+   184→   184→  gpsLocation     String?  // JSON: {lat, lng}
+   185→   185→  assignedToId    String?
+   186→   186→  supervisorId    String?
+   187→   187→  workOrderId     String?  // linked work order (generated on ACCEPTED)
+   188→   188→  invoiceId       String?  // linked invoice (generated on CLIENT_CONFIRMED)
+   189→   189→  eta             String?  // technician ETA
+   190→   190→  rejectionReason String?  // if technician rejects
+   191→   191→  reworkReason    String?  // if customer requests rework
+   192→   192→  resolutionNotes String?
+   193→   193→  customerRating  Int?
+   194→   194→  customerFeedback String?
+   195→   195→  acceptedAt      DateTime?
+   196→   196→  startedAt       DateTime?
+   197→   197→  completedAt     DateTime?
+   198→   198→  clientConfirmedAt DateTime?
+   199→   199→  resolvedAt      DateTime?
+   200→   200→  closedAt        DateTime?
+   201→   201→  createdAt       DateTime @default(now())
+   202→   202→  updatedAt       DateTime @updatedAt
+   203→   203→
+   204→   204→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   205→   205→  customer      Customer @relation(fields: [customerId], references: [id])
+   206→   206→  equipment     Equipment? @relation(fields: [equipmentId], references: [id])
+   207→   207→  assignedTo    User?    @relation("TechnicianComplaints", fields: [assignedToId], references: [id])
+   208→   208→  supervisor    User?    @relation("SupervisorComplaints", fields: [supervisorId], references: [id])
+   209→   209→  workOrders    WorkOrder[]
+   210→   210→  notifications Notification[]
+   211→   211→  timeline      ComplaintTimeline[]
+   212→   212→
+   213→   213→  @@index([tenantId, status])
+   214→   214→  @@index([tenantId, assignedToId])
+   215→   215→}
+   216→   216→
+   217→   217→// ============ WORK ORDERS ============
+   218→   218→
+   219→   219→model WorkOrder {
+   220→   220→  id              String   @id @default(cuid())
+   221→   221→  tenantId        String
+   222→   222→  complaintId     String?
+   223→   223→  equipmentId     String?
+   224→   224→  title           String
+   225→   225→  description     String
+   226→   226→  status          String   @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, READONLY, CANCELLED
+   227→   227→  priority        String   @default("medium")
+   228→   228→  type            String   @default("corrective") // corrective, preventive, emergency
+   229→   229→  assignedToId    String?
+   230→   230→  createdBy       String?
+   231→   231→  scheduledDate   DateTime?
+   232→   232→  startedAt       DateTime?
+   233→   233→  completedAt     DateTime?
+   234→   234→  checkInGps      String?  // JSON: {lat, lng, timestamp}
+   235→   235→  checkOutGps     String?  // JSON: {lat, lng, timestamp}
+   236→   236→  laborHours      Float?
+   237→   237→  laborCost       Float?
+   238→   238→  materialCost    Float?
+   239→   239→  totalCost       Float?
+   240→   240→  notes           String?
+   241→   241→  photos          String?  // JSON array
+   242→   242→  beforePhotos    String?  // JSON array
+   243→   243→  afterPhotos     String?  // JSON array
+   244→   244→  videoUrl        String?
+   245→   245→  materialsUsed   String?  // JSON: [{name, qty, unit, cost}]
+   246→   246→  checklistData   String?  // JSON: completed checklist
+   247→   247→  remarks         String?
+   248→   248→  technicianSignature String?
+   249→   249→  customerSignature   String?
+   250→   250→  serviceReportPdf   String?
+   251→   251→  isLocked        Boolean  @default(false)
+   252→   252→  createdAt       DateTime @default(now())
+   253→   253→  updatedAt       DateTime @updatedAt
+   254→   254→
+   255→   255→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+   256→   256→  complaint       Complaint? @relation(fields: [complaintId], references: [id])
+   257→   257→  equipment       Equipment? @relation(fields: [equipmentId], references: [id])
+   258→   258→  assignedTo      User?    @relation("TechnicianWorkOrders", fields: [assignedToId], references: [id])
+   259→   259→  creator         User?    @relation("CreatorWorkOrders", fields: [createdBy], references: [id])
+   260→   260→  materials       WorkOrderMaterial[]
+   261→   261→  invoices        Invoice[]
+   262→   262→
+   263→   263→  @@index([tenantId, status])
+   264→   264→  @@index([tenantId, assignedToId])
+   265→   265→}
+   266→   266→
+   267→   267→model WorkOrderMaterial {
+   268→   268→  id            String   @id @default(cuid())
+   269→   269→  workOrderId   String
+   270→   270→  inventoryItemId String
+   271→   271→  quantity      Int
+   272→   272→  unitCost      Float
+   273→   273→  totalCost     Float
+   274→   274→
+   275→   275→  workOrder     WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
+   276→   276→  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
+   277→   277→}
+   278→   278→
+   279→   279→// ============ CHECKLIST TEMPLATES ============
+   280→   280→
+   281→   281→model ChecklistTemplate {
+   282→   282→  id          String   @id @default(cuid())
+   283→   283→  tenantId    String
+   284→   284→  name        String
+   285→   285→  category    String   // HVAC, Electrical, Plumbing, Generator, etc.
+   286→   286→  description String?
+   287→   287→  items       String   // JSON array of checklist items
+   288→   288→  isDefault   Boolean  @default(false)
+   289→   289→  createdAt   DateTime @default(now())
+   290→   290→  updatedAt   DateTime @updatedAt
+   291→   291→
+   292→   292→  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+   293→   293→}
+   294→   294→
+   295→   295→// ============ PREVENTIVE MAINTENANCE ============
+   296→   296→
+   297→   297→model PmSchedule {
+   298→   298→  id            String   @id @default(cuid())
+   299→   299→  tenantId      String
+   300→   300→  equipmentId   String
+   301→   301→  title         String
+   302→   302→  description   String?
+   303→   303→  frequency     String   // monthly, quarterly, half_yearly, yearly, custom
+   304→   304→  customDays    Int?
+   305→   305→  lastExecuted  DateTime?
+   306→   306→  nextDueDate   DateTime
+   307→   307→  assignedToId  String?
+   308→   308→  status        String   @default("active") // active, paused, completed
+   309→   309→  checklistTemplateId String?
+   310→   310→  createdAt     DateTime @default(now())
+   311→   311→  updatedAt     DateTime @updatedAt
+   312→   312→
+   313→   313→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   314→   314→  equipment     Equipment @relation(fields: [equipmentId], references: [id])
+   315→   315→  assignedTo    User?    @relation("PmScheduleAssignee", fields: [assignedToId], references: [id])
+   316→   316→}
+   317→   317→
+   318→   318→// ============ QUOTATIONS ============
+   319→   319→
+   320→   320→model Quotation {
+   321→   321→  id            String   @id @default(cuid())
+   322→   322→  tenantId      String
+   323→   323→  customerId    String
+   324→   324→  complaintId   String?
+   325→   325→  title         String
+   326→   326→  description   String?
+   327→   327→  items         String   // JSON array of line items
+   328→   328→  subtotal      Float
+   329→   329→  tax           Float    @default(0)
+   330→   330→  discount      Float    @default(0)
+   331→   331→  total         Float
+   332→   332→  status        String   @default("DRAFT") // DRAFT, SENT, APPROVED, REJECTED, EXPIRED
+   333→   333→  validUntil    DateTime?
+   334→   334→  approvedBy    String?
+   335→   335→  approvedAt    DateTime?
+   336→   336→  pdfUrl        String?
+   337→   337→  notes         String?
+   338→   338→  createdAt     DateTime @default(now())
+   339→   339→  updatedAt     DateTime @updatedAt
+   340→   340→
+   341→   341→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   342→   342→  customer      Customer @relation(fields: [customerId], references: [id])
+   343→   343→}
+   344→   344→
+   345→   345→// ============ INVOICES ============
+   346→   346→
+   347→   347→model Invoice {
+   348→   348→  id            String   @id @default(cuid())
+   349→   349→  tenantId      String
+   350→   350→  customerId    String
+   351→   351→  workOrderId   String?
+   352→   352→  quotationId   String?
+   353→   353→  invoiceNumber String   @unique
+   354→   354→  title         String
+   355→   355→  description   String?
+   356→   356→  items         String   // JSON array of line items
+   357→   357→  subtotal      Float
+   358→   358→  tax           Float    @default(0)
+   359→   359→  discount      Float    @default(0)
+   360→   360→  total         Float
+   361→   361→  status        String   @default("DRAFT") // DRAFT, PENDING, APPROVED, PAID, CANCELLED, OVERDUE
+   362→   362→  dueDate       DateTime?
+   363→   363→  paidAt        DateTime?
+   364→   364→  paymentMethod String?
+   365→   365→  paymentRef    String?
+   366→   366→  sentVia       String?  // email, whatsapp, portal
+   367→   367→  pdfUrl        String?
+   368→   368→  createdBy     String?
+   369→   369→  createdAt     DateTime @default(now())
+   370→   370→  updatedAt     DateTime @updatedAt
+   371→   371→
+   372→   372→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   373→   373→  customer      Customer @relation(fields: [customerId], references: [id])
+   374→   374→  workOrder     WorkOrder? @relation(fields: [workOrderId], references: [id])
+   375→   375→  creator       User?    @relation("CreatorInvoices", fields: [createdBy], references: [id])
+   376→   376→
+   377→   377→  @@index([tenantId, status])
+   378→   378→}
+   379→   379→
+   380→   380→// ============ INVENTORY ============
+   381→   381→
+   382→   382→model InventoryItem {
+   383→   383→  id            String   @id @default(cuid())
+   384→   384→  tenantId      String
+   385→   385→  name          String
+   386→   386→  sku           String?
+   387→   387→  category      String?
+   388→   388→  description   String?
+   389→   389→  unit          String   @default("pcs")
+   390→   390→  quantity      Int      @default(0)
+   391→   391→  minStock      Int      @default(0)
+   392→   392→  unitCost      Float    @default(0)
+   393→   393→  supplier      String?
+   394→   394→  location      String?
+   395→   395→  photos        String?
+   396→   396→  isActive      Boolean  @default(true)
+   397→   397→  createdAt     DateTime @default(now())
+   398→   398→  updatedAt     DateTime @updatedAt
+   399→   399→
+   400→   400→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   401→   401→  workOrderMaterials WorkOrderMaterial[]
+   402→   402→}
+   403→   403→
+   404→   404→// ============ PURCHASE ORDERS ============
+   405→   405→
+   406→   406→model PurchaseOrder {
+   407→   407→  id            String   @id @default(cuid())
+   408→   408→  tenantId      String
+   409→   409→  poNumber      String   @unique
+   410→   410→  supplier      String
+   411→   411→  supplierContact String?
+   412→   412→  items         String   // JSON array
+   413→   413→  subtotal      Float
+   414→   414→  tax           Float    @default(0)
+   415→   415→  total         Float
+   416→   416→  status        String   @default("DRAFT") // DRAFT, SENT, APPROVED, RECEIVED, CANCELLED
+   417→   417→  expectedDate  DateTime?
+   418→   418→  receivedAt    DateTime?
+   419→   419→  notes         String?
+   420→   420→  createdAt     DateTime @default(now())
+   421→   421→  updatedAt     DateTime @updatedAt
+   422→   422→
+   423→   423→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   424→   424→}
+   425→   425→
+   426→   426→// ============ VEHICLES ============
+   427→   427→
+   428→   428→model Vehicle {
+   429→   429→  id            String   @id @default(cuid())
+   430→   430→  tenantId      String
+   431→   431→  plateNumber   String
+   432→   432→  make          String
+   433→   433→  model         String
+   434→   434→  year          Int?
+   435→   435→  vin           String?
+   436→   436→  fuelType      String?
+   437→   437→  status        String   @default("active") // active, maintenance, decommissioned
+   438→   438→  currentMileage Float?
+   439→   439→  nextServiceDate DateTime?
+   440→   440→  createdAt     DateTime @default(now())
+   441→   441→  updatedAt     DateTime @updatedAt
+   442→   442→
+   443→   443→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   444→   444→  logs          VehicleLog[]
+   445→   445→}
+   446→   446→
+   447→   447→model VehicleLog {
+   448→   448→  id            String   @id @default(cuid())
+   449→   449→  vehicleId     String
+   450→   450→  userId        String?
+   451→   451→  type          String   // fuel, maintenance, repair
+   452→   452→  date          DateTime
+   453→   453→  odometer      Float?
+   454→   454→  quantity      Float?   // liters for fuel
+   455→   455→  cost          Float
+   456→   456→  description   String?
+   457→   457→  location      String?
+   458→   458→  createdAt     DateTime @default(now())
+   459→   459→  updatedAt     DateTime @updatedAt
+   460→   460→
+   461→   461→  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+   462→   462→  user          User?    @relation(fields: [userId], references: [id])
+   463→   463→}
+   464→   464→
+   465→   465→// ============ COMPLAINT TIMELINE ============
+   466→   466→
+   467→   467→model ComplaintTimeline {
+   468→   468→  id              String   @id @default(cuid())
+   469→   469→  tenantId        String
+   470→   470→  complaintId     String
+   471→   471→  action          String   // created, assigned, accepted, rejected, started, checklist_updated, completed, client_confirmed, client_rejected, rework_required, invoice_generated, invoice_approved, invoice_sent, payment_received, closed, status_override
+   472→   472→  fromStatus      String?
+   473→   473→  toStatus        String?
+   474→   474→  description     String
+   475→   475→  performedBy     String?  // userId
+   476→   476→  performedByRole String?
+   477→   477→  metadata        String?  // JSON: extra data (technician name, ETA, etc.)
+   478→   478→  createdAt       DateTime @default(now())
+   479→   479→
+   480→   480→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+   481→   481→  complaint       Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+   482→   482→
+   483→   483→  @@index([tenantId, complaintId])
+   484→   484→  @@index([complaintId, createdAt])
+   485→   485→}
+   486→   486→
+   487→   487→// ============ NOTIFICATIONS ============
+   488→   488→
+   489→   489→model Notification {
+   490→   490→  id            String   @id @default(cuid())
+   491→   491→  tenantId      String
+   492→   492→  userId        String?
+   493→   493→  type          String   // complaint_assigned, status_update, pm_reminder, invoice_reminder, eta_update, workflow_transition, escalation
+   494→   494→  title         String
+   495→   495→  message       String
+   496→   496→  data          String?  // JSON: related entity IDs
+   497→   497→  isRead        Boolean  @default(false)
+   498→   498→  relatedEntityType String? // complaint, work_order, invoice, pm_schedule
+   499→   499→  relatedEntityId   String?
+   500→   500→  createdAt     DateTime @default(now())
+   501→   501→  updatedAt     DateTime @updatedAt
+   502→   502→
+   503→   503→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   504→   504→  complaint     Complaint? @relation(fields: [relatedEntityId], references: [id])
+   505→   505→}
+   506→   506→
+   507→   507→// ============ AUDIT LOGS ============
+   508→   508→
+   509→   509→model AuditLog {
+   510→   510→  id            String   @id @default(cuid())
+   511→   511→  tenantId      String
+   512→   512→  userId        String
+   513→   513→  action        String
+   514→   514→  entity        String
+   515→   515→  entityId      String?
+   516→   516→  oldValue      String?  // JSON: previous value
+   517→   517→  newValue      String?  // JSON: new value
+   518→   518→  details       String?  // JSON
+   519→   519→  ipAddress     String?
+   520→   520→  userAgent     String?
+   521→   521→  device        String?
+   522→   522→  createdAt     DateTime @default(now())
+   523→   523→
+   524→   524→  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+   525→   525→  user          User     @relation(fields: [userId], references: [id])
+   526→   526→
+   527→   527→  @@index([tenantId, createdAt])
+   528→   528→  @@index([tenantId, entity])
+   529→   529→  @@index([tenantId, entityId])
+   530→   530→}
+   531→   531→
+   532→   532→// ============ LEAVE & ATTENDANCE ============
+   533→   533→
+   534→   534→model LeaveRequest {
+   535→   535→  id            String   @id @default(cuid())
+   536→   536→  tenantId      String
+   537→   537→  userId        String
+   538→   538→  type          String   // sick, annual, emergency, personal
+   539→   539→  startDate     DateTime
+   540→   540→  endDate       DateTime
+   541→   541→  days          Float
+   542→   542→  reason        String?
+   543→   543→  status        String   @default("PENDING") // PENDING, APPROVED, REJECTED, CANCELLED
+   544→   544→  approvedBy    String?
+   545→   545→  approvedAt    DateTime?
+   546→   546→  createdAt     DateTime @default(now())
+   547→   547→  updatedAt     DateTime @updatedAt
+   548→   548→}
+   549→   549→
+   550→   550→model Attendance {
+   551→   551→  id            String   @id @default(cuid())
+   552→   552→  tenantId      String
+   553→   553→  userId        String
+   554→   554→  date          DateTime
+   555→   555→  checkIn       DateTime?
+   556→   556→  checkOut      DateTime?
+   557→   557→  checkInGps    String?
+   558→   558→  checkOutGps   String?
+   559→   559→  hoursWorked   Float?
+   560→   560→  status        String   @default("present") // present, absent, late, half_day, leave
+   561→   561→  notes         String?
+   562→   562→  createdAt     DateTime @default(now())
+   563→   563→  updatedAt     DateTime @updatedAt
+   564→   564→
+   565→   565→  @@unique([tenantId, userId, date])
+   566→   566→}
+   567→   567→
+   568→   568→// ============ CMS - CONTENT MANAGEMENT SYSTEM ============
+   569→   569→
+   570→   570→// 1. CMS Settings - Global CMS settings (JSON blobs)
+   571→   571→model CmsSetting {
+   572→   572→  id          String   @id @default(cuid())
+   573→   573→  tenantId    String
+   574→   574→  key         String
+   575→   575→  value       String   // JSON blob
+   576→   576→  category    String?
+   577→   577→  createdAt   DateTime @default(now())
+   578→   578→  updatedAt   DateTime @updatedAt
+   579→   579→
+   580→   580→  @@unique([tenantId, key])
+   581→   581→  @@index([tenantId])
+   582→   582→}
+   583→   583→
+   584→   584→// 2. CMS Hero - Hero section content
+   585→   585→model CmsHero {
+   586→   586→  id              String    @id @default(cuid())
+   587→   587→  tenantId        String
+   588→   588→  headline        String?
+   589→   589→  subheadline     String?
+   590→   590→  backgroundImage String?
+   591→   591→  backgroundVideo String?
+   592→   592→  cta1Text        String?
+   593→   593→  cta1Link        String?
+   594→   594→  cta2Text        String?
+   595→   595→  cta2Link        String?
+   596→   596→  stat1Value      String?
+   597→   597→  stat1Label      String?
+   598→   598→  stat2Value      String?
+   599→   599→  stat2Label      String?
+   600→   600→  stat3Value      String?
+   601→   601→  stat3Label      String?
+   602→   602→  chipText        String?
+   603→   603→  chipSubtext     String?
+   604→   604→  isActive        Boolean   @default(true)
+   605→   605→  publishedAt     DateTime?
+   606→   606→  createdAt       DateTime  @default(now())
+   607→   607→  updatedAt       DateTime  @updatedAt
+   608→   608→
+   609→   609→  @@index([tenantId])
+   610→   610→}
+   611→   611→
+   612→   612→// 3. CMS Service - Services
+   613→   613→model CmsService {
+   614→   614→  id            String   @id @default(cuid())
+   615→   615→  tenantId      String
+   616→   616→  name          String
+   617→   617→  slug          String
+   618→   618→  description   String?
+   619→   619→  image         String?
+   620→   620→  icon          String?
+   621→   621→  category      String?  // HVAC, Electrical, Plumbing, etc.
+   622→   622→  status        String   @default("draft") // active, draft
+   623→   623→  seoTitle      String?
+   624→   624→  seoDescription String?
+   625→   625→  displayOrder  Int      @default(0)
+   626→   626→  isEnabled     Boolean  @default(true)
+   627→   627→  createdAt     DateTime @default(now())
+   628→   628→  updatedAt     DateTime @updatedAt
+   629→   629→
+   630→   630→  @@unique([tenantId, slug])
+   631→   631→  @@index([tenantId])
+   632→   632→}
+   633→   633→
+   634→   634→// 4. CMS Industry - Industries served
+   635→   635→model CmsIndustry {
+   636→   636→  id            String   @id @default(cuid())
+   637→   637→  tenantId      String
+   638→   638→  name          String
+   639→   639→  description   String?
+   640→   640→  image         String?
+   641→   641→  icon          String?
+   642→   642→  displayOrder  Int      @default(0)
+   643→   643→  isEnabled     Boolean  @default(true)
+   644→   644→  createdAt     DateTime @default(now())
+   645→   645→  updatedAt     DateTime @updatedAt
+   646→   646→
+   647→   647→  @@index([tenantId])
+   648→   648→}
+   649→   649→
+   650→   650→// 5. CMS Project - Portfolio projects
+   651→   651→model CmsProject {
+   652→   652→  id                String    @id @default(cuid())
+   653→   653→  tenantId          String
+   654→   654→  title             String
+   655→   655→  slug              String
+   656→   656→  description       String?
+   657→   657→  category          String?
+   658→   658→  featuredImage     String?
+   659→   659→  images            String?   // JSON array
+   660→   660→  beforeAfterImages String?   // JSON
+   661→   661→  completionStatus  String    @default("planned") // planned, in_progress, completed
+   662→   662→  isFeatured        Boolean   @default(false)
+   663→   663→  galleryImages     String?   // JSON
+   664→   664→  seoTitle          String?
+   665→   665→  seoDescription    String?
+   666→   666→  displayOrder      Int       @default(0)
+   667→   667→  status            String    @default("draft") // active, draft
+   668→   668→  publishedAt       DateTime?
+   669→   669→  createdAt         DateTime  @default(now())
+   670→   670→  updatedAt         DateTime  @updatedAt
+   671→   671→
+   672→   672→  @@unique([tenantId, slug])
+   673→   673→  @@index([tenantId])
+   674→   674→}
+   675→   675→
+   676→   676→// 6. CMS Blog Category - Blog categories
+   677→   677→model CmsBlogCategory {
+   678→   678→  id          String   @id @default(cuid())
+   679→   679→  tenantId    String
+   680→   680→  name        String
+   681→   681→  slug        String
+   682→   682→  description String?
+   683→   683→  createdAt   DateTime @default(now())
+   684→   684→  updatedAt   DateTime @updatedAt
+   685→   685→
+   686→   686→  blogs       CmsBlog[]
+   687→   687→
+   688→   688→  @@unique([tenantId, slug])
+   689→   689→  @@index([tenantId])
+   690→   690→}
+   691→   691→
+   692→   692→// 7. CMS Blog - Blog posts
+   693→   693→model CmsBlog {
+   694→   694→  id            String    @id @default(cuid())
+   695→   695→  tenantId      String
+   696→   696→  title         String
+   697→   697→  slug          String
+   698→   698→  excerpt       String?
+   699→   699→  content       String?   // rich text
+   700→   700→  featuredImage String?
+   701→   701→  categoryId    String?
+   702→   702→  authorId      String?   // User
+   703→   703→  status        String    @default("draft") // draft, published, scheduled
+   704→   704→  seoTitle      String?
+   705→   705→  seoDescription String?
+   706→   706→  seoKeywords   String?
+   707→   707→  isFeatured    Boolean   @default(false)
+   708→   708→  publishedAt   DateTime?
+   709→   709→  scheduledAt   DateTime?
+   710→   710→  viewCount     Int       @default(0)
+   711→   711→  createdAt     DateTime  @default(now())
+   712→   712→  updatedAt     DateTime  @updatedAt
+   713→   713→
+   714→   714→  category      CmsBlogCategory? @relation(fields: [categoryId], references: [id])
+   715→   715→
+   716→   716→  @@unique([tenantId, slug])
+   717→   717→  @@index([tenantId])
+   718→   718→}
+   719→   719→
+   720→   720→// 8. CMS Testimonial - Customer testimonials
+   721→   721→model CmsTestimonial {
+   722→   722→  id            String   @id @default(cuid())
+   723→   723→  tenantId      String
+   724→   724→  customerName  String
+   725→   725→  company       String?
+   726→   726→  photo         String?
+   727→   727→  rating        Int      // 1-5
+   728→   728→  comment       String
+   729→   729→  status        String   @default("draft") // active, draft
+   730→   730→  displayOrder  Int      @default(0)
+   731→   731→  isEnabled     Boolean  @default(true)
+   732→   732→  createdAt     DateTime @default(now())
+   733→   733→  updatedAt     DateTime @updatedAt
+   734→   734→
+   735→   735→  @@index([tenantId])
+   736→   736→}
+   737→   737→
+   738→   738→// 9. CMS Career Job - Career positions
+   739→   739→model CmsCareerJob {
+   740→   740→  id                String    @id @default(cuid())
+   741→   741→  tenantId          String
+   742→   742→  title             String
+   743→   743→  department        String?
+   744→   744→  description       String?
+   745→   745→  requirements      String?   // JSON
+   746→   746→  salary            String?
+   747→   747→  status            String    @default("open") // open, closed, filled
+   748→   748→  applicationDeadline DateTime?
+   749→   749→  location          String?
+   750→   750→  type              String    @default("fulltime") // fulltime, parttime, contract
+   751→   751→  createdAt         DateTime  @default(now())
+   752→   752→  updatedAt         DateTime  @updatedAt
+   753→   753→
+   754→   754→  applications      CmsCareerApplication[]
+   755→   755→
+   756→   756→  @@index([tenantId])
+   757→   757→}
+   758→   758→
+   759→   759→// 10. CMS Career Application - Job applications
+   760→   760→model CmsCareerApplication {
+   761→   761→  id            String   @id @default(cuid())
+   762→   762→  tenantId      String
+   763→   763→  jobId         String
+   764→   764→  fullName      String
+   765→   765→  email         String
+   766→   766→  phone         String?
+   767→   767→  resumeUrl     String?
+   768→   768→  coverLetter   String?
+   769→   769→  status        String   @default("new") // new, reviewed, shortlisted, rejected, hired
+   770→   770→  createdAt     DateTime @default(now())
+   771→   771→  updatedAt     DateTime @updatedAt
+   772→   772→
+   773→   773→  job          CmsCareerJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+   774→   774→
+   775→   775→  @@index([tenantId])
+   776→   776→}
+   777→   777→
+   778→   778→// 11. CMS Contact Message - Contact form submissions
+   779→   779→model CmsContactMessage {
+   780→   780→  id            String    @id @default(cuid())
+   781→   781→  tenantId      String
+   782→   782→  name          String
+   783→   783→  email         String
+   784→   784→  phone         String?
+   785→   785→  subject       String?
+   786→   786→  message       String
+   787→   787→  source        String    @default("website") // website, whatsapp, email, emergency
+   788→   788→  status        String    @default("new") // new, read, replied, archived
+   789→   789→  assignedToId  String?   // User
+   790→   790→  reply         String?
+   791→   791→  replyAt       DateTime?
+   792→   792→  createdAt     DateTime  @default(now())
+   793→   793→  updatedAt     DateTime  @updatedAt
+   794→   794→
+   795→   795→  @@index([tenantId])
+   796→   796→}
+   797→   797→
+   798→   798→// 12. CMS Media - Media library
+   799→   799→model CmsMedia {
+   800→   800→  id            String   @id @default(cuid())
+   801→   801→  tenantId      String
+   802→   802→  fileName      String
+   803→   803→  originalName  String
+   804→   804→  mimeType      String
+   805→   805→  size          Int
+   806→   806→  url           String
+   807→   807→  thumbnailUrl  String?
+   808→   808→  folder        String?
+   809→   809→  category      String?
+   810→   810→  alt           String?
+   811→   811→  width         Int?
+   812→   812→  height        Int?
+   813→   813→  uploadedById  String?  // User
+   814→   814→  createdAt     DateTime @default(now())
+   815→   815→  updatedAt     DateTime @updatedAt
+   816→   816→
+   817→   817→  @@index([tenantId])
+   818→   818→}
+   819→   819→
+   820→   820→// 13. CMS SEO - SEO settings per page
+   821→   821→model CmsSeo {
+   822→   822→  id            String   @id @default(cuid())
+   823→   823→  tenantId      String
+   824→   824→  pagePath      String
+   825→   825→  title         String?
+   826→   826→  description   String?
+   827→   827→  keywords      String?
+   828→   828→  ogTitle       String?
+   829→   829→  ogDescription String?
+   830→   830→  ogImage       String?
+   831→   831→  schemaMarkup  String?  // JSON
+   832→   832→  canonicalUrl  String?
+   833→   833→  createdAt     DateTime @default(now())
+   834→   834→  updatedAt     DateTime @updatedAt
+   835→   835→
+   836→   836→  @@unique([tenantId, pagePath])
+   837→   837→  @@index([tenantId])
+   838→   838→}
+   839→   839→
+   840→   840→// 14. CMS Footer - Footer settings
+   841→   841→model CmsFooter {
+   842→   842→  id                String   @id @default(cuid())
+   843→   843→  tenantId          String
+   844→   844→  companyDescription String?
+   845→   845→  address           String?
+   846→   846→  phone             String?
+   847→   847→  email             String?
+   848→   848→  whatsapp          String?
+   849→   849→  facebook          String?
+   850→   850→  instagram         String?
+   851→   851→  linkedin          String?
+   852→   852→  twitter           String?
+   853→   853→  youtube           String?
+   854→   854→  copyrightText     String?
+   855→   855→  privacyPolicyLink String?
+   856→   856→  termsLink         String?
+   857→   857→  menuLinks         String?  // JSON
+   858→   858→  createdAt         DateTime @default(now())
+   859→   859→  updatedAt         DateTime @updatedAt
+   860→   860→
+   861→   861→  @@index([tenantId])
+   862→   862→}
+   863→   863→
+   864→   864→// 15. CMS Announcement - Announcement bar
+   865→   865→model CmsAnnouncement {
+   866→   866→  id            String    @id @default(cuid())
+   867→   867→  tenantId      String
+   868→   868→  text          String
+   869→   869→  type          String    @default("info") // maintenance, holiday, emergency, info
+   870→   870→  link          String?
+   871→   871→  isEnabled     Boolean   @default(true)
+   872→   872→  scheduledFrom DateTime?
+   873→   873→  scheduledTo   DateTime?
+   874→   874→  displayOrder  Int       @default(0)
+   875→   875→  createdAt     DateTime  @default(now())
+   876→   876→  updatedAt     DateTime  @updatedAt
+   877→   877→
+   878→   878→  @@index([tenantId])
+   879→   879→}
+   880→   880→
+   881→   881→// 16. CMS Popup - Popup management
+   882→   882→model CmsPopup {
+   883→   883→  id            String    @id @default(cuid())
+   884→   884→  tenantId      String
+   885→   885→  title         String
+   886→   886→  content       String?
+   887→   887→  type          String    @default("welcome") // welcome, alert, promotional, newsletter
+   888→   888→  imageUrl      String?
+   889→   889→  frequency     String    @default("once") // once, session, once/day, always
+   890→   890→  isEnabled     Boolean   @default(true)
+   891→   891→  scheduledFrom DateTime?
+   892→   892→  scheduledTo   DateTime?
+   893→   893→  createdAt     DateTime  @default(now())
+   894→   894→  updatedAt     DateTime  @updatedAt
+   895→   895→
+   896→   896→  @@index([tenantId])
+   897→   897→}
+   898→   898→
+   899→   899→// 17. CMS Form - Form builder
+   900→   900→model CmsForm {
+   901→   901→  id            String   @id @default(cuid())
+   902→   902→  tenantId      String
+   903→   903→  name          String
+   904→   904→  formType      String   @default("contact") // contact, career, feedback, survey, custom
+   905→   905→  fields        String   // JSON
+   906→   906→  isActive      Boolean  @default(true)
+   907→   907→  createdAt     DateTime @default(now())
+   908→   908→  updatedAt     DateTime @updatedAt
+   909→   909→
+   910→   910→  @@index([tenantId])
+   911→   911→}
+   912→   912→
+   913→   913→// 18. CMS Activity Log - CMS audit log
+   914→   914→model CmsActivityLog {
+   915→   915→  id            String   @id @default(cuid())
+   916→   916→  tenantId      String
+   917→   917→  userId        String?
+   918→   918→  action        String
+   919→   919→  section       String?
+   920→   920→  details       String?  // JSON
+   921→   921→  ipAddress     String?
+   922→   922→  createdAt     DateTime @default(now())
+   923→   923→
+   924→   924→  @@index([tenantId])
+   925→   925→}
+   926→   926→
+   927→   927→// ============ WHATSAPP SYSTEM ============
+   928→   928→
+   929→   929→// 19. WhatsApp Config - Provider settings per tenant
+   930→   930→model WhatsAppConfig {
+   931→   931→  id              String   @id @default(cuid())
+   932→   932→  tenantId        String
+   933→   933→  provider        String   @default("openwa") // openwa, meta, twilio
+   934→   934→  isEnabled       Boolean  @default(false)
+   935→   935→  phoneNumber     String?
+   936→   936→  businessName    String?
+   937→   937→  // OpenWA config
+   938→   938→  openwaBaseUrl   String?  // e.g. http://localhost:3001
+   939→   939→  openwaSession   String?
+   940→   940→  openwaApiKey    String?
+   941→   941→  openwaQrCode    String?  // base64 QR image
+   942→   942→  openwaStatus    String   @default("disconnected") // connected, disconnected, connecting
+   943→   943→  // Meta Cloud API config
+   944→   944→  metaAccessToken String?
+   945→   945→  metaPhoneNumberId String?
+   946→   946→  metaVerifyToken String?
+   947→   947→  metaWebhookSecret String?
+   948→   948→  metaBusinessAccountId String?
+   949→   949→  // Twilio config
+   950→   950→  twilioAccountSid  String?
+   951→   951→  twilioAuthToken   String?
+   952→   952→  twilioPhoneNumber String?
+   953→   953→  // General
+   954→   954→  autoReplyEnabled  Boolean @default(true)
+   955→   955→  welcomeMessage    String  @default("Welcome to MOHD.HMS ENTERPRISE!\n\nPlease choose:\n1️⃣ New Complaint\n2️⃣ Service Request\n3️⃣ Complaint Status\n4️⃣ My Equipment\n5️⃣ Work Order Status\n6️⃣ Invoices\n7️⃣ Emergency Service\n8️⃣ Speak to Customer Support")
+   956→   956→  emergencyNumbers  String?  // JSON array of phone numbers
+   957→   957→  defaultPriority   String  @default("medium")
+   958→   958→  createdAt       DateTime @default(now())
+   959→   959→  updatedAt       DateTime @updatedAt
+   960→   960→
+   961→   961→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+   962→   962→  sessions        WhatsAppSession[]
+   963→   963→
+   964→   964→  @@unique([tenantId])
+   965→   965→}
+   966→   966→
+   967→   967→// 20. WhatsApp Session - Per-customer conversation session
+   968→   968→model WhatsAppSession {
+   969→   969→  id              String   @id @default(cuid())
+   970→   970→  tenantId        String
+   971→   971→  configId        String
+   972→   972→  phoneNumber     String   // customer WhatsApp number (international format)
+   973→   973→  customerId      String?  // linked CMMS customer
+   974→   974→  sessionId       String?  // provider session ID
+   975→   975→  state           String   @default("menu") // menu, new_complaint_desc, new_complaint_media, new_complaint_equipment, service_request_desc, status_query, invoice_query, equipment_list, emergency_desc, feedback_rating, feedback_comment, escalation_desc, chat, appointment_date, appointment_time, appointment_location
+   976→   976→  stateData       String?  // JSON - temp data for current flow step
+   977→   977→  lastMessageAt   DateTime @default(now())
+   978→   978→  messageCount    Int      @default(0)
+   979→   979→  isActive        Boolean  @default(true)
+   980→   980→  isBlocked       Boolean  @default(false)
+   981→   981→  createdAt       DateTime @default(now())
+   982→   982→  updatedAt       DateTime @updatedAt
+   983→   983→
+   984→   984→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+   985→   985→  config          WhatsAppConfig @relation(fields: [configId], references: [id])
+   986→   986→  customer        Customer? @relation(fields: [customerId], references: [id])
+   987→   987→  messages        WhatsAppMessage[]
+   988→   988→  threads         ConversationThread[]
+   989→   989→
+   990→   990→  @@index([tenantId, phoneNumber])
+   991→   991→  @@index([phoneNumber])
+   992→   992→  @@index([state])
+   993→   993→}
+   994→   994→
+   995→   995→// 21. WhatsApp Message - All messages (inbound + outbound)
+   996→   996→model WhatsAppMessage {
+   997→   997→  id              String   @id @default(cuid())
+   998→   998→  tenantId        String
+   999→   999→  sessionId       String
+  1000→  1000→  threadId        String?
+  1001→  1001→  direction       String   // inbound, outbound
+  1002→  1002→  messageType     String   @default("text") // text, image, video, audio, document, location, contact, sticker
+  1003→  1003→  content         String?  // text content
+  1004→  1004→  mediaUrl        String?
+  1005→  1005→  mediaType       String?
+  1006→  1006→  thumbnailUrl    String?
+  1007→  1007→  caption         String?
+  1008→  1008→  location        String?  // JSON: {lat, lng, address}
+  1009→  1009→  fromNumber      String?
+  1010→  1010→  toNumber        String?
+  1011→  1011→  providerMessageId String? // WhatsApp message ID from provider
+  1012→  1012→  status          String   @default("sent") // sent, delivered, read, failed
+  1013→  1013→  errorMessage    String?
+  1014→  1014→  isFromBot       Boolean  @default(false)
+  1015→  1015→  isTemplate      Boolean  @default(false)
+  1016→  1016→  metadata        String?  // JSON - extra data
+  1017→  1017→  createdAt       DateTime @default(now())
+  1018→  1018→  updatedAt       DateTime @updatedAt
+  1019→  1019→
+  1020→  1020→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  1021→  1021→  session         WhatsAppSession @relation(fields: [sessionId], references: [id])
+  1022→  1022→  thread          ConversationThread? @relation(fields: [threadId], references: [id])
+  1023→  1023→  deliveryLogs    WhatsAppDeliveryLog[]
+  1024→  1024→
+  1025→  1025→  @@index([tenantId, sessionId])
+  1026→  1026→  @@index([sessionId])
+  1027→  1027→  @@index([providerMessageId])
+  1028→  1028→  @@index([createdAt])
+  1029→  1029→}
+  1030→  1030→
+  1031→  1031→// 22. Conversation Thread - Grouped conversations
+  1032→  1032→model ConversationThread {
+  1033→  1033→  id              String   @id @default(cuid())
+  1034→  1034→  tenantId        String
+  1035→  1035→  sessionId       String
+  1036→  1036→  subject         String?
+  1037→  1037→  status          String   @default("active") // active, resolved, archived
+  1038→  1038→  assignedToId    String?  // staff member handling this thread
+  1039→  1039→  lastMessageAt   DateTime @default(now())
+  1040→  1040→  messageCount    Int      @default(0)
+  1041→  1041→  createdAt       DateTime @default(now())
+  1042→  1042→  updatedAt       DateTime @updatedAt
+  1043→  1043→
+  1044→  1044→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  1045→  1045→  session         WhatsAppSession @relation(fields: [sessionId], references: [id])
+  1046→  1046→  customer        Customer? @relation(fields: [customerId], references: [id])
+  1047→  1047→  customerId      String?
+  1048→  1048→  messages        WhatsAppMessage[]
+  1049→  1049→
+  1050→  1050→  @@index([tenantId, status])
+  1051→  1051→  @@index([sessionId])
+  1052→  1052→  @@index([assignedToId])
+  1053→  1053→}
+  1054→  1054→
+  1055→  1055→// 23. WhatsApp Template - Message templates
+  1056→  1056→model WhatsAppTemplate {
+  1057→  1057→  id              String   @id @default(cuid())
+  1058→  1058→  tenantId        String
+  1059→  1059→  name            String
+  1060→  1060→  category        String   // welcome, complaint_created, assigned, in_progress, completed, invoice, feedback, emergency, appointment, notification, custom
+  1061→  1061→  content         String   // template body with {{variables}}
+  1062→  1062→  variables        String?  // JSON array of variable names
+  1063→  1063→  mediaType       String?  // text, image, document
+  1064→  1064→  mediaUrl        String?  // URL for template media
+  1065→  1065→  isActive        Boolean  @default(true)
+  1066→  1066→  isSystem        Boolean  @default(false) // system templates can't be deleted
+  1067→  1067→  createdAt       DateTime @default(now())
+  1068→  1068→  updatedAt       DateTime @updatedAt
+  1069→  1069→
+  1070→  1070→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  1071→  1071→
+  1072→  1072→  @@unique([tenantId, name])
+  1073→  1073→  @@index([tenantId, category])
+  1074→  1074→}
+  1075→  1075→
+  1076→  1076→// 24. Customer Feedback via WhatsApp
+  1077→  1077→model CustomerFeedback {
+  1078→  1078→  id              String   @id @default(cuid())
+  1079→  1079→  tenantId        String
+  1080→  1080→  customerId      String
+  1081→  1081→  complaintId     String?
+  1082→  1082→  workOrderId     String?
+  1083→  1083→  rating          Int      // 1-5
+  1084→  1084→  comment         String?
+  1085→  1085→  source          String   @default("whatsapp") // whatsapp, portal, email
+  1086→  1086→  createdAt       DateTime @default(now())
+  1087→  1087→
+  1088→  1088→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  1089→  1089→  customer        Customer @relation(fields: [customerId], references: [id])
+  1090→  1090→
+  1091→  1091→  @@index([tenantId, customerId])
+  1092→  1092→}
+  1093→  1093→
+  1094→  1094→// 25. Customer Report/Escalation via WhatsApp
+  1095→  1095→model CustomerReport {
+  1096→  1096→  id              String   @id @default(cuid())
+  1097→  1097→  tenantId        String
+  1098→  1098→  customerId      String
+  1099→  1099→  sessionId       String?
+  1100→  1100→  type            String   @default("escalation") // escalation, complaint, suggestion, other
+  1101→  1101→  subject         String
+  1102→  1102→  description     String
+  1103→  1103→  priority        String   @default("medium")
+  1104→  1104→  status          String   @default("OPEN") // OPEN, IN_REVIEW, RESOLVED, DISMISSED
+  1105→  1105→  resolvedById    String?
+  1106→  1106→  resolvedAt      DateTime?
+  1107→  1107→  resolutionNotes String?
+  1108→  1108→  createdAt       DateTime @default(now())
+  1109→  1109→  updatedAt       DateTime @updatedAt
+  1110→  1110→
+  1111→  1111→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  1112→  1112→  customer        Customer @relation(fields: [customerId], references: [id])
+  1113→  1113→
+  1114→  1114→  @@index([tenantId, status])
+  1115→  1115→}
+  1116→  1116→
+  1117→  1117→// 26. Broadcast Log - Mass message campaigns
+  1118→  1118→model BroadcastLog {
+  1119→  1119→  id              String   @id @default(cuid())
+  1120→  1120→  tenantId        String
+  1121→  1121→  title           String
+  1122→  1122→  content         String
+  1123→  1123→  templateId      String?
+  1124→  1124→  recipientCount  Int      @default(0)
+  1125→  1125→  sentCount       Int      @default(0)
+  1126→  1126→  deliveredCount  Int      @default(0)
+  1127→  1127→  failedCount     Int      @default(0)
+  1128→  1128→  readCount       Int      @default(0)
+  1129→  1129→  status          String   @default("draft") // draft, scheduled, sending, completed, failed
+  1130→  1130→  scheduledAt     DateTime?
+  1131→  1131→  sentAt          DateTime?
+  1132→  1132→  completedAt     DateTime?
+  1133→  1133→  createdBy       String?
+  1134→  1134→  createdAt       DateTime @default(now())
+  1135→  1135→  updatedAt       DateTime @updatedAt
+  1136→  1136→
+  1137→  1137→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  1138→  1138→
+  1139→  1139→  @@index([tenantId, status])
+  1140→  1140→}
+  1141→  1141→
+  1142→  1142→// 27. WhatsApp Delivery Log - Per-message delivery tracking
+  1143→  1143→model WhatsAppDeliveryLog {
+  1144→  1144→  id              String   @id @default(cuid())
+  1145→  1145→  tenantId        String
+  1146→  1146→  messageId       String
+  1147→  1147→  direction       String   // inbound, outbound
+  1148→  1148→  status          String   // sent, delivered, read, failed, deleted
+  1149→  1149→  providerStatus  String?  // raw provider status
+  1150→  1150→  timestamp       DateTime @default(now())
+  1151→  1151→  errorMessage    String?
+  1152→  1152→
+  1153→  1153→  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  1154→  1154→  message         WhatsAppMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  1155→  1155→
+  1156→  1156→  @@index([tenantId, messageId])
+  1157→  1157→  @@index([messageId])
+  1158→  1158→}

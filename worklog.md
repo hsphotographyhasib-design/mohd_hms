@@ -90,3 +90,27 @@ Stage Summary:
 - File rewritten: `src/lib/whatsapp-service/manager.ts` (321 → ~280 lines, clean architecture)
 - Build error resolved: `Parsing ecmascript source code failed` on line 48
 - All WhatsApp API routes compile and respond correctly
+---
+Task ID: 2
+Agent: Main Agent
+Task: Build enterprise Complaint & Service Request Automation Workflow
+
+Work Log:
+- Enhanced Prisma schema: Added ComplaintTimeline model, added fields to Complaint (source, workOrderId, invoiceId, eta, timestamps for each stage), added fields to WorkOrder (beforePhotos, afterPhotos, videoUrl, materialsUsed, remarks, isLocked), enhanced AuditLog (oldValue, newValue, device)
+- Ran db:push to sync schema + regenerate Prisma client
+- Created src/lib/workflow/state-machine.ts (731 lines): 15 transition rules, role-based validation, STATUS_CONFIG, getAvailableActions(), validateTransition()
+- Created src/lib/workflow/notification-engine.ts (514 lines): recordWorkflowTransition(), getComplaintTimeline(), resolveNotificationTargets() per action, audit logging with IP/device
+- Created src/app/api/complaints/[id]/workflow/route.ts (508 lines): POST for transitions (assign/accept/reject/start/complete/confirm/rework/invoice/payment/close/override), GET for status+actions+timeline. Auto-creates WorkOrder on accept, Invoice on client confirm
+- Updated src/types/index.ts: New ComplaintStatus (13 states), ComplaintSource, ComplaintTimelineEntry, WorkflowAction, enhanced ComplaintItem
+- Updated src/app/api/complaints/route.ts: Changed default status from OPEN to NEW
+- Rewrote src/components/modules/complaints/complaint-detail.tsx (~480 lines): Status progress bar, 2-column layout, timeline with icons, 12 action dialogs (assign/accept/reject/start/complete/confirm/rework/approve invoice/send invoice/record payment/close/override), role-based action buttons
+- Updated src/components/modules/complaints/complaint-list.tsx: All 13 status colors, SHORT_STATUS labels, status count tracking
+
+Stage Summary:
+- Complete enterprise workflow state machine with 13 statuses and rework loop
+- Role-based permission system: customer, technician, supervisor, finance, admin, super_admin
+- Automatic transitions: Accept→WO Created, Client Confirm→Draft Invoice
+- Transaction-safe API with Prisma $transaction
+- Timeline + notification system for every action
+- Admin override capability with audit trail
+- All code lints cleanly, dev server compiles without errors
