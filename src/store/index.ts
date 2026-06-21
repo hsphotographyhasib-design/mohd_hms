@@ -34,6 +34,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.setItem('cmms_token', data.token);
       localStorage.setItem('cmms_user', JSON.stringify(data.user));
       set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
+      // Reset view to dashboard on login
+      setTimeout(() => { useAppStore.getState().setView('dashboard'); }, 0);
     } catch (error) {
       set({ isLoading: false });
       throw error;
@@ -63,6 +65,8 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     localStorage.removeItem('cmms_token');
     localStorage.removeItem('cmms_user');
     set({ user: null, token: null, isAuthenticated: false });
+    // Reset view to dashboard on logout
+    setTimeout(() => { useAppStore.getState().setView('dashboard'); }, 0);
   },
 
   updateProfile: (data: Partial<AuthUser>) => {

@@ -23,7 +23,7 @@ const demoAccounts: DemoAccount[] = [
   { label: 'Admin', email: 'admin@facilitypro.com', password: 'password123', icon: <Shield className="h-3.5 w-3.5" />, color: 'bg-rose-100 text-rose-700 hover:bg-rose-200 dark:bg-rose-950 dark:text-rose-300 dark:hover:bg-rose-900' },
   { label: 'Manager', email: 'manager@facilitypro.com', password: 'password123', icon: <UserCog className="h-3.5 w-3.5" />, color: 'bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:hover:bg-amber-900' },
   { label: 'Supervisor', email: 'supervisor@facilitypro.com', password: 'password123', icon: <HardHat className="h-3.5 w-3.5" />, color: 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:hover:bg-emerald-900' },
-  { label: 'Technician', email: 'technician@facilitypro.com', password: 'password123', icon: <Wrench className="h-3.5 w-3.5" />, color: 'bg-teal-100 text-teal-700 hover:bg-teal-200 dark:bg-teal-950 dark:text-teal-300 dark:hover:bg-teal-900' },
+  { label: 'Technician', email: 'tech1@facilitypro.com', password: 'password123', icon: <Wrench className="h-3.5 w-3.5" />, color: 'bg-teal-100 text-teal-700 hover:bg-teal-200 dark:bg-teal-950 dark:text-teal-300 dark:hover:bg-teal-900' },
   { label: 'Finance', email: 'finance@facilitypro.com', password: 'password123', icon: <DollarSign className="h-3.5 w-3.5" />, color: 'bg-orange-100 text-orange-700 hover:bg-orange-200 dark:bg-orange-950 dark:text-orange-300 dark:hover:bg-orange-900' },
 ];
 
@@ -229,14 +229,10 @@ export function LoginView() {
                       key={account.label}
                       type="button"
                       onClick={() => {
-                        handleDemoLogin(account);
+                        handleQuickLogin(account);
                       }}
-                      onBlur={(e) => {
-                        if (e.relatedTarget === null) return;
-                      }}
-                      onDoubleClick={() => handleQuickLogin(account)}
                       className={`inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium transition-colors ${account.color}`}
-                      title={`Double-click to login as ${account.label}`}
+                      title={`Login as ${account.label}`}
                     >
                       {account.icon}
                       {account.label}
@@ -244,7 +240,7 @@ export function LoginView() {
                   ))}
                 </div>
                 <p className="text-[11px] text-muted-foreground text-center mt-2">
-                  Click to pre-fill &bull; Double-click to sign in
+                  Click to sign in instantly
                 </p>
               </div>
             </CardContent>

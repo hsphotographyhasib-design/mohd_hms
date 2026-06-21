@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
+
 import { useAuthStore, useAppStore, useNotificationStore, canAccess } from '@/store';
 import type { AppView, UserRole, NavItem } from '@/types';
 import { cn } from '@/lib/utils';
@@ -252,6 +254,17 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
 
 export function Sidebar() {
   const { sidebarOpen, setSidebarOpen } = useAppStore();
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(max-width: 1023px)').matches;
+  });
+
+  useEffect(() => {
+    const mql = window.matchMedia('(max-width: 1023px)');
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener('change', handler);
+    return () => mql.removeEventListener('change', handler);
+  }, []);
 
   return (
     <>
@@ -265,14 +278,16 @@ export function Sidebar() {
       </motion.aside>
 
       {/* Mobile Sidebar */}
-      <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
-        <SheetContent side="left" className="p-0 w-72">
-          <SheetHeader className="sr-only">
-            <SheetTitle>Navigation Menu</SheetTitle>
-          </SheetHeader>
-          <SidebarContent collapsed={false} onClose={() => setSidebarOpen(false)} />
-        </SheetContent>
-      </Sheet>
+      {isMobile && (
+        <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+          <SheetContent side="left" className="p-0 w-72">
+            <SheetHeader className="sr-only">
+              <SheetTitle>Navigation Menu</SheetTitle>
+            </SheetHeader>
+            <SidebarContent collapsed={false} onClose={() => setSidebarOpen(false)} />
+          </SheetContent>
+        </Sheet>
+      )}
     </>
   );
 }
