@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -14,17 +14,24 @@ import {
 import {
   ArrowLeft, Plus, Trash2, Copy, Printer, FileText, Send,
   MessageSquare, Search, X, CheckCircle2, Circle,
-  Loader2, Upload,
+  Loader2, Upload, GripVertical, Sparkles, QrCode,
 } from 'lucide-react';
 import { useAppStore } from '@/store';
 import type { QuotationLineItem, CustomerData, EmployeeData } from '@/types';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
+import { format, addDays } from 'date-fns';
+import dynamic from 'next/dynamic';
+
+// Lazy-load QR Code (client-only)
+const QRCodeSVG = dynamic(
+  () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
+  { ssr: false }
+);
 
 // ============ CONSTANTS ============
 
-const UNITS = ['pcs', 'set', 'lot', 'hr', 'day', 'month', 'sqm', 'm', 'kg', 'l'];
+const UNITS = ['Nos', 'Set', 'Lot', 'Hr', 'Day', 'Month', 'Sqm', 'Meter', 'Kg', 'Ltr', 'Pcs', 'Unit'];
 const TAX_RATES = ['0', '5', '10', '15'];
 const CURRENCIES = ['BND', 'USD', 'SGD', 'MYR'];
 
@@ -36,32 +43,18 @@ const CURRENCY_NAMES: Record<string, string> = {
 };
 
 const DEFAULT_TERMS = [
-  '50% advance payment and balance upon completion.',
-  'Price validity: 60 days from the quotation date.',
-  'Delivery period: 3 working days after order confirmation.',
-  'Additional works are subject to variation order.',
-  'Material warranty follows manufacturer terms.',
-  'Warranty applies only to workmanship.',
-  'Payment by bank transfer or cheque.',
+  '50% advance payment.',
+  'Balance upon completion.',
+  'Price validity 60 days.',
+  'Delivery 3 working days.',
+  'Material warranty follows manufacturer.',
+  'Additional works subject to variation order.',
+  'Payment by bank transfer.',
 ];
 
 const WORKFLOW_STEPS = [
-  'Draft',
-  'Review',
-  'Approved',
-  'Sent',
-  'Accepted',
-  'Converted to Work Order',
-  'Converted to Invoice',
-  'Paid',
-  'Closed',
-];
-
-const DEFAULT_LINE_ITEMS: QuotationLineItem[] = [
-  { title: 'Split AC Installation', unit: 'pcs', quantity: 2, rate: 150, amount: 300 },
-  { title: 'Copper Pipe (1/4 + 3/8)', unit: 'set', quantity: 1, rate: 260, amount: 260 },
-  { title: 'Gas Top Up (R410A)', unit: 'lot', quantity: 1, rate: 140, amount: 140 },
-  { title: '', unit: 'pcs', quantity: 0, rate: 0, amount: 0 },
+  'Draft', 'Review', 'Approved', 'Sent', 'Accepted',
+  'Converted to Work Order', 'Converted to Invoice', 'Paid', 'Closed',
 ];
 
 // ============ NUMBER TO WORDS ============
@@ -97,7 +90,6 @@ function numberToWords(num: number): string {
   if (intPart % 1000 > 0) {
     words += convertBelowThousand(intPart % 1000);
   }
-
   if (decPart > 0) {
     words += ' AND ' + convertBelowThousand(decPart) + ' CENTS';
   }
@@ -116,6 +108,189 @@ function formatCurrency(amount: number, currency: string): string {
   return `${sym} ${amount.toFixed(2)}`;
 }
 
+// ============ BARCODE COMPONENT ============
+
+function BarcodeDisplay({ value }: { value: string }) {
+  const barcodeRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    if (!barcodeRef.current || !value) return;
+    import('jsbarcode').then((JsBarcode) => {
+      try {
+        JsBarcode.default(barcodeRef.current, value, {
+          format: 'CODE128',
+          width: 1.5,
+          height: 40,
+          displayValue: true,
+          fontSize: 10,
+          font: 'monospace',
+          margin: 5,
+        });
+      } catch {
+        // Fallback if barcode fails
+      }
+    });
+  }, [value]);
+
+  if (!value) return null;
+
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <svg ref={barcodeRef} className="max-w-full" />
+      <QRCodeSVG
+        value={value}
+        size={64}
+        level="M"
+        includeMargin={false}
+        bgColor="#FFFFFF"
+        fgColor="#111827"
+      />
+      <span className="text-[10px] text-muted-foreground">Scan to open quotation</span>
+    </div>
+  );
+}
+
+// ============ ITEM SUGGESTION DROPDOWN ============
+
+interface ItemSuggestion {
+  title: string;
+  description?: string;
+  unit: string;
+  rate: number;
+  category?: string;
+  warranty?: string;
+  count: number;
+}
+
+function ItemSuggestionDropdown({
+  query,
+  onSelect,
+  onClose,
+  position,
+}: {
+  query: string;
+  onSelect: (item: ItemSuggestion) => void;
+  onClose: () => void;
+  position: { top: number; left: number } | null;
+}) {
+  const [suggestions, setSuggestions] = useState<ItemSuggestion[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!query.trim() || query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(
+          `/api/quotations/item-suggestions?q=${encodeURIComponent(query)}&limit=8`,
+          { headers: authHeaders() }
+        );
+        if (res.ok) {
+          const json = await res.json();
+          setSuggestions(json.suggestions || []);
+          setSelectedIndex(0);
+        }
+      } catch {
+        // silent
+      } finally {
+        setLoading(false);
+      }
+    }, 200);
+
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (suggestions.length === 0) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev + 1) % suggestions.length);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
+      } else if (e.key === 'Enter' && suggestions[selectedIndex]) {
+        e.preventDefault();
+        onSelect(suggestions[selectedIndex]);
+      } else if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [suggestions, selectedIndex, onSelect, onClose]);
+
+  if (suggestions.length === 0 && !loading) return null;
+
+  return (
+    <div
+      ref={dropdownRef}
+      className="absolute z-50 w-80 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-hidden"
+      style={position ? { top: position.top, left: Math.min(position.left, window.innerWidth - 340) } : undefined}
+    >
+      {loading ? (
+        <div className="flex items-center gap-2 px-3 py-3 text-sm text-muted-foreground">
+          <Loader2 className="h-3.5 w-3.5 animate-spin" /> Searching items...
+        </div>
+      ) : (
+        <div className="py-1 max-h-60 overflow-y-auto">
+          {suggestions.map((item, i) => (
+            <button
+              key={item.title}
+              className={cn(
+                'w-full text-left px-3 py-2.5 hover:bg-emerald-50/70 transition-colors border-b border-gray-50 last:border-0',
+                i === selectedIndex && 'bg-emerald-50/70'
+              )}
+              onClick={() => onSelect(item)}
+              onMouseEnter={() => setSelectedIndex(i)}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-medium text-sm text-gray-900 truncate">{item.title}</span>
+                <div className="flex items-center gap-2 shrink-0">
+                  {item.count > 1 && (
+                    <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">
+                      {item.count}x
+                    </span>
+                  )}
+                  <span className="text-xs font-semibold text-emerald-700">
+                    {formatCurrency(item.rate, 'BND')}
+                  </span>
+                </div>
+              </div>
+              {item.description && (
+                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{item.description}</p>
+              )}
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-[10px] text-muted-foreground bg-gray-50 px-1.5 py-0.5 rounded">
+                  {item.unit}
+                </span>
+                {item.category && (
+                  <span className="text-[10px] text-muted-foreground bg-gray-50 px-1.5 py-0.5 rounded">
+                    {item.category}
+                  </span>
+                )}
+                {item.warranty && (
+                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                    {item.warranty}
+                  </span>
+                )}
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ============ MAIN COMPONENT ============
 
 export function QuotationForm({ quotationId }: { quotationId?: string }) {
@@ -131,15 +306,22 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [dateStr, setDateStr] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [suggestionState, setSuggestionState] = useState<{
+    index: number | null;
+    query: string;
+    position: { top: number; left: number } | null;
+  }>({ index: null, query: '', position: null });
 
-  const [lineItems, setLineItems] = useState<QuotationLineItem[]>(DEFAULT_LINE_ITEMS);
+  const [lineItems, setLineItems] = useState<QuotationLineItem[]>([
+    { title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 },
+  ]);
 
   const [formData, setFormData] = useState({
     referenceNo: '',
     projectName: '',
     site: '',
     description: '',
-    validUntil: '',
+    validUntil: format(addDays(new Date(), 60), 'yyyy-MM-dd'),
     preparedBy: '',
     notes: '',
     terms: DEFAULT_TERMS,
@@ -172,7 +354,6 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
           const numJson = await numRes.json();
           setQuotationNo(numJson.quotationNo || '');
         } else {
-          // Fallback
           const now = new Date();
           setQuotationNo(`QTN/${now.getFullYear()}/0001`);
         }
@@ -199,13 +380,24 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
             });
             if (q.items) {
               const parsed = typeof q.items === 'string' ? JSON.parse(q.items) : q.items;
-              setLineItems(parsed.length > 0 ? parsed : DEFAULT_LINE_ITEMS);
+              setLineItems(parsed.length > 0
+                ? parsed.map((item: QuotationLineItem) => ({
+                    ...item,
+                    description: item.description || '',
+                    unit: item.unit || 'Nos',
+                  }))
+                : [{ title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 }]
+              );
             }
             // Load customer
-            if (q.customerId && custRes.ok) {
-              const custList = (await custRes.json()).data || [];
-              const found = custList.find((c: CustomerData) => c.id === q.customerId);
-              if (found) setSelectedCustomer(found);
+            if (q.customerId) {
+              const custList = customers.length > 0 ? { data: customers } : await custRes.clone().json();
+              const list = custList.data || [];
+              const found = list.find((c: CustomerData) => c.id === q.customerId);
+              if (found) {
+                setSelectedCustomer(found);
+                setCustomerSearch(found.companyName || found.name);
+              }
             }
           }
         }
@@ -217,7 +409,7 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
       }
     }
     init();
-    }, [quotationId]);
+  }, [quotationId]);
 
   // --- Computed ---
   const subtotal = useMemo(
@@ -250,7 +442,8 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
         c.name.toLowerCase().includes(q) ||
         (c.companyName && c.companyName.toLowerCase().includes(q)) ||
         c.customerNumber.toLowerCase().includes(q) ||
-        (c.email && c.email.toLowerCase().includes(q))
+        (c.email && c.email.toLowerCase().includes(q)) ||
+        (c.phone && c.phone.includes(q))
     ).slice(0, 8);
   }, [customerSearch, customers]);
 
@@ -265,23 +458,14 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
       // Ensure last row is empty
       const lastItem = updated[updated.length - 1];
       if (lastItem.title !== '' || lastItem.quantity !== 0 || lastItem.rate !== 0) {
-        updated.push({ title: '', unit: 'pcs', quantity: 0, rate: 0, amount: 0 });
+        updated.push({ title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 });
       }
       return updated;
     });
   }, []);
 
   const addRow = useCallback(() => {
-    setLineItems((prev) => [...prev, { title: '', unit: 'pcs', quantity: 0, rate: 0, amount: 0 }]);
-  }, []);
-
-  const duplicateRow = useCallback((index: number) => {
-    setLineItems((prev) => {
-      const copy = { ...prev[index], id: undefined, title: prev[index].title + ' (copy)' };
-      const updated = [...prev];
-      updated.splice(index + 1, 0, copy);
-      return updated;
-    });
+    setLineItems((prev) => [...prev, { title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 }]);
   }, []);
 
   const deleteRow = useCallback((index: number) => {
@@ -294,10 +478,70 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
   const insertRow = useCallback((index: number) => {
     setLineItems((prev) => {
       const updated = [...prev];
-      updated.splice(index, 0, { title: '', unit: 'pcs', quantity: 0, rate: 0, amount: 0 });
+      updated.splice(index + 1, 0, { title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 });
       return updated;
     });
   }, []);
+
+  const duplicateRow = useCallback((index: number) => {
+    setLineItems((prev) => {
+      const copy = { ...prev[index], id: undefined, title: prev[index].title + ' (copy)' };
+      const updated = [...prev];
+      updated.splice(index + 1, 0, copy);
+      return updated;
+    });
+  }, []);
+
+  const applyItemSuggestion = useCallback((index: number, suggestion: ItemSuggestion) => {
+    setLineItems((prev) => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        title: suggestion.title,
+        description: suggestion.description || '',
+        unit: suggestion.unit,
+        rate: suggestion.rate,
+        amount: (updated[index].quantity || 1) * suggestion.rate,
+        category: suggestion.category,
+        warranty: suggestion.warranty,
+      };
+      // Ensure last row is empty
+      const lastItem = updated[updated.length - 1];
+      if (lastItem.title !== '' || lastItem.quantity !== 0 || lastItem.rate !== 0) {
+        updated.push({ title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 });
+      }
+      return updated;
+    });
+    setSuggestionState({ index: null, query: '', position: null });
+  }, []);
+
+  // --- Item title input ref for position calculation ---
+  const itemInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());
+
+  const handleItemTitleFocus = useCallback((index: number) => {
+    const input = itemInputRefs.current.get(index);
+    if (input) {
+      const rect = input.getBoundingClientRect();
+      setSuggestionState({
+        index,
+        query: lineItems[index]?.title || '',
+        position: { top: rect.bottom + 4, left: rect.left },
+      });
+    }
+  }, [lineItems]);
+
+  const handleItemTitleChange = useCallback((index: number, value: string) => {
+    updateLineItem(index, 'title', value);
+    const input = itemInputRefs.current.get(index);
+    if (input) {
+      const rect = input.getBoundingClientRect();
+      setSuggestionState({
+        index,
+        query: value,
+        position: { top: rect.bottom + 4, left: rect.left },
+      });
+    }
+  }, [updateLineItem]);
 
   // --- Save handler ---
   const handleSave = useCallback(async () => {
@@ -310,16 +554,12 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
       toast.error('Add at least one line item');
       return;
     }
-    if (!formData.projectName.trim()) {
-      toast.error('Project name is required');
-      return;
-    }
 
     setSaving(true);
     try {
       const payload = {
         customerId: selectedCustomer.id,
-        title: formData.projectName,
+        title: formData.projectName || 'Quotation',
         quotationNo,
         description: formData.description,
         referenceNo: formData.referenceNo,
@@ -366,8 +606,15 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
     }
   }, [selectedCustomer, lineItems, formData, quotationNo, subtotal, taxAmount, grandTotal, quotationId, setView]);
 
-  // --- Current workflow step index ---
-  const currentStepIndex = 0; // Always Draft for new/editing
+  // --- Current workflow step ---
+  const currentStepIndex = 0;
+
+  // Close suggestions on click outside
+  useEffect(() => {
+    const handleClick = () => setSuggestionState((s) => ({ ...s, index: null, query: '' }));
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
+  }, []);
 
   if (loading) {
     return (
@@ -396,16 +643,18 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
               <div className="relative">
                 <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Search customers..."
+                  placeholder="Search by name, phone, email..."
                   className="pl-9 h-9 text-sm"
                   value={customerSearch}
                   onChange={(e) => {
                     setCustomerSearch(e.target.value);
                     setCustomerResultsOpen(true);
+                    if (selectedCustomer) {
+                      setSelectedCustomer(null);
+                    }
                   }}
                   onFocus={() => setCustomerResultsOpen(true)}
                 />
-                {/* Dropdown results */}
                 {customerResultsOpen && filteredCustomers.length > 0 && (
                   <div className="absolute z-50 top-full mt-1 left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
                     {filteredCustomers.map((c) => (
@@ -422,7 +671,9 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                         {c.companyName && c.name !== c.companyName && (
                           <span className="text-muted-foreground ml-1">({c.name})</span>
                         )}
-                        <span className="block text-xs text-muted-foreground">{c.email || c.phone}</span>
+                        <span className="block text-xs text-muted-foreground">
+                          {c.phone} {c.email ? `| ${c.email}` : ''}
+                        </span>
                       </button>
                     ))}
                   </div>
@@ -446,12 +697,14 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                       <X className="h-3.5 w-3.5 text-gray-400" />
                     </button>
                   </div>
+
                   {selectedCustomer.address && (
                     <div>
                       <span className="text-xs text-gray-500 uppercase">Address</span>
                       <p className="text-sm text-gray-700">{selectedCustomer.address}</p>
                     </div>
                   )}
+
                   <div className="grid grid-cols-2 gap-2">
                     <div>
                       <span className="text-xs text-gray-500 uppercase">Phone</span>
@@ -462,30 +715,44 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                       <p className="text-sm text-gray-700 truncate">{selectedCustomer.email || '—'}</p>
                     </div>
                   </div>
-                  <div>
-                    <span className="text-xs text-gray-500 uppercase">Customer No.</span>
-                    <p className="text-sm text-gray-700">{selectedCustomer.customerNumber}</p>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <span className="text-xs text-gray-500 uppercase">Customer No.</span>
+                      <p className="text-sm text-gray-700 font-mono">{selectedCustomer.customerNumber}</p>
+                    </div>
+                    <div>
+                      <span className="text-xs text-gray-500 uppercase">Country</span>
+                      <p className="text-sm text-gray-700">{selectedCustomer.country || 'Brunei'}</p>
+                    </div>
                   </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <span className="text-xs text-gray-500 uppercase">District</span>
+                      <p className="text-sm text-gray-700">{selectedCustomer.district || '—'}</p>
+                    </div>
+                    <div>
+                      <span className="text-xs text-gray-500 uppercase">Tax Rate</span>
+                      <p className="text-sm text-gray-700">{selectedCustomer.taxRate ?? 0}%</p>
+                    </div>
+                  </div>
+
+                  {selectedCustomer.pic && (
+                    <div>
+                      <span className="text-xs text-gray-500 uppercase">PIC</span>
+                      <p className="text-sm text-gray-700">{selectedCustomer.pic}</p>
+                    </div>
+                  )}
+
+                  {selectedCustomer.paymentTerms && (
+                    <div>
+                      <span className="text-xs text-gray-500 uppercase">Payment Terms</span>
+                      <p className="text-sm text-gray-700">{selectedCustomer.paymentTerms}</p>
+                    </div>
+                  )}
 
                   <Separator />
-
-                  {/* Tax Rate */}
-                  <div>
-                    <Label className="text-xs text-gray-500 uppercase">Tax Rate</Label>
-                    <Select
-                      value={formData.taxRate}
-                      onValueChange={(v) => setFormData((f) => ({ ...f, taxRate: v }))}
-                    >
-                      <SelectTrigger className="w-full h-9 text-sm mt-1">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {TAX_RATES.map((r) => (
-                          <SelectItem key={r} value={r}>{r}%</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
 
                   {/* Currency */}
                   <div>
@@ -580,7 +847,7 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                   <Input
                     value={quotationNo}
                     readOnly
-                    className="h-9 text-sm mt-1 bg-gray-50 cursor-not-allowed"
+                    className="h-9 text-sm mt-1 bg-gray-50 cursor-not-allowed font-mono"
                   />
                 </div>
                 <div>
@@ -594,60 +861,60 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                 </div>
               </div>
 
-              {/* Row 3: Valid Until */}
-              <div>
-                <Label className="text-xs text-gray-500 uppercase">Valid Until</Label>
-                <Input
-                  type="date"
-                  value={formData.validUntil}
-                  onChange={(e) => setFormData((f) => ({ ...f, validUntil: e.target.value }))}
-                  className="h-9 text-sm mt-1"
-                />
+              {/* Row 3: Valid Until + Prepared By */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-gray-500 uppercase">Valid Until</Label>
+                  <Input
+                    type="date"
+                    value={formData.validUntil}
+                    onChange={(e) => setFormData((f) => ({ ...f, validUntil: e.target.value }))}
+                    className="h-9 text-sm mt-1"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-gray-500 uppercase">Prepared By</Label>
+                  <Select
+                    value={formData.preparedBy}
+                    onValueChange={(v) => setFormData((f) => ({ ...f, preparedBy: v }))}
+                  >
+                    <SelectTrigger className="w-full h-9 text-sm mt-1">
+                      <SelectValue placeholder="Select employee" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {employees.map((e) => (
+                        <SelectItem key={e.id} value={e.id}>
+                          {e.name}{e.employeeNumber ? ` (${e.employeeNumber})` : ''}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
-              {/* Row 4: Prepared By */}
-              <div>
-                <Label className="text-xs text-gray-500 uppercase">Prepared By</Label>
-                <Select
-                  value={formData.preparedBy}
-                  onValueChange={(v) => setFormData((f) => ({ ...f, preparedBy: v }))}
-                >
-                  <SelectTrigger className="w-full h-9 text-sm mt-1">
-                    <SelectValue placeholder="Select employee" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {employees.map((e) => (
-                      <SelectItem key={e.id} value={e.id}>
-                        {e.name}{e.employeeNumber ? ` (${e.employeeNumber})` : ''}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+              {/* Row 4: Reference No + Project Name */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <Label className="text-xs text-gray-500 uppercase">Reference No.</Label>
+                  <Input
+                    value={formData.referenceNo}
+                    onChange={(e) => setFormData((f) => ({ ...f, referenceNo: e.target.value }))}
+                    placeholder="Optional reference"
+                    className="h-9 text-sm mt-1"
+                  />
+                </div>
+                <div>
+                  <Label className="text-xs text-gray-500 uppercase">Project Name</Label>
+                  <Input
+                    value={formData.projectName}
+                    onChange={(e) => setFormData((f) => ({ ...f, projectName: e.target.value }))}
+                    placeholder="Enter project name"
+                    className="h-9 text-sm mt-1"
+                  />
+                </div>
               </div>
 
-              {/* Row 5: Reference No */}
-              <div>
-                <Label className="text-xs text-gray-500 uppercase">Reference No.</Label>
-                <Input
-                  value={formData.referenceNo}
-                  onChange={(e) => setFormData((f) => ({ ...f, referenceNo: e.target.value }))}
-                  placeholder="Optional reference number"
-                  className="h-9 text-sm mt-1"
-                />
-              </div>
-
-              {/* Row 6: Project Name */}
-              <div>
-                <Label className="text-xs text-gray-500 uppercase">Project Name</Label>
-                <Input
-                  value={formData.projectName}
-                  onChange={(e) => setFormData((f) => ({ ...f, projectName: e.target.value }))}
-                  placeholder="Enter project name"
-                  className="h-9 text-sm mt-1"
-                />
-              </div>
-
-              {/* Row 7: Site */}
+              {/* Row 5: Site */}
               <div>
                 <Label className="text-xs text-gray-500 uppercase">Site</Label>
                 <Input
@@ -658,7 +925,7 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                 />
               </div>
 
-              {/* Row 8: Description */}
+              {/* Row 6: Description */}
               <div>
                 <Label className="text-xs text-gray-500 uppercase">Description</Label>
                 <Textarea
@@ -689,48 +956,16 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
               </div>
             </CardHeader>
             <CardContent className="pt-4">
-              {/* Action buttons row */}
-              <div className="flex items-center gap-2 mb-3">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 text-xs"
-                  onClick={() => insertRow(lineItems.length - 1)}
-                >
-                  <Plus className="h-3 w-3 mr-1" /> Insert Row
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 text-xs"
-                  onClick={() => {
-                    if (lineItems.length > 1) duplicateRow(lineItems.length - 2);
-                  }}
-                >
-                  <Copy className="h-3 w-3 mr-1" /> Duplicate Row
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-7 text-xs text-rose-600 hover:text-rose-700 hover:bg-rose-50"
-                  onClick={() => {
-                    if (lineItems.length > 1) deleteRow(lineItems.length - 2);
-                  }}
-                >
-                  <Trash2 className="h-3 w-3 mr-1" /> Delete Row
-                </Button>
-              </div>
-
               {/* Table */}
               <div className="overflow-x-auto rounded-lg border border-gray-200">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase w-10">
-                        SL#
+                      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-500 uppercase w-10">
+                        SL
                       </th>
-                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase min-w-[180px]">
-                        Item Title
+                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase min-w-[220px]">
+                        Item
                       </th>
                       <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase w-20">
                         Unit
@@ -738,14 +973,14 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                       <th className="px-3 py-2 text-right text-xs font-semibold text-gray-500 uppercase w-20">
                         Qty
                       </th>
-                      <th className="px-3 py-2 text-right text-xs font-semibold text-gray-500 uppercase w-24">
+                      <th className="px-3 py-2 text-right text-xs font-semibold text-gray-500 uppercase w-28">
                         Rate
                       </th>
                       <th className="px-3 py-2 text-right text-xs font-semibold text-gray-500 uppercase w-28">
                         Amount
                       </th>
-                      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-500 uppercase w-16">
-                        Actions
+                      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-500 uppercase w-10">
+                        <span className="sr-only">Actions</span>
                       </th>
                     </tr>
                   </thead>
@@ -753,20 +988,72 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                     {lineItems.map((item, index) => (
                       <tr
                         key={index}
-                        className="border-t border-gray-100 hover:bg-gray-50/50 transition-colors"
+                        className={cn(
+                          'border-t border-gray-100 transition-colors',
+                          item.title ? 'hover:bg-emerald-50/20' : 'bg-gray-50/30'
+                        )}
                       >
-                        <td className="px-3 py-1.5 text-muted-foreground text-xs">
+                        {/* SL# */}
+                        <td className="px-3 py-2 text-muted-foreground text-xs text-center align-top pt-3">
                           {index + 1}
                         </td>
-                        <td className="px-3 py-1.5">
-                          <Input
-                            value={item.title}
-                            onChange={(e) => updateLineItem(index, 'title', e.target.value)}
-                            placeholder="Item description"
-                            className="h-8 text-sm border-0 shadow-none focus-visible:ring-1 focus-visible:ring-emerald-500 p-0"
-                          />
+
+                        {/* Item Title + Description (below) */}
+                        <td className="px-3 py-2 relative">
+                          <div className="flex items-start gap-1.5">
+                            <Input
+                              ref={(el) => {
+                                if (el) itemInputRefs.current.set(index, el);
+                              }}
+                              value={item.title}
+                              onChange={(e) => handleItemTitleChange(index, e.target.value)}
+                              onFocus={() => handleItemTitleFocus(index)}
+                              onClick={(e) => e.stopPropagation()}
+                              placeholder="Type item name..."
+                              className="h-8 text-sm border-0 shadow-none focus-visible:ring-1 focus-visible:ring-emerald-500 p-0 font-medium"
+                            />
+                            <Sparkles className="h-3.5 w-3.5 text-amber-400 mt-1.5 shrink-0" />
+                          </div>
+                          {/* Description BELOW item title */}
+                          <div className="mt-1">
+                            <Textarea
+                              value={item.description || ''}
+                              onChange={(e) => updateLineItem(index, 'description', e.target.value)}
+                              placeholder="Item description (optional)..."
+                              className="text-xs text-gray-500 min-h-[32px] resize-none border-0 shadow-none focus-visible:ring-0 p-0 placeholder:text-gray-300"
+                              rows={1}
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </div>
+                          {/* Category/Warranty badges */}
+                          {(item.category || item.warranty) && (
+                            <div className="flex items-center gap-1.5 mt-1">
+                              {item.category && (
+                                <span className="text-[10px] text-muted-foreground bg-gray-100 px-1.5 py-0.5 rounded">
+                                  {item.category}
+                                </span>
+                              )}
+                              {item.warranty && (
+                                <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+                                  {item.warranty}
+                                </span>
+                              )}
+                            </div>
+                          )}
+
+                          {/* Item Suggestion Dropdown */}
+                          {suggestionState.index === index && suggestionState.query.length >= 2 && (
+                            <ItemSuggestionDropdown
+                              query={suggestionState.query}
+                              onSelect={(s) => applyItemSuggestion(index, s)}
+                              onClose={() => setSuggestionState((prev) => ({ ...prev, index: null, query: '' }))}
+                              position={suggestionState.position}
+                            />
+                          )}
                         </td>
-                        <td className="px-3 py-1.5">
+
+                        {/* Unit */}
+                        <td className="px-3 py-2 align-top pt-3">
                           <Select
                             value={item.unit}
                             onValueChange={(v) => updateLineItem(index, 'unit', v)}
@@ -781,7 +1068,9 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                             </SelectContent>
                           </Select>
                         </td>
-                        <td className="px-3 py-1.5">
+
+                        {/* Qty */}
+                        <td className="px-3 py-2 align-top pt-3">
                           <Input
                             type="number"
                             value={item.quantity || ''}
@@ -790,7 +1079,9 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                             min={0}
                           />
                         </td>
-                        <td className="px-3 py-1.5">
+
+                        {/* Rate */}
+                        <td className="px-3 py-2 align-top pt-3">
                           <Input
                             type="number"
                             value={item.rate || ''}
@@ -800,19 +1091,44 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                             step="0.01"
                           />
                         </td>
-                        <td className="px-3 py-1.5 text-right font-semibold text-sm">
+
+                        {/* Amount */}
+                        <td className="px-3 py-2 text-right font-semibold text-sm align-top pt-3">
                           {formatCurrency(item.amount, formData.currency)}
                         </td>
-                        <td className="px-3 py-1.5 text-center">
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="h-7 w-7 text-gray-400 hover:text-rose-500 hover:bg-rose-50"
-                            onClick={() => deleteRow(index)}
-                            disabled={lineItems.length <= 1}
-                          >
-                            <Trash2 className="h-3.5 w-3.5" />
-                          </Button>
+
+                        {/* Actions */}
+                        <td className="px-3 py-2 text-center align-top pt-3">
+                          <div className="flex items-center justify-center gap-0.5">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50"
+                              onClick={() => insertRow(index)}
+                              title="Insert row below"
+                            >
+                              <Plus className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+                              onClick={() => duplicateRow(index)}
+                              title="Duplicate row"
+                            >
+                              <Copy className="h-3 w-3" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-gray-400 hover:text-rose-500 hover:bg-rose-50"
+                              onClick={() => deleteRow(index)}
+                              disabled={lineItems.length <= 1}
+                              title="Delete row"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -823,10 +1139,26 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
           </Card>
         </div>
 
-        {/* ============ RIGHT COLUMN — Summary, Workflow, Attachments ============ */}
+        {/* ============ RIGHT COLUMN — Summary, Barcode, Workflow ============ */}
         <div className="lg:col-span-4 space-y-4">
+          {/* Barcode & QR Code Card */}
+          {quotationNo && (
+            <Card className="py-0 gap-0">
+              <CardHeader className="pb-0">
+                <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider flex items-center gap-2">
+                  <QrCode className="h-4 w-4" /> Barcode / QR Code
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4 flex justify-center">
+                <div className="bg-white rounded-lg p-3 border border-gray-100 inline-block">
+                  <BarcodeDisplay value={quotationNo} />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Summary Card */}
-          <Card className="py-0 gap-0">
+          <Card className="py-0 gap-0 lg:sticky lg:top-20">
             <CardHeader className="pb-0">
               <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
                 Summary
@@ -856,7 +1188,7 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
 
               {/* Tax Rate */}
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Tax Rate</span>
+                <span className="text-sm text-gray-600">Tax</span>
                 <Select
                   value={formData.taxRate}
                   onValueChange={(v) => setFormData((f) => ({ ...f, taxRate: v }))}
@@ -870,14 +1202,6 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                     ))}
                   </SelectContent>
                 </Select>
-              </div>
-
-              {/* Tax */}
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">Tax</span>
-                <span className="text-sm font-medium text-gray-900">
-                  {formatCurrency(taxAmount, formData.currency)}
-                </span>
               </div>
 
               {/* Shipping */}
@@ -924,7 +1248,6 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                   const isCurrent = i === currentStepIndex;
                   return (
                     <div key={step} className="flex items-center gap-3">
-                      {/* Circle */}
                       <div className="flex flex-col items-center">
                         <div
                           className={cn(
@@ -940,7 +1263,6 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                             <Circle className="h-3.5 w-3.5" />
                           )}
                         </div>
-                        {/* Connector line */}
                         {i < WORKFLOW_STEPS.length - 1 && (
                           <div
                             className={cn(
@@ -950,7 +1272,6 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                           />
                         )}
                       </div>
-                      {/* Label */}
                       <span
                         className={cn(
                           'text-sm py-2 -ml-1',
@@ -966,22 +1287,6 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                     </div>
                   );
                 })}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Attachments Card */}
-          <Card className="py-0 gap-0">
-            <CardHeader className="pb-0">
-              <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
-                Attachments
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-emerald-300 hover:bg-emerald-50/30 transition-colors cursor-pointer">
-                <Upload className="h-8 w-8 text-gray-300 mx-auto mb-2" />
-                <p className="text-sm text-gray-500">Drop files here or click to upload</p>
-                <p className="text-xs text-muted-foreground mt-1">PDF, Images, Documents (Max 10MB)</p>
               </div>
             </CardContent>
           </Card>
@@ -1005,10 +1310,10 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
               </Button>
               <Separator orientation="vertical" className="h-6 mx-1 hidden sm:block" />
               <Button variant="secondary" size="sm" className="h-9 text-sm">
-                <Send className="h-4 w-4 mr-1.5" /> Send Email
+                <Send className="h-4 w-4 mr-1.5" /> Email
               </Button>
               <Button variant="secondary" size="sm" className="h-9 text-sm">
-                <MessageSquare className="h-4 w-4 mr-1.5" /> Send WhatsApp
+                <MessageSquare className="h-4 w-4 mr-1.5" /> WhatsApp
               </Button>
               <Separator orientation="vertical" className="h-6 mx-1 hidden sm:block" />
               <Button variant="outline" size="sm" className="h-9 text-sm">
@@ -1036,14 +1341,21 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                 disabled={saving}
               >
                 {saving && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
-                Save
+                Save Draft
               </Button>
               <Button
                 size="sm"
                 className="h-9 text-sm bg-emerald-600 hover:bg-emerald-700 text-white"
                 onClick={() => toast.info('Convert to Work Order — coming soon')}
               >
-                Convert to Work Order
+                Convert to WO
+              </Button>
+              <Button
+                size="sm"
+                className="h-9 text-sm bg-emerald-600 hover:bg-emerald-700 text-white"
+                onClick={() => toast.info('Convert to Invoice — coming soon')}
+              >
+                Convert to Invoice
               </Button>
             </div>
           </div>

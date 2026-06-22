@@ -273,10 +273,13 @@ export type QuotationStatus = 'DRAFT' | 'REVIEW' | 'APPROVED' | 'SENT' | 'ACCEPT
 export interface QuotationLineItem {
   id?: string;
   title: string;
+  description?: string;
   unit: string;
   quantity: number;
   rate: number;
   amount: number;
+  category?: string;
+  warranty?: string;
 }
 
 export interface QuotationItem {
@@ -363,6 +366,11 @@ export interface CustomerData {
   address?: string;
   companyName?: string;
   customerNumber: string;
+  paymentTerms?: string;
+  pic?: string;
+  country?: string;
+  district?: string;
+  taxRate?: number;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

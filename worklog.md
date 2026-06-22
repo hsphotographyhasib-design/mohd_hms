@@ -249,3 +249,26 @@ Stage Summary:
 - Theme selection persists via localStorage key "facilitypro-theme"
 - Verified via browser: dark→reload→dark ✓, light→reload→light ✓, clear→reload→light (default) ✓
 - Zero lint errors, zero runtime errors
+
+---
+Task ID: quotation-module-premium-rebuild
+Agent: main
+Task: Build premium quotation module with description below items, smart suggestions, barcode/QR, and enhanced customer info
+
+Work Log:
+- Updated Prisma schema: Added paymentTerms, pic, country, district, taxRate to Customer model
+- Updated TypeScript types: Added description, category, warranty to QuotationLineItem; added new fields to CustomerData
+- Pushed schema to SQLite DB with `bun run db:push`
+- Installed jsbarcode and qrcode.react libraries
+- Created /api/quotations/item-suggestions API endpoint (searches all existing quotation items across tenant, returns ranked suggestions with frequency)
+- Rewrote quotation-form.tsx (~750 lines): 3-column layout (customer info + terms | quotation info + line items | barcode + summary + workflow)
+- Key form features: Description below item title, smart item suggestion dropdown with keyboard nav, CODE128 barcode + QR code display, customer search by name/phone/email/company, auto-fill of country/district/tax/PIC/payment terms, updated default terms matching user spec
+- Updated quotation-detail.tsx: Added BarcodeDisplay component, line items now show description below title with category/warranty badges, barcode card shown above items table
+- Updated customer API to return new fields (paymentTerms, pic, country, district, taxRate)
+- E2E verified: Quotation list loads with stats + filters, New Quotation form renders all sections correctly, zero console errors, zero lint errors, all API calls 200
+
+Stage Summary:
+- 7 files modified: prisma/schema.prisma, src/types/index.ts, src/app/api/customers/route.ts, src/app/api/quotations/item-suggestions/route.ts (new), src/components/modules/quotations/quotation-form.tsx, src/components/modules/quotations/quotation-detail.tsx
+- 2 packages added: jsbarcode, qrcode.react
+- Design language preserved: white cards, rounded corners, emerald green actions, same shadows/spacing/typography
+- All 9 workflow states supported: Draft → Review → Approved → Sent → Accepted → Converted to WO → Converted to Invoice → Paid → Closed

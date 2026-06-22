@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -16,8 +16,14 @@ import {
   Copy, Printer, Loader2, AlertTriangle, Eye, Pencil,
   RotateCcw, Wrench, FileSpreadsheet, Banknote, Lock,
   Building2, Phone, Mail, MapPin, Hash, User, Calendar,
-  MessageSquare, ChevronRight,
+  MessageSquare, ChevronRight, QrCode,
 } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+const QRCodeSVG = dynamic(
+  () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
+  { ssr: false }
+);
 import { useAppStore } from '@/store';
 import type { QuotationLineItem, QuotationStatus } from '@/types';
 import { toast } from 'sonner';
@@ -120,6 +126,32 @@ function numberToWords(num: number): string {
   if (intPart % 1000 > 0) words += convertBelowThousand(intPart % 1000);
   if (decPart > 0) words += ' AND ' + convertBelowThousand(decPart) + ' CENTS';
   return words.trim() || 'ZERO';
+}
+
+// ============ BARCODE COMPONENT ============
+
+function BarcodeDisplay({ value }: { value: string }) {
+  const barcodeRef = useRef<SVGSVGElement>(null);
+
+  useEffect(() => {
+    if (!barcodeRef.current || !value) return;
+    import('jsbarcode').then((JsBarcode) => {
+      try {
+        JsBarcode.default(barcodeRef.current, value, {
+          format: 'CODE128', width: 1.5, height: 40,
+          displayValue: true, fontSize: 10, font: 'monospace', margin: 5,
+        });
+      } catch { /* ignore */ }
+    });
+  }, [value]);
+
+  if (!value) return null;
+  return (
+    <div className="flex flex-col items-center gap-2">
+      <svg ref={barcodeRef} className="max-w-full" />
+      <QRCodeSVG value={value} size={64} level="M" includeMargin={false} bgColor="#FFFFFF" fgColor="#111827" />
+    </div>
+  );
 }
 
 // ============ MAIN COMPONENT ============
@@ -511,12 +543,28 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
 
         {/* ============ CENTER: Line Items & Summary ============ */}
         <div className="lg:col-span-2 space-y-4">
+          {/* Barcode / QR Code */}
+          {data.quotationNo && (
+            <Card className="py-0 gap-0 overflow-hidden">
+              <CardHeader className="pb-0">
+                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
+                  <QrCode className="h-3.5 w-3.5" /> Barcode / QR Code
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4 flex justify-center">
+                <div className="bg-white rounded-lg p-4 border border-gray-100 inline-block">
+                  <BarcodeDisplay value={data.quotationNo} />
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Line Items Table */}
           <Card className="py-0 gap-0 overflow-hidden">
             <CardHeader className="pb-0">
               <div className="flex items-center justify-between w-full">
                 <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Line Items ({lineItems.length})
+                  Line Items ({lineItems.filter((i) => i.title).length})
                 </CardTitle>
                 <span className="text-xs text-muted-foreground font-mono">{data.quotationNo}</span>
               </div>
@@ -526,8 +574,8 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="bg-gray-50">
-                      <th className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase w-10">SL#</th>
-                      <th className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase">Description</th>
+                      <th className="px-3 py-2.5 text-center text-xs font-semibold text-gray-500 uppercase w-10">SL</th>
+                      <th className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase min-w-[220px]">Item</th>
                       <th className="px-3 py-2.5 text-center text-xs font-semibold text-gray-500 uppercase w-16">Unit</th>
                       <th className="px-3 py-2.5 text-right text-xs font-semibold text-gray-500 uppercase w-16">Qty</th>
                       <th className="px-3 py-2.5 text-right text-xs font-semibold text-gray-500 uppercase w-24">Rate</th>
@@ -535,21 +583,36 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
                     </tr>
                   </thead>
                   <tbody>
-                    {lineItems.length === 0 ? (
+                    {lineItems.filter((i) => i.title).length === 0 ? (
                       <tr>
                         <td colSpan={6} className="text-center py-8 text-muted-foreground text-sm">
                           No line items
                         </td>
                       </tr>
                     ) : (
-                      lineItems.map((item, index) => (
+                      lineItems.filter((i) => i.title).map((item, index) => (
                         <tr key={index} className={cn('border-t border-gray-100', index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30')}>
-                          <td className="px-3 py-2.5 text-muted-foreground text-xs font-mono">{index + 1}</td>
-                          <td className="px-3 py-2.5 font-medium text-gray-900">{item.title || '—'}</td>
-                          <td className="px-3 py-2.5 text-center text-xs text-muted-foreground uppercase">{item.unit || '—'}</td>
-                          <td className="px-3 py-2.5 text-right font-mono">{item.quantity || 0}</td>
-                          <td className="px-3 py-2.5 text-right font-mono">{formatCurrency(item.rate || 0, currency)}</td>
-                          <td className="px-3 py-2.5 text-right font-bold font-mono text-gray-900">
+                          <td className="px-3 py-3 text-muted-foreground text-xs font-mono text-center align-top pt-3.5">{index + 1}</td>
+                          <td className="px-3 py-3">
+                            <p className="font-medium text-gray-900">{item.title || '—'}</p>
+                            {item.description && (
+                              <p className="text-xs text-gray-500 mt-1 leading-relaxed">{item.description}</p>
+                            )}
+                            {(item.category || item.warranty) && (
+                              <div className="flex items-center gap-1.5 mt-1.5">
+                                {item.category && (
+                                  <span className="text-[10px] text-muted-foreground bg-gray-100 px-1.5 py-0.5 rounded">{item.category}</span>
+                                )}
+                                {item.warranty && (
+                                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">{item.warranty}</span>
+                                )}
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-3 py-3 text-center text-xs text-muted-foreground uppercase align-top pt-3.5">{item.unit || '—'}</td>
+                          <td className="px-3 py-3 text-right font-mono align-top pt-3.5">{item.quantity || 0}</td>
+                          <td className="px-3 py-3 text-right font-mono align-top pt-3.5">{formatCurrency(item.rate || 0, currency)}</td>
+                          <td className="px-3 py-3 text-right font-bold font-mono text-gray-900 align-top pt-3.5">
                             {formatCurrency(item.amount || (item.quantity || 0) * (item.rate || 0), currency)}
                           </td>
                         </tr>

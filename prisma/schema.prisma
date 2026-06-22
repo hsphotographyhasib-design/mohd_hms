@@ -104,17 +104,22 @@ model Department {
 // ============ CUSTOMERS ============
 
 model Customer {
-  id          String   @id @default(cuid())
-  tenantId    String
-  name        String
-  email       String?
-  phone       String
-  address     String?
-  gpsLocation String?  // JSON: {lat, lng}
-  companyName String?
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  email         String?
+  phone         String
+  address       String?
+  gpsLocation   String?  // JSON: {lat, lng}
+  companyName   String?
   customerNumber String @unique
-  photo       String?
-  isActive    Boolean  @default(true)
+  photo         String?
+  paymentTerms  String?  // e.g. "50% advance, balance upon completion"
+  pic           String?  // Person in Charge
+  country       String?  @default("Brunei")
+  district      String?
+  taxRate       Float    @default(0)
+  isActive      Boolean  @default(true)
   isWhatsappVerified  Boolean  @default(false)
   whatsappId          String?
   whatsappPhone       String?
