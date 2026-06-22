@@ -111,3 +111,29 @@ Stage Summary:
 - File: src/components/modules/quotations/quotation-detail.tsx
 - Lint: Clean (no errors)
 - Dev server: Compiles successfully
+---
+Task ID: 2
+Agent: Main Agent
+Task: Precise quotation template matching - detailed VLM analysis and pixel-perfect fixes
+
+Work Log:
+- Ran detailed VLM analysis on PRINTED QUOTATION.png extracting 7 sections with exact element details
+- Compared element-by-element against implementation, found 7 discrepancies
+- Fixed all discrepancies in quotation-detail.tsx
+
+Stage Summary:
+- 7 fixes applied based on detailed VLM analysis:
+  1. Section titles changed from gray to GREEN (emerald-600): QUOTATION TO, SITE/DELIVERY TO, OTHER INFORMATION, TERMS & CONDITIONS, NOTES
+  2. Table header changed from emerald-600/white to emerald-50 (light green) with dark text
+  3. Table column header "Qty" → "Quantity" to match template exactly
+  4. Summary box moved from side-by-side to BELOW table, right-aligned (flex justify-end)
+  5. Amount In Words changed from emerald-800 italic to gray-800 regular font
+  6. THANK YOU changed to centered, bold, no italic; removed contact info from footer
+  7. Disclaimer centered with gray-500 text; Layout: NOTES → Prepared By + Stamp → SCAN TO VIEW + QR → Disclaimer → THANK YOU!
+- 8 default terms updated to match template wording
+- Logo changed from rounded-lg to rounded-full (circular per template)
+- Contact detail icons changed from gray-400 to emerald-500 (green per template)
+- All 25 template elements verified matching
+- All existing features preserved (workflow, dialogs, print/email/WhatsApp, etc.)
+- File: src/components/modules/quotations/quotation-detail.tsx (745 lines)
+- Lint: Clean, compiles successfully
