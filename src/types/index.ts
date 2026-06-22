@@ -105,13 +105,18 @@ export interface EquipmentItem {
   category: EquipmentCategory;
   assetNumber: string;
   qrCode: string;
+  qrId?: string;
   brand?: string;
   model?: string;
   serialNumber?: string;
   location?: string;
+  building?: string;
+  room?: string;
   installDate?: string;
   warrantyExpiry?: string;
+  warrantyInfo?: string;
   status: EquipmentStatus;
+  condition?: string;
   photos?: string;
   documents?: string;
   specifications?: string;

@@ -1,0 +1,801 @@
+     1→'use client';
+     2→
+     3→import { useState, useEffect, useCallback } from 'react';
+     4→import {
+     5→  ArrowLeft,
+     6→  Edit,
+     7→  QrCode,
+     8→  Download,
+     9→  Wind,
+    10→  Zap,
+    11→  Droplets,
+    12→  Battery,
+    13→  Cog,
+    14→  ShieldAlert,
+    15→  Wrench,
+    16→  MapPin,
+    17→  Building2,
+    18→  Tag,
+    19→  Hash,
+    20→  User,
+    21→  FileText,
+    22→  Calendar,
+    23→  ClipboardList,
+    24→  Clock,
+    25→  Package,
+    26→} from 'lucide-react';
+    27→import type { LucideIcon } from 'lucide-react';
+    28→import { toast } from 'sonner';
+    29→import { useAuthStore, useAppStore } from '@/store';
+    30→import { cn } from '@/lib/utils';
+    31→import { format } from 'date-fns';
+    32→import type {
+    33→  EquipmentItem,
+    34→  EquipmentCategory,
+    35→  EquipmentStatus,
+    36→  ComplaintItem,
+    37→  WorkOrderItem,
+    38→  PmScheduleItem,
+    39→  PaginatedResponse,
+    40→  CustomerData,
+    41→} from '@/types';
+    42→import { Button } from '@/components/ui/button';
+    43→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+    44→import { Badge } from '@/components/ui/badge';
+    45→import {
+    46→  Table,
+    47→  TableBody,
+    48→  TableCell,
+    49→  TableHead,
+    50→  TableHeader,
+    51→  TableRow,
+    52→} from '@/components/ui/table';
+    53→import {
+    54→  Dialog,
+    55→  DialogContent,
+    56→  DialogDescription,
+    57→  DialogFooter,
+    58→  DialogHeader,
+    59→  DialogTitle,
+    60→} from '@/components/ui/dialog';
+    61→import {
+    62→  Select,
+    63→  SelectContent,
+    64→  SelectItem,
+    65→  SelectTrigger,
+    66→  SelectValue,
+    67→} from '@/components/ui/select';
+    68→import { Label } from '@/components/ui/label';
+    69→import { Textarea } from '@/components/ui/textarea';
+    70→import { Input } from '@/components/ui/input';
+    71→import { Separator } from '@/components/ui/separator';
+    72→import { Skeleton } from '@/components/ui/skeleton';
+    73→
+    74→// ============ HELPERS ============
+    75→
+    76→const CATEGORY_OPTIONS: EquipmentCategory[] = [
+    77→  'HVAC', 'Electrical', 'Plumbing', 'Generator', 'Mechanical', 'FireProtection',
+    78→];
+    79→
+    80→const STATUS_OPTIONS: EquipmentStatus[] = [
+    81→  'active', 'inactive', 'under_maintenance', 'decommissioned',
+    82→];
+    83→
+    84→function CategoryIcon({ category, className }: { category: string; className?: string }) {
+    85→  const icons: Record<string, LucideIcon> = {
+    86→    HVAC: Wind, Electrical: Zap, Plumbing: Droplets,
+    87→    Generator: Battery, Mechanical: Cog, FireProtection: ShieldAlert,
+    88→  };
+    89→  const Icon = icons[category] || Wrench;
+    90→  return <Icon className={cn('h-5 w-5', className)} />;
+    91→}
+    92→
+    93→function getCategoryColor(category: string) {
+    94→  const colors: Record<string, string> = {
+    95→    HVAC: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+    96→    Electrical: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    97→    Plumbing: 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border-sky-200 dark:border-sky-800',
+    98→    Generator: 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+    99→    Mechanical: 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300 border-orange-200 dark:border-orange-800',
+   100→    FireProtection: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200 dark:border-rose-800',
+   101→  };
+   102→  return colors[category] || 'bg-gray-100 text-gray-700 dark:bg-gray-950 dark:text-gray-300 border-gray-200 dark:border-gray-800';
+   103→}
+   104→
+   105→function getStatusColor(status: EquipmentStatus) {
+   106→  const colors: Record<string, string> = {
+   107→    active: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+   108→    inactive: 'bg-gray-100 text-gray-700 dark:bg-gray-950 dark:text-gray-300 border-gray-200 dark:border-gray-800',
+   109→    under_maintenance: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+   110→    decommissioned: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200 dark:border-rose-800',
+   111→  };
+   112→  return colors[status] || colors.inactive;
+   113→}
+   114→
+   115→function formatStatusLabel(status: string) {
+   116→  const labels: Record<string, string> = {
+   117→    active: 'Active', inactive: 'Inactive',
+   118→    under_maintenance: 'Under Maintenance', decommissioned: 'Decommissioned',
+   119→  };
+   120→  return labels[status] || status;
+   121→}
+   122→
+   123→function InfoField({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value?: string | null }) {
+   124→  return (
+   125→    <div className="flex items-start gap-3 py-2">
+   126→      <div className="mt-0.5 text-muted-foreground">
+   127→        <Icon className="h-4 w-4" />
+   128→      </div>
+   129→      <div className="flex-1 min-w-0">
+   130→        <p className="text-xs text-muted-foreground">{label}</p>
+   131→        <p className="text-sm font-medium">{value || '—'}</p>
+   132→      </div>
+   133→    </div>
+   134→  );
+   135→}
+   136→
+   137→function ComplaintStatusBadge({ status }: { status: string }) {
+   138→  const colors: Record<string, string> = {
+   139→    OPEN: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+   140→    ASSIGNED: 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300 border-sky-200 dark:border-sky-800',
+   141→    IN_PROGRESS: 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+   142→    RESOLVED: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+   143→    CLOSED: 'bg-gray-100 text-gray-700 dark:bg-gray-950 dark:text-gray-300 border-gray-200 dark:border-gray-800',
+   144→  };
+   145→  return (
+   146→    <Badge variant="outline" className={cn('text-xs', colors[status] || '')}>
+   147→      {status}
+   148→    </Badge>
+   149→  );
+   150→}
+   151→
+   152→function WoStatusBadge({ status }: { status: string }) {
+   153→  const colors: Record<string, string> = {
+   154→    PENDING: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+   155→    IN_PROGRESS: 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+   156→    COMPLETED: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+   157→    CANCELLED: 'bg-gray-100 text-gray-700 dark:bg-gray-950 dark:text-gray-300 border-gray-200 dark:border-gray-800',
+   158→  };
+   159→  return (
+   160→    <Badge variant="outline" className={cn('text-xs', colors[status] || '')}>
+   161→      {status}
+   162→    </Badge>
+   163→  );
+   164→}
+   165→
+   166→// ============ MAIN COMPONENT ============
+   167→
+   168→interface EquipmentFormData {
+   169→  name: string;
+   170→  category: EquipmentCategory;
+   171→  customerId: string;
+   172→  brand: string;
+   173→  model: string;
+   174→  serialNumber: string;
+   175→  location: string;
+   176→  status: EquipmentStatus;
+   177→  notes: string;
+   178→}
+   179→
+   180→export function EquipmentDetail() {
+   181→  const { user } = useAuthStore();
+   182→  const { viewParams, setView } = useAppStore();
+   183→  const token = typeof window !== 'undefined' ? localStorage.getItem('cmms_token') : null;
+   184→  const equipmentId = viewParams?.id;
+   185→
+   186→  const [item, setItem] = useState<EquipmentItem | null>(null);
+   187→  const [loading, setLoading] = useState(true);
+   188→  const [complaints, setComplaints] = useState<ComplaintItem[]>([]);
+   189→  const [workOrders, setWorkOrders] = useState<WorkOrderItem[]>([]);
+   190→  const [pmSchedules, setPmSchedules] = useState<PmScheduleItem[]>([]);
+   191→
+   192→  // Edit dialog
+   193→  const [formOpen, setFormOpen] = useState(false);
+   194→  const [formData, setFormData] = useState<EquipmentFormData>({
+   195→    name: '', category: 'HVAC', customerId: '', brand: '', model: '',
+   196→    serialNumber: '', location: '', status: 'active', notes: '',
+   197→  });
+   198→  const [formSaving, setFormSaving] = useState(false);
+   199→  const [customers, setCustomers] = useState<CustomerData[]>([]);
+   200→
+   201→  // QR dialog
+   202→  const [qrOpen, setQrOpen] = useState(false);
+   203→
+   204→  const canEdit = user?.role && ['super_admin', 'admin', 'manager'].includes(user.role);
+   205→
+   206→  // Fetch equipment
+   207→  const fetchEquipment = useCallback(async () => {
+   208→    if (!token || !equipmentId) return;
+   209→    setLoading(true);
+   210→    try {
+   211→      const res = await fetch(`/api/equipment/${equipmentId}`, {
+   212→        headers: { Authorization: `Bearer ${token}` },
+   213→      });
+   214→      if (!res.ok) throw new Error('Not found');
+   215→      const data = await res.json();
+   216→      setItem(data);
+   217→    } catch {
+   218→      toast.error('Failed to load equipment');
+   219→      setView('equipment');
+   220→    } finally {
+   221→      setLoading(false);
+   222→    }
+   223→  }, [token, equipmentId, setView]);
+   224→
+   225→  // Fetch complaints for this equipment
+   226→  const fetchComplaints = useCallback(async () => {
+   227→    if (!token || !equipmentId) return;
+   228→    try {
+   229→      const res = await fetch(`/api/complaints?equipmentId=${equipmentId}&pageSize=10`, {
+   230→        headers: { Authorization: `Bearer ${token}` },
+   231→      });
+   232→      const data: PaginatedResponse<ComplaintItem> = await res.json();
+   233→      if (data.data) setComplaints(data.data);
+   234→    } catch {
+   235→      // ignore
+   236→    }
+   237→  }, [token, equipmentId]);
+   238→
+   239→  // Fetch work orders for this equipment
+   240→  const fetchWorkOrders = useCallback(async () => {
+   241→    if (!token || !equipmentId) return;
+   242→    try {
+   243→      const res = await fetch(`/api/work-orders?equipmentId=${equipmentId}&pageSize=10`, {
+   244→        headers: { Authorization: `Bearer ${token}` },
+   245→      });
+   246→      const data: PaginatedResponse<WorkOrderItem> = await res.json();
+   247→      if (data.data) setWorkOrders(data.data);
+   248→    } catch {
+   249→      // ignore
+   250→    }
+   251→  }, [token, equipmentId]);
+   252→
+   253→  // Fetch PM schedules for this equipment
+   254→  const fetchPmSchedules = useCallback(async () => {
+   255→    if (!token || !equipmentId) return;
+   256→    try {
+   257→      const res = await fetch(`/api/pm?equipmentId=${equipmentId}&pageSize=10`, {
+   258→        headers: { Authorization: `Bearer ${token}` },
+   259→      });
+   260→      const data: PaginatedResponse<PmScheduleItem> = await res.json();
+   261→      if (data.data) setPmSchedules(data.data);
+   262→    } catch {
+   263→      // ignore
+   264→    }
+   265→  }, [token, equipmentId]);
+   266→
+   267→  // Fetch customers
+   268→  const fetchCustomers = useCallback(async () => {
+   269→    if (!token) return;
+   270→    try {
+   271→      const res = await fetch('/api/customers?pageSize=100', {
+   272→        headers: { Authorization: `Bearer ${token}` },
+   273→      });
+   274→      const data: PaginatedResponse<CustomerData> = await res.json();
+   275→      if (data.data) setCustomers(data.data);
+   276→    } catch {
+   277→      // ignore
+   278→    }
+   279→  }, [token]);
+   280→
+   281→  useEffect(() => {
+   282→    fetchEquipment();
+   283→    fetchComplaints();
+   284→    fetchWorkOrders();
+   285→    fetchPmSchedules();
+   286→    fetchCustomers();
+   287→  }, [fetchEquipment, fetchComplaints, fetchWorkOrders, fetchPmSchedules, fetchCustomers]);
+   288→
+   289→  const openEditForm = () => {
+   290→    if (!item) return;
+   291→    setFormData({
+   292→      name: item.name,
+   293→      category: item.category,
+   294→      customerId: item.customerId || '',
+   295→      brand: item.brand || '',
+   296→      model: item.model || '',
+   297→      serialNumber: item.serialNumber || '',
+   298→      location: item.location || '',
+   299→      status: item.status,
+   300→      notes: item.notes || '',
+   301→    });
+   302→    setFormOpen(true);
+   303→  };
+   304→
+   305→  const handleSubmit = async () => {
+   306→    if (!token || !item || !formData.name.trim()) {
+   307→      toast.error('Equipment name is required');
+   308→      return;
+   309→    }
+   310→    setFormSaving(true);
+   311→    try {
+   312→      const res = await fetch(`/api/equipment/${item.id}`, {
+   313→        method: 'PUT',
+   314→        headers: {
+   315→          'Content-Type': 'application/json',
+   316→          Authorization: `Bearer ${token}`,
+   317→        },
+   318→        body: JSON.stringify({
+   319→          name: formData.name,
+   320→          category: formData.category,
+   321→          customerId: formData.customerId || undefined,
+   322→          brand: formData.brand || undefined,
+   323→          model: formData.model || undefined,
+   324→          serialNumber: formData.serialNumber || undefined,
+   325→          location: formData.location || undefined,
+   326→          status: formData.status,
+   327→          notes: formData.notes || undefined,
+   328→        }),
+   329→      });
+   330→      if (!res.ok) {
+   331→        const err = await res.json();
+   332→        throw new Error(err.error || 'Failed to update');
+   333→      }
+   334→      toast.success('Equipment updated');
+   335→      setFormOpen(false);
+   336→      fetchEquipment();
+   337→    } catch (err) {
+   338→      toast.error(err instanceof Error ? err.message : 'Failed to update');
+   339→    } finally {
+   340→      setFormSaving(false);
+   341→    }
+   342→  };
+   343→
+   344→  // Parse specifications
+   345→  let parsedSpecs: Record<string, string> | null = null;
+   346→  if (item?.specifications) {
+   347→    try {
+   348→      parsedSpecs = JSON.parse(item.specifications);
+   349→    } catch {
+   350→      parsedSpecs = null;
+   351→    }
+   352→  }
+   353→
+   354→  if (loading) {
+   355→    return (
+   356→      <div className="p-4 md:p-6 space-y-6">
+   357→        <Skeleton className="h-8 w-48" />
+   358→        <Skeleton className="h-40 rounded-xl" />
+   359→        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   360→          <Skeleton className="h-48 rounded-xl" />
+   361→          <Skeleton className="h-48 rounded-xl" />
+   362→        </div>
+   363→      </div>
+   364→    );
+   365→  }
+   366→
+   367→  if (!item) return null;
+   368→
+   369→  return (
+   370→    <div className="p-4 md:p-6 space-y-6">
+   371→      {/* Back button */}
+   372→      <Button variant="ghost" onClick={() => setView('equipment')} className="gap-2 -ml-2">
+   373→        <ArrowLeft className="h-4 w-4" />
+   374→        Back to Equipment
+   375→      </Button>
+   376→
+   377→      {/* Equipment Header */}
+   378→      <Card>
+   379→        <CardContent className="p-6">
+   380→          <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+   381→            <div className="flex items-start gap-4">
+   382→              <div className="h-14 w-14 rounded-xl bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center shrink-0">
+   383→                <CategoryIcon category={item.category} className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />
+   384→              </div>
+   385→              <div className="space-y-1">
+   386→                <div className="flex items-center gap-3 flex-wrap">
+   387→                  <h1 className="text-xl font-bold">{item.name}</h1>
+   388→                  <Badge variant="outline" className={cn('text-xs', getCategoryColor(item.category))}>
+   389→                    {item.category}
+   390→                  </Badge>
+   391→                  <Badge variant="outline" className={cn('text-xs', getStatusColor(item.status))}>
+   392→                    {formatStatusLabel(item.status)}
+   393→                  </Badge>
+   394→                </div>
+   395→                <p className="text-sm text-muted-foreground font-mono">{item.assetNumber}</p>
+   396→                {item.customerName && (
+   397→                  <p className="text-sm text-muted-foreground">{item.customerName}</p>
+   398→                )}
+   399→              </div>
+   400→            </div>
+   401→            <div className="flex items-center gap-2">
+   402→              <Button variant="outline" size="sm" onClick={() => setQrOpen(true)}>
+   403→                <QrCode className="h-4 w-4" />
+   404→                QR Code
+   405→              </Button>
+   406→              {canEdit && (
+   407→                <Button size="sm" onClick={openEditForm}>
+   408→                  <Edit className="h-4 w-4" />
+   409→                  Edit
+   410→                </Button>
+   411→              )}
+   412→            </div>
+   413→          </div>
+   414→        </CardContent>
+   415→      </Card>
+   416→
+   417→      {/* QR Code Section */}
+   418→      <Card>
+   419→        <CardHeader className="pb-3">
+   420→          <CardTitle className="text-base flex items-center gap-2">
+   421→            <QrCode className="h-4 w-4" />
+   422→            QR Code
+   423→          </CardTitle>
+   424→        </CardHeader>
+   425→        <CardContent>
+   426→          <div className="flex flex-col items-center gap-4 py-4">
+   427→            <div className="w-52 h-52 bg-white dark:bg-gray-900 border-2 border-dashed border-muted-foreground/20 rounded-xl flex items-center justify-center p-6">
+   428→              <div className="text-center space-y-3">
+   429→                <QrCode className="h-20 w-20 mx-auto text-emerald-600 dark:text-emerald-400" />
+   430→                <p className="text-xs font-mono font-medium break-all leading-tight">{item.qrCode || item.assetNumber}</p>
+   431→              </div>
+   432→            </div>
+   433→            <Button
+   434→              variant="outline"
+   435→              size="sm"
+   436→              onClick={() => {
+   437→                const text = item.qrCode || item.assetNumber;
+   438→                navigator.clipboard.writeText(text).then(
+   439→                  () => toast.success('QR code text copied'),
+   440→                  () => toast.error('Failed to copy')
+   441→                );
+   442→              }}
+   443→            >
+   444→              <Download className="h-4 w-4" />
+   445→              Copy QR Code Text
+   446→            </Button>
+   447→          </div>
+   448→        </CardContent>
+   449→      </Card>
+   450→
+   451→      {/* Info Grid */}
+   452→      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+   453→        {/* Brand, Model, Serial, Location */}
+   454→        <Card>
+   455→          <CardContent className="p-4">
+   456→            <h3 className="text-sm font-semibold mb-2">Equipment Details</h3>
+   457→            <Separator className="mb-3" />
+   458→            <InfoField icon={Tag} label="Brand" value={item.brand} />
+   459→            <InfoField icon={Hash} label="Model" value={item.model} />
+   460→            <InfoField icon={Hash} label="Serial Number" value={item.serialNumber} />
+   461→            <InfoField icon={MapPin} label="Location" value={item.location} />
+   462→          </CardContent>
+   463→        </Card>
+   464→
+   465→        {/* Customer, Install Date, Warranty, Specifications */}
+   466→        <Card>
+   467→          <CardContent className="p-4">
+   468→            <h3 className="text-sm font-semibold mb-2">Service Information</h3>
+   469→            <Separator className="mb-3" />
+   470→            <InfoField icon={Building2} label="Customer" value={item.customerName} />
+   471→            <InfoField
+   472→              icon={Calendar}
+   473→              label="Install Date"
+   474→              value={item.installDate ? format(new Date(item.installDate), 'MMM d, yyyy') : undefined}
+   475→            />
+   476→            <InfoField
+   477→              icon={Clock}
+   478→              label="Warranty Expiry"
+   479→              value={item.warrantyExpiry ? format(new Date(item.warrantyExpiry), 'MMM d, yyyy') : undefined}
+   480→            />
+   481→          </CardContent>
+   482→        </Card>
+   483→
+   484→        {/* Specifications */}
+   485→        {parsedSpecs && Object.keys(parsedSpecs).length > 0 && (
+   486→          <Card className="md:col-span-2">
+   487→            <CardContent className="p-4">
+   488→              <h3 className="text-sm font-semibold mb-2">Specifications</h3>
+   489→              <Separator className="mb-3" />
+   490→              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+   491→                {Object.entries(parsedSpecs).map(([key, val]) => (
+   492→                  <div key={key} className="space-y-1">
+   493→                    <p className="text-xs text-muted-foreground capitalize">{key.replace(/_/g, ' ')}</p>
+   494→                    <p className="text-sm font-medium">{String(val)}</p>
+   495→                  </div>
+   496→                ))}
+   497→              </div>
+   498→            </CardContent>
+   499→          </Card>
+   500→        )}
+   501→
+   502→        {/* Notes */}
+   503→        {item.notes && (
+   504→          <Card className="md:col-span-2">
+   505→            <CardContent className="p-4">
+   506→              <h3 className="text-sm font-semibold mb-2 flex items-center gap-2">
+   507→                <FileText className="h-4 w-4" />
+   508→                Notes
+   509→              </h3>
+   510→              <Separator className="mb-3" />
+   511→              <p className="text-sm text-muted-foreground whitespace-pre-wrap">{item.notes}</p>
+   512→            </CardContent>
+   513→          </Card>
+   514→        )}
+   515→      </div>
+   516→
+   517→      {/* Related Complaints */}
+   518→      <Card>
+   519→        <CardHeader className="pb-3">
+   520→          <CardTitle className="text-base flex items-center gap-2">
+   521→            <ClipboardList className="h-4 w-4" />
+   522→            Related Complaints ({complaints.length})
+   523→          </CardTitle>
+   524→        </CardHeader>
+   525→        <CardContent className="p-0">
+   526→          {complaints.length === 0 ? (
+   527→            <p className="p-4 text-sm text-muted-foreground text-center">No complaints found for this equipment</p>
+   528→          ) : (
+   529→            <div className="overflow-x-auto">
+   530→              <Table>
+   531→                <TableHeader>
+   532→                  <TableRow>
+   533→                    <TableHead>ID</TableHead>
+   534→                    <TableHead>Title</TableHead>
+   535→                    <TableHead>Priority</TableHead>
+   536→                    <TableHead>Status</TableHead>
+   537→                    <TableHead>Date</TableHead>
+   538→                  </TableRow>
+   539→                </TableHeader>
+   540→                <TableBody>
+   541→                  {complaints.map((c) => (
+   542→                    <TableRow
+   543→                      key={c.id}
+   544→                      className="cursor-pointer"
+   545→                      onClick={() => setView('complaint-detail', { id: c.id })}
+   546→                    >
+   547→                      <TableCell className="font-mono text-xs">{c.id.slice(0, 8)}</TableCell>
+   548→                      <TableCell className="font-medium text-sm">{c.title}</TableCell>
+   549→                      <TableCell>
+   550→                        <Badge
+   551→                          variant="outline"
+   552→                          className={cn(
+   553→                            'text-xs',
+   554→                            c.priority === 'critical'
+   555→                              ? 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300 border-rose-200 dark:border-rose-800'
+   556→                              : c.priority === 'high'
+   557→                                ? 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300 border-orange-200 dark:border-orange-800'
+   558→                                : c.priority === 'medium'
+   559→                                  ? 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800'
+   560→                                  : 'bg-gray-100 text-gray-700 dark:bg-gray-950 dark:text-gray-300 border-gray-200 dark:border-gray-800'
+   561→                          )}
+   562→                        >
+   563→                          {c.priority}
+   564→                        </Badge>
+   565→                      </TableCell>
+   566→                      <TableCell><ComplaintStatusBadge status={c.status} /></TableCell>
+   567→                      <TableCell className="text-sm text-muted-foreground">
+   568→                        {c.createdAt ? format(new Date(c.createdAt), 'MMM d, yyyy') : '—'}
+   569→                      </TableCell>
+   570→                    </TableRow>
+   571→                  ))}
+   572→                </TableBody>
+   573→              </Table>
+   574→            </div>
+   575→          )}
+   576→        </CardContent>
+   577→      </Card>
+   578→
+   579→      {/* Related Work Orders */}
+   580→      <Card>
+   581→        <CardHeader className="pb-3">
+   582→          <CardTitle className="text-base flex items-center gap-2">
+   583→            <Package className="h-4 w-4" />
+   584→            Related Work Orders ({workOrders.length})
+   585→          </CardTitle>
+   586→        </CardHeader>
+   587→        <CardContent className="p-0">
+   588→          {workOrders.length === 0 ? (
+   589→            <p className="p-4 text-sm text-muted-foreground text-center">No work orders found for this equipment</p>
+   590→          ) : (
+   591→            <div className="overflow-x-auto">
+   592→              <Table>
+   593→                <TableHeader>
+   594→                  <TableRow>
+   595→                    <TableHead>ID</TableHead>
+   596→                    <TableHead>Title</TableHead>
+   597→                    <TableHead>Type</TableHead>
+   598→                    <TableHead>Status</TableHead>
+   599→                    <TableHead>Assigned</TableHead>
+   600→                  </TableRow>
+   601→                </TableHeader>
+   602→                <TableBody>
+   603→                  {workOrders.map((wo) => (
+   604→                    <TableRow
+   605→                      key={wo.id}
+   606→                      className="cursor-pointer"
+   607→                      onClick={() => setView('work-order-detail', { id: wo.id })}
+   608→                    >
+   609→                      <TableCell className="font-mono text-xs">{wo.id.slice(0, 8)}</TableCell>
+   610→                      <TableCell className="font-medium text-sm">{wo.title}</TableCell>
+   611→                      <TableCell className="text-sm capitalize">{wo.type}</TableCell>
+   612→                      <TableCell><WoStatusBadge status={wo.status} /></TableCell>
+   613→                      <TableCell className="text-sm text-muted-foreground">
+   614→                        {wo.assignedToName || 'Unassigned'}
+   615→                      </TableCell>
+   616→                    </TableRow>
+   617→                  ))}
+   618→                </TableBody>
+   619→              </Table>
+   620→            </div>
+   621→          )}
+   622→        </CardContent>
+   623→      </Card>
+   624→
+   625→      {/* PM History */}
+   626→      <Card>
+   627→        <CardHeader className="pb-3">
+   628→          <CardTitle className="text-base flex items-center gap-2">
+   629→            <Clock className="h-4 w-4" />
+   630→            PM Schedules ({pmSchedules.length})
+   631→          </CardTitle>
+   632→        </CardHeader>
+   633→        <CardContent className="p-0">
+   634→          {pmSchedules.length === 0 ? (
+   635→            <p className="p-4 text-sm text-muted-foreground text-center">No PM schedules for this equipment</p>
+   636→          ) : (
+   637→            <div className="divide-y">
+   638→              {pmSchedules.map((pm) => (
+   639→                <div key={pm.id} className="px-4 py-3 flex items-center justify-between gap-4">
+   640→                  <div className="min-w-0 flex-1">
+   641→                    <p className="text-sm font-medium truncate">{pm.title}</p>
+   642→                    <p className="text-xs text-muted-foreground">
+   643→                      Frequency: {pm.frequency}
+   644→                      {pm.customDays ? ` (${pm.customDays} days)` : ''}
+   645→                    </p>
+   646→                  </div>
+   647→                  <div className="text-right shrink-0">
+   648→                    <p className="text-xs text-muted-foreground">Next Due</p>
+   649→                    <p className="text-sm font-medium">
+   650→                      {pm.nextDueDate ? format(new Date(pm.nextDueDate), 'MMM d, yyyy') : '—'}
+   651→                    </p>
+   652→                  </div>
+   653→                </div>
+   654→              ))}
+   655→            </div>
+   656→          )}
+   657→        </CardContent>
+   658→      </Card>
+   659→
+   660→      {/* Edit Dialog */}
+   661→      <Dialog open={formOpen} onOpenChange={setFormOpen}>
+   662→        <DialogContent className="sm:max-w-xl max-h-[85vh] overflow-y-auto">
+   663→          <DialogHeader>
+   664→            <DialogTitle>Edit Equipment</DialogTitle>
+   665→            <DialogDescription>Update equipment details below.</DialogDescription>
+   666→          </DialogHeader>
+   667→          <div className="grid gap-4 py-2">
+   668→            <div className="grid gap-2">
+   669→              <Label htmlFor="edit-name">Name *</Label>
+   670→              <Input
+   671→                id="edit-name"
+   672→                placeholder="Equipment name"
+   673→                value={formData.name}
+   674→                onChange={(e) => setFormData((f) => ({ ...f, name: e.target.value }))}
+   675→              />
+   676→            </div>
+   677→            <div className="grid grid-cols-2 gap-4">
+   678→              <div className="grid gap-2">
+   679→                <Label>Category</Label>
+   680→                <Select
+   681→                  value={formData.category}
+   682→                  onValueChange={(v) => setFormData((f) => ({ ...f, category: v as EquipmentCategory }))}
+   683→                >
+   684→                  <SelectTrigger><SelectValue /></SelectTrigger>
+   685→                  <SelectContent>
+   686→                    {CATEGORY_OPTIONS.map((cat) => (
+   687→                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+   688→                    ))}
+   689→                  </SelectContent>
+   690→                </Select>
+   691→              </div>
+   692→              <div className="grid gap-2">
+   693→                <Label>Status</Label>
+   694→                <Select
+   695→                  value={formData.status}
+   696→                  onValueChange={(v) => setFormData((f) => ({ ...f, status: v as EquipmentStatus }))}
+   697→                >
+   698→                  <SelectTrigger><SelectValue /></SelectTrigger>
+   699→                  <SelectContent>
+   700→                    {STATUS_OPTIONS.map((s) => (
+   701→                      <SelectItem key={s} value={s}>{formatStatusLabel(s)}</SelectItem>
+   702→                    ))}
+   703→                  </SelectContent>
+   704→                </Select>
+   705→              </div>
+   706→            </div>
+   707→            <div className="grid gap-2">
+   708→              <Label>Customer</Label>
+   709→              <Select
+   710→                value={formData.customerId}
+   711→                onValueChange={(v) => setFormData((f) => ({ ...f, customerId: v === 'none' ? '' : v }))}
+   712→              >
+   713→                <SelectTrigger><SelectValue placeholder="Select customer" /></SelectTrigger>
+   714→                <SelectContent>
+   715→                  <SelectItem value="none">None</SelectItem>
+   716→                  {customers.map((c) => (
+   717→                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+   718→                  ))}
+   719→                </SelectContent>
+   720→              </Select>
+   721→            </div>
+   722→            <div className="grid grid-cols-2 gap-4">
+   723→              <div className="grid gap-2">
+   724→                <Label>Brand</Label>
+   725→                <Input
+   726→                  placeholder="Brand"
+   727→                  value={formData.brand}
+   728→                  onChange={(e) => setFormData((f) => ({ ...f, brand: e.target.value }))}
+   729→                />
+   730→              </div>
+   731→              <div className="grid gap-2">
+   732→                <Label>Model</Label>
+   733→                <Input
+   734→                  placeholder="Model"
+   735→                  value={formData.model}
+   736→                  onChange={(e) => setFormData((f) => ({ ...f, model: e.target.value }))}
+   737→                />
+   738→              </div>
+   739→            </div>
+   740→            <div className="grid grid-cols-2 gap-4">
+   741→              <div className="grid gap-2">
+   742→                <Label>Serial Number</Label>
+   743→                <Input
+   744→                  placeholder="Serial number"
+   745→                  value={formData.serialNumber}
+   746→                  onChange={(e) => setFormData((f) => ({ ...f, serialNumber: e.target.value }))}
+   747→                />
+   748→              </div>
+   749→              <div className="grid gap-2">
+   750→                <Label>Location</Label>
+   751→                <Input
+   752→                  placeholder="Location"
+   753→                  value={formData.location}
+   754→                  onChange={(e) => setFormData((f) => ({ ...f, location: e.target.value }))}
+   755→                />
+   756→              </div>
+   757→            </div>
+   758→            <div className="grid gap-2">
+   759→              <Label>Notes</Label>
+   760→              <Textarea
+   761→                placeholder="Additional notes..."
+   762→                value={formData.notes}
+   763→                onChange={(e) => setFormData((f) => ({ ...f, notes: e.target.value }))}
+   764→                rows={3}
+   765→              />
+   766→            </div>
+   767→          </div>
+   768→          <DialogFooter>
+   769→            <Button variant="outline" onClick={() => setFormOpen(false)}>Cancel</Button>
+   770→            <Button onClick={handleSubmit} disabled={formSaving}>
+   771→              {formSaving ? 'Saving...' : 'Update Equipment'}
+   772→            </Button>
+   773→          </DialogFooter>
+   774→        </DialogContent>
+   775→      </Dialog>
+   776→
+   777→      {/* QR Dialog */}
+   778→      <Dialog open={qrOpen} onOpenChange={setQrOpen}>
+   779→        <DialogContent className="sm:max-w-sm">
+   780→          <DialogHeader>
+   781→            <DialogTitle>QR Code</DialogTitle>
+   782→            <DialogDescription>Scan this code to identify the equipment</DialogDescription>
+   783→          </DialogHeader>
+   784→          <div className="flex flex-col items-center gap-4 py-4">
+   785→            <div className="w-48 h-48 bg-white dark:bg-gray-900 border-2 border-dashed border-muted-foreground/30 rounded-xl flex items-center justify-center p-4">
+   786→              <div className="text-center space-y-2">
+   787→                <QrCode className="h-16 w-16 mx-auto text-emerald-600 dark:text-emerald-400" />
+   788→                <p className="text-xs font-mono font-medium break-all">{item.qrCode || item.assetNumber}</p>
+   789→              </div>
+   790→            </div>
+   791→            <div className="text-center space-y-1">
+   792→              <p className="font-medium text-sm">{item.name}</p>
+   793→              <p className="text-xs text-muted-foreground font-mono">{item.assetNumber}</p>
+   794→            </div>
+   795→          </div>
+   796→        </DialogContent>
+   797→      </Dialog>
+   798→    </div>
+   799→  );
+   800→}
+   801→

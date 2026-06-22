@@ -56,13 +56,18 @@ export async function GET(request: NextRequest) {
       category: eq.category,
       assetNumber: eq.assetNumber,
       qrCode: eq.qrCode,
+      qrId: eq.qrId,
       brand: eq.brand,
       model: eq.model,
       serialNumber: eq.serialNumber,
       location: eq.location,
+      building: eq.building,
+      room: eq.room,
       installDate: eq.installDate?.toISOString(),
       warrantyExpiry: eq.warrantyExpiry?.toISOString(),
+      warrantyInfo: eq.warrantyInfo,
       status: eq.status,
+      condition: eq.condition,
       photos: eq.photos,
       documents: eq.documents,
       specifications: eq.specifications,
@@ -102,6 +107,10 @@ export async function POST(request: NextRequest) {
 
     const assetNumber = generateAssetNumber(category);
     const qrCode = `QR-${assetNumber}`;
+    const { generateQrId, buildQrUrl } = await import('@/lib/qr-utils');
+    const qrId = generateQrId(category);
+    const domain = request.headers.get('host') || 'smartms.com';
+    const qrUrl = buildQrUrl(domain, qrId);
 
     const equipment = await db.equipment.create({
       data: {
@@ -111,13 +120,18 @@ export async function POST(request: NextRequest) {
         customerId: customerId || null,
         assetNumber,
         qrCode,
+        qrId,
         brand: brand || null,
         model: model || null,
         serialNumber: serialNumber || null,
         location: location || null,
+        building: body.building || null,
+        room: body.room || null,
         installDate: installDate ? new Date(installDate) : null,
         warrantyExpiry: warrantyExpiry ? new Date(warrantyExpiry) : null,
+        warrantyInfo: body.warrantyInfo || null,
         status: status || 'active',
+        condition: body.condition || 'good',
         photos: photos || null,
         documents: documents || null,
         specifications: specifications ? JSON.stringify(specifications) : null,
@@ -126,6 +140,11 @@ export async function POST(request: NextRequest) {
       include: {
         customer: { select: { name: true } },
       },
+    });
+
+    // Create QR code record
+    await db.equipmentQrCode.create({
+      data: { tenantId, equipmentId: equipment.id, qrId, qrUrl },
     });
 
     return NextResponse.json({
@@ -137,13 +156,18 @@ export async function POST(request: NextRequest) {
       category: equipment.category,
       assetNumber: equipment.assetNumber,
       qrCode: equipment.qrCode,
+      qrId: equipment.qrId,
       brand: equipment.brand,
       model: equipment.model,
       serialNumber: equipment.serialNumber,
       location: equipment.location,
+      building: equipment.building,
+      room: equipment.room,
       installDate: equipment.installDate?.toISOString(),
       warrantyExpiry: equipment.warrantyExpiry?.toISOString(),
+      warrantyInfo: equipment.warrantyInfo,
       status: equipment.status,
+      condition: equipment.condition,
       photos: equipment.photos,
       documents: equipment.documents,
       specifications: equipment.specifications,

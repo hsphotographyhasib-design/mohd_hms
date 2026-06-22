@@ -48,6 +48,8 @@ model Tenant {
   customerFeedbacks    CustomerFeedback[]
   customerReports      CustomerReport[]
   complaintTimelines   ComplaintTimeline[]
+  equipmentQrCodes     EquipmentQrCode[]
+  scanLogs             ScanLog[]
 }
 
 // ============ USERS & AUTH ============
@@ -142,32 +144,83 @@ model Customer {
 // ============ EQUIPMENT ============
 
 model Equipment {
+  id              String   @id @default(cuid())
+  tenantId        String
+  customerId      String?
+  name            String
+  category        String   // HVAC, Electrical, Plumbing, Generator, Mechanical, FireProtection
+  assetNumber     String   @unique
+  qrCode          String   @unique
+  qrId            String?   @unique  // QR-GEN-NFYH3RZAA format, used for public URLs
+  brand           String?
+  model           String?
+  serialNumber    String?
+  location        String?
+  building        String?
+  room            String?
+  installDate     DateTime?
+  warrantyExpiry  DateTime?
+  warrantyInfo    String?
+  status          String   @default("active") // active, inactive, under_maintenance, decommissioned, critical, out_of_service, overdue_pm
+  condition       String   @default("good") // good, fair, poor, critical
+  photos          String?  // JSON array of URLs
+  documents       String?  // JSON array of URLs
+  specifications  String? // JSON object
+  notes           String?
+  scanCount       Int      @default(0)
+  lastScannedAt   DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant       @relation(fields: [tenantId], references: [id])
+  customer        Customer?    @relation(fields: [customerId], references: [id])
+  complaints      Complaint[]
+  workOrders      WorkOrder[]
+  pmSchedules     PmSchedule[]
+  scanLogs        ScanLog[]
+  qrCodeRecord    EquipmentQrCode?
+}
+
+// ============ EQUIPMENT QR CODES ============
+
+model EquipmentQrCode {
   id            String   @id @default(cuid())
   tenantId      String
-  customerId    String?
-  name          String
-  category      String   // HVAC, Electrical, Plumbing, Generator, Mechanical, FireProtection
-  assetNumber   String   @unique
-  qrCode        String   @unique
-  brand         String?
-  model         String?
-  serialNumber  String?
-  location      String?
-  installDate   DateTime?
-  warrantyExpiry DateTime?
-  status        String   @default("active") // active, inactive, under_maintenance, decommissioned
-  photos        String?  // JSON array of URLs
-  documents     String?  // JSON array of URLs
-  specifications String? // JSON object
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  equipmentId   String   @unique
+  qrId          String   @unique  // QR-GEN-NFYH3RZAA
+  qrUrl         String              // https://domain.com/equipment/QR-GEN-NFYH3RZAA
+  isActive      Boolean  @default(true)
+  generatedAt   DateTime @default(now())
+  lastRegeneratedAt DateTime?
+  version       Int      @default(1)
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  customer      Customer? @relation(fields: [customerId], references: [id])
-  complaints    Complaint[]
-  workOrders    WorkOrder[]
-  pmSchedules   PmSchedule[]
+  equipment     Equipment @relation(fields: [equipmentId], references: [id])
+}
+
+// ============ SCAN LOGS ============
+
+model ScanLog {
+  id            String   @id @default(cuid())
+  tenantId      String
+  equipmentId   String
+  qrId          String
+  scannedBy     String?  // userId or null for anonymous
+  scannedByName String?  // "Anonymous" for public scans
+  ipAddress     String?
+  userAgent     String?
+  device        String?  // mobile, desktop, tablet
+  browser       String?
+  location      String?  // geo if available
+  referer       String?
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  equipment     Equipment @relation(fields: [equipmentId], references: [id])
+
+  @@index([tenantId, equipmentId])
+  @@index([qrId])
+  @@index([createdAt])
 }
 
 // ============ COMPLAINTS ============

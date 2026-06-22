@@ -46,3 +46,46 @@ Stage Summary:
 - Key changes: single-column centered layout (max-width: 210mm), green header bar with barcode, 7-column table with separate Description column, inline summary panel, footer with signature/stamp/QR/thank-you
 - Print CSS ensures colors render correctly on paper
 - All existing functionality preserved (workflow actions, payment dialog, email/WhatsApp/Print, status badges)
+---
+Task ID: 2
+Agent: Main Agent
+Task: Build enterprise-grade QR Asset Management System
+
+Work Log:
+- Analyzed existing equipment model — found QR code was a placeholder icon, not a real scannable QR
+- Added 3 new Prisma models: EquipmentQrCode, ScanLog, plus new fields on Equipment (qrId, building, room, warrantyInfo, condition, scanCount, lastScannedAt)
+- Backfilled all 10 existing equipment records with unique QR IDs and QR code records
+- Created QR utility library (src/lib/qr-utils.ts) with generateQrId, buildQrUrl, parseDevice, isValidQrId, getStatusConfig, etc.
+- Created label templates library (src/lib/label-templates.ts) with 10 templates across 5 sizes
+- Created label PDF generator (src/lib/label-pdf.ts) for printable equipment tags
+- Built 6 API routes:
+  - GET /api/qr/lookup/[qrId] — PUBLIC: lookup equipment by QR ID, log scan, return full data + maintenance history
+  - POST /api/qr/scan — PUBLIC: log scan event
+  - GET|POST /api/equipment/qr/[id] — AUTH: get/regenerate QR codes
+  - GET /api/equipment/qr-analytics — AUTH: scan analytics with period filtering
+  - POST /api/equipment/bulk-qr — AUTH: batch QR generation
+  - POST /api/qr/service-request — PUBLIC: submit service request from QR page
+- Built public equipment page at /equipment/[qrId]/page.tsx — responsive, mobile-first design with:
+  - Company header bar, equipment hero card, QR verification badge
+  - Live status card with color indicators, condition progress bar
+  - Equipment details grid (asset no, serial, brand, model, category, location, building, room, install date, warranty)
+  - Customer info card
+  - Maintenance history timeline with filter tabs (30/90/180/365 days)
+  - Service request form (pre-fills equipment ID, location, customer)
+  - Support buttons (WhatsApp, Call, Email, Share)
+  - Scan counter with last scan timestamp
+- Replaced broken QR Code section in equipment-detail.tsx with enterprise QrCodeManager component featuring:
+  - Real scannable QR code via qrcode.react (was placeholder icon before)
+  - Tabs: QR Code | Scan Analytics
+  - Actions: Copy Link, Open Public Page, Download PNG, Print Label, Regenerate QR
+  - Scan Analytics tab with period filters, total/unique counters, device breakdown, recent scans
+  - Print Label dialog generates professional A4 equipment tag with QR code injected
+- Updated Equipment API routes to include new fields (qrId, building, room, warrantyInfo, condition, scanCount, lastScannedAt)
+- Equipment creation now auto-generates QR ID and creates EquipmentQrCode record
+
+Stage Summary:
+- QR codes now open secure public equipment pages with real-time asset data
+- All database IDs are hidden — only QR IDs are exposed in URLs
+- Scan logging with device/browser/IP tracking and rate limiting
+- VLM verification scored the public page 8/10
+- All existing functionality (complaints, work orders, PM) integrated with QR system

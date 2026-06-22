@@ -23,6 +23,13 @@ import {
   ClipboardList,
   Clock,
   Package,
+  RefreshCw,
+  Printer,
+  Copy,
+  ExternalLink,
+  Scan,
+  Eye,
+  TagIcon,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
@@ -70,6 +77,13 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import dynamic from 'next/dynamic';
+
+const QRCodeSVG = dynamic(
+  () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
+  { ssr: false }
+);
 
 // ============ HELPERS ============
 
@@ -414,37 +428,27 @@ export function EquipmentDetail() {
         </CardContent>
       </Card>
 
-      {/* QR Code Section */}
+      {/* QR Code & Tags Section */}
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base flex items-center gap-2">
             <QrCode className="h-4 w-4" />
-            QR Code
+            QR Code & Asset Tag
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-col items-center gap-4 py-4">
-            <div className="w-52 h-52 bg-white dark:bg-gray-900 border-2 border-dashed border-muted-foreground/20 rounded-xl flex items-center justify-center p-6">
-              <div className="text-center space-y-3">
-                <QrCode className="h-20 w-20 mx-auto text-emerald-600 dark:text-emerald-400" />
-                <p className="text-xs font-mono font-medium break-all leading-tight">{item.qrCode || item.assetNumber}</p>
-              </div>
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                const text = item.qrCode || item.assetNumber;
-                navigator.clipboard.writeText(text).then(
-                  () => toast.success('QR code text copied'),
-                  () => toast.error('Failed to copy')
-                );
-              }}
-            >
-              <Download className="h-4 w-4" />
-              Copy QR Code Text
-            </Button>
-          </div>
+          <Tabs defaultValue="qrcode" className="w-full">
+            <TabsList className="w-full">
+              <TabsTrigger value="qrcode" className="flex-1">QR Code</TabsTrigger>
+              <TabsTrigger value="analytics" className="flex-1">Scan Analytics</TabsTrigger>
+            </TabsList>
+            <TabsContent value="qrcode">
+              <QrCodeManager equipment={item} />
+            </TabsContent>
+            <TabsContent value="analytics">
+              <ScanAnalytics equipmentId={item.id} />
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
 
@@ -774,27 +778,341 @@ export function EquipmentDetail() {
         </DialogContent>
       </Dialog>
 
-      {/* QR Dialog */}
+      {/* QR Dialog — Full QR Preview */}
       <Dialog open={qrOpen} onOpenChange={setQrOpen}>
-        <DialogContent className="sm:max-w-sm">
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>QR Code</DialogTitle>
-            <DialogDescription>Scan this code to identify the equipment</DialogDescription>
+            <DialogTitle>QR Code — {item.name}</DialogTitle>
+            <DialogDescription>Scan this code to view equipment details and maintenance history</DialogDescription>
           </DialogHeader>
-          <div className="flex flex-col items-center gap-4 py-4">
-            <div className="w-48 h-48 bg-white dark:bg-gray-900 border-2 border-dashed border-muted-foreground/30 rounded-xl flex items-center justify-center p-4">
-              <div className="text-center space-y-2">
-                <QrCode className="h-16 w-16 mx-auto text-emerald-600 dark:text-emerald-400" />
-                <p className="text-xs font-mono font-medium break-all">{item.qrCode || item.assetNumber}</p>
-              </div>
-            </div>
-            <div className="text-center space-y-1">
-              <p className="font-medium text-sm">{item.name}</p>
-              <p className="text-xs text-muted-foreground font-mono">{item.assetNumber}</p>
-            </div>
-          </div>
+          <QrCodeManager equipment={item} isDialog />
         </DialogContent>
       </Dialog>
+    </div>
+  );
+}
+
+// ============ QR CODE MANAGER COMPONENT ============
+
+const token = () => localStorage.getItem('cmms_token') || '';
+
+function QrCodeManager({ equipment, isDialog }: { equipment: EquipmentItem; isDialog?: boolean }) {
+  const [qrData, setQrData] = useState<{ qrId: string; qrUrl: string; scanCount: number; lastScannedAt?: string; version: number } | null>(null);
+  const [regenerating, setRegenerating] = useState(false);
+  const [labelOpen, setLabelOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState('hvac');
+  const [printing, setPrinting] = useState(false);
+
+  const qrId = equipment.qrId || '';
+  const qrUrl = qrData?.qrUrl || (typeof window !== 'undefined' ? `${window.location.origin}/equipment/${qrId}` : '');
+  const scanUrl = qrUrl || `https://smartms.com/equipment/${qrId}`;
+
+  useEffect(() => {
+    if (equipment.id) {
+      fetch(`/api/equipment/qr/${equipment.id}`, { headers: { Authorization: `Bearer ${token()}` } })
+        .then(r => r.json())
+        .then(d => setQrData(d))
+        .catch(() => {});
+    }
+  }, [equipment.id]);
+
+  const handleRegenerate = async () => {
+    setRegenerating(true);
+    try {
+      const res = await fetch(`/api/equipment/qr/${equipment.id}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token()}` },
+      });
+      if (!res.ok) throw new Error();
+      const data = await res.json();
+      setQrData(data);
+      toast.success('QR code regenerated');
+    } catch { toast.error('Failed to regenerate QR code'); }
+    finally { setRegenerating(false); }
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(scanUrl).then(() => toast.success('Link copied'));
+  };
+
+  const handleOpenPublic = () => {
+    window.open(`/equipment/${qrId}`, '_blank');
+  };
+
+  const handleDownloadPng = () => {
+    const canvas = document.querySelector(`#qr-svg-${equipment.id.replace(/[^a-z0-9]/gi, '')}`) as SVGSVGElement | null;
+    if (!canvas) { toast.error('QR code not ready'); return; }
+    const svgData = new XMLSerializer().serializeToString(canvas);
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    const img = new Image();
+    img.onload = () => {
+      const c = document.createElement('canvas');
+      c.width = img.width * 2; c.height = img.height * 2;
+      const ctx = c.getContext('2d')!;
+      ctx.fillStyle = 'white'; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      const a = document.createElement('a');
+      a.href = c.toDataURL('image/png');
+      a.download = `QR-${equipment.assetNumber}.png`;
+      a.click();
+      toast.success('PNG downloaded');
+    };
+    img.src = url;
+  };
+
+  const handlePrintLabel = () => {
+    setLabelOpen(true);
+  };
+
+  const executePrintLabel = () => {
+    setPrinting(true);
+    const win = window.open('', '_blank');
+    if (!win) { toast.error('Popup blocked'); setPrinting(false); return; }
+    win.document.write(`
+      <!DOCTYPE html><html><head><title>Equipment Tag - ${equipment.name}</title>
+      <style>
+        @page { size: A4; margin: 10mm; }
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 90vh; margin: 0; background: #f3f4f6; }
+        .tag { background: white; border: 2px solid #059669; border-radius: 12px; padding: 20px; width: 280px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .tag-header { text-align: center; border-bottom: 2px solid #059669; padding-bottom: 12px; margin-bottom: 12px; }
+        .tag-header .logo { width: 40px; height: 40px; background: #059669; border-radius: 8px; color: white; font-weight: bold; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 4px; }
+        .tag-header h2 { font-size: 9px; color: #059669; margin: 0; letter-spacing: 1px; }
+        .tag-header .company { font-size: 11px; font-weight: bold; color: #111; margin: 2px 0 0; }
+        .tag-body h3 { font-size: 14px; font-weight: bold; text-align: center; margin: 0 0 8px; color: #111; }
+        .tag-qr { text-align: center; margin: 12px 0; }
+        .tag-qr svg { max-width: 160px; }
+        .tag-qr p { font-size: 8px; color: #666; margin: 4px 0 0; font-family: monospace; }
+        .tag-fields { font-size: 10px; color: #333; }
+        .tag-fields .row { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px dotted #e5e7eb; }
+        .tag-fields .label { color: #666; }
+        .tag-fields .value { font-weight: 600; text-align: right; max-width: 60%; }
+        .tag-footer { margin-top: 12px; padding-top: 8px; border-top: 1px solid #e5e7eb; text-align: center; }
+        .tag-footer p { font-size: 7px; color: #999; margin: 2px 0; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 8px; font-weight: 600; }
+        .badge-active { background: #d1fae5; color: #059669; }
+        .tag-verified { text-align: center; margin-top: 8px; }
+        .tag-verified svg { width: 16px; height: 16px; display: inline; vertical-align: middle; }
+        .tag-verified span { font-size: 8px; color: #059669; font-weight: 600; }
+      </style></head><body>
+      <div class="tag">
+        <div class="tag-header">
+          <div class="logo">S</div>
+          <h2>FACILITY MANAGEMENT</h2>
+          <div class="company">Smart Maintenance Services</div>
+        </div>
+        <div class="tag-body">
+          <h3>${equipment.name}</h3>
+          <div class="tag-qr" id="label-qr-target"></div>
+          <div class="tag-fields">
+            <div class="row"><span class="label">Asset No.</span><span class="value">${equipment.assetNumber}</span></div>
+            <div class="row"><span class="label">QR ID</span><span class="value" style="font-size:8px;font-family:monospace">${qrId}</span></div>
+            ${equipment.serialNumber ? `<div class="row"><span class="label">Serial No.</span><span class="value">${equipment.serialNumber}</span></div>` : ''}
+            ${equipment.brand ? `<div class="row"><span class="label">Brand</span><span class="value">${equipment.brand}</span></div>` : ''}
+            ${equipment.model ? `<div class="row"><span class="label">Model</span><span class="value">${equipment.model}</span></div>` : ''}
+            <div class="row"><span class="label">Category</span><span class="value">${equipment.category}</span></div>
+            <div class="row"><span class="label">Location</span><span class="value">${equipment.location || '—'}</span></div>
+            <div class="row"><span class="label">Status</span><span class="value"><span class="badge badge-active">${equipment.status}</span></span></div>
+          </div>
+          <div class="tag-verified"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg> <span>Verified Asset</span></div>
+          <div class="tag-footer">
+            <p>Emergency: +673 245 6789 | info@smartms.com</p>
+            <p>www.smartms.com | Scan QR for details</p>
+          </div>
+        </div>
+      </div>
+      <script>
+        (function(){
+          var svg = document.querySelector('#qr-svg-${equipment.id.replace(/[^a-z0-9]/gi, '')}');
+          if(svg){
+            var c = svg.cloneNode(true);
+            c.removeAttribute('id');
+            c.style.width='160px';c.style.height='160px';
+            document.getElementById('label-qr-target').appendChild(c);
+          }
+          setTimeout(function(){window.print();},500);
+        })();
+      </script>
+      </body></html>
+    `);
+    win.document.close();
+    setTimeout(() => { setPrinting(false); setLabelOpen(false); }, 2000);
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Real QR Code */}
+      <div className="flex flex-col items-center gap-3 py-3">
+        <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+          <QRCodeSVG
+            id={`qr-svg-${equipment.id.replace(/[^a-z0-9]/gi, '')}`}
+            value={scanUrl}
+            size={isDialog ? 180 : 200}
+            level="H"
+            includeMargin={false}
+          />
+        </div>
+        <div className="text-center space-y-1">
+          <p className="text-xs font-mono font-medium text-emerald-700 break-all">{qrId}</p>
+          <p className="text-[10px] text-gray-400">{scanUrl}</p>
+        </div>
+      </div>
+
+      {/* QR Info */}
+      <div className="bg-gray-50 rounded-lg p-3 space-y-2 text-xs">
+        <div className="flex justify-between"><span className="text-gray-500">Version</span><span className="font-medium">{qrData?.version || 1}</span></div>
+        <div className="flex justify-between"><span className="text-gray-500">Total Scans</span><span className="font-medium">{qrData?.scanCount ?? 0}</span></div>
+        <div className="flex justify-between"><span className="text-gray-500">Last Scanned</span><span className="font-medium">{qrData?.lastScannedAt ? format(new Date(qrData.lastScannedAt), 'dd MMM yyyy, HH:mm') : 'Never'}</span></div>
+      </div>
+
+      {/* Action Buttons */}
+      {!isDialog && (
+        <div className="grid grid-cols-2 gap-2">
+          <Button variant="outline" size="sm" onClick={handleCopyLink}>
+            <Copy className="h-3.5 w-3.5 mr-1.5" /> Copy Link
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleOpenPublic}>
+            <ExternalLink className="h-3.5 w-3.5 mr-1.5" /> Open Page
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleDownloadPng}>
+            <Download className="h-3.5 w-3.5 mr-1.5" /> PNG
+          </Button>
+          <Button variant="outline" size="sm" onClick={handlePrintLabel}>
+            <Printer className="h-3.5 w-3.5 mr-1.5" /> Print Label
+          </Button>
+          <Button variant="outline" size="sm" className="col-span-2 text-emerald-700 hover:bg-emerald-50" onClick={handleRegenerate} disabled={regenerating}>
+            <RefreshCw className={`h-3.5 w-3.5 mr-1.5 ${regenerating ? 'animate-spin' : ''}`} />
+            {regenerating ? 'Regenerating...' : 'Regenerate QR Code'}
+          </Button>
+        </div>
+      )}
+
+      {/* Print Label Dialog */}
+      <Dialog open={labelOpen} onOpenChange={setLabelOpen}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Print Equipment Tag</DialogTitle>
+            <DialogDescription>Generate a printable equipment label with QR code.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div className="bg-gray-50 rounded-lg p-4 text-center">
+              <p className="text-sm font-semibold">{equipment.name}</p>
+              <p className="text-xs text-gray-500 font-mono">{equipment.assetNumber}</p>
+            </div>
+            <p className="text-xs text-gray-500">Click below to open a print-ready label in a new window. The label includes the QR code, equipment details, company info, and emergency contact.</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setLabelOpen(false)}>Cancel</Button>
+            <Button onClick={executePrintLabel} disabled={printing} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+              <Printer className="h-4 w-4 mr-2" />
+              {printing ? 'Opening...' : 'Print Label'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
+
+// ============ SCAN ANALYTICS COMPONENT ============
+
+function ScanAnalytics({ equipmentId }: { equipmentId: string }) {
+  const [analytics, setAnalytics] = useState<{
+    totalScans: number;
+    uniqueScanners: number;
+    recentScans: Array<{ id: string; scannedByName: string | null; device: string | null; browser: string | null; createdAt: string }>;
+    deviceBreakdown: Record<string, number>;
+  } | null>(null);
+  const [period, setPeriod] = useState('last_30_days');
+  const [loading, setLoading] = useState(true);
+
+  const fetchAnalytics = useCallback(() => {
+    fetch(`/api/equipment/qr-analytics?equipmentId=${equipmentId}&period=${period}`, {
+      headers: { Authorization: `Bearer ${token()}` },
+    })
+      .then(r => r.json())
+      .then(d => setAnalytics(d))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [equipmentId, period]);
+
+  useEffect(() => { fetchAnalytics(); }, [fetchAnalytics]);
+
+  if (loading) {
+    return (
+      <div className="space-y-3 py-4">
+        <Skeleton className="h-8 w-full" />
+        <Skeleton className="h-6 w-3/4" />
+        <Skeleton className="h-20 w-full" />
+      </div>
+    );
+  }
+
+  if (!analytics) {
+    return <p className="text-sm text-gray-500 text-center py-6">No scan data available</p>;
+  }
+
+  return (
+    <div className="space-y-4">
+      {/* Period Filter */}
+      <div className="flex gap-2 flex-wrap">
+        {(['last_7_days', 'last_30_days', 'last_90_days', 'last_6_months', 'last_year'] as const).map(p => (
+          <Button key={p} variant={period === p ? 'default' : 'outline'} size="sm"
+            className={period === p ? 'bg-emerald-600 hover:bg-emerald-700 text-white text-xs' : 'text-xs'}
+            onClick={() => setPeriod(p)}>
+            {p.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          </Button>
+        ))}
+      </div>
+
+      {/* Summary Cards */}
+      <div className="grid grid-cols-2 gap-3">
+        <div className="bg-emerald-50 rounded-lg p-3 text-center">
+          <p className="text-2xl font-bold text-emerald-700">{analytics.totalScans}</p>
+          <p className="text-[10px] text-emerald-600 font-medium">Total Scans</p>
+        </div>
+        <div className="bg-blue-50 rounded-lg p-3 text-center">
+          <p className="text-2xl font-bold text-blue-700">{analytics.uniqueScanners}</p>
+          <p className="text-[10px] text-blue-600 font-medium">Unique Scanners</p>
+        </div>
+      </div>
+
+      {/* Device Breakdown */}
+      <div>
+        <p className="text-xs font-semibold text-gray-700 mb-2">Device Breakdown</p>
+        <div className="flex gap-2">
+          {Object.entries(analytics.deviceBreakdown).map(([device, count]) => (
+            <div key={device} className="flex-1 bg-gray-50 rounded-lg p-2 text-center">
+              <p className="text-sm font-bold text-gray-800">{count}</p>
+              <p className="text-[9px] text-gray-500 capitalize">{device}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Recent Scans */}
+      <div>
+        <p className="text-xs font-semibold text-gray-700 mb-2">Recent Scans</p>
+        {analytics.recentScans.length === 0 ? (
+          <p className="text-xs text-gray-400 text-center py-3">No scans recorded</p>
+        ) : (
+          <div className="space-y-1.5 max-h-48 overflow-y-auto custom-scrollbar">
+            {analytics.recentScans.slice(0, 10).map(scan => (
+              <div key={scan.id} className="flex items-center justify-between bg-gray-50 rounded-md px-3 py-2 text-xs">
+                <div className="flex items-center gap-2">
+                  <Scan className="h-3.5 w-3.5 text-gray-400" />
+                  <span className="text-gray-700">{scan.scannedByName || 'Anonymous'}</span>
+                </div>
+                <div className="flex items-center gap-3 text-gray-400">
+                  {scan.device && <span className="capitalize">{scan.device}</span>}
+                  <span>{format(new Date(scan.createdAt), 'dd MMM, HH:mm')}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
