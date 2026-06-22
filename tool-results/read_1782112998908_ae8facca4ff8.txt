@@ -1,0 +1,620 @@
+     1→   200→    await updateStatus('CANCELLED');
+     2→   201→    setShowCancelDialog(false);
+     3→   202→  };
+     4→   203→
+     5→   204→  const handlePrint = () => window.print();
+     6→   205→
+     7→   206→  const handleSendEmail = () => {
+     8→   207→    if (!inv) return;
+     9→   208→    const subject = encodeURIComponent(`Invoice ${inv.invoiceNumber} - ${COMPANY.name}`);
+    10→   209→    const body = encodeURIComponent(
+    11→   210→      `Dear ${inv.customerName},\n\nPlease find attached invoice ${inv.invoiceNumber} for ${inv.title}.\n\nTotal Amount: BND ${fmtBND(inv.total)}\nDue Date: ${fmtDate(inv.dueDate)}\n\nThank you for your business.\n\nBest regards,\n${COMPANY.name}\n${COMPANY.phone}\n${COMPANY.email}`
+    12→   211→    );
+    13→   212→    window.open(`mailto:${inv.customerEmail || ''}?subject=${subject}&body=${body}`);
+    14→   213→  };
+    15→   214→
+    16→   215→  const handleSendWhatsApp = () => {
+    17→   216→    if (!inv) return;
+    18→   217→    const msg = encodeURIComponent(
+    19→   218→      `Dear ${inv.customerName},\n\nInvoice *${inv.invoiceNumber}*\nAmount: *BND ${fmtBND(inv.total)}*\nDue: ${fmtDate(inv.dueDate)}\n\nPlease find the invoice attached. Thank you for your business.\n\n- ${COMPANY.name}`
+    20→   219→    );
+    21→   220→    const phone = (inv.customerPhone || '').replace(/[^0-9]/g, '');
+    22→   221→    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+    23→   222→  };
+    24→   223→
+    25→   224→  const isAdmin = user ? hasMinRole(user.role, 'admin') : false;
+    26→   225→  const isFinance = user?.role === 'finance';
+    27→   226→  const canManage = isAdmin || isFinance;
+    28→   227→
+    29→   228→  // ============ LOADING STATE ============
+    30→   229→  if (loading) {
+    31→   230→    return (
+    32→   231→      <div className="p-4 md:p-6 space-y-4">
+    33→   232→        <Skeleton className="h-8 w-64" />
+    34→   233→        <Skeleton className="h-[800px] w-full rounded-xl" />
+    35→   234→      </div>
+    36→   235→    );
+    37→   236→  }
+    38→   237→
+    39→   238→  if (!inv) {
+    40→   239→    return (
+    41→   240→      <div className="p-6 text-center">
+    42→   241→        <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+    43→   242→        <p className="text-muted-foreground text-lg">Invoice not found</p>
+    44→   243→        <Button variant="outline" className="mt-4" onClick={() => setView('invoices')}>
+    45→   244→          <ArrowLeft className="h-4 w-4 mr-2" /> Back to Invoices
+    46→   245→        </Button>
+    47→   246→      </div>
+    48→   247→    );
+    49→   248→  }
+    50→   249→
+    51→   250→  const statusStyle = STATUS_STYLES[inv.status] || STATUS_STYLES.DRAFT;
+    52→   251→  const currency = inv.currency || 'BND';
+    53→   252→  const currencyLabel = currency === 'BND' ? 'Brunei Dollar' : currency;
+    54→   253→
+    55→   254→  return (
+    56→   255→    <div className="print:p-0">
+    57→   256→      {/* ===== TOP ACTION BAR (hidden on print) ===== */}
+    58→   257→      <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 md:p-6 pb-0 md:pb-0 print:hidden">
+    59→   258→        <Button variant="ghost" size="icon" onClick={() => setView('invoices')}>
+    60→   259→          <ArrowLeft className="h-4 w-4" />
+    61→   260→        </Button>
+    62→   261→        <div className="flex-1 min-w-0">
+    63→   262→          <div className="flex items-center gap-3 flex-wrap">
+    64→   263→            <FileText className="h-5 w-5 text-emerald-600" />
+    65→   264→            <h1 className="text-lg md:text-xl font-bold truncate">
+    66→   265→              Invoice {inv.invoiceNumber}
+    67→   266→            </h1>
+    68→   267→            <Badge variant="outline" className={statusStyle.className}>
+    69→   268→              {statusStyle.label}
+    70→   269→            </Badge>
+    71→   270→          </div>
+    72→   271→        </div>
+    73→   272→        <div className="flex items-center gap-2 flex-wrap">
+    74→   273→          <Button variant="outline" size="sm" onClick={handlePrint}>
+    75→   274→            <Printer className="h-4 w-4 mr-1.5" /> Print
+    76→   275→          </Button>
+    77→   276→          <Button variant="outline" size="sm" onClick={handleSendEmail}>
+    78→   277→            <Mail className="h-4 w-4 mr-1.5" /> Email
+    79→   278→          </Button>
+    80→   279→          <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
+    81→   280→            <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
+    82→   281→          </Button>
+    83→   282→          <DropdownMenu>
+    84→   283→            <DropdownMenuTrigger asChild>
+    85→   284→              <Button variant="outline" size="sm">
+    86→   285→                <MoreVertical className="h-4 w-4" />
+    87→   286→              </Button>
+    88→   287→            </DropdownMenuTrigger>
+    89→   288→            <DropdownMenuContent align="end">
+    90→   289→              <DropdownMenuItem onClick={() => toast.info('PDF download coming soon')}>
+    91→   290→                <Download className="h-4 w-4 mr-2" /> Download PDF
+    92→   291→              </DropdownMenuItem>
+    93→   292→              {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
+    94→   293→                <>
+    95→   294→                  <DropdownMenuItem onClick={() => setShowPaymentDialog(true)} className="text-emerald-700">
+    96→   295→                    <CreditCard className="h-4 w-4 mr-2" /> Record Payment
+    97→   296→                  </DropdownMenuItem>
+    98→   297→                  <DropdownMenuItem onClick={() => setShowCancelDialog(true)} className="text-red-600">
+    99→   298→                    <X className="h-4 w-4 mr-2" /> Cancel Invoice
+   100→   299→                  </DropdownMenuItem>
+   101→   300→                </>
+   102→   301→              )}
+   103→   302→            </DropdownMenuContent>
+   104→   303→          </DropdownMenu>
+   105→   304→        </div>
+   106→   305→      </div>
+   107→   306→
+   108→   307→      {/* ===== INVOICE DOCUMENT (A4 Layout) ===== */}
+   109→   308→      <div className="flex justify-center p-3 md:p-6 print:p-0">
+   110→   309→        <div className="invoice-document bg-white border border-gray-200 rounded-xl shadow-sm print:shadow-none print:rounded-none print:border-0 w-full" style={{ maxWidth: '210mm' }}>
+   111→   310→          <div className="p-5 md:p-8 print:p-6">
+   112→   311→
+   113→   312→            {/* ====== ROW 1: Company Header (Left) + INVOICE Title & Barcode (Right) ====== */}
+   114→   313→            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
+   115→   314→              {/* Left: Company Logo & Info */}
+   116→   315→              <div className="flex-1 min-w-0">
+   117→   316→                <div className="flex items-center gap-3 mb-3">
+   118→   317→                  {/* Green "S" Logo */}
+   119→   318→                  <div className="w-11 h-11 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shrink-0 shadow-sm">
+   120→   319→                    {COMPANY.shortName}
+   121→   320→                  </div>
+   122→   321→                  <div>
+   123→   322→                    <h2 className="font-bold text-sm md:text-[15px] leading-tight text-gray-900">{COMPANY.name}</h2>
+   124→   323→                  </div>
+   125→   324→                </div>
+   126→   325→                <div className="text-[11px] text-gray-500 space-y-1 ml-0 sm:ml-14">
+   127→   326→                  <p className="flex items-start gap-1.5">
+   128→   327→                    <MapPin className="h-3 w-3 mt-0.5 shrink-0 text-gray-400" />
+   129→   328→                    {COMPANY.address}
+   130→   329→                  </p>
+   131→   330→                  <p className="flex items-center gap-1.5">
+   132→   331→                    <Phone className="h-3 w-3 shrink-0 text-gray-400" />
+   133→   332→                    {COMPANY.phone}
+   134→   333→                  </p>
+   135→   334→                  <p className="flex items-center gap-1.5">
+   136→   335→                    <MailIcon className="h-3 w-3 shrink-0 text-gray-400" />
+   137→   336→                    {COMPANY.email}
+   138→   337→                  </p>
+   139→   338→                  <p className="flex items-center gap-1.5">
+   140→   339→                    <Building2 className="h-3 w-3 shrink-0 text-gray-400" />
+   141→   340→                    {COMPANY.website}
+   142→   341→                  </p>
+   143→   342→                </div>
+   144→   343→              </div>
+   145→   344→
+   146→   345→              {/* Right: INVOICE Label + Green Bar with Number + Barcode */}
+   147→   346→              <div className="flex flex-col items-end gap-2 shrink-0">
+   148→   347→                <p className="text-emerald-600 font-bold text-xl tracking-wide">INVOICE</p>
+   149→   348→                {/* Green bar with invoice number in white + barcode */}
+   150→   349→                <div className="flex items-center gap-3">
+   151→   350→                  <div className="bg-emerald-600 rounded-md px-4 py-1.5">
+   152→   351→                    <span className="text-white font-bold text-sm tracking-wide">{inv.invoiceNumber}</span>
+   153→   352→                  </div>
+   154→   353→                  <div className="bg-white p-1">
+   155→   354→                    <svg ref={barcodeRef} className="h-11" />
+   156→   355→                  </div>
+   157→   356→                </div>
+   158→   357→                <p className="text-xs font-medium text-gray-700 font-mono">{inv.invoiceNumber}</p>
+   159→   358→              </div>
+   160→   359→            </div>
+   161→   360→
+   162→   361→            {/* ====== ROW 2: Invoice Details (Left) + Payment Information (Right) ====== */}
+   163→   362→            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+   164→   363→              {/* Left: Invoice Details */}
+   165→   364→              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+   166→   365→                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   167→   366→                  <FileText className="h-3.5 w-3.5 text-emerald-600" />
+   168→   367→                  Invoice Details
+   169→   368→                </h3>
+   170→   369→                <div className="space-y-2 text-xs">
+   171→   370→                  <div className="flex justify-between gap-4">
+   172→   371→                    <span className="text-gray-500 flex items-center gap-1.5">
+   173→   372→                      <Calendar className="h-3 w-3 text-gray-400" /> Invoice Date
+   174→   373→                    </span>
+   175→   374→                    <span className="font-medium text-gray-800">{fmtDate(inv.createdAt)}</span>
+   176→   375→                  </div>
+   177→   376→                  <div className="flex justify-between gap-4">
+   178→   377→                    <span className="text-gray-500 flex items-center gap-1.5">
+   179→   378→                      <Calendar className="h-3 w-3 text-gray-400" /> Due Date
+   180→   379→                    </span>
+   181→   380→                    <span className="font-medium text-gray-800">{fmtDate(inv.dueDate)}</span>
+   182→   381→                  </div>
+   183→   382→                  {inv.referenceNo && (
+   184→   383→                    <div className="flex justify-between gap-4">
+   185→   384→                      <span className="text-gray-500 flex items-center gap-1.5">
+   186→   385→                        <Hash className="h-3 w-3 text-gray-400" /> Reference
+   187→   386→                      </span>
+   188→   387→                      <span className="font-medium text-gray-800">{inv.referenceNo}</span>
+   189→   388→                    </div>
+   190→   389→                  )}
+   191→   390→                  {inv.poReference && (
+   192→   391→                    <div className="flex justify-between gap-4">
+   193→   392→                      <span className="text-gray-500 flex items-center gap-1.5">
+   194→   393→                        <Hash className="h-3 w-3 text-gray-400" /> PO / Ref No.
+   195→   394→                      </span>
+   196→   395→                      <span className="font-medium text-gray-800">{inv.poReference}</span>
+   197→   396→                    </div>
+   198→   397→                  )}
+   199→   398→                  <div className="flex justify-between gap-4">
+   200→   399→                    <span className="text-gray-500 flex items-center gap-1.5">
+   201→   400→                      <Calendar className="h-3 w-3 text-gray-400" /> Payment Terms
+   202→   401→                    </span>
+   203→   402→                    <span className="font-medium text-gray-800">{inv.paymentTerms || '30 Days'}</span>
+   204→   403→                  </div>
+   205→   404→                  <div className="flex justify-between gap-4">
+   206→   405→                    <span className="text-gray-500 flex items-center gap-1.5">
+   207→   406→                      <Landmark className="h-3 w-3 text-gray-400" /> Currency
+   208→   407→                    </span>
+   209→   408→                    <span className="font-medium text-gray-800">{currency} - {currencyLabel}</span>
+   210→   409→                  </div>
+   211→   410→                  {(inv.preparedByName || inv.creatorName) && (
+   212→   411→                    <div className="flex justify-between gap-4">
+   213→   412→                      <span className="text-gray-500 flex items-center gap-1.5">
+   214→   413→                        <User className="h-3 w-3 text-gray-400" /> Prepared By
+   215→   414→                      </span>
+   216→   415→                      <span className="font-medium text-gray-800">{inv.preparedByName || inv.creatorName}</span>
+   217→   416→                    </div>
+   218→   417→                  )}
+   219→   418→                </div>
+   220→   419→              </div>
+   221→   420→
+   222→   421→              {/* Right: Payment Information */}
+   223→   422→              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+   224→   423→                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   225→   424→                  <CreditCard className="h-3.5 w-3.5 text-emerald-600" />
+   226→   425→                  Payment Information
+   227→   426→                </h3>
+   228→   427→                <div className="space-y-2 text-xs">
+   229→   428→                  <div className="flex justify-between gap-4">
+   230→   429→                    <span className="text-gray-500">Bank Name</span>
+   231→   430→                    <span className="font-medium text-gray-800">{inv.bankName || 'BAIDURI BANK'}</span>
+   232→   431→                  </div>
+   233→   432→                  <div className="flex justify-between gap-4">
+   234→   433→                    <span className="text-gray-500">Account Name</span>
+   235→   434→                    <span className="font-medium text-gray-800 text-right max-w-[60%]">{inv.bankAccountName || COMPANY.name}</span>
+   236→   435→                  </div>
+   237→   436→                  <div className="flex justify-between gap-4">
+   238→   437→                    <span className="text-gray-500">Account No.</span>
+   239→   438→                    <span className="font-medium text-gray-800 font-mono">{inv.bankAccountNo || '00-12345-678901-2'}</span>
+   240→   439→                  </div>
+   241→   440→                  <div className="flex justify-between gap-4">
+   242→   441→                    <span className="text-gray-500">Payment Method</span>
+   243→   442→                    <span className="font-medium text-gray-800">{inv.paymentMethod || 'Bank Transfer'}</span>
+   244→   443→                  </div>
+   245→   444→                  <div className="flex justify-between gap-4">
+   246→   445→                    <span className="text-gray-500">Payment Status</span>
+   247→   446→                    <span className={`font-bold ${inv.status === 'PAID' ? 'text-emerald-600' : inv.status === 'CANCELLED' ? 'text-red-600' : 'text-amber-600'}`}>
+   248→   447→                      {inv.status === 'PAID' ? 'Paid' : inv.status === 'CANCELLED' ? 'Cancelled' : 'Unpaid'}
+   249→   448→                    </span>
+   250→   449→                  </div>
+   251→   450→                  {inv.paidAt && (
+   252→   451→                    <div className="flex justify-between gap-4">
+   253→   452→                      <span className="text-gray-500">Paid On</span>
+   254→   453→                      <span className="font-medium text-gray-800">{fmtDate(inv.paidAt)}</span>
+   255→   454→                    </div>
+   256→   455→                  )}
+   257→   456→                  {inv.transactionId && (
+   258→   457→                    <div className="flex justify-between gap-4">
+   259→   458→                      <span className="text-gray-500">Transaction ID</span>
+   260→   459→                      <span className="font-medium text-gray-800 font-mono text-[10px]">{inv.transactionId}</span>
+   261→   460→                    </div>
+   262→   461→                  )}
+   263→   462→                </div>
+   264→   463→              </div>
+   265→   464→            </div>
+   266→   465→
+   267→   466→            {/* ====== ROW 3: Bill To (Left) + Ship To (Right) ====== */}
+   268→   467→            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+   269→   468→              {/* Bill To */}
+   270→   469→              <div className="bg-blue-50/40 rounded-lg p-4 border border-blue-100">
+   271→   470→                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   272→   471→                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
+   273→   472→                  Bill To
+   274→   473→                </h3>
+   275→   474→                <p className="font-bold text-sm text-gray-900 mb-1">
+   276→   475→                  {(inv.customerCompany || inv.customerName || '').toUpperCase()}
+   277→   476→                </p>
+   278→   477→                {inv.customerAddress && (
+   279→   478→                  <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">{inv.customerAddress}</p>
+   280→   479→                )}
+   281→   480→                <div className="space-y-1">
+   282→   481→                  {inv.customerPhone && (
+   283→   482→                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+   284→   483→                      <Phone className="h-3 w-3 text-gray-400" /> {inv.customerPhone}
+   285→   484→                    </p>
+   286→   485→                  )}
+   287→   486→                  {inv.customerEmail && (
+   288→   487→                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+   289→   488→                      <MailIcon className="h-3 w-3 text-gray-400" /> {inv.customerEmail}
+   290→   489→                    </p>
+   291→   490→                  )}
+   292→   491→                  {inv.customerPic && (
+   293→   492→                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+   294→   493→                      <User className="h-3 w-3 text-gray-400" /> {inv.customerPic} (PIC)
+   295→   494→                    </p>
+   296→   495→                  )}
+   297→   496→                </div>
+   298→   497→              </div>
+   299→   498→
+   300→   499→              {/* Ship To */}
+   301→   500→              <div className="bg-blue-50/40 rounded-lg p-4 border border-blue-100">
+   302→   501→                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   303→   502→                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
+   304→   503→                  Ship To
+   305→   504→                </h3>
+   306→   505→                {inv.shipToName ? (
+   307→   506→                  <>
+   308→   507→                    <p className="font-bold text-sm text-gray-900 mb-1">{inv.shipToName.toUpperCase()}</p>
+   309→   508→                    {inv.shipToAddress && (
+   310→   509→                      <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">{inv.shipToAddress}</p>
+   311→   510→                    )}
+   312→   511→                    <div className="space-y-1">
+   313→   512→                      {inv.shipToPhone && (
+   314→   513→                        <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+   315→   514→                          <Phone className="h-3 w-3 text-gray-400" /> {inv.shipToPhone}
+   316→   515→                        </p>
+   317→   516→                      )}
+   318→   517→                      {inv.shipToContact && (
+   319→   518→                        <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+   320→   519→                          <User className="h-3 w-3 text-gray-400" /> {inv.shipToContact}
+   321→   520→                        </p>
+   322→   521→                      )}
+   323→   522→                    </div>
+   324→   523→                  </>
+   325→   524→                ) : (
+   326→   525→                  <>
+   327→   526→                    <p className="font-bold text-sm text-gray-900 mb-1">
+   328→   527→                      {(inv.customerCompany || inv.customerName || '').toUpperCase()}
+   329→   528→                    </p>
+   330→   529→                    {inv.customerAddress && (
+   331→   530→                      <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">{inv.customerAddress}</p>
+   332→   531→                    )}
+   333→   532→                    <div className="space-y-1">
+   334→   533→                      {inv.customerPhone && (
+   335→   534→                        <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+   336→   535→                          <Phone className="h-3 w-3 text-gray-400" /> {inv.customerPhone}
+   337→   536→                        </p>
+   338→   537→                      )}
+   339→   538→                      {inv.customerPic && (
+   340→   539→                        <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+   341→   540→                          <User className="h-3 w-3 text-gray-400" /> {inv.customerPic}
+   342→   541→                        </p>
+   343→   542→                      )}
+   344→   543→                    </div>
+   345→   544→                  </>
+   346→   545→                )}
+   347→   546→              </div>
+   348→   547→            </div>
+   349→   548→
+   350→   549→            {/* ====== ROW 4: Line Items Table + Summary (side by side on desktop) ====== */}
+   351→   550→            <div className="mb-6">
+   352→   551→              <div className="flex flex-col lg:flex-row gap-4">
+   353→   552→                {/* Table */}
+   354→   553→                <div className="flex-1 min-w-0 overflow-x-auto">
+   355→   554→                  <table className="w-full text-xs border-collapse">
+   356→   555→                    <thead>
+   357→   556→                      <tr className="bg-emerald-600 text-white">
+   358→   557→                        <th className="text-center font-semibold py-2.5 px-2 w-10 rounded-tl-md">SL</th>
+   359→   558→                        <th className="text-left font-semibold py-2.5 px-2">Item Title</th>
+   360→   559→                        <th className="text-left font-semibold py-2.5 px-2">Description</th>
+   361→   560→                        <th className="text-center font-semibold py-2.5 px-2 w-14">Unit</th>
+   362→   561→                        <th className="text-center font-semibold py-2.5 px-2 w-12">Qty</th>
+   363→   562→                        <th className="text-right font-semibold py-2.5 px-2 w-22">Rate ({currency})</th>
+   364→   563→                        <th className="text-right font-semibold py-2.5 px-2 w-24 rounded-tr-md">Amount ({currency})</th>
+   365→   564→                      </tr>
+   366→   565→                    </thead>
+   367→   566→                    <tbody>
+   368→   567→                      {lineItems.length === 0 ? (
+   369→   568→                        <tr>
+   370→   569→                          <td colSpan={7} className="text-center py-10 text-gray-400 text-sm">
+   371→   570→                            No line items
+   372→   571→                          </td>
+   373→   572→                        </tr>
+   374→   573→                      ) : (
+   375→   574→                        lineItems.map((item, i) => (
+   376→   575→                          <tr
+   377→   576→                            key={i}
+   378→   577→                            className={`border-b border-gray-100 ${i % 2 === 1 ? 'bg-gray-50/50' : ''} hover:bg-emerald-50/30 transition-colors`}
+   379→   578→                          >
+   380→   579→                            <td className="text-center py-3 px-2 text-gray-600 font-medium">{i + 1}</td>
+   381→   580→                            <td className="py-3 px-2">
+   382→   581→                              <p className="font-semibold text-gray-800 text-xs">{item.title}</p>
+   383→   582→                            </td>
+   384→   583→                            <td className="py-3 px-2">
+   385→   584→                              <p className="text-gray-500 text-[11px] leading-relaxed">{item.description || '—'}</p>
+   386→   585→                            </td>
+   387→   586→                            <td className="text-center py-3 px-2 text-gray-600">{item.unit || 'Nos'}</td>
+   388→   587→                            <td className="text-center py-3 px-2 text-gray-600">{item.quantity}</td>
+   389→   588→                            <td className="text-right py-3 px-2 text-gray-700">{fmtBND(item.rate)}</td>
+   390→   589→                            <td className="text-right py-3 px-2 font-semibold text-gray-800">{fmtBND(item.amount)}</td>
+   391→   590→                          </tr>
+   392→   591→                        ))
+   393→   592→                      )}
+   394→   593→                    </tbody>
+   395→   594→                  </table>
+   396→   595→                </div>
+   397→   596→
+   398→   597→                {/* Summary Panel (right side, inline) */}
+   399→   598→                <div className="lg:w-72 shrink-0">
+   400→   599→                  <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 space-y-2.5">
+   401→   600→                    <div className="flex justify-between text-xs">
+   402→   601→                      <span className="text-gray-500">Subtotal</span>
+   403→   602→                      <span className="text-gray-800 font-medium">{currency} {fmtBND(inv.subtotal)}</span>
+   404→   603→                    </div>
+   405→   604→                    <div className="flex justify-between text-xs">
+   406→   605→                      <span className="text-gray-500">Discount</span>
+   407→   606→                      <span className="text-gray-800 font-medium">{currency} {fmtBND(inv.discount)}</span>
+   408→   607→                    </div>
+   409→   608→                    <div className="flex justify-between text-xs">
+   410→   609→                      <span className="text-gray-500">Tax ({inv.taxRate || 0}%)</span>
+   411→   610→                      <span className="text-gray-800 font-medium">{currency} {fmtBND(inv.tax)}</span>
+   412→   611→                    </div>
+   413→   612→                    <div className="flex justify-between text-xs">
+   414→   613→                      <span className="text-gray-500">Shipping</span>
+   415→   614→                      <span className="text-gray-800 font-medium">{currency} {fmtBND(inv.shipping)}</span>
+   416→   615→                    </div>
+   417→   616→                    {/* Divider */}
+   418→   617→                    <div className="border-t border-gray-300 pt-2.5">
+   419→   618→                      <div className="flex justify-between items-center">
+   420→   619→                        <span className="text-sm font-bold text-gray-900">GRAND TOTAL</span>
+   421→   620→                        <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(inv.total)}</span>
+   422→   621→                      </div>
+   423→   622→                    </div>
+   424→   623→                    {/* Amount in Words */}
+   425→   624→                    <div className="bg-emerald-50 rounded-md p-2.5 mt-1 border border-emerald-100">
+   426→   625→                      <p className="text-[9px] text-emerald-600 font-semibold uppercase tracking-wider mb-0.5">Amount In Words</p>
+   427→   626→                      <p className="text-[11px] text-emerald-800 italic font-medium leading-relaxed">
+   428→   627→                        {numberToCurrencyWords(inv.total)}
+   429→   628→                      </p>
+   430→   629→                    </div>
+   431→   630→                  </div>
+   432→   631→                </div>
+   433→   632→              </div>
+   434→   633→            </div>
+   435→   634→
+   436→   635→            {/* ====== ROW 5: Terms & Conditions ====== */}
+   437→   636→            <div className="mb-6">
+   438→   637→              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   439→   638→                <FileText className="h-3.5 w-3.5 text-emerald-600" />
+   440→   639→                Terms & Conditions
+   441→   640→              </h3>
+   442→   641→              <ol className="text-[11px] text-gray-500 space-y-1.5 list-decimal list-inside leading-relaxed">
+   443→   642→                {terms.map((term, i) => (
+   444→   643→                  <li key={i}>{term}</li>
+   445→   644→                ))}
+   446→   645→              </ol>
+   447→   646→            </div>
+   448→   647→
+   449→   648→            {/* ====== ROW 6: Footer — Signature, Stamp, Attachment, QR, Thank You ====== */}
+   450→   649→            <div className="border-t border-gray-200 pt-6">
+   451→   650→              <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6">
+   452→   651→                {/* Left: Authorised Signature + Stamp */}
+   453→   652→                <div className="flex items-end gap-5">
+   454→   653→                  <div>
+   455→   654→                    <p className="text-xs font-medium text-gray-800 mb-1">
+   456→   655→                      {inv.preparedByName || inv.creatorName || '—'}
+   457→   656→                    </p>
+   458→   657→                    <p className="text-[10px] text-gray-400 mb-2">Authorised Signature</p>
+   459→   658→                    <p className="text-[10px] text-gray-400">Managing Director</p>
+   460→   659→                    {/* Signature line */}
+   461→   660→                    <div className="w-40 border-b border-gray-300 mt-1" />
+   462→   661→                  </div>
+   463→   662→                  {/* Company Stamp */}
+   464→   663→                  <div className="w-16 h-16 border-2 border-emerald-600 rounded-full flex items-center justify-center shrink-0 opacity-80">
+   465→   664→                    <div className="text-center">
+   466→   665→                      <span className="text-emerald-600 font-bold text-base leading-none block">{COMPANY.shortName}</span>
+   467→   666→                      <span className="text-emerald-600 text-[7px] leading-none block mt-0.5">{COMPANY.regNo}</span>
+   468→   667→                    </div>
+   469→   668→                  </div>
+   470→   669→                </div>
+   471→   670→
+   472→   671→                {/* Center: Attachment (if quotation linked) */}
+   473→   672→                {inv.referenceNo && (
+   474→   673→                  <div className="text-xs text-gray-500">
+   475→   674→                    <div className="flex items-center gap-1.5 mb-1">
+   476→   675→                      <FileText className="h-3.5 w-3.5 text-gray-400" />
+   477→   676→                      <span className="font-medium text-gray-600">Attachment</span>
+   478→   677→                    </div>
+   479→   678→                    <p className="text-[11px] text-gray-500">Quotation_{inv.referenceNo.replace(/\//g, '-')}.pdf</p>
+   480→   679→                  </div>
+   481→   680→                )}
+   482→   681→
+   483→   682→                {/* Right: QR Code + Thank You */}
+   484→   683→                <div className="flex items-end gap-4">
+   485→   684→                  <div className="text-center">
+   486→   685→                    <div className="w-16 h-16 mx-auto">
+   487→   686→                      <QRCodeSVG
+   488→   687→                        value={`https://smartms.com/invoice/${inv.invoiceNumber}`}
+   489→   688→                        size={64}
+   490→   689→                        level="M"
+   491→   690→                        includeMargin={false}
+   492→   691→                      />
+   493→   692→                    </div>
+   494→   693→                    <p className="text-[8px] text-gray-400 mt-1">Scan to Verify</p>
+   495→   694→                  </div>
+   496→   695→                  <div>
+   497→   696→                    <p className="text-emerald-600 font-semibold text-lg italic">Thank You!</p>
+   498→   697→                    <div className="text-[10px] text-gray-400 space-y-0.5 mt-1">
+   499→   698→                      <p className="flex items-center gap-1"><Phone className="h-2.5 w-2.5" /> {COMPANY.phone}</p>
+   500→   699→                      <p className="flex items-center gap-1"><MailIcon className="h-2.5 w-2.5" /> {COMPANY.email}</p>
+   501→   700→                      <p className="flex items-center gap-1"><Building2 className="h-2.5 w-2.5" /> {COMPANY.website}</p>
+   502→   701→                    </div>
+   503→   702→                  </div>
+   504→   703→                </div>
+   505→   704→              </div>
+   506→   705→
+   507→   706→              {/* Page indicator */}
+   508→   707→              <div className="text-center mt-6">
+   509→   708→                <p className="text-[10px] text-gray-300">Page 1 of 1</p>
+   510→   709→              </div>
+   511→   710→            </div>
+   512→   711→
+   513→   712→          </div>
+   514→   713→        </div>
+   515→   714→      </div>
+   516→   715→
+   517→   716→      {/* ===== MOBILE ACTION BAR (hidden on print) ===== */}
+   518→   717→      <div className="lg:hidden px-3 md:px-6 pb-4 print:hidden space-y-3">
+   519→   718→        {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
+   520→   719→          <Button
+   521→   720→            onClick={() => setShowPaymentDialog(true)}
+   522→   721→            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+   523→   722→          >
+   524→   723→            <CreditCard className="h-4 w-4 mr-2" /> Record Payment
+   525→   724→          </Button>
+   526→   725→        )}
+   527→   726→      </div>
+   528→   727→
+   529→   728→      {/* ===== PAYMENT DIALOG ===== */}
+   530→   729→      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+   531→   730→        <DialogContent className="sm:max-w-md">
+   532→   731→          <DialogHeader>
+   533→   732→            <DialogTitle>Record Payment</DialogTitle>
+   534→   733→            <DialogDescription>Mark this invoice as paid and record payment details.</DialogDescription>
+   535→   734→          </DialogHeader>
+   536→   735→          <div className="space-y-4 py-2">
+   537→   736→            <div className="bg-emerald-50 rounded-lg p-4 text-center">
+   538→   737→              <p className="text-xs text-gray-500 mb-1">Amount Due</p>
+   539→   738→              <p className="text-2xl font-bold text-emerald-700">
+   540→   739→                {currency} {fmtBND(inv.total)}
+   541→   740→              </p>
+   542→   741→            </div>
+   543→   742→            <div>
+   544→   743→              <Label className="text-xs">Payment Method</Label>
+   545→   744→              <select
+   546→   745→                className="w-full mt-1 h-9 rounded-md border border-gray-300 px-3 text-sm bg-white"
+   547→   746→                value={paymentForm.method}
+   548→   747→                onChange={(e) => setPaymentForm({ ...paymentForm, method: e.target.value })}
+   549→   748→              >
+   550→   749→                <option>Bank Transfer</option>
+   551→   750→                <option>Cheque</option>
+   552→   751→                <option>Cash</option>
+   553→   752→                <option>Online Payment</option>
+   554→   753→                <option>Other</option>
+   555→   754→              </select>
+   556→   755→            </div>
+   557→   756→            <div>
+   558→   757→              <Label className="text-xs">Payment Reference</Label>
+   559→   758→              <Input
+   560→   759→                placeholder="e.g. Receipt number"
+   561→   760→                value={paymentForm.ref}
+   562→   761→                onChange={(e) => setPaymentForm({ ...paymentForm, ref: e.target.value })}
+   563→   762→                className="mt-1"
+   564→   763→              />
+   565→   764→            </div>
+   566→   765→            <div>
+   567→   766→              <Label className="text-xs">Transaction ID</Label>
+   568→   767→              <Input
+   569→   768→                placeholder="e.g. TRX202606200123"
+   570→   769→                value={paymentForm.transactionId}
+   571→   770→                onChange={(e) => setPaymentForm({ ...paymentForm, transactionId: e.target.value })}
+   572→   771→                className="mt-1"
+   573→   772→              />
+   574→   773→            </div>
+   575→   774→          </div>
+   576→   775→          <DialogFooter>
+   577→   776→            <Button variant="outline" onClick={() => setShowPaymentDialog(false)}>Cancel</Button>
+   578→   777→            <Button
+   579→   778→              onClick={handleRecordPayment}
+   580→   779→              disabled={actionLoading}
+   581→   780→              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   582→   781→            >
+   583→   782→              {actionLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
+   584→   783→              Confirm Payment
+   585→   784→            </Button>
+   586→   785→          </DialogFooter>
+   587→   786→        </DialogContent>
+   588→   787→      </Dialog>
+   589→   788→
+   590→   789→      {/* ===== CANCEL DIALOG ===== */}
+   591→   790→      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+   592→   791→        <DialogContent className="sm:max-w-sm">
+   593→   792→          <DialogHeader>
+   594→   793→            <DialogTitle>Cancel Invoice</DialogTitle>
+   595→   794→            <DialogDescription>
+   596→   795→              Are you sure you want to cancel invoice {inv.invoiceNumber}? This action cannot be undone.
+   597→   796→            </DialogDescription>
+   598→   797→          </DialogHeader>
+   599→   798→          <div className="py-2">
+   600→   799→            <Label className="text-xs">Reason (optional)</Label>
+   601→   800→            <Textarea
+   602→   801→              placeholder="Reason for cancellation..."
+   603→   802→              value={cancelReason}
+   604→   803→              onChange={(e) => setCancelReason(e.target.value)}
+   605→   804→              className="mt-1"
+   606→   805→              rows={3}
+   607→   806→            />
+   608→   807→          </div>
+   609→   808→          <DialogFooter>
+   610→   809→            <Button variant="outline" onClick={() => setShowCancelDialog(false)}>Keep Invoice</Button>
+   611→   810→            <Button variant="destructive" onClick={handleCancel} disabled={actionLoading}>
+   612→   811→              {actionLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+   613→   812→              Cancel Invoice
+   614→   813→            </Button>
+   615→   814→          </DialogFooter>
+   616→   815→        </DialogContent>
+   617→   816→      </Dialog>
+   618→   817→    </div>
+   619→   818→  );
+   620→   819→}

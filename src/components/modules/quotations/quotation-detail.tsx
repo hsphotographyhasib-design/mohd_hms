@@ -159,6 +159,9 @@ interface QuotationData {
   notes?: string;
   createdAt: string;
   updatedAt: string;
+  warranty?: string;
+  deliveryPeriod?: string;
+  salesPerson?: string;
 }
 
 export function QuotationDetail({ quotationId }: { quotationId?: string }) {
@@ -372,6 +375,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
               {/* Left: Company Logo & Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-3">
+                  {/* Green "S" Logo */}
                   <div className="w-11 h-11 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shrink-0 shadow-sm">
                     {COMPANY.shortName}
                   </div>
@@ -402,6 +406,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
               {/* Right: QUOTATION Label + Green Bar with Number + Barcode */}
               <div className="flex flex-col items-end gap-2 shrink-0">
                 <p className="text-emerald-600 font-bold text-xl tracking-wide">QUOTATION</p>
+                {/* Green bar with quotation number in white + barcode */}
                 <div className="flex items-center gap-3">
                   <div className="bg-emerald-600 rounded-md px-4 py-1.5">
                     <span className="text-white font-bold text-sm tracking-wide">{barcodeValue}</span>
@@ -414,106 +419,13 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
               </div>
             </div>
 
-            {/* ====== ROW 2: Quotation Details (Left) + Project / Site Info (Right) ====== */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-              {/* Left: Quotation Details */}
+            {/* ====== ROW 2: Three-Column — Quotation To | Site / Delivery To | Other Information ====== */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+              {/* Column 1: Quotation To */}
               <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
                 <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <FileText className="h-3.5 w-3.5 text-emerald-600" />
-                  Quotation Details
-                </h3>
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between gap-4">
-                    <span className="text-gray-500 flex items-center gap-1.5">
-                      <Calendar className="h-3 w-3 text-gray-400" /> Quotation Date
-                    </span>
-                    <span className="font-medium text-gray-800">{fmtDate(qt.createdAt)}</span>
-                  </div>
-                  <div className="flex justify-between gap-4">
-                    <span className="text-gray-500 flex items-center gap-1.5">
-                      <Calendar className="h-3 w-3 text-gray-400" /> Valid Until
-                    </span>
-                    <span className="font-medium text-gray-800">{fmtDate(qt.validUntil)}</span>
-                  </div>
-                  {qt.referenceNo && (
-                    <div className="flex justify-between gap-4">
-                      <span className="text-gray-500 flex items-center gap-1.5">
-                        <Hash className="h-3 w-3 text-gray-400" /> Reference
-                      </span>
-                      <span className="font-medium text-gray-800">{qt.referenceNo}</span>
-                    </div>
-                  )}
-                  {qt.projectName && (
-                    <div className="flex justify-between gap-4">
-                      <span className="text-gray-500 flex items-center gap-1.5">
-                        <Building2 className="h-3 w-3 text-gray-400" /> Project
-                      </span>
-                      <span className="font-medium text-gray-800">{qt.projectName}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between gap-4">
-                    <span className="text-gray-500 flex items-center gap-1.5">
-                      <Landmark className="h-3 w-3 text-gray-400" /> Currency
-                    </span>
-                    <span className="font-medium text-gray-800">{currency} - {currencyLabel}</span>
-                  </div>
-                  {qt.preparedByName && (
-                    <div className="flex justify-between gap-4">
-                      <span className="text-gray-500 flex items-center gap-1.5">
-                        <User className="h-3 w-3 text-gray-400" /> Prepared By
-                      </span>
-                      <span className="font-medium text-gray-800">{qt.preparedByName}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Right: Status & Timeline */}
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
-                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                  Status & Timeline
-                </h3>
-                <div className="space-y-2 text-xs">
-                  <div className="flex justify-between gap-4">
-                    <span className="text-gray-500">Current Status</span>
-                    <Badge variant="outline" className={STATUS_CONFIG[qt.status]?.className || ''}>
-                      {STATUS_CONFIG[qt.status]?.label || qt.status}
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between gap-4">
-                    <span className="text-gray-500">Created</span>
-                    <span className="font-medium text-gray-800">{fmtDate(qt.createdAt)}</span>
-                  </div>
-                  {qt.validUntil && (
-                    <div className="flex justify-between gap-4">
-                      <span className="text-gray-500">Valid Until</span>
-                      <span className="font-medium text-gray-800">{fmtDate(qt.validUntil)}</span>
-                    </div>
-                  )}
-                  {qt.sentAt && (
-                    <div className="flex justify-between gap-4">
-                      <span className="text-gray-500">Sent On</span>
-                      <span className="font-medium text-gray-800">{fmtDate(qt.sentAt)}</span>
-                    </div>
-                  )}
-                  {qt.acceptedAt && (
-                    <div className="flex justify-between gap-4">
-                      <span className="text-gray-500">Accepted On</span>
-                      <span className="font-medium text-gray-800">{fmtDate(qt.acceptedAt)}</span>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* ====== ROW 3: Bill To (Left) + Site (Right) ====== */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
-              {/* Bill To */}
-              <div className="bg-blue-50/40 rounded-lg p-4 border border-blue-100">
-                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
-                  Bill To
+                  <User className="h-3.5 w-3.5 text-emerald-600" />
+                  Quotation To
                 </h3>
                 <p className="font-bold text-sm text-gray-900 mb-1">
                   {(qt.customer?.companyName || qt.customer?.name || '').toUpperCase()}
@@ -540,11 +452,11 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
                 </div>
               </div>
 
-              {/* Site Info */}
-              <div className="bg-blue-50/40 rounded-lg p-4 border border-blue-100">
+              {/* Column 2: Site / Delivery To */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
                 <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                   <MapPin className="h-3.5 w-3.5 text-emerald-600" />
-                  Site / Ship To
+                  Site / Delivery To
                 </h3>
                 {qt.site ? (
                   <p className="text-[11px] text-gray-700 leading-relaxed">{qt.site}</p>
@@ -558,10 +470,82 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
                     )}
                   </>
                 )}
+                {qt.projectName && (
+                  <div className="mt-2 pt-2 border-t border-gray-200">
+                    <p className="text-[10px] text-gray-400 uppercase tracking-wider">Project</p>
+                    <p className="text-[11px] text-gray-700 font-medium">{qt.projectName}</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Column 3: Other Information */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5 text-emerald-600" />
+                  Other Information
+                </h3>
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Calendar className="h-3 w-3 text-gray-400" /> Qt. Date
+                    </span>
+                    <span className="font-medium text-gray-800">{fmtDate(qt.createdAt)}</span>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Calendar className="h-3 w-3 text-gray-400" /> Valid Until
+                    </span>
+                    <span className="font-medium text-gray-800">{fmtDate(qt.validUntil)}</span>
+                  </div>
+                  {qt.referenceNo && (
+                    <div className="flex justify-between gap-3">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <Hash className="h-3 w-3 text-gray-400" /> Reference
+                      </span>
+                      <span className="font-medium text-gray-800 text-right">{qt.referenceNo}</span>
+                    </div>
+                  )}
+                  {(qt.salesPerson || qt.preparedByName) && (
+                    <div className="flex justify-between gap-3">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <User className="h-3 w-3 text-gray-400" /> Sales Person
+                      </span>
+                      <span className="font-medium text-gray-800">{qt.salesPerson || qt.preparedByName}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Landmark className="h-3 w-3 text-gray-400" /> Currency
+                    </span>
+                    <span className="font-medium text-gray-800">{currency}</span>
+                  </div>
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500">Tax Rate</span>
+                    <span className="font-medium text-gray-800">{qt.taxRate || 0}%</span>
+                  </div>
+                  {qt.deliveryPeriod && (
+                    <div className="flex justify-between gap-3">
+                      <span className="text-gray-500">Delivery</span>
+                      <span className="font-medium text-gray-800">{qt.deliveryPeriod}</span>
+                    </div>
+                  )}
+                  {qt.warranty && (
+                    <div className="flex justify-between gap-3">
+                      <span className="text-gray-500">Warranty</span>
+                      <span className="font-medium text-gray-800">{qt.warranty}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-500">Status</span>
+                    <Badge variant="outline" className={`${STATUS_CONFIG[qt.status]?.className || ''} text-[10px] px-1.5 py-0`}>
+                      {STATUS_CONFIG[qt.status]?.label || qt.status}
+                    </Badge>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* ====== ROW 4: Line Items Table + Summary (side by side on desktop) ====== */}
+            {/* ====== ROW 3: Line Items Table + Summary (side by side on desktop) ====== */}
             <div className="mb-6">
               <div className="flex flex-col lg:flex-row gap-4">
                 {/* Table */}
@@ -628,12 +612,14 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
                       <span className="text-gray-500">Shipping</span>
                       <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.shipping)}</span>
                     </div>
+                    {/* Divider */}
                     <div className="border-t border-gray-300 pt-2.5">
                       <div className="flex justify-between items-center">
                         <span className="text-sm font-bold text-gray-900">GRAND TOTAL</span>
                         <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(qt.total)}</span>
                       </div>
                     </div>
+                    {/* Amount in Words */}
                     <div className="bg-emerald-50 rounded-md p-2.5 mt-1 border border-emerald-100">
                       <p className="text-[9px] text-emerald-600 font-semibold uppercase tracking-wider mb-0.5">Amount In Words</p>
                       <p className="text-[11px] text-emerald-800 italic font-medium leading-relaxed">
@@ -645,7 +631,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
               </div>
             </div>
 
-            {/* ====== ROW 5: Terms & Conditions ====== */}
+            {/* ====== ROW 4: Terms & Conditions ====== */}
             <div className="mb-6">
               <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                 <FileText className="h-3.5 w-3.5 text-emerald-600" />
@@ -658,17 +644,30 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
               </ol>
             </div>
 
-            {/* ====== ROW 6: Footer — Signature, Stamp, Notes, QR, Thank You ====== */}
+            {/* ====== ROW 5: Footer — Notes, Prepared By, Stamp, QR, Thank You ====== */}
             <div className="border-t border-gray-200 pt-6">
+              {/* Notes Section */}
+              <div className="mb-6">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5 text-emerald-600" />
+                  Notes
+                </h3>
+                <p className="text-[11px] text-gray-500 leading-relaxed">
+                  {qt.notes || 'Thank you for considering Smart Maintenance Services. We look forward to working with you.'}
+                </p>
+              </div>
+
+              {/* Prepared By + Stamp + QR Row */}
               <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6">
-                {/* Left: Authorised Signature + Stamp */}
+                {/* Left: Prepared By + Company Stamp */}
                 <div className="flex items-end gap-5">
                   <div>
                     <p className="text-xs font-medium text-gray-800 mb-1">
-                      {qt.preparedByName || '—'}
+                      {qt.preparedByName || qt.salesPerson || '—'}
                     </p>
-                    <p className="text-[10px] text-gray-400 mb-2">Authorised Signature</p>
-                    <p className="text-[10px] text-gray-400">Managing Director</p>
+                    <p className="text-[10px] text-gray-400 mb-2">Prepared By</p>
+                    <p className="text-[10px] text-gray-400">Sales Executive</p>
+                    {/* Signature line */}
                     <div className="w-40 border-b border-gray-300 mt-1" />
                   </div>
                   {/* Company Stamp */}
@@ -680,17 +679,15 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
                   </div>
                 </div>
 
-                {/* Center: Notes */}
-                <div className="text-xs text-gray-500 max-w-xs">
-                  <p className="font-medium text-gray-600 mb-1">Notes</p>
-                  <p className="text-[11px] leading-relaxed">
-                    {qt.notes || 'Thank you for choosing Smart Maintenance Services. We look forward to working with you.'}
-                  </p>
+                {/* Center: Disclaimer */}
+                <div className="text-[10px] text-gray-400 italic text-center max-w-xs">
+                  This is a computer generated quotation. No signature is required.
                 </div>
 
-                {/* Right: QR Code + Thank You */}
+                {/* Right: SCAN TO VIEW + QR Code + Thank You */}
                 <div className="flex items-end gap-4">
                   <div className="text-center">
+                    <p className="text-[8px] text-gray-500 font-semibold uppercase tracking-wider mb-1.5">SCAN TO VIEW</p>
                     <div className="w-16 h-16 mx-auto">
                       <QRCodeSVG
                         value={`https://smartms.com/quotation/${qt.quotationNo || qt.id}`}
@@ -699,7 +696,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
                         includeMargin={false}
                       />
                     </div>
-                    <p className="text-[8px] text-gray-400 mt-1">Scan to Verify</p>
+                    <p className="text-[7px] text-gray-400 mt-1 max-w-[64px] leading-tight">Scan this QR code to view this quotation online.</p>
                   </div>
                   <div>
                     <p className="text-emerald-600 font-semibold text-lg italic">Thank You!</p>

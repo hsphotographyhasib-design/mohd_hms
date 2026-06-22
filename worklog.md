@@ -89,3 +89,25 @@ Stage Summary:
 - Scan logging with device/browser/IP tracking and rate limiting
 - VLM verification scored the public page 8/10
 - All existing functionality (complaints, work orders, PM) integrated with QR system
+---
+Task ID: 1
+Agent: Main Agent
+Task: Rewrite quotation-detail.tsx to match PRINTED QUOTATION.png template
+
+Work Log:
+- Used VLM to analyze PRINTED QUOTATION.png template and compare with PRINTED INVOICE.png
+- Identified all differences between quotation and invoice templates
+- Read existing quotation-detail.tsx (754 lines) and invoice-detail.tsx (819 lines) for reference
+- Completely rewrote quotation-detail.tsx document layout section to match template
+
+Stage Summary:
+- Key changes made to match template:
+  1. Replaced 2-column "Quotation Details" + "Status & Timeline" row with 3-column layout: "QUOTATION TO" | "SITE / DELIVERY TO" | "OTHER INFORMATION"
+  2. "QUOTATION TO" column shows customer info (name, address, phone, email, PIC)
+  3. "SITE / DELIVERY TO" column shows site address and project name
+  4. "OTHER INFORMATION" column shows: Qt. Date, Valid Until, Reference, Sales Person, Currency, Tax Rate, Delivery Period, Warranty, Status badge
+  5. Updated footer: Added "NOTES" section with specific text, changed "Authorised Signature"/"Managing Director" to "PREPARED BY"/"Sales Executive", changed "Scan to Verify" to "SCAN TO VIEW" with subtitle, added disclaimer "This is a computer generated quotation. No signature is required."
+  6. Preserved all existing functionality: workflow transitions, reject dialog, print/email/WhatsApp, copy number, edit, status badge, loading/error states
+- File: src/components/modules/quotations/quotation-detail.tsx
+- Lint: Clean (no errors)
+- Dev server: Compiles successfully
