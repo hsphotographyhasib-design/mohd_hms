@@ -49,6 +49,28 @@ export async function GET(request: NextRequest) {
     if (status) where.status = status;
     if (customerId) where.customerId = customerId;
 
+    // Stats query (lightweight aggregation)
+  const statsMode = request.nextUrl.searchParams.get('stats') === 'true';
+
+    if (statsMode) {
+      const [totalCount, totalValue, draftCount, pendingCount, acceptedCount, paidCount] = await Promise.all([
+        db.quotation.count({ where: { tenantId } }),
+        db.quotation.aggregate({ where: { tenantId }, _sum: { total: true } }),
+        db.quotation.count({ where: { tenantId, status: 'DRAFT' } }),
+        db.quotation.count({ where: { tenantId, status: { in: ['REVIEW', 'SENT', 'APPROVED'] } } }),
+        db.quotation.count({ where: { tenantId, status: 'ACCEPTED' } }),
+        db.quotation.count({ where: { tenantId, status: 'PAID' } }),
+      ]);
+      return NextResponse.json({
+        total: totalCount,
+        totalValue: totalValue._sum.total || 0,
+        draft: draftCount,
+        pendingAction: pendingCount,
+        accepted: acceptedCount,
+        paid: paidCount,
+      });
+    }
+
     const [items, total] = await Promise.all([
       db.quotation.findMany({
         where,
@@ -191,7 +213,7 @@ export async function POST(request: NextRequest) {
     console.log('[QUOTATION SQL]:', `INSERT INTO Quotation ... VALUES ('${qId.substring(0,8)}...', '${safeItems.substring(0, 30)}...`);
     await db.$executeRawUnsafe(`
       INSERT INTO Quotation (id, tenantId, customerId, complaintId, quotationNo, title, description, referenceNo, projectName, site, preparedBy, items, terms, currency, subtotal, taxRate, tax, discount, shipping, total, status, validUntil, notes, createdAt, updatedAt)
-      VALUES ('${qId}', '${tenantId}', '${customerId}', ${safeComplaintId}, '${quotationNo}', '${safeTitle}', ${safeDesc}, ${safeRef}, ${safeProject}, ${safeSite}, '${userId}', '${safeItems}', ${safeTerms}, '${currency || 'BND'}', ${subtotal}, ${finalTaxRate}, ${tax}, ${finalDiscount}, ${finalShipping}, ${total}, 'DRAFT', ${safeValidUntil}, ${safeNotes}, '${now}', '${now}')
+      VALUES ('${qId}', '${tenantId}', '${customerId}', ${safeComplaintId}, '${quotationNo}', '${safeTitle}', ${safeDesc}, ${safeRef}, ${safeProject}, ${safeSite}, '${userId}', '${safeItems}', ${safeTerms}, '${currency || 'BND'}', ${subtotal}, ${finalTaxRate}, ${tax}, ${finalDiscount}, ${finalShipping}, ${total}, 'DRAFT', ${safeValidUntil}, ${safeNotes}, '${now.toISOString()}', '${now.toISOString()}')
     `);
 
     const rows = await db.$queryRawUnsafe<any[]>(`

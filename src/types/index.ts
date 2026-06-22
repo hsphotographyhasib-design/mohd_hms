@@ -53,6 +53,7 @@ export type AppView =
   | 'pm'
   | 'quotations'
   | 'quotation-detail'
+  | 'quotation-edit'
   | 'new-quotation'
   | 'inventory'
   | 'customers'

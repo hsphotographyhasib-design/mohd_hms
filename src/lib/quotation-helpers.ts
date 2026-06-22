@@ -44,24 +44,39 @@ export async function generateQuotationNo(tenantId: string): Promise<string> {
   return `QTN/${tenantCode}/${month}/${sequential}`;
 }
 
-export async function updateQuotationFields(quotationId: string, fields: Record<string, unknown>): Promise<void> {
-  const updates = [
-    { field: 'quotationNo', value: fields.quotationNo },
-    { field: 'referenceNo', value: fields.referenceNo },
-    { field: 'projectName', value: fields.projectName },
-    { field: 'site', value: fields.site },
-    { field: 'preparedBy', value: fields.preparedBy },
-    { field: 'terms', value: fields.terms },
-    { field: 'currency', value: fields.currency },
-    { field: 'taxRate', value: fields.taxRate },
-    { field: 'discount', value: fields.discount },
-    { field: 'shipping', value: fields.shipping },
-    { field: 'sentAt', value: fields.sentAt },
-    { field: 'acceptedAt', value: fields.acceptedAt },
-  ];
-  for (const { field, value } of updates) {
-    await db.$executeRawUnsafe(
-      `UPDATE Quotation SET ${field} = ${value} WHERE id = '${quotationId}'`
-    );
-  }
-  }
+export async function addNewQuotationFields(
+  quotationId: string,
+  fields: {
+    quotationNo?: string;
+    referenceNo?: string | null;
+    projectName?: string | null;
+    site?: string | null;
+    preparedBy?: string | null;
+    terms?: string[] | null;
+    currency?: string | null;
+    taxRate?: number;
+    discount?: number;
+    shipping?: number;
+    sentAt?: null;
+    acceptedAt?: null;
+  },
+): Promise<void> {
+  const sqlStr = (s: string | undefined | null) => s ? s.replace(/'/g, "''") : null;
+  const sqlNum = (n: number | undefined | null) => n ?? 0;
+
+  await db.$executeRawUnsafe(`
+    UPDATE Quotation
+    SET
+      quotationNo = '${sqlStr(fields.quotationNo)}',
+      referenceNo = ${fields.referenceNo ? `'${sqlStr(fields.referenceNo)}'` : 'NULL'},
+      projectName = ${fields.projectName ? `'${sqlStr(fields.projectName)}'` : 'NULL'},
+      site = ${fields.site ? `'${sqlStr(fields.site)}'` : 'NULL'},
+      preparedBy = ${fields.preparedBy ? `'${fields.preparedBy}'` : 'NULL'},
+      terms = ${fields.terms ? `'${sqlStr(JSON.stringify(fields.terms))}'` : 'NULL'},
+      currency = '${fields.currency || 'BND'}',
+      taxRate = ${sqlNum(fields.taxRate)},
+      discount = ${sqlNum(fields.discount)},
+      shipping = ${sqlNum(fields.shipping)}
+    WHERE id = '${quotationId}'
+  `);
+}

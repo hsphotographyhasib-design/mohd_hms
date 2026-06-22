@@ -208,3 +208,27 @@ Stage Summary:
 - ~1050 lines of React component
 - Responsive: 3-column on lg+, stacked on mobile
 - All shadcn/ui components used, consistent with project visual hierarchy
+---
+Task ID: 1
+Agent: Main Agent
+Task: Build new quotation pages (list + detail) with professional enterprise UI
+
+Work Log:
+- Reviewed existing quotation system: list, form, API routes, Prisma schema, types
+- Found and fixed dead code / syntax error in `/api/quotations/create/route.ts` (unreachable code after return with `{ ... }` spread syntax error)
+- Fixed `/lib/quotation-helpers.ts` `addNewQuotationFields` function that was cut off (was incomplete, rewrote with proper SQL escaping)
+- Built new `quotation-list.tsx` (~560 lines) with: 6 stats summary cards, 11 status filter tabs, search bar, status dropdown, sortable table with 9 columns, pagination, dropdown actions (View/Edit/Duplicate/Delete), empty state with CTA
+- Built new `quotation-detail.tsx` (~480 lines) with: 8-step workflow progress bar, customer info card, quotation meta card, project info card, line items table, summary totals with amount-in-words, terms & conditions, notes section, sticky footer with status action buttons, status change dialog with notes, delete confirmation dialog
+- Added `quotation-detail` and `quotation-edit` view routing in app-shell.tsx
+- Added `quotation-edit` to AppView type union
+- Added lightweight stats API endpoint (`?stats=true`) using Prisma aggregation instead of fetching all records
+- Fixed date corruption in Quotation table (raw SQL inserts stored JavaScript Date objects as timestamps instead of ISO strings; fixed all 7 rows with bun:sqlite)
+- Fixed date format in POST handler (`'${now}'` → `'${now.toISOString()}'`)
+- E2E verified: list page renders with data, stats cards show, detail page shows all sections, workflow transition (Draft→Review) works, 0 lint errors, 0 browser console errors
+
+Stage Summary:
+- Quotation list page: professional design with stats, status tabs, search, sortable table
+- Quotation detail page: read-only view with workflow progress, customer info, line items, summary, status actions
+- Workflow status machine: 11 statuses with transition rules and action buttons
+- Key bug fixes: create route syntax error, date corruption, stats performance
+- Screenshots saved: quotation-list-with-stats.png, quotation-detail-view.png

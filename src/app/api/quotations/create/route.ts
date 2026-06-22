@@ -138,55 +138,8 @@ export async function POST(request: NextRequest) {
       createdAt: q.createdAt,
       updatedAt: q.updatedAt,
     }, { status: 201 });
-  console.log('[CREATE] Attempting quotation creation...');
-    try {
-      const quotation = await db.quotation.create({
-        data: {
-          tenantId,
-          customerId,
-          complaintId: complaintId || null,
-          quotationNo: '',
-          title,
-          description: description || null,
-          items: JSON.stringify(parsedItems),
-          subtotal,
-          tax: 0,
-          discount: 0,
-          total,
-          status: 'DRAFT',
-          validUntil: validUntil ? new Date(validUntil) : null,
-          notes: notes || null,
-        },
-        include: {
-          customer: { select: { name: true, phone: true, email: true } },
-        },
-      });
-
-      console.log('[CREATE] Quotation created:', quotation.id);
-      console.log('[CREATE] Setting new fields...');
-      await addNewQuotationFields(quotation.id, {
-        quotationNo: quotationNo,
-        referenceNo: referenceNo,
-        projectName: projectName,
-        site,
-        preparedBy: userId,
-        terms,
-        currency,
-        taxRate: parseFloat(taxRate) || 0,
-        discount: parseFloat(discount) || 0,
-        shipping: parseFloat(shipping) || 0,
-        sentAt: null,
-        acceptedAt: null,
-      });
-
-      console.log('[CREATE] Fields set. Total:', quotation.total);
-      console.log('[CREATE] Response:', JSON.stringify({ id: quotation.id, total: quotation.total }));
-
-      return NextResponse.json({ ... }, { status: 201 });
-    } catch (error) {
-      console.error('[CATCH] Quotation create error:', error);
-      console.error('[CATCH] Error details:', error);
-      return NextResponse.json({ error: 'Internal server error', detail: error instanceof Error ? error.message : String(error) }, { status: 500 });
-    }
-  },
+  } catch (error) {
+    console.error('Quotation create error:', error);
+    return NextResponse.json({ error: 'Internal server error', detail: error instanceof Error ? error.message : String(error) }, { status: 500 });
+  }
 }
