@@ -159,8 +159,7 @@
   }
   body {
     @apply text-foreground;
-    background: linear-gradient(180deg, var(--page-bg) 0%, var(--page-bg-end) 100%);
-    background-attachment: fixed;
+    background: var(--background);
   }
 }
 

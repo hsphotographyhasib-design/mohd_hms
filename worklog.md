@@ -232,3 +232,20 @@ Stage Summary:
 - Workflow status machine: 11 statuses with transition rules and action buttons
 - Key bug fixes: create route syntax error, date corruption, stats performance
 - Screenshots saved: quotation-list-with-stats.png, quotation-detail-view.png
+
+---
+Task ID: theme-default-persist
+Agent: main
+Task: Make default theme white (light) and ensure theme selection persists across sessions
+
+Work Log:
+- Changed `defaultTheme="system"` to `defaultTheme="light"` in ThemeProvider (layout.tsx)
+- Added explicit `storageKey="facilitypro-theme"` for clear persistence
+- Removed hardcoded gradient background from app-shell.tsx, replaced with `bg-background` class
+- Changed body background in globals.css from fixed gradient to `var(--background)` for proper theme adaptation
+
+Stage Summary:
+- Default theme is now white/light (no dark class on <html> by default)
+- Theme selection persists via localStorage key "facilitypro-theme"
+- Verified via browser: dark→reload→dark ✓, light→reload→light ✓, clear→reload→light (default) ✓
+- Zero lint errors, zero runtime errors
