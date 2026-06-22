@@ -41,11 +41,9 @@ export function generateAssetNumber(category: string): string {
 
 export function generateInvoiceNumber(): string {
   const now = new Date();
-  const y = now.getFullYear().toString().slice(-2);
-  const m = (now.getMonth() + 1).toString().padStart(2, '0');
-  const d = now.getDate().toString().padStart(2, '0');
-  const seq = Math.random().toString(36).toUpperCase().slice(2, 6);
-  return `INV-${y}${m}${d}-${seq}`;
+  const y = now.getFullYear();
+  const seq = Math.floor(Math.random() * 9000) + 1000;
+  return `INV/SMSB/01/${y}/${seq}`;
 }
 
 export function generatePONumber(): string {

@@ -33,7 +33,7 @@ export async function GET(
     const quotation = await db.quotation.findFirst({
       where: { id, tenantId },
       include: {
-        customer: { select: { name: true, phone: true, email: true, address: true } },
+        customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
       },
     });
 
@@ -59,6 +59,8 @@ export async function GET(
         phone: quotation.customer.phone,
         email: quotation.customer.email,
         address: quotation.customer.address,
+        companyName: quotation.customer.companyName,
+        pic: quotation.customer.pic,
       },
       complaintId: quotation.complaintId,
       quotationNo: quotation.quotationNo,
@@ -179,6 +181,8 @@ export async function PUT(
         phone: updated.customer.phone,
         email: updated.customer.email,
         address: updated.customer.address,
+        companyName: updated.customer.companyName,
+        pic: updated.customer.pic,
       },
       complaintId: updated.complaintId,
       quotationNo: updated.quotationNo,

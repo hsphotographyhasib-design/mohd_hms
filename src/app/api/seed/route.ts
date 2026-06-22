@@ -7,7 +7,128 @@ export async function POST() {
     // Check if seed data already exists
     const existingTenant = await db.tenant.findFirst({ where: { domain: 'demo.facilitypro.com' } });
     if (existingTenant) {
-      return NextResponse.json({ message: 'Seed data already exists', tenantId: existingTenant.id });
+      // Delete old invoices and quotations, then recreate them
+      await db.invoice.deleteMany({ where: { tenantId: existingTenant.id } });
+      await db.quotation.deleteMany({ where: { tenantId: existingTenant.id } });
+      // Re-fetch relations needed for invoice creation
+      const customers = await db.customer.findMany({ where: { tenantId: existingTenant.id } });
+      const users = await db.user.findMany({ where: { tenantId: existingTenant.id } });
+      const workOrders = await db.workOrder.findMany({ where: { tenantId: existingTenant.id, status: 'COMPLETED' } });
+
+      if (customers.length === 0 || users.length === 0 || workOrders.length === 0) {
+        return NextResponse.json({ message: 'Seed data already exists but missing dependencies', tenantId: existingTenant.id });
+      }
+
+      // Create invoices with new format
+      const invoiceStatuses = ['DRAFT', 'PENDING', 'APPROVED', 'PAID', 'PAID', 'OVERDUE'] as const;
+      const invoiceItems = [
+        [
+          { title: 'Split AC Installation', description: 'Installation of 1 unit split AC including mounting, copper pipe, drain pipe, brackets, testing and commissioning.', unit: 'Nos', quantity: 2, rate: 250, amount: 500 },
+          { title: 'Copper Pipe (1/4 + 3/8)', description: 'Insulated copper pipe with accessories.', unit: 'Meter', quantity: 10, rate: 12, amount: 120 },
+          { title: 'Gas Top Up (R410A)', description: 'R410A refrigerant gas top up and pressure test.', unit: 'Kg', quantity: 2, rate: 45, amount: 90 },
+        ],
+        [
+          { title: 'Electrical Panel Maintenance', description: 'Full inspection and maintenance of main distribution panel including tightening connections and thermal imaging.', unit: 'Nos', quantity: 1, rate: 350, amount: 350 },
+          { title: 'Circuit Breaker Replacement', description: 'Replacement of 32A MCB with new Hager branded breaker.', unit: 'Nos', quantity: 4, rate: 85, amount: 340 },
+        ],
+        [
+          { title: 'Plumbing Repair Works', description: 'Repair of leaking pipes and replacement of worn-out fittings in washroom area.', unit: 'Lot', quantity: 1, rate: 450, amount: 450 },
+          { title: 'Water Pump Service', description: 'Full service of centrifugal water pump including impeller check and seal replacement.', unit: 'Nos', quantity: 2, rate: 180, amount: 360 },
+        ],
+      ];
+      const defaultTerms = [
+        '50% advance payment and balance upon completion.',
+        'Price validity: 60 days from the invoice date.',
+        'Delivery period: 3 working days.',
+        'Additional works are subject to variation order.',
+        'Warranty applies only to workmanship.',
+        'Material warranty follows manufacturer terms.',
+        'Payment by bank transfer or cheque.',
+      ];
+      await Promise.all(
+        workOrders.slice(0, 6).map((wo, i) => {
+          const status = invoiceStatuses[i % 6];
+          const custIdx = i % customers.length;
+          const items = invoiceItems[i % 3];
+          const subtotal = items.reduce((s: number, item: { amount: number }) => s + item.amount, 0);
+          return db.invoice.create({
+            data: {
+              tenantId: existingTenant.id,
+              customerId: customers[custIdx].id,
+              workOrderId: wo.id,
+              invoiceNumber: generateInvoiceNumber(),
+              title: `Invoice for ${wo.title}`,
+              items: JSON.stringify(items),
+              subtotal,
+              taxRate: 0, tax: 0, discount: 0, shipping: 0,
+              total: subtotal,
+              status,
+              currency: 'BND',
+              paymentTerms: '30 Days',
+              referenceNo: `QTN/SMSB/01/${4529 + i}`,
+              poReference: i === 0 ? 'PO-2026-0001' : null,
+              dueDate: new Date(Date.now() + 30 * 86400000).toISOString(),
+              paidAt: status === 'PAID' ? new Date().toISOString() : null,
+              paymentMethod: status === 'PAID' ? 'Bank Transfer' : null,
+              transactionId: status === 'PAID' ? `TRX2026062001${i + 1}` : null,
+              bankName: 'BAIDURI BANK',
+              bankAccountName: 'SMART MAINTENANCE SERVICES SDN BHD',
+              bankAccountNo: '00-12345-678901-2',
+              notes: 'Thank you for choosing Smart Maintenance Services.',
+              terms: JSON.stringify(defaultTerms),
+              shipToName: customers[custIdx].companyName || customers[custIdx].name,
+              shipToAddress: customers[custIdx].address || undefined,
+              shipToPhone: customers[custIdx].phone,
+              preparedBy: users[Math.min(5, users.length - 1)].id,
+              createdBy: users[Math.min(5, users.length - 1)].id,
+            },
+          });
+        })
+      );
+
+      // Create quotations
+      const quotationItems = [
+        [
+          { title: 'Split AC Installation', description: 'Installation of 1 unit split AC including mounting, copper pipe, drain pipe, brackets, testing and commissioning.', unit: 'Nos', quantity: 2, rate: 250, amount: 500, category: 'HVAC', warranty: '12 months' },
+          { title: 'Copper Pipe (1/4 + 3/8)', description: 'Insulated copper pipe with accessories.', unit: 'Meter', quantity: 10, rate: 12, amount: 120, category: 'HVAC' },
+          { title: 'Gas Top Up (R410A)', description: 'R410A refrigerant gas top up and pressure test.', unit: 'Kg', quantity: 2, rate: 45, amount: 90, category: 'HVAC' },
+        ],
+        [
+          { title: 'Generator Overhaul', description: 'Complete overhaul of diesel generator including oil change, filter replacement, and load testing.', unit: 'Nos', quantity: 1, rate: 1200, amount: 1200, category: 'Generator', warranty: '6 months' },
+          { title: 'Fuel System Service', description: 'Cleaning and servicing of fuel delivery system, injector testing.', unit: 'Lot', quantity: 1, rate: 350, amount: 350, category: 'Generator' },
+        ],
+      ];
+      const qtStatuses = ['DRAFT', 'REVIEW', 'APPROVED', 'SENT', 'ACCEPTED', 'CONVERTED_INVOICE'] as const;
+      await Promise.all(
+        customers.slice(0, 6).map((cust, i) => {
+          const status = qtStatuses[i % 6];
+          const items = quotationItems[i % 2];
+          const subtotal = items.reduce((s: number, item: { amount: number }) => s + item.amount, 0);
+          return db.quotation.create({
+            data: {
+              tenantId: existingTenant.id,
+              customerId: cust.id,
+              quotationNo: `QTN/SMSB/01/${4529 + i}`,
+              title: `Quotation for ${['AC Installation', 'Generator Service', 'Electrical Works', 'Plumbing Works', 'Fire Suppression', 'Preventive Maintenance'][i]}`,
+              items: JSON.stringify(items),
+              terms: JSON.stringify(defaultTerms),
+              currency: 'BND',
+              subtotal,
+              taxRate: 0, tax: 0, discount: 0, shipping: 0,
+              total: subtotal,
+              status,
+              validUntil: new Date(Date.now() + 60 * 86400000).toISOString(),
+              preparedBy: users[Math.min(5, users.length - 1)].id,
+              sentAt: ['SENT', 'ACCEPTED', 'CONVERTED_INVOICE'].includes(status) ? new Date(Date.now() - 5 * 86400000).toISOString() : null,
+              acceptedAt: ['ACCEPTED', 'CONVERTED_INVOICE'].includes(status) ? new Date(Date.now() - 2 * 86400000).toISOString() : null,
+              approvedAt: ['APPROVED', 'SENT', 'ACCEPTED', 'CONVERTED_INVOICE'].includes(status) ? new Date(Date.now() - 7 * 86400000).toISOString() : null,
+              notes: 'Thank you for choosing Smart Maintenance Services. We look forward to working with you.',
+            },
+          });
+        })
+      );
+
+      return NextResponse.json({ message: 'Invoices and quotations reseeded', tenantId: existingTenant.id });
     }
 
     // Create tenant
@@ -209,10 +330,32 @@ export async function POST() {
 
     // Create invoices
     const invoiceStatuses = ['DRAFT', 'PENDING', 'APPROVED', 'PAID', 'PAID', 'OVERDUE'] as const;
+    const invoiceItems = [
+      [
+        { title: 'Split AC Installation', description: 'Installation of 1 unit split AC including mounting, copper pipe, drain pipe, brackets, testing and commissioning.', unit: 'Nos', quantity: 2, rate: 250, amount: 500 },
+        { title: 'Copper Pipe (1/4 + 3/8)', description: 'Insulated copper pipe with accessories.', unit: 'Meter', quantity: 10, rate: 12, amount: 120 },
+        { title: 'Gas Top Up (R410A)', description: 'R410A refrigerant gas top up and pressure test.', unit: 'Kg', quantity: 2, rate: 45, amount: 90 },
+      ],
+      [
+        { title: 'Electrical Panel Maintenance', description: 'Full inspection and maintenance of main distribution panel including tightening connections and thermal imaging.', unit: 'Nos', quantity: 1, rate: 350, amount: 350 },
+        { title: 'Circuit Breaker Replacement', description: 'Replacement of 32A MCB with new Hager branded breaker.', unit: 'Nos', quantity: 4, rate: 85, amount: 340 },
+      ],
+      [
+        { title: 'Plumbing Repair Works', description: 'Repair of leaking pipes and replacement of worn-out fittings in washroom area.', unit: 'Lot', quantity: 1, rate: 450, amount: 450 },
+        { title: 'Water Pump Service', description: 'Full service of centrifugal water pump including impeller check and seal replacement.', unit: 'Nos', quantity: 2, rate: 180, amount: 360 },
+      ],
+    ];
     await Promise.all(
       workOrders.filter(wo => wo.status === 'COMPLETED').map((wo, i) => {
         const status = invoiceStatuses[i % 6];
         const custIdx = i % 3;
+        const items = invoiceItems[i % 3];
+        const subtotal = items.reduce((s, item) => s + item.amount, 0);
+        const taxRate = 0;
+        const tax = 0;
+        const discount = 0;
+        const shipping = 0;
+        const total = subtotal;
         return db.invoice.create({
           data: {
             tenantId: tenant.id,
@@ -220,15 +363,39 @@ export async function POST() {
             workOrderId: wo.id,
             invoiceNumber: generateInvoiceNumber(),
             title: `Invoice for ${wo.title}`,
-            items: JSON.stringify([{ description: 'Labor charges', amount: wo.laborCost || 0 }, { description: 'Material charges', amount: wo.materialCost || 0 }]),
-            subtotal: (wo.laborCost || 0) + (wo.materialCost || 0),
-            tax: ((wo.laborCost || 0) + (wo.materialCost || 0)) * 0.05,
-            discount: 0,
-            total: ((wo.laborCost || 0) + (wo.materialCost || 0)) * 1.05,
+            items: JSON.stringify(items),
+            subtotal,
+            taxRate,
+            tax,
+            discount,
+            shipping,
+            total,
             status,
+            currency: 'BND',
+            paymentTerms: '30 Days',
+            referenceNo: `QTN/SMSB/01/${4500 + i}`,
+            poReference: i === 0 ? 'PO-2026-0001' : null,
             dueDate: new Date(Date.now() + 30 * 86400000).toISOString(),
             paidAt: status === 'PAID' ? new Date().toISOString() : null,
-            paymentMethod: status === 'PAID' ? 'bank_transfer' : null,
+            paymentMethod: status === 'PAID' ? 'Bank Transfer' : null,
+            transactionId: status === 'PAID' ? `TRX2026062001${i + 1}` : null,
+            bankName: 'BAIDURI BANK',
+            bankAccountName: 'SMART MAINTENANCE SERVICES SDN BHD',
+            bankAccountNo: '00-12345-678901-2',
+            notes: i === 0 ? 'Thank you for choosing Smart Maintenance Services.' : null,
+            terms: JSON.stringify([
+              '50% advance payment and balance upon completion.',
+              'Price validity: 60 days from the invoice date.',
+              'Delivery period: 3 working days.',
+              'Additional works are subject to variation order.',
+              'Warranty applies only to workmanship.',
+              'Material warranty follows manufacturer terms.',
+              'Payment by bank transfer or cheque.',
+            ]),
+            shipToName: customers[custIdx].companyName || customers[custIdx].name,
+            shipToAddress: customers[custIdx].address,
+            shipToPhone: customers[custIdx].phone,
+            preparedBy: users[5].id,
             createdBy: users[5].id,
           },
         });

@@ -77,6 +77,7 @@ model User {
   assignedWorkOrders  WorkOrder[]  @relation("TechnicianWorkOrders")
   createdWorkOrders   WorkOrder[]  @relation("CreatorWorkOrders")
   createdInvoices     Invoice[]    @relation("CreatorInvoices")
+  preparedInvoices    Invoice[]    @relation("PreparerInvoices")
   pmSchedules   PmSchedule[] @relation("PmScheduleAssignee")
   supervisorComplaints Complaint[] @relation("SupervisorComplaints")
   auditLogs    AuditLog[]
@@ -356,39 +357,59 @@ model Quotation {
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
   customer      Customer @relation(fields: [customerId], references: [id])
+  invoices      Invoice[]
 }
 
 // ============ INVOICES ============
 
 model Invoice {
-  id            String   @id @default(cuid())
-  tenantId      String
-  customerId    String
-  workOrderId   String?
-  quotationId   String?
-  invoiceNumber String   @unique
-  title         String
-  description   String?
-  items         String   // JSON array of line items
-  subtotal      Float
-  tax           Float    @default(0)
-  discount      Float    @default(0)
-  total         Float
-  status        String   @default("DRAFT") // DRAFT, PENDING, APPROVED, PAID, CANCELLED, OVERDUE
-  dueDate       DateTime?
-  paidAt        DateTime?
-  paymentMethod String?
-  paymentRef    String?
-  sentVia       String?  // email, whatsapp, portal
-  pdfUrl        String?
-  createdBy     String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id              String   @id @default(cuid())
+  tenantId        String
+  customerId      String
+  workOrderId     String?
+  quotationId     String?
+  invoiceNumber   String   @unique
+  title           String
+  description     String?
+  items           String   // JSON array of line items: [{title,description,unit,quantity,rate,amount}]
+  subtotal        Float
+  taxRate         Float    @default(0)
+  tax             Float    @default(0)
+  discount        Float    @default(0)
+  shipping        Float    @default(0)
+  total           Float
+  status          String   @default("DRAFT") // DRAFT, PENDING, APPROVED, PAID, CANCELLED, OVERDUE
+  currency        String   @default("BND")
+  referenceNo     String?  // linked quotation number
+  poReference     String?  // customer PO number
+  paymentTerms    String?  // e.g. "30 Days"
+  dueDate         DateTime?
+  paidAt          DateTime?
+  paymentMethod   String?
+  paymentRef      String?
+  transactionId   String?  // bank transaction ID
+  bankName        String?
+  bankAccountName String?
+  bankAccountNo   String?
+  sentVia         String?  // email, whatsapp, portal
+  pdfUrl          String?
+  notes           String?
+  terms           String?  // JSON array of terms & conditions
+  shipToName      String?
+  shipToAddress   String?
+  shipToPhone     String?
+  shipToContact   String?
+  preparedBy      String?  // userId
+  createdBy       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
   customer      Customer @relation(fields: [customerId], references: [id])
   workOrder     WorkOrder? @relation(fields: [workOrderId], references: [id])
+  quotation     Quotation? @relation(fields: [quotationId], references: [id])
   creator       User?    @relation("CreatorInvoices", fields: [createdBy], references: [id])
+  preparer      User?    @relation("PreparerInvoices", fields: [preparedBy], references: [id])
 
   @@index([tenantId, status])
 }

@@ -243,25 +243,63 @@ export interface WorkOrderMaterialItem {
 
 export type InvoiceStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'PAID' | 'CANCELLED' | 'OVERDUE';
 
+export interface InvoiceLineItem {
+  title: string;
+  description?: string;
+  unit: string;
+  quantity: number;
+  rate: number;
+  amount: number;
+  category?: string;
+  warranty?: string;
+}
+
 export interface InvoiceItem {
   id: string;
   tenantId: string;
   customerId: string;
   customerName?: string;
+  customerPhone?: string;
+  customerEmail?: string;
+  customerAddress?: string;
+  customerCompany?: string;
+  customerPic?: string;
   workOrderId?: string;
+  quotationId?: string;
   invoiceNumber: string;
   title: string;
   description?: string;
   items?: string;
   subtotal: number;
+  taxRate: number;
   tax: number;
   discount: number;
+  shipping: number;
   total: number;
   status: InvoiceStatus;
+  currency?: string;
+  referenceNo?: string;
+  poReference?: string;
+  paymentTerms?: string;
   dueDate?: string;
   paidAt?: string;
   paymentMethod?: string;
+  paymentRef?: string;
+  transactionId?: string;
+  bankName?: string;
+  bankAccountName?: string;
+  bankAccountNo?: string;
   sentVia?: string;
+  notes?: string;
+  terms?: string;
+  shipToName?: string;
+  shipToAddress?: string;
+  shipToPhone?: string;
+  shipToContact?: string;
+  preparedBy?: string;
+  preparedByName?: string;
+  creatorName?: string;
+  quotationNo?: string;
   createdAt: string;
   updatedAt: string;
 }

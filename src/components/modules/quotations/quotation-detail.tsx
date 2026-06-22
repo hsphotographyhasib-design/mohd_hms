@@ -1,168 +1,141 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Separator } from '@/components/ui/separator';
 import {
-  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
-  DialogDescription,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  ArrowLeft, FileText, Send, CheckCircle2, Clock, XCircle,
-  Copy, Printer, Loader2, AlertTriangle, Eye, Pencil,
-  RotateCcw, Wrench, FileSpreadsheet, Banknote, Lock,
-  Building2, Phone, Mail, MapPin, Hash, User, Calendar,
-  MessageSquare, ChevronRight, QrCode,
+  ArrowLeft, Eye, Printer, Mail, MessageCircle, MoreVertical,
+  Loader2, AlertCircle, CheckCircle2, Send, X,
+  MapPin, Phone, MailIcon, User, Building2,
+  Upload, File, Copy, FileText, RotateCcw, Lock,
+  Pencil, ChevronRight, MessageSquare,
 } from 'lucide-react';
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { toast } from 'sonner';
+import { useAppStore, useAuthStore, hasMinRole } from '@/store';
+import type { QuotationLineItem, QuotationStatus } from '@/types';
+import { numberToCurrencyWords } from '@/lib/number-to-words';
+import { format } from 'date-fns';
+import JsBarcode from 'jsbarcode';
 import dynamic from 'next/dynamic';
 
 const QRCodeSVG = dynamic(
   () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
   { ssr: false }
 );
-import { useAppStore } from '@/store';
-import type { QuotationLineItem, QuotationStatus } from '@/types';
-import { toast } from 'sonner';
-import { cn } from '@/lib/utils';
-import { format } from 'date-fns';
 
 // ============ CONSTANTS ============
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; bgColor: string; borderColor: string; description: string }> = {
-  DRAFT: { label: 'Draft', color: 'text-gray-700', bgColor: 'bg-gray-100', borderColor: 'border-gray-300', description: 'Quotation is being prepared' },
-  REVIEW: { label: 'In Review', color: 'text-amber-700', bgColor: 'bg-amber-50', borderColor: 'border-amber-300', description: 'Quotation is under review' },
-  APPROVED: { label: 'Approved', color: 'text-teal-700', bgColor: 'bg-teal-50', borderColor: 'border-teal-300', description: 'Quotation has been approved' },
-  SENT: { label: 'Sent to Customer', color: 'text-sky-700', bgColor: 'bg-sky-50', borderColor: 'border-sky-300', description: 'Quotation has been sent to customer' },
-  ACCEPTED: { label: 'Accepted', color: 'text-emerald-700', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-300', description: 'Customer has accepted the quotation' },
-  REJECTED: { label: 'Rejected', color: 'text-rose-700', bgColor: 'bg-rose-50', borderColor: 'border-rose-300', description: 'Customer has rejected the quotation' },
-  EXPIRED: { label: 'Expired', color: 'text-gray-600', bgColor: 'bg-gray-50', borderColor: 'border-gray-300', description: 'Quotation has expired' },
-  CONVERTED_WO: { label: 'Converted to WO', color: 'text-purple-700', bgColor: 'bg-purple-50', borderColor: 'border-purple-300', description: 'Quotation converted to Work Order' },
-  CONVERTED_INVOICE: { label: 'Converted to Invoice', color: 'text-indigo-700', bgColor: 'bg-indigo-50', borderColor: 'border-indigo-300', description: 'Quotation converted to Invoice' },
-  PAID: { label: 'Paid', color: 'text-emerald-700', bgColor: 'bg-emerald-50', borderColor: 'border-emerald-300', description: 'Payment received' },
-  CLOSED: { label: 'Closed', color: 'text-gray-600', bgColor: 'bg-gray-50', borderColor: 'border-gray-300', description: 'Quotation is closed' },
+const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
+  DRAFT: { label: 'Draft', className: 'bg-gray-100 text-gray-700 border-gray-300' },
+  REVIEW: { label: 'In Review', className: 'bg-amber-100 text-amber-800 border-amber-300' },
+  APPROVED: { label: 'Approved', className: 'bg-teal-100 text-teal-800 border-teal-300' },
+  SENT: { label: 'Sent', className: 'bg-sky-100 text-sky-800 border-sky-300' },
+  ACCEPTED: { label: 'Accepted', className: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+  REJECTED: { label: 'Rejected', className: 'bg-rose-100 text-rose-700 border-rose-300' },
+  EXPIRED: { label: 'Expired', className: 'bg-gray-100 text-gray-600 border-gray-300' },
+  CONVERTED_WO: { label: 'Converted to WO', className: 'bg-purple-100 text-purple-800 border-purple-300' },
+  CONVERTED_INVOICE: { label: 'Converted to Invoice', className: 'bg-violet-100 text-violet-800 border-violet-300' },
+  PAID: { label: 'Paid', className: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+  CLOSED: { label: 'Closed', className: 'bg-gray-100 text-gray-600 border-gray-300' },
 };
 
-const WORKFLOW_STEPS = [
-  'DRAFT', 'REVIEW', 'APPROVED', 'SENT', 'ACCEPTED', 'CONVERTED_WO', 'PAID', 'CLOSED',
-] as const;
-
-const VALID_TRANSITIONS: Record<string, { target: string; label: string; icon: React.ElementType; color: string; confirm?: string }[]> = {
+const WORKFLOW_TRANSITIONS: Record<string, { label: string; target: string; icon: React.ReactNode; color: string }[]> = {
   DRAFT: [
-    { target: 'REVIEW', label: 'Submit for Review', icon: Eye, color: 'bg-amber-600 hover:bg-amber-700' },
-    { target: 'REJECTED', label: 'Reject', icon: XCircle, color: 'bg-rose-600 hover:bg-rose-700', confirm: 'Reject this quotation?' },
+    { label: 'Submit for Review', target: 'REVIEW', icon: <Send className="h-4 w-4" />, color: 'text-amber-700 hover:bg-amber-50' },
   ],
   REVIEW: [
-    { target: 'APPROVED', label: 'Approve', icon: CheckCircle2, color: 'bg-teal-600 hover:bg-teal-700' },
-    { target: 'REJECTED', label: 'Reject', icon: XCircle, color: 'bg-rose-600 hover:bg-rose-700', confirm: 'Reject this quotation?' },
-    { target: 'DRAFT', label: 'Back to Draft', icon: RotateCcw, color: 'bg-gray-600 hover:bg-gray-700' },
+    { label: 'Approve', target: 'APPROVED', icon: <CheckCircle2 className="h-4 w-4" />, color: 'text-emerald-700 hover:bg-emerald-50' },
+    { label: 'Send Back to Draft', target: 'DRAFT', icon: <RotateCcw className="h-4 w-4" />, color: 'text-gray-700 hover:bg-gray-50' },
   ],
   APPROVED: [
-    { target: 'SENT', label: 'Send to Customer', icon: Send, color: 'bg-sky-600 hover:bg-sky-700' },
-    { target: 'DRAFT', label: 'Back to Draft', icon: RotateCcw, color: 'bg-gray-600 hover:bg-gray-700' },
+    { label: 'Send to Customer', target: 'SENT', icon: <Send className="h-4 w-4" />, color: 'text-sky-700 hover:bg-sky-50' },
   ],
   SENT: [
-    { target: 'ACCEPTED', label: 'Mark as Accepted', icon: CheckCircle2, color: 'bg-emerald-600 hover:bg-emerald-700' },
-    { target: 'EXPIRED', label: 'Mark as Expired', icon: Clock, color: 'bg-gray-600 hover:bg-gray-700', confirm: 'Mark this quotation as expired?' },
+    { label: 'Mark as Accepted', target: 'ACCEPTED', icon: <CheckCircle2 className="h-4 w-4" />, color: 'text-emerald-700 hover:bg-emerald-50' },
+    { label: 'Mark as Rejected', target: 'REJECTED', icon: <X className="h-4 w-4" />, color: 'text-rose-700 hover:bg-rose-50' },
   ],
   ACCEPTED: [
-    { target: 'CONVERTED_WO', label: 'Convert to Work Order', icon: Wrench, color: 'bg-purple-600 hover:bg-purple-700' },
-    { target: 'CONVERTED_INVOICE', label: 'Convert to Invoice', icon: FileSpreadsheet, color: 'bg-indigo-600 hover:bg-indigo-700' },
-    { target: 'CLOSED', label: 'Close', icon: Lock, color: 'bg-gray-600 hover:bg-gray-700', confirm: 'Close this quotation?' },
+    { label: 'Convert to Work Order', target: 'CONVERTED_WO', icon: <FileText className="h-4 w-4" />, color: 'text-purple-700 hover:bg-purple-50' },
+    { label: 'Convert to Invoice', target: 'CONVERTED_INVOICE', icon: <FileText className="h-4 w-4" />, color: 'text-violet-700 hover:bg-violet-50' },
   ],
-  REJECTED: [
-    { target: 'DRAFT', label: 'Reopen as Draft', icon: RotateCcw, color: 'bg-gray-600 hover:bg-gray-700' },
-  ],
-  EXPIRED: [
-    { target: 'DRAFT', label: 'Reopen as Draft', icon: RotateCcw, color: 'bg-gray-600 hover:bg-gray-700' },
-  ],
-  CONVERTED_WO: [
-    { target: 'CLOSED', label: 'Close', icon: Lock, color: 'bg-gray-600 hover:bg-gray-700' },
-    { target: 'PAID', label: 'Mark as Paid', icon: Banknote, color: 'bg-emerald-600 hover:bg-emerald-700' },
-  ],
-  CONVERTED_INVOICE: [
-    { target: 'PAID', label: 'Mark as Paid', icon: Banknote, color: 'bg-emerald-600 hover:bg-emerald-700' },
-    { target: 'CLOSED', label: 'Close', icon: Lock, color: 'bg-gray-600 hover:bg-gray-700' },
-  ],
-  PAID: [
-    { target: 'CLOSED', label: 'Close', icon: Lock, color: 'bg-gray-600 hover:bg-gray-700' },
-  ],
-  CLOSED: [],
 };
 
-const CURRENCY_SYMBOLS: Record<string, string> = { BND: 'BND', USD: '$', SGD: 'S$', MYR: 'RM' };
+const DEFAULT_TERMS = [
+  '50% advance payment and balance upon completion.',
+  'Price validity: 60 days from the quotation date.',
+  'Delivery period: 3 working days.',
+  'Additional works are subject to variation order.',
+  'Warranty applies only to workmanship.',
+  'Material warranty follows manufacturer terms.',
+  'Payment by bank transfer or cheque.',
+];
+
+const COMPANY = {
+  name: 'SMART MAINTENANCE SERVICES SDN BHD',
+  shortName: 'LS',
+  address: 'No. 25, Spg 88, Jln Gadong BE1318, Bandar Seri Begawan, Brunei Darussalam',
+  phone: '+673 245 6789',
+  email: 'info@smartms.com',
+  website: 'www.smartms.com',
+  regNo: 'BE1318',
+};
 
 // ============ HELPERS ============
 
-const getToken = () => localStorage.getItem('cmms_token') || '';
-const authHeaders = () => ({ Authorization: `Bearer ${getToken()}` });
+const token = () => localStorage.getItem('cmms_token') || '';
 
-function formatCurrency(amount: number, currency?: string): string {
-  const sym = currency ? (CURRENCY_SYMBOLS[currency] || currency) : 'BND';
-  return `${sym} ${amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+function fmtBND(n: number): string {
+  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-function numberToWords(num: number): string {
-  if (num === 0) return 'ZERO';
-  if (!Number.isFinite(num)) return 'ZERO';
-  const ones = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE',
-    'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN',
-    'SEVENTEEN', 'EIGHTEEN', 'NINETEEN'];
-  const tens = ['', '', 'TWENTY', 'THIRTY', 'FORTY', 'FIFTY', 'SIXTY', 'SEVENTY', 'EIGHTY', 'NINETY'];
-  const intPart = Math.floor(Math.abs(num));
-  const decPart = Math.round((Math.abs(num) - intPart) * 100);
-  function convertBelowThousand(n: number): string {
-    if (n === 0) return '';
-    if (n < 20) return ones[n];
-    if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '');
-    return ones[Math.floor(n / 100)] + ' HUNDRED' + (n % 100 ? ' AND ' + convertBelowThousand(n % 100) : '');
-  }
-  let words = '';
-  if (intPart >= 1000000) words += convertBelowThousand(Math.floor(intPart / 1000000)) + ' MILLION ';
-  if (intPart >= 1000) words += convertBelowThousand(Math.floor((intPart % 1000000) / 1000)) + ' THOUSAND ';
-  if (intPart % 1000 > 0) words += convertBelowThousand(intPart % 1000);
-  if (decPart > 0) words += ' AND ' + convertBelowThousand(decPart) + ' CENTS';
-  return words.trim() || 'ZERO';
+function fmtDate(d?: string): string {
+  if (!d) return '—';
+  return format(new Date(d), 'dd/MM/yyyy');
 }
 
-// ============ BARCODE COMPONENT ============
-
-function BarcodeDisplay({ value }: { value: string }) {
-  const barcodeRef = useRef<SVGSVGElement>(null);
-
-  useEffect(() => {
-    if (!barcodeRef.current || !value) return;
-    import('jsbarcode').then((JsBarcode) => {
-      try {
-        JsBarcode.default(barcodeRef.current, value, {
-          format: 'CODE128', width: 1.5, height: 40,
-          displayValue: true, fontSize: 10, font: 'monospace', margin: 5,
-        });
-      } catch { /* ignore */ }
-    });
-  }, [value]);
-
-  if (!value) return null;
-  return (
-    <div className="flex flex-col items-center gap-2">
-      <svg ref={barcodeRef} className="max-w-full" />
-      <QRCodeSVG value={value} size={64} level="M" includeMargin={false} bgColor="#FFFFFF" fgColor="#111827" />
-    </div>
-  );
+function parseLineItems(itemsStr?: string): QuotationLineItem[] {
+  if (!itemsStr) return [];
+  try {
+    const parsed = JSON.parse(itemsStr);
+    if (Array.isArray(parsed)) return parsed;
+  } catch { /* empty */ }
+  return [];
 }
 
-// ============ MAIN COMPONENT ============
+function parseTerms(termsStr?: string): string[] {
+  if (!termsStr) return DEFAULT_TERMS;
+  try {
+    const parsed = JSON.parse(termsStr);
+    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+  } catch { /* empty */ }
+  return DEFAULT_TERMS;
+}
 
-interface QuotationDetailData {
+// ============ COMPONENT ============
+
+interface QuotationCustomer {
+  name: string;
+  phone?: string;
+  email?: string;
+  address?: string;
+  companyName?: string;
+  pic?: string;
+}
+
+interface QuotationData {
   id: string;
   tenantId: string;
   customerId: string;
-  customer?: { name: string; phone?: string; email?: string; address?: string };
-  customerName?: string;
-  complaintId?: string;
+  customer: QuotationCustomer;
   quotationNo?: string;
   title: string;
   description?: string;
@@ -171,8 +144,8 @@ interface QuotationDetailData {
   site?: string;
   preparedBy?: string;
   preparedByName?: string;
-  items?: string | QuotationLineItem[];
-  terms?: string | string[];
+  items?: string;
+  terms?: string;
   currency?: string;
   subtotal: number;
   taxRate: number;
@@ -182,629 +155,491 @@ interface QuotationDetailData {
   total: number;
   status: string;
   validUntil?: string;
-  approvedBy?: string;
   approvedAt?: string;
   sentAt?: string;
   acceptedAt?: string;
-  pdfUrl?: string;
   notes?: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export function QuotationDetail({ quotationId }: { quotationId?: string }) {
-  const setView = useAppStore((s) => s.setView);
-
-  const [data, setData] = useState<QuotationDetailData | null>(null);
+  const { viewParams, setView } = useAppStore();
+  const user = useAuthStore((s) => s.user);
+  const id = quotationId || viewParams.id;
+  const [qt, setQt] = useState<QuotationData | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
-  const [statusDialog, setStatusDialog] = useState<{ open: boolean; targetStatus: string; label: string; confirm?: string }>({
-    open: false, targetStatus: '', label: '', confirm: '',
-  });
-  const [statusNotes, setStatusNotes] = useState('');
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [deleting, setDeleting] = useState(false);
+  const [lineItems, setLineItems] = useState<QuotationLineItem[]>([]);
+  const [terms, setTerms] = useState<string[]>(DEFAULT_TERMS);
+  const [showRejectDialog, setShowRejectDialog] = useState(false);
+  const [rejectReason, setRejectReason] = useState('');
+  const barcodeRef = useRef<SVGSVGElement>(null);
 
-  const fetchQuotation = useCallback(async () => {
-    if (!quotationId) return;
+  const fetchQt = useCallback(async () => {
+    if (!id) return;
     setLoading(true);
     try {
-      const res = await fetch(`/api/quotations/${quotationId}`, { headers: authHeaders() });
-      if (!res.ok) throw new Error('Not found');
+      const res = await fetch(`/api/quotations/${id}`, {
+        headers: { Authorization: `Bearer ${token()}` },
+      });
+      if (!res.ok) throw new Error();
       const json = await res.json();
-      setData(json);
+      setQt(json);
+      setLineItems(parseLineItems(json.items));
+      setTerms(parseTerms(json.terms));
     } catch {
       toast.error('Failed to load quotation');
-      setView('quotations');
     } finally {
       setLoading(false);
     }
-  }, [quotationId, setView]);
+  }, [id]);
 
-  useEffect(() => { fetchQuotation(); }, [fetchQuotation]);
+  useEffect(() => { fetchQt(); }, [fetchQt]);
 
-  // Parse items and terms
-  const lineItems = useMemo<QuotationLineItem[]>(() => {
-    if (!data?.items) return [];
-    try {
-      const parsed = typeof data.items === 'string' ? JSON.parse(data.items) : data.items;
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
+  // Generate barcode
+  useEffect(() => {
+    const barcodeValue = qt?.quotationNo || qt?.title || '';
+    if (barcodeValue && barcodeRef.current) {
+      try {
+        JsBarcode(barcodeRef.current, barcodeValue, {
+          format: 'CODE128',
+          width: 2,
+          height: 50,
+          displayValue: false,
+          margin: 0,
+        });
+      } catch { /* barcode generation can fail in SSR */ }
     }
-  }, [data?.items]);
+  }, [qt?.quotationNo, qt?.title]);
 
-  const termsList = useMemo<string[]>(() => {
-    if (!data?.terms) return [];
-    try {
-      const parsed = typeof data.terms === 'string' ? JSON.parse(data.terms) : data.terms;
-      return Array.isArray(parsed) ? parsed : [];
-    } catch {
-      return [];
-    }
-  }, [data?.terms]);
-
-  const currentStatus = data?.status || 'DRAFT';
-  const availableActions = VALID_TRANSITIONS[currentStatus] || [];
-  const currentStepIndex = WORKFLOW_STEPS.indexOf(currentStatus as typeof WORKFLOW_STEPS[number]);
-
-  // Handle status transition
-  const handleStatusChange = async () => {
-    if (!quotationId) return;
+  const updateStatus = async (status: string, extra?: Record<string, unknown>) => {
+    if (!id) return;
     setActionLoading(true);
     try {
-      const res = await fetch(`/api/quotations/${quotationId}/status`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...authHeaders() },
-        body: JSON.stringify({ status: statusDialog.targetStatus, notes: statusNotes || undefined }),
+      const res = await fetch(`/api/quotations/${id}/status`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({ status, ...extra }),
       });
-      if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || 'Status update failed');
-      }
-      toast.success(`Quotation status updated to ${STATUS_CONFIG[statusDialog.targetStatus]?.label || statusDialog.targetStatus}`);
-      setStatusDialog({ open: false, targetStatus: '', label: '', confirm: '' });
-      setStatusNotes('');
-      fetchQuotation();
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to update status');
+      if (!res.ok) throw new Error();
+      toast.success(`Quotation ${status.toLowerCase().replace(/_/g, ' ')}`);
+      fetchQt();
+    } catch {
+      toast.error('Action failed');
     } finally {
       setActionLoading(false);
     }
   };
 
-  // Handle delete
-  const handleDelete = async () => {
-    if (!quotationId) return;
-    setDeleting(true);
-    try {
-      const res = await fetch(`/api/quotations/${quotationId}`, {
-        method: 'DELETE',
-        headers: authHeaders(),
-      });
-      if (!res.ok) throw new Error();
-      toast.success('Quotation deleted');
-      setView('quotations');
-    } catch {
-      toast.error('Failed to delete quotation');
-    } finally {
-      setDeleting(false);
+  const handleReject = async () => {
+    await updateStatus('REJECTED', { reason: rejectReason });
+    setShowRejectDialog(false);
+    setRejectReason('');
+  };
+
+  const handleCopyNumber = () => {
+    if (qt?.quotationNo) {
+      navigator.clipboard.writeText(qt.quotationNo);
+      toast.success('Quotation number copied');
     }
   };
 
-  // Handle duplicate
-  const handleDuplicate = async () => {
-    if (!data) return;
-    try {
-      const res = await fetch('/api/quotations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...authHeaders() },
-        body: JSON.stringify({
-          customerId: data.customerId,
-          title: data.title + ' (Copy)',
-          description: data.description,
-          referenceNo: data.referenceNo,
-          projectName: data.projectName,
-          site: data.site,
-          items: data.items,
-          terms: data.terms,
-          currency: data.currency || 'BND',
-          taxRate: data.taxRate,
-          discount: data.discount,
-          shipping: data.shipping || 0,
-          validUntil: data.validUntil,
-          notes: data.notes,
-        }),
-      });
-      if (!res.ok) throw new Error();
-      toast.success('Quotation duplicated');
-      setView('quotations');
-    } catch {
-      toast.error('Failed to duplicate quotation');
-    }
+  const handlePrint = () => window.print();
+
+  const handleSendEmail = () => {
+    if (!qt) return;
+    const subject = encodeURIComponent(`Quotation ${qt.quotationNo || 'N/A'} - ${COMPANY.name}`);
+    const body = encodeURIComponent(
+      `Dear ${qt.customer?.name || 'Customer'},\n\nPlease find attached quotation for ${qt.title}.\n\nTotal Amount: ${qt.currency || 'BND'} ${fmtBND(qt.total)}\nValid Until: ${fmtDate(qt.validUntil)}\n\nThank you for your interest.\n\nBest regards,\n${COMPANY.name}\n${COMPANY.phone}`
+    );
+    window.open(`mailto:${qt.customer?.email || ''}?subject=${subject}&body=${body}`);
   };
 
-  const currency = data?.currency || 'BND';
-  const amountInWords = useMemo(() => {
-    if (!data) return '';
-    const words = numberToWords(data.total);
-    const currencyName: Record<string, string> = {
-      BND: 'BRUNEI DOLLARS', USD: 'US DOLLARS', SGD: 'SINGAPORE DOLLARS', MYR: 'MALAYSIAN RINGGIT',
-    };
-    return `${words} ${currencyName[currency] || currency} ONLY`;
-  }, [data?.total, currency]);
+  const handleSendWhatsApp = () => {
+    if (!qt) return;
+    const msg = encodeURIComponent(
+      `Dear ${qt.customer?.name},\n\nQuotation *${qt.quotationNo || 'N/A'}*\nAmount: *${qt.currency || 'BND'} ${fmtBND(qt.total)}*\nValid Until: ${fmtDate(qt.validUntil)}\n\nPlease review and let us know if you have any questions.\n\n- ${COMPANY.name}`
+    );
+    const phone = (qt.customer?.phone || '').replace(/[^0-9]/g, '');
+    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+  };
 
-  // ---- Loading State ----
+  const canManage = user ? hasMinRole(user.role, 'admin') : false;
+  const transitions = qt ? (WORKFLOW_TRANSITIONS[qt.status] || []) : [];
+
+  // ============ LOADING STATE ============
   if (loading) {
     return (
       <div className="p-4 md:p-6 space-y-4">
-        <div className="flex items-center gap-3">
-          <Skeleton className="h-8 w-8 rounded-lg" />
-          <Skeleton className="h-8 w-48" />
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Skeleton className="h-64 rounded-xl" />
-          <Skeleton className="h-64 rounded-xl" />
-        </div>
-        <Skeleton className="h-80 rounded-xl" />
+        <Skeleton className="h-8 w-64" />
+        <Skeleton className="h-[600px] w-full rounded-xl" />
       </div>
     );
   }
 
-  if (!data) {
+  if (!qt) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 gap-3">
-        <AlertTriangle className="h-8 w-8 text-amber-500" />
-        <p className="text-gray-600">Quotation not found</p>
-        <Button variant="outline" onClick={() => setView('quotations')}>Back to Quotations</Button>
+      <div className="p-6 text-center">
+        <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+        <p className="text-muted-foreground text-lg">Quotation not found</p>
+        <Button variant="outline" className="mt-4" onClick={() => setView('quotations')}>
+          <ArrowLeft className="h-4 w-4 mr-2" /> Back to Quotations
+        </Button>
       </div>
     );
   }
 
-  const statusCfg = STATUS_CONFIG[currentStatus] || STATUS_CONFIG.DRAFT;
+  const statusStyle = STATUS_CONFIG[qt.status] || STATUS_CONFIG.DRAFT;
+  const currencyLabel = qt.currency === 'BND' ? 'Brunei Dollar' : (qt.currency || 'BND');
+  const barcodeValue = qt.quotationNo || qt.title || '';
 
   return (
-    <div className="p-4 md:p-6 space-y-5 pb-20">
-      {/* ==================== HEADER ==================== */}
-      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => setView('quotations')}>
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <div>
-            <div className="flex items-center gap-3">
-              <h1 className="text-xl font-bold text-gray-900">Quotation Details</h1>
-              <Badge variant="outline" className={cn('font-medium border', statusCfg.bgColor, statusCfg.color, statusCfg.borderColor)}>
-                {statusCfg.label}
-              </Badge>
-            </div>
-            <p className="text-sm text-muted-foreground font-mono mt-0.5">{data.quotationNo || 'No quotation number'}</p>
+    <div className="p-3 md:p-6 space-y-4 print:p-0">
+      {/* ===== TOP ACTION BAR ===== */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 print:hidden">
+        <Button variant="ghost" size="icon" onClick={() => setView('quotations')}>
+          <ArrowLeft className="h-4 w-4" />
+        </Button>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3 flex-wrap">
+            <FileText className="h-5 w-5 text-orange-500" />
+            <h1 className="text-lg md:text-xl font-bold truncate">
+              Quotation {qt.quotationNo || 'N/A'}
+            </h1>
+            <Badge variant="outline" className={statusStyle.className}>
+              {statusStyle.label}
+            </Badge>
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => window.print()}>
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Workflow Action Buttons */}
+          {canManage && transitions.map((t) => (
+            <Button
+              key={t.target}
+              variant="outline"
+              size="sm"
+              className={t.color}
+              disabled={actionLoading}
+              onClick={() => {
+                if (t.target === 'REJECTED') {
+                  setShowRejectDialog(true);
+                } else {
+                  updateStatus(t.target);
+                }
+              }}
+            >
+              {actionLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : t.icon}
+              <span className="ml-1.5">{t.label}</span>
+            </Button>
+          ))}
+
+          <Button variant="outline" size="sm" onClick={handlePrint}>
             <Printer className="h-4 w-4 mr-1.5" /> Print
           </Button>
-          <Button variant="outline" size="sm" onClick={handleDuplicate}>
-            <Copy className="h-4 w-4 mr-1.5" /> Duplicate
+          <Button variant="outline" size="sm" onClick={handleSendEmail}>
+            <Mail className="h-4 w-4 mr-1.5" /> Send Email
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setView('quotation-edit', { id: quotationId || '' })}>
-            <Pencil className="h-4 w-4 mr-1.5" /> Edit
+          <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
+            <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
           </Button>
-          <Button variant="outline" size="sm" className="text-rose-600 hover:text-rose-700 hover:bg-rose-50" onClick={() => setDeleteDialogOpen(true)}>
-            <XCircle className="h-4 w-4 mr-1.5" /> Delete
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm">
+                <MoreVertical className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={handleCopyNumber}>
+                <Copy className="h-4 w-4 mr-2" /> Copy Quotation No.
+              </DropdownMenuItem>
+              {canManage && qt.status === 'DRAFT' && (
+                <DropdownMenuItem onClick={() => setView('quotation-edit', { id: qt.id })}>
+                  <Pencil className="h-4 w-4 mr-2" /> Edit Quotation
+                </DropdownMenuItem>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
-      {/* ==================== WORKFLOW PROGRESS BAR ==================== */}
-      <Card className="py-0 gap-0 overflow-hidden">
-        <CardContent className="p-4">
-          <div className="flex items-center gap-0 overflow-x-auto pb-1">
-            {WORKFLOW_STEPS.map((step, i) => {
-              const isCompleted = i <= currentStepIndex;
-              const isCurrent = step === currentStatus;
-              const stepCfg = STATUS_CONFIG[step];
-              return (
-                <div key={step} className="flex items-center shrink-0">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className={cn(
-                        'w-7 h-7 rounded-full flex items-center justify-center border-2 transition-all shrink-0',
-                        isCompleted
-                          ? 'bg-emerald-500 border-emerald-500 text-white'
-                          : 'border-gray-300 text-gray-400'
-                      )}
-                    >
-                      {isCompleted ? (
-                        <CheckCircle2 className="h-4 w-4" />
-                      ) : (
-                        <span className="text-xs font-bold">{i + 1}</span>
-                      )}
-                    </div>
-                    <span
-                      className={cn(
-                        'text-xs font-medium whitespace-nowrap',
-                        isCurrent
-                          ? 'text-emerald-700 font-bold'
-                          : isCompleted
-                            ? 'text-gray-700'
-                            : 'text-gray-400'
-                      )}
-                    >
-                      {stepCfg?.label || step}
-                    </span>
-                  </div>
-                  {i < WORKFLOW_STEPS.length - 1 && (
-                    <div className={cn(
-                      'w-8 h-0.5 mx-1 shrink-0',
-                      i < currentStepIndex ? 'bg-emerald-500' : 'bg-gray-200'
-                    )} />
-                  )}
+      {/* ===== MAIN LAYOUT: Quotation Card + Summary Sidebar ===== */}
+      <div className="flex flex-col lg:flex-row gap-4">
+        {/* Left: Main Quotation Content */}
+        <div className="flex-1 min-w-0">
+      <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden print:shadow-none print:rounded-none print:border-0">
+        <div className="p-4 md:p-8">
+          {/* === HEADER: Company Info (Left) + Barcode/QR/Quotation Details (Right) === */}
+          <div className="flex flex-col md:flex-row md:justify-between gap-6 mb-8">
+            {/* Left: Company Info */}
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-12 h-12 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+                  {COMPANY.shortName}
                 </div>
-              );
-            })}
-          </div>
-        </CardContent>
-      </Card>
+                <div>
+                  <h2 className="font-bold text-sm md:text-base leading-tight">{COMPANY.name}</h2>
+                </div>
+              </div>
+              <div className="text-xs text-gray-500 space-y-1 ml-0 md:ml-15">
+                <p className="flex items-start gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                  {COMPANY.address}
+                </p>
+                <p className="flex items-center gap-1.5">
+                  <Phone className="h-3.5 w-3.5 shrink-0" />
+                  {COMPANY.phone}
+                </p>
+                <p className="flex items-center gap-1.5">
+                  <MailIcon className="h-3.5 w-3.5 shrink-0" />
+                  {COMPANY.email}
+                </p>
+                <p className="flex items-center gap-1.5">
+                  <Building2 className="h-3.5 w-3.5 shrink-0" />
+                  {COMPANY.website}
+                </p>
+              </div>
+            </div>
 
-      {/* ==================== MAIN CONTENT ==================== */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        {/* ============ LEFT: Customer & Meta Info ============ */}
-        <div className="lg:col-span-1 space-y-4">
-          {/* Customer Information */}
-          <Card className="py-0 gap-0">
-            <CardHeader className="pb-0">
-              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Customer Information
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4 space-y-3">
-              {data.customer ? (
-                <>
-                  <div className="flex items-start gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center shrink-0">
-                      <Building2 className="h-5 w-5 text-emerald-600" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm">{data.customer.name}</p>
-                      {data.customer.email && (
-                        <div className="flex items-center gap-1.5 mt-1">
-                          <Mail className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground truncate">{data.customer.email}</span>
-                        </div>
-                      )}
-                      {data.customer.phone && (
-                        <div className="flex items-center gap-1.5 mt-0.5">
-                          <Phone className="h-3 w-3 text-muted-foreground" />
-                          <span className="text-xs text-muted-foreground">{data.customer.phone}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  {data.customer.address && (
-                    <div className="flex items-start gap-2 pt-1">
-                      <MapPin className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
-                      <p className="text-xs text-muted-foreground">{data.customer.address}</p>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <p className="text-sm text-muted-foreground">{data.customerName || '—'}</p>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Quotation Meta */}
-          <Card className="py-0 gap-0">
-            <CardHeader className="pb-0">
-              <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                Quotation Details
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="pt-4 space-y-3">
-              <InfoRow icon={Hash} label="Reference No." value={data.referenceNo || '—'} />
-              <InfoRow icon={User} label="Prepared By" value={data.preparedByName || '—'} />
-              <InfoRow icon={Calendar} label="Date" value={format(new Date(data.createdAt), 'dd MMM yyyy, hh:mm a')} />
-              <InfoRow icon={Clock} label="Valid Until" value={data.validUntil ? format(new Date(data.validUntil), 'dd MMM yyyy') : '—'} />
-              {data.approvedAt && (
-                <InfoRow icon={CheckCircle2} label="Approved At" value={format(new Date(data.approvedAt), 'dd MMM yyyy, hh:mm a')} />
-              )}
-              {data.sentAt && (
-                <InfoRow icon={Send} label="Sent At" value={format(new Date(data.sentAt), 'dd MMM yyyy, hh:mm a')} />
-              )}
-              {data.acceptedAt && (
-                <InfoRow icon={CheckCircle2} label="Accepted At" value={format(new Date(data.acceptedAt), 'dd MMM yyyy, hh:mm a')} />
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Project & Site */}
-          {(data.projectName || data.site || data.description) && (
-            <Card className="py-0 gap-0">
-              <CardHeader className="pb-0">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Project Information
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4 space-y-3">
-                {data.projectName && <InfoRow icon={FileText} label="Project Name" value={data.projectName} />}
-                {data.site && <InfoRow icon={MapPin} label="Site" value={data.site} />}
-                {data.description && (
-                  <div>
-                    <p className="text-xs text-muted-foreground mb-1">Description</p>
-                    <p className="text-sm text-gray-700 bg-gray-50 rounded-lg p-2.5 whitespace-pre-wrap">{data.description}</p>
+            {/* Right: Barcode, QR, Quotation Details */}
+            <div className="flex flex-col items-center md:items-end gap-3 shrink-0">
+              {/* Barcode */}
+              <div className="bg-white p-2">
+                <svg ref={barcodeRef} className="h-12" />
+              </div>
+              {/* QR Code */}
+              <div className="w-16 h-16">
+                <QRCodeSVG
+                  value={`https://smartms.com/quotation/${qt.quotationNo || qt.id}`}
+                  size={64}
+                  level="M"
+                  includeMargin={false}
+                />
+              </div>
+              {/* Quotation Label */}
+              <div className="text-center md:text-right">
+                <p className="text-emerald-600 font-bold text-lg">QUOTATION</p>
+                <p className="font-bold text-sm text-gray-900">{qt.quotationNo || 'N/A'}</p>
+              </div>
+              {/* Quotation Meta */}
+              <div className="text-xs text-gray-500 space-y-1.5 text-right w-full max-w-52">
+                <div className="flex justify-between gap-3">
+                  <span className="text-gray-400">Quotation Date</span>
+                  <span className="font-medium text-gray-700">{fmtDate(qt.createdAt)}</span>
+                </div>
+                <div className="flex justify-between gap-3">
+                  <span className="text-gray-400">Valid Until</span>
+                  <span className="font-medium text-gray-700">{fmtDate(qt.validUntil)}</span>
+                </div>
+                {qt.referenceNo && (
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-400">Reference</span>
+                    <span className="font-medium text-gray-700">{qt.referenceNo}</span>
                   </div>
                 )}
-              </CardContent>
-            </Card>
-          )}
-        </div>
-
-        {/* ============ CENTER: Line Items & Summary ============ */}
-        <div className="lg:col-span-2 space-y-4">
-          {/* Barcode / QR Code */}
-          {data.quotationNo && (
-            <Card className="py-0 gap-0 overflow-hidden">
-              <CardHeader className="pb-0">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex items-center gap-2">
-                  <QrCode className="h-3.5 w-3.5" /> Barcode / QR Code
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4 flex justify-center">
-                <div className="bg-white rounded-lg p-4 border border-gray-100 inline-block">
-                  <BarcodeDisplay value={data.quotationNo} />
+                {qt.projectName && (
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-400">Project</span>
+                    <span className="font-medium text-gray-700">{qt.projectName}</span>
+                  </div>
+                )}
+                <div className="flex justify-between gap-3">
+                  <span className="text-gray-400">Currency</span>
+                  <span className="font-medium text-gray-700">{qt.currency || 'BND'} - {currencyLabel}</span>
                 </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Line Items Table */}
-          <Card className="py-0 gap-0 overflow-hidden">
-            <CardHeader className="pb-0">
-              <div className="flex items-center justify-between w-full">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Line Items ({lineItems.filter((i) => i.title).length})
-                </CardTitle>
-                <span className="text-xs text-muted-foreground font-mono">{data.quotationNo}</span>
+                {qt.preparedByName && (
+                  <div className="flex justify-between gap-3">
+                    <span className="text-gray-400">Prepared By</span>
+                    <span className="font-medium text-gray-700">{qt.preparedByName}</span>
+                  </div>
+                )}
               </div>
-            </CardHeader>
-            <CardContent className="pt-4">
-              <div className="overflow-x-auto rounded-lg border border-gray-200">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-gray-50">
-                      <th className="px-3 py-2.5 text-center text-xs font-semibold text-gray-500 uppercase w-10">SL</th>
-                      <th className="px-3 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase min-w-[220px]">Item</th>
-                      <th className="px-3 py-2.5 text-center text-xs font-semibold text-gray-500 uppercase w-16">Unit</th>
-                      <th className="px-3 py-2.5 text-right text-xs font-semibold text-gray-500 uppercase w-16">Qty</th>
-                      <th className="px-3 py-2.5 text-right text-xs font-semibold text-gray-500 uppercase w-24">Rate</th>
-                      <th className="px-3 py-2.5 text-right text-xs font-semibold text-gray-500 uppercase w-28">Amount</th>
+            </div>
+          </div>
+
+          <Separator className="mb-6" />
+
+          {/* === BILL TO === */}
+          <div className="mb-6">
+            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <MapPin className="h-3.5 w-3.5" /> Bill To
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <p className="font-bold text-sm text-gray-900 mb-1">
+                  {(qt.customer?.companyName || qt.customer?.name || '').toUpperCase()}
+                </p>
+                {qt.customer?.address && (
+                  <p className="text-xs text-gray-500 mb-1.5">{qt.customer.address}</p>
+                )}
+                <div className="space-y-1">
+                  {qt.customer?.phone && (
+                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
+                      <Phone className="h-3 w-3" /> {qt.customer.phone}
+                    </p>
+                  )}
+                  {qt.customer?.email && (
+                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
+                      <MailIcon className="h-3 w-3" /> {qt.customer.email}
+                    </p>
+                  )}
+                  {qt.customer?.pic && (
+                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
+                      <User className="h-3 w-3" /> {qt.customer.pic} (PIC)
+                    </p>
+                  )}
+                </div>
+              </div>
+              {qt.site && (
+                <div>
+                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                    <MapPin className="h-3.5 w-3.5" /> Site
+                  </h3>
+                  <p className="text-xs text-gray-700">{qt.site}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* === LINE ITEMS TABLE === */}
+          <div className="mb-6 overflow-x-auto">
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr className="border-b-2 border-gray-300">
+                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-10">SL</th>
+                  <th className="text-left font-semibold text-gray-700 py-2.5 px-2">Item Title</th>
+                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-16">Unit</th>
+                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-14">Qty</th>
+                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-20">Rate ({qt.currency || 'BND'})</th>
+                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-24">Amount ({qt.currency || 'BND'})</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lineItems.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-8 text-gray-400 text-sm">
+                      No line items
+                    </td>
+                  </tr>
+                ) : (
+                  lineItems.map((item, i) => (
+                    <tr
+                      key={item.id || i}
+                      className={`border-b border-gray-200 ${i % 2 === 1 ? 'bg-gray-50/50' : ''}`}
+                    >
+                      <td className="text-center py-2.5 px-2 text-gray-600">{i + 1}</td>
+                      <td className="py-2.5 px-2">
+                        <p className="font-medium text-gray-800 text-xs">{item.title}</p>
+                        {item.description && (
+                          <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.description}</p>
+                        )}
+                      </td>
+                      <td className="text-center py-2.5 px-2 text-gray-600">{item.unit || 'Nos'}</td>
+                      <td className="text-center py-2.5 px-2 text-gray-600">{item.quantity}</td>
+                      <td className="text-right py-2.5 px-2 text-gray-700">{fmtBND(item.rate)}</td>
+                      <td className="text-right py-2.5 px-2 font-medium text-gray-800">{fmtBND(item.amount)}</td>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {lineItems.filter((i) => i.title).length === 0 ? (
-                      <tr>
-                        <td colSpan={6} className="text-center py-8 text-muted-foreground text-sm">
-                          No line items
-                        </td>
-                      </tr>
-                    ) : (
-                      lineItems.filter((i) => i.title).map((item, index) => (
-                        <tr key={index} className={cn('border-t border-gray-100', index % 2 === 0 ? 'bg-white' : 'bg-gray-50/30')}>
-                          <td className="px-3 py-3 text-muted-foreground text-xs font-mono text-center align-top pt-3.5">{index + 1}</td>
-                          <td className="px-3 py-3">
-                            <p className="font-medium text-gray-900">{item.title || '—'}</p>
-                            {item.description && (
-                              <p className="text-xs text-gray-500 mt-1 leading-relaxed">{item.description}</p>
-                            )}
-                            {(item.category || item.warranty) && (
-                              <div className="flex items-center gap-1.5 mt-1.5">
-                                {item.category && (
-                                  <span className="text-[10px] text-muted-foreground bg-gray-100 px-1.5 py-0.5 rounded">{item.category}</span>
-                                )}
-                                {item.warranty && (
-                                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">{item.warranty}</span>
-                                )}
-                              </div>
-                            )}
-                          </td>
-                          <td className="px-3 py-3 text-center text-xs text-muted-foreground uppercase align-top pt-3.5">{item.unit || '—'}</td>
-                          <td className="px-3 py-3 text-right font-mono align-top pt-3.5">{item.quantity || 0}</td>
-                          <td className="px-3 py-3 text-right font-mono align-top pt-3.5">{formatCurrency(item.rate || 0, currency)}</td>
-                          <td className="px-3 py-3 text-right font-bold font-mono text-gray-900 align-top pt-3.5">
-                            {formatCurrency(item.amount || (item.quantity || 0) * (item.rate || 0), currency)}
-                          </td>
-                        </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+                  ))
+                )}
+              </tbody>
+            </table>
+            <p className="text-center text-xs text-gray-400 mt-3 italic">Thank you for your business!</p>
+          </div>
 
-          {/* Summary & Totals */}
-          <Card className="py-0 gap-0 overflow-hidden">
-            <CardContent className="p-0">
-              <div className="bg-gray-50 rounded-b-xl p-5">
-                <div className="max-w-sm ml-auto space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-gray-600">Subtotal</span>
-                    <span className="text-sm font-mono font-medium">{formatCurrency(data.subtotal, currency)}</span>
-                  </div>
-                  {(data.taxRate || 0) > 0 && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Tax ({data.taxRate}%)</span>
-                      <span className="text-sm font-mono font-medium">{formatCurrency(data.tax, currency)}</span>
-                    </div>
-                  )}
-                  {data.discount > 0 && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Discount</span>
-                      <span className="text-sm font-mono font-medium text-rose-600">-{formatCurrency(data.discount, currency)}</span>
-                    </div>
-                  )}
-                  {data.shipping > 0 && (
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-gray-600">Shipping</span>
-                      <span className="text-sm font-mono font-medium">{formatCurrency(data.shipping, currency)}</span>
-                    </div>
-                  )}
-                  <Separator className="!mt-3 !mb-3" />
-                  <div className="flex items-center justify-between">
-                    <span className="text-base font-bold text-gray-900">Grand Total</span>
-                    <span className="text-xl font-bold text-emerald-700 font-mono">{formatCurrency(data.total, currency)}</span>
-                  </div>
-                  <div className="bg-emerald-50 text-emerald-800 rounded-lg px-3 py-2 text-xs font-medium mt-2">
-                    {amountInWords}
-                  </div>
+          <Separator className="mb-6" />
+
+          {/* === BOTTOM SECTIONS: 3 Columns (Terms, Attachments, Notes) === */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+            {/* Terms & Conditions */}
+            <div>
+              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                Terms & Conditions
+              </h3>
+              <ol className="text-xs text-gray-500 space-y-1.5 list-decimal list-inside">
+                {terms.map((term, i) => (
+                  <li key={i} className="leading-relaxed">{term}</li>
+                ))}
+              </ol>
+            </div>
+
+            {/* Attachments */}
+            <div>
+              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                Attachments
+              </h3>
+              <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 text-center mb-3">
+                <Upload className="h-6 w-6 text-gray-300 mx-auto mb-1" />
+                <p className="text-xs text-gray-400">Drag & drop files here or click to browse</p>
+                <p className="text-[10px] text-gray-300 mt-0.5">PDF, DOC, XLS, JPG, PNG (Max 10MB)</p>
+              </div>
+            </div>
+
+            {/* Notes */}
+            <div>
+              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                Notes
+              </h3>
+              <p className="text-xs text-gray-500 leading-relaxed">
+                {qt.notes || 'Thank you for choosing Smart Maintenance Services. We look forward to working with you.'}
+              </p>
+              <div className="mt-4 flex items-end gap-4">
+                <div>
+                  <p className="text-xs font-medium text-gray-700">
+                    {qt.preparedByName || '—'}
+                  </p>
+                  <p className="text-[10px] text-gray-400">Authorised Signature</p>
+                </div>
+                <div className="w-14 h-14 border-2 border-emerald-600 rounded-full flex items-center justify-center shrink-0">
+                  <span className="text-emerald-600 font-bold text-xs">{COMPANY.shortName}</span>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Terms & Conditions */}
-          {termsList.length > 0 && (
-            <Card className="py-0 gap-0 overflow-hidden">
-              <CardHeader className="pb-0">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Terms & Conditions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <div className="space-y-2">
-                  {termsList.filter((t) => t.trim()).map((term, i) => (
-                    <div key={i} className="flex gap-2.5 items-start">
-                      <span className="text-xs text-muted-foreground mt-0.5 w-4 shrink-0 font-mono">{i + 1}.</span>
-                      <p className="text-sm text-gray-600">{term}</p>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Notes */}
-          {data.notes && (
-            <Card className="py-0 gap-0 overflow-hidden">
-              <CardHeader className="pb-0">
-                <CardTitle className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                  Notes
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <p className="text-sm text-gray-600 bg-gray-50 rounded-lg p-3 whitespace-pre-wrap">{data.notes}</p>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-      </div>
-
-      {/* ==================== STICKY FOOTER: ACTION BUTTONS ==================== */}
-      {availableActions.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-40">
-          <div className="max-w-7xl mx-auto px-4 md:px-6 py-3">
-            <div className="flex items-center gap-2 overflow-x-auto">
-              <span className="text-xs text-muted-foreground font-medium shrink-0 mr-1">Actions:</span>
-              {availableActions.map((action) => {
-                const Icon = action.icon;
-                return (
-                  <Button
-                    key={action.target}
-                    size="sm"
-                    className={cn('text-white shadow-sm shrink-0', action.color)}
-                    onClick={() => {
-                      if (action.confirm) {
-                        setStatusDialog({ open: true, targetStatus: action.target, label: action.label, confirm: action.confirm });
-                      } else {
-                        setStatusDialog({ open: true, targetStatus: action.target, label: action.label, confirm: undefined });
-                        setStatusNotes('');
-                      }
-                    }}
-                  >
-                    <Icon className="h-3.5 w-3.5 mr-1.5" />
-                    {action.label}
-                    <ChevronRight className="h-3 w-3 ml-1" />
-                  </Button>
-                );
-              })}
             </div>
           </div>
         </div>
-      )}
 
-      {/* ==================== STATUS CHANGE DIALOG ==================== */}
-      <Dialog open={statusDialog.open} onOpenChange={(open) => !open && setStatusDialog({ open: false, targetStatus: '', label: '', confirm: '' })}>
-        <DialogContent className="max-w-md">
+        {/* === PRINT SUMMARY (inline for print) === */}
+        <div className="print:block hidden print:px-8 print:pb-6">
+          <QuotationSummaryPrint qt={qt} />
+        </div>
+      </div>
+        </div>{/* End left column */}
+
+        {/* Right: Summary Sidebar (desktop only, sticky) */}
+        <div className="hidden lg:block w-80 shrink-0">
+          <div className="sticky top-24">
+            <QuotationSummaryCard qt={qt} />
+          </div>
+        </div>
+      </div>{/* End layout wrapper */}
+
+      {/* === MOBILE SUMMARY CARD === */}
+      <div className="lg:hidden">
+        <QuotationSummaryCard qt={qt} />
+      </div>
+
+      {/* ===== REJECT DIALOG ===== */}
+      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+        <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {statusDialog.confirm ? (
-                <AlertTriangle className="h-5 w-5 text-amber-500" />
-              ) : (
-                <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-              )}
-              {statusDialog.label}
-            </DialogTitle>
+            <DialogTitle>Reject Quotation</DialogTitle>
             <DialogDescription>
-              {statusDialog.confirm
-                ? statusDialog.confirm
-                : `Change quotation status to "${STATUS_CONFIG[statusDialog.targetStatus]?.label || statusDialog.targetStatus}"?`}
+              Please provide a reason for rejecting this quotation.
             </DialogDescription>
           </DialogHeader>
-          <div>
-            <label className="text-sm font-medium text-gray-700">Notes (optional)</label>
+          <div className="py-2">
             <Textarea
-              value={statusNotes}
-              onChange={(e) => setStatusNotes(e.target.value)}
-              placeholder="Add any notes for this status change..."
-              className="mt-1.5"
+              placeholder="Reason for rejection..."
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              className="mt-1"
               rows={3}
             />
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setStatusDialog({ open: false, targetStatus: '', label: '', confirm: '' })}
-              disabled={actionLoading}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleStatusChange}
-              disabled={actionLoading}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-            >
-              {actionLoading && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
-              Confirm
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* ==================== DELETE CONFIRMATION DIALOG ==================== */}
-      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-rose-500" />
-              Delete Quotation
-            </DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this quotation? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)} disabled={deleting}>
-              Cancel
-            </Button>
-            <Button
-              variant="destructive"
-              onClick={handleDelete}
-              disabled={deleting}
-            >
-              {deleting && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
-              Delete
+            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleReject} disabled={actionLoading}>
+              {actionLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+              Reject Quotation
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -813,15 +648,103 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
   );
 }
 
-// ============ SUB-COMPONENTS ============
+// ============ SUMMARY COMPONENTS ============
 
-function InfoRow({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string }) {
+function QuotationSummaryCard({ qt }: { qt: QuotationData }) {
+  const currency = qt.currency || 'BND';
+
   return (
-    <div className="flex items-start gap-2.5">
-      <Icon className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5" />
-      <div className="min-w-0">
-        <p className="text-xs text-muted-foreground">{label}</p>
-        <p className="text-sm text-gray-900 font-medium">{value}</p>
+    <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 space-y-4">
+      <div>
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">Summary</h3>
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs">
+            <span className="text-gray-500">Subtotal</span>
+            <span className="text-gray-700">{currency} {fmtBND(qt.subtotal)}</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-gray-500">Discount</span>
+            <span className="text-gray-700">{currency} {fmtBND(qt.discount)}</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-gray-500">Tax ({qt.taxRate || 0}%)</span>
+            <span className="text-gray-700">{currency} {fmtBND(qt.tax)}</span>
+          </div>
+          <div className="flex justify-between text-xs">
+            <span className="text-gray-500">Shipping</span>
+            <span className="text-gray-700">{currency} {fmtBND(qt.shipping)}</span>
+          </div>
+          <Separator />
+          <div className="flex justify-between items-center">
+            <span className="text-sm font-semibold text-gray-700">Grand Total</span>
+            <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(qt.total)}</span>
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-emerald-50 rounded-lg p-3">
+        <p className="text-[10px] text-emerald-600 font-medium mb-0.5">Amount In Words</p>
+        <p className="text-xs text-emerald-700 italic font-medium">
+          {numberToCurrencyWords(qt.total)}
+        </p>
+      </div>
+
+      {/* Quotation Status Timeline */}
+      <div>
+        <h3 className="text-sm font-semibold text-gray-700 mb-3">Status</h3>
+        <div className="space-y-1.5 text-xs">
+          <div className="flex justify-between">
+            <span className="text-gray-400">Current Status</span>
+            <Badge variant="outline" className={STATUS_CONFIG[qt.status]?.className || ''}>
+              {STATUS_CONFIG[qt.status]?.label || qt.status}
+            </Badge>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-gray-400">Created</span>
+            <span className="text-gray-700">{fmtDate(qt.createdAt)}</span>
+          </div>
+          {qt.validUntil && (
+            <div className="flex justify-between">
+              <span className="text-gray-400">Valid Until</span>
+              <span className="text-gray-700">{fmtDate(qt.validUntil)}</span>
+            </div>
+          )}
+          {qt.sentAt && (
+            <div className="flex justify-between">
+              <span className="text-gray-400">Sent On</span>
+              <span className="text-gray-700">{fmtDate(qt.sentAt)}</span>
+            </div>
+          )}
+          {qt.acceptedAt && (
+            <div className="flex justify-between">
+              <span className="text-gray-400">Accepted On</span>
+              <span className="text-gray-700">{fmtDate(qt.acceptedAt)}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function QuotationSummaryPrint({ qt }: { qt: QuotationData }) {
+  const currency = qt.currency || 'BND';
+  return (
+    <div className="flex justify-end">
+      <div className="w-72 space-y-3">
+        <h3 className="text-sm font-semibold text-gray-700">Summary</h3>
+        <div className="space-y-1.5 text-xs">
+          <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>{currency} {fmtBND(qt.subtotal)}</span></div>
+          <div className="flex justify-between"><span className="text-gray-500">Discount</span><span>{currency} {fmtBND(qt.discount)}</span></div>
+          <div className="flex justify-between"><span className="text-gray-500">Tax ({qt.taxRate || 0}%)</span><span>{currency} {fmtBND(qt.tax)}</span></div>
+          <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span>{currency} {fmtBND(qt.shipping)}</span></div>
+          <Separator />
+          <div className="flex justify-between text-base font-bold text-emerald-600"><span>Grand Total</span><span>{currency} {fmtBND(qt.total)}</span></div>
+        </div>
+        <div className="bg-emerald-50 rounded-lg p-2.5 mt-3">
+          <p className="text-[10px] text-emerald-600 font-medium">Amount In Words</p>
+          <p className="text-xs text-emerald-700 italic">{numberToCurrencyWords(qt.total)}</p>
+        </div>
       </div>
     </div>
   );
