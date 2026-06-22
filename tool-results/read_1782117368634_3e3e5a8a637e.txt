@@ -1,0 +1,747 @@
+     1→     1→'use client';
+     2→     2→
+     3→     3→import { useState, useEffect, useRef, useCallback } from 'react';
+     4→     4→import { Button } from '@/components/ui/button';
+     5→     5→import { Badge } from '@/components/ui/badge';
+     6→     6→import { Skeleton } from '@/components/ui/skeleton';
+     7→     7→import {
+     8→     8→  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
+     9→     9→} from '@/components/ui/dialog';
+    10→    10→import { Textarea } from '@/components/ui/textarea';
+    11→    11→import {
+    12→    12→  ArrowLeft, Printer, Mail, MessageCircle, MoreVertical,
+    13→    13→  Loader2, AlertCircle, CheckCircle2, Send, X,
+    14→    14→  MapPin, Phone, MailIcon, User, Calendar, Hash, Building2, Landmark, Truck,
+    15→    15→  Copy, FileText, RotateCcw, Pencil,
+    16→    16→} from 'lucide-react';
+    17→    17→import {
+    18→    18→  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+    19→    19→} from '@/components/ui/dropdown-menu';
+    20→    20→import { toast } from 'sonner';
+    21→    21→import { useAppStore, useAuthStore, hasMinRole } from '@/store';
+    22→    22→import type { QuotationLineItem, QuotationStatus } from '@/types';
+    23→    23→import { numberToCurrencyWords } from '@/lib/number-to-words';
+    24→    24→import { format } from 'date-fns';
+    25→    25→import JsBarcode from 'jsbarcode';
+    26→    26→import dynamic from 'next/dynamic';
+    27→    27→
+    28→    28→const QRCodeSVG = dynamic(
+    29→    29→  () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
+    30→    30→  { ssr: false }
+    31→    31→);
+    32→    32→
+    33→    33→// ============ CONSTANTS ============
+    34→    34→
+    35→    35→const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
+    36→    36→  DRAFT: { label: 'Draft', className: 'bg-gray-100 text-gray-700 border-gray-300' },
+    37→    37→  REVIEW: { label: 'In Review', className: 'bg-amber-100 text-amber-800 border-amber-300' },
+    38→    38→  APPROVED: { label: 'Approved', className: 'bg-teal-100 text-teal-800 border-teal-300' },
+    39→    39→  SENT: { label: 'Sent', className: 'bg-sky-100 text-sky-800 border-sky-300' },
+    40→    40→  ACCEPTED: { label: 'Accepted', className: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+    41→    41→  REJECTED: { label: 'Rejected', className: 'bg-rose-100 text-rose-700 border-rose-300' },
+    42→    42→  EXPIRED: { label: 'Expired', className: 'bg-gray-100 text-gray-600 border-gray-300' },
+    43→    43→  CONVERTED_WO: { label: 'Converted to WO', className: 'bg-purple-100 text-purple-800 border-purple-300' },
+    44→    44→  CONVERTED_INVOICE: { label: 'Converted to Invoice', className: 'bg-violet-100 text-violet-800 border-violet-300' },
+    45→    45→  PAID: { label: 'Paid', className: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+    46→    46→  CLOSED: { label: 'Closed', className: 'bg-gray-100 text-gray-600 border-gray-300' },
+    47→    47→};
+    48→    48→
+    49→    49→const WORKFLOW_TRANSITIONS: Record<string, { label: string; target: string; icon: React.ReactNode; color: string }[]> = {
+    50→    50→  DRAFT: [
+    51→    51→    { label: 'Submit for Review', target: 'REVIEW', icon: <Send className="h-4 w-4" />, color: 'text-amber-700 hover:bg-amber-50' },
+    52→    52→  ],
+    53→    53→  REVIEW: [
+    54→    54→    { label: 'Approve', target: 'APPROVED', icon: <CheckCircle2 className="h-4 w-4" />, color: 'text-emerald-700 hover:bg-emerald-50' },
+    55→    55→    { label: 'Send Back to Draft', target: 'DRAFT', icon: <RotateCcw className="h-4 w-4" />, color: 'text-gray-700 hover:bg-gray-50' },
+    56→    56→  ],
+    57→    57→  APPROVED: [
+    58→    58→    { label: 'Send to Customer', target: 'SENT', icon: <Send className="h-4 w-4" />, color: 'text-sky-700 hover:bg-sky-50' },
+    59→    59→  ],
+    60→    60→  SENT: [
+    61→    61→    { label: 'Mark as Accepted', target: 'ACCEPTED', icon: <CheckCircle2 className="h-4 w-4" />, color: 'text-emerald-700 hover:bg-emerald-50' },
+    62→    62→    { label: 'Mark as Rejected', target: 'REJECTED', icon: <X className="h-4 w-4" />, color: 'text-rose-700 hover:bg-rose-50' },
+    63→    63→  ],
+    64→    64→  ACCEPTED: [
+    65→    65→    { label: 'Convert to Work Order', target: 'CONVERTED_WO', icon: <FileText className="h-4 w-4" />, color: 'text-purple-700 hover:bg-purple-50' },
+    66→    66→    { label: 'Convert to Invoice', target: 'CONVERTED_INVOICE', icon: <FileText className="h-4 w-4" />, color: 'text-violet-700 hover:bg-violet-50' },
+    67→    67→  ],
+    68→    68→};
+    69→    69→
+    70→    70→const DEFAULT_TERMS = [
+    71→    71→  'This quotation is valid for the period stated above only.',
+    72→    72→  '50% advance payment and balance upon completion.',
+    73→    73→  'Delivery period: 3 working days after confirmation.',
+    74→    74→  'Price quoted are in BND and inclusive of installation.',
+    75→    75→  'Warranty applies only to workmanship.',
+    76→    76→  'Material warranty follows manufacturer terms.',
+    77→    77→  'Additional works are subject to variation order.',
+    78→    78→  'Payment by bank transfer or cheque.',
+    79→    79→];
+    80→    80→
+    81→    81→const COMPANY = {
+    82→    82→  name: 'SMART MAINTENANCE SERVICES SDN BHD',
+    83→    83→  shortName: 'S',
+    84→    84→  address: 'No. 25, Spg 88, Jln Gadong BE1318, Bandar Seri Begawan, Brunei Darussalam',
+    85→    85→  phone: '+673 245 6789',
+    86→    86→  email: 'info@smartms.com',
+    87→    87→  website: 'www.smartms.com',
+    88→    88→  regNo: 'BE1318',
+    89→    89→};
+    90→    90→
+    91→    91→// ============ HELPERS ============
+    92→    92→
+    93→    93→const token = () => localStorage.getItem('cmms_token') || '';
+    94→    94→
+    95→    95→function fmtBND(n: number): string {
+    96→    96→  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    97→    97→}
+    98→    98→
+    99→    99→function fmtDate(d?: string): string {
+   100→   100→  if (!d) return '—';
+   101→   101→  return format(new Date(d), 'dd/MM/yyyy');
+   102→   102→}
+   103→   103→
+   104→   104→function parseLineItems(itemsStr?: string): QuotationLineItem[] {
+   105→   105→  if (!itemsStr) return [];
+   106→   106→  try {
+   107→   107→    const parsed = JSON.parse(itemsStr);
+   108→   108→    if (Array.isArray(parsed)) return parsed;
+   109→   109→  } catch { /* empty */ }
+   110→   110→  return [];
+   111→   111→}
+   112→   112→
+   113→   113→function parseTerms(termsStr?: string): string[] {
+   114→   114→  if (!termsStr) return DEFAULT_TERMS;
+   115→   115→  try {
+   116→   116→    const parsed = JSON.parse(termsStr);
+   117→   117→    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+   118→   118→  } catch { /* empty */ }
+   119→   119→  return DEFAULT_TERMS;
+   120→   120→}
+   121→   121→
+   122→   122→// ============ COMPONENT ============
+   123→   123→
+   124→   124→interface QuotationCustomer {
+   125→   125→  name: string;
+   126→   126→  phone?: string;
+   127→   127→  email?: string;
+   128→   128→  address?: string;
+   129→   129→  companyName?: string;
+   130→   130→  pic?: string;
+   131→   131→}
+   132→   132→
+   133→   133→interface QuotationData {
+   134→   134→  id: string;
+   135→   135→  tenantId: string;
+   136→   136→  customerId: string;
+   137→   137→  customer: QuotationCustomer;
+   138→   138→  quotationNo?: string;
+   139→   139→  title: string;
+   140→   140→  description?: string;
+   141→   141→  referenceNo?: string;
+   142→   142→  projectName?: string;
+   143→   143→  site?: string;
+   144→   144→  preparedBy?: string;
+   145→   145→  preparedByName?: string;
+   146→   146→  items?: string;
+   147→   147→  terms?: string;
+   148→   148→  currency?: string;
+   149→   149→  subtotal: number;
+   150→   150→  taxRate: number;
+   151→   151→  tax: number;
+   152→   152→  discount: number;
+   153→   153→  shipping: number;
+   154→   154→  total: number;
+   155→   155→  status: string;
+   156→   156→  validUntil?: string;
+   157→   157→  approvedAt?: string;
+   158→   158→  sentAt?: string;
+   159→   159→  acceptedAt?: string;
+   160→   160→  notes?: string;
+   161→   161→  createdAt: string;
+   162→   162→  updatedAt: string;
+   163→   163→  warranty?: string;
+   164→   164→  deliveryPeriod?: string;
+   165→   165→  salesPerson?: string;
+   166→   166→}
+   167→   167→
+   168→   168→export function QuotationDetail({ quotationId }: { quotationId?: string }) {
+   169→   169→  const { viewParams, setView } = useAppStore();
+   170→   170→  const user = useAuthStore((s) => s.user);
+   171→   171→  const id = quotationId || viewParams.id;
+   172→   172→  const [qt, setQt] = useState<QuotationData | null>(null);
+   173→   173→  const [loading, setLoading] = useState(true);
+   174→   174→  const [actionLoading, setActionLoading] = useState(false);
+   175→   175→  const [lineItems, setLineItems] = useState<QuotationLineItem[]>([]);
+   176→   176→  const [terms, setTerms] = useState<string[]>(DEFAULT_TERMS);
+   177→   177→  const [showRejectDialog, setShowRejectDialog] = useState(false);
+   178→   178→  const [rejectReason, setRejectReason] = useState('');
+   179→   179→  const barcodeRef = useRef<SVGSVGElement>(null);
+   180→   180→
+   181→   181→  const fetchQt = useCallback(async () => {
+   182→   182→    if (!id) return;
+   183→   183→    setLoading(true);
+   184→   184→    try {
+   185→   185→      const res = await fetch(`/api/quotations/${id}`, {
+   186→   186→        headers: { Authorization: `Bearer ${token()}` },
+   187→   187→      });
+   188→   188→      if (!res.ok) throw new Error();
+   189→   189→      const json = await res.json();
+   190→   190→      setQt(json);
+   191→   191→      setLineItems(parseLineItems(json.items));
+   192→   192→      setTerms(parseTerms(json.terms));
+   193→   193→    } catch {
+   194→   194→      toast.error('Failed to load quotation');
+   195→   195→    } finally {
+   196→   196→      setLoading(false);
+   197→   197→    }
+   198→   198→  }, [id]);
+   199→   199→
+   200→   200→  useEffect(() => { fetchQt(); }, [fetchQt]);
+   201→   201→
+   202→   202→  // Generate barcode
+   203→   203→  useEffect(() => {
+   204→   204→    const barcodeValue = qt?.quotationNo || qt?.title || '';
+   205→   205→    if (barcodeValue && barcodeRef.current) {
+   206→   206→      try {
+   207→   207→        JsBarcode(barcodeRef.current, barcodeValue, {
+   208→   208→          format: 'CODE128',
+   209→   209→          width: 1.8,
+   210→   210→          height: 45,
+   211→   211→          displayValue: false,
+   212→   212→          margin: 0,
+   213→   213→        });
+   214→   214→      } catch { /* barcode generation can fail in SSR */ }
+   215→   215→    }
+   216→   216→  }, [qt?.quotationNo, qt?.title]);
+   217→   217→
+   218→   218→  const updateStatus = async (status: string, extra?: Record<string, unknown>) => {
+   219→   219→    if (!id) return;
+   220→   220→    setActionLoading(true);
+   221→   221→    try {
+   222→   222→      const res = await fetch(`/api/quotations/${id}/status`, {
+   223→   223→        method: 'PUT',
+   224→   224→        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+   225→   225→        body: JSON.stringify({ status, ...extra }),
+   226→   226→      });
+   227→   227→      if (!res.ok) throw new Error();
+   228→   228→      toast.success(`Quotation ${status.toLowerCase().replace(/_/g, ' ')}`);
+   229→   229→      fetchQt();
+   230→   230→    } catch {
+   231→   231→      toast.error('Action failed');
+   232→   232→    } finally {
+   233→   233→      setActionLoading(false);
+   234→   234→    }
+   235→   235→  };
+   236→   236→
+   237→   237→  const handleReject = async () => {
+   238→   238→    await updateStatus('REJECTED', { reason: rejectReason });
+   239→   239→    setShowRejectDialog(false);
+   240→   240→    setRejectReason('');
+   241→   241→  };
+   242→   242→
+   243→   243→  const handleCopyNumber = () => {
+   244→   244→    if (qt?.quotationNo) {
+   245→   245→      navigator.clipboard.writeText(qt.quotationNo);
+   246→   246→      toast.success('Quotation number copied');
+   247→   247→    }
+   248→   248→  };
+   249→   249→
+   250→   250→  const handlePrint = () => window.print();
+   251→   251→
+   252→   252→  const handleSendEmail = () => {
+   253→   253→    if (!qt) return;
+   254→   254→    const subject = encodeURIComponent(`Quotation ${qt.quotationNo || 'N/A'} - ${COMPANY.name}`);
+   255→   255→    const body = encodeURIComponent(
+   256→   256→      `Dear ${qt.customer?.name || 'Customer'},\n\nPlease find attached quotation for ${qt.title}.\n\nTotal Amount: ${qt.currency || 'BND'} ${fmtBND(qt.total)}\nValid Until: ${fmtDate(qt.validUntil)}\n\nThank you for your interest.\n\nBest regards,\n${COMPANY.name}\n${COMPANY.phone}`
+   257→   257→    );
+   258→   258→    window.open(`mailto:${qt.customer?.email || ''}?subject=${subject}&body=${body}`);
+   259→   259→  };
+   260→   260→
+   261→   261→  const handleSendWhatsApp = () => {
+   262→   262→    if (!qt) return;
+   263→   263→    const msg = encodeURIComponent(
+   264→   264→      `Dear ${qt.customer?.name},\n\nQuotation *${qt.quotationNo || 'N/A'}*\nAmount: *${qt.currency || 'BND'} ${fmtBND(qt.total)}*\nValid Until: ${fmtDate(qt.validUntil)}\n\nPlease review and let us know if you have any questions.\n\n- ${COMPANY.name}`
+   265→   265→    );
+   266→   266→    const phone = (qt.customer?.phone || '').replace(/[^0-9]/g, '');
+   267→   267→    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+   268→   268→  };
+   269→   269→
+   270→   270→  const canManage = user ? hasMinRole(user.role, 'admin') : false;
+   271→   271→  const transitions = qt ? (WORKFLOW_TRANSITIONS[qt.status] || []) : [];
+   272→   272→
+   273→   273→  // ============ LOADING STATE ============
+   274→   274→  if (loading) {
+   275→   275→    return (
+   276→   276→      <div className="p-4 md:p-6 space-y-4">
+   277→   277→        <Skeleton className="h-8 w-64" />
+   278→   278→        <Skeleton className="h-[800px] w-full rounded-xl" />
+   279→   279→      </div>
+   280→   280→    );
+   281→   281→  }
+   282→   282→
+   283→   283→  if (!qt) {
+   284→   284→    return (
+   285→   285→      <div className="p-6 text-center">
+   286→   286→        <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+   287→   287→        <p className="text-muted-foreground text-lg">Quotation not found</p>
+   288→   288→        <Button variant="outline" className="mt-4" onClick={() => setView('quotations')}>
+   289→   289→          <ArrowLeft className="h-4 w-4 mr-2" /> Back to Quotations
+   290→   290→        </Button>
+   291→   291→      </div>
+   292→   292→    );
+   293→   293→  }
+   294→   294→
+   295→   295→  const statusStyle = STATUS_CONFIG[qt.status] || STATUS_CONFIG.DRAFT;
+   296→   296→  const currency = qt.currency || 'BND';
+   297→   297→  const barcodeValue = qt.quotationNo || qt.title || '';
+   298→   298→
+   299→   299→  return (
+   300→   300→    <div className="print:p-0">
+   301→   301→      {/* ===== TOP ACTION BAR (hidden on print) ===== */}
+   302→   302→      <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 md:p-6 pb-0 md:pb-0 print:hidden">
+   303→   303→        <Button variant="ghost" size="icon" onClick={() => setView('quotations')}>
+   304→   304→          <ArrowLeft className="h-4 w-4" />
+   305→   305→        </Button>
+   306→   306→        <div className="flex-1 min-w-0">
+   307→   307→          <div className="flex items-center gap-3 flex-wrap">
+   308→   308→            <FileText className="h-5 w-5 text-emerald-600" />
+   309→   309→            <h1 className="text-lg md:text-xl font-bold truncate">
+   310→   310→              Quotation {qt.quotationNo || 'N/A'}
+   311→   311→            </h1>
+   312→   312→            <Badge variant="outline" className={statusStyle.className}>
+   313→   313→              {statusStyle.label}
+   314→   314→            </Badge>
+   315→   315→          </div>
+   316→   316→        </div>
+   317→   317→        <div className="flex items-center gap-2 flex-wrap">
+   318→   318→          {canManage && transitions.map((t) => (
+   319→   319→            <Button
+   320→   320→              key={t.target}
+   321→   321→              variant="outline"
+   322→   322→              size="sm"
+   323→   323→              className={t.color}
+   324→   324→              disabled={actionLoading}
+   325→   325→              onClick={() => {
+   326→   326→                if (t.target === 'REJECTED') {
+   327→   327→                  setShowRejectDialog(true);
+   328→   328→                } else {
+   329→   329→                  updateStatus(t.target);
+   330→   330→                }
+   331→   331→              }}
+   332→   332→            >
+   333→   333→              {actionLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : t.icon}
+   334→   334→              <span className="ml-1.5">{t.label}</span>
+   335→   335→            </Button>
+   336→   336→          ))}
+   337→   337→
+   338→   338→          <Button variant="outline" size="sm" onClick={handlePrint}>
+   339→   339→            <Printer className="h-4 w-4 mr-1.5" /> Print
+   340→   340→          </Button>
+   341→   341→          <Button variant="outline" size="sm" onClick={handleSendEmail}>
+   342→   342→            <Mail className="h-4 w-4 mr-1.5" /> Email
+   343→   343→          </Button>
+   344→   344→          <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
+   345→   345→            <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
+   346→   346→          </Button>
+   347→   347→          <DropdownMenu>
+   348→   348→            <DropdownMenuTrigger asChild>
+   349→   349→              <Button variant="outline" size="sm">
+   350→   350→                <MoreVertical className="h-4 w-4" />
+   351→   351→              </Button>
+   352→   352→            </DropdownMenuTrigger>
+   353→   353→            <DropdownMenuContent align="end">
+   354→   354→              <DropdownMenuItem onClick={handleCopyNumber}>
+   355→   355→                <Copy className="h-4 w-4 mr-2" /> Copy Quotation No.
+   356→   356→              </DropdownMenuItem>
+   357→   357→              {canManage && qt.status === 'DRAFT' && (
+   358→   358→                <DropdownMenuItem onClick={() => setView('quotation-edit', { id: qt.id })}>
+   359→   359→                  <Pencil className="h-4 w-4 mr-2" /> Edit Quotation
+   360→   360→                </DropdownMenuItem>
+   361→   361→              )}
+   362→   362→            </DropdownMenuContent>
+   363→   363→          </DropdownMenu>
+   364→   364→        </div>
+   365→   365→      </div>
+   366→   366→
+   367→   367→      {/* ===== QUOTATION DOCUMENT (A4 Layout) ===== */}
+   368→   368→      <div className="flex justify-center p-3 md:p-6 print:p-0">
+   369→   369→        <div className="invoice-document bg-white border border-gray-200 rounded-xl shadow-sm print:shadow-none print:rounded-none print:border-0 w-full" style={{ maxWidth: '210mm' }}>
+   370→   370→          <div className="p-5 md:p-8 print:p-6">
+   371→   371→
+   372→   372→            {/* ====== ROW 1: Company Header (Left) + QUOTATION Title & Barcode (Right) ====== */}
+   373→   373→            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
+   374→   374→              {/* Left: Company Logo & Info */}
+   375→   375→              <div className="flex-1 min-w-0">
+   376→   376→                <div className="flex items-center gap-3 mb-3">
+   377→   377→                  <div className="w-11 h-11 bg-emerald-600 rounded-full flex items-center justify-center text-white font-bold text-xl shrink-0 shadow-sm">
+   378→   378→                    {COMPANY.shortName}
+   379→   379→                  </div>
+   380→   380→                  <div>
+   381→   381→                    <h2 className="font-bold text-sm md:text-[15px] leading-tight text-gray-900">{COMPANY.name}</h2>
+   382→   382→                  </div>
+   383→   383→                </div>
+   384→   384→                <div className="text-[11px] text-gray-600 space-y-1 ml-0 sm:ml-14">
+   385→   385→                  <p className="flex items-start gap-1.5">
+   386→   386→                    <MapPin className="h-3 w-3 mt-0.5 shrink-0 text-emerald-500" />
+   387→   387→                    {COMPANY.address}
+   388→   388→                  </p>
+   389→   389→                  <p className="flex items-center gap-1.5">
+   390→   390→                    <Phone className="h-3 w-3 shrink-0 text-emerald-500" />
+   391→   391→                    {COMPANY.phone}
+   392→   392→                  </p>
+   393→   393→                  <p className="flex items-center gap-1.5">
+   394→   394→                    <MailIcon className="h-3 w-3 shrink-0 text-emerald-500" />
+   395→   395→                    {COMPANY.email}
+   396→   396→                  </p>
+   397→   397→                  <p className="flex items-center gap-1.5">
+   398→   398→                    <Building2 className="h-3 w-3 shrink-0 text-emerald-500" />
+   399→   399→                    {COMPANY.website}
+   400→   400→                  </p>
+   401→   401→                </div>
+   402→   402→              </div>
+   403→   403→
+   404→   404→              {/* Right: QUOTATION Label + Green Bar with Number + Barcode */}
+   405→   405→              <div className="flex flex-col items-end gap-2 shrink-0">
+   406→   406→                <p className="text-emerald-600 font-bold text-xl tracking-wide">QUOTATION</p>
+   407→   407→                <div className="flex items-center gap-3">
+   408→   408→                  <div className="bg-emerald-600 rounded-md px-4 py-1.5">
+   409→   409→                    <span className="text-white font-bold text-sm tracking-wide">{barcodeValue}</span>
+   410→   410→                  </div>
+   411→   411→                  <div className="bg-white p-1">
+   412→   412→                    <svg ref={barcodeRef} className="h-11" />
+   413→   413→                  </div>
+   414→   414→                </div>
+   415→   415→                <p className="text-xs font-medium text-gray-700 font-mono">{barcodeValue}</p>
+   416→   416→              </div>
+   417→   417→            </div>
+   418→   418→
+   419→   419→            {/* ====== ROW 2: Three-Column — QUOTATION TO | SITE / DELIVERY TO | OTHER INFORMATION ====== */}
+   420→   420→            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+   421→   421→              {/* Column 1: QUOTATION TO */}
+   422→   422→              <div className="rounded-lg p-4 border border-gray-200">
+   423→   423→                <h3 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   424→   424→                  <User className="h-3.5 w-3.5" />
+   425→   425→                  QUOTATION TO
+   426→   426→                </h3>
+   427→   427→                <p className="font-bold text-sm text-gray-900 mb-1">
+   428→   428→                  {(qt.customer?.companyName || qt.customer?.name || '').toUpperCase()}
+   429→   429→                </p>
+   430→   430→                {qt.customer?.address && (
+   431→   431→                  <p className="text-[11px] text-gray-600 mb-2 leading-relaxed">{qt.customer.address}</p>
+   432→   432→                )}
+   433→   433→                <div className="space-y-1">
+   434→   434→                  {qt.customer?.phone && (
+   435→   435→                    <p className="text-[11px] text-gray-600 flex items-center gap-1.5">
+   436→   436→                      <Phone className="h-3 w-3 text-emerald-500" /> {qt.customer.phone}
+   437→   437→                    </p>
+   438→   438→                  )}
+   439→   439→                  {qt.customer?.email && (
+   440→   440→                    <p className="text-[11px] text-gray-600 flex items-center gap-1.5">
+   441→   441→                      <MailIcon className="h-3 w-3 text-emerald-500" /> {qt.customer.email}
+   442→   442→                    </p>
+   443→   443→                  )}
+   444→   444→                  {qt.customer?.pic && (
+   445→   445→                    <p className="text-[11px] text-gray-600 flex items-center gap-1.5">
+   446→   446→                      <User className="h-3 w-3 text-emerald-500" /> {qt.customer.pic} (PIC)
+   447→   447→                    </p>
+   448→   448→                  )}
+   449→   449→                </div>
+   450→   450→              </div>
+   451→   451→
+   452→   452→              {/* Column 2: SITE / DELIVERY TO */}
+   453→   453→              <div className="rounded-lg p-4 border border-gray-200">
+   454→   454→                <h3 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   455→   455→                  <Truck className="h-3.5 w-3.5" />
+   456→   456→                  SITE / DELIVERY TO
+   457→   457→                </h3>
+   458→   458→                {qt.site ? (
+   459→   459→                  <div>
+   460→   460→                    <p className="text-[11px] text-gray-600 leading-relaxed">{qt.site}</p>
+   461→   461→                    {qt.customer?.phone && (
+   462→   462→                      <p className="text-[11px] text-gray-600 flex items-center gap-1.5 mt-2">
+   463→   463→                        <Phone className="h-3 w-3 text-emerald-500" /> {qt.customer.phone}
+   464→   464→                      </p>
+   465→   465→                    )}
+   466→   466→                    {qt.customer?.pic && (
+   467→   467→                      <p className="text-[11px] text-gray-600 flex items-center gap-1.5 mt-1">
+   468→   468→                        <User className="h-3 w-3 text-emerald-500" /> Site Contact: {qt.customer.pic}
+   469→   469→                      </p>
+   470→   470→                    )}
+   471→   471→                  </div>
+   472→   472→                ) : (
+   473→   473→                  <div>
+   474→   474→                    <p className="font-bold text-sm text-gray-900 mb-1">
+   475→   475→                      {(qt.customer?.companyName || qt.customer?.name || '').toUpperCase()}
+   476→   476→                    </p>
+   477→   477→                    {qt.customer?.address && (
+   478→   478→                      <p className="text-[11px] text-gray-600 leading-relaxed">{qt.customer.address}</p>
+   479→   479→                    )}
+   480→   480→                  </div>
+   481→   481→                )}
+   482→   482→                {qt.projectName && (
+   483→   483→                  <div className="mt-3 pt-2 border-t border-gray-200">
+   484→   484→                    <p className="text-[10px] text-gray-400 uppercase tracking-wider font-medium">Project</p>
+   485→   485→                    <p className="text-[11px] text-gray-700 font-medium">{qt.projectName}</p>
+   486→   486→                  </div>
+   487→   487→                )}
+   488→   488→              </div>
+   489→   489→
+   490→   490→              {/* Column 3: OTHER INFORMATION */}
+   491→   491→              <div className="rounded-lg p-4 border border-gray-200">
+   492→   492→                <h3 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   493→   493→                  <FileText className="h-3.5 w-3.5" />
+   494→   494→                  OTHER INFORMATION
+   495→   495→                </h3>
+   496→   496→                <div className="space-y-2 text-xs">
+   497→   497→                  {qt.projectName && (
+   498→   498→                    <div className="flex justify-between gap-2">
+   499→   499→                      <span className="text-gray-500">Project Name</span>
+   500→   500→                      <span className="font-medium text-gray-800 text-right">{qt.projectName}</span>
+   501→   501→                    </div>
+   502→   502→                  )}
+   503→   503→                  {qt.site && (
+   504→   504→                    <div className="flex justify-between gap-2">
+   505→   505→                      <span className="text-gray-500">Site</span>
+   506→   506→                      <span className="font-medium text-gray-800 text-right max-w-[55%]">{qt.site}</span>
+   507→   507→                    </div>
+   508→   508→                  )}
+   509→   509→                  <div className="flex justify-between gap-2">
+   510→   510→                    <span className="text-gray-500">Quotation Date</span>
+   511→   511→                    <span className="font-medium text-gray-800">{fmtDate(qt.createdAt)}</span>
+   512→   512→                  </div>
+   513→   513→                  <div className="flex justify-between gap-2">
+   514→   514→                    <span className="text-gray-500">Valid Until</span>
+   515→   515→                    <span className="font-medium text-gray-800">{fmtDate(qt.validUntil)}</span>
+   516→   516→                  </div>
+   517→   517→                  {qt.referenceNo && (
+   518→   518→                    <div className="flex justify-between gap-2">
+   519→   519→                      <span className="text-gray-500">Reference</span>
+   520→   520→                      <span className="font-medium text-gray-800 text-right">{qt.referenceNo}</span>
+   521→   521→                    </div>
+   522→   522→                  )}
+   523→   523→                  <div className="flex justify-between gap-2">
+   524→   524→                    <span className="text-gray-500">Sales Person</span>
+   525→   525→                    <span className="font-medium text-gray-800">{qt.salesPerson || qt.preparedByName}</span>
+   526→   526→                  </div>
+   527→   527→                  <div className="flex justify-between gap-2">
+   528→   528→                    <span className="text-gray-500">Tax Rate</span>
+   529→   529→                    <span className="font-medium text-gray-800">{qt.taxRate || 0}%{qt.taxRate === 0 ? ' (Tax Exempt)' : ''}</span>
+   530→   530→                  </div>
+   531→   531→                  {qt.deliveryPeriod && (
+   532→   532→                    <div className="flex justify-between gap-2">
+   533→   533→                      <span className="text-gray-500">Delivery Period</span>
+   534→   534→                      <span className="font-medium text-gray-800">{qt.deliveryPeriod}</span>
+   535→   535→                    </div>
+   536→   536→                  )}
+   537→   537→                  {qt.warranty && (
+   538→   538→                    <div className="flex justify-between gap-2">
+   539→   539→                      <span className="text-gray-500">Warranty</span>
+   540→   540→                      <span className="font-medium text-gray-800">{qt.warranty}</span>
+   541→   541→                    </div>
+   542→   542→                  )}
+   543→   543→                  <div className="flex justify-between gap-2">
+   544→   544→                    <span className="text-gray-500">Quotation Status</span>
+   545→   545→                    <Badge variant="outline" className={`${STATUS_CONFIG[qt.status]?.className || ''} text-[10px] px-1.5 py-0`}>
+   546→   546→                      {STATUS_CONFIG[qt.status]?.label || qt.status}
+   547→   547→                    </Badge>
+   548→   548→                  </div>
+   549→   549→                </div>
+   550→   550→              </div>
+   551→   551→            </div>
+   552→   552→
+   553→   553→            {/* ====== ROW 3: Line Items Table + Summary (side by side) ====== */}
+   554→   554→            <div className="mb-6">
+   555→   555→              <div className="flex flex-col lg:flex-row gap-4">
+   556→   556→                {/* Table */}
+   557→   557→                <div className="flex-1 min-w-0 overflow-x-auto">
+   558→   558→                  <table className="w-full text-xs border-collapse">
+   559→   559→                    <thead>
+   560→   560→                      <tr className="bg-gray-100 text-gray-800 border-b border-gray-300">
+   561→   561→                        <th className="text-center font-semibold py-2.5 px-2 w-10">SL</th>
+   562→   562→                        <th className="text-left font-semibold py-2.5 px-2">Item Title</th>
+   563→   563→                        <th className="text-left font-semibold py-2.5 px-2">Description</th>
+   564→   564→                        <th className="text-center font-semibold py-2.5 px-2 w-14">Unit</th>
+   565→   565→                        <th className="text-center font-semibold py-2.5 px-2 w-14">Quantity</th>
+   566→   566→                        <th className="text-right font-semibold py-2.5 px-2 w-24">Rate ({currency})</th>
+   567→   567→                        <th className="text-right font-semibold py-2.5 px-2 w-24">Amount ({currency})</th>
+   568→   568→                      </tr>
+   569→   569→                    </thead>
+   570→   570→                    <tbody>
+   571→   571→                      {lineItems.length === 0 ? (
+   572→   572→                        <tr>
+   573→   573→                          <td colSpan={7} className="text-center py-10 text-gray-400 text-sm">
+   574→   574→                            No line items
+   575→   575→                          </td>
+   576→   576→                        </tr>
+   577→   577→                      ) : (
+   578→   578→                        lineItems.map((item, i) => (
+   579→   579→                          <tr
+   580→   580→                            key={item.id || i}
+   581→   581→                            className={`border-b border-gray-100 ${i % 2 === 1 ? 'bg-gray-50/50' : ''}`}
+   582→   582→                          >
+   583→   583→                            <td className="text-center py-3 px-2 text-gray-600 font-medium">{i + 1}</td>
+   584→   584→                            <td className="py-3 px-2">
+   585→   585→                              <p className="font-semibold text-gray-800 text-xs">{item.title}</p>
+   586→   586→                            </td>
+   587→   587→                            <td className="py-3 px-2">
+   588→   588→                              <p className="text-gray-500 text-[11px] leading-relaxed">{item.description || '—'}</p>
+   589→   589→                            </td>
+   590→   590→                            <td className="text-center py-3 px-2 text-gray-600">{item.unit || 'Nos'}</td>
+   591→   591→                            <td className="text-center py-3 px-2 text-gray-600">{item.quantity}</td>
+   592→   592→                            <td className="text-right py-3 px-2 text-gray-700">{fmtBND(item.rate)}</td>
+   593→   593→                            <td className="text-right py-3 px-2 font-semibold text-gray-800">{fmtBND(item.amount)}</td>
+   594→   594→                          </tr>
+   595→   595→                        ))
+   596→   596→                      )}
+   597→   597→                    </tbody>
+   598→   598→                  </table>
+   599→   599→                </div>
+   600→   600→
+   601→   601→                {/* Summary Panel (right side of table) */}
+   602→   602→                <div className="lg:w-64 shrink-0">
+   603→   603→                  <div className="rounded-lg border border-gray-200 p-4 space-y-2.5 bg-emerald-50/50">
+   604→   604→                    <div className="flex justify-between text-xs">
+   605→   605→                      <span className="text-gray-500">Subtotal</span>
+   606→   606→                      <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.subtotal)}</span>
+   607→   607→                    </div>
+   608→   608→                    <div className="flex justify-between text-xs">
+   609→   609→                      <span className="text-gray-500">Discount</span>
+   610→   610→                      <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.discount)}</span>
+   611→   611→                    </div>
+   612→   612→                    <div className="flex justify-between text-xs">
+   613→   613→                      <span className="text-gray-500">Tax ({qt.taxRate || 0}%)</span>
+   614→   614→                      <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.tax)}</span>
+   615→   615→                    </div>
+   616→   616→                    <div className="flex justify-between text-xs">
+   617→   617→                      <span className="text-gray-500">Shipping</span>
+   618→   618→                      <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.shipping)}</span>
+   619→   619→                    </div>
+   620→   620→                    <div className="border-t border-gray-300 pt-2.5">
+   621→   621→                      <div className="flex justify-between items-center">
+   622→   622→                        <span className="text-sm font-bold text-gray-900">GRAND TOTAL</span>
+   623→   623→                        <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(qt.total)}</span>
+   624→   624→                      </div>
+   625→   625→                    </div>
+   626→   626→                    <div className="rounded-md p-2.5 mt-1 bg-emerald-50 border border-emerald-100">
+   627→   627→                      <p className="text-[9px] text-emerald-600 font-bold uppercase tracking-wider mb-0.5">Amount In Words</p>
+   628→   628→                      <p className="text-[11px] text-gray-900 font-medium leading-relaxed">
+   629→   629→                        {numberToCurrencyWords(qt.total)}
+   630→   630→                      </p>
+   631→   631→                    </div>
+   632→   632→                  </div>
+   633→   633→                </div>
+   634→   634→              </div>
+   635→   635→            </div>
+   636→   636→
+   637→   637→            {/* ====== ROW 5: Terms & Conditions ====== */}
+   638→   638→            <div className="mb-6">
+   639→   639→              <h3 className="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   640→   640→                <FileText className="h-3.5 w-3.5" />
+   641→   641→                TERMS & CONDITIONS
+   642→   642→              </h3>
+   643→   643→              <ol className="text-[11px] text-gray-600 space-y-1.5 list-decimal list-inside leading-relaxed">
+   644→   644→                {terms.map((term, i) => (
+   645→   645→                  <li key={i}>{term}</li>
+   646→   646→                ))}
+   647→   647→              </ol>
+   648→   648→            </div>
+   649→   649→
+   650→   650→            {/* ====== ROW 6: Footer — 4-Column Grid: NOTES | PREPARED BY | COMPANY STAMP | SCAN TO VIEW ====== */}
+   651→   651→            <div className="border-t border-gray-200 pt-5">
+   652→   652→              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+   653→   653→                {/* Column 1: NOTES */}
+   654→   654→                <div>
+   655→   655→                  <h4 className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2">Notes</h4>
+   656→   656→                  <p className="text-[10px] text-gray-600 leading-relaxed">
+   657→   657→                    {qt.notes || 'Thank you for considering Smart Maintenance Services. We look forward to working with you.'}
+   658→   658→                  </p>
+   659→   659→                </div>
+   660→   660→
+   661→   661→                {/* Column 2: PREPARED BY */}
+   662→   662→                <div>
+   663→   663→                  <h4 className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2">Prepared By</h4>
+   664→   664→                  {/* Signature area */}
+   665→   665→                  <div className="h-8 mb-1 flex items-end">
+   666→   666→                    <p className="text-sm italic text-gray-400 font-cursive">{qt.preparedByName || qt.salesPerson || ''}</p>
+   667→   667→                  </div>
+   668→   668→                  <p className="text-[11px] text-gray-800 font-medium">{qt.preparedByName || qt.salesPerson || '—'}</p>
+   669→   669→                  <p className="text-[10px] text-gray-500">Sales Executive</p>
+   670→   670→                </div>
+   671→   671→
+   672→   672→                {/* Column 3: COMPANY STAMP */}
+   673→   673→                <div>
+   674→   674→                  <h4 className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2">Company Stamp</h4>
+   675→   675→                  <div className="w-[60px] h-[60px] border-2 border-emerald-600 rounded-full flex items-center justify-center opacity-80">
+   676→   676→                    <div className="text-center">
+   677→   677→                      <span className="text-emerald-600 font-bold text-sm leading-none block">{COMPANY.shortName}</span>
+   678→   678→                      <span className="text-emerald-600 text-[6px] leading-none block mt-0.5">{COMPANY.regNo}</span>
+   679→   679→                    </div>
+   680→   680→                  </div>
+   681→   681→                </div>
+   682→   682→
+   683→   683→                {/* Column 4: SCAN TO VIEW */}
+   684→   684→                <div>
+   685→   685→                  <h4 className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider mb-2">Scan To View</h4>
+   686→   686→                  <div className="w-[60px] h-[60px]">
+   687→   687→                    <QRCodeSVG
+   688→   688→                      value={`https://smartms.com/quotation/${qt.quotationNo || qt.id}`}
+   689→   689→                      size={60}
+   690→   690→                      level="M"
+   691→   691→                      includeMargin={false}
+   692→   692→                    />
+   693→   693→                  </div>
+   694→   694→                  <p className="text-[7px] text-gray-500 mt-1.5 max-w-[80px] leading-tight">Scan this QR code to view this quotation online.</p>
+   695→   695→                </div>
+   696→   696→              </div>
+   697→   697→
+   698→   698→              {/* Disclaimer */}
+   699→   699→              <p className="text-[10px] text-gray-500 text-center mt-6">
+   700→   700→                This is a computer generated quotation. No signature is required.
+   701→   701→              </p>
+   702→   702→
+   703→   703→              {/* THANK YOU — centered, standalone */}
+   704→   704→              <p className="text-emerald-600 font-bold text-base text-center mt-3 tracking-wide">
+   705→   705→                THANK YOU!
+   706→   706→              </p>
+   707→   707→
+   708→   708→              {/* Page indicator */}
+   709→   709→              <div className="text-center mt-3">
+   710→   710→                <p className="text-[10px] text-gray-300">Page 1 of 1</p>
+   711→   711→              </div>
+   712→   712→            </div>
+   713→   713→
+   714→   714→          </div>
+   715→   715→        </div>
+   716→   716→      </div>
+   717→   717→
+   718→   718→      {/* ===== REJECT DIALOG ===== */}
+   719→   719→      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+   720→   720→        <DialogContent className="sm:max-w-sm">
+   721→   721→          <DialogHeader>
+   722→   722→            <DialogTitle>Reject Quotation</DialogTitle>
+   723→   723→            <DialogDescription>
+   724→   724→              Please provide a reason for rejecting this quotation.
+   725→   725→            </DialogDescription>
+   726→   726→          </DialogHeader>
+   727→   727→          <div className="py-2">
+   728→   728→            <Textarea
+   729→   729→              placeholder="Reason for rejection..."
+   730→   730→              value={rejectReason}
+   731→   731→              onChange={(e) => setRejectReason(e.target.value)}
+   732→   732→              className="mt-1"
+   733→   733→              rows={3}
+   734→   734→            />
+   735→   735→          </div>
+   736→   736→          <DialogFooter>
+   737→   737→            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>Cancel</Button>
+   738→   738→            <Button variant="destructive" onClick={handleReject} disabled={actionLoading}>
+   739→   739→              {actionLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+   740→   740→              Reject Quotation
+   741→   741→            </Button>
+   742→   742→          </DialogFooter>
+   743→   743→        </DialogContent>
+   744→   744→      </Dialog>
+   745→   745→    </div>
+   746→   746→  );
+   747→   747→}

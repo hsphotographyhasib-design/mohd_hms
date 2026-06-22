@@ -137,3 +137,36 @@ Stage Summary:
 - All existing features preserved (workflow, dialogs, print/email/WhatsApp, etc.)
 - File: src/components/modules/quotations/quotation-detail.tsx (745 lines)
 - Lint: Clean, compiles successfully
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix quotation-detail.tsx to exactly match PRINTED QUOTATION.png template (second pass, pixel-perfect)
+
+Work Log:
+- VLM analyzed template: confirmed table headers are BLACK text on LIGHT GRAY background (not green)
+- VLM confirmed summary/totals box is to the RIGHT of table (side by side), not below
+- VLM confirmed footer is 4-column grid: NOTES | PREPARED BY | COMPANY STAMP | SCAN TO VIEW
+- VLM confirmed THANK YOU! is centered below footer, no contact info near it
+- VLM confirmed Amount In Words text is BLACK (not green), inside light green box
+
+Changes applied:
+1. Table headers: changed from `bg-emerald-600 text-white` to `bg-gray-100 text-gray-800 border-b border-gray-300` (light gray with black text)
+2. Table+Summary layout: changed from stacked (table above, summary below) to side-by-side (`flex-col lg:flex-row`, summary `lg:w-64 shrink-0`)
+3. Amount In Words text: changed from `text-emerald-800` to `text-gray-900` (black)
+4. Footer restructured from flex-row to `grid grid-cols-2 md:grid-cols-4` 4-column layout
+5. Each footer column has bold green uppercase label header matching template
+6. Removed separate NOTES section above footer; integrated into footer grid
+7. COMPANY STAMP now has its own labeled column (was inline with Prepared By)
+8. Added "PREPARED BY" label header, signature area, name, "Sales Executive" title
+9. THANK YOU! moved to standalone centered element below footer, removed contact info
+10. Disclaimer text between 4-column grid and THANK YOU!
+11. Site/Delivery To icon changed from MapPin to Truck (matching template)
+12. Removed hover effects on table rows for cleaner print output
+
+All features preserved: 9-status workflow, reject dialog, print/email/WhatsApp, copy number, edit, status badge, loading/error states.
+
+Stage Summary:
+- File: src/components/modules/quotations/quotation-detail.tsx (747 lines)
+- Lint: Clean (no errors)
+- Dev server: Compiles successfully (250-338ms)
+- Element count: 17/17 template elements verified
