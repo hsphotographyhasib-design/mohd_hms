@@ -1,0 +1,751 @@
+     1→     1→'use client';
+     2→     2→
+     3→     3→import { useState, useEffect, useRef, useCallback } from 'react';
+     4→     4→import { Button } from '@/components/ui/button';
+     5→     5→import { Badge } from '@/components/ui/badge';
+     6→     6→import { Skeleton } from '@/components/ui/skeleton';
+     7→     7→import { Separator } from '@/components/ui/separator';
+     8→     8→import {
+     9→     9→  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
+    10→    10→} from '@/components/ui/dialog';
+    11→    11→import { Textarea } from '@/components/ui/textarea';
+    12→    12→import {
+    13→    13→  ArrowLeft, Eye, Printer, Mail, MessageCircle, MoreVertical,
+    14→    14→  Loader2, AlertCircle, CheckCircle2, Send, X,
+    15→    15→  MapPin, Phone, MailIcon, User, Building2,
+    16→    16→  Upload, File, Copy, FileText, RotateCcw, Lock,
+    17→    17→  Pencil, ChevronRight, MessageSquare,
+    18→    18→} from 'lucide-react';
+    19→    19→import {
+    20→    20→  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+    21→    21→} from '@/components/ui/dropdown-menu';
+    22→    22→import { toast } from 'sonner';
+    23→    23→import { useAppStore, useAuthStore, hasMinRole } from '@/store';
+    24→    24→import type { QuotationLineItem, QuotationStatus } from '@/types';
+    25→    25→import { numberToCurrencyWords } from '@/lib/number-to-words';
+    26→    26→import { format } from 'date-fns';
+    27→    27→import JsBarcode from 'jsbarcode';
+    28→    28→import dynamic from 'next/dynamic';
+    29→    29→
+    30→    30→const QRCodeSVG = dynamic(
+    31→    31→  () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
+    32→    32→  { ssr: false }
+    33→    33→);
+    34→    34→
+    35→    35→// ============ CONSTANTS ============
+    36→    36→
+    37→    37→const STATUS_CONFIG: Record<string, { label: string; className: string }> = {
+    38→    38→  DRAFT: { label: 'Draft', className: 'bg-gray-100 text-gray-700 border-gray-300' },
+    39→    39→  REVIEW: { label: 'In Review', className: 'bg-amber-100 text-amber-800 border-amber-300' },
+    40→    40→  APPROVED: { label: 'Approved', className: 'bg-teal-100 text-teal-800 border-teal-300' },
+    41→    41→  SENT: { label: 'Sent', className: 'bg-sky-100 text-sky-800 border-sky-300' },
+    42→    42→  ACCEPTED: { label: 'Accepted', className: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+    43→    43→  REJECTED: { label: 'Rejected', className: 'bg-rose-100 text-rose-700 border-rose-300' },
+    44→    44→  EXPIRED: { label: 'Expired', className: 'bg-gray-100 text-gray-600 border-gray-300' },
+    45→    45→  CONVERTED_WO: { label: 'Converted to WO', className: 'bg-purple-100 text-purple-800 border-purple-300' },
+    46→    46→  CONVERTED_INVOICE: { label: 'Converted to Invoice', className: 'bg-violet-100 text-violet-800 border-violet-300' },
+    47→    47→  PAID: { label: 'Paid', className: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+    48→    48→  CLOSED: { label: 'Closed', className: 'bg-gray-100 text-gray-600 border-gray-300' },
+    49→    49→};
+    50→    50→
+    51→    51→const WORKFLOW_TRANSITIONS: Record<string, { label: string; target: string; icon: React.ReactNode; color: string }[]> = {
+    52→    52→  DRAFT: [
+    53→    53→    { label: 'Submit for Review', target: 'REVIEW', icon: <Send className="h-4 w-4" />, color: 'text-amber-700 hover:bg-amber-50' },
+    54→    54→  ],
+    55→    55→  REVIEW: [
+    56→    56→    { label: 'Approve', target: 'APPROVED', icon: <CheckCircle2 className="h-4 w-4" />, color: 'text-emerald-700 hover:bg-emerald-50' },
+    57→    57→    { label: 'Send Back to Draft', target: 'DRAFT', icon: <RotateCcw className="h-4 w-4" />, color: 'text-gray-700 hover:bg-gray-50' },
+    58→    58→  ],
+    59→    59→  APPROVED: [
+    60→    60→    { label: 'Send to Customer', target: 'SENT', icon: <Send className="h-4 w-4" />, color: 'text-sky-700 hover:bg-sky-50' },
+    61→    61→  ],
+    62→    62→  SENT: [
+    63→    63→    { label: 'Mark as Accepted', target: 'ACCEPTED', icon: <CheckCircle2 className="h-4 w-4" />, color: 'text-emerald-700 hover:bg-emerald-50' },
+    64→    64→    { label: 'Mark as Rejected', target: 'REJECTED', icon: <X className="h-4 w-4" />, color: 'text-rose-700 hover:bg-rose-50' },
+    65→    65→  ],
+    66→    66→  ACCEPTED: [
+    67→    67→    { label: 'Convert to Work Order', target: 'CONVERTED_WO', icon: <FileText className="h-4 w-4" />, color: 'text-purple-700 hover:bg-purple-50' },
+    68→    68→    { label: 'Convert to Invoice', target: 'CONVERTED_INVOICE', icon: <FileText className="h-4 w-4" />, color: 'text-violet-700 hover:bg-violet-50' },
+    69→    69→  ],
+    70→    70→};
+    71→    71→
+    72→    72→const DEFAULT_TERMS = [
+    73→    73→  '50% advance payment and balance upon completion.',
+    74→    74→  'Price validity: 60 days from the quotation date.',
+    75→    75→  'Delivery period: 3 working days.',
+    76→    76→  'Additional works are subject to variation order.',
+    77→    77→  'Warranty applies only to workmanship.',
+    78→    78→  'Material warranty follows manufacturer terms.',
+    79→    79→  'Payment by bank transfer or cheque.',
+    80→    80→];
+    81→    81→
+    82→    82→const COMPANY = {
+    83→    83→  name: 'SMART MAINTENANCE SERVICES SDN BHD',
+    84→    84→  shortName: 'LS',
+    85→    85→  address: 'No. 25, Spg 88, Jln Gadong BE1318, Bandar Seri Begawan, Brunei Darussalam',
+    86→    86→  phone: '+673 245 6789',
+    87→    87→  email: 'info@smartms.com',
+    88→    88→  website: 'www.smartms.com',
+    89→    89→  regNo: 'BE1318',
+    90→    90→};
+    91→    91→
+    92→    92→// ============ HELPERS ============
+    93→    93→
+    94→    94→const token = () => localStorage.getItem('cmms_token') || '';
+    95→    95→
+    96→    96→function fmtBND(n: number): string {
+    97→    97→  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    98→    98→}
+    99→    99→
+   100→   100→function fmtDate(d?: string): string {
+   101→   101→  if (!d) return '—';
+   102→   102→  return format(new Date(d), 'dd/MM/yyyy');
+   103→   103→}
+   104→   104→
+   105→   105→function parseLineItems(itemsStr?: string): QuotationLineItem[] {
+   106→   106→  if (!itemsStr) return [];
+   107→   107→  try {
+   108→   108→    const parsed = JSON.parse(itemsStr);
+   109→   109→    if (Array.isArray(parsed)) return parsed;
+   110→   110→  } catch { /* empty */ }
+   111→   111→  return [];
+   112→   112→}
+   113→   113→
+   114→   114→function parseTerms(termsStr?: string): string[] {
+   115→   115→  if (!termsStr) return DEFAULT_TERMS;
+   116→   116→  try {
+   117→   117→    const parsed = JSON.parse(termsStr);
+   118→   118→    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+   119→   119→  } catch { /* empty */ }
+   120→   120→  return DEFAULT_TERMS;
+   121→   121→}
+   122→   122→
+   123→   123→// ============ COMPONENT ============
+   124→   124→
+   125→   125→interface QuotationCustomer {
+   126→   126→  name: string;
+   127→   127→  phone?: string;
+   128→   128→  email?: string;
+   129→   129→  address?: string;
+   130→   130→  companyName?: string;
+   131→   131→  pic?: string;
+   132→   132→}
+   133→   133→
+   134→   134→interface QuotationData {
+   135→   135→  id: string;
+   136→   136→  tenantId: string;
+   137→   137→  customerId: string;
+   138→   138→  customer: QuotationCustomer;
+   139→   139→  quotationNo?: string;
+   140→   140→  title: string;
+   141→   141→  description?: string;
+   142→   142→  referenceNo?: string;
+   143→   143→  projectName?: string;
+   144→   144→  site?: string;
+   145→   145→  preparedBy?: string;
+   146→   146→  preparedByName?: string;
+   147→   147→  items?: string;
+   148→   148→  terms?: string;
+   149→   149→  currency?: string;
+   150→   150→  subtotal: number;
+   151→   151→  taxRate: number;
+   152→   152→  tax: number;
+   153→   153→  discount: number;
+   154→   154→  shipping: number;
+   155→   155→  total: number;
+   156→   156→  status: string;
+   157→   157→  validUntil?: string;
+   158→   158→  approvedAt?: string;
+   159→   159→  sentAt?: string;
+   160→   160→  acceptedAt?: string;
+   161→   161→  notes?: string;
+   162→   162→  createdAt: string;
+   163→   163→  updatedAt: string;
+   164→   164→}
+   165→   165→
+   166→   166→export function QuotationDetail({ quotationId }: { quotationId?: string }) {
+   167→   167→  const { viewParams, setView } = useAppStore();
+   168→   168→  const user = useAuthStore((s) => s.user);
+   169→   169→  const id = quotationId || viewParams.id;
+   170→   170→  const [qt, setQt] = useState<QuotationData | null>(null);
+   171→   171→  const [loading, setLoading] = useState(true);
+   172→   172→  const [actionLoading, setActionLoading] = useState(false);
+   173→   173→  const [lineItems, setLineItems] = useState<QuotationLineItem[]>([]);
+   174→   174→  const [terms, setTerms] = useState<string[]>(DEFAULT_TERMS);
+   175→   175→  const [showRejectDialog, setShowRejectDialog] = useState(false);
+   176→   176→  const [rejectReason, setRejectReason] = useState('');
+   177→   177→  const barcodeRef = useRef<SVGSVGElement>(null);
+   178→   178→
+   179→   179→  const fetchQt = useCallback(async () => {
+   180→   180→    if (!id) return;
+   181→   181→    setLoading(true);
+   182→   182→    try {
+   183→   183→      const res = await fetch(`/api/quotations/${id}`, {
+   184→   184→        headers: { Authorization: `Bearer ${token()}` },
+   185→   185→      });
+   186→   186→      if (!res.ok) throw new Error();
+   187→   187→      const json = await res.json();
+   188→   188→      setQt(json);
+   189→   189→      setLineItems(parseLineItems(json.items));
+   190→   190→      setTerms(parseTerms(json.terms));
+   191→   191→    } catch {
+   192→   192→      toast.error('Failed to load quotation');
+   193→   193→    } finally {
+   194→   194→      setLoading(false);
+   195→   195→    }
+   196→   196→  }, [id]);
+   197→   197→
+   198→   198→  useEffect(() => { fetchQt(); }, [fetchQt]);
+   199→   199→
+   200→   200→  // Generate barcode
+   201→   201→  useEffect(() => {
+   202→   202→    const barcodeValue = qt?.quotationNo || qt?.title || '';
+   203→   203→    if (barcodeValue && barcodeRef.current) {
+   204→   204→      try {
+   205→   205→        JsBarcode(barcodeRef.current, barcodeValue, {
+   206→   206→          format: 'CODE128',
+   207→   207→          width: 2,
+   208→   208→          height: 50,
+   209→   209→          displayValue: false,
+   210→   210→          margin: 0,
+   211→   211→        });
+   212→   212→      } catch { /* barcode generation can fail in SSR */ }
+   213→   213→    }
+   214→   214→  }, [qt?.quotationNo, qt?.title]);
+   215→   215→
+   216→   216→  const updateStatus = async (status: string, extra?: Record<string, unknown>) => {
+   217→   217→    if (!id) return;
+   218→   218→    setActionLoading(true);
+   219→   219→    try {
+   220→   220→      const res = await fetch(`/api/quotations/${id}/status`, {
+   221→   221→        method: 'PUT',
+   222→   222→        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+   223→   223→        body: JSON.stringify({ status, ...extra }),
+   224→   224→      });
+   225→   225→      if (!res.ok) throw new Error();
+   226→   226→      toast.success(`Quotation ${status.toLowerCase().replace(/_/g, ' ')}`);
+   227→   227→      fetchQt();
+   228→   228→    } catch {
+   229→   229→      toast.error('Action failed');
+   230→   230→    } finally {
+   231→   231→      setActionLoading(false);
+   232→   232→    }
+   233→   233→  };
+   234→   234→
+   235→   235→  const handleReject = async () => {
+   236→   236→    await updateStatus('REJECTED', { reason: rejectReason });
+   237→   237→    setShowRejectDialog(false);
+   238→   238→    setRejectReason('');
+   239→   239→  };
+   240→   240→
+   241→   241→  const handleCopyNumber = () => {
+   242→   242→    if (qt?.quotationNo) {
+   243→   243→      navigator.clipboard.writeText(qt.quotationNo);
+   244→   244→      toast.success('Quotation number copied');
+   245→   245→    }
+   246→   246→  };
+   247→   247→
+   248→   248→  const handlePrint = () => window.print();
+   249→   249→
+   250→   250→  const handleSendEmail = () => {
+   251→   251→    if (!qt) return;
+   252→   252→    const subject = encodeURIComponent(`Quotation ${qt.quotationNo || 'N/A'} - ${COMPANY.name}`);
+   253→   253→    const body = encodeURIComponent(
+   254→   254→      `Dear ${qt.customer?.name || 'Customer'},\n\nPlease find attached quotation for ${qt.title}.\n\nTotal Amount: ${qt.currency || 'BND'} ${fmtBND(qt.total)}\nValid Until: ${fmtDate(qt.validUntil)}\n\nThank you for your interest.\n\nBest regards,\n${COMPANY.name}\n${COMPANY.phone}`
+   255→   255→    );
+   256→   256→    window.open(`mailto:${qt.customer?.email || ''}?subject=${subject}&body=${body}`);
+   257→   257→  };
+   258→   258→
+   259→   259→  const handleSendWhatsApp = () => {
+   260→   260→    if (!qt) return;
+   261→   261→    const msg = encodeURIComponent(
+   262→   262→      `Dear ${qt.customer?.name},\n\nQuotation *${qt.quotationNo || 'N/A'}*\nAmount: *${qt.currency || 'BND'} ${fmtBND(qt.total)}*\nValid Until: ${fmtDate(qt.validUntil)}\n\nPlease review and let us know if you have any questions.\n\n- ${COMPANY.name}`
+   263→   263→    );
+   264→   264→    const phone = (qt.customer?.phone || '').replace(/[^0-9]/g, '');
+   265→   265→    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+   266→   266→  };
+   267→   267→
+   268→   268→  const canManage = user ? hasMinRole(user.role, 'admin') : false;
+   269→   269→  const transitions = qt ? (WORKFLOW_TRANSITIONS[qt.status] || []) : [];
+   270→   270→
+   271→   271→  // ============ LOADING STATE ============
+   272→   272→  if (loading) {
+   273→   273→    return (
+   274→   274→      <div className="p-4 md:p-6 space-y-4">
+   275→   275→        <Skeleton className="h-8 w-64" />
+   276→   276→        <Skeleton className="h-[600px] w-full rounded-xl" />
+   277→   277→      </div>
+   278→   278→    );
+   279→   279→  }
+   280→   280→
+   281→   281→  if (!qt) {
+   282→   282→    return (
+   283→   283→      <div className="p-6 text-center">
+   284→   284→        <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+   285→   285→        <p className="text-muted-foreground text-lg">Quotation not found</p>
+   286→   286→        <Button variant="outline" className="mt-4" onClick={() => setView('quotations')}>
+   287→   287→          <ArrowLeft className="h-4 w-4 mr-2" /> Back to Quotations
+   288→   288→        </Button>
+   289→   289→      </div>
+   290→   290→    );
+   291→   291→  }
+   292→   292→
+   293→   293→  const statusStyle = STATUS_CONFIG[qt.status] || STATUS_CONFIG.DRAFT;
+   294→   294→  const currencyLabel = qt.currency === 'BND' ? 'Brunei Dollar' : (qt.currency || 'BND');
+   295→   295→  const barcodeValue = qt.quotationNo || qt.title || '';
+   296→   296→
+   297→   297→  return (
+   298→   298→    <div className="p-3 md:p-6 space-y-4 print:p-0">
+   299→   299→      {/* ===== TOP ACTION BAR ===== */}
+   300→   300→      <div className="flex flex-col sm:flex-row sm:items-center gap-3 print:hidden">
+   301→   301→        <Button variant="ghost" size="icon" onClick={() => setView('quotations')}>
+   302→   302→          <ArrowLeft className="h-4 w-4" />
+   303→   303→        </Button>
+   304→   304→        <div className="flex-1 min-w-0">
+   305→   305→          <div className="flex items-center gap-3 flex-wrap">
+   306→   306→            <FileText className="h-5 w-5 text-orange-500" />
+   307→   307→            <h1 className="text-lg md:text-xl font-bold truncate">
+   308→   308→              Quotation {qt.quotationNo || 'N/A'}
+   309→   309→            </h1>
+   310→   310→            <Badge variant="outline" className={statusStyle.className}>
+   311→   311→              {statusStyle.label}
+   312→   312→            </Badge>
+   313→   313→          </div>
+   314→   314→        </div>
+   315→   315→        <div className="flex items-center gap-2 flex-wrap">
+   316→   316→          {/* Workflow Action Buttons */}
+   317→   317→          {canManage && transitions.map((t) => (
+   318→   318→            <Button
+   319→   319→              key={t.target}
+   320→   320→              variant="outline"
+   321→   321→              size="sm"
+   322→   322→              className={t.color}
+   323→   323→              disabled={actionLoading}
+   324→   324→              onClick={() => {
+   325→   325→                if (t.target === 'REJECTED') {
+   326→   326→                  setShowRejectDialog(true);
+   327→   327→                } else {
+   328→   328→                  updateStatus(t.target);
+   329→   329→                }
+   330→   330→              }}
+   331→   331→            >
+   332→   332→              {actionLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : t.icon}
+   333→   333→              <span className="ml-1.5">{t.label}</span>
+   334→   334→            </Button>
+   335→   335→          ))}
+   336→   336→
+   337→   337→          <Button variant="outline" size="sm" onClick={handlePrint}>
+   338→   338→            <Printer className="h-4 w-4 mr-1.5" /> Print
+   339→   339→          </Button>
+   340→   340→          <Button variant="outline" size="sm" onClick={handleSendEmail}>
+   341→   341→            <Mail className="h-4 w-4 mr-1.5" /> Send Email
+   342→   342→          </Button>
+   343→   343→          <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
+   344→   344→            <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
+   345→   345→          </Button>
+   346→   346→          <DropdownMenu>
+   347→   347→            <DropdownMenuTrigger asChild>
+   348→   348→              <Button variant="outline" size="sm">
+   349→   349→                <MoreVertical className="h-4 w-4" />
+   350→   350→              </Button>
+   351→   351→            </DropdownMenuTrigger>
+   352→   352→            <DropdownMenuContent align="end">
+   353→   353→              <DropdownMenuItem onClick={handleCopyNumber}>
+   354→   354→                <Copy className="h-4 w-4 mr-2" /> Copy Quotation No.
+   355→   355→              </DropdownMenuItem>
+   356→   356→              {canManage && qt.status === 'DRAFT' && (
+   357→   357→                <DropdownMenuItem onClick={() => setView('quotation-edit', { id: qt.id })}>
+   358→   358→                  <Pencil className="h-4 w-4 mr-2" /> Edit Quotation
+   359→   359→                </DropdownMenuItem>
+   360→   360→              )}
+   361→   361→            </DropdownMenuContent>
+   362→   362→          </DropdownMenu>
+   363→   363→        </div>
+   364→   364→      </div>
+   365→   365→
+   366→   366→      {/* ===== MAIN LAYOUT: Quotation Card + Summary Sidebar ===== */}
+   367→   367→      <div className="flex flex-col lg:flex-row gap-4">
+   368→   368→        {/* Left: Main Quotation Content */}
+   369→   369→        <div className="flex-1 min-w-0">
+   370→   370→      <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden print:shadow-none print:rounded-none print:border-0">
+   371→   371→        <div className="p-4 md:p-8">
+   372→   372→          {/* === HEADER: Company Info (Left) + Barcode/QR/Quotation Details (Right) === */}
+   373→   373→          <div className="flex flex-col md:flex-row md:justify-between gap-6 mb-8">
+   374→   374→            {/* Left: Company Info */}
+   375→   375→            <div className="flex-1">
+   376→   376→              <div className="flex items-center gap-3 mb-3">
+   377→   377→                <div className="w-12 h-12 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+   378→   378→                  {COMPANY.shortName}
+   379→   379→                </div>
+   380→   380→                <div>
+   381→   381→                  <h2 className="font-bold text-sm md:text-base leading-tight">{COMPANY.name}</h2>
+   382→   382→                </div>
+   383→   383→              </div>
+   384→   384→              <div className="text-xs text-gray-500 space-y-1 ml-0 md:ml-15">
+   385→   385→                <p className="flex items-start gap-1.5">
+   386→   386→                  <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+   387→   387→                  {COMPANY.address}
+   388→   388→                </p>
+   389→   389→                <p className="flex items-center gap-1.5">
+   390→   390→                  <Phone className="h-3.5 w-3.5 shrink-0" />
+   391→   391→                  {COMPANY.phone}
+   392→   392→                </p>
+   393→   393→                <p className="flex items-center gap-1.5">
+   394→   394→                  <MailIcon className="h-3.5 w-3.5 shrink-0" />
+   395→   395→                  {COMPANY.email}
+   396→   396→                </p>
+   397→   397→                <p className="flex items-center gap-1.5">
+   398→   398→                  <Building2 className="h-3.5 w-3.5 shrink-0" />
+   399→   399→                  {COMPANY.website}
+   400→   400→                </p>
+   401→   401→              </div>
+   402→   402→            </div>
+   403→   403→
+   404→   404→            {/* Right: Barcode, QR, Quotation Details */}
+   405→   405→            <div className="flex flex-col items-center md:items-end gap-3 shrink-0">
+   406→   406→              {/* Barcode */}
+   407→   407→              <div className="bg-white p-2">
+   408→   408→                <svg ref={barcodeRef} className="h-12" />
+   409→   409→              </div>
+   410→   410→              {/* QR Code */}
+   411→   411→              <div className="w-16 h-16">
+   412→   412→                <QRCodeSVG
+   413→   413→                  value={`https://smartms.com/quotation/${qt.quotationNo || qt.id}`}
+   414→   414→                  size={64}
+   415→   415→                  level="M"
+   416→   416→                  includeMargin={false}
+   417→   417→                />
+   418→   418→              </div>
+   419→   419→              {/* Quotation Label */}
+   420→   420→              <div className="text-center md:text-right">
+   421→   421→                <p className="text-emerald-600 font-bold text-lg">QUOTATION</p>
+   422→   422→                <p className="font-bold text-sm text-gray-900">{qt.quotationNo || 'N/A'}</p>
+   423→   423→              </div>
+   424→   424→              {/* Quotation Meta */}
+   425→   425→              <div className="text-xs text-gray-500 space-y-1.5 text-right w-full max-w-52">
+   426→   426→                <div className="flex justify-between gap-3">
+   427→   427→                  <span className="text-gray-400">Quotation Date</span>
+   428→   428→                  <span className="font-medium text-gray-700">{fmtDate(qt.createdAt)}</span>
+   429→   429→                </div>
+   430→   430→                <div className="flex justify-between gap-3">
+   431→   431→                  <span className="text-gray-400">Valid Until</span>
+   432→   432→                  <span className="font-medium text-gray-700">{fmtDate(qt.validUntil)}</span>
+   433→   433→                </div>
+   434→   434→                {qt.referenceNo && (
+   435→   435→                  <div className="flex justify-between gap-3">
+   436→   436→                    <span className="text-gray-400">Reference</span>
+   437→   437→                    <span className="font-medium text-gray-700">{qt.referenceNo}</span>
+   438→   438→                  </div>
+   439→   439→                )}
+   440→   440→                {qt.projectName && (
+   441→   441→                  <div className="flex justify-between gap-3">
+   442→   442→                    <span className="text-gray-400">Project</span>
+   443→   443→                    <span className="font-medium text-gray-700">{qt.projectName}</span>
+   444→   444→                  </div>
+   445→   445→                )}
+   446→   446→                <div className="flex justify-between gap-3">
+   447→   447→                  <span className="text-gray-400">Currency</span>
+   448→   448→                  <span className="font-medium text-gray-700">{qt.currency || 'BND'} - {currencyLabel}</span>
+   449→   449→                </div>
+   450→   450→                {qt.preparedByName && (
+   451→   451→                  <div className="flex justify-between gap-3">
+   452→   452→                    <span className="text-gray-400">Prepared By</span>
+   453→   453→                    <span className="font-medium text-gray-700">{qt.preparedByName}</span>
+   454→   454→                  </div>
+   455→   455→                )}
+   456→   456→              </div>
+   457→   457→            </div>
+   458→   458→          </div>
+   459→   459→
+   460→   460→          <Separator className="mb-6" />
+   461→   461→
+   462→   462→          {/* === BILL TO === */}
+   463→   463→          <div className="mb-6">
+   464→   464→            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   465→   465→              <MapPin className="h-3.5 w-3.5" /> Bill To
+   466→   466→            </h3>
+   467→   467→            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+   468→   468→              <div>
+   469→   469→                <p className="font-bold text-sm text-gray-900 mb-1">
+   470→   470→                  {(qt.customer?.companyName || qt.customer?.name || '').toUpperCase()}
+   471→   471→                </p>
+   472→   472→                {qt.customer?.address && (
+   473→   473→                  <p className="text-xs text-gray-500 mb-1.5">{qt.customer.address}</p>
+   474→   474→                )}
+   475→   475→                <div className="space-y-1">
+   476→   476→                  {qt.customer?.phone && (
+   477→   477→                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   478→   478→                      <Phone className="h-3 w-3" /> {qt.customer.phone}
+   479→   479→                    </p>
+   480→   480→                  )}
+   481→   481→                  {qt.customer?.email && (
+   482→   482→                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   483→   483→                      <MailIcon className="h-3 w-3" /> {qt.customer.email}
+   484→   484→                    </p>
+   485→   485→                  )}
+   486→   486→                  {qt.customer?.pic && (
+   487→   487→                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   488→   488→                      <User className="h-3 w-3" /> {qt.customer.pic} (PIC)
+   489→   489→                    </p>
+   490→   490→                  )}
+   491→   491→                </div>
+   492→   492→              </div>
+   493→   493→              {qt.site && (
+   494→   494→                <div>
+   495→   495→                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   496→   496→                    <MapPin className="h-3.5 w-3.5" /> Site
+   497→   497→                  </h3>
+   498→   498→                  <p className="text-xs text-gray-700">{qt.site}</p>
+   499→   499→                </div>
+   500→   500→              )}
+   501→   501→            </div>
+   502→   502→          </div>
+   503→   503→
+   504→   504→          {/* === LINE ITEMS TABLE === */}
+   505→   505→          <div className="mb-6 overflow-x-auto">
+   506→   506→            <table className="w-full text-xs border-collapse">
+   507→   507→              <thead>
+   508→   508→                <tr className="border-b-2 border-gray-300">
+   509→   509→                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-10">SL</th>
+   510→   510→                  <th className="text-left font-semibold text-gray-700 py-2.5 px-2">Item Title</th>
+   511→   511→                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-16">Unit</th>
+   512→   512→                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-14">Qty</th>
+   513→   513→                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-20">Rate ({qt.currency || 'BND'})</th>
+   514→   514→                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-24">Amount ({qt.currency || 'BND'})</th>
+   515→   515→                </tr>
+   516→   516→              </thead>
+   517→   517→              <tbody>
+   518→   518→                {lineItems.length === 0 ? (
+   519→   519→                  <tr>
+   520→   520→                    <td colSpan={6} className="text-center py-8 text-gray-400 text-sm">
+   521→   521→                      No line items
+   522→   522→                    </td>
+   523→   523→                  </tr>
+   524→   524→                ) : (
+   525→   525→                  lineItems.map((item, i) => (
+   526→   526→                    <tr
+   527→   527→                      key={item.id || i}
+   528→   528→                      className={`border-b border-gray-200 ${i % 2 === 1 ? 'bg-gray-50/50' : ''}`}
+   529→   529→                    >
+   530→   530→                      <td className="text-center py-2.5 px-2 text-gray-600">{i + 1}</td>
+   531→   531→                      <td className="py-2.5 px-2">
+   532→   532→                        <p className="font-medium text-gray-800 text-xs">{item.title}</p>
+   533→   533→                        {item.description && (
+   534→   534→                          <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.description}</p>
+   535→   535→                        )}
+   536→   536→                      </td>
+   537→   537→                      <td className="text-center py-2.5 px-2 text-gray-600">{item.unit || 'Nos'}</td>
+   538→   538→                      <td className="text-center py-2.5 px-2 text-gray-600">{item.quantity}</td>
+   539→   539→                      <td className="text-right py-2.5 px-2 text-gray-700">{fmtBND(item.rate)}</td>
+   540→   540→                      <td className="text-right py-2.5 px-2 font-medium text-gray-800">{fmtBND(item.amount)}</td>
+   541→   541→                    </tr>
+   542→   542→                  ))
+   543→   543→                )}
+   544→   544→              </tbody>
+   545→   545→            </table>
+   546→   546→            <p className="text-center text-xs text-gray-400 mt-3 italic">Thank you for your business!</p>
+   547→   547→          </div>
+   548→   548→
+   549→   549→          <Separator className="mb-6" />
+   550→   550→
+   551→   551→          {/* === BOTTOM SECTIONS: 3 Columns (Terms, Attachments, Notes) === */}
+   552→   552→          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+   553→   553→            {/* Terms & Conditions */}
+   554→   554→            <div>
+   555→   555→              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+   556→   556→                Terms & Conditions
+   557→   557→              </h3>
+   558→   558→              <ol className="text-xs text-gray-500 space-y-1.5 list-decimal list-inside">
+   559→   559→                {terms.map((term, i) => (
+   560→   560→                  <li key={i} className="leading-relaxed">{term}</li>
+   561→   561→                ))}
+   562→   562→              </ol>
+   563→   563→            </div>
+   564→   564→
+   565→   565→            {/* Attachments */}
+   566→   566→            <div>
+   567→   567→              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+   568→   568→                Attachments
+   569→   569→              </h3>
+   570→   570→              <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 text-center mb-3">
+   571→   571→                <Upload className="h-6 w-6 text-gray-300 mx-auto mb-1" />
+   572→   572→                <p className="text-xs text-gray-400">Drag & drop files here or click to browse</p>
+   573→   573→                <p className="text-[10px] text-gray-300 mt-0.5">PDF, DOC, XLS, JPG, PNG (Max 10MB)</p>
+   574→   574→              </div>
+   575→   575→            </div>
+   576→   576→
+   577→   577→            {/* Notes */}
+   578→   578→            <div>
+   579→   579→              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+   580→   580→                Notes
+   581→   581→              </h3>
+   582→   582→              <p className="text-xs text-gray-500 leading-relaxed">
+   583→   583→                {qt.notes || 'Thank you for choosing Smart Maintenance Services. We look forward to working with you.'}
+   584→   584→              </p>
+   585→   585→              <div className="mt-4 flex items-end gap-4">
+   586→   586→                <div>
+   587→   587→                  <p className="text-xs font-medium text-gray-700">
+   588→   588→                    {qt.preparedByName || '—'}
+   589→   589→                  </p>
+   590→   590→                  <p className="text-[10px] text-gray-400">Authorised Signature</p>
+   591→   591→                </div>
+   592→   592→                <div className="w-14 h-14 border-2 border-emerald-600 rounded-full flex items-center justify-center shrink-0">
+   593→   593→                  <span className="text-emerald-600 font-bold text-xs">{COMPANY.shortName}</span>
+   594→   594→                </div>
+   595→   595→              </div>
+   596→   596→            </div>
+   597→   597→          </div>
+   598→   598→        </div>
+   599→   599→
+   600→   600→        {/* === PRINT SUMMARY (inline for print) === */}
+   601→   601→        <div className="print:block hidden print:px-8 print:pb-6">
+   602→   602→          <QuotationSummaryPrint qt={qt} />
+   603→   603→        </div>
+   604→   604→      </div>
+   605→   605→        </div>{/* End left column */}
+   606→   606→
+   607→   607→        {/* Right: Summary Sidebar (desktop only, sticky) */}
+   608→   608→        <div className="hidden lg:block w-80 shrink-0">
+   609→   609→          <div className="sticky top-24">
+   610→   610→            <QuotationSummaryCard qt={qt} />
+   611→   611→          </div>
+   612→   612→        </div>
+   613→   613→      </div>{/* End layout wrapper */}
+   614→   614→
+   615→   615→      {/* === MOBILE SUMMARY CARD === */}
+   616→   616→      <div className="lg:hidden">
+   617→   617→        <QuotationSummaryCard qt={qt} />
+   618→   618→      </div>
+   619→   619→
+   620→   620→      {/* ===== REJECT DIALOG ===== */}
+   621→   621→      <Dialog open={showRejectDialog} onOpenChange={setShowRejectDialog}>
+   622→   622→        <DialogContent className="sm:max-w-sm">
+   623→   623→          <DialogHeader>
+   624→   624→            <DialogTitle>Reject Quotation</DialogTitle>
+   625→   625→            <DialogDescription>
+   626→   626→              Please provide a reason for rejecting this quotation.
+   627→   627→            </DialogDescription>
+   628→   628→          </DialogHeader>
+   629→   629→          <div className="py-2">
+   630→   630→            <Textarea
+   631→   631→              placeholder="Reason for rejection..."
+   632→   632→              value={rejectReason}
+   633→   633→              onChange={(e) => setRejectReason(e.target.value)}
+   634→   634→              className="mt-1"
+   635→   635→              rows={3}
+   636→   636→            />
+   637→   637→          </div>
+   638→   638→          <DialogFooter>
+   639→   639→            <Button variant="outline" onClick={() => setShowRejectDialog(false)}>Cancel</Button>
+   640→   640→            <Button variant="destructive" onClick={handleReject} disabled={actionLoading}>
+   641→   641→              {actionLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+   642→   642→              Reject Quotation
+   643→   643→            </Button>
+   644→   644→          </DialogFooter>
+   645→   645→        </DialogContent>
+   646→   646→      </Dialog>
+   647→   647→    </div>
+   648→   648→  );
+   649→   649→}
+   650→   650→
+   651→   651→// ============ SUMMARY COMPONENTS ============
+   652→   652→
+   653→   653→function QuotationSummaryCard({ qt }: { qt: QuotationData }) {
+   654→   654→  const currency = qt.currency || 'BND';
+   655→   655→
+   656→   656→  return (
+   657→   657→    <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 space-y-4">
+   658→   658→      <div>
+   659→   659→        <h3 className="text-sm font-semibold text-gray-700 mb-3">Summary</h3>
+   660→   660→        <div className="space-y-2">
+   661→   661→          <div className="flex justify-between text-xs">
+   662→   662→            <span className="text-gray-500">Subtotal</span>
+   663→   663→            <span className="text-gray-700">{currency} {fmtBND(qt.subtotal)}</span>
+   664→   664→          </div>
+   665→   665→          <div className="flex justify-between text-xs">
+   666→   666→            <span className="text-gray-500">Discount</span>
+   667→   667→            <span className="text-gray-700">{currency} {fmtBND(qt.discount)}</span>
+   668→   668→          </div>
+   669→   669→          <div className="flex justify-between text-xs">
+   670→   670→            <span className="text-gray-500">Tax ({qt.taxRate || 0}%)</span>
+   671→   671→            <span className="text-gray-700">{currency} {fmtBND(qt.tax)}</span>
+   672→   672→          </div>
+   673→   673→          <div className="flex justify-between text-xs">
+   674→   674→            <span className="text-gray-500">Shipping</span>
+   675→   675→            <span className="text-gray-700">{currency} {fmtBND(qt.shipping)}</span>
+   676→   676→          </div>
+   677→   677→          <Separator />
+   678→   678→          <div className="flex justify-between items-center">
+   679→   679→            <span className="text-sm font-semibold text-gray-700">Grand Total</span>
+   680→   680→            <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(qt.total)}</span>
+   681→   681→          </div>
+   682→   682→        </div>
+   683→   683→      </div>
+   684→   684→
+   685→   685→      <div className="bg-emerald-50 rounded-lg p-3">
+   686→   686→        <p className="text-[10px] text-emerald-600 font-medium mb-0.5">Amount In Words</p>
+   687→   687→        <p className="text-xs text-emerald-700 italic font-medium">
+   688→   688→          {numberToCurrencyWords(qt.total)}
+   689→   689→        </p>
+   690→   690→      </div>
+   691→   691→
+   692→   692→      {/* Quotation Status Timeline */}
+   693→   693→      <div>
+   694→   694→        <h3 className="text-sm font-semibold text-gray-700 mb-3">Status</h3>
+   695→   695→        <div className="space-y-1.5 text-xs">
+   696→   696→          <div className="flex justify-between">
+   697→   697→            <span className="text-gray-400">Current Status</span>
+   698→   698→            <Badge variant="outline" className={STATUS_CONFIG[qt.status]?.className || ''}>
+   699→   699→              {STATUS_CONFIG[qt.status]?.label || qt.status}
+   700→   700→            </Badge>
+   701→   701→          </div>
+   702→   702→          <div className="flex justify-between">
+   703→   703→            <span className="text-gray-400">Created</span>
+   704→   704→            <span className="text-gray-700">{fmtDate(qt.createdAt)}</span>
+   705→   705→          </div>
+   706→   706→          {qt.validUntil && (
+   707→   707→            <div className="flex justify-between">
+   708→   708→              <span className="text-gray-400">Valid Until</span>
+   709→   709→              <span className="text-gray-700">{fmtDate(qt.validUntil)}</span>
+   710→   710→            </div>
+   711→   711→          )}
+   712→   712→          {qt.sentAt && (
+   713→   713→            <div className="flex justify-between">
+   714→   714→              <span className="text-gray-400">Sent On</span>
+   715→   715→              <span className="text-gray-700">{fmtDate(qt.sentAt)}</span>
+   716→   716→            </div>
+   717→   717→          )}
+   718→   718→          {qt.acceptedAt && (
+   719→   719→            <div className="flex justify-between">
+   720→   720→              <span className="text-gray-400">Accepted On</span>
+   721→   721→              <span className="text-gray-700">{fmtDate(qt.acceptedAt)}</span>
+   722→   722→            </div>
+   723→   723→          )}
+   724→   724→        </div>
+   725→   725→      </div>
+   726→   726→    </div>
+   727→   727→  );
+   728→   728→}
+   729→   729→
+   730→   730→function QuotationSummaryPrint({ qt }: { qt: QuotationData }) {
+   731→   731→  const currency = qt.currency || 'BND';
+   732→   732→  return (
+   733→   733→    <div className="flex justify-end">
+   734→   734→      <div className="w-72 space-y-3">
+   735→   735→        <h3 className="text-sm font-semibold text-gray-700">Summary</h3>
+   736→   736→        <div className="space-y-1.5 text-xs">
+   737→   737→          <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>{currency} {fmtBND(qt.subtotal)}</span></div>
+   738→   738→          <div className="flex justify-between"><span className="text-gray-500">Discount</span><span>{currency} {fmtBND(qt.discount)}</span></div>
+   739→   739→          <div className="flex justify-between"><span className="text-gray-500">Tax ({qt.taxRate || 0}%)</span><span>{currency} {fmtBND(qt.tax)}</span></div>
+   740→   740→          <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span>{currency} {fmtBND(qt.shipping)}</span></div>
+   741→   741→          <Separator />
+   742→   742→          <div className="flex justify-between text-base font-bold text-emerald-600"><span>Grand Total</span><span>{currency} {fmtBND(qt.total)}</span></div>
+   743→   743→        </div>
+   744→   744→        <div className="bg-emerald-50 rounded-lg p-2.5 mt-3">
+   745→   745→          <p className="text-[10px] text-emerald-600 font-medium">Amount In Words</p>
+   746→   746→          <p className="text-xs text-emerald-700 italic">{numberToCurrencyWords(qt.total)}</p>
+   747→   747→        </div>
+   748→   748→      </div>
+   749→   749→    </div>
+   750→   750→  );
+   751→   751→}

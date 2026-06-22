@@ -1,0 +1,845 @@
+     1→'use client';
+     2→
+     3→import { useState, useEffect, useRef, useCallback } from 'react';
+     4→import { Button } from '@/components/ui/button';
+     5→import { Badge } from '@/components/ui/badge';
+     6→import { Skeleton } from '@/components/ui/skeleton';
+     7→import { Separator } from '@/components/ui/separator';
+     8→import {
+     9→  Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
+    10→} from '@/components/ui/dialog';
+    11→import { Input } from '@/components/ui/input';
+    12→import { Label } from '@/components/ui/label';
+    13→import {
+    14→  Textarea } from '@/components/ui/textarea';
+    15→import {
+    16→  ArrowLeft, Eye, Printer, Mail, MessageCircle, MoreVertical,
+    17→  CreditCard, Download, FileText, Banknote, X,
+    18→  MapPin, Phone, MailIcon, User, Calendar, Hash, Building2,
+    19→  Upload, File, Loader2, AlertCircle, CheckCircle2, Send,
+    20→  Stamp,
+    21→} from 'lucide-react';
+    22→import {
+    23→  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
+    24→} from '@/components/ui/dropdown-menu';
+    25→import { toast } from 'sonner';
+    26→import { useAppStore, useAuthStore, hasMinRole } from '@/store';
+    27→import type { InvoiceItem, InvoiceLineItem } from '@/types';
+    28→import { numberToCurrencyWords } from '@/lib/number-to-words';
+    29→import { format } from 'date-fns';
+    30→import JsBarcode from 'jsbarcode';
+    31→import dynamic from 'next/dynamic';
+    32→
+    33→const QRCodeSVG = dynamic(
+    34→  () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
+    35→  { ssr: false }
+    36→);
+    37→
+    38→// ============ CONSTANTS ============
+    39→
+    40→const DEFAULT_TERMS = [
+    41→  '50% advance payment and balance upon completion.',
+    42→  'Price validity: 60 days from the invoice date.',
+    43→  'Delivery period: 3 working days.',
+    44→  'Additional works are subject to variation order.',
+    45→  'Warranty applies only to workmanship.',
+    46→  'Material warranty follows manufacturer terms.',
+    47→  'Payment by bank transfer or cheque.',
+    48→];
+    49→
+    50→const COMPANY = {
+    51→  name: 'SMART MAINTENANCE SERVICES SDN BHD',
+    52→  shortName: 'LS',
+    53→  address: 'No. 25, Spg 88, Jln Gadong BE1318, Bandar Seri Begawan, Brunei Darussalam',
+    54→  phone: '+673 245 6789',
+    55→  email: 'info@smartms.com',
+    56→  website: 'www.smartms.com',
+    57→  regNo: 'BE1318',
+    58→};
+    59→
+    60→const STATUS_STYLES: Record<string, { label: string; className: string }> = {
+    61→  DRAFT: { label: 'Draft', className: 'bg-gray-100 text-gray-700 border-gray-300' },
+    62→  PENDING: { label: 'Pending', className: 'bg-amber-100 text-amber-800 border-amber-300' },
+    63→  APPROVED: { label: 'Approved', className: 'bg-teal-100 text-teal-800 border-teal-300' },
+    64→  PAID: { label: 'Paid', className: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+    65→  CANCELLED: { label: 'Cancelled', className: 'bg-red-100 text-red-700 border-red-300' },
+    66→  OVERDUE: { label: 'Overdue', className: 'bg-rose-100 text-rose-800 border-rose-300' },
+    67→};
+    68→
+    69→// ============ HELPERS ============
+    70→
+    71→const token = () => localStorage.getItem('cmms_token') || '';
+    72→
+    73→function fmtBND(n: number): string {
+    74→  return n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    75→}
+    76→
+    77→function fmtDate(d?: string): string {
+    78→  if (!d) return '—';
+    79→  return format(new Date(d), 'dd/MM/yyyy');
+    80→}
+    81→
+    82→function parseLineItems(itemsStr?: string): InvoiceLineItem[] {
+    83→  if (!itemsStr) return [];
+    84→  try {
+    85→    const parsed = JSON.parse(itemsStr);
+    86→    if (Array.isArray(parsed)) return parsed;
+    87→  } catch { /* empty */ }
+    88→  // Legacy format: [{description, amount}]
+    89→  try {
+    90→    const legacy = JSON.parse(itemsStr);
+    91→    if (Array.isArray(legacy)) {
+    92→      return legacy.map((item: { description?: string; amount?: number }, i: number) => ({
+    93→        title: item.description || `Item ${i + 1}`,
+    94→        description: '',
+    95→        unit: 'Nos',
+    96→        quantity: 1,
+    97→        rate: item.amount || 0,
+    98→        amount: item.amount || 0,
+    99→      }));
+   100→    }
+   101→  } catch { /* empty */ }
+   102→  return [];
+   103→}
+   104→
+   105→function parseTerms(termsStr?: string): string[] {
+   106→  if (!termsStr) return DEFAULT_TERMS;
+   107→  try {
+   108→    const parsed = JSON.parse(termsStr);
+   109→    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+   110→  } catch { /* empty */ }
+   111→  return DEFAULT_TERMS;
+   112→}
+   113→
+   114→// ============ COMPONENT ============
+   115→
+   116→export function InvoiceDetail() {
+   117→  const { viewParams, setView } = useAppStore();
+   118→  const user = useAuthStore((s) => s.user);
+   119→  const id = viewParams.id;
+   120→  const [inv, setInv] = useState<InvoiceItem | null>(null);
+   121→  const [loading, setLoading] = useState(true);
+   122→  const [actionLoading, setActionLoading] = useState(false);
+   123→  const [lineItems, setLineItems] = useState<InvoiceLineItem[]>([]);
+   124→  const [terms, setTerms] = useState<string[]>(DEFAULT_TERMS);
+   125→  const [showPaymentDialog, setShowPaymentDialog] = useState(false);
+   126→  const [paymentForm, setPaymentForm] = useState({ method: 'Bank Transfer', ref: '', transactionId: '' });
+   127→  const [showCancelDialog, setShowCancelDialog] = useState(false);
+   128→  const [cancelReason, setCancelReason] = useState('');
+   129→  const barcodeRef = useRef<SVGSVGElement>(null);
+   130→
+   131→  const fetchInv = useCallback(async () => {
+   132→    if (!id) return;
+   133→    setLoading(true);
+   134→    try {
+   135→      const res = await fetch(`/api/invoices/${id}`, {
+   136→        headers: { Authorization: `Bearer ${token()}` },
+   137→      });
+   138→      if (!res.ok) throw new Error();
+   139→      const json = await res.json();
+   140→      setInv(json);
+   141→      setLineItems(parseLineItems(json.items));
+   142→      setTerms(parseTerms(json.terms));
+   143→    } catch {
+   144→      toast.error('Failed to load invoice');
+   145→    } finally {
+   146→      setLoading(false);
+   147→    }
+   148→  }, [id]);
+   149→
+   150→  useEffect(() => { fetchInv(); }, [fetchInv]);
+   151→
+   152→  // Generate barcode
+   153→  useEffect(() => {
+   154→    if (inv?.invoiceNumber && barcodeRef.current) {
+   155→      try {
+   156→        JsBarcode(barcodeRef.current, inv.invoiceNumber, {
+   157→          format: 'CODE128',
+   158→          width: 2,
+   159→          height: 50,
+   160→          displayValue: false,
+   161→          margin: 0,
+   162→        });
+   163→      } catch { /* barcode generation can fail in SSR */ }
+   164→    }
+   165→  }, [inv?.invoiceNumber]);
+   166→
+   167→  const updateStatus = async (status: string, extra?: Record<string, unknown>) => {
+   168→    if (!id) return;
+   169→    setActionLoading(true);
+   170→    try {
+   171→      const res = await fetch(`/api/invoices/${id}`, {
+   172→        method: 'PUT',
+   173→        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+   174→        body: JSON.stringify({ status, ...extra }),
+   175→      });
+   176→      if (!res.ok) throw new Error();
+   177→      toast.success(`Invoice ${status.toLowerCase()}`);
+   178→      fetchInv();
+   179→    } catch {
+   180→      toast.error('Action failed');
+   181→    } finally {
+   182→      setActionLoading(false);
+   183→    }
+   184→  };
+   185→
+   186→  const handleRecordPayment = async () => {
+   187→    if (!paymentForm.method) {
+   188→      toast.error('Please select a payment method');
+   189→      return;
+   190→    }
+   191→    await updateStatus('PAID', {
+   192→      paymentMethod: paymentForm.method,
+   193→      paymentRef: paymentForm.ref,
+   194→      transactionId: paymentForm.transactionId,
+   195→    });
+   196→    setShowPaymentDialog(false);
+   197→    setPaymentForm({ method: 'Bank Transfer', ref: '', transactionId: '' });
+   198→  };
+   199→
+   200→  const handleCancel = async () => {
+   201→    await updateStatus('CANCELLED');
+   202→    setShowCancelDialog(false);
+   203→  };
+   204→
+   205→  const handlePrint = () => {
+   206→    window.print();
+   207→  };
+   208→
+   209→  const handleSendEmail = () => {
+   210→    if (!inv) return;
+   211→    const subject = encodeURIComponent(`Invoice ${inv.invoiceNumber} - ${COMPANY.name}`);
+   212→    const body = encodeURIComponent(
+   213→      `Dear ${inv.customerName},\n\nPlease find attached invoice ${inv.invoiceNumber} for ${inv.title}.\n\nTotal Amount: BND ${fmtBND(inv.total)}\nDue Date: ${fmtDate(inv.dueDate)}\n\nThank you for your business.\n\nBest regards,\n${COMPANY.name}\n${COMPANY.phone}\n${COMPANY.email}`
+   214→    );
+   215→    window.open(`mailto:${inv.customerEmail || ''}?subject=${subject}&body=${body}`);
+   216→  };
+   217→
+   218→  const handleSendWhatsApp = () => {
+   219→    if (!inv) return;
+   220→    const msg = encodeURIComponent(
+   221→      `Dear ${inv.customerName},\n\nInvoice *${inv.invoiceNumber}*\nAmount: *BND ${fmtBND(inv.total)}*\nDue: ${fmtDate(inv.dueDate)}\n\nPlease find the invoice attached. Thank you for your business.\n\n- ${COMPANY.name}`
+   222→    );
+   223→    const phone = (inv.customerPhone || '').replace(/[^0-9]/g, '');
+   224→    window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+   225→  };
+   226→
+   227→  const isAdmin = user ? hasMinRole(user.role, 'admin') : false;
+   228→  const isFinance = user?.role === 'finance';
+   229→  const canManage = isAdmin || isFinance;
+   230→
+   231→  // ============ LOADING STATE ============
+   232→  if (loading) {
+   233→    return (
+   234→      <div className="p-4 md:p-6 space-y-4">
+   235→        <Skeleton className="h-8 w-64" />
+   236→        <Skeleton className="h-[600px] w-full rounded-xl" />
+   237→      </div>
+   238→    );
+   239→  }
+   240→
+   241→  if (!inv) {
+   242→    return (
+   243→      <div className="p-6 text-center">
+   244→        <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+   245→        <p className="text-muted-foreground text-lg">Invoice not found</p>
+   246→        <Button variant="outline" className="mt-4" onClick={() => setView('invoices')}>
+   247→          <ArrowLeft className="h-4 w-4 mr-2" /> Back to Invoices
+   248→        </Button>
+   249→      </div>
+   250→    );
+   251→  }
+   252→
+   253→  const statusStyle = STATUS_STYLES[inv.status] || STATUS_STYLES.DRAFT;
+   254→  const currencyLabel = inv.currency === 'BND' ? 'Brunei Dollar' : (inv.currency || 'BND');
+   255→
+   256→  return (
+   257→    <div className="p-3 md:p-6 space-y-4 print:p-0">
+   258→      {/* ===== TOP ACTION BAR ===== */}
+   259→      <div className="flex flex-col sm:flex-row sm:items-center gap-3 print:hidden">
+   260→        <Button variant="ghost" size="icon" onClick={() => setView('invoices')}>
+   261→          <ArrowLeft className="h-4 w-4" />
+   262→        </Button>
+   263→        <div className="flex-1 min-w-0">
+   264→          <div className="flex items-center gap-3 flex-wrap">
+   265→            <FileText className="h-5 w-5 text-orange-500" />
+   266→            <h1 className="text-lg md:text-xl font-bold truncate">
+   267→              Invoice {inv.invoiceNumber}
+   268→            </h1>
+   269→            <Badge variant="outline" className={statusStyle.className}>
+   270→              {statusStyle.label}
+   271→            </Badge>
+   272→          </div>
+   273→        </div>
+   274→        <div className="flex items-center gap-2 flex-wrap">
+   275→          <Button variant="outline" size="sm" onClick={handlePrint}>
+   276→            <Printer className="h-4 w-4 mr-1.5" /> Print
+   277→          </Button>
+   278→          <Button variant="outline" size="sm" onClick={handleSendEmail}>
+   279→            <Mail className="h-4 w-4 mr-1.5" /> Send Email
+   280→          </Button>
+   281→          <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
+   282→            <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
+   283→          </Button>
+   284→          <DropdownMenu>
+   285→            <DropdownMenuTrigger asChild>
+   286→              <Button variant="outline" size="sm">
+   287→                <MoreVertical className="h-4 w-4" />
+   288→              </Button>
+   289→            </DropdownMenuTrigger>
+   290→            <DropdownMenuContent align="end">
+   291→              <DropdownMenuItem onClick={() => toast.info('PDF download coming soon')}>
+   292→                <Download className="h-4 w-4 mr-2" /> Download PDF
+   293→              </DropdownMenuItem>
+   294→              {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
+   295→                <>
+   296→                  <DropdownMenuItem onClick={() => setShowPaymentDialog(true)} className="text-emerald-700">
+   297→                    <CreditCard className="h-4 w-4 mr-2" /> Record Payment
+   298→                  </DropdownMenuItem>
+   299→                  <DropdownMenuItem onClick={() => setShowCancelDialog(true)} className="text-red-600">
+   300→                    <X className="h-4 w-4 mr-2" /> Cancel Invoice
+   301→                  </DropdownMenuItem>
+   302→                </>
+   303→              )}
+   304→            </DropdownMenuContent>
+   305→          </DropdownMenu>
+   306→        </div>
+   307→      </div>
+   308→
+   309→      {/* ===== MAIN LAYOUT: Invoice Card + Summary Sidebar ===== */}
+   310→      <div className="flex flex-col lg:flex-row gap-4">
+   311→        {/* Left: Main Invoice Content */}
+   312→        <div className="flex-1 min-w-0">
+   313→        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden print:shadow-none print:rounded-none print:border-0">
+   314→        <div className="p-4 md:p-8">
+   315→          {/* === HEADER: Company Info (Left) + Barcode/QR/Invoice Details (Right) === */}
+   316→          <div className="flex flex-col md:flex-row md:justify-between gap-6 mb-8">
+   317→            {/* Left: Company Info */}
+   318→            <div className="flex-1">
+   319→              <div className="flex items-center gap-3 mb-3">
+   320→                <div className="w-12 h-12 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
+   321→                  {COMPANY.shortName}
+   322→                </div>
+   323→                <div>
+   324→                  <h2 className="font-bold text-sm md:text-base leading-tight">{COMPANY.name}</h2>
+   325→                </div>
+   326→              </div>
+   327→              <div className="text-xs text-gray-500 space-y-1 ml-0 md:ml-15">
+   328→                <p className="flex items-start gap-1.5">
+   329→                  <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+   330→                  {COMPANY.address}
+   331→                </p>
+   332→                <p className="flex items-center gap-1.5">
+   333→                  <Phone className="h-3.5 w-3.5 shrink-0" />
+   334→                  {COMPANY.phone}
+   335→                </p>
+   336→                <p className="flex items-center gap-1.5">
+   337→                  <MailIcon className="h-3.5 w-3.5 shrink-0" />
+   338→                  {COMPANY.email}
+   339→                </p>
+   340→                <p className="flex items-center gap-1.5">
+   341→                  <Building2 className="h-3.5 w-3.5 shrink-0" />
+   342→                  {COMPANY.website}
+   343→                </p>
+   344→              </div>
+   345→            </div>
+   346→
+   347→            {/* Right: Barcode, QR, Invoice Details */}
+   348→            <div className="flex flex-col items-center md:items-end gap-3 shrink-0">
+   349→              {/* Barcode */}
+   350→              <div className="bg-white p-2">
+   351→                <svg ref={barcodeRef} className="h-12" />
+   352→              </div>
+   353→              {/* QR Code */}
+   354→              <div className="w-16 h-16">
+   355→                <QRCodeSVG
+   356→                  value={`https://smartms.com/invoice/${inv.invoiceNumber}`}
+   357→                  size={64}
+   358→                  level="M"
+   359→                  includeMargin={false}
+   360→                />
+   361→              </div>
+   362→              {/* Invoice Label */}
+   363→              <div className="text-center md:text-right">
+   364→                <p className="text-emerald-600 font-bold text-lg">INVOICE</p>
+   365→                <p className="font-bold text-sm text-gray-900">{inv.invoiceNumber}</p>
+   366→              </div>
+   367→              {/* Invoice Meta */}
+   368→              <div className="text-xs text-gray-500 space-y-1.5 text-right w-full max-w-52">
+   369→                <div className="flex justify-between gap-3">
+   370→                  <span className="text-gray-400">Invoice Date</span>
+   371→                  <span className="font-medium text-gray-700">{fmtDate(inv.createdAt)}</span>
+   372→                </div>
+   373→                <div className="flex justify-between gap-3">
+   374→                  <span className="text-gray-400">Due Date</span>
+   375→                  <span className="font-medium text-gray-700">{fmtDate(inv.dueDate)}</span>
+   376→                </div>
+   377→                {inv.referenceNo && (
+   378→                  <div className="flex justify-between gap-3">
+   379→                    <span className="text-gray-400">Reference</span>
+   380→                    <span className="font-medium text-gray-700">{inv.referenceNo}</span>
+   381→                  </div>
+   382→                )}
+   383→                {inv.poReference && (
+   384→                  <div className="flex justify-between gap-3">
+   385→                    <span className="text-gray-400">PO/Ref No.</span>
+   386→                    <span className="font-medium text-gray-700">{inv.poReference}</span>
+   387→                  </div>
+   388→                )}
+   389→                <div className="flex justify-between gap-3">
+   390→                  <span className="text-gray-400">Payment Terms</span>
+   391→                  <span className="font-medium text-gray-700">{inv.paymentTerms || '30 Days'}</span>
+   392→                </div>
+   393→                <div className="flex justify-between gap-3">
+   394→                  <span className="text-gray-400">Currency</span>
+   395→                  <span className="font-medium text-gray-700">{inv.currency || 'BND'} - {currencyLabel}</span>
+   396→                </div>
+   397→                {(inv.preparedByName || inv.creatorName) && (
+   398→                  <div className="flex justify-between gap-3">
+   399→                    <span className="text-gray-400">Prepared By</span>
+   400→                    <span className="font-medium text-gray-700">{inv.preparedByName || inv.creatorName}</span>
+   401→                  </div>
+   402→                )}
+   403→              </div>
+   404→            </div>
+   405→          </div>
+   406→
+   407→          <Separator className="mb-6" />
+   408→
+   409→          {/* === BILL TO / SHIP TO === */}
+   410→          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+   411→            {/* Bill To */}
+   412→            <div>
+   413→              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   414→                <MapPin className="h-3.5 w-3.5" /> Bill To
+   415→              </h3>
+   416→              <p className="font-bold text-sm text-gray-900 mb-1">
+   417→                {(inv.customerCompany || inv.customerName || '').toUpperCase()}
+   418→              </p>
+   419→              {inv.customerAddress && (
+   420→                <p className="text-xs text-gray-500 mb-1.5">{inv.customerAddress}</p>
+   421→              )}
+   422→              <div className="space-y-1">
+   423→                {inv.customerPhone && (
+   424→                  <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   425→                    <Phone className="h-3 w-3" /> {inv.customerPhone}
+   426→                  </p>
+   427→                )}
+   428→                {inv.customerEmail && (
+   429→                  <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   430→                    <MailIcon className="h-3 w-3" /> {inv.customerEmail}
+   431→                  </p>
+   432→                )}
+   433→                {inv.customerPic && (
+   434→                  <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   435→                    <User className="h-3 w-3" /> {inv.customerPic} (PIC)
+   436→                  </p>
+   437→                )}
+   438→              </div>
+   439→            </div>
+   440→
+   441→            {/* Ship To */}
+   442→            <div>
+   443→              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+   444→                <MapPin className="h-3.5 w-3.5" /> Ship To
+   445→              </h3>
+   446→              {inv.shipToName ? (
+   447→                <>
+   448→                  <p className="font-bold text-sm text-gray-900 mb-1">{inv.shipToName.toUpperCase()}</p>
+   449→                  {inv.shipToAddress && (
+   450→                    <p className="text-xs text-gray-500 mb-1.5">{inv.shipToAddress}</p>
+   451→                  )}
+   452→                  <div className="space-y-1">
+   453→                    {inv.shipToPhone && (
+   454→                      <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   455→                        <Phone className="h-3 w-3" /> {inv.shipToPhone}
+   456→                      </p>
+   457→                    )}
+   458→                    {inv.shipToContact && (
+   459→                      <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   460→                        <User className="h-3 w-3" /> {inv.shipToContact}
+   461→                      </p>
+   462→                    )}
+   463→                  </div>
+   464→                </>
+   465→              ) : (
+   466→                <>
+   467→                  <p className="font-bold text-sm text-gray-900 mb-1">
+   468→                    {(inv.customerCompany || inv.customerName || '').toUpperCase()}
+   469→                  </p>
+   470→                  {inv.customerAddress && (
+   471→                    <p className="text-xs text-gray-500 mb-1.5">{inv.customerAddress}</p>
+   472→                  )}
+   473→                  <div className="space-y-1">
+   474→                    {inv.customerPhone && (
+   475→                      <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   476→                        <Phone className="h-3 w-3" /> {inv.customerPhone}
+   477→                      </p>
+   478→                    )}
+   479→                    {inv.customerPic && (
+   480→                      <p className="text-xs text-gray-500 flex items-center gap-1.5">
+   481→                        <User className="h-3 w-3" /> {inv.customerPic}
+   482→                      </p>
+   483→                    )}
+   484→                  </div>
+   485→                </>
+   486→              )}
+   487→            </div>
+   488→          </div>
+   489→
+   490→          {/* === LINE ITEMS TABLE === */}
+   491→          <div className="mb-6 overflow-x-auto">
+   492→            <table className="w-full text-xs border-collapse">
+   493→              <thead>
+   494→                <tr className="border-b-2 border-gray-300">
+   495→                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-10">SL</th>
+   496→                  <th className="text-left font-semibold text-gray-700 py-2.5 px-2">Item Title</th>
+   497→                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-16">Unit</th>
+   498→                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-14">Qty</th>
+   499→                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-20">Rate ({inv.currency || 'BND'})</th>
+   500→                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-24">Amount ({inv.currency || 'BND'})</th>
+   501→                </tr>
+   502→              </thead>
+   503→              <tbody>
+   504→                {lineItems.length === 0 ? (
+   505→                  <tr>
+   506→                    <td colSpan={6} className="text-center py-8 text-gray-400 text-sm">
+   507→                      No line items
+   508→                    </td>
+   509→                  </tr>
+   510→                ) : (
+   511→                  lineItems.map((item, i) => (
+   512→                    <tr
+   513→                      key={i}
+   514→                      className={`border-b border-gray-200 ${i % 2 === 1 ? 'bg-gray-50/50' : ''}`}
+   515→                    >
+   516→                      <td className="text-center py-2.5 px-2 text-gray-600">{i + 1}</td>
+   517→                      <td className="py-2.5 px-2">
+   518→                        <p className="font-medium text-gray-800 text-xs">{item.title}</p>
+   519→                        {item.description && (
+   520→                          <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.description}</p>
+   521→                        )}
+   522→                      </td>
+   523→                      <td className="text-center py-2.5 px-2 text-gray-600">{item.unit || 'Nos'}</td>
+   524→                      <td className="text-center py-2.5 px-2 text-gray-600">{item.quantity}</td>
+   525→                      <td className="text-right py-2.5 px-2 text-gray-700">{fmtBND(item.rate)}</td>
+   526→                      <td className="text-right py-2.5 px-2 font-medium text-gray-800">{fmtBND(item.amount)}</td>
+   527→                    </tr>
+   528→                  ))
+   529→                )}
+   530→              </tbody>
+   531→            </table>
+   532→            <p className="text-center text-xs text-gray-400 mt-3 italic">Thank you for your business!</p>
+   533→          </div>
+   534→
+   535→          <Separator className="mb-6" />
+   536→
+   537→          {/* === BOTTOM SECTIONS: 3 Columns (Terms, Attachments, Notes) === */}
+   538→          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+   539→            {/* Terms & Conditions */}
+   540→            <div>
+   541→              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+   542→                Terms & Conditions
+   543→              </h3>
+   544→              <ol className="text-xs text-gray-500 space-y-1.5 list-decimal list-inside">
+   545→                {terms.map((term, i) => (
+   546→                  <li key={i} className="leading-relaxed">{term}</li>
+   547→                ))}
+   548→              </ol>
+   549→            </div>
+   550→
+   551→            {/* Attachments */}
+   552→            <div>
+   553→              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+   554→                Attachments
+   555→              </h3>
+   556→              <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 text-center mb-3">
+   557→                <Upload className="h-6 w-6 text-gray-300 mx-auto mb-1" />
+   558→                <p className="text-xs text-gray-400">Drag & drop files here or click to browse</p>
+   559→                <p className="text-[10px] text-gray-300 mt-0.5">PDF, DOC, XLS, JPG, PNG (Max 10MB)</p>
+   560→              </div>
+   561→              {inv.pdfUrl && (
+   562→                <div className="flex items-center gap-2 text-xs p-2 bg-gray-50 rounded-lg">
+   563→                  <File className="h-4 w-4 text-red-500" />
+   564→                  <span className="text-gray-700 truncate flex-1">
+   565→                    Invoice_{inv.invoiceNumber.replace(/\//g, '-')}.pdf
+   566→                  </span>
+   567→                  <span className="text-gray-400 shrink-0">PDF</span>
+   568→                </div>
+   569→              )}
+   570→            </div>
+   571→
+   572→            {/* Notes */}
+   573→            <div>
+   574→              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+   575→                Notes
+   576→              </h3>
+   577→              <p className="text-xs text-gray-500 leading-relaxed">
+   578→                {inv.notes || 'Thank you for choosing Smart Maintenance Services.'}
+   579→              </p>
+   580→              <div className="mt-4 flex items-end gap-4">
+   581→                <div>
+   582→                  <p className="text-xs font-medium text-gray-700">
+   583→                    {(inv.preparedByName || inv.creatorName || '—')}
+   584→                  </p>
+   585→                  <p className="text-[10px] text-gray-400">Authorised Signature</p>
+   586→                </div>
+   587→                <div className="w-14 h-14 border-2 border-emerald-600 rounded-full flex items-center justify-center shrink-0">
+   588→                  <span className="text-emerald-600 font-bold text-xs">{COMPANY.shortName}</span>
+   589→                </div>
+   590→              </div>
+   591→            </div>
+   592→          </div>
+   593→        </div>
+   594→
+   595→        {/* === PRINT SUMMARY (inline for print) === */}
+   596→        <div className="print:block hidden print:px-8 print:pb-6">
+   597→          <InvoiceSummaryPrint inv={inv} lineItems={lineItems} />
+   598→        </div>
+   599→      </div>
+   600→        </div>{/* End left column */}
+   601→
+   602→        {/* Right: Summary Sidebar (desktop only, sticky) */}
+   603→        <div className="hidden lg:block w-80 shrink-0">
+   604→          <div className="sticky top-24">
+   605→            <InvoiceSummaryCard inv={inv} onRecordPayment={() => setShowPaymentDialog(true)} canManage={canManage} />
+   606→          </div>
+   607→        </div>
+   608→      </div>{/* End layout wrapper */}
+   609→
+   610→      {/* === MOBILE SUMMARY CARD (shown below invoice card on mobile) === */}
+   611→      <div className="lg:hidden">
+   612→        <InvoiceSummaryCard inv={inv} onRecordPayment={() => setShowPaymentDialog(true)} canManage={canManage} />
+   613→      </div>
+   614→
+   615→      {/* ===== PAYMENT DIALOG ===== */}
+   616→      <Dialog open={showPaymentDialog} onOpenChange={setShowPaymentDialog}>
+   617→        <DialogContent className="sm:max-w-md">
+   618→          <DialogHeader>
+   619→            <DialogTitle>Record Payment</DialogTitle>
+   620→            <DialogDescription>Mark this invoice as paid and record payment details.</DialogDescription>
+   621→          </DialogHeader>
+   622→          <div className="space-y-4 py-2">
+   623→            <div className="bg-emerald-50 rounded-lg p-4 text-center">
+   624→              <p className="text-xs text-gray-500 mb-1">Amount Due</p>
+   625→              <p className="text-2xl font-bold text-emerald-700">
+   626→                {inv.currency || 'BND'} {fmtBND(inv.total)}
+   627→              </p>
+   628→            </div>
+   629→            <div>
+   630→              <Label className="text-xs">Payment Method</Label>
+   631→              <select
+   632→                className="w-full mt-1 h-9 rounded-md border border-gray-300 px-3 text-sm bg-white"
+   633→                value={paymentForm.method}
+   634→                onChange={(e) => setPaymentForm({ ...paymentForm, method: e.target.value })}
+   635→              >
+   636→                <option>Bank Transfer</option>
+   637→                <option>Cheque</option>
+   638→                <option>Cash</option>
+   639→                <option>Online Payment</option>
+   640→                <option>Other</option>
+   641→              </select>
+   642→            </div>
+   643→            <div>
+   644→              <Label className="text-xs">Payment Reference</Label>
+   645→              <Input
+   646→                placeholder="e.g. Receipt number"
+   647→                value={paymentForm.ref}
+   648→                onChange={(e) => setPaymentForm({ ...paymentForm, ref: e.target.value })}
+   649→                className="mt-1"
+   650→              />
+   651→            </div>
+   652→            <div>
+   653→              <Label className="text-xs">Transaction ID</Label>
+   654→              <Input
+   655→                placeholder="e.g. TRX202606200123"
+   656→                value={paymentForm.transactionId}
+   657→                onChange={(e) => setPaymentForm({ ...paymentForm, transactionId: e.target.value })}
+   658→                className="mt-1"
+   659→              />
+   660→            </div>
+   661→          </div>
+   662→          <DialogFooter>
+   663→            <Button variant="outline" onClick={() => setShowPaymentDialog(false)}>Cancel</Button>
+   664→            <Button
+   665→              onClick={handleRecordPayment}
+   666→              disabled={actionLoading}
+   667→              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+   668→            >
+   669→              {actionLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCircle2 className="h-4 w-4 mr-2" />}
+   670→              Confirm Payment
+   671→            </Button>
+   672→          </DialogFooter>
+   673→        </DialogContent>
+   674→      </Dialog>
+   675→
+   676→      {/* ===== CANCEL DIALOG ===== */}
+   677→      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+   678→        <DialogContent className="sm:max-w-sm">
+   679→          <DialogHeader>
+   680→            <DialogTitle>Cancel Invoice</DialogTitle>
+   681→            <DialogDescription>
+   682→              Are you sure you want to cancel invoice {inv.invoiceNumber}? This action cannot be undone.
+   683→            </DialogDescription>
+   684→          </DialogHeader>
+   685→          <div className="py-2">
+   686→            <Label className="text-xs">Reason (optional)</Label>
+   687→            <Textarea
+   688→              placeholder="Reason for cancellation..."
+   689→              value={cancelReason}
+   690→              onChange={(e) => setCancelReason(e.target.value)}
+   691→              className="mt-1"
+   692→              rows={3}
+   693→            />
+   694→          </div>
+   695→          <DialogFooter>
+   696→            <Button variant="outline" onClick={() => setShowCancelDialog(false)}>Keep Invoice</Button>
+   697→            <Button variant="destructive" onClick={handleCancel} disabled={actionLoading}>
+   698→              {actionLoading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+   699→              Cancel Invoice
+   700→            </Button>
+   701→          </DialogFooter>
+   702→        </DialogContent>
+   703→      </Dialog>
+   704→    </div>
+   705→  );
+   706→}
+   707→
+   708→// ============ SUMMARY COMPONENTS ============
+   709→
+   710→function InvoiceSummaryCard({ inv, onRecordPayment, canManage }: {
+   711→  inv: InvoiceItem;
+   712→  onRecordPayment: () => void;
+   713→  canManage: boolean;
+   714→}) {
+   715→  const currency = inv.currency || 'BND';
+   716→
+   717→  return (
+   718→    <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 space-y-4">
+   719→      {/* Summary */}
+   720→      <div>
+   721→        <h3 className="text-sm font-semibold text-gray-700 mb-3">Summary</h3>
+   722→        <div className="space-y-2">
+   723→          <div className="flex justify-between text-xs">
+   724→            <span className="text-gray-500">Subtotal</span>
+   725→            <span className="text-gray-700">{currency} {fmtBND(inv.subtotal)}</span>
+   726→          </div>
+   727→          <div className="flex justify-between text-xs">
+   728→            <span className="text-gray-500">Discount</span>
+   729→            <span className="text-gray-700">{currency} {fmtBND(inv.discount)}</span>
+   730→          </div>
+   731→          <div className="flex justify-between text-xs">
+   732→            <span className="text-gray-500">Tax ({inv.taxRate || 0}%)</span>
+   733→            <span className="text-gray-700">{currency} {fmtBND(inv.tax)}</span>
+   734→          </div>
+   735→          <div className="flex justify-between text-xs">
+   736→            <span className="text-gray-500">Shipping</span>
+   737→            <span className="text-gray-700">{currency} {fmtBND(inv.shipping)}</span>
+   738→          </div>
+   739→          <Separator />
+   740→          <div className="flex justify-between items-center">
+   741→            <span className="text-sm font-semibold text-gray-700">Grand Total</span>
+   742→            <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(inv.total)}</span>
+   743→          </div>
+   744→        </div>
+   745→      </div>
+   746→
+   747→      {/* Amount in Words */}
+   748→      <div className="bg-emerald-50 rounded-lg p-3">
+   749→        <p className="text-[10px] text-emerald-600 font-medium mb-0.5">Amount In Words</p>
+   750→        <p className="text-xs text-emerald-700 italic font-medium">
+   751→          {numberToCurrencyWords(inv.total)}
+   752→        </p>
+   753→      </div>
+   754→
+   755→      {/* Payment Information */}
+   756→      <div>
+   757→        <h3 className="text-sm font-semibold text-gray-700 mb-3">Payment Information</h3>
+   758→        <div className="space-y-1.5 text-xs">
+   759→          <div className="flex justify-between">
+   760→            <span className="text-gray-400">Bank Name</span>
+   761→            <span className="text-gray-700 font-medium">{inv.bankName || 'BAIDURI BANK'}</span>
+   762→          </div>
+   763→          <div className="flex justify-between">
+   764→            <span className="text-gray-400">Account Name</span>
+   765→            <span className="text-gray-700 font-medium text-right max-w-[60%]">{inv.bankAccountName || COMPANY.name}</span>
+   766→          </div>
+   767→          <div className="flex justify-between">
+   768→            <span className="text-gray-400">Account No.</span>
+   769→            <span className="text-gray-700 font-medium">{inv.bankAccountNo || '00-12345-678901-2'}</span>
+   770→          </div>
+   771→          <div className="flex justify-between">
+   772→            <span className="text-gray-400">Payment Method</span>
+   773→            <span className="text-gray-700">{inv.paymentMethod || '—'}</span>
+   774→          </div>
+   775→          <div className="flex justify-between">
+   776→            <span className="text-gray-400">Payment Status</span>
+   777→            <span className={`font-semibold ${inv.status === 'PAID' ? 'text-emerald-600' : 'text-amber-600'}`}>
+   778→              {inv.status === 'PAID' ? 'Paid' : inv.status === 'CANCELLED' ? 'Cancelled' : 'Unpaid'}
+   779→            </span>
+   780→          </div>
+   781→          {inv.paidAt && (
+   782→            <div className="flex justify-between">
+   783→              <span className="text-gray-400">Paid On</span>
+   784→              <span className="text-gray-700">{fmtDate(inv.paidAt)}</span>
+   785→            </div>
+   786→          )}
+   787→          {inv.transactionId && (
+   788→            <div className="flex justify-between">
+   789→              <span className="text-gray-400">Transaction ID</span>
+   790→              <span className="text-gray-700 font-mono text-[10px]">{inv.transactionId}</span>
+   791→            </div>
+   792→          )}
+   793→        </div>
+   794→      </div>
+   795→
+   796→      {/* Actions */}
+   797→      {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
+   798→        <div className="space-y-2">
+   799→          <h3 className="text-sm font-semibold text-gray-700 mb-2">Actions</h3>
+   800→          <Button
+   801→            onClick={onRecordPayment}
+   802→            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm"
+   803→          >
+   804→            <CreditCard className="h-4 w-4 mr-2" /> Record Payment
+   805→          </Button>
+   806→          <Button variant="outline" className="w-full text-sm">
+   807→            <Download className="h-4 w-4 mr-2" /> Download PDF
+   808→          </Button>
+   809→          <Button variant="outline" className="w-full text-sm">
+   810→            <Mail className="h-4 w-4 mr-2" /> Send Email
+   811→          </Button>
+   812→          <Button variant="outline" className="w-full text-sm">
+   813→            <MessageCircle className="h-4 w-4 mr-2" /> Send WhatsApp
+   814→          </Button>
+   815→          <Button variant="outline" className="w-full text-sm text-red-600 hover:bg-red-50 hover:text-red-700">
+   816→            <X className="h-4 w-4 mr-2" /> Cancel Invoice
+   817→          </Button>
+   818→        </div>
+   819→      )}
+   820→    </div>
+   821→  );
+   822→}
+   823→
+   824→function InvoiceSummaryPrint({ inv, lineItems }: { inv: InvoiceItem; lineItems: InvoiceLineItem[] }) {
+   825→  const currency = inv.currency || 'BND';
+   826→  return (
+   827→    <div className="flex justify-end">
+   828→      <div className="w-72 space-y-3">
+   829→        <h3 className="text-sm font-semibold text-gray-700">Summary</h3>
+   830→        <div className="space-y-1.5 text-xs">
+   831→          <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>{currency} {fmtBND(inv.subtotal)}</span></div>
+   832→          <div className="flex justify-between"><span className="text-gray-500">Discount</span><span>{currency} {fmtBND(inv.discount)}</span></div>
+   833→          <div className="flex justify-between"><span className="text-gray-500">Tax ({inv.taxRate || 0}%)</span><span>{currency} {fmtBND(inv.tax)}</span></div>
+   834→          <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span>{currency} {fmtBND(inv.shipping)}</span></div>
+   835→          <Separator />
+   836→          <div className="flex justify-between text-base font-bold text-emerald-600"><span>Grand Total</span><span>{currency} {fmtBND(inv.total)}</span></div>
+   837→        </div>
+   838→        <div className="bg-emerald-50 rounded-lg p-2.5 mt-3">
+   839→          <p className="text-[10px] text-emerald-600 font-medium">Amount In Words</p>
+   840→          <p className="text-xs text-emerald-700 italic">{numberToCurrencyWords(inv.total)}</p>
+   841→        </div>
+   842→      </div>
+   843→    </div>
+   844→  );
+   845→}

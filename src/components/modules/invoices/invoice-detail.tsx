@@ -4,20 +4,19 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
-  Textarea } from '@/components/ui/textarea';
+  Textarea
+} from '@/components/ui/textarea';
 import {
-  ArrowLeft, Eye, Printer, Mail, MessageCircle, MoreVertical,
-  CreditCard, Download, FileText, Banknote, X,
-  MapPin, Phone, MailIcon, User, Calendar, Hash, Building2,
-  Upload, File, Loader2, AlertCircle, CheckCircle2, Send,
-  Stamp,
+  ArrowLeft, Printer, Mail, MessageCircle, MoreVertical,
+  CreditCard, Download, FileText, X,
+  MapPin, Phone, MailIcon, User, Calendar, Hash, Building2, Landmark,
+  Loader2, AlertCircle, CheckCircle2,
 } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
@@ -49,7 +48,7 @@ const DEFAULT_TERMS = [
 
 const COMPANY = {
   name: 'SMART MAINTENANCE SERVICES SDN BHD',
-  shortName: 'LS',
+  shortName: 'S',
   address: 'No. 25, Spg 88, Jln Gadong BE1318, Bandar Seri Begawan, Brunei Darussalam',
   phone: '+673 245 6789',
   email: 'info@smartms.com',
@@ -85,7 +84,6 @@ function parseLineItems(itemsStr?: string): InvoiceLineItem[] {
     const parsed = JSON.parse(itemsStr);
     if (Array.isArray(parsed)) return parsed;
   } catch { /* empty */ }
-  // Legacy format: [{description, amount}]
   try {
     const legacy = JSON.parse(itemsStr);
     if (Array.isArray(legacy)) {
@@ -111,7 +109,7 @@ function parseTerms(termsStr?: string): string[] {
   return DEFAULT_TERMS;
 }
 
-// ============ COMPONENT ============
+// ============ MAIN COMPONENT ============
 
 export function InvoiceDetail() {
   const { viewParams, setView } = useAppStore();
@@ -127,6 +125,7 @@ export function InvoiceDetail() {
   const [showCancelDialog, setShowCancelDialog] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   const barcodeRef = useRef<SVGSVGElement>(null);
+  const qrReady = useRef(false);
 
   const fetchInv = useCallback(async () => {
     if (!id) return;
@@ -155,8 +154,8 @@ export function InvoiceDetail() {
       try {
         JsBarcode(barcodeRef.current, inv.invoiceNumber, {
           format: 'CODE128',
-          width: 2,
-          height: 50,
+          width: 1.8,
+          height: 45,
           displayValue: false,
           margin: 0,
         });
@@ -202,9 +201,7 @@ export function InvoiceDetail() {
     setShowCancelDialog(false);
   };
 
-  const handlePrint = () => {
-    window.print();
-  };
+  const handlePrint = () => window.print();
 
   const handleSendEmail = () => {
     if (!inv) return;
@@ -233,7 +230,7 @@ export function InvoiceDetail() {
     return (
       <div className="p-4 md:p-6 space-y-4">
         <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-[600px] w-full rounded-xl" />
+        <Skeleton className="h-[800px] w-full rounded-xl" />
       </div>
     );
   }
@@ -251,18 +248,19 @@ export function InvoiceDetail() {
   }
 
   const statusStyle = STATUS_STYLES[inv.status] || STATUS_STYLES.DRAFT;
-  const currencyLabel = inv.currency === 'BND' ? 'Brunei Dollar' : (inv.currency || 'BND');
+  const currency = inv.currency || 'BND';
+  const currencyLabel = currency === 'BND' ? 'Brunei Dollar' : currency;
 
   return (
-    <div className="p-3 md:p-6 space-y-4 print:p-0">
-      {/* ===== TOP ACTION BAR ===== */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 print:hidden">
+    <div className="print:p-0">
+      {/* ===== TOP ACTION BAR (hidden on print) ===== */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 md:p-6 pb-0 md:pb-0 print:hidden">
         <Button variant="ghost" size="icon" onClick={() => setView('invoices')}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
-            <FileText className="h-5 w-5 text-orange-500" />
+            <FileText className="h-5 w-5 text-emerald-600" />
             <h1 className="text-lg md:text-xl font-bold truncate">
               Invoice {inv.invoiceNumber}
             </h1>
@@ -276,7 +274,7 @@ export function InvoiceDetail() {
             <Printer className="h-4 w-4 mr-1.5" /> Print
           </Button>
           <Button variant="outline" size="sm" onClick={handleSendEmail}>
-            <Mail className="h-4 w-4 mr-1.5" /> Send Email
+            <Mail className="h-4 w-4 mr-1.5" /> Email
           </Button>
           <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
             <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
@@ -306,310 +304,425 @@ export function InvoiceDetail() {
         </div>
       </div>
 
-      {/* ===== MAIN LAYOUT: Invoice Card + Summary Sidebar ===== */}
-      <div className="flex flex-col lg:flex-row gap-4">
-        {/* Left: Main Invoice Content */}
-        <div className="flex-1 min-w-0">
-        <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden print:shadow-none print:rounded-none print:border-0">
-        <div className="p-4 md:p-8">
-          {/* === HEADER: Company Info (Left) + Barcode/QR/Invoice Details (Right) === */}
-          <div className="flex flex-col md:flex-row md:justify-between gap-6 mb-8">
-            {/* Left: Company Info */}
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                  {COMPANY.shortName}
+      {/* ===== INVOICE DOCUMENT (A4 Layout) ===== */}
+      <div className="flex justify-center p-3 md:p-6 print:p-0">
+        <div className="invoice-document bg-white border border-gray-200 rounded-xl shadow-sm print:shadow-none print:rounded-none print:border-0 w-full" style={{ maxWidth: '210mm' }}>
+          <div className="p-5 md:p-8 print:p-6">
+
+            {/* ====== ROW 1: Company Header (Left) + INVOICE Title & Barcode (Right) ====== */}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
+              {/* Left: Company Logo & Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 mb-3">
+                  {/* Green "S" Logo */}
+                  <div className="w-11 h-11 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shrink-0 shadow-sm">
+                    {COMPANY.shortName}
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-sm md:text-[15px] leading-tight text-gray-900">{COMPANY.name}</h2>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="font-bold text-sm md:text-base leading-tight">{COMPANY.name}</h2>
+                <div className="text-[11px] text-gray-500 space-y-1 ml-0 sm:ml-14">
+                  <p className="flex items-start gap-1.5">
+                    <MapPin className="h-3 w-3 mt-0.5 shrink-0 text-gray-400" />
+                    {COMPANY.address}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <Phone className="h-3 w-3 shrink-0 text-gray-400" />
+                    {COMPANY.phone}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <MailIcon className="h-3 w-3 shrink-0 text-gray-400" />
+                    {COMPANY.email}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <Building2 className="h-3 w-3 shrink-0 text-gray-400" />
+                    {COMPANY.website}
+                  </p>
                 </div>
               </div>
-              <div className="text-xs text-gray-500 space-y-1 ml-0 md:ml-15">
-                <p className="flex items-start gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-                  {COMPANY.address}
-                </p>
-                <p className="flex items-center gap-1.5">
-                  <Phone className="h-3.5 w-3.5 shrink-0" />
-                  {COMPANY.phone}
-                </p>
-                <p className="flex items-center gap-1.5">
-                  <MailIcon className="h-3.5 w-3.5 shrink-0" />
-                  {COMPANY.email}
-                </p>
-                <p className="flex items-center gap-1.5">
-                  <Building2 className="h-3.5 w-3.5 shrink-0" />
-                  {COMPANY.website}
-                </p>
+
+              {/* Right: INVOICE Label + Green Bar with Number + Barcode */}
+              <div className="flex flex-col items-end gap-2 shrink-0">
+                <p className="text-emerald-600 font-bold text-xl tracking-wide">INVOICE</p>
+                {/* Green bar with invoice number in white + barcode */}
+                <div className="flex items-center gap-3">
+                  <div className="bg-emerald-600 rounded-md px-4 py-1.5">
+                    <span className="text-white font-bold text-sm tracking-wide">{inv.invoiceNumber}</span>
+                  </div>
+                  <div className="bg-white p-1">
+                    <svg ref={barcodeRef} className="h-11" />
+                  </div>
+                </div>
+                <p className="text-xs font-medium text-gray-700 font-mono">{inv.invoiceNumber}</p>
               </div>
             </div>
 
-            {/* Right: Barcode, QR, Invoice Details */}
-            <div className="flex flex-col items-center md:items-end gap-3 shrink-0">
-              {/* Barcode */}
-              <div className="bg-white p-2">
-                <svg ref={barcodeRef} className="h-12" />
-              </div>
-              {/* QR Code */}
-              <div className="w-16 h-16">
-                <QRCodeSVG
-                  value={`https://smartms.com/invoice/${inv.invoiceNumber}`}
-                  size={64}
-                  level="M"
-                  includeMargin={false}
-                />
-              </div>
-              {/* Invoice Label */}
-              <div className="text-center md:text-right">
-                <p className="text-emerald-600 font-bold text-lg">INVOICE</p>
-                <p className="font-bold text-sm text-gray-900">{inv.invoiceNumber}</p>
-              </div>
-              {/* Invoice Meta */}
-              <div className="text-xs text-gray-500 space-y-1.5 text-right w-full max-w-52">
-                <div className="flex justify-between gap-3">
-                  <span className="text-gray-400">Invoice Date</span>
-                  <span className="font-medium text-gray-700">{fmtDate(inv.createdAt)}</span>
-                </div>
-                <div className="flex justify-between gap-3">
-                  <span className="text-gray-400">Due Date</span>
-                  <span className="font-medium text-gray-700">{fmtDate(inv.dueDate)}</span>
-                </div>
-                {inv.referenceNo && (
-                  <div className="flex justify-between gap-3">
-                    <span className="text-gray-400">Reference</span>
-                    <span className="font-medium text-gray-700">{inv.referenceNo}</span>
+            {/* ====== ROW 2: Invoice Details (Left) + Payment Information (Right) ====== */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+              {/* Left: Invoice Details */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5 text-emerald-600" />
+                  Invoice Details
+                </h3>
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Calendar className="h-3 w-3 text-gray-400" /> Invoice Date
+                    </span>
+                    <span className="font-medium text-gray-800">{fmtDate(inv.createdAt)}</span>
                   </div>
-                )}
-                {inv.poReference && (
-                  <div className="flex justify-between gap-3">
-                    <span className="text-gray-400">PO/Ref No.</span>
-                    <span className="font-medium text-gray-700">{inv.poReference}</span>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Calendar className="h-3 w-3 text-gray-400" /> Due Date
+                    </span>
+                    <span className="font-medium text-gray-800">{fmtDate(inv.dueDate)}</span>
                   </div>
-                )}
-                <div className="flex justify-between gap-3">
-                  <span className="text-gray-400">Payment Terms</span>
-                  <span className="font-medium text-gray-700">{inv.paymentTerms || '30 Days'}</span>
-                </div>
-                <div className="flex justify-between gap-3">
-                  <span className="text-gray-400">Currency</span>
-                  <span className="font-medium text-gray-700">{inv.currency || 'BND'} - {currencyLabel}</span>
-                </div>
-                {(inv.preparedByName || inv.creatorName) && (
-                  <div className="flex justify-between gap-3">
-                    <span className="text-gray-400">Prepared By</span>
-                    <span className="font-medium text-gray-700">{inv.preparedByName || inv.creatorName}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          <Separator className="mb-6" />
-
-          {/* === BILL TO / SHIP TO === */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            {/* Bill To */}
-            <div>
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" /> Bill To
-              </h3>
-              <p className="font-bold text-sm text-gray-900 mb-1">
-                {(inv.customerCompany || inv.customerName || '').toUpperCase()}
-              </p>
-              {inv.customerAddress && (
-                <p className="text-xs text-gray-500 mb-1.5">{inv.customerAddress}</p>
-              )}
-              <div className="space-y-1">
-                {inv.customerPhone && (
-                  <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                    <Phone className="h-3 w-3" /> {inv.customerPhone}
-                  </p>
-                )}
-                {inv.customerEmail && (
-                  <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                    <MailIcon className="h-3 w-3" /> {inv.customerEmail}
-                  </p>
-                )}
-                {inv.customerPic && (
-                  <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                    <User className="h-3 w-3" /> {inv.customerPic} (PIC)
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Ship To */}
-            <div>
-              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                <MapPin className="h-3.5 w-3.5" /> Ship To
-              </h3>
-              {inv.shipToName ? (
-                <>
-                  <p className="font-bold text-sm text-gray-900 mb-1">{inv.shipToName.toUpperCase()}</p>
-                  {inv.shipToAddress && (
-                    <p className="text-xs text-gray-500 mb-1.5">{inv.shipToAddress}</p>
+                  {inv.referenceNo && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <Hash className="h-3 w-3 text-gray-400" /> Reference
+                      </span>
+                      <span className="font-medium text-gray-800">{inv.referenceNo}</span>
+                    </div>
                   )}
-                  <div className="space-y-1">
-                    {inv.shipToPhone && (
-                      <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                        <Phone className="h-3 w-3" /> {inv.shipToPhone}
-                      </p>
-                    )}
-                    {inv.shipToContact && (
-                      <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                        <User className="h-3 w-3" /> {inv.shipToContact}
-                      </p>
-                    )}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <p className="font-bold text-sm text-gray-900 mb-1">
-                    {(inv.customerCompany || inv.customerName || '').toUpperCase()}
-                  </p>
-                  {inv.customerAddress && (
-                    <p className="text-xs text-gray-500 mb-1.5">{inv.customerAddress}</p>
+                  {inv.poReference && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <Hash className="h-3 w-3 text-gray-400" /> PO / Ref No.
+                      </span>
+                      <span className="font-medium text-gray-800">{inv.poReference}</span>
+                    </div>
                   )}
-                  <div className="space-y-1">
-                    {inv.customerPhone && (
-                      <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                        <Phone className="h-3 w-3" /> {inv.customerPhone}
-                      </p>
-                    )}
-                    {inv.customerPic && (
-                      <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                        <User className="h-3 w-3" /> {inv.customerPic}
-                      </p>
-                    )}
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Calendar className="h-3 w-3 text-gray-400" /> Payment Terms
+                    </span>
+                    <span className="font-medium text-gray-800">{inv.paymentTerms || '30 Days'}</span>
                   </div>
-                </>
-              )}
-            </div>
-          </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Landmark className="h-3 w-3 text-gray-400" /> Currency
+                    </span>
+                    <span className="font-medium text-gray-800">{currency} - {currencyLabel}</span>
+                  </div>
+                  {(inv.preparedByName || inv.creatorName) && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <User className="h-3 w-3 text-gray-400" /> Prepared By
+                      </span>
+                      <span className="font-medium text-gray-800">{inv.preparedByName || inv.creatorName}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-          {/* === LINE ITEMS TABLE === */}
-          <div className="mb-6 overflow-x-auto">
-            <table className="w-full text-xs border-collapse">
-              <thead>
-                <tr className="border-b-2 border-gray-300">
-                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-10">SL</th>
-                  <th className="text-left font-semibold text-gray-700 py-2.5 px-2">Item Title</th>
-                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-16">Unit</th>
-                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-14">Qty</th>
-                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-20">Rate ({inv.currency || 'BND'})</th>
-                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-24">Amount ({inv.currency || 'BND'})</th>
-                </tr>
-              </thead>
-              <tbody>
-                {lineItems.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="text-center py-8 text-gray-400 text-sm">
-                      No line items
-                    </td>
-                  </tr>
+              {/* Right: Payment Information */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <CreditCard className="h-3.5 w-3.5 text-emerald-600" />
+                  Payment Information
+                </h3>
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500">Bank Name</span>
+                    <span className="font-medium text-gray-800">{inv.bankName || 'BAIDURI BANK'}</span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500">Account Name</span>
+                    <span className="font-medium text-gray-800 text-right max-w-[60%]">{inv.bankAccountName || COMPANY.name}</span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500">Account No.</span>
+                    <span className="font-medium text-gray-800 font-mono">{inv.bankAccountNo || '00-12345-678901-2'}</span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500">Payment Method</span>
+                    <span className="font-medium text-gray-800">{inv.paymentMethod || 'Bank Transfer'}</span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500">Payment Status</span>
+                    <span className={`font-bold ${inv.status === 'PAID' ? 'text-emerald-600' : inv.status === 'CANCELLED' ? 'text-red-600' : 'text-amber-600'}`}>
+                      {inv.status === 'PAID' ? 'Paid' : inv.status === 'CANCELLED' ? 'Cancelled' : 'Unpaid'}
+                    </span>
+                  </div>
+                  {inv.paidAt && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500">Paid On</span>
+                      <span className="font-medium text-gray-800">{fmtDate(inv.paidAt)}</span>
+                    </div>
+                  )}
+                  {inv.transactionId && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500">Transaction ID</span>
+                      <span className="font-medium text-gray-800 font-mono text-[10px]">{inv.transactionId}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* ====== ROW 3: Bill To (Left) + Ship To (Right) ====== */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+              {/* Bill To */}
+              <div className="bg-blue-50/40 rounded-lg p-4 border border-blue-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
+                  Bill To
+                </h3>
+                <p className="font-bold text-sm text-gray-900 mb-1">
+                  {(inv.customerCompany || inv.customerName || '').toUpperCase()}
+                </p>
+                {inv.customerAddress && (
+                  <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">{inv.customerAddress}</p>
+                )}
+                <div className="space-y-1">
+                  {inv.customerPhone && (
+                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                      <Phone className="h-3 w-3 text-gray-400" /> {inv.customerPhone}
+                    </p>
+                  )}
+                  {inv.customerEmail && (
+                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                      <MailIcon className="h-3 w-3 text-gray-400" /> {inv.customerEmail}
+                    </p>
+                  )}
+                  {inv.customerPic && (
+                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                      <User className="h-3 w-3 text-gray-400" /> {inv.customerPic} (PIC)
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Ship To */}
+              <div className="bg-blue-50/40 rounded-lg p-4 border border-blue-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
+                  Ship To
+                </h3>
+                {inv.shipToName ? (
+                  <>
+                    <p className="font-bold text-sm text-gray-900 mb-1">{inv.shipToName.toUpperCase()}</p>
+                    {inv.shipToAddress && (
+                      <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">{inv.shipToAddress}</p>
+                    )}
+                    <div className="space-y-1">
+                      {inv.shipToPhone && (
+                        <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                          <Phone className="h-3 w-3 text-gray-400" /> {inv.shipToPhone}
+                        </p>
+                      )}
+                      {inv.shipToContact && (
+                        <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                          <User className="h-3 w-3 text-gray-400" /> {inv.shipToContact}
+                        </p>
+                      )}
+                    </div>
+                  </>
                 ) : (
-                  lineItems.map((item, i) => (
-                    <tr
-                      key={i}
-                      className={`border-b border-gray-200 ${i % 2 === 1 ? 'bg-gray-50/50' : ''}`}
-                    >
-                      <td className="text-center py-2.5 px-2 text-gray-600">{i + 1}</td>
-                      <td className="py-2.5 px-2">
-                        <p className="font-medium text-gray-800 text-xs">{item.title}</p>
-                        {item.description && (
-                          <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.description}</p>
-                        )}
-                      </td>
-                      <td className="text-center py-2.5 px-2 text-gray-600">{item.unit || 'Nos'}</td>
-                      <td className="text-center py-2.5 px-2 text-gray-600">{item.quantity}</td>
-                      <td className="text-right py-2.5 px-2 text-gray-700">{fmtBND(item.rate)}</td>
-                      <td className="text-right py-2.5 px-2 font-medium text-gray-800">{fmtBND(item.amount)}</td>
-                    </tr>
-                  ))
+                  <>
+                    <p className="font-bold text-sm text-gray-900 mb-1">
+                      {(inv.customerCompany || inv.customerName || '').toUpperCase()}
+                    </p>
+                    {inv.customerAddress && (
+                      <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">{inv.customerAddress}</p>
+                    )}
+                    <div className="space-y-1">
+                      {inv.customerPhone && (
+                        <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                          <Phone className="h-3 w-3 text-gray-400" /> {inv.customerPhone}
+                        </p>
+                      )}
+                      {inv.customerPic && (
+                        <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                          <User className="h-3 w-3 text-gray-400" /> {inv.customerPic}
+                        </p>
+                      )}
+                    </div>
+                  </>
                 )}
-              </tbody>
-            </table>
-            <p className="text-center text-xs text-gray-400 mt-3 italic">Thank you for your business!</p>
-          </div>
+              </div>
+            </div>
 
-          <Separator className="mb-6" />
+            {/* ====== ROW 4: Line Items Table + Summary (side by side on desktop) ====== */}
+            <div className="mb-6">
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* Table */}
+                <div className="flex-1 min-w-0 overflow-x-auto">
+                  <table className="w-full text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-emerald-600 text-white">
+                        <th className="text-center font-semibold py-2.5 px-2 w-10 rounded-tl-md">SL</th>
+                        <th className="text-left font-semibold py-2.5 px-2">Item Title</th>
+                        <th className="text-left font-semibold py-2.5 px-2">Description</th>
+                        <th className="text-center font-semibold py-2.5 px-2 w-14">Unit</th>
+                        <th className="text-center font-semibold py-2.5 px-2 w-12">Qty</th>
+                        <th className="text-right font-semibold py-2.5 px-2 w-22">Rate ({currency})</th>
+                        <th className="text-right font-semibold py-2.5 px-2 w-24 rounded-tr-md">Amount ({currency})</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {lineItems.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="text-center py-10 text-gray-400 text-sm">
+                            No line items
+                          </td>
+                        </tr>
+                      ) : (
+                        lineItems.map((item, i) => (
+                          <tr
+                            key={i}
+                            className={`border-b border-gray-100 ${i % 2 === 1 ? 'bg-gray-50/50' : ''} hover:bg-emerald-50/30 transition-colors`}
+                          >
+                            <td className="text-center py-3 px-2 text-gray-600 font-medium">{i + 1}</td>
+                            <td className="py-3 px-2">
+                              <p className="font-semibold text-gray-800 text-xs">{item.title}</p>
+                            </td>
+                            <td className="py-3 px-2">
+                              <p className="text-gray-500 text-[11px] leading-relaxed">{item.description || '—'}</p>
+                            </td>
+                            <td className="text-center py-3 px-2 text-gray-600">{item.unit || 'Nos'}</td>
+                            <td className="text-center py-3 px-2 text-gray-600">{item.quantity}</td>
+                            <td className="text-right py-3 px-2 text-gray-700">{fmtBND(item.rate)}</td>
+                            <td className="text-right py-3 px-2 font-semibold text-gray-800">{fmtBND(item.amount)}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
 
-          {/* === BOTTOM SECTIONS: 3 Columns (Terms, Attachments, Notes) === */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            {/* Terms & Conditions */}
-            <div>
-              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                {/* Summary Panel (right side, inline) */}
+                <div className="lg:w-72 shrink-0">
+                  <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 space-y-2.5">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Subtotal</span>
+                      <span className="text-gray-800 font-medium">{currency} {fmtBND(inv.subtotal)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Discount</span>
+                      <span className="text-gray-800 font-medium">{currency} {fmtBND(inv.discount)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Tax ({inv.taxRate || 0}%)</span>
+                      <span className="text-gray-800 font-medium">{currency} {fmtBND(inv.tax)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Shipping</span>
+                      <span className="text-gray-800 font-medium">{currency} {fmtBND(inv.shipping)}</span>
+                    </div>
+                    {/* Divider */}
+                    <div className="border-t border-gray-300 pt-2.5">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-bold text-gray-900">GRAND TOTAL</span>
+                        <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(inv.total)}</span>
+                      </div>
+                    </div>
+                    {/* Amount in Words */}
+                    <div className="bg-emerald-50 rounded-md p-2.5 mt-1 border border-emerald-100">
+                      <p className="text-[9px] text-emerald-600 font-semibold uppercase tracking-wider mb-0.5">Amount In Words</p>
+                      <p className="text-[11px] text-emerald-800 italic font-medium leading-relaxed">
+                        {numberToCurrencyWords(inv.total)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ====== ROW 5: Terms & Conditions ====== */}
+            <div className="mb-6">
+              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                <FileText className="h-3.5 w-3.5 text-emerald-600" />
                 Terms & Conditions
               </h3>
-              <ol className="text-xs text-gray-500 space-y-1.5 list-decimal list-inside">
+              <ol className="text-[11px] text-gray-500 space-y-1.5 list-decimal list-inside leading-relaxed">
                 {terms.map((term, i) => (
-                  <li key={i} className="leading-relaxed">{term}</li>
+                  <li key={i}>{term}</li>
                 ))}
               </ol>
             </div>
 
-            {/* Attachments */}
-            <div>
-              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
-                Attachments
-              </h3>
-              <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 text-center mb-3">
-                <Upload className="h-6 w-6 text-gray-300 mx-auto mb-1" />
-                <p className="text-xs text-gray-400">Drag & drop files here or click to browse</p>
-                <p className="text-[10px] text-gray-300 mt-0.5">PDF, DOC, XLS, JPG, PNG (Max 10MB)</p>
-              </div>
-              {inv.pdfUrl && (
-                <div className="flex items-center gap-2 text-xs p-2 bg-gray-50 rounded-lg">
-                  <File className="h-4 w-4 text-red-500" />
-                  <span className="text-gray-700 truncate flex-1">
-                    Invoice_{inv.invoiceNumber.replace(/\//g, '-')}.pdf
-                  </span>
-                  <span className="text-gray-400 shrink-0">PDF</span>
+            {/* ====== ROW 6: Footer — Signature, Stamp, Attachment, QR, Thank You ====== */}
+            <div className="border-t border-gray-200 pt-6">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6">
+                {/* Left: Authorised Signature + Stamp */}
+                <div className="flex items-end gap-5">
+                  <div>
+                    <p className="text-xs font-medium text-gray-800 mb-1">
+                      {inv.preparedByName || inv.creatorName || '—'}
+                    </p>
+                    <p className="text-[10px] text-gray-400 mb-2">Authorised Signature</p>
+                    <p className="text-[10px] text-gray-400">Managing Director</p>
+                    {/* Signature line */}
+                    <div className="w-40 border-b border-gray-300 mt-1" />
+                  </div>
+                  {/* Company Stamp */}
+                  <div className="w-16 h-16 border-2 border-emerald-600 rounded-full flex items-center justify-center shrink-0 opacity-80">
+                    <div className="text-center">
+                      <span className="text-emerald-600 font-bold text-base leading-none block">{COMPANY.shortName}</span>
+                      <span className="text-emerald-600 text-[7px] leading-none block mt-0.5">{COMPANY.regNo}</span>
+                    </div>
+                  </div>
                 </div>
-              )}
+
+                {/* Center: Attachment (if quotation linked) */}
+                {inv.referenceNo && (
+                  <div className="text-xs text-gray-500">
+                    <div className="flex items-center gap-1.5 mb-1">
+                      <FileText className="h-3.5 w-3.5 text-gray-400" />
+                      <span className="font-medium text-gray-600">Attachment</span>
+                    </div>
+                    <p className="text-[11px] text-gray-500">Quotation_{inv.referenceNo.replace(/\//g, '-')}.pdf</p>
+                  </div>
+                )}
+
+                {/* Right: QR Code + Thank You */}
+                <div className="flex items-end gap-4">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto">
+                      <QRCodeSVG
+                        value={`https://smartms.com/invoice/${inv.invoiceNumber}`}
+                        size={64}
+                        level="M"
+                        includeMargin={false}
+                      />
+                    </div>
+                    <p className="text-[8px] text-gray-400 mt-1">Scan to Verify</p>
+                  </div>
+                  <div>
+                    <p className="text-emerald-600 font-semibold text-lg italic">Thank You!</p>
+                    <div className="text-[10px] text-gray-400 space-y-0.5 mt-1">
+                      <p className="flex items-center gap-1"><Phone className="h-2.5 w-2.5" /> {COMPANY.phone}</p>
+                      <p className="flex items-center gap-1"><MailIcon className="h-2.5 w-2.5" /> {COMPANY.email}</p>
+                      <p className="flex items-center gap-1"><Building2 className="h-2.5 w-2.5" /> {COMPANY.website}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Page indicator */}
+              <div className="text-center mt-6">
+                <p className="text-[10px] text-gray-300">Page 1 of 1</p>
+              </div>
             </div>
 
-            {/* Notes */}
-            <div>
-              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
-                Notes
-              </h3>
-              <p className="text-xs text-gray-500 leading-relaxed">
-                {inv.notes || 'Thank you for choosing Smart Maintenance Services.'}
-              </p>
-              <div className="mt-4 flex items-end gap-4">
-                <div>
-                  <p className="text-xs font-medium text-gray-700">
-                    {(inv.preparedByName || inv.creatorName || '—')}
-                  </p>
-                  <p className="text-[10px] text-gray-400">Authorised Signature</p>
-                </div>
-                <div className="w-14 h-14 border-2 border-emerald-600 rounded-full flex items-center justify-center shrink-0">
-                  <span className="text-emerald-600 font-bold text-xs">{COMPANY.shortName}</span>
-                </div>
-              </div>
-            </div>
           </div>
-        </div>
-
-        {/* === PRINT SUMMARY (inline for print) === */}
-        <div className="print:block hidden print:px-8 print:pb-6">
-          <InvoiceSummaryPrint inv={inv} lineItems={lineItems} />
         </div>
       </div>
-        </div>{/* End left column */}
 
-        {/* Right: Summary Sidebar (desktop only, sticky) */}
-        <div className="hidden lg:block w-80 shrink-0">
-          <div className="sticky top-24">
-            <InvoiceSummaryCard inv={inv} onRecordPayment={() => setShowPaymentDialog(true)} canManage={canManage} />
-          </div>
-        </div>
-      </div>{/* End layout wrapper */}
-
-      {/* === MOBILE SUMMARY CARD (shown below invoice card on mobile) === */}
-      <div className="lg:hidden">
-        <InvoiceSummaryCard inv={inv} onRecordPayment={() => setShowPaymentDialog(true)} canManage={canManage} />
+      {/* ===== MOBILE ACTION BAR (hidden on print) ===== */}
+      <div className="lg:hidden px-3 md:px-6 pb-4 print:hidden space-y-3">
+        {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
+          <Button
+            onClick={() => setShowPaymentDialog(true)}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"
+          >
+            <CreditCard className="h-4 w-4 mr-2" /> Record Payment
+          </Button>
+        )}
       </div>
 
       {/* ===== PAYMENT DIALOG ===== */}
@@ -623,7 +736,7 @@ export function InvoiceDetail() {
             <div className="bg-emerald-50 rounded-lg p-4 text-center">
               <p className="text-xs text-gray-500 mb-1">Amount Due</p>
               <p className="text-2xl font-bold text-emerald-700">
-                {inv.currency || 'BND'} {fmtBND(inv.total)}
+                {currency} {fmtBND(inv.total)}
               </p>
             </div>
             <div>
@@ -701,145 +814,6 @@ export function InvoiceDetail() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
-
-// ============ SUMMARY COMPONENTS ============
-
-function InvoiceSummaryCard({ inv, onRecordPayment, canManage }: {
-  inv: InvoiceItem;
-  onRecordPayment: () => void;
-  canManage: boolean;
-}) {
-  const currency = inv.currency || 'BND';
-
-  return (
-    <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 space-y-4">
-      {/* Summary */}
-      <div>
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">Summary</h3>
-        <div className="space-y-2">
-          <div className="flex justify-between text-xs">
-            <span className="text-gray-500">Subtotal</span>
-            <span className="text-gray-700">{currency} {fmtBND(inv.subtotal)}</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-gray-500">Discount</span>
-            <span className="text-gray-700">{currency} {fmtBND(inv.discount)}</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-gray-500">Tax ({inv.taxRate || 0}%)</span>
-            <span className="text-gray-700">{currency} {fmtBND(inv.tax)}</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-gray-500">Shipping</span>
-            <span className="text-gray-700">{currency} {fmtBND(inv.shipping)}</span>
-          </div>
-          <Separator />
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-gray-700">Grand Total</span>
-            <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(inv.total)}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Amount in Words */}
-      <div className="bg-emerald-50 rounded-lg p-3">
-        <p className="text-[10px] text-emerald-600 font-medium mb-0.5">Amount In Words</p>
-        <p className="text-xs text-emerald-700 italic font-medium">
-          {numberToCurrencyWords(inv.total)}
-        </p>
-      </div>
-
-      {/* Payment Information */}
-      <div>
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">Payment Information</h3>
-        <div className="space-y-1.5 text-xs">
-          <div className="flex justify-between">
-            <span className="text-gray-400">Bank Name</span>
-            <span className="text-gray-700 font-medium">{inv.bankName || 'BAIDURI BANK'}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">Account Name</span>
-            <span className="text-gray-700 font-medium text-right max-w-[60%]">{inv.bankAccountName || COMPANY.name}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">Account No.</span>
-            <span className="text-gray-700 font-medium">{inv.bankAccountNo || '00-12345-678901-2'}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">Payment Method</span>
-            <span className="text-gray-700">{inv.paymentMethod || '—'}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">Payment Status</span>
-            <span className={`font-semibold ${inv.status === 'PAID' ? 'text-emerald-600' : 'text-amber-600'}`}>
-              {inv.status === 'PAID' ? 'Paid' : inv.status === 'CANCELLED' ? 'Cancelled' : 'Unpaid'}
-            </span>
-          </div>
-          {inv.paidAt && (
-            <div className="flex justify-between">
-              <span className="text-gray-400">Paid On</span>
-              <span className="text-gray-700">{fmtDate(inv.paidAt)}</span>
-            </div>
-          )}
-          {inv.transactionId && (
-            <div className="flex justify-between">
-              <span className="text-gray-400">Transaction ID</span>
-              <span className="text-gray-700 font-mono text-[10px]">{inv.transactionId}</span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Actions */}
-      {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
-        <div className="space-y-2">
-          <h3 className="text-sm font-semibold text-gray-700 mb-2">Actions</h3>
-          <Button
-            onClick={onRecordPayment}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm"
-          >
-            <CreditCard className="h-4 w-4 mr-2" /> Record Payment
-          </Button>
-          <Button variant="outline" className="w-full text-sm">
-            <Download className="h-4 w-4 mr-2" /> Download PDF
-          </Button>
-          <Button variant="outline" className="w-full text-sm">
-            <Mail className="h-4 w-4 mr-2" /> Send Email
-          </Button>
-          <Button variant="outline" className="w-full text-sm">
-            <MessageCircle className="h-4 w-4 mr-2" /> Send WhatsApp
-          </Button>
-          <Button variant="outline" className="w-full text-sm text-red-600 hover:bg-red-50 hover:text-red-700">
-            <X className="h-4 w-4 mr-2" /> Cancel Invoice
-          </Button>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function InvoiceSummaryPrint({ inv, lineItems }: { inv: InvoiceItem; lineItems: InvoiceLineItem[] }) {
-  const currency = inv.currency || 'BND';
-  return (
-    <div className="flex justify-end">
-      <div className="w-72 space-y-3">
-        <h3 className="text-sm font-semibold text-gray-700">Summary</h3>
-        <div className="space-y-1.5 text-xs">
-          <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>{currency} {fmtBND(inv.subtotal)}</span></div>
-          <div className="flex justify-between"><span className="text-gray-500">Discount</span><span>{currency} {fmtBND(inv.discount)}</span></div>
-          <div className="flex justify-between"><span className="text-gray-500">Tax ({inv.taxRate || 0}%)</span><span>{currency} {fmtBND(inv.tax)}</span></div>
-          <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span>{currency} {fmtBND(inv.shipping)}</span></div>
-          <Separator />
-          <div className="flex justify-between text-base font-bold text-emerald-600"><span>Grand Total</span><span>{currency} {fmtBND(inv.total)}</span></div>
-        </div>
-        <div className="bg-emerald-50 rounded-lg p-2.5 mt-3">
-          <p className="text-[10px] text-emerald-600 font-medium">Amount In Words</p>
-          <p className="text-xs text-emerald-700 italic">{numberToCurrencyWords(inv.total)}</p>
-        </div>
-      </div>
     </div>
   );
 }

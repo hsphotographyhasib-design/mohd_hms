@@ -200,3 +200,122 @@
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: oklch(0.8 0 0); border-radius: 3px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: oklch(0.7 0 0); }
+
+/* ============ PRINT STYLES — A4 Invoice / Quotation ============ */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 10mm;
+  }
+
+  html, body {
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Hide chrome elements during print */
+  header, nav, footer,
+  [class*="app-header"], [class*="floating-nav"] {
+    display: none !important;
+  }
+
+  /* The invoice/quotation document itself */
+  .invoice-document {
+    max-width: 100% !important;
+    width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  /* Ensure the inner padding works on paper */
+  .invoice-document > div {
+    padding: 0 !important;
+  }
+
+  /* Ensure table headers with bg color print */
+  table thead tr.bg-emerald-600 {
+    background: #059669 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  table thead tr.bg-emerald-600 th {
+    color: white !important;
+  }
+
+  /* Green bar with invoice number */
+  .bg-emerald-600 {
+    background: #059669 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Green accent elements */
+  .bg-emerald-50 {
+    background: #ecfdf5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .border-emerald-600 {
+    border-color: #059669 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .border-emerald-100 {
+    border-color: #d1fae5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .text-emerald-600, .text-emerald-700, .text-emerald-800 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Background sections */
+  .bg-gray-50 {
+    background: #f9fafb !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .bg-blue-50\/40 {
+    background: #eff6ff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Badge status colors */
+  .bg-amber-100, .bg-teal-100, .bg-emerald-100, .bg-rose-100, .bg-gray-100,
+  .bg-sky-100, .bg-purple-100, .bg-violet-100 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Ensure QR code and barcode render */
+  svg {
+    break-inside: avoid;
+  }
+
+  /* Avoid breaking the document mid-table */
+  table {
+    break-inside: auto;
+  }
+  tr {
+    break-inside: avoid;
+    break-after: auto;
+  }
+
+  /* Page breaks */
+  .invoice-document {
+    break-inside: avoid;
+  }
+}

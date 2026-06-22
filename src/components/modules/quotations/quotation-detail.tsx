@@ -4,17 +4,15 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  ArrowLeft, Eye, Printer, Mail, MessageCircle, MoreVertical,
+  ArrowLeft, Printer, Mail, MessageCircle, MoreVertical,
   Loader2, AlertCircle, CheckCircle2, Send, X,
-  MapPin, Phone, MailIcon, User, Building2,
-  Upload, File, Copy, FileText, RotateCcw, Lock,
-  Pencil, ChevronRight, MessageSquare,
+  MapPin, Phone, MailIcon, User, Calendar, Hash, Building2, Landmark,
+  Copy, FileText, RotateCcw, Pencil,
 } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
@@ -81,7 +79,7 @@ const DEFAULT_TERMS = [
 
 const COMPANY = {
   name: 'SMART MAINTENANCE SERVICES SDN BHD',
-  shortName: 'LS',
+  shortName: 'S',
   address: 'No. 25, Spg 88, Jln Gadong BE1318, Bandar Seri Begawan, Brunei Darussalam',
   phone: '+673 245 6789',
   email: 'info@smartms.com',
@@ -204,8 +202,8 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
       try {
         JsBarcode(barcodeRef.current, barcodeValue, {
           format: 'CODE128',
-          width: 2,
-          height: 50,
+          width: 1.8,
+          height: 45,
           displayValue: false,
           margin: 0,
         });
@@ -273,7 +271,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
     return (
       <div className="p-4 md:p-6 space-y-4">
         <Skeleton className="h-8 w-64" />
-        <Skeleton className="h-[600px] w-full rounded-xl" />
+        <Skeleton className="h-[800px] w-full rounded-xl" />
       </div>
     );
   }
@@ -291,19 +289,20 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
   }
 
   const statusStyle = STATUS_CONFIG[qt.status] || STATUS_CONFIG.DRAFT;
-  const currencyLabel = qt.currency === 'BND' ? 'Brunei Dollar' : (qt.currency || 'BND');
+  const currency = qt.currency || 'BND';
+  const currencyLabel = currency === 'BND' ? 'Brunei Dollar' : currency;
   const barcodeValue = qt.quotationNo || qt.title || '';
 
   return (
-    <div className="p-3 md:p-6 space-y-4 print:p-0">
-      {/* ===== TOP ACTION BAR ===== */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 print:hidden">
+    <div className="print:p-0">
+      {/* ===== TOP ACTION BAR (hidden on print) ===== */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-3 md:p-6 pb-0 md:pb-0 print:hidden">
         <Button variant="ghost" size="icon" onClick={() => setView('quotations')}>
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-3 flex-wrap">
-            <FileText className="h-5 w-5 text-orange-500" />
+            <FileText className="h-5 w-5 text-emerald-600" />
             <h1 className="text-lg md:text-xl font-bold truncate">
               Quotation {qt.quotationNo || 'N/A'}
             </h1>
@@ -338,7 +337,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
             <Printer className="h-4 w-4 mr-1.5" /> Print
           </Button>
           <Button variant="outline" size="sm" onClick={handleSendEmail}>
-            <Mail className="h-4 w-4 mr-1.5" /> Send Email
+            <Mail className="h-4 w-4 mr-1.5" /> Email
           </Button>
           <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
             <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
@@ -363,258 +362,364 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
         </div>
       </div>
 
-      {/* ===== MAIN LAYOUT: Quotation Card + Summary Sidebar ===== */}
-      <div className="flex flex-col lg:flex-row gap-4">
-        {/* Left: Main Quotation Content */}
-        <div className="flex-1 min-w-0">
-      <div className="bg-white border border-gray-200 rounded-xl shadow-sm overflow-hidden print:shadow-none print:rounded-none print:border-0">
-        <div className="p-4 md:p-8">
-          {/* === HEADER: Company Info (Left) + Barcode/QR/Quotation Details (Right) === */}
-          <div className="flex flex-col md:flex-row md:justify-between gap-6 mb-8">
-            {/* Left: Company Info */}
-            <div className="flex-1">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-12 h-12 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl">
-                  {COMPANY.shortName}
+      {/* ===== QUOTATION DOCUMENT (A4 Layout) ===== */}
+      <div className="flex justify-center p-3 md:p-6 print:p-0">
+        <div className="invoice-document bg-white border border-gray-200 rounded-xl shadow-sm print:shadow-none print:rounded-none print:border-0 w-full" style={{ maxWidth: '210mm' }}>
+          <div className="p-5 md:p-8 print:p-6">
+
+            {/* ====== ROW 1: Company Header (Left) + QUOTATION Title & Barcode (Right) ====== */}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-6">
+              {/* Left: Company Logo & Info */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-11 h-11 bg-emerald-600 rounded-lg flex items-center justify-center text-white font-bold text-xl shrink-0 shadow-sm">
+                    {COMPANY.shortName}
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-sm md:text-[15px] leading-tight text-gray-900">{COMPANY.name}</h2>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="font-bold text-sm md:text-base leading-tight">{COMPANY.name}</h2>
+                <div className="text-[11px] text-gray-500 space-y-1 ml-0 sm:ml-14">
+                  <p className="flex items-start gap-1.5">
+                    <MapPin className="h-3 w-3 mt-0.5 shrink-0 text-gray-400" />
+                    {COMPANY.address}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <Phone className="h-3 w-3 shrink-0 text-gray-400" />
+                    {COMPANY.phone}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <MailIcon className="h-3 w-3 shrink-0 text-gray-400" />
+                    {COMPANY.email}
+                  </p>
+                  <p className="flex items-center gap-1.5">
+                    <Building2 className="h-3 w-3 shrink-0 text-gray-400" />
+                    {COMPANY.website}
+                  </p>
                 </div>
               </div>
-              <div className="text-xs text-gray-500 space-y-1 ml-0 md:ml-15">
-                <p className="flex items-start gap-1.5">
-                  <MapPin className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-                  {COMPANY.address}
-                </p>
-                <p className="flex items-center gap-1.5">
-                  <Phone className="h-3.5 w-3.5 shrink-0" />
-                  {COMPANY.phone}
-                </p>
-                <p className="flex items-center gap-1.5">
-                  <MailIcon className="h-3.5 w-3.5 shrink-0" />
-                  {COMPANY.email}
-                </p>
-                <p className="flex items-center gap-1.5">
-                  <Building2 className="h-3.5 w-3.5 shrink-0" />
-                  {COMPANY.website}
-                </p>
+
+              {/* Right: QUOTATION Label + Green Bar with Number + Barcode */}
+              <div className="flex flex-col items-end gap-2 shrink-0">
+                <p className="text-emerald-600 font-bold text-xl tracking-wide">QUOTATION</p>
+                <div className="flex items-center gap-3">
+                  <div className="bg-emerald-600 rounded-md px-4 py-1.5">
+                    <span className="text-white font-bold text-sm tracking-wide">{barcodeValue}</span>
+                  </div>
+                  <div className="bg-white p-1">
+                    <svg ref={barcodeRef} className="h-11" />
+                  </div>
+                </div>
+                <p className="text-xs font-medium text-gray-700 font-mono">{barcodeValue}</p>
               </div>
             </div>
 
-            {/* Right: Barcode, QR, Quotation Details */}
-            <div className="flex flex-col items-center md:items-end gap-3 shrink-0">
-              {/* Barcode */}
-              <div className="bg-white p-2">
-                <svg ref={barcodeRef} className="h-12" />
-              </div>
-              {/* QR Code */}
-              <div className="w-16 h-16">
-                <QRCodeSVG
-                  value={`https://smartms.com/quotation/${qt.quotationNo || qt.id}`}
-                  size={64}
-                  level="M"
-                  includeMargin={false}
-                />
-              </div>
-              {/* Quotation Label */}
-              <div className="text-center md:text-right">
-                <p className="text-emerald-600 font-bold text-lg">QUOTATION</p>
-                <p className="font-bold text-sm text-gray-900">{qt.quotationNo || 'N/A'}</p>
-              </div>
-              {/* Quotation Meta */}
-              <div className="text-xs text-gray-500 space-y-1.5 text-right w-full max-w-52">
-                <div className="flex justify-between gap-3">
-                  <span className="text-gray-400">Quotation Date</span>
-                  <span className="font-medium text-gray-700">{fmtDate(qt.createdAt)}</span>
-                </div>
-                <div className="flex justify-between gap-3">
-                  <span className="text-gray-400">Valid Until</span>
-                  <span className="font-medium text-gray-700">{fmtDate(qt.validUntil)}</span>
-                </div>
-                {qt.referenceNo && (
-                  <div className="flex justify-between gap-3">
-                    <span className="text-gray-400">Reference</span>
-                    <span className="font-medium text-gray-700">{qt.referenceNo}</span>
+            {/* ====== ROW 2: Quotation Details (Left) + Project / Site Info (Right) ====== */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+              {/* Left: Quotation Details */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <FileText className="h-3.5 w-3.5 text-emerald-600" />
+                  Quotation Details
+                </h3>
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Calendar className="h-3 w-3 text-gray-400" /> Quotation Date
+                    </span>
+                    <span className="font-medium text-gray-800">{fmtDate(qt.createdAt)}</span>
                   </div>
-                )}
-                {qt.projectName && (
-                  <div className="flex justify-between gap-3">
-                    <span className="text-gray-400">Project</span>
-                    <span className="font-medium text-gray-700">{qt.projectName}</span>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Calendar className="h-3 w-3 text-gray-400" /> Valid Until
+                    </span>
+                    <span className="font-medium text-gray-800">{fmtDate(qt.validUntil)}</span>
                   </div>
-                )}
-                <div className="flex justify-between gap-3">
-                  <span className="text-gray-400">Currency</span>
-                  <span className="font-medium text-gray-700">{qt.currency || 'BND'} - {currencyLabel}</span>
+                  {qt.referenceNo && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <Hash className="h-3 w-3 text-gray-400" /> Reference
+                      </span>
+                      <span className="font-medium text-gray-800">{qt.referenceNo}</span>
+                    </div>
+                  )}
+                  {qt.projectName && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <Building2 className="h-3 w-3 text-gray-400" /> Project
+                      </span>
+                      <span className="font-medium text-gray-800">{qt.projectName}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500 flex items-center gap-1.5">
+                      <Landmark className="h-3 w-3 text-gray-400" /> Currency
+                    </span>
+                    <span className="font-medium text-gray-800">{currency} - {currencyLabel}</span>
+                  </div>
+                  {qt.preparedByName && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500 flex items-center gap-1.5">
+                        <User className="h-3 w-3 text-gray-400" /> Prepared By
+                      </span>
+                      <span className="font-medium text-gray-800">{qt.preparedByName}</span>
+                    </div>
+                  )}
                 </div>
-                {qt.preparedByName && (
-                  <div className="flex justify-between gap-3">
-                    <span className="text-gray-400">Prepared By</span>
-                    <span className="font-medium text-gray-700">{qt.preparedByName}</span>
+              </div>
+
+              {/* Right: Status & Timeline */}
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                  Status & Timeline
+                </h3>
+                <div className="space-y-2 text-xs">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500">Current Status</span>
+                    <Badge variant="outline" className={STATUS_CONFIG[qt.status]?.className || ''}>
+                      {STATUS_CONFIG[qt.status]?.label || qt.status}
+                    </Badge>
                   </div>
-                )}
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-500">Created</span>
+                    <span className="font-medium text-gray-800">{fmtDate(qt.createdAt)}</span>
+                  </div>
+                  {qt.validUntil && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500">Valid Until</span>
+                      <span className="font-medium text-gray-800">{fmtDate(qt.validUntil)}</span>
+                    </div>
+                  )}
+                  {qt.sentAt && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500">Sent On</span>
+                      <span className="font-medium text-gray-800">{fmtDate(qt.sentAt)}</span>
+                    </div>
+                  )}
+                  {qt.acceptedAt && (
+                    <div className="flex justify-between gap-4">
+                      <span className="text-gray-500">Accepted On</span>
+                      <span className="font-medium text-gray-800">{fmtDate(qt.acceptedAt)}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
 
-          <Separator className="mb-6" />
-
-          {/* === BILL TO === */}
-          <div className="mb-6">
-            <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5" /> Bill To
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
+            {/* ====== ROW 3: Bill To (Left) + Site (Right) ====== */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
+              {/* Bill To */}
+              <div className="bg-blue-50/40 rounded-lg p-4 border border-blue-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
+                  Bill To
+                </h3>
                 <p className="font-bold text-sm text-gray-900 mb-1">
                   {(qt.customer?.companyName || qt.customer?.name || '').toUpperCase()}
                 </p>
                 {qt.customer?.address && (
-                  <p className="text-xs text-gray-500 mb-1.5">{qt.customer.address}</p>
+                  <p className="text-[11px] text-gray-500 mb-2 leading-relaxed">{qt.customer.address}</p>
                 )}
                 <div className="space-y-1">
                   {qt.customer?.phone && (
-                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                      <Phone className="h-3 w-3" /> {qt.customer.phone}
+                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                      <Phone className="h-3 w-3 text-gray-400" /> {qt.customer.phone}
                     </p>
                   )}
                   {qt.customer?.email && (
-                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                      <MailIcon className="h-3 w-3" /> {qt.customer.email}
+                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                      <MailIcon className="h-3 w-3 text-gray-400" /> {qt.customer.email}
                     </p>
                   )}
                   {qt.customer?.pic && (
-                    <p className="text-xs text-gray-500 flex items-center gap-1.5">
-                      <User className="h-3 w-3" /> {qt.customer.pic} (PIC)
+                    <p className="text-[11px] text-gray-500 flex items-center gap-1.5">
+                      <User className="h-3 w-3 text-gray-400" /> {qt.customer.pic} (PIC)
                     </p>
                   )}
                 </div>
               </div>
-              {qt.site && (
-                <div>
-                  <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                    <MapPin className="h-3.5 w-3.5" /> Site
-                  </h3>
-                  <p className="text-xs text-gray-700">{qt.site}</p>
-                </div>
-              )}
-            </div>
-          </div>
 
-          {/* === LINE ITEMS TABLE === */}
-          <div className="mb-6 overflow-x-auto">
-            <table className="w-full text-xs border-collapse">
-              <thead>
-                <tr className="border-b-2 border-gray-300">
-                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-10">SL</th>
-                  <th className="text-left font-semibold text-gray-700 py-2.5 px-2">Item Title</th>
-                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-16">Unit</th>
-                  <th className="text-center font-semibold text-gray-700 py-2.5 px-2 w-14">Qty</th>
-                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-20">Rate ({qt.currency || 'BND'})</th>
-                  <th className="text-right font-semibold text-gray-700 py-2.5 px-2 w-24">Amount ({qt.currency || 'BND'})</th>
-                </tr>
-              </thead>
-              <tbody>
-                {lineItems.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="text-center py-8 text-gray-400 text-sm">
-                      No line items
-                    </td>
-                  </tr>
+              {/* Site Info */}
+              <div className="bg-blue-50/40 rounded-lg p-4 border border-blue-100">
+                <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                  <MapPin className="h-3.5 w-3.5 text-emerald-600" />
+                  Site / Ship To
+                </h3>
+                {qt.site ? (
+                  <p className="text-[11px] text-gray-700 leading-relaxed">{qt.site}</p>
                 ) : (
-                  lineItems.map((item, i) => (
-                    <tr
-                      key={item.id || i}
-                      className={`border-b border-gray-200 ${i % 2 === 1 ? 'bg-gray-50/50' : ''}`}
-                    >
-                      <td className="text-center py-2.5 px-2 text-gray-600">{i + 1}</td>
-                      <td className="py-2.5 px-2">
-                        <p className="font-medium text-gray-800 text-xs">{item.title}</p>
-                        {item.description && (
-                          <p className="text-gray-500 text-xs mt-0.5 leading-relaxed">{item.description}</p>
-                        )}
-                      </td>
-                      <td className="text-center py-2.5 px-2 text-gray-600">{item.unit || 'Nos'}</td>
-                      <td className="text-center py-2.5 px-2 text-gray-600">{item.quantity}</td>
-                      <td className="text-right py-2.5 px-2 text-gray-700">{fmtBND(item.rate)}</td>
-                      <td className="text-right py-2.5 px-2 font-medium text-gray-800">{fmtBND(item.amount)}</td>
-                    </tr>
-                  ))
+                  <>
+                    <p className="font-bold text-sm text-gray-900 mb-1">
+                      {(qt.customer?.companyName || qt.customer?.name || '').toUpperCase()}
+                    </p>
+                    {qt.customer?.address && (
+                      <p className="text-[11px] text-gray-500 leading-relaxed">{qt.customer.address}</p>
+                    )}
+                  </>
                 )}
-              </tbody>
-            </table>
-            <p className="text-center text-xs text-gray-400 mt-3 italic">Thank you for your business!</p>
-          </div>
+              </div>
+            </div>
 
-          <Separator className="mb-6" />
+            {/* ====== ROW 4: Line Items Table + Summary (side by side on desktop) ====== */}
+            <div className="mb-6">
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* Table */}
+                <div className="flex-1 min-w-0 overflow-x-auto">
+                  <table className="w-full text-xs border-collapse">
+                    <thead>
+                      <tr className="bg-emerald-600 text-white">
+                        <th className="text-center font-semibold py-2.5 px-2 w-10 rounded-tl-md">SL</th>
+                        <th className="text-left font-semibold py-2.5 px-2">Item Title</th>
+                        <th className="text-left font-semibold py-2.5 px-2">Description</th>
+                        <th className="text-center font-semibold py-2.5 px-2 w-14">Unit</th>
+                        <th className="text-center font-semibold py-2.5 px-2 w-12">Qty</th>
+                        <th className="text-right font-semibold py-2.5 px-2 w-22">Rate ({currency})</th>
+                        <th className="text-right font-semibold py-2.5 px-2 w-24 rounded-tr-md">Amount ({currency})</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {lineItems.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="text-center py-10 text-gray-400 text-sm">
+                            No line items
+                          </td>
+                        </tr>
+                      ) : (
+                        lineItems.map((item, i) => (
+                          <tr
+                            key={item.id || i}
+                            className={`border-b border-gray-100 ${i % 2 === 1 ? 'bg-gray-50/50' : ''} hover:bg-emerald-50/30 transition-colors`}
+                          >
+                            <td className="text-center py-3 px-2 text-gray-600 font-medium">{i + 1}</td>
+                            <td className="py-3 px-2">
+                              <p className="font-semibold text-gray-800 text-xs">{item.title}</p>
+                            </td>
+                            <td className="py-3 px-2">
+                              <p className="text-gray-500 text-[11px] leading-relaxed">{item.description || '—'}</p>
+                            </td>
+                            <td className="text-center py-3 px-2 text-gray-600">{item.unit || 'Nos'}</td>
+                            <td className="text-center py-3 px-2 text-gray-600">{item.quantity}</td>
+                            <td className="text-right py-3 px-2 text-gray-700">{fmtBND(item.rate)}</td>
+                            <td className="text-right py-3 px-2 font-semibold text-gray-800">{fmtBND(item.amount)}</td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
 
-          {/* === BOTTOM SECTIONS: 3 Columns (Terms, Attachments, Notes) === */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-            {/* Terms & Conditions */}
-            <div>
-              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
+                {/* Summary Panel (right side, inline) */}
+                <div className="lg:w-72 shrink-0">
+                  <div className="bg-gray-50 rounded-lg border border-gray-200 p-4 space-y-2.5">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Subtotal</span>
+                      <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.subtotal)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Discount</span>
+                      <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.discount)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Tax ({qt.taxRate || 0}%)</span>
+                      <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.tax)}</span>
+                    </div>
+                    <div className="flex justify-between text-xs">
+                      <span className="text-gray-500">Shipping</span>
+                      <span className="text-gray-800 font-medium">{currency} {fmtBND(qt.shipping)}</span>
+                    </div>
+                    <div className="border-t border-gray-300 pt-2.5">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-bold text-gray-900">GRAND TOTAL</span>
+                        <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(qt.total)}</span>
+                      </div>
+                    </div>
+                    <div className="bg-emerald-50 rounded-md p-2.5 mt-1 border border-emerald-100">
+                      <p className="text-[9px] text-emerald-600 font-semibold uppercase tracking-wider mb-0.5">Amount In Words</p>
+                      <p className="text-[11px] text-emerald-800 italic font-medium leading-relaxed">
+                        {numberToCurrencyWords(qt.total)}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ====== ROW 5: Terms & Conditions ====== */}
+            <div className="mb-6">
+              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+                <FileText className="h-3.5 w-3.5 text-emerald-600" />
                 Terms & Conditions
               </h3>
-              <ol className="text-xs text-gray-500 space-y-1.5 list-decimal list-inside">
+              <ol className="text-[11px] text-gray-500 space-y-1.5 list-decimal list-inside leading-relaxed">
                 {terms.map((term, i) => (
-                  <li key={i} className="leading-relaxed">{term}</li>
+                  <li key={i}>{term}</li>
                 ))}
               </ol>
             </div>
 
-            {/* Attachments */}
-            <div>
-              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
-                Attachments
-              </h3>
-              <div className="border-2 border-dashed border-gray-200 rounded-lg p-4 text-center mb-3">
-                <Upload className="h-6 w-6 text-gray-300 mx-auto mb-1" />
-                <p className="text-xs text-gray-400">Drag & drop files here or click to browse</p>
-                <p className="text-[10px] text-gray-300 mt-0.5">PDF, DOC, XLS, JPG, PNG (Max 10MB)</p>
-              </div>
-            </div>
+            {/* ====== ROW 6: Footer — Signature, Stamp, Notes, QR, Thank You ====== */}
+            <div className="border-t border-gray-200 pt-6">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6">
+                {/* Left: Authorised Signature + Stamp */}
+                <div className="flex items-end gap-5">
+                  <div>
+                    <p className="text-xs font-medium text-gray-800 mb-1">
+                      {qt.preparedByName || '—'}
+                    </p>
+                    <p className="text-[10px] text-gray-400 mb-2">Authorised Signature</p>
+                    <p className="text-[10px] text-gray-400">Managing Director</p>
+                    <div className="w-40 border-b border-gray-300 mt-1" />
+                  </div>
+                  {/* Company Stamp */}
+                  <div className="w-16 h-16 border-2 border-emerald-600 rounded-full flex items-center justify-center shrink-0 opacity-80">
+                    <div className="text-center">
+                      <span className="text-emerald-600 font-bold text-base leading-none block">{COMPANY.shortName}</span>
+                      <span className="text-emerald-600 text-[7px] leading-none block mt-0.5">{COMPANY.regNo}</span>
+                    </div>
+                  </div>
+                </div>
 
-            {/* Notes */}
-            <div>
-              <h3 className="text-xs font-semibold text-gray-700 uppercase tracking-wider mb-3">
-                Notes
-              </h3>
-              <p className="text-xs text-gray-500 leading-relaxed">
-                {qt.notes || 'Thank you for choosing Smart Maintenance Services. We look forward to working with you.'}
-              </p>
-              <div className="mt-4 flex items-end gap-4">
-                <div>
-                  <p className="text-xs font-medium text-gray-700">
-                    {qt.preparedByName || '—'}
+                {/* Center: Notes */}
+                <div className="text-xs text-gray-500 max-w-xs">
+                  <p className="font-medium text-gray-600 mb-1">Notes</p>
+                  <p className="text-[11px] leading-relaxed">
+                    {qt.notes || 'Thank you for choosing Smart Maintenance Services. We look forward to working with you.'}
                   </p>
-                  <p className="text-[10px] text-gray-400">Authorised Signature</p>
                 </div>
-                <div className="w-14 h-14 border-2 border-emerald-600 rounded-full flex items-center justify-center shrink-0">
-                  <span className="text-emerald-600 font-bold text-xs">{COMPANY.shortName}</span>
+
+                {/* Right: QR Code + Thank You */}
+                <div className="flex items-end gap-4">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto">
+                      <QRCodeSVG
+                        value={`https://smartms.com/quotation/${qt.quotationNo || qt.id}`}
+                        size={64}
+                        level="M"
+                        includeMargin={false}
+                      />
+                    </div>
+                    <p className="text-[8px] text-gray-400 mt-1">Scan to Verify</p>
+                  </div>
+                  <div>
+                    <p className="text-emerald-600 font-semibold text-lg italic">Thank You!</p>
+                    <div className="text-[10px] text-gray-400 space-y-0.5 mt-1">
+                      <p className="flex items-center gap-1"><Phone className="h-2.5 w-2.5" /> {COMPANY.phone}</p>
+                      <p className="flex items-center gap-1"><MailIcon className="h-2.5 w-2.5" /> {COMPANY.email}</p>
+                      <p className="flex items-center gap-1"><Building2 className="h-2.5 w-2.5" /> {COMPANY.website}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
+
+              {/* Page indicator */}
+              <div className="text-center mt-6">
+                <p className="text-[10px] text-gray-300">Page 1 of 1</p>
+              </div>
             </div>
+
           </div>
         </div>
-
-        {/* === PRINT SUMMARY (inline for print) === */}
-        <div className="print:block hidden print:px-8 print:pb-6">
-          <QuotationSummaryPrint qt={qt} />
-        </div>
-      </div>
-        </div>{/* End left column */}
-
-        {/* Right: Summary Sidebar (desktop only, sticky) */}
-        <div className="hidden lg:block w-80 shrink-0">
-          <div className="sticky top-24">
-            <QuotationSummaryCard qt={qt} />
-          </div>
-        </div>
-      </div>{/* End layout wrapper */}
-
-      {/* === MOBILE SUMMARY CARD === */}
-      <div className="lg:hidden">
-        <QuotationSummaryCard qt={qt} />
       </div>
 
       {/* ===== REJECT DIALOG ===== */}
@@ -644,108 +749,6 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-  );
-}
-
-// ============ SUMMARY COMPONENTS ============
-
-function QuotationSummaryCard({ qt }: { qt: QuotationData }) {
-  const currency = qt.currency || 'BND';
-
-  return (
-    <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-4 space-y-4">
-      <div>
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">Summary</h3>
-        <div className="space-y-2">
-          <div className="flex justify-between text-xs">
-            <span className="text-gray-500">Subtotal</span>
-            <span className="text-gray-700">{currency} {fmtBND(qt.subtotal)}</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-gray-500">Discount</span>
-            <span className="text-gray-700">{currency} {fmtBND(qt.discount)}</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-gray-500">Tax ({qt.taxRate || 0}%)</span>
-            <span className="text-gray-700">{currency} {fmtBND(qt.tax)}</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-gray-500">Shipping</span>
-            <span className="text-gray-700">{currency} {fmtBND(qt.shipping)}</span>
-          </div>
-          <Separator />
-          <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-gray-700">Grand Total</span>
-            <span className="text-lg font-bold text-emerald-600">{currency} {fmtBND(qt.total)}</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-emerald-50 rounded-lg p-3">
-        <p className="text-[10px] text-emerald-600 font-medium mb-0.5">Amount In Words</p>
-        <p className="text-xs text-emerald-700 italic font-medium">
-          {numberToCurrencyWords(qt.total)}
-        </p>
-      </div>
-
-      {/* Quotation Status Timeline */}
-      <div>
-        <h3 className="text-sm font-semibold text-gray-700 mb-3">Status</h3>
-        <div className="space-y-1.5 text-xs">
-          <div className="flex justify-between">
-            <span className="text-gray-400">Current Status</span>
-            <Badge variant="outline" className={STATUS_CONFIG[qt.status]?.className || ''}>
-              {STATUS_CONFIG[qt.status]?.label || qt.status}
-            </Badge>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-gray-400">Created</span>
-            <span className="text-gray-700">{fmtDate(qt.createdAt)}</span>
-          </div>
-          {qt.validUntil && (
-            <div className="flex justify-between">
-              <span className="text-gray-400">Valid Until</span>
-              <span className="text-gray-700">{fmtDate(qt.validUntil)}</span>
-            </div>
-          )}
-          {qt.sentAt && (
-            <div className="flex justify-between">
-              <span className="text-gray-400">Sent On</span>
-              <span className="text-gray-700">{fmtDate(qt.sentAt)}</span>
-            </div>
-          )}
-          {qt.acceptedAt && (
-            <div className="flex justify-between">
-              <span className="text-gray-400">Accepted On</span>
-              <span className="text-gray-700">{fmtDate(qt.acceptedAt)}</span>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function QuotationSummaryPrint({ qt }: { qt: QuotationData }) {
-  const currency = qt.currency || 'BND';
-  return (
-    <div className="flex justify-end">
-      <div className="w-72 space-y-3">
-        <h3 className="text-sm font-semibold text-gray-700">Summary</h3>
-        <div className="space-y-1.5 text-xs">
-          <div className="flex justify-between"><span className="text-gray-500">Subtotal</span><span>{currency} {fmtBND(qt.subtotal)}</span></div>
-          <div className="flex justify-between"><span className="text-gray-500">Discount</span><span>{currency} {fmtBND(qt.discount)}</span></div>
-          <div className="flex justify-between"><span className="text-gray-500">Tax ({qt.taxRate || 0}%)</span><span>{currency} {fmtBND(qt.tax)}</span></div>
-          <div className="flex justify-between"><span className="text-gray-500">Shipping</span><span>{currency} {fmtBND(qt.shipping)}</span></div>
-          <Separator />
-          <div className="flex justify-between text-base font-bold text-emerald-600"><span>Grand Total</span><span>{currency} {fmtBND(qt.total)}</span></div>
-        </div>
-        <div className="bg-emerald-50 rounded-lg p-2.5 mt-3">
-          <p className="text-[10px] text-emerald-600 font-medium">Amount In Words</p>
-          <p className="text-xs text-emerald-700 italic">{numberToCurrencyWords(qt.total)}</p>
-        </div>
-      </div>
     </div>
   );
 }

@@ -27,4 +27,22 @@ Stage Summary:
 - Invoice and quotation detail pages fully match the uploaded reference image
 - All 13 sections present: company header, barcode/QR, invoice/quotation details, Bill To, Ship To, line items table, Terms, Attachments, Notes with signature/stamp, Summary sidebar, Amount in words, Payment information, Action buttons
 - Desktop: two-column layout with sticky sidebar. Mobile: stacked with summary card below
-- Print-optimized with inline summary
+- Print-optimized with inline summary---
+Task ID: 1
+Agent: Main Agent
+Task: Redesign invoice/quotation detail pages to match uploaded printed invoice template photo
+
+Work Log:
+- Analyzed uploaded invoice template (PRINTED INVOICE.png) using VLM to extract exact layout details
+- Identified 17 key elements: company header, green INVOICE title, green bar with invoice number, barcode, invoice details section, payment info section, Bill To, Ship To, 7-column items table, summary panel, amount in words, terms & conditions, signature area, company stamp, QR code, "Thank You!" text, contact info, page indicator
+- Completely rewrote `src/components/modules/invoices/invoice-detail.tsx` — changed from sidebar layout to single A4-width document layout matching template
+- Completely rewrote `src/components/modules/quotations/quotation-detail.tsx` — same template-matching design with quotation-specific fields
+- Added comprehensive print CSS in `src/app/globals.css` for A4 paper output with `print-color-adjust: exact` for green headers, backgrounds, and all colored elements
+- Fixed CSS parse error (escaped `print\\:hidden` class in raw CSS)
+- Verified both pages in browser using agent-browser — all 17/17 elements confirmed present by VLM analysis
+
+Stage Summary:
+- Invoice and quotation detail pages now render as professional A4-width documents matching the uploaded template
+- Key changes: single-column centered layout (max-width: 210mm), green header bar with barcode, 7-column table with separate Description column, inline summary panel, footer with signature/stamp/QR/thank-you
+- Print CSS ensures colors render correctly on paper
+- All existing functionality preserved (workflow actions, payment dialog, email/WhatsApp/Print, status badges)

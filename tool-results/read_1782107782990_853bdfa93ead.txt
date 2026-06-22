@@ -1,0 +1,1366 @@
+     1→'use client';
+     2→
+     3→import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+     4→import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+     5→import { Button } from '@/components/ui/button';
+     6→import { Input } from '@/components/ui/input';
+     7→import { Textarea } from '@/components/ui/textarea';
+     8→import { Label } from '@/components/ui/label';
+     9→import { Badge } from '@/components/ui/badge';
+    10→import { Separator } from '@/components/ui/separator';
+    11→import {
+    12→  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+    13→} from '@/components/ui/select';
+    14→import {
+    15→  ArrowLeft, Plus, Trash2, Copy, Printer, FileText, Send,
+    16→  MessageSquare, Search, X, CheckCircle2, Circle,
+    17→  Loader2, Upload, GripVertical, Sparkles, QrCode,
+    18→} from 'lucide-react';
+    19→import { useAppStore } from '@/store';
+    20→import type { QuotationLineItem, CustomerData, EmployeeData } from '@/types';
+    21→import { toast } from 'sonner';
+    22→import { cn } from '@/lib/utils';
+    23→import { format, addDays } from 'date-fns';
+    24→import dynamic from 'next/dynamic';
+    25→
+    26→// Lazy-load QR Code (client-only)
+    27→const QRCodeSVG = dynamic(
+    28→  () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
+    29→  { ssr: false }
+    30→);
+    31→
+    32→// ============ CONSTANTS ============
+    33→
+    34→const UNITS = ['Nos', 'Set', 'Lot', 'Hr', 'Day', 'Month', 'Sqm', 'Meter', 'Kg', 'Ltr', 'Pcs', 'Unit'];
+    35→const TAX_RATES = ['0', '5', '10', '15'];
+    36→const CURRENCIES = ['BND', 'USD', 'SGD', 'MYR'];
+    37→
+    38→const CURRENCY_NAMES: Record<string, string> = {
+    39→  BND: 'BRUNEI DOLLARS',
+    40→  USD: 'US DOLLARS',
+    41→  SGD: 'SINGAPORE DOLLARS',
+    42→  MYR: 'MALAYSIAN RINGGIT',
+    43→};
+    44→
+    45→const DEFAULT_TERMS = [
+    46→  '50% advance payment.',
+    47→  'Balance upon completion.',
+    48→  'Price validity 60 days.',
+    49→  'Delivery 3 working days.',
+    50→  'Material warranty follows manufacturer.',
+    51→  'Additional works subject to variation order.',
+    52→  'Payment by bank transfer.',
+    53→];
+    54→
+    55→const WORKFLOW_STEPS = [
+    56→  'Draft', 'Review', 'Approved', 'Sent', 'Accepted',
+    57→  'Converted to Work Order', 'Converted to Invoice', 'Paid', 'Closed',
+    58→];
+    59→
+    60→// ============ NUMBER TO WORDS ============
+    61→
+    62→function numberToWords(num: number): string {
+    63→  if (num === 0) return 'ZERO';
+    64→  if (!Number.isFinite(num)) return 'ZERO';
+    65→
+    66→  const ones = ['', 'ONE', 'TWO', 'THREE', 'FOUR', 'FIVE', 'SIX', 'SEVEN', 'EIGHT', 'NINE',
+    67→    'TEN', 'ELEVEN', 'TWELVE', 'THIRTEEN', 'FOURTEEN', 'FIFTEEN', 'SIXTEEN',
+    68→    'SEVENTEEN', 'EIGHTEEN', 'NINETEEN'];
+    69→  const tens = ['', '', 'TWENTY', 'THIRTY', 'FORTY', 'FIFTY', 'SIXTY', 'SEVENTY', 'EIGHTY', 'NINETY'];
+    70→
+    71→  const intPart = Math.floor(Math.abs(num));
+    72→  const decPart = Math.round((Math.abs(num) - intPart) * 100);
+    73→
+    74→  function convertBelowThousand(n: number): string {
+    75→    if (n === 0) return '';
+    76→    if (n < 20) return ones[n];
+    77→    if (n < 100) {
+    78→      return tens[Math.floor(n / 10)] + (n % 10 ? ' ' + ones[n % 10] : '');
+    79→    }
+    80→    return ones[Math.floor(n / 100)] + ' HUNDRED' + (n % 100 ? ' AND ' + convertBelowThousand(n % 100) : '');
+    81→  }
+    82→
+    83→  let words = '';
+    84→  if (intPart >= 1000000) {
+    85→    words += convertBelowThousand(Math.floor(intPart / 1000000)) + ' MILLION ';
+    86→  }
+    87→  if (intPart >= 1000) {
+    88→    words += convertBelowThousand(Math.floor((intPart % 1000000) / 1000)) + ' THOUSAND ';
+    89→  }
+    90→  if (intPart % 1000 > 0) {
+    91→    words += convertBelowThousand(intPart % 1000);
+    92→  }
+    93→  if (decPart > 0) {
+    94→    words += ' AND ' + convertBelowThousand(decPart) + ' CENTS';
+    95→  }
+    96→
+    97→  return words.trim() || 'ZERO';
+    98→}
+    99→
+   100→// ============ HELPERS ============
+   101→
+   102→const getToken = () => localStorage.getItem('cmms_token') || '';
+   103→const authHeaders = () => ({ Authorization: `Bearer ${getToken()}` });
+   104→
+   105→function formatCurrency(amount: number, currency: string): string {
+   106→  const currencySymbols: Record<string, string> = { BND: 'BND', USD: '$', SGD: 'S$', MYR: 'RM' };
+   107→  const sym = currencySymbols[currency] || currency;
+   108→  return `${sym} ${amount.toFixed(2)}`;
+   109→}
+   110→
+   111→// ============ BARCODE COMPONENT ============
+   112→
+   113→function BarcodeDisplay({ value }: { value: string }) {
+   114→  const barcodeRef = useRef<SVGSVGElement>(null);
+   115→
+   116→  useEffect(() => {
+   117→    if (!barcodeRef.current || !value) return;
+   118→    import('jsbarcode').then((JsBarcode) => {
+   119→      try {
+   120→        JsBarcode.default(barcodeRef.current, value, {
+   121→          format: 'CODE128',
+   122→          width: 1.5,
+   123→          height: 40,
+   124→          displayValue: true,
+   125→          fontSize: 10,
+   126→          font: 'monospace',
+   127→          margin: 5,
+   128→        });
+   129→      } catch {
+   130→        // Fallback if barcode fails
+   131→      }
+   132→    });
+   133→  }, [value]);
+   134→
+   135→  if (!value) return null;
+   136→
+   137→  return (
+   138→    <div className="flex flex-col items-center gap-2">
+   139→      <svg ref={barcodeRef} className="max-w-full" />
+   140→      <QRCodeSVG
+   141→        value={value}
+   142→        size={64}
+   143→        level="M"
+   144→        includeMargin={false}
+   145→        bgColor="#FFFFFF"
+   146→        fgColor="#111827"
+   147→      />
+   148→      <span className="text-[10px] text-muted-foreground">Scan to open quotation</span>
+   149→    </div>
+   150→  );
+   151→}
+   152→
+   153→// ============ ITEM SUGGESTION DROPDOWN ============
+   154→
+   155→interface ItemSuggestion {
+   156→  title: string;
+   157→  description?: string;
+   158→  unit: string;
+   159→  rate: number;
+   160→  category?: string;
+   161→  warranty?: string;
+   162→  count: number;
+   163→}
+   164→
+   165→function ItemSuggestionDropdown({
+   166→  query,
+   167→  onSelect,
+   168→  onClose,
+   169→  position,
+   170→}: {
+   171→  query: string;
+   172→  onSelect: (item: ItemSuggestion) => void;
+   173→  onClose: () => void;
+   174→  position: { top: number; left: number } | null;
+   175→}) {
+   176→  const [suggestions, setSuggestions] = useState<ItemSuggestion[]>([]);
+   177→  const [loading, setLoading] = useState(false);
+   178→  const [selectedIndex, setSelectedIndex] = useState(0);
+   179→  const dropdownRef = useRef<HTMLDivElement>(null);
+   180→
+   181→  useEffect(() => {
+   182→    if (!query.trim() || query.length < 2) {
+   183→      setSuggestions([]);
+   184→      return;
+   185→    }
+   186→
+   187→    const timer = setTimeout(async () => {
+   188→      setLoading(true);
+   189→      try {
+   190→        const res = await fetch(
+   191→          `/api/quotations/item-suggestions?q=${encodeURIComponent(query)}&limit=8`,
+   192→          { headers: authHeaders() }
+   193→        );
+   194→        if (res.ok) {
+   195→          const json = await res.json();
+   196→          setSuggestions(json.suggestions || []);
+   197→          setSelectedIndex(0);
+   198→        }
+   199→      } catch {
+   200→        // silent
+   201→      } finally {
+   202→        setLoading(false);
+   203→      }
+   204→    }, 200);
+   205→
+   206→    return () => clearTimeout(timer);
+   207→  }, [query]);
+   208→
+   209→  // Keyboard navigation
+   210→  useEffect(() => {
+   211→    const handleKeyDown = (e: KeyboardEvent) => {
+   212→      if (suggestions.length === 0) return;
+   213→      if (e.key === 'ArrowDown') {
+   214→        e.preventDefault();
+   215→        setSelectedIndex((prev) => (prev + 1) % suggestions.length);
+   216→      } else if (e.key === 'ArrowUp') {
+   217→        e.preventDefault();
+   218→        setSelectedIndex((prev) => (prev - 1 + suggestions.length) % suggestions.length);
+   219→      } else if (e.key === 'Enter' && suggestions[selectedIndex]) {
+   220→        e.preventDefault();
+   221→        onSelect(suggestions[selectedIndex]);
+   222→      } else if (e.key === 'Escape') {
+   223→        onClose();
+   224→      }
+   225→    };
+   226→
+   227→    document.addEventListener('keydown', handleKeyDown);
+   228→    return () => document.removeEventListener('keydown', handleKeyDown);
+   229→  }, [suggestions, selectedIndex, onSelect, onClose]);
+   230→
+   231→  if (suggestions.length === 0 && !loading) return null;
+   232→
+   233→  return (
+   234→    <div
+   235→      ref={dropdownRef}
+   236→      className="absolute z-50 w-80 bg-white border border-gray-200 rounded-xl shadow-lg max-h-64 overflow-hidden"
+   237→      style={position ? { top: position.top, left: Math.min(position.left, window.innerWidth - 340) } : undefined}
+   238→    >
+   239→      {loading ? (
+   240→        <div className="flex items-center gap-2 px-3 py-3 text-sm text-muted-foreground">
+   241→          <Loader2 className="h-3.5 w-3.5 animate-spin" /> Searching items...
+   242→        </div>
+   243→      ) : (
+   244→        <div className="py-1 max-h-60 overflow-y-auto">
+   245→          {suggestions.map((item, i) => (
+   246→            <button
+   247→              key={item.title}
+   248→              className={cn(
+   249→                'w-full text-left px-3 py-2.5 hover:bg-emerald-50/70 transition-colors border-b border-gray-50 last:border-0',
+   250→                i === selectedIndex && 'bg-emerald-50/70'
+   251→              )}
+   252→              onClick={() => onSelect(item)}
+   253→              onMouseEnter={() => setSelectedIndex(i)}
+   254→            >
+   255→              <div className="flex items-center justify-between gap-2">
+   256→                <span className="font-medium text-sm text-gray-900 truncate">{item.title}</span>
+   257→                <div className="flex items-center gap-2 shrink-0">
+   258→                  {item.count > 1 && (
+   259→                    <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded-full">
+   260→                      {item.count}x
+   261→                    </span>
+   262→                  )}
+   263→                  <span className="text-xs font-semibold text-emerald-700">
+   264→                    {formatCurrency(item.rate, 'BND')}
+   265→                  </span>
+   266→                </div>
+   267→              </div>
+   268→              {item.description && (
+   269→                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{item.description}</p>
+   270→              )}
+   271→              <div className="flex items-center gap-2 mt-1">
+   272→                <span className="text-[10px] text-muted-foreground bg-gray-50 px-1.5 py-0.5 rounded">
+   273→                  {item.unit}
+   274→                </span>
+   275→                {item.category && (
+   276→                  <span className="text-[10px] text-muted-foreground bg-gray-50 px-1.5 py-0.5 rounded">
+   277→                    {item.category}
+   278→                  </span>
+   279→                )}
+   280→                {item.warranty && (
+   281→                  <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+   282→                    {item.warranty}
+   283→                  </span>
+   284→                )}
+   285→              </div>
+   286→            </button>
+   287→          ))}
+   288→        </div>
+   289→      )}
+   290→    </div>
+   291→  );
+   292→}
+   293→
+   294→// ============ MAIN COMPONENT ============
+   295→
+   296→export function QuotationForm({ quotationId }: { quotationId?: string }) {
+   297→  const setView = useAppStore((s) => s.setView);
+   298→
+   299→  // --- State ---
+   300→  const [customers, setCustomers] = useState<CustomerData[]>([]);
+   301→  const [employees, setEmployees] = useState<EmployeeData[]>([]);
+   302→  const [customerSearch, setCustomerSearch] = useState('');
+   303→  const [customerResultsOpen, setCustomerResultsOpen] = useState(false);
+   304→  const [selectedCustomer, setSelectedCustomer] = useState<CustomerData | null>(null);
+   305→  const [quotationNo, setQuotationNo] = useState('');
+   306→  const [loading, setLoading] = useState(false);
+   307→  const [saving, setSaving] = useState(false);
+   308→  const [dateStr, setDateStr] = useState(format(new Date(), 'yyyy-MM-dd'));
+   309→  const [suggestionState, setSuggestionState] = useState<{
+   310→    index: number | null;
+   311→    query: string;
+   312→    position: { top: number; left: number } | null;
+   313→  }>({ index: null, query: '', position: null });
+   314→
+   315→  const [lineItems, setLineItems] = useState<QuotationLineItem[]>([
+   316→    { title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 },
+   317→  ]);
+   318→
+   319→  const [formData, setFormData] = useState({
+   320→    referenceNo: '',
+   321→    projectName: '',
+   322→    site: '',
+   323→    description: '',
+   324→    validUntil: format(addDays(new Date(), 60), 'yyyy-MM-dd'),
+   325→    preparedBy: '',
+   326→    notes: '',
+   327→    terms: DEFAULT_TERMS,
+   328→    currency: 'BND',
+   329→    taxRate: '0',
+   330→    discount: 0,
+   331→    shipping: 0,
+   332→  });
+   333→
+   334→  // --- Fetch initial data ---
+   335→  useEffect(() => {
+   336→    async function init() {
+   337→      setLoading(true);
+   338→      try {
+   339→        const [custRes, empRes, numRes] = await Promise.all([
+   340→          fetch('/api/customers?pageSize=100', { headers: authHeaders() }),
+   341→          fetch('/api/employees?pageSize=100', { headers: authHeaders() }),
+   342→          fetch('/api/quotations/next-number', { headers: authHeaders() }),
+   343→        ]);
+   344→
+   345→        if (custRes.ok) {
+   346→          const custJson = await custRes.json();
+   347→          setCustomers(custJson.data || []);
+   348→        }
+   349→        if (empRes.ok) {
+   350→          const empJson = await empRes.json();
+   351→          setEmployees(empJson.data || []);
+   352→        }
+   353→        if (numRes.ok) {
+   354→          const numJson = await numRes.json();
+   355→          setQuotationNo(numJson.quotationNo || '');
+   356→        } else {
+   357→          const now = new Date();
+   358→          setQuotationNo(`QTN/${now.getFullYear()}/0001`);
+   359→        }
+   360→
+   361→        // Load quotation if editing
+   362→        if (quotationId) {
+   363→          const qRes = await fetch(`/api/quotations/${quotationId}`, { headers: authHeaders() });
+   364→          if (qRes.ok) {
+   365→            const q = await qRes.json();
+   366→            setQuotationNo(q.quotationNo || '');
+   367→            setFormData({
+   368→              referenceNo: q.referenceNo || '',
+   369→              projectName: q.projectName || '',
+   370→              site: q.site || '',
+   371→              description: q.description || '',
+   372→              validUntil: q.validUntil ? format(new Date(q.validUntil), 'yyyy-MM-dd') : '',
+   373→              preparedBy: q.preparedBy || '',
+   374→              notes: q.notes || '',
+   375→              terms: q.terms ? (typeof q.terms === 'string' ? JSON.parse(q.terms) : q.terms) : DEFAULT_TERMS,
+   376→              currency: q.currency || 'BND',
+   377→              taxRate: String(q.taxRate ?? 0),
+   378→              discount: q.discount ?? 0,
+   379→              shipping: q.shipping ?? 0,
+   380→            });
+   381→            if (q.items) {
+   382→              const parsed = typeof q.items === 'string' ? JSON.parse(q.items) : q.items;
+   383→              setLineItems(parsed.length > 0
+   384→                ? parsed.map((item: QuotationLineItem) => ({
+   385→                    ...item,
+   386→                    description: item.description || '',
+   387→                    unit: item.unit || 'Nos',
+   388→                  }))
+   389→                : [{ title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 }]
+   390→              );
+   391→            }
+   392→            // Load customer
+   393→            if (q.customerId) {
+   394→              const custList = customers.length > 0 ? { data: customers } : await custRes.clone().json();
+   395→              const list = custList.data || [];
+   396→              const found = list.find((c: CustomerData) => c.id === q.customerId);
+   397→              if (found) {
+   398→                setSelectedCustomer(found);
+   399→                setCustomerSearch(found.companyName || found.name);
+   400→              }
+   401→            }
+   402→          }
+   403→        }
+   404→      } catch (err) {
+   405→        console.error('Init error:', err);
+   406→        toast.error('Failed to load initial data');
+   407→      } finally {
+   408→        setLoading(false);
+   409→      }
+   410→    }
+   411→    init();
+   412→  }, [quotationId]);
+   413→
+   414→  // --- Computed ---
+   415→  const subtotal = useMemo(
+   416→    () => lineItems.reduce((sum, item) => sum + (item.quantity * item.rate), 0),
+   417→    [lineItems]
+   418→  );
+   419→
+   420→  const taxAmount = useMemo(
+   421→    () => subtotal * (parseFloat(formData.taxRate) / 100),
+   422→    [subtotal, formData.taxRate]
+   423→  );
+   424→
+   425→  const grandTotal = useMemo(
+   426→    () => Math.max(0, subtotal - formData.discount + taxAmount + formData.shipping),
+   427→    [subtotal, formData.discount, taxAmount, formData.shipping]
+   428→  );
+   429→
+   430→  const amountInWords = useMemo(() => {
+   431→    const words = numberToWords(grandTotal);
+   432→    const currencyName = CURRENCY_NAMES[formData.currency] || formData.currency;
+   433→    return `${words} ${currencyName} ONLY`;
+   434→  }, [grandTotal, formData.currency]);
+   435→
+   436→  // --- Customer search filtering ---
+   437→  const filteredCustomers = useMemo(() => {
+   438→    if (!customerSearch.trim()) return [];
+   439→    const q = customerSearch.toLowerCase();
+   440→    return customers.filter(
+   441→      (c) =>
+   442→        c.name.toLowerCase().includes(q) ||
+   443→        (c.companyName && c.companyName.toLowerCase().includes(q)) ||
+   444→        c.customerNumber.toLowerCase().includes(q) ||
+   445→        (c.email && c.email.toLowerCase().includes(q)) ||
+   446→        (c.phone && c.phone.includes(q))
+   447→    ).slice(0, 8);
+   448→  }, [customerSearch, customers]);
+   449→
+   450→  // --- Line item handlers ---
+   451→  const updateLineItem = useCallback((index: number, field: keyof QuotationLineItem, value: string | number) => {
+   452→    setLineItems((prev) => {
+   453→      const updated = [...prev];
+   454→      updated[index] = { ...updated[index], [field]: value };
+   455→      if (field === 'quantity' || field === 'rate') {
+   456→        updated[index].amount = updated[index].quantity * updated[index].rate;
+   457→      }
+   458→      // Ensure last row is empty
+   459→      const lastItem = updated[updated.length - 1];
+   460→      if (lastItem.title !== '' || lastItem.quantity !== 0 || lastItem.rate !== 0) {
+   461→        updated.push({ title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 });
+   462→      }
+   463→      return updated;
+   464→    });
+   465→  }, []);
+   466→
+   467→  const addRow = useCallback(() => {
+   468→    setLineItems((prev) => [...prev, { title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 }]);
+   469→  }, []);
+   470→
+   471→  const deleteRow = useCallback((index: number) => {
+   472→    setLineItems((prev) => {
+   473→      if (prev.length <= 1) return prev;
+   474→      return prev.filter((_, i) => i !== index);
+   475→    });
+   476→  }, []);
+   477→
+   478→  const insertRow = useCallback((index: number) => {
+   479→    setLineItems((prev) => {
+   480→      const updated = [...prev];
+   481→      updated.splice(index + 1, 0, { title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 });
+   482→      return updated;
+   483→    });
+   484→  }, []);
+   485→
+   486→  const duplicateRow = useCallback((index: number) => {
+   487→    setLineItems((prev) => {
+   488→      const copy = { ...prev[index], id: undefined, title: prev[index].title + ' (copy)' };
+   489→      const updated = [...prev];
+   490→      updated.splice(index + 1, 0, copy);
+   491→      return updated;
+   492→    });
+   493→  }, []);
+   494→
+   495→  const applyItemSuggestion = useCallback((index: number, suggestion: ItemSuggestion) => {
+   496→    setLineItems((prev) => {
+   497→      const updated = [...prev];
+   498→      updated[index] = {
+   499→        ...updated[index],
+   500→        title: suggestion.title,
+   501→        description: suggestion.description || '',
+   502→        unit: suggestion.unit,
+   503→        rate: suggestion.rate,
+   504→        amount: (updated[index].quantity || 1) * suggestion.rate,
+   505→        category: suggestion.category,
+   506→        warranty: suggestion.warranty,
+   507→      };
+   508→      // Ensure last row is empty
+   509→      const lastItem = updated[updated.length - 1];
+   510→      if (lastItem.title !== '' || lastItem.quantity !== 0 || lastItem.rate !== 0) {
+   511→        updated.push({ title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0 });
+   512→      }
+   513→      return updated;
+   514→    });
+   515→    setSuggestionState({ index: null, query: '', position: null });
+   516→  }, []);
+   517→
+   518→  // --- Item title input ref for position calculation ---
+   519→  const itemInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());
+   520→
+   521→  const handleItemTitleFocus = useCallback((index: number) => {
+   522→    const input = itemInputRefs.current.get(index);
+   523→    if (input) {
+   524→      const rect = input.getBoundingClientRect();
+   525→      setSuggestionState({
+   526→        index,
+   527→        query: lineItems[index]?.title || '',
+   528→        position: { top: rect.bottom + 4, left: rect.left },
+   529→      });
+   530→    }
+   531→  }, [lineItems]);
+   532→
+   533→  const handleItemTitleChange = useCallback((index: number, value: string) => {
+   534→    updateLineItem(index, 'title', value);
+   535→    const input = itemInputRefs.current.get(index);
+   536→    if (input) {
+   537→      const rect = input.getBoundingClientRect();
+   538→      setSuggestionState({
+   539→        index,
+   540→        query: value,
+   541→        position: { top: rect.bottom + 4, left: rect.left },
+   542→      });
+   543→    }
+   544→  }, [updateLineItem]);
+   545→
+   546→  // --- Save handler ---
+   547→  const handleSave = useCallback(async () => {
+   548→    if (!selectedCustomer) {
+   549→      toast.error('Please select a customer');
+   550→      return;
+   551→    }
+   552→    const validItems = lineItems.filter((item) => item.title.trim() !== '');
+   553→    if (validItems.length === 0) {
+   554→      toast.error('Add at least one line item');
+   555→      return;
+   556→    }
+   557→
+   558→    setSaving(true);
+   559→    try {
+   560→      const payload = {
+   561→        customerId: selectedCustomer.id,
+   562→        title: formData.projectName || 'Quotation',
+   563→        quotationNo,
+   564→        description: formData.description,
+   565→        referenceNo: formData.referenceNo,
+   566→        projectName: formData.projectName,
+   567→        site: formData.site,
+   568→        preparedBy: formData.preparedBy || null,
+   569→        items: JSON.stringify(validItems),
+   570→        terms: JSON.stringify(formData.terms),
+   571→        currency: formData.currency,
+   572→        subtotal,
+   573→        taxRate: parseFloat(formData.taxRate),
+   574→        tax: taxAmount,
+   575→        discount: formData.discount,
+   576→        shipping: formData.shipping,
+   577→        total: grandTotal,
+   578→        status: 'DRAFT',
+   579→        validUntil: formData.validUntil || null,
+   580→        notes: formData.notes,
+   581→      };
+   582→
+   583→      const res = quotationId
+   584→        ? await fetch(`/api/quotations/${quotationId}`, {
+   585→            method: 'PUT',
+   586→            headers: { 'Content-Type': 'application/json', ...authHeaders() },
+   587→            body: JSON.stringify(payload),
+   588→          })
+   589→        : await fetch('/api/quotations', {
+   590→            method: 'POST',
+   591→            headers: { 'Content-Type': 'application/json', ...authHeaders() },
+   592→            body: JSON.stringify(payload),
+   593→          });
+   594→
+   595→      if (!res.ok) {
+   596→        const err = await res.json();
+   597→        throw new Error(err.error || 'Save failed');
+   598→      }
+   599→
+   600→      toast.success(quotationId ? 'Quotation updated' : 'Quotation created');
+   601→      setView('quotations');
+   602→    } catch (err) {
+   603→      toast.error(err instanceof Error ? err.message : 'Failed to save quotation');
+   604→    } finally {
+   605→      setSaving(false);
+   606→    }
+   607→  }, [selectedCustomer, lineItems, formData, quotationNo, subtotal, taxAmount, grandTotal, quotationId, setView]);
+   608→
+   609→  // --- Current workflow step ---
+   610→  const currentStepIndex = 0;
+   611→
+   612→  // Close suggestions on click outside
+   613→  useEffect(() => {
+   614→    const handleClick = () => setSuggestionState((s) => ({ ...s, index: null, query: '' }));
+   615→    document.addEventListener('click', handleClick);
+   616→    return () => document.removeEventListener('click', handleClick);
+   617→  }, []);
+   618→
+   619→  if (loading) {
+   620→    return (
+   621→      <div className="flex items-center justify-center h-64">
+   622→        <Loader2 className="h-8 w-8 text-emerald-600 animate-spin" />
+   623→        <span className="ml-3 text-gray-500">Loading quotation...</span>
+   624→      </div>
+   625→    );
+   626→  }
+   627→
+   628→  return (
+   629→    <div className="flex flex-col min-h-full">
+   630→      {/* ==================== MAIN 3-COLUMN LAYOUT ==================== */}
+   631→      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-5 p-4 md:p-6 pb-28">
+   632→        {/* ============ LEFT COLUMN — Customer Info & Terms ============ */}
+   633→        <div className="lg:col-span-3 space-y-4">
+   634→          {/* Customer Information */}
+   635→          <Card className="py-0 gap-0">
+   636→            <CardHeader className="pb-0">
+   637→              <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+   638→                Customer Information
+   639→              </CardTitle>
+   640→            </CardHeader>
+   641→            <CardContent className="pt-4 space-y-3">
+   642→              {/* Search */}
+   643→              <div className="relative">
+   644→                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+   645→                <Input
+   646→                  placeholder="Search by name, phone, email..."
+   647→                  className="pl-9 h-9 text-sm"
+   648→                  value={customerSearch}
+   649→                  onChange={(e) => {
+   650→                    setCustomerSearch(e.target.value);
+   651→                    setCustomerResultsOpen(true);
+   652→                    if (selectedCustomer) {
+   653→                      setSelectedCustomer(null);
+   654→                    }
+   655→                  }}
+   656→                  onFocus={() => setCustomerResultsOpen(true)}
+   657→                />
+   658→                {customerResultsOpen && filteredCustomers.length > 0 && (
+   659→                  <div className="absolute z-50 top-full mt-1 left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+   660→                    {filteredCustomers.map((c) => (
+   661→                      <button
+   662→                        key={c.id}
+   663→                        className="w-full text-left px-3 py-2 hover:bg-gray-50 text-sm border-b border-gray-100 last:border-0 transition-colors"
+   664→                        onClick={() => {
+   665→                          setSelectedCustomer(c);
+   666→                          setCustomerSearch(c.companyName || c.name);
+   667→                          setCustomerResultsOpen(false);
+   668→                        }}
+   669→                      >
+   670→                        <span className="font-medium">{c.companyName || c.name}</span>
+   671→                        {c.companyName && c.name !== c.companyName && (
+   672→                          <span className="text-muted-foreground ml-1">({c.name})</span>
+   673→                        )}
+   674→                        <span className="block text-xs text-muted-foreground">
+   675→                          {c.phone} {c.email ? `| ${c.email}` : ''}
+   676→                        </span>
+   677→                      </button>
+   678→                    ))}
+   679→                  </div>
+   680→                )}
+   681→              </div>
+   682→
+   683→              {/* Selected customer details */}
+   684→              {selectedCustomer ? (
+   685→                <div className="space-y-2.5 pt-1">
+   686→                  <div className="flex items-center justify-between">
+   687→                    <span className="text-sm font-semibold text-gray-900">
+   688→                      {selectedCustomer.companyName || selectedCustomer.name}
+   689→                    </span>
+   690→                    <button
+   691→                      onClick={() => {
+   692→                        setSelectedCustomer(null);
+   693→                        setCustomerSearch('');
+   694→                      }}
+   695→                      className="p-1 hover:bg-gray-100 rounded"
+   696→                    >
+   697→                      <X className="h-3.5 w-3.5 text-gray-400" />
+   698→                    </button>
+   699→                  </div>
+   700→
+   701→                  {selectedCustomer.address && (
+   702→                    <div>
+   703→                      <span className="text-xs text-gray-500 uppercase">Address</span>
+   704→                      <p className="text-sm text-gray-700">{selectedCustomer.address}</p>
+   705→                    </div>
+   706→                  )}
+   707→
+   708→                  <div className="grid grid-cols-2 gap-2">
+   709→                    <div>
+   710→                      <span className="text-xs text-gray-500 uppercase">Phone</span>
+   711→                      <p className="text-sm text-gray-700">{selectedCustomer.phone || '—'}</p>
+   712→                    </div>
+   713→                    <div>
+   714→                      <span className="text-xs text-gray-500 uppercase">Email</span>
+   715→                      <p className="text-sm text-gray-700 truncate">{selectedCustomer.email || '—'}</p>
+   716→                    </div>
+   717→                  </div>
+   718→
+   719→                  <div className="grid grid-cols-2 gap-2">
+   720→                    <div>
+   721→                      <span className="text-xs text-gray-500 uppercase">Customer No.</span>
+   722→                      <p className="text-sm text-gray-700 font-mono">{selectedCustomer.customerNumber}</p>
+   723→                    </div>
+   724→                    <div>
+   725→                      <span className="text-xs text-gray-500 uppercase">Country</span>
+   726→                      <p className="text-sm text-gray-700">{selectedCustomer.country || 'Brunei'}</p>
+   727→                    </div>
+   728→                  </div>
+   729→
+   730→                  <div className="grid grid-cols-2 gap-2">
+   731→                    <div>
+   732→                      <span className="text-xs text-gray-500 uppercase">District</span>
+   733→                      <p className="text-sm text-gray-700">{selectedCustomer.district || '—'}</p>
+   734→                    </div>
+   735→                    <div>
+   736→                      <span className="text-xs text-gray-500 uppercase">Tax Rate</span>
+   737→                      <p className="text-sm text-gray-700">{selectedCustomer.taxRate ?? 0}%</p>
+   738→                    </div>
+   739→                  </div>
+   740→
+   741→                  {selectedCustomer.pic && (
+   742→                    <div>
+   743→                      <span className="text-xs text-gray-500 uppercase">PIC</span>
+   744→                      <p className="text-sm text-gray-700">{selectedCustomer.pic}</p>
+   745→                    </div>
+   746→                  )}
+   747→
+   748→                  {selectedCustomer.paymentTerms && (
+   749→                    <div>
+   750→                      <span className="text-xs text-gray-500 uppercase">Payment Terms</span>
+   751→                      <p className="text-sm text-gray-700">{selectedCustomer.paymentTerms}</p>
+   752→                    </div>
+   753→                  )}
+   754→
+   755→                  <Separator />
+   756→
+   757→                  {/* Currency */}
+   758→                  <div>
+   759→                    <Label className="text-xs text-gray-500 uppercase">Currency</Label>
+   760→                    <Select
+   761→                      value={formData.currency}
+   762→                      onValueChange={(v) => setFormData((f) => ({ ...f, currency: v }))}
+   763→                    >
+   764→                      <SelectTrigger className="w-full h-9 text-sm mt-1">
+   765→                        <SelectValue />
+   766→                      </SelectTrigger>
+   767→                      <SelectContent>
+   768→                        {CURRENCIES.map((c) => (
+   769→                          <SelectItem key={c} value={c}>{c}</SelectItem>
+   770→                        ))}
+   771→                      </SelectContent>
+   772→                    </Select>
+   773→                  </div>
+   774→                </div>
+   775→              ) : (
+   776→                <p className="text-sm text-muted-foreground text-center py-4">
+   777→                  Search and select a customer above
+   778→                </p>
+   779→              )}
+   780→            </CardContent>
+   781→          </Card>
+   782→
+   783→          {/* Terms & Conditions */}
+   784→          <Card className="py-0 gap-0">
+   785→            <CardHeader className="pb-0">
+   786→              <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+   787→                Terms & Conditions
+   788→              </CardTitle>
+   789→            </CardHeader>
+   790→            <CardContent className="pt-4 space-y-2">
+   791→              {formData.terms.map((term, i) => (
+   792→                <div key={i} className="flex gap-2 items-start">
+   793→                  <span className="text-xs text-muted-foreground mt-1.5 w-4 shrink-0">{i + 1}.</span>
+   794→                  <Textarea
+   795→                    value={term}
+   796→                    onChange={(e) => {
+   797→                      const updated = [...formData.terms];
+   798→                      updated[i] = e.target.value;
+   799→                      setFormData((f) => ({ ...f, terms: updated }));
+   800→                    }}
+   801→                    className="text-sm min-h-[36px] resize-none p-2"
+   802→                    rows={1}
+   803→                  />
+   804→                </div>
+   805→              ))}
+   806→              <Button
+   807→                variant="ghost"
+   808→                size="sm"
+   809→                className="w-full text-xs text-muted-foreground hover:text-foreground mt-1"
+   810→                onClick={() => setFormData((f) => ({ ...f, terms: [...f.terms, ''] }))}
+   811→              >
+   812→                <Plus className="h-3 w-3 mr-1" /> Add Term
+   813→              </Button>
+   814→            </CardContent>
+   815→          </Card>
+   816→        </div>
+   817→
+   818→        {/* ============ CENTER COLUMN — Quotation Info & Line Items ============ */}
+   819→        <div className="lg:col-span-5 space-y-4">
+   820→          {/* Quotation Info Header */}
+   821→          <Card className="py-0 gap-0">
+   822→            <CardContent className="p-4 md:p-5 space-y-4">
+   823→              {/* Row 1: Title + Status */}
+   824→              <div className="flex items-center justify-between">
+   825→                <div className="flex items-center gap-3">
+   826→                  <Button
+   827→                    variant="ghost"
+   828→                    size="icon"
+   829→                    className="h-8 w-8"
+   830→                    onClick={() => setView('quotations')}
+   831→                  >
+   832→                    <ArrowLeft className="h-4 w-4" />
+   833→                  </Button>
+   834→                  <h1 className="text-lg font-bold text-gray-900">
+   835→                    {quotationId ? 'Edit Quotation' : 'New Quotation'}
+   836→                  </h1>
+   837→                </div>
+   838→                <Badge className="bg-emerald-100 text-emerald-800 border-0 hover:bg-emerald-100">
+   839→                  <CheckCircle2 className="h-3 w-3 mr-1" /> Draft
+   840→                </Badge>
+   841→              </div>
+   842→
+   843→              {/* Row 2: Quotation No + Date */}
+   844→              <div className="grid grid-cols-2 gap-3">
+   845→                <div>
+   846→                  <Label className="text-xs text-gray-500 uppercase">Quotation No.</Label>
+   847→                  <Input
+   848→                    value={quotationNo}
+   849→                    readOnly
+   850→                    className="h-9 text-sm mt-1 bg-gray-50 cursor-not-allowed font-mono"
+   851→                  />
+   852→                </div>
+   853→                <div>
+   854→                  <Label className="text-xs text-gray-500 uppercase">Date</Label>
+   855→                  <Input
+   856→                    type="date"
+   857→                    value={dateStr}
+   858→                    readOnly
+   859→                    className="h-9 text-sm mt-1 bg-gray-50 cursor-not-allowed"
+   860→                  />
+   861→                </div>
+   862→              </div>
+   863→
+   864→              {/* Row 3: Valid Until + Prepared By */}
+   865→              <div className="grid grid-cols-2 gap-3">
+   866→                <div>
+   867→                  <Label className="text-xs text-gray-500 uppercase">Valid Until</Label>
+   868→                  <Input
+   869→                    type="date"
+   870→                    value={formData.validUntil}
+   871→                    onChange={(e) => setFormData((f) => ({ ...f, validUntil: e.target.value }))}
+   872→                    className="h-9 text-sm mt-1"
+   873→                  />
+   874→                </div>
+   875→                <div>
+   876→                  <Label className="text-xs text-gray-500 uppercase">Prepared By</Label>
+   877→                  <Select
+   878→                    value={formData.preparedBy}
+   879→                    onValueChange={(v) => setFormData((f) => ({ ...f, preparedBy: v }))}
+   880→                  >
+   881→                    <SelectTrigger className="w-full h-9 text-sm mt-1">
+   882→                      <SelectValue placeholder="Select employee" />
+   883→                    </SelectTrigger>
+   884→                    <SelectContent>
+   885→                      {employees.map((e) => (
+   886→                        <SelectItem key={e.id} value={e.id}>
+   887→                          {e.name}{e.employeeNumber ? ` (${e.employeeNumber})` : ''}
+   888→                        </SelectItem>
+   889→                      ))}
+   890→                    </SelectContent>
+   891→                  </Select>
+   892→                </div>
+   893→              </div>
+   894→
+   895→              {/* Row 4: Reference No + Project Name */}
+   896→              <div className="grid grid-cols-2 gap-3">
+   897→                <div>
+   898→                  <Label className="text-xs text-gray-500 uppercase">Reference No.</Label>
+   899→                  <Input
+   900→                    value={formData.referenceNo}
+   901→                    onChange={(e) => setFormData((f) => ({ ...f, referenceNo: e.target.value }))}
+   902→                    placeholder="Optional reference"
+   903→                    className="h-9 text-sm mt-1"
+   904→                  />
+   905→                </div>
+   906→                <div>
+   907→                  <Label className="text-xs text-gray-500 uppercase">Project Name</Label>
+   908→                  <Input
+   909→                    value={formData.projectName}
+   910→                    onChange={(e) => setFormData((f) => ({ ...f, projectName: e.target.value }))}
+   911→                    placeholder="Enter project name"
+   912→                    className="h-9 text-sm mt-1"
+   913→                  />
+   914→                </div>
+   915→              </div>
+   916→
+   917→              {/* Row 5: Site */}
+   918→              <div>
+   919→                <Label className="text-xs text-gray-500 uppercase">Site</Label>
+   920→                <Input
+   921→                  value={formData.site}
+   922→                  onChange={(e) => setFormData((f) => ({ ...f, site: e.target.value }))}
+   923→                  placeholder="Enter site location"
+   924→                  className="h-9 text-sm mt-1"
+   925→                />
+   926→              </div>
+   927→
+   928→              {/* Row 6: Description */}
+   929→              <div>
+   930→                <Label className="text-xs text-gray-500 uppercase">Description</Label>
+   931→                <Textarea
+   932→                  value={formData.description}
+   933→                  onChange={(e) => setFormData((f) => ({ ...f, description: e.target.value }))}
+   934→                  placeholder="Enter description or scope of work..."
+   935→                  className="text-sm mt-1 min-h-[80px]"
+   936→                  rows={3}
+   937→                />
+   938→              </div>
+   939→            </CardContent>
+   940→          </Card>
+   941→
+   942→          {/* Line Items Table */}
+   943→          <Card className="py-0 gap-0">
+   944→            <CardHeader className="pb-0">
+   945→              <div className="flex items-center justify-between w-full">
+   946→                <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+   947→                  Line Items
+   948→                </CardTitle>
+   949→                <Button
+   950→                  size="sm"
+   951→                  className="h-8 bg-emerald-600 hover:bg-emerald-700 text-white"
+   952→                  onClick={addRow}
+   953→                >
+   954→                  <Plus className="h-3.5 w-3.5 mr-1.5" /> Add Item
+   955→                </Button>
+   956→              </div>
+   957→            </CardHeader>
+   958→            <CardContent className="pt-4">
+   959→              {/* Table */}
+   960→              <div className="overflow-x-auto rounded-lg border border-gray-200">
+   961→                <table className="w-full text-sm">
+   962→                  <thead>
+   963→                    <tr className="bg-gray-50">
+   964→                      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-500 uppercase w-10">
+   965→                        SL
+   966→                      </th>
+   967→                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase min-w-[220px]">
+   968→                        Item
+   969→                      </th>
+   970→                      <th className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase w-20">
+   971→                        Unit
+   972→                      </th>
+   973→                      <th className="px-3 py-2 text-right text-xs font-semibold text-gray-500 uppercase w-20">
+   974→                        Qty
+   975→                      </th>
+   976→                      <th className="px-3 py-2 text-right text-xs font-semibold text-gray-500 uppercase w-28">
+   977→                        Rate
+   978→                      </th>
+   979→                      <th className="px-3 py-2 text-right text-xs font-semibold text-gray-500 uppercase w-28">
+   980→                        Amount
+   981→                      </th>
+   982→                      <th className="px-3 py-2 text-center text-xs font-semibold text-gray-500 uppercase w-10">
+   983→                        <span className="sr-only">Actions</span>
+   984→                      </th>
+   985→                    </tr>
+   986→                  </thead>
+   987→                  <tbody>
+   988→                    {lineItems.map((item, index) => (
+   989→                      <tr
+   990→                        key={index}
+   991→                        className={cn(
+   992→                          'border-t border-gray-100 transition-colors',
+   993→                          item.title ? 'hover:bg-emerald-50/20' : 'bg-gray-50/30'
+   994→                        )}
+   995→                      >
+   996→                        {/* SL# */}
+   997→                        <td className="px-3 py-2 text-muted-foreground text-xs text-center align-top pt-3">
+   998→                          {index + 1}
+   999→                        </td>
+  1000→
+  1001→                        {/* Item Title + Description (below) */}
+  1002→                        <td className="px-3 py-2 relative">
+  1003→                          <div className="flex items-start gap-1.5">
+  1004→                            <Input
+  1005→                              ref={(el) => {
+  1006→                                if (el) itemInputRefs.current.set(index, el);
+  1007→                              }}
+  1008→                              value={item.title}
+  1009→                              onChange={(e) => handleItemTitleChange(index, e.target.value)}
+  1010→                              onFocus={() => handleItemTitleFocus(index)}
+  1011→                              onClick={(e) => e.stopPropagation()}
+  1012→                              placeholder="Type item name..."
+  1013→                              className="h-8 text-sm border-0 shadow-none focus-visible:ring-1 focus-visible:ring-emerald-500 p-0 font-medium"
+  1014→                            />
+  1015→                            <Sparkles className="h-3.5 w-3.5 text-amber-400 mt-1.5 shrink-0" />
+  1016→                          </div>
+  1017→                          {/* Description BELOW item title */}
+  1018→                          <div className="mt-1">
+  1019→                            <Textarea
+  1020→                              value={item.description || ''}
+  1021→                              onChange={(e) => updateLineItem(index, 'description', e.target.value)}
+  1022→                              placeholder="Item description (optional)..."
+  1023→                              className="text-xs text-gray-500 min-h-[32px] resize-none border-0 shadow-none focus-visible:ring-0 p-0 placeholder:text-gray-300"
+  1024→                              rows={1}
+  1025→                              onClick={(e) => e.stopPropagation()}
+  1026→                            />
+  1027→                          </div>
+  1028→                          {/* Category/Warranty badges */}
+  1029→                          {(item.category || item.warranty) && (
+  1030→                            <div className="flex items-center gap-1.5 mt-1">
+  1031→                              {item.category && (
+  1032→                                <span className="text-[10px] text-muted-foreground bg-gray-100 px-1.5 py-0.5 rounded">
+  1033→                                  {item.category}
+  1034→                                </span>
+  1035→                              )}
+  1036→                              {item.warranty && (
+  1037→                                <span className="text-[10px] text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded">
+  1038→                                  {item.warranty}
+  1039→                                </span>
+  1040→                              )}
+  1041→                            </div>
+  1042→                          )}
+  1043→
+  1044→                          {/* Item Suggestion Dropdown */}
+  1045→                          {suggestionState.index === index && suggestionState.query.length >= 2 && (
+  1046→                            <ItemSuggestionDropdown
+  1047→                              query={suggestionState.query}
+  1048→                              onSelect={(s) => applyItemSuggestion(index, s)}
+  1049→                              onClose={() => setSuggestionState((prev) => ({ ...prev, index: null, query: '' }))}
+  1050→                              position={suggestionState.position}
+  1051→                            />
+  1052→                          )}
+  1053→                        </td>
+  1054→
+  1055→                        {/* Unit */}
+  1056→                        <td className="px-3 py-2 align-top pt-3">
+  1057→                          <Select
+  1058→                            value={item.unit}
+  1059→                            onValueChange={(v) => updateLineItem(index, 'unit', v)}
+  1060→                          >
+  1061→                            <SelectTrigger className="h-8 text-xs border-0 shadow-none focus:ring-1 focus:ring-emerald-500 p-0 w-16">
+  1062→                              <SelectValue />
+  1063→                            </SelectTrigger>
+  1064→                            <SelectContent>
+  1065→                              {UNITS.map((u) => (
+  1066→                                <SelectItem key={u} value={u}>{u}</SelectItem>
+  1067→                              ))}
+  1068→                            </SelectContent>
+  1069→                          </Select>
+  1070→                        </td>
+  1071→
+  1072→                        {/* Qty */}
+  1073→                        <td className="px-3 py-2 align-top pt-3">
+  1074→                          <Input
+  1075→                            type="number"
+  1076→                            value={item.quantity || ''}
+  1077→                            onChange={(e) => updateLineItem(index, 'quantity', parseFloat(e.target.value) || 0)}
+  1078→                            className="h-8 text-sm text-right border-0 shadow-none focus-visible:ring-1 focus-visible:ring-emerald-500 p-0"
+  1079→                            min={0}
+  1080→                          />
+  1081→                        </td>
+  1082→
+  1083→                        {/* Rate */}
+  1084→                        <td className="px-3 py-2 align-top pt-3">
+  1085→                          <Input
+  1086→                            type="number"
+  1087→                            value={item.rate || ''}
+  1088→                            onChange={(e) => updateLineItem(index, 'rate', parseFloat(e.target.value) || 0)}
+  1089→                            className="h-8 text-sm text-right border-0 shadow-none focus-visible:ring-1 focus-visible:ring-emerald-500 p-0"
+  1090→                            min={0}
+  1091→                            step="0.01"
+  1092→                          />
+  1093→                        </td>
+  1094→
+  1095→                        {/* Amount */}
+  1096→                        <td className="px-3 py-2 text-right font-semibold text-sm align-top pt-3">
+  1097→                          {formatCurrency(item.amount, formData.currency)}
+  1098→                        </td>
+  1099→
+  1100→                        {/* Actions */}
+  1101→                        <td className="px-3 py-2 text-center align-top pt-3">
+  1102→                          <div className="flex items-center justify-center gap-0.5">
+  1103→                            <Button
+  1104→                              variant="ghost"
+  1105→                              size="icon"
+  1106→                              className="h-7 w-7 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50"
+  1107→                              onClick={() => insertRow(index)}
+  1108→                              title="Insert row below"
+  1109→                            >
+  1110→                              <Plus className="h-3 w-3" />
+  1111→                            </Button>
+  1112→                            <Button
+  1113→                              variant="ghost"
+  1114→                              size="icon"
+  1115→                              className="h-7 w-7 text-gray-400 hover:text-blue-600 hover:bg-blue-50"
+  1116→                              onClick={() => duplicateRow(index)}
+  1117→                              title="Duplicate row"
+  1118→                            >
+  1119→                              <Copy className="h-3 w-3" />
+  1120→                            </Button>
+  1121→                            <Button
+  1122→                              variant="ghost"
+  1123→                              size="icon"
+  1124→                              className="h-7 w-7 text-gray-400 hover:text-rose-500 hover:bg-rose-50"
+  1125→                              onClick={() => deleteRow(index)}
+  1126→                              disabled={lineItems.length <= 1}
+  1127→                              title="Delete row"
+  1128→                            >
+  1129→                              <Trash2 className="h-3 w-3" />
+  1130→                            </Button>
+  1131→                          </div>
+  1132→                        </td>
+  1133→                      </tr>
+  1134→                    ))}
+  1135→                  </tbody>
+  1136→                </table>
+  1137→              </div>
+  1138→            </CardContent>
+  1139→          </Card>
+  1140→        </div>
+  1141→
+  1142→        {/* ============ RIGHT COLUMN — Summary, Barcode, Workflow ============ */}
+  1143→        <div className="lg:col-span-4 space-y-4">
+  1144→          {/* Barcode & QR Code Card */}
+  1145→          {quotationNo && (
+  1146→            <Card className="py-0 gap-0">
+  1147→              <CardHeader className="pb-0">
+  1148→                <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider flex items-center gap-2">
+  1149→                  <QrCode className="h-4 w-4" /> Barcode / QR Code
+  1150→                </CardTitle>
+  1151→              </CardHeader>
+  1152→              <CardContent className="pt-4 flex justify-center">
+  1153→                <div className="bg-white rounded-lg p-3 border border-gray-100 inline-block">
+  1154→                  <BarcodeDisplay value={quotationNo} />
+  1155→                </div>
+  1156→              </CardContent>
+  1157→            </Card>
+  1158→          )}
+  1159→
+  1160→          {/* Summary Card */}
+  1161→          <Card className="py-0 gap-0 lg:sticky lg:top-20">
+  1162→            <CardHeader className="pb-0">
+  1163→              <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+  1164→                Summary
+  1165→              </CardTitle>
+  1166→            </CardHeader>
+  1167→            <CardContent className="pt-4 space-y-3">
+  1168→              {/* Subtotal */}
+  1169→              <div className="flex items-center justify-between">
+  1170→                <span className="text-sm text-gray-600">Subtotal</span>
+  1171→                <span className="text-sm font-medium text-gray-900">
+  1172→                  {formatCurrency(subtotal, formData.currency)}
+  1173→                </span>
+  1174→              </div>
+  1175→
+  1176→              {/* Discount */}
+  1177→              <div className="flex items-center justify-between gap-3">
+  1178→                <span className="text-sm text-gray-600">Discount</span>
+  1179→                <Input
+  1180→                  type="number"
+  1181→                  value={formData.discount || ''}
+  1182→                  onChange={(e) => setFormData((f) => ({ ...f, discount: parseFloat(e.target.value) || 0 }))}
+  1183→                  className="h-8 w-28 text-sm text-right"
+  1184→                  min={0}
+  1185→                  step="0.01"
+  1186→                />
+  1187→              </div>
+  1188→
+  1189→              {/* Tax Rate */}
+  1190→              <div className="flex items-center justify-between">
+  1191→                <span className="text-sm text-gray-600">Tax</span>
+  1192→                <Select
+  1193→                  value={formData.taxRate}
+  1194→                  onValueChange={(v) => setFormData((f) => ({ ...f, taxRate: v }))}
+  1195→                >
+  1196→                  <SelectTrigger className="h-8 w-28 text-sm">
+  1197→                    <SelectValue />
+  1198→                  </SelectTrigger>
+  1199→                  <SelectContent>
+  1200→                    {TAX_RATES.map((r) => (
+  1201→                      <SelectItem key={r} value={r}>{r}%</SelectItem>
+  1202→                    ))}
+  1203→                  </SelectContent>
+  1204→                </Select>
+  1205→              </div>
+  1206→
+  1207→              {/* Shipping */}
+  1208→              <div className="flex items-center justify-between gap-3">
+  1209→                <span className="text-sm text-gray-600">Shipping</span>
+  1210→                <Input
+  1211→                  type="number"
+  1212→                  value={formData.shipping || ''}
+  1213→                  onChange={(e) => setFormData((f) => ({ ...f, shipping: parseFloat(e.target.value) || 0 }))}
+  1214→                  className="h-8 w-28 text-sm text-right"
+  1215→                  min={0}
+  1216→                  step="0.01"
+  1217→                />
+  1218→              </div>
+  1219→
+  1220→              <Separator />
+  1221→
+  1222→              {/* Grand Total */}
+  1223→              <div className="flex items-center justify-between">
+  1224→                <span className="text-base font-bold text-gray-900">Grand Total</span>
+  1225→                <span className="text-xl font-bold text-emerald-600">
+  1226→                  {formatCurrency(grandTotal, formData.currency)}
+  1227→                </span>
+  1228→              </div>
+  1229→
+  1230→              {/* Amount in Words */}
+  1231→              <div className="bg-emerald-50 text-emerald-800 rounded-lg p-3 text-sm font-medium">
+  1232→                {amountInWords}
+  1233→              </div>
+  1234→            </CardContent>
+  1235→          </Card>
+  1236→
+  1237→          {/* Workflow Status Card */}
+  1238→          <Card className="py-0 gap-0">
+  1239→            <CardHeader className="pb-0">
+  1240→              <CardTitle className="text-sm font-semibold text-gray-700 uppercase tracking-wider">
+  1241→                Workflow Status
+  1242→              </CardTitle>
+  1243→            </CardHeader>
+  1244→            <CardContent className="pt-4">
+  1245→              <div className="space-y-0">
+  1246→                {WORKFLOW_STEPS.map((step, i) => {
+  1247→                  const isCompleted = i <= currentStepIndex;
+  1248→                  const isCurrent = i === currentStepIndex;
+  1249→                  return (
+  1250→                    <div key={step} className="flex items-center gap-3">
+  1251→                      <div className="flex flex-col items-center">
+  1252→                        <div
+  1253→                          className={cn(
+  1254→                            'w-6 h-6 rounded-full flex items-center justify-center shrink-0',
+  1255→                            isCompleted
+  1256→                              ? 'bg-emerald-500 text-white'
+  1257→                              : 'border-2 border-gray-300 text-gray-400'
+  1258→                          )}
+  1259→                        >
+  1260→                          {isCompleted ? (
+  1261→                            <CheckCircle2 className="h-3.5 w-3.5" />
+  1262→                          ) : (
+  1263→                            <Circle className="h-3.5 w-3.5" />
+  1264→                          )}
+  1265→                        </div>
+  1266→                        {i < WORKFLOW_STEPS.length - 1 && (
+  1267→                          <div
+  1268→                            className={cn(
+  1269→                              'w-0.5 h-6',
+  1270→                              isCompleted ? 'bg-emerald-500' : 'bg-gray-200'
+  1271→                            )}
+  1272→                          />
+  1273→                        )}
+  1274→                      </div>
+  1275→                      <span
+  1276→                        className={cn(
+  1277→                          'text-sm py-2 -ml-1',
+  1278→                          isCurrent
+  1279→                            ? 'font-semibold text-gray-900'
+  1280→                            : isCompleted
+  1281→                              ? 'text-gray-600'
+  1282→                              : 'text-gray-400'
+  1283→                        )}
+  1284→                      >
+  1285→                        {step}
+  1286→                      </span>
+  1287→                    </div>
+  1288→                  );
+  1289→                })}
+  1290→              </div>
+  1291→            </CardContent>
+  1292→          </Card>
+  1293→        </div>
+  1294→      </div>
+  1295→
+  1296→      {/* ==================== STICKY FOOTER ==================== */}
+  1297→      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-[0_-2px_10px_rgba(0,0,0,0.05)] z-40">
+  1298→        <div className="max-w-[1600px] mx-auto px-4 md:px-6 py-3">
+  1299→          <div className="flex flex-wrap items-center gap-2">
+  1300→            {/* Left group — secondary actions */}
+  1301→            <div className="flex flex-wrap items-center gap-2">
+  1302→              <Button variant="outline" size="sm" className="h-9 text-sm">
+  1303→                <FileText className="h-4 w-4 mr-1.5" /> Preview
+  1304→              </Button>
+  1305→              <Button variant="outline" size="sm" className="h-9 text-sm">
+  1306→                <FileText className="h-4 w-4 mr-1.5" /> Generate PDF
+  1307→              </Button>
+  1308→              <Button variant="outline" size="sm" className="h-9 text-sm" onClick={() => window.print()}>
+  1309→                <Printer className="h-4 w-4 mr-1.5" /> Print
+  1310→              </Button>
+  1311→              <Separator orientation="vertical" className="h-6 mx-1 hidden sm:block" />
+  1312→              <Button variant="secondary" size="sm" className="h-9 text-sm">
+  1313→                <Send className="h-4 w-4 mr-1.5" /> Email
+  1314→              </Button>
+  1315→              <Button variant="secondary" size="sm" className="h-9 text-sm">
+  1316→                <MessageSquare className="h-4 w-4 mr-1.5" /> WhatsApp
+  1317→              </Button>
+  1318→              <Separator orientation="vertical" className="h-6 mx-1 hidden sm:block" />
+  1319→              <Button variant="outline" size="sm" className="h-9 text-sm">
+  1320→                <Copy className="h-4 w-4 mr-1.5" /> Duplicate
+  1321→              </Button>
+  1322→            </div>
+  1323→
+  1324→            {/* Spacer */}
+  1325→            <div className="flex-1" />
+  1326→
+  1327→            {/* Right group — primary actions */}
+  1328→            <div className="flex items-center gap-2">
+  1329→              <Button
+  1330→                variant="outline"
+  1331→                size="sm"
+  1332→                className="h-9 text-sm"
+  1333→                onClick={() => setView('quotations')}
+  1334→              >
+  1335→                Cancel
+  1336→              </Button>
+  1337→              <Button
+  1338→                size="sm"
+  1339→                className="h-9 text-sm bg-emerald-600 hover:bg-emerald-700 text-white"
+  1340→                onClick={handleSave}
+  1341→                disabled={saving}
+  1342→              >
+  1343→                {saving && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
+  1344→                Save Draft
+  1345→              </Button>
+  1346→              <Button
+  1347→                size="sm"
+  1348→                className="h-9 text-sm bg-emerald-600 hover:bg-emerald-700 text-white"
+  1349→                onClick={() => toast.info('Convert to Work Order — coming soon')}
+  1350→              >
+  1351→                Convert to WO
+  1352→              </Button>
+  1353→              <Button
+  1354→                size="sm"
+  1355→                className="h-9 text-sm bg-emerald-600 hover:bg-emerald-700 text-white"
+  1356→                onClick={() => toast.info('Convert to Invoice — coming soon')}
+  1357→              >
+  1358→                Convert to Invoice
+  1359→              </Button>
+  1360→            </div>
+  1361→          </div>
+  1362→        </div>
+  1363→      </div>
+  1364→    </div>
+  1365→  );
+  1366→}
