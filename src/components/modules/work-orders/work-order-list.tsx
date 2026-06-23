@@ -119,7 +119,7 @@ export function WorkOrderList() {
   ];
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -134,7 +134,7 @@ export function WorkOrderList() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {stats.map((s) => (
           <Card key={s.label} className={`border ${s.color}`}>
             <CardContent className="p-4">
@@ -176,10 +176,11 @@ export function WorkOrderList() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Table (Desktop) */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
-          <div className="overflow-x-auto max-h-96 overflow-y-auto">
+          <div className="overflow-x-auto -mx-3 sm:mx-0 max-h-96 overflow-y-auto">
+            <div className="min-w-[640px]">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -218,20 +219,76 @@ export function WorkOrderList() {
                 ))}
               </TableBody>
             </Table>
-          </div>
-
-          {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between border-t px-4 py-3">
-              <p className="text-sm text-muted-foreground">Page {data.page} of {data.totalPages} ({data.total} total)</p>
-              <div className="flex gap-1">
-                <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}><ChevronLeft className="h-4 w-4" /></Button>
-                <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}><ChevronRight className="h-4 w-4" /></Button>
-              </div>
             </div>
-          )}
+          </div>
         </CardContent>
       </Card>
+
+      {/* Work Order Cards (Mobile) */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          [...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-36 rounded-xl" />
+          ))
+        ) : (data?.data || []).length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12 gap-3">
+              <ClipboardList className="h-12 w-12 text-muted-foreground/30" />
+              <p className="text-muted-foreground text-sm">No work orders found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          (data?.data || []).map((wo) => (
+            <Card
+              key={wo.id}
+              className="cursor-pointer hover:border-emerald-200 dark:hover:border-emerald-800 transition-colors"
+              onClick={() => setView('work-order-detail', { id: wo.id })}
+            >
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <span className="font-medium text-sm">{wo.title}</span>
+                    <p className="text-xs text-muted-foreground font-mono">{wo.id.slice(0, 8)}</p>
+                  </div>
+                  <StatusBadge status={wo.status} />
+                </div>
+                <div className="flex items-center gap-2 flex-wrap">
+                  <TypeBadge type={wo.type} />
+                  <span className="text-xs capitalize text-muted-foreground">{wo.priority} priority</span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{wo.assignedToName || 'Unassigned'}</span>
+                  <span>{wo.scheduledDate ? new Date(wo.scheduledDate).toLocaleDateString() : '—'}</span>
+                </div>
+                {wo.equipmentName && (
+                  <p className="text-xs text-muted-foreground truncate">{wo.equipmentName}</p>
+                )}
+                <div className="flex items-center justify-end pt-2 border-t">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={(e) => { e.stopPropagation(); setView('work-order-detail', { id: wo.id }); }}
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="flex items-center justify-between px-1 py-3">
+          <p className="text-sm text-muted-foreground">Page {data.page} of {data.totalPages} ({data.total} total)</p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}><ChevronLeft className="h-4 w-4" /></Button>
+            <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}><ChevronRight className="h-4 w-4" /></Button>
+          </div>
+        </div>
+      )}
 
       {/* New WO Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

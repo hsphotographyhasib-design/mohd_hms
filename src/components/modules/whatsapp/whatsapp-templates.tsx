@@ -399,8 +399,8 @@ export function WhatsAppTemplates() {
         </div>
       </div>
 
-      {/* Template Table */}
-      <Card>
+      {/* Desktop Template Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
           {isLoading ? (
             <div className="space-y-4 p-6">
@@ -480,7 +480,47 @@ export function WhatsAppTemplates() {
         </CardContent>
       </Card>
 
-      {/* Create/Edit Dialog */}
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-4"><Skeleton className="h-24 w-full rounded-lg" /></CardContent></Card>
+          ))
+        ) : filteredTemplates.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <FileText className="h-12 w-12 mx-auto mb-3 opacity-30" />
+            <p className="text-lg font-medium">No templates found</p>
+            <p className="text-sm">Create a new template to get started</p>
+          </div>
+        ) : (
+          filteredTemplates.map((template) => (
+            <Card key={template.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      {template.isSystem && <Lock className="h-3 w-3 text-muted-foreground" />}
+                      <p className="font-medium truncate">{template.name}</p>
+                    </div>
+                    <Badge variant="secondary" className={cn('text-[10px] mt-1', CATEGORY_COLORS[template.category] || CATEGORY_COLORS.custom)}>
+                      {template.category.replace(/_/g, ' ')}
+                    </Badge>
+                  </div>
+                  <Switch checked={template.isActive} onCheckedChange={() => handleToggleActive(template)} className="data-[state=checked]:bg-emerald-600" />
+                </div>
+                <p className="text-sm text-muted-foreground line-clamp-2">{template.content}</p>
+                <div className="flex items-center gap-1 border-t pt-3">
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleOpenEdit(template)}><Pencil className="h-3.5 w-3.5" /></Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => handleDuplicate(template)}><Copy className="h-3.5 w-3.5" /></Button>
+                  {!template.isSystem && (
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:text-red-600 hover:bg-red-50" onClick={() => handleDelete(template)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>

@@ -217,7 +217,7 @@ export function QuotationList() {
   }, [data]);
 
   return (
-    <div className="p-4 md:p-6 space-y-5">
+    <div className="p-3 sm:p-4 md:p-6 space-y-5">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -239,7 +239,7 @@ export function QuotationList() {
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 lg:grid-cols-6 gap-3">
           <Card className="py-0 gap-0 overflow-hidden">
             <CardContent className="p-4">
               <div className="flex items-center justify-between">
@@ -379,10 +379,11 @@ export function QuotationList() {
         </div>
       </div>
 
-      {/* Quotations Table */}
-      <Card className="py-0 gap-0 overflow-hidden">
+      {/* Quotations Table (Desktop) */}
+      <Card className="hidden md:block py-0 gap-0 overflow-hidden">
         <CardContent className="p-0">
-          <div className="overflow-x-auto max-h-[480px] overflow-y-auto">
+          <div className="overflow-x-auto -mx-3 sm:mx-0 max-h-[480px] overflow-y-auto">
+            <div className="min-w-[640px]">
             <Table>
               <TableHeader>
                 <TableRow className="bg-gray-50/80 hover:bg-gray-50/80">
@@ -611,8 +612,101 @@ export function QuotationList() {
               </div>
             </div>
           )}
+        </div>
         </CardContent>
       </Card>
+
+      {/* Quotation Cards (Mobile) */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          [...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-40 rounded-xl" />
+          ))
+        ) : (data?.data || []).length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12 gap-3">
+              <FileText className="h-12 w-12 text-muted-foreground/30" />
+              <div className="text-center">
+                <p className="font-medium text-sm">No quotations found</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {search || statusFilter ? 'Try adjusting your filters' : 'Create your first quotation'}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        ) : (
+          (data?.data || []).map((q) => (
+            <Card
+              key={q.id}
+              className="cursor-pointer hover:border-emerald-200 dark:hover:border-emerald-800 transition-colors"
+              onClick={() => setView('quotation-detail', { id: q.id })}
+            >
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <span className="font-mono text-sm font-semibold text-emerald-700">{q.quotationNo || '—'}</span>
+                    <p className="text-xs text-muted-foreground truncate">{q.customerName || '—'}</p>
+                  </div>
+                  <StatusBadge status={q.status} />
+                </div>
+                <p className="text-sm font-medium truncate">{q.projectName || q.title || '—'}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-bold">{formatCurrency(q.total, q.currency)}</span>
+                  <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    <span>{format(new Date(q.createdAt), 'dd MMM yyyy')}</span>
+                    {q.validUntil && (
+                      <span className={cn(
+                        new Date(q.validUntil) < new Date() && q.status === 'SENT' ? 'text-rose-600 font-medium' : ''
+                      )}>
+                        → {format(new Date(q.validUntil), 'dd MMM')}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center justify-end pt-2 border-t gap-1">
+                  <Button
+                    variant="ghost" size="icon" className="h-7 w-7"
+                    onClick={(e) => { e.stopPropagation(); setView('quotation-detail', { id: q.id }); }}
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost" size="icon" className="h-7 w-7"
+                    onClick={(e) => { e.stopPropagation(); setView('quotation-edit', { id: q.id }); }}
+                  >
+                    <FileText className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive"
+                    onClick={(e) => handleDelete(q.id, e)}
+                    disabled={deletingId === q.id}
+                  >
+                    {deletingId === q.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Pagination (Mobile) */}
+      {data && data.totalPages > 1 && (
+        <div className="md:hidden flex items-center justify-between px-1 py-2">
+          <p className="text-xs text-muted-foreground">
+            {(data.page - 1) * data.pageSize + 1}–{Math.min(data.page * data.pageSize, data.total)} of {data.total}
+          </p>
+          <div className="flex items-center gap-1">
+            <Button variant="outline" size="icon" className="h-8 w-8" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <span className="text-xs px-2">{data.page} / {data.totalPages}</span>
+            <Button variant="outline" size="icon" className="h-8 w-8" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

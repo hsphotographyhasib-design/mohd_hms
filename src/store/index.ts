@@ -129,10 +129,12 @@ interface AppState {
   searchOpen: boolean;
   quickActionsOpen: boolean;
   notificationPanelOpen: boolean;
+  mobileNavOpen: boolean;
   setView: (view: AppView, params?: Record<string, string>) => void;
   setSearchOpen: (open: boolean) => void;
   setQuickActionsOpen: (open: boolean) => void;
   setNotificationPanelOpen: (open: boolean) => void;
+  setMobileNavOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -141,10 +143,12 @@ export const useAppStore = create<AppState>((set) => ({
   searchOpen: false,
   quickActionsOpen: false,
   notificationPanelOpen: false,
+  mobileNavOpen: false,
   setView: (view, params = {}) => set({ currentView: view, viewParams: params }),
   setSearchOpen: (open) => set({ searchOpen: open }),
   setQuickActionsOpen: (open) => set({ quickActionsOpen: open }),
   setNotificationPanelOpen: (open) => set({ notificationPanelOpen: open }),
+  setMobileNavOpen: (open) => set({ mobileNavOpen: open }),
 }));
 
 // ============ NOTIFICATION STATE ============

@@ -288,8 +288,8 @@ export function CmsContact() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Desktop Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
           {error ? (
             <div className="flex items-center gap-3 p-6 text-rose-600">
@@ -389,6 +389,79 @@ export function CmsContact() {
           )}
         </CardContent>
       </Card>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {error ? (
+          <Card>
+            <CardContent className="flex items-center gap-3 p-6 text-rose-600">
+              <AlertCircle className="h-5 w-5" />
+              <p>Failed to load messages. Try refreshing.</p>
+            </CardContent>
+          </Card>
+        ) : loading ? (
+          [...Array(3)].map((_, i) => <Skeleton key={i} className="h-36 rounded-xl" />)
+        ) : items.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+              <Inbox className="h-8 w-8 mb-2" />
+              <p className="text-sm">No messages found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          items.map((item) => (
+            <Card key={item.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-semibold text-sm leading-tight">{item.name}</p>
+                  <div className="flex gap-1.5 shrink-0">
+                    <Badge variant="outline" className={getSourceBadgeColor(item.source)}>
+                      {item.source.charAt(0).toUpperCase() + item.source.slice(1)}
+                    </Badge>
+                    <Badge variant="outline" className={getStatusBadgeColor(item.status)}>
+                      {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                    </Badge>
+                  </div>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground">{item.email}</p>
+                  {item.subject && (
+                    <p className="text-xs text-muted-foreground truncate">{item.subject}</p>
+                  )}
+                  <p className="text-xs text-muted-foreground">{formatDate(item.createdAt)}</p>
+                </div>
+                <div className="flex items-center justify-end pt-2 border-t">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={() => openDetail(item)}
+                  >
+                    <Mail className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Mobile Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="md:hidden flex items-center justify-between px-1 py-2">
+          <p className="text-xs text-muted-foreground">
+            Page {data.page} of {data.totalPages} ({data.total} total)
+          </p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Detail Dialog */}
       <Dialog open={detailOpen} onOpenChange={setDetailOpen}>

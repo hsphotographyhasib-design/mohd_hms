@@ -352,8 +352,8 @@ export function CmsAnnouncements() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Table (Desktop) */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
           {error ? (
             <div className="flex items-center gap-3 p-6 text-rose-600">
@@ -462,6 +462,87 @@ export function CmsAnnouncements() {
           )}
         </CardContent>
       </Card>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {error ? (
+          <Card className="border-rose-200 bg-rose-50">
+            <CardContent className="p-4 flex items-center gap-3">
+              <AlertCircle className="h-5 w-5 text-rose-600" />
+              <p className="text-rose-700 text-sm">Failed to load announcements. Try refreshing.</p>
+            </CardContent>
+          </Card>
+        ) : loading ? (
+          [...Array(3)].map((_, i) => <Skeleton key={i} className="h-32 rounded-xl" />)
+        ) : items.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center text-muted-foreground">
+              <Megaphone className="h-12 w-12 mx-auto mb-3 opacity-30" />
+              <p className="font-medium">No announcements found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          items.map((item) => {
+            const status = getAnnouncementStatus(item);
+            return (
+              <Card key={item.id}>
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-sm font-medium line-clamp-2 min-w-0 flex-1">{item.text}</p>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <Badge variant="outline" className={TYPE_COLORS[item.type] || 'bg-gray-100 text-gray-700 border-gray-200'}>
+                        {item.type}
+                      </Badge>
+                      <Badge variant="outline" className={getStatusColor(status)}>
+                        {status}
+                      </Badge>
+                    </div>
+                  </div>
+                  {item.scheduledFrom && item.scheduledTo && (
+                    <p className="text-xs text-muted-foreground">
+                      {new Date(item.scheduledFrom).toLocaleDateString()} → {new Date(item.scheduledTo).toLocaleDateString()}
+                    </p>
+                  )}
+                  {item.link && (
+                    <p className="text-xs text-emerald-600 truncate">{item.link}</p>
+                  )}
+                  <div className="flex items-center justify-between pt-2 border-t">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <span>{item.isEnabled ? 'Enabled' : 'Disabled'}</span>
+                      <Switch checked={item.isEnabled} onCheckedChange={() => toggleEnabled(item)} />
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(item)}>
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7 text-rose-600 hover:text-rose-700 hover:bg-rose-50" onClick={() => openDelete(item.id)}>
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
+      </div>
+
+      {/* Mobile Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="md:hidden flex items-center justify-between px-1 py-2">
+          <p className="text-xs text-muted-foreground">
+            Page {data.page} of {data.totalPages} ({data.total} total)
+          </p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" className="h-8 w-8" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" className="h-8 w-8" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Add/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

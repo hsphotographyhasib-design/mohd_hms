@@ -321,7 +321,7 @@ export function ComplaintList() {
   // ============ RENDER ============
 
   return (
-    <div className="p-4 md:p-6 space-y-6">
+    <div className="p-3 sm:p-4 md:p-6 space-y-6">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -439,12 +439,14 @@ export function ComplaintList() {
               <p className="text-muted-foreground text-sm">No complaints found</p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Customer</TableHead>
+            <div className="overflow-x-auto -mx-3 sm:mx-0">
+              <div className="min-w-[640px]">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>ID</TableHead>
+                    <TableHead>Title</TableHead>
+                    <TableHead>Customer</TableHead>
                   <TableHead>Equipment</TableHead>
                   <TableHead>Priority</TableHead>
                   <TableHead>Status</TableHead>
@@ -499,6 +501,8 @@ export function ComplaintList() {
                 ))}
               </TableBody>
             </Table>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

@@ -351,8 +351,8 @@ export function CmsCareers() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Desktop Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
           {error ? (
             <div className="flex items-center gap-3 p-6 text-rose-600">
@@ -444,34 +444,89 @@ export function CmsCareers() {
             </div>
           )}
 
-          {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between border-t px-4 py-3">
-              <p className="text-sm text-muted-foreground">
-                Page {data.page} of {data.totalPages} ({data.total} total)
-              </p>
-              <div className="flex gap-1">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  disabled={page <= 1}
-                  onClick={() => setPage(page - 1)}
-                >
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  disabled={page >= data.totalPages}
-                  onClick={() => setPage(page + 1)}
-                >
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          )}
         </CardContent>
       </Card>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {error ? (
+          <Card className="border-rose-200 bg-rose-50">
+            <CardContent className="p-4 flex items-center gap-3">
+              <AlertCircle className="h-5 w-5 text-rose-600" />
+              <p className="text-rose-700">Failed to load positions. Try refreshing.</p>
+            </CardContent>
+          </Card>
+        ) : loading ? (
+          Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i}>
+              <CardContent className="p-4 space-y-3">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-5 w-16" />
+                  <Skeleton className="h-5 w-16" />
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        ) : items.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center text-muted-foreground">
+              <p className="font-medium">No positions found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          items.map((item) => (
+            <Card key={item.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-medium text-sm leading-tight">{item.title}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{item.location || '—'} · {item.department}</p>
+                  </div>
+                  <Badge variant="outline" className={getStatusBadgeColor(item.status) + ' shrink-0'}>
+                    {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                  </Badge>
+                </div>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                  <Badge variant="outline" className={getTypeBadgeColor(item.type)}>
+                    {formatTypeLabel(item.type)}
+                  </Badge>
+                  {item.salary && <span>{item.salary}</span>}
+                  {item.applicationDeadline && <span>Due {formatDeadline(item.applicationDeadline)}</span>}
+                </div>
+                <div className="flex items-center justify-end gap-1 pt-2 border-t">
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(item)}>
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7 text-rose-600 hover:text-rose-700 hover:bg-rose-50" onClick={() => openDelete(item.id)}>
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Pagination */}
+      {data && data.totalPages > 1 && (
+        <Card>
+          <div className="flex items-center justify-between px-4 py-3">
+            <p className="text-sm text-muted-foreground">
+              Page {data.page} of {data.totalPages} ({data.total} total)
+            </p>
+            <div className="flex gap-1">
+              <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Add/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

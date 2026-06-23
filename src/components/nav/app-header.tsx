@@ -30,6 +30,7 @@ import {
   ChevronRight,
   Check,
   X,
+  Menu,
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -121,7 +122,7 @@ const glassStyles =
 
 export function AppHeader() {
   // ---- State & Stores ----
-  const { setView } = useAppStore();
+  const { setView, setMobileNavOpen } = useAppStore();
   const { user, secureLogout } = useAuthStore();
   const { unreadCount, notifications, markAllAsRead } = useNotificationStore();
   const { theme, setTheme } = useTheme();
@@ -242,19 +243,29 @@ export function AppHeader() {
         ref={headerRef}
         className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-xl border-b border-gray-200/80 dark:bg-gray-950/70 dark:border-white/10"
       >
-        <div className="flex items-center justify-between h-16 px-4 lg:px-6 gap-4">
-          {/* ---- LEFT: Logo + Company Name ---- */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-emerald-500 text-white shadow-md shadow-emerald-500/25">
-              <Building2 className="h-5 w-5" />
+        <div className="flex items-center justify-between h-14 sm:h-16 px-3 sm:px-4 lg:px-6 gap-2 sm:gap-4">
+          {/* ---- LEFT: Hamburger (mobile) + Logo ---- */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            {/* Mobile hamburger menu */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="lg:hidden h-9 w-9 text-muted-foreground hover:text-foreground"
+              onClick={() => setMobileNavOpen(true)}
+              aria-label="Open navigation menu"
+            >
+              <Menu className="h-5 w-5" />
+            </Button>
+            <div className="flex items-center justify-center h-8 w-8 sm:h-9 sm:w-9 rounded-lg bg-emerald-500 text-white shadow-md shadow-emerald-500/25">
+              <Building2 className="h-4 w-4 sm:h-5 sm:w-5" />
             </div>
-            <span className="font-semibold text-lg text-foreground tracking-tight">
+            <span className="font-semibold text-base sm:text-lg text-foreground tracking-tight">
               FacilityPro
             </span>
           </div>
 
-          {/* ---- CENTER: Search Bar ---- */}
-          <div className="flex-1 flex justify-center max-w-xl mx-auto">
+          {/* ---- CENTER: Search Bar (hidden on small mobile, shown sm+) ---- */}
+          <div className="hidden sm:flex flex-1 justify-center max-w-xl mx-auto">
             <div className="relative w-full">
               <button
                 type="button"
@@ -292,7 +303,7 @@ export function AppHeader() {
                     animate="visible"
                     exit="exit"
                     className={cn(
-                      'absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[480px] max-w-[calc(100vw-2rem)]',
+                      'absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[480px] max-w-[calc(100vw-2rem)] sm:max-w-[480px]',
                       glassStyles,
                       'p-4 z-50'
                     )}
@@ -348,12 +359,28 @@ export function AppHeader() {
           </div>
 
           {/* ---- RIGHT: Action Buttons ---- */}
-          <div className="flex items-center gap-1.5 shrink-0">
-            {/* QR Scanner */}
+          <div className="flex items-center gap-0.5 sm:gap-1.5 shrink-0">
+            {/* Mobile search trigger */}
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400"
+              className="sm:hidden h-9 w-9 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400"
+              onClick={() => {
+                setSearchOpen((prev) => !prev);
+                setProfileOpen(false);
+                setNotifPanelOpen(false);
+                setQuickActionsOpen(false);
+              }}
+              aria-label="Search"
+            >
+              <Search className="h-[18px] w-[18px]" />
+            </Button>
+
+            {/* QR Scanner - hidden on mobile */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hidden sm:inline-flex h-9 w-9 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400"
               onClick={() => toast.info('QR Scanner opened')}
               aria-label="QR Scanner"
             >
@@ -391,7 +418,7 @@ export function AppHeader() {
                     animate="visible"
                     exit="exit"
                     className={cn(
-                      'absolute top-full right-0 mt-2 w-80',
+                      'absolute top-full right-0 mt-2 w-72 sm:w-80',
                       glassStyles,
                       'overflow-hidden z-50'
                     )}
@@ -479,11 +506,11 @@ export function AppHeader() {
               </AnimatePresence>
             </Button>
 
-            {/* ---- Language Switcher ---- */}
+            {/* ---- Language Switcher (hidden on mobile) ---- */}
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9 text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 relative"
+              className="hidden sm:inline-flex h-9 w-9 text-muted-foreground hover:text-sky-600 dark:hover:text-sky-400 relative"
               onClick={handleLanguageToggle}
               aria-label="Switch language"
             >
@@ -635,7 +662,7 @@ export function AppHeader() {
       {/* ============================================================ */}
       {/* QUICK ACTIONS FAB (Floating Action Button)                    */}
       {/* ============================================================ */}
-      <div ref={quickActionsRef} className="fixed bottom-6 right-6 z-40">
+      <div ref={quickActionsRef} className="fixed bottom-20 sm:bottom-6 right-4 sm:right-6 z-40">
         <AnimatePresence>
           {quickActionsOpen && (
             <motion.div
@@ -676,7 +703,7 @@ export function AppHeader() {
             setNotifPanelOpen(false);
           }}
           className={cn(
-            'relative h-14 w-14 rounded-full shadow-lg shadow-emerald-500/30',
+            'relative h-12 w-12 sm:h-14 sm:w-14 rounded-full shadow-lg shadow-emerald-500/30',
             'flex items-center justify-center',
             'bg-emerald-500 hover:bg-emerald-600 text-white',
             'transition-colors duration-200'

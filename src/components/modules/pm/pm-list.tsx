@@ -179,7 +179,8 @@ export function PmList() {
       </div>
 
       {viewMode === 'list' ? (
-        <Card>
+        <>
+        <Card className="hidden md:block">
           <CardContent className="p-0">
             <div className="overflow-x-auto max-h-96 overflow-y-auto">
               <Table>
@@ -216,17 +217,56 @@ export function PmList() {
                 </TableBody>
               </Table>
             </div>
-            {data && data.totalPages > 1 && (
-              <div className="flex items-center justify-between border-t px-4 py-3">
-                <p className="text-sm text-muted-foreground">Page {data.page} of {data.totalPages}</p>
-                <div className="flex gap-1">
-                  <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}><ChevronLeft className="h-4 w-4" /></Button>
-                  <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}><ChevronRight className="h-4 w-4" /></Button>
-                </div>
-              </div>
-            )}
           </CardContent>
         </Card>
+
+        {/* Mobile Cards */}
+        <div className="md:hidden space-y-3">
+          {loading ? Array.from({ length: 5 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-4"><Skeleton className="h-24 w-full rounded-lg" /></CardContent></Card>
+          )) : items.length === 0 ? (
+            <div className="text-center py-8 text-muted-foreground">No PM schedules found</div>
+          ) : items.map((pm) => {
+            const isOverdue = pm.status === 'active' && new Date(pm.nextDueDate) < now;
+            return (
+              <Card key={pm.id} className={isOverdue ? 'bg-rose-50/60 hover:bg-rose-50' : 'hover:bg-muted/50'}>
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div className="min-w-0 flex-1">
+                      <p className="font-medium truncate">{pm.title}</p>
+                      <p className="text-sm text-muted-foreground truncate">{pm.equipmentName || '—'}</p>
+                    </div>
+                    <StatusBadge status={pm.status} />
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <FrequencyBadge freq={pm.frequency} />
+                    {pm.assignedToName && (
+                      <span className="text-muted-foreground">{pm.assignedToName}</span>
+                    )}
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Last: {fmtDate(pm.lastExecuted)}</span>
+                    <span className={`font-medium ${isOverdue ? 'text-rose-600' : ''}`}>Due: {fmtDate(pm.nextDueDate)}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </div>
+
+        {/* Shared Pagination */}
+        {data && data.totalPages > 1 && (
+          <Card>
+            <div className="flex items-center justify-between px-4 py-3">
+              <p className="text-sm text-muted-foreground">Page {data.page} of {data.totalPages}</p>
+              <div className="flex gap-1">
+                <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}><ChevronLeft className="h-4 w-4" /></Button>
+                <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}><ChevronRight className="h-4 w-4" /></Button>
+              </div>
+            </div>
+          </Card>
+        )}
+        </>
       ) : (
         /* Calendar View */
         <Card>

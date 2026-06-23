@@ -435,8 +435,8 @@ export function WhatsAppCampaigns() {
         />
       </div>
 
-      {/* Campaign Table */}
-      <Card>
+      {/* Desktop Campaign Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
           {isLoading ? (
             <div className="space-y-4 p-6">
@@ -546,7 +546,61 @@ export function WhatsAppCampaigns() {
         </CardContent>
       </Card>
 
-      {/* Create Campaign Dialog */}
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-4"><Skeleton className="h-28 w-full rounded-lg" /></CardContent></Card>
+          ))
+        ) : campaigns.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <Megaphone className="h-12 w-12 mx-auto mb-3 opacity-30" />
+            <p className="text-lg font-medium">No campaigns yet</p>
+            <p className="text-sm">Create your first broadcast campaign</p>
+          </div>
+        ) : (
+          campaigns.map((campaign) => (
+            <Card key={campaign.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium truncate">{campaign.title}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {campaign.sentAt ? formatRelativeTime(campaign.sentAt) : campaign.scheduledAt ? formatRelativeTime(campaign.scheduledAt) : formatRelativeTime(campaign.createdAt)}
+                    </p>
+                  </div>
+                  <Badge variant="secondary" className={cn('text-[10px]', STATUS_CONFIG[campaign.status].color)}>
+                    <span className={cn('h-1.5 w-1.5 rounded-full mr-1', STATUS_CONFIG[campaign.status].dotColor)} />
+                    {STATUS_CONFIG[campaign.status].label}
+                  </Badge>
+                </div>
+                <p className="text-sm text-muted-foreground line-clamp-2">{campaign.content}</p>
+                <div className="flex items-center gap-3 text-xs">
+                  <span className="text-muted-foreground">{campaign.recipientCount} recipients</span>
+                  {campaign.sentCount > 0 && <span className="text-emerald-600 font-medium">{campaign.sentCount} sent</span>}
+                  {campaign.deliveredCount > 0 && <span className="text-emerald-600">{campaign.deliveredCount} delivered</span>}
+                  {campaign.failedCount > 0 && <span className="text-red-500">{campaign.failedCount} failed</span>}
+                </div>
+                <div className="flex items-center gap-1 border-t pt-3">
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => { setDetailCampaign(campaign); setDetailOpen(true); }}><Eye className="h-3.5 w-3.5" /></Button>
+                  {campaign.status === 'draft' && (
+                    <>
+                      <Button variant="ghost" size="icon" className="h-7 w-7 text-amber-600 hover:bg-amber-50" onClick={() => {
+                        setCampaigns((prev) => prev.map((c) => (c.id === campaign.id ? { ...c, status: 'scheduled' as BroadcastStatus, scheduledAt: new Date(Date.now() + 3600000).toISOString() } : c)));
+                        toast.success('Campaign scheduled');
+                      }}><CalendarClock className="h-3.5 w-3.5" /></Button>
+                      <Button variant="ghost" size="icon" className="h-7 w-7 text-red-500 hover:bg-red-50" onClick={() => handleDeleteCampaign(campaign)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                    </>
+                  )}
+                  {campaign.status === 'scheduled' && (
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-amber-600 hover:bg-amber-50" onClick={() => handleCancelCampaign(campaign)}><XCircle className="h-3.5 w-3.5" /></Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="max-w-lg">
           <DialogHeader>

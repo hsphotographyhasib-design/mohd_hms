@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore, useAuthStore, canAccess } from '@/store';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
 import type { AppView } from '@/types';
 import { cn } from '@/lib/utils';
 import {
@@ -178,6 +179,7 @@ export function FloatingNavBar() {
   // ---- Stores ----
   const { currentView, setView } = useAppStore();
   const { user } = useAuthStore();
+  const isMobile = useIsMobile();
 
   // ---- Local State ----
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
@@ -291,7 +293,12 @@ export function FloatingNavBar() {
     const btn = navItemRefs.current.get(itemId);
     if (btn) {
       const rect = btn.getBoundingClientRect();
-      setDropdownRect({ top: rect.bottom + 4, left: rect.left + rect.width / 2 - 90 });
+      const dropdownWidth = 180;
+      const viewportWidth = window.innerWidth;
+      let left = rect.left + rect.width / 2 - dropdownWidth / 2;
+      // Clamp to viewport edges with 8px margin
+      left = Math.max(8, Math.min(left, viewportWidth - dropdownWidth - 8));
+      setDropdownRect({ top: rect.bottom + 4, left });
     }
   }, []);
 
@@ -519,8 +526,8 @@ export function FloatingNavBar() {
         aria-expanded={hasSub ? isOpen : undefined}
         aria-haspopup={hasSub ? 'true' : undefined}
         className={cn(
-          'relative flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap',
-          'transition-colors duration-200 select-none',
+          'relative flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1.5 sm:py-2 rounded-xl text-sm font-medium whitespace-nowrap',
+          'transition-colors duration-200 select-none min-h-[40px] sm:min-h-0',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1',
           active
             ? 'text-emerald-700 dark:text-emerald-400'
@@ -561,10 +568,11 @@ export function FloatingNavBar() {
   };
 
   // ============================================================
-  // EARLY RETURN IF NO USER
+  // EARLY RETURN IF NO USER OR MOBILE
   // ============================================================
 
-  if (!user) return null;
+  // Hide floating nav on mobile — bottom nav + "More" sheet handle mobile navigation
+  if (isMobile || !user) return null;
 
   // ============================================================
   // MAIN RENDER
@@ -576,7 +584,7 @@ export function FloatingNavBar() {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: 'easeOut' }}
-      className="sticky top-[68px] z-40 w-full max-w-5xl mx-auto px-4 mt-2"
+      className="sticky top-[52px] sm:top-[68px] z-40 w-full max-w-5xl mx-auto px-2 sm:px-4 mt-1 sm:mt-2"
       aria-label="Main navigation"
     >
       <div
@@ -585,12 +593,12 @@ export function FloatingNavBar() {
           'bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl',
           'border border-gray-200/80 dark:border-white/10 rounded-2xl',
           'shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:shadow-black/20',
-          'px-2 py-1.5'
+          'px-1 sm:px-2 py-1 sm:py-1.5'
         )}
       >
-        {/* Left scroll arrow */}
+        {/* Left scroll arrow (hidden on mobile — use touch scroll) */}
         <AnimatePresence>
-          <ArrowButton direction="left" visible={canScrollLeft} onScroll={scroll} />
+          <ArrowButton direction="left" visible={canScrollLeft && !isMobile} onScroll={scroll} />
         </AnimatePresence>
 
         {/* Scrollable nav items */}
@@ -618,9 +626,9 @@ export function FloatingNavBar() {
           )}
         </div>
 
-        {/* Right scroll arrow */}
+        {/* Right scroll arrow (hidden on mobile) */}
         <AnimatePresence>
-          <ArrowButton direction="right" visible={canScrollRight} onScroll={scroll} />
+          <ArrowButton direction="right" visible={canScrollRight && !isMobile} onScroll={scroll} />
         </AnimatePresence>
       </div>
     </motion.nav>

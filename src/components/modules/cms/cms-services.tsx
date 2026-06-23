@@ -333,7 +333,7 @@ export function CmsServices() {
       </Card>
 
       {/* Table */}
-      <Card>
+      <Card className="hidden md:block">
         <CardContent className="p-0">
           {error ? (
             <div className="flex items-center gap-3 p-6 text-rose-600">
@@ -467,6 +467,91 @@ export function CmsServices() {
           )}
         </CardContent>
       </Card>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {error ? (
+          <Card className="border-rose-200 bg-rose-50">
+            <CardContent className="p-4 flex items-center gap-3">
+              <AlertCircle className="h-5 w-5 text-rose-600" />
+              <p className="text-rose-700 text-sm">Failed to load services. Try refreshing.</p>
+            </CardContent>
+          </Card>
+        ) : loading ? (
+          [...Array(3)].map((_, i) => <Skeleton key={i} className="h-36 rounded-xl" />)
+        ) : items.length === 0 ? (
+          <Card>
+            <CardContent className="p-8 text-center text-muted-foreground">
+              <Briefcase className="h-12 w-12 mx-auto mb-3 opacity-30" />
+              <p className="font-medium">No services found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          items.map((item) => (
+            <Card key={item.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2 min-w-0">
+                    {item.icon && <span className="text-lg shrink-0">{item.icon}</span>}
+                    <p className="font-semibold text-sm truncate">{item.name}</p>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className={
+                      item.status === 'active'
+                        ? 'bg-green-100 text-green-700 border-green-200 shrink-0'
+                        : 'bg-yellow-100 text-yellow-700 border-yellow-200 shrink-0'
+                    }
+                  >
+                    {item.status}
+                  </Badge>
+                </div>
+                <div className="space-y-1">
+                  <p className="text-xs text-muted-foreground font-mono">{item.slug}</p>
+                  <Badge variant="outline" className={getCategoryBadgeColor(item.category)}>
+                    {item.category}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1">
+                    <GripVertical className="h-3 w-3" />
+                    <span>Order: {item.displayOrder}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span>{item.isEnabled ? 'Enabled' : 'Disabled'}</span>
+                    <Switch checked={item.isEnabled} onCheckedChange={() => toggleEnabled(item)} />
+                  </div>
+                </div>
+                <div className="flex items-center justify-end gap-1 pt-2 border-t">
+                  <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(item)}>
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7 text-rose-600 hover:text-rose-700 hover:bg-rose-50" onClick={() => openDelete(item.id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Mobile Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="md:hidden flex items-center justify-between px-1">
+          <p className="text-sm text-muted-foreground">
+            Page {data.page} of {data.totalPages}
+          </p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Add/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

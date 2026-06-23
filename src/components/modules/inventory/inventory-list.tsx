@@ -20,6 +20,7 @@ import {
   Plus, Search, Package, Loader2, ChevronLeft, ChevronRight, AlertTriangle,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 import type { InventoryItemData, PaginatedResponse } from '@/types';
 
 const token = () => localStorage.getItem('cmms_token') || '';
@@ -82,7 +83,7 @@ export function InventoryList() {
   const lowStockCount = items.filter((i) => i.quantity < i.minStock).length;
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-teal-100 flex items-center justify-center">
@@ -96,7 +97,7 @@ export function InventoryList() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
         <Card className="border-emerald-200 bg-emerald-50 text-emerald-700">
           <CardContent className="p-4">
             <p className="text-xs font-medium opacity-75">Total Items</p>
@@ -148,10 +149,11 @@ export function InventoryList() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Table (Desktop) */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
-          <div className="overflow-x-auto max-h-96 overflow-y-auto">
+          <div className="overflow-x-auto -mx-3 sm:mx-0 max-h-96 overflow-y-auto">
+            <div className="min-w-[640px]">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -189,6 +191,7 @@ export function InventoryList() {
                 })}
               </TableBody>
             </Table>
+            </div>
           </div>
           {data && data.totalPages > 1 && (
             <div className="flex items-center justify-between border-t px-4 py-3">
@@ -201,6 +204,61 @@ export function InventoryList() {
           )}
         </CardContent>
       </Card>
+
+      {/* Inventory Cards (Mobile) */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          [...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-36 rounded-xl" />
+          ))
+        ) : items.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12 gap-3">
+              <Package className="h-12 w-12 text-muted-foreground/30" />
+              <p className="text-muted-foreground text-sm">No items found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          items.map((item) => {
+            const isLow = item.quantity < item.minStock;
+            return (
+              <Card key={item.id} className={isLow ? 'border-rose-200 dark:border-rose-800' : ''}>
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-0.5 min-w-0 flex-1">
+                      <span className="font-medium text-sm">{item.name}</span>
+                      <p className="text-xs text-muted-foreground font-mono">{item.sku || '—'}</p>
+                    </div>
+                    <Badge variant="outline">{item.category || '—'}</Badge>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className={cn('font-medium', isLow ? 'text-rose-600' : '')}>
+                      {item.quantity} {item.unit}
+                      {isLow && <AlertTriangle className="inline h-3 w-3 ml-1 text-rose-500" />}
+                    </span>
+                    <span className="font-medium">{fmt(item.quantity * item.unitCost)}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-xs text-muted-foreground pt-2 border-t">
+                    <span>{fmt(item.unitCost)} / {item.unit}</span>
+                    <span>Min: {item.minStock}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        )}
+      </div>
+
+      {/* Pagination (Mobile) */}
+      {data && data.totalPages > 1 && (
+        <div className="md:hidden flex items-center justify-between px-1 py-2">
+          <p className="text-xs text-muted-foreground">Page {data.page} of {data.totalPages} ({data.total} total)</p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" className="h-8 w-8" disabled={page <= 1} onClick={() => setPage(page - 1)}><ChevronLeft className="h-4 w-4" /></Button>
+            <Button variant="outline" size="icon" className="h-8 w-8" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}><ChevronRight className="h-4 w-4" /></Button>
+          </div>
+        </div>
+      )}
 
       {/* Add Item Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

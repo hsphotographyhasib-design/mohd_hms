@@ -264,9 +264,9 @@ export function LoginView() {
   /*  RENDER                                                           */
   /* ================================================================ */
   return (
-    <div className="min-h-dvh flex items-center justify-center bg-gray-100 dark:bg-gray-950 p-6">
+    <div className="min-h-dvh flex items-center justify-center bg-gray-100 dark:bg-gray-950">
       <main
-        className="w-full max-w-[420px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-[20px] shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_rgba(16,24,40,0.08)] p-8 pb-6"
+        className="w-full max-w-[420px] mx-3 sm:mx-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-[20px] shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_rgba(16,24,40,0.08)] p-6 sm:p-8 sm:pb-6"
         role="main"
         aria-labelledby="auth-title"
       >
@@ -358,13 +358,13 @@ export function LoginView() {
             <p className="text-xs font-medium text-gray-400 dark:text-gray-500 text-center mb-2.5">
               Quick Demo Access
             </p>
-            <div className="flex flex-wrap justify-center gap-1.5">
+            <div className="flex flex-wrap justify-center gap-2">
               {demoAccounts.map((account) => (
                 <button
                   key={account.label}
                   type="button"
                   onClick={() => handleDemoLogin(account)}
-                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-transparent"
+                  className="inline-flex items-center justify-center gap-1.5 px-3 py-2 sm:py-1.5 rounded-full text-xs font-medium transition-colors cursor-pointer bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 border border-transparent min-h-[40px] sm:min-h-0"
                   title={`Login as ${account.label}`}
                 >
                   {account.icon}
@@ -494,7 +494,7 @@ export function LoginView() {
           <button
             type="button"
             onClick={() => showPanel('choices')}
-            className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors"
+            className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-2 px-3 sm:p-1 sm:px-2 rounded-lg transition-colors min-h-[44px] sm:min-h-0"
           >
             <span className="inline-flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
@@ -575,7 +575,7 @@ export function LoginView() {
             <button
               type="button"
               onClick={() => showPanel('choices')}
-              className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors"
+              className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-2 px-3 sm:p-1 sm:px-2 rounded-lg transition-colors min-h-[44px] sm:min-h-0"
             >
               <span className="inline-flex items-center gap-1">
                 <ArrowLeft className="w-3.5 h-3.5" />
@@ -641,7 +641,7 @@ export function LoginView() {
               type="button"
               onClick={handleResend}
               disabled={resendCountdown > 0}
-              className={`self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm p-1 px-2 rounded-lg transition-colors ${
+              className={`self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm p-2 px-3 sm:p-1 sm:px-2 rounded-lg transition-colors min-h-[44px] sm:min-h-0 ${
                 resendCountdown > 0
                   ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
                   : 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline'
@@ -660,7 +660,7 @@ export function LoginView() {
                 if (countdownRef.current) clearInterval(countdownRef.current);
                 setResendCountdown(0);
               }}
-              className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors"
+              className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-2 px-3 sm:p-1 sm:px-2 rounded-lg transition-colors min-h-[44px] sm:min-h-0"
             >
               <span className="inline-flex items-center gap-1">
                 <ArrowLeft className="w-3.5 h-3.5" />

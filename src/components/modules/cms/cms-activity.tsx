@@ -195,8 +195,8 @@ export function CmsActivity() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Desktop Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
           {error ? (
             <div className="flex items-center gap-3 p-6 text-rose-600">
@@ -281,6 +281,72 @@ export function CmsActivity() {
           )}
         </CardContent>
       </Card>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {error ? (
+          <Card>
+            <CardContent className="flex items-center gap-3 p-6 text-rose-600">
+              <AlertCircle className="h-5 w-5" />
+              <p>Failed to load activity log. Try refreshing.</p>
+            </CardContent>
+          </Card>
+        ) : loading ? (
+          [...Array(3)].map((_, i) => <Skeleton key={i} className="h-36 rounded-xl" />)
+        ) : items.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+              <History className="h-8 w-8 mb-2" />
+              <p className="text-sm">No activity records found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          items.map((item) => (
+            <Card key={item.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <Badge
+                    variant="outline"
+                    className={SECTION_COLORS[item.section] || 'bg-gray-100 text-gray-700 border-gray-200 shrink-0'}
+                  >
+                    {item.section}
+                  </Badge>
+                  <span className="text-xs text-muted-foreground whitespace-nowrap">{relativeTime(item.createdAt)}</span>
+                </div>
+                <p className="font-semibold text-sm">{item.action}</p>
+                <div className="space-y-0.5">
+                  {item.user && (
+                    <p className="text-xs text-muted-foreground">User: {item.user}</p>
+                  )}
+                  {item.ip && (
+                    <p className="text-xs text-muted-foreground font-mono">IP: {item.ip}</p>
+                  )}
+                  {item.details && (
+                    <p className="text-xs text-muted-foreground line-clamp-2">{item.details}</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Mobile Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="md:hidden flex items-center justify-between px-1 py-2">
+          <p className="text-xs text-muted-foreground">
+            Page {data.page} of {data.totalPages} ({data.total} total)
+          </p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

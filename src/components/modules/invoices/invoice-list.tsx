@@ -120,7 +120,7 @@ export function InvoiceList() {
   const overdueAmount = invoices.filter((i) => i.status === 'OVERDUE').reduce((s, i) => s + i.total, 0);
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
@@ -134,7 +134,7 @@ export function InvoiceList() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
         {[
           { label: 'Total', value: totalAmount, color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
           { label: 'Draft', value: draftAmount, color: 'bg-gray-50 text-gray-700 border-gray-200' },
@@ -174,10 +174,11 @@ export function InvoiceList() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Table (Desktop) */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
-          <div className="overflow-x-auto max-h-96 overflow-y-auto">
+          <div className="overflow-x-auto -mx-3 sm:mx-0 max-h-96 overflow-y-auto">
+            <div className="min-w-[640px]">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -216,18 +217,73 @@ export function InvoiceList() {
                 ))}
               </TableBody>
             </Table>
-          </div>
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between border-t px-4 py-3">
-              <p className="text-sm text-muted-foreground">Page {data.page} of {data.totalPages} ({data.total} total)</p>
-              <div className="flex gap-1">
-                <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}><ChevronLeft className="h-4 w-4" /></Button>
-                <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}><ChevronRight className="h-4 w-4" /></Button>
-              </div>
             </div>
-          )}
+          </div>
         </CardContent>
       </Card>
+
+      {/* Invoice Cards (Mobile) */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          [...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-36 rounded-xl" />
+          ))
+        ) : invoices.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12 gap-3">
+              <Receipt className="h-12 w-12 text-muted-foreground/30" />
+              <p className="text-muted-foreground text-sm">No invoices found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          invoices.map((inv) => (
+            <Card
+              key={inv.id}
+              className="cursor-pointer hover:border-emerald-200 dark:hover:border-emerald-800 transition-colors"
+              onClick={() => setView('invoice-detail', { id: inv.id })}
+            >
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <span className="font-medium text-sm">{inv.title}</span>
+                    <p className="text-xs text-muted-foreground font-mono">{inv.invoiceNumber}</p>
+                  </div>
+                  <StatusBadge status={inv.status} />
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{inv.customerName || '—'}</span>
+                  <span>Due: {inv.dueDate ? new Date(inv.dueDate).toLocaleDateString() : '—'}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">Subtotal: {fmt(inv.subtotal)}</span>
+                  <span className="font-bold text-sm">{fmt(inv.total)}</span>
+                </div>
+                <div className="flex items-center justify-end pt-2 border-t">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7"
+                    onClick={(e) => { e.stopPropagation(); setView('invoice-detail', { id: inv.id }); }}
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="flex items-center justify-between px-1 py-3">
+          <p className="text-sm text-muted-foreground">Page {data.page} of {data.totalPages} ({data.total} total)</p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}><ChevronLeft className="h-4 w-4" /></Button>
+            <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}><ChevronRight className="h-4 w-4" /></Button>
+          </div>
+        </div>
+      )}
 
       {/* New Invoice Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

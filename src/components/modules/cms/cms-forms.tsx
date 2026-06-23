@@ -282,8 +282,8 @@ export function CmsForms() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Desktop Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
           {error ? (
             <div className="flex items-center gap-3 p-6 text-rose-600">
@@ -387,6 +387,88 @@ export function CmsForms() {
           )}
         </CardContent>
       </Card>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {error ? (
+          <Card>
+            <CardContent className="flex items-center gap-3 p-6 text-rose-600">
+              <AlertCircle className="h-5 w-5" />
+              <p>Failed to load forms. Try refreshing.</p>
+            </CardContent>
+          </Card>
+        ) : loading ? (
+          [...Array(3)].map((_, i) => <Skeleton key={i} className="h-36 rounded-xl" />)
+        ) : items.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-8 text-muted-foreground">
+              <FileText className="h-8 w-8 mb-2" />
+              <p className="text-sm">No forms found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          items.map((item) => (
+            <Card key={item.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between gap-2">
+                  <p className="font-semibold text-sm leading-tight">{item.name}</p>
+                  <Badge variant="outline" className={TYPE_COLORS[item.formType] || 'bg-gray-100 text-gray-700 border-gray-200 shrink-0'}>
+                    {item.formType}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{countFields(item.fields)} field{countFields(item.fields) !== 1 ? 's' : ''}</span>
+                  <span>Created {item.createdAt ? new Date(item.createdAt).toLocaleDateString() : '—'}</span>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t">
+                  <div className="flex items-center gap-2">
+                    <Switch
+                      checked={item.isActive}
+                      onCheckedChange={() => toggleActive(item)}
+                    />
+                    <span className="text-xs text-muted-foreground">{item.isActive ? 'Active' : 'Inactive'}</span>
+                  </div>
+                  <div className="flex gap-1">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7"
+                      onClick={() => openEdit(item)}
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 text-rose-600 hover:text-rose-700 hover:bg-rose-50"
+                      onClick={() => openDelete(item.id)}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Mobile Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="md:hidden flex items-center justify-between px-1 py-2">
+          <p className="text-xs text-muted-foreground">
+            Page {data.page} of {data.totalPages} ({data.total} total)
+          </p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Add/Edit Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

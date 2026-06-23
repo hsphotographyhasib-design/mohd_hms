@@ -151,7 +151,7 @@ export function EmployeeList() {
   ];
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -208,10 +208,11 @@ export function EmployeeList() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Table (Desktop) */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
-          <div className="overflow-x-auto max-h-96 overflow-y-auto">
+          <div className="overflow-x-auto -mx-3 sm:mx-0 max-h-96 overflow-y-auto">
+            <div className="min-w-[640px]">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -266,6 +267,7 @@ export function EmployeeList() {
                 )}
               </TableBody>
             </Table>
+            </div>
           </div>
 
           {/* Pagination */}
@@ -286,6 +288,75 @@ export function EmployeeList() {
           )}
         </CardContent>
       </Card>
+
+      {/* Employee Cards (Mobile) */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          [...Array(3)].map((_, i) => (
+            <Skeleton key={i} className="h-32 rounded-xl" />
+          ))
+        ) : employees.length === 0 ? (
+          <Card>
+            <CardContent className="flex flex-col items-center justify-center py-12 gap-3">
+              <Users className="h-12 w-12 text-muted-foreground/30" />
+              <p className="text-muted-foreground text-sm">No employees found</p>
+            </CardContent>
+          </Card>
+        ) : (
+          employees.map((emp) => (
+            <Card key={emp.id}>
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-sm">{emp.name}</span>
+                      <div className="flex items-center gap-1">
+                        <CircleDot className={`h-2 w-2 ${emp.isOnline ? 'text-emerald-500' : 'text-gray-400'}`} />
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground truncate">{emp.email}</p>
+                  </div>
+                  <RoleBadge role={emp.role} />
+                </div>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <span>{emp.departmentName || '—'}</span>
+                  <span>{emp.phone || '—'}</span>
+                </div>
+                <div className="flex items-center justify-end gap-1 pt-2 border-t">
+                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <Pencil className="h-3.5 w-3.5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-rose-500 hover:text-rose-600"
+                    onClick={() => handleDelete(emp.id)}
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Pagination */}
+      {data && data.totalPages > 1 && (
+        <div className="flex items-center justify-between px-1 py-3">
+          <p className="text-sm text-muted-foreground">
+            Page {data.page} of {data.totalPages} ({data.total} total)
+          </p>
+          <div className="flex gap-1">
+            <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      )}
 
       {/* Add Employee Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

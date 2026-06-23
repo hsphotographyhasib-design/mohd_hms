@@ -319,3 +319,30 @@
     break-inside: avoid;
   }
 }
+
+/* ============================================================
+   MOBILE RESPONSIVE UTILITIES
+   ============================================================ */
+
+/* Make all data tables horizontally scrollable on mobile */
+@media (max-width: 767px) {
+  /* Tables inside the main content area get scroll wrapper behavior */
+  main table {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Ensure table cells don't wrap awkwardly */
+  main table th,
+  main table td {
+    white-space: nowrap;
+  }
+
+  /* But allow specific text columns to wrap */
+  main table td.text-wrap,
+  main table td[data-wrap="true"] {
+    white-space: normal;
+    min-width: 120px;
+  }
+}

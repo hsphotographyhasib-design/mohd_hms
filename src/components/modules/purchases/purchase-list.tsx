@@ -141,7 +141,7 @@ export function PurchaseList() {
   };
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -202,10 +202,11 @@ export function PurchaseList() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Desktop Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
-          <div className="overflow-x-auto max-h-96 overflow-y-auto custom-scrollbar">
+          <div className="overflow-x-auto -mx-3 sm:mx-0 max-h-96 overflow-y-auto custom-scrollbar">
+            <div className="min-w-[640px]">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -262,24 +263,63 @@ export function PurchaseList() {
                 )}
               </TableBody>
             </Table>
-          </div>
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between border-t px-4 py-3">
-              <p className="text-sm text-muted-foreground">
-                Page {data.page} of {data.totalPages} ({data.total} total)
-              </p>
-              <div className="flex gap-1">
-                <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
             </div>
-          )}
+          </div>
         </CardContent>
       </Card>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-4"><Skeleton className="h-24 w-full rounded-lg" /></CardContent></Card>
+          ))
+        ) : (data?.data || []).length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">No purchase orders found</div>
+        ) : (
+          (data?.data || []).map((po) => (
+            <Card key={po.id} className="hover:bg-muted/50 transition-colors">
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-medium truncate">{po.poNumber}</p>
+                    <p className="text-sm text-muted-foreground truncate">{po.supplier}</p>
+                  </div>
+                  <StatusBadge status={po.status} />
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">{po.expectedDate ? format(new Date(po.expectedDate), 'MMM d, yyyy') : '—'}</span>
+                  <span className="font-medium">{fmt(po.total)}</span>
+                </div>
+                <div className="flex items-center gap-1 border-t pt-3">
+                  <Button variant="ghost" size="icon" className="h-7 w-7" title="View"><Eye className="h-3.5 w-3.5" /></Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7" title="Edit"><Pencil className="h-3.5 w-3.5" /></Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7" title="Delete" onClick={() => handleDelete(po.id)}><Trash2 className="h-3.5 w-3.5 text-rose-500" /></Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Shared Pagination */}
+      {data && data.totalPages > 1 && (
+        <Card>
+          <div className="flex items-center justify-between px-4 py-3">
+            <p className="text-sm text-muted-foreground">
+              Page {data.page} of {data.totalPages} ({data.total} total)
+            </p>
+            <div className="flex gap-1">
+              <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* New PO Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

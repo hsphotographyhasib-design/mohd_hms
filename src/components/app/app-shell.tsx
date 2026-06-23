@@ -2,9 +2,12 @@
 
 import { lazy, Suspense } from 'react';
 import { useAppStore } from '@/store';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AppHeader } from '@/components/nav/app-header';
 import { FloatingNavBar } from '@/components/nav/floating-nav-bar';
+import { MobileBottomNav } from '@/components/nav/mobile-bottom-nav';
+import { MobileNavSheet } from '@/components/nav/mobile-nav-sheet';
 
 // Lazy-loaded module views
 const DashboardView = lazy(() => import('@/components/modules/dashboard/dashboard-view').then(m => ({ default: m.DashboardView })));
@@ -60,15 +63,15 @@ const WhatsAppSettings = lazy(() => import('@/components/modules/whatsapp/whatsa
 
 function ViewLoader() {
   return (
-    <div className="p-6 space-y-4">
-      <Skeleton className="h-8 w-64" />
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="p-4 sm:p-6 space-y-4">
+      <Skeleton className="h-8 w-48 sm:w-64" />
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
         {[...Array(4)].map((_, i) => (
-          <Skeleton key={i} className="h-32 rounded-xl" />
+          <Skeleton key={i} className="h-24 sm:h-32 rounded-xl" />
         ))}
       </div>
-      <Skeleton className="h-64 rounded-xl" />
-      <Skeleton className="h-48 rounded-xl" />
+      <Skeleton className="h-48 sm:h-64 rounded-xl" />
+      <Skeleton className="h-36 sm:h-48 rounded-xl" />
     </div>
   );
 }
@@ -131,15 +134,23 @@ function ViewRouter() {
 }
 
 export function AppShell() {
+  const isMobile = useIsMobile();
+
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Header */}
       <AppHeader />
-      {/* Floating Navigation Bar */}
+
+      {/* Floating Navigation Bar — always visible (icons-only on mobile, icons+labels on desktop) */}
       <FloatingNavBar />
-      {/* Main Content - full width, no sidebar margin */}
-      <main className="pt-2 pb-8">
-        <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
+
+      {/* Mobile Bottom Tab Bar + "More" Sheet */}
+      {isMobile && <MobileBottomNav />}
+      {isMobile && <MobileNavSheet />}
+
+      {/* Main Content — extra bottom padding on mobile for the bottom nav bar */}
+      <main className={isMobile ? 'pt-1 pb-20 sm:pb-24' : 'pt-2 pb-8'}>
+        <div className="mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8">
           <ViewRouter />
         </div>
       </main>

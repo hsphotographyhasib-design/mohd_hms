@@ -405,7 +405,7 @@ export function EquipmentList() {
   // ============ RENDER ============
 
   return (
-    <div className="p-4 md:p-6 space-y-6">
+    <div className="p-3 sm:p-4 md:p-6 space-y-6">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
@@ -542,10 +542,12 @@ export function EquipmentList() {
               <p className="text-muted-foreground text-sm">No equipment found</p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Asset #</TableHead>
+            <div className="overflow-x-auto -mx-3 sm:mx-0">
+              <div className="min-w-[640px]">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Asset #</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Category</TableHead>
                   <TableHead>Customer</TableHead>
@@ -644,6 +646,8 @@ export function EquipmentList() {
                 ))}
               </TableBody>
             </Table>
+              </div>
+            </div>
           )}
         </CardContent>
       </Card>

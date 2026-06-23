@@ -137,7 +137,7 @@ export function VehicleList() {
   ];
 
   return (
-    <div className="p-4 md:p-6 space-y-4">
+    <div className="p-3 sm:p-4 md:p-6 space-y-4">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
@@ -181,10 +181,11 @@ export function VehicleList() {
         </CardContent>
       </Card>
 
-      {/* Table */}
-      <Card>
+      {/* Desktop Table */}
+      <Card className="hidden md:block">
         <CardContent className="p-0">
-          <div className="overflow-x-auto max-h-96 overflow-y-auto">
+          <div className="overflow-x-auto -mx-3 sm:mx-0 max-h-96 overflow-y-auto">
+            <div className="min-w-[640px]">
             <Table>
               <TableHeader>
                 <TableRow>
@@ -251,26 +252,72 @@ export function VehicleList() {
                 )}
               </TableBody>
             </Table>
-          </div>
-
-          {/* Pagination */}
-          {data && data.totalPages > 1 && (
-            <div className="flex items-center justify-between border-t px-4 py-3">
-              <p className="text-sm text-muted-foreground">
-                Page {data.page} of {data.totalPages} ({data.total} total)
-              </p>
-              <div className="flex gap-1">
-                <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
-                  <ChevronLeft className="h-4 w-4" />
-                </Button>
-                <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
-                  <ChevronRight className="h-4 w-4" />
-                </Button>
-              </div>
             </div>
-          )}
+          </div>
         </CardContent>
       </Card>
+
+      {/* Mobile Cards */}
+      <div className="md:hidden space-y-3">
+        {loading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <Card key={i}><CardContent className="p-4"><Skeleton className="h-24 w-full rounded-lg" /></CardContent></Card>
+          ))
+        ) : vehicles.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">No vehicles found</div>
+        ) : (
+          vehicles.map((v) => (
+            <Card key={v.id} className="hover:bg-muted/50 transition-colors">
+              <CardContent className="p-4 space-y-3">
+                <div className="flex items-start justify-between">
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono font-medium text-sm">{v.plateNumber}</p>
+                    <p className="text-sm text-muted-foreground truncate">{v.make} {v.model}</p>
+                  </div>
+                  <StatusBadge status={v.status || 'active'} />
+                </div>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span>{v.year || '—'}</span>
+                  <span>·</span>
+                  <Badge variant="outline" className={
+                    v.fuelType === 'electric' ? 'bg-emerald-50 text-emerald-700' :
+                    v.fuelType === 'hybrid' ? 'bg-teal-50 text-teal-700' :
+                    v.fuelType === 'diesel' ? 'bg-gray-100 text-gray-700' :
+                    'bg-amber-50 text-amber-700'
+                  }>{v.fuelType || '—'}</Badge>
+                </div>
+                <div className="flex items-center justify-between text-sm">
+                  <span className="text-muted-foreground">{v.currentMileage != null ? `${v.currentMileage.toLocaleString()} km` : '—'}</span>
+                  <span className="text-muted-foreground">{v.nextServiceDate ? format(new Date(v.nextServiceDate), 'MMM d, yyyy') : '—'}</span>
+                </div>
+                <div className="flex items-center gap-1 border-t pt-3">
+                  <Button variant="ghost" size="icon" className="h-7 w-7"><Pencil className="h-3.5 w-3.5" /></Button>
+                  <Button variant="ghost" size="icon" className="h-7 w-7 text-rose-500 hover:text-rose-600" onClick={() => handleDelete(v.id)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
+
+      {/* Shared Pagination */}
+      {data && data.totalPages > 1 && (
+        <Card>
+          <div className="flex items-center justify-between px-4 py-3">
+            <p className="text-sm text-muted-foreground">
+              Page {data.page} of {data.totalPages} ({data.total} total)
+            </p>
+            <div className="flex gap-1">
+              <Button variant="outline" size="icon" disabled={page <= 1} onClick={() => setPage(page - 1)}>
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" disabled={page >= data.totalPages} onClick={() => setPage(page + 1)}>
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </Card>
+      )}
 
       {/* Add Vehicle Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
