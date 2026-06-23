@@ -110,7 +110,9 @@ export function FinanceView() {
     }
   }, []);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   if (loading) return <FinanceSkeleton />;
   if (error) {

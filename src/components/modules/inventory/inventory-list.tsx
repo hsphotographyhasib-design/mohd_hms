@@ -53,7 +53,9 @@ export function InventoryList() {
     finally { setLoading(false); }
   }, [page, search, categoryFilter, lowStockOnly]);
 
-  useEffect(() => { fetchData(); }, [fetchData]);
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   const handleSubmit = async () => {
     if (!form.name || !form.unit) { toast.error('Name and unit are required'); return; }
@@ -142,7 +144,7 @@ export function InventoryList() {
                 <SelectItem value="Consumables">Consumables</SelectItem>
               </SelectContent>
             </Select>
-            <Button variant={lowStockOnly ? 'default' : 'outline'} size="sm" onClick={() => { setLowStockOnly(!lowStockOnly); setPage(1); }} className={lowStockOnly ? 'bg-rose-600 hover:bg-rose-700 text-white' : ''}>
+            <Button variant={lowStockOnly ? 'default' : 'outline'} size="sm" onClick={() => { setLowStockOnly(!lowStockOnly); setPage(1); }} className={lowStockOnly ? 'bg-rose-600 hover:bg-rose-700' : ''}>
               <AlertTriangle className="h-4 w-4 mr-2" /> Low Stock
             </Button>
           </div>

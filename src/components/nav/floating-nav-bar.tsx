@@ -200,7 +200,7 @@ export function FloatingNavBar() {
   // ============================================================
 
   const filteredItems = useMemo(() => {
-    if (!user) return [];
+    if (!user) return { mainItems: [], showCms: false };
     const role = user.role;
     const mainItems = NAV_ITEMS.filter((item) => canAccess(role, item.feature));
     const showCms = canAccess(role, 'cms');
