@@ -1,0 +1,321 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* PAGE BACKGROUND - muted canvas */
+  --background: #EEF2F6;
+
+  /* CONTENT PANELS - white and prominent */
+  --card: #FFFFFF;
+  --popover: #FFFFFF;
+
+  /* Keep foreground as dark text */
+  --foreground: #111827;
+  --card-foreground: #111827;
+  --popover-foreground: #111827;
+
+  /* Muted areas - slightly darker than before for contrast with bg */
+  --muted: #F3F4F6;
+  --muted-foreground: #6B7280;
+
+  /* Secondary */
+  --secondary: #F3F4F6;
+  --secondary-foreground: #111827;
+
+  /* Accent */
+  --accent: #F3F4F6;
+  --accent-foreground: #111827;
+
+  /* Borders - visible but soft */
+  --border: #E5E7EB;
+  --input: #D1D5DB;
+
+  /* Primary stays dark */
+  --primary: #111827;
+  --primary-foreground: #FFFFFF;
+
+  /* Ring */
+  --ring: #10B981;
+
+  /* Destructive */
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* Charts */
+  --chart-1: oklch(0.696 0.17 162.48);
+  --chart-2: oklch(0.769 0.188 70.08);
+  --chart-3: oklch(0.627 0.265 303.9);
+  --chart-4: oklch(0.645 0.246 16.439);
+  --chart-5: oklch(0.488 0.243 264.376);
+
+  /* Sidebar */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #111827;
+  --sidebar-primary: #10B981;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F3F4F6;
+  --sidebar-accent-foreground: #111827;
+  --sidebar-border: #E5E7EB;
+  --sidebar-ring: #10B981;
+}
+
+/* Custom visual hierarchy tokens */
+:root {
+  --page-bg: #EEF2F6;
+  --page-bg-end: #E8EDF2;
+  --card-bg: #FFFFFF;
+  --header-bg: rgba(255,255,255,0.9);
+  --nav-bg: rgba(255,255,255,0.95);
+  --table-header-bg: #F8FAFC;
+  --table-row-hover: #F1F5F9;
+  --border-soft: #E5E7EB;
+  --shadow-soft: 0 2px 8px rgba(0,0,0,0.04);
+  --shadow-medium: 0 4px 15px rgba(0,0,0,0.05);
+  --shadow-strong: 0 8px 30px rgba(0,0,0,0.05);
+  --shadow-modal: 0 20px 60px rgba(0,0,0,0.15);
+  --overlay-bg: rgba(15,23,42,0.35);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.696 0.17 162.48); /* teal/emerald */
+  --chart-2: oklch(0.769 0.188 70.08);  /* amber */
+  --chart-3: oklch(0.627 0.265 303.9);  /* rose */
+  --chart-4: oklch(0.645 0.246 16.439); /* orange */
+  --chart-5: oklch(0.488 0.243 264.376); /* purple */
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply text-foreground;
+    background: var(--background);
+  }
+}
+
+/* Card elevation system */
+@layer components {
+  .card-elevated {
+    background: var(--card-bg);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    box-shadow: var(--shadow-medium);
+    transition: transform 200ms ease, box-shadow 200ms ease;
+  }
+  .card-elevated:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+  }
+
+  /* Table styles */
+  .table-modern thead tr {
+    background: var(--table-header-bg);
+  }
+  .table-modern tbody tr {
+    border-bottom: 1px solid var(--border-soft);
+    transition: background 150ms ease;
+  }
+  .table-modern tbody tr:hover {
+    background: var(--table-row-hover);
+  }
+
+  /* Empty section fill */
+  .section-muted {
+    background: #F3F4F6;
+    border-radius: 16px;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: oklch(0.8 0 0); border-radius: 3px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: oklch(0.7 0 0); }
+
+/* ============ PRINT STYLES — A4 Invoice / Quotation ============ */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 12mm 10mm;
+  }
+
+  html, body {
+    background: white !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+  }
+
+  /* Hide chrome elements during print */
+  header, nav, footer,
+  [class*="app-header"], [class*="floating-nav"] {
+    display: none !important;
+  }
+
+  /* The invoice/quotation document itself */
+  .invoice-document {
+    max-width: 100% !important;
+    width: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white !important;
+  }
+
+  /* Ensure the inner padding works on paper */
+  .invoice-document > div {
+    padding: 0 !important;
+  }
+
+  /* Ensure table headers with bg color print */
+  table thead tr.bg-emerald-600 {
+    background: #059669 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  table thead tr.bg-emerald-600 th {
+    color: white !important;
+  }
+
+  /* Green bar with invoice number */
+  .bg-emerald-600 {
+    background: #059669 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Green accent elements */
+  .bg-emerald-50 {
+    background: #ecfdf5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .border-emerald-600 {
+    border-color: #059669 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .border-emerald-100 {
+    border-color: #d1fae5 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .text-emerald-600, .text-emerald-700, .text-emerald-800 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Background sections */
+  .bg-gray-50 {
+    background: #f9fafb !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .bg-blue-50\/40 {
+    background: #eff6ff !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Badge status colors */
+  .bg-amber-100, .bg-teal-100, .bg-emerald-100, .bg-rose-100, .bg-gray-100,
+  .bg-sky-100, .bg-purple-100, .bg-violet-100 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Ensure QR code and barcode render */
+  svg {
+    break-inside: avoid;
+  }
+
+  /* Avoid breaking the document mid-table */
+  table {
+    break-inside: auto;
+  }
+  tr {
+    break-inside: avoid;
+    break-after: auto;
+  }
+
+  /* Page breaks */
+  .invoice-document {
+    break-inside: avoid;
+  }
+}

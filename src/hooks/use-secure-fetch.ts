@@ -1,0 +1,1 @@
+export { useSecureFetch, setupFetchInterceptor } from '@/shared/hooks/use-secure-fetch';
