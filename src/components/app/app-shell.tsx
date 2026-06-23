@@ -135,13 +135,15 @@ function ViewRouter() {
 
 export function AppShell() {
   const isMobile = useIsMobile();
+  const currentView = useAppStore((s) => s.currentView);
+  const showMobileDashboardHeader = isMobile && currentView === 'dashboard';
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Sticky Header */}
-      <AppHeader />
+      {/* Sticky Header — hidden on mobile when dashboard is shown (mobile dashboard has its own) */}
+      {!showMobileDashboardHeader && <AppHeader />}
 
-      {/* Floating Navigation Bar — always visible (icons-only on mobile, icons+labels on desktop) */}
+      {/* Floating Navigation Bar — hidden on mobile */}
       <FloatingNavBar />
 
       {/* Mobile Bottom Tab Bar + "More" Sheet */}
@@ -149,8 +151,8 @@ export function AppShell() {
       {isMobile && <MobileNavSheet />}
 
       {/* Main Content — extra bottom padding on mobile for the bottom nav bar */}
-      <main className={isMobile ? 'pt-1 pb-20 sm:pb-24' : 'pt-2 pb-8'}>
-        <div className="mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8">
+      <main className={showMobileDashboardHeader ? 'pb-0' : isMobile ? 'pt-1 pb-24' : 'pt-2 pb-8'}>
+        <div className={showMobileDashboardHeader ? '' : 'mx-auto max-w-7xl px-3 sm:px-4 md:px-6 lg:px-8'}>
           <ViewRouter />
         </div>
       </main>

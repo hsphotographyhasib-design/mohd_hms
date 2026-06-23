@@ -21,7 +21,9 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuthStore, useAppStore } from '@/store';
+import { useIsMobile } from '@/shared/hooks/use-mobile';
 import type { DashboardStats, ComplaintItem, WorkOrderItem, PmScheduleItem, UserRole } from '@/types';
+import { MobileDashboard, MobileDashboardSkeleton } from './mobile-dashboard';
 
 // ============ HELPERS ============
 
@@ -376,6 +378,7 @@ function CircularProgress({ value, size = 140 }: { value: number; size?: number 
 export function DashboardView() {
   const { user } = useAuthStore();
   const setView = useAppStore((s) => s.setView);
+  const isMobile = useIsMobile();
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -402,10 +405,22 @@ export function DashboardView() {
     fetchDashboard();
   }, [fetchDashboard]);
 
-  if (loading) return <div className="p-4 md:p-6"><DashboardSkeleton /></div>;
+  if (loading) return isMobile ? <MobileDashboardSkeleton /> : <div className="p-4 md:p-6"><DashboardSkeleton /></div>;
 
   if (error) {
-    return (
+    return isMobile ? (
+      <div className="p-4">
+        <div className="flex flex-col items-center py-16 gap-4">
+          <div className="w-16 h-16 rounded-full bg-rose-100 flex items-center justify-center">
+            <AlertTriangle className="h-8 w-8 text-rose-500" />
+          </div>
+          <p className="text-sm text-muted-foreground">{error}</p>
+          <Button onClick={fetchDashboard} variant="outline" size="sm">
+            <RefreshCw className="h-4 w-4 mr-2" />Retry
+          </Button>
+        </div>
+      </div>
+    ) : (
       <div className="p-4 md:p-6">
         <Card className="max-w-md mx-auto">
           <CardContent className="flex flex-col items-center py-12 gap-4">
@@ -427,6 +442,9 @@ export function DashboardView() {
   }
 
   if (!stats) return null;
+
+  // Mobile: use the reference-design dashboard
+  if (isMobile) return <MobileDashboard stats={stats} />;
 
   const kpiCards = getKpiCardsForRole(user?.role || 'admin', stats);
   const today = format(new Date(), 'EEEE, MMMM d, yyyy');
