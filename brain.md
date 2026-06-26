@@ -10,10 +10,23 @@
 - CMMS (Computerized Maintenance Management System) - HMS
 - Framework: Next.js 16 with App Router, TypeScript, Tailwind CSS 4, shadcn/ui
 - Single-route SPA: only `/` route, views switched via Zustand store (`useAppStore.setView`)
-- Database: SQLite with Prisma ORM
+- Database: SQLite (local dev) / Turso libSQL (production Vercel) with Prisma ORM
 - Auth: JWT-based with localStorage persistence
 - Primary color: emerald (green)
 - Port: 3000
+
+## Vercel Deployment
+- **Build**: `prisma generate && next build` (postinstall runs prisma generate)
+- **No standalone output** (Vercel handles it)
+- **Database auto-detect**: `db.ts` checks if DATABASE_URL starts with `libsql://` → uses @prisma/adapter-libsql, otherwise local SQLite
+- **Turso DB**: `libsql://mohd-hms-amdsajib121.aws-ap-south-1.turso.io` (Mumbai region)
+- **Turso API token** (for CLI): stored in user's Turso account
+- **Vercel env vars needed**:
+  - `DATABASE_URL` = `libsql://mohd-hms-amdsajib121.aws-ap-south-1.turso.io`
+  - `DATABASE_AUTH_TOKEN` = DB token (created via `turso db tokens create mohd-hms --expiration none`)
+  - `JWT_SECRET` = strong random string
+  - `NEXT_PUBLIC_APP_URL` = Vercel deployment URL
+- **WhatsApp mini-service**: NOT deployed to Vercel (needs persistent process, e.g. Railway)
 
 ## Architecture
 - `src/store/index.ts` — Zustand stores (auth, app, notification) + `canAccess()` permission helper
