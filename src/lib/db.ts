@@ -12,24 +12,26 @@ function createPrismaClient(): PrismaClient {
 
   // Turso / libSQL remote database (Vercel production)
   if (dbUrl.startsWith('libsql://') || dbUrl.startsWith('https://')) {
-    // CRITICAL: Set env var BEFORE requiring @prisma/client.
-    // Prisma's generated code reads DATABASE_URL at import-time,
-    // so it must be present before the first require().
-    process.env.DATABASE_URL = dbUrl
+    const authToken = process.env.DATABASE_AUTH_TOKEN || ''
+    // Embed auth token directly in the URL
+    const fullUrl = authToken
+      ? `${dbUrl}?authToken=${encodeURIComponent(authToken)}`
+      : dbUrl
+
+    // Set env var as safety net before any Prisma module loads
+    process.env.DATABASE_URL = fullUrl
 
     const { PrismaClient } = require('@prisma/client')
     const { createClient } = require('@libsql/client')
     const { PrismaLibSQL } = require('@prisma/adapter-libsql')
 
-    const libsql = createClient({
-      url: dbUrl,
-      authToken: process.env.DATABASE_AUTH_TOKEN || undefined,
-    })
-
+    const libsql = createClient({ url: fullUrl })
     const adapter = new PrismaLibSQL(libsql)
 
+    // Pass datasourceUrl EXPLICITLY — Prisma uses this instead of reading env
     return new PrismaClient({
       adapter,
+      datasourceUrl: fullUrl,
       log: [],
     })
   }
@@ -37,6 +39,7 @@ function createPrismaClient(): PrismaClient {
   // Local SQLite file (development)
   const { PrismaClient } = require('@prisma/client')
   return new PrismaClient({
+    datasourceUrl: dbUrl,
     log: process.env.NODE_ENV === 'development' ? ['query'] : [],
   })
 }
