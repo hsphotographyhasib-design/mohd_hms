@@ -4,6 +4,7 @@ import { verifyToken } from '@/lib/auth';
 import { Prisma } from '@prisma/client';
 import { headers } from 'next/headers';
 import type { JwtPayload } from 'jsonwebtoken';
+export const dynamic = 'force-dynamic';
 
 async function getAuthUser() {
   const headersList = await headers();

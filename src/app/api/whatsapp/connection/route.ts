@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth';
 import { waManager } from '@/lib/whatsapp-service/manager';
+export const dynamic = 'force-dynamic';
 
 // POST - Connect/Disconnect/Reconnect/GetQR/SendTest
 export async function POST(req: NextRequest) {

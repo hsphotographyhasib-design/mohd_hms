@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { hashPassword, generateAssetNumber, generateInvoiceNumber, generatePONumber, generateCustomerNumber } from '@/lib/auth';
+export const dynamic = 'force-dynamic';
 
 export async function POST() {
   try {

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+export const dynamic = 'force-dynamic';
 
 async function upsertByFind<T extends { id: string }>(
   model: any,

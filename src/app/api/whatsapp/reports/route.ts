@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { Prisma } from '@prisma/client';
+export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {

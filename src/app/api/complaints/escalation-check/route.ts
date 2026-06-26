@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/lib/auth';
 import { checkEscalations } from '@/lib/workflow/escalation-rules';
+export const dynamic = 'force-dynamic';
 
 // ── POST: Trigger escalation checks ────────────────────────────────────────
 

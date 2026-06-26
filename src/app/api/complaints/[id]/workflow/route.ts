@@ -11,6 +11,8 @@ import {
   type ComplaintStatus,
 } from '@/lib/workflow/state-machine';
 
+export const dynamic = 'force-dynamic';
+
 // ── Action → Status Mapping ──────────────────────────────────────────────────
 
 const ACTION_STATUS_MAP: Record<string, ComplaintStatus> = {
