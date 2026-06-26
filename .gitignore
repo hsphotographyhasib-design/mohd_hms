@@ -30,12 +30,22 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
+# env files (keep .env.example)
+.env
+.env.local
+.env.production
+.env.production.local
 
 # vercel
 .vercel
 
+# database
+*.db
+*.db-journal
+
+# mini-services runtime data
+mini-services/*/storage/
+mini-services/*/node_modules/
 
 # typescript
 *.tsbuildinfo
@@ -52,3 +62,6 @@ prompt
 server.log
 # Skills directory
 /skills/
+
+# z-scripts runtime
+.zscripts/
