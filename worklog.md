@@ -170,3 +170,33 @@ Stage Summary:
 - Lint: Clean (no errors)
 - Dev server: Compiles successfully (250-338ms)
 - Element count: 17/17 template elements verified
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Convert landing page from single-page scrolling to multi-page Next.js routing
+
+Work Log:
+- Analyzed the 710KB static landing.html (1054 lines) loaded via iframe
+- Identified all 14 sections, navigation structure, CSS (420 lines), JS (300 lines)
+- Extracted CSS to public/landing-styles.css (loaded via <link> tag to avoid auth app conflicts)
+- Created shared data file: src/components/landing/landing-data.ts (icons, defaults, CMS helpers)
+- Created shared hook: src/components/landing/use-landing-data.ts (CMS API fetch)
+- Created shared layout: src/components/landing/public-layout.tsx (header, footer, floating buttons, active nav, mobile menu)
+- Created 14 section components: src/components/landing/sections/index.tsx
+- Created landing-home.tsx for dynamic import (avoids CSS conflict with auth app)
+- Created 8 sub-page routes: /about, /services, /industries, /projects, /system, /careers, /blog, /contact, /support
+- Updated main page.tsx: uses next/dynamic for landing, preserves auth flow
+- All navigation changed from #anchor to Next.js Link components
+- Active navigation highlighting via usePathname() + data-active attribute
+- Mobile menu closes on route change
+- Auth guard: authenticated users redirected from public pages to /
+- Lint: Clean (0 errors)
+- Pushed to GitHub (commit 013c7c2)
+
+Stage Summary:
+- 10 page routes created with proper Next.js App Router
+- Visual design 100% preserved (same CSS, fonts, colors, animations, responsive breakpoints)
+- Fast client-side navigation with browser history and deep linking support
+- CMS integration preserved (same API, same data flow)
+- Landing CSS isolated from auth app via <link> tag loading
