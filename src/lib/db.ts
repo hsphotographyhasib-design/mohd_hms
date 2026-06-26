@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client'
+/* eslint-disable @typescript-eslint/no-require-imports */
+import type { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
@@ -11,12 +12,13 @@ function createPrismaClient(): PrismaClient {
 
   // Turso / libSQL remote database (Vercel production)
   if (dbUrl.startsWith('libsql://') || dbUrl.startsWith('https://')) {
-    // Force-set DATABASE_URL so Prisma's generated client can read it
+    // CRITICAL: Set env var BEFORE requiring @prisma/client.
+    // Prisma's generated code reads DATABASE_URL at import-time,
+    // so it must be present before the first require().
     process.env.DATABASE_URL = dbUrl
 
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PrismaClient } = require('@prisma/client')
     const { createClient } = require('@libsql/client')
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { PrismaLibSQL } = require('@prisma/adapter-libsql')
 
     const libsql = createClient({
@@ -33,6 +35,7 @@ function createPrismaClient(): PrismaClient {
   }
 
   // Local SQLite file (development)
+  const { PrismaClient } = require('@prisma/client')
   return new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query'] : [],
   })
