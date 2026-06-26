@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
+import dynamic from 'next/dynamic';
 import { Building2 } from 'lucide-react';
 import { useAuthStore } from '@/store';
-import { LandingPage } from '@/components/app/landing-page';
 import { LoginView } from '@/components/app/login-view';
 import { AppShell } from '@/components/app/app-shell';
 import { AuthGuard } from '@/components/session/auth-guard';
@@ -14,52 +14,28 @@ import { setupFetchInterceptor } from '@/hooks/use-secure-fetch';
 const emptySubscribe = () => () => {};
 
 function useHydrated() {
-  return useSyncExternalStore(
-    emptySubscribe,
-    () => true,
-    () => false
-  );
+  return useSyncExternalStore(emptySubscribe, () => true, () => false);
 }
 
-/**
- * Fetch Interceptor Initializer — sets up once on mount
- */
 function FetchInterceptorSetup() {
-  useEffect(() => {
-    setupFetchInterceptor();
-  }, []);
+  useEffect(() => { setupFetchInterceptor(); }, []);
   return null;
 }
 
-/**
- * Toast listener — listens for cmms:toast custom events and
- * dispatches them through the shadcn toast system
- */
 function ToastListener() {
   useEffect(() => {
     const handleToast = (e: Event) => {
       const { type = 'info', message = '' } = (e as CustomEvent).detail || {};
-      // Use the toast function from shadcn
       import('@/hooks/use-toast').then(({ toast }) => {
-        toast({
-          title: type === 'warning' ? 'Warning' : type === 'error' ? 'Error' : type === 'success' ? 'Success' : 'Info',
-          description: message,
-          variant: type === 'error' ? 'destructive' : 'default',
-        });
+        toast({ title: type === 'error' ? 'Error' : type === 'success' ? 'Success' : 'Info', description: message, variant: type === 'error' ? 'destructive' : 'default' });
       });
     };
-
     window.addEventListener('cmms:toast', handleToast);
     return () => window.removeEventListener('cmms:toast', handleToast);
   }, []);
-
   return null;
 }
 
-/**
- * Protected App — wraps the authenticated AppShell with
- * AuthGuard (session validation) and IdleTimer (inactivity auto-logout)
- */
 function ProtectedApp() {
   return (
     <AuthGuard>
@@ -70,13 +46,17 @@ function ProtectedApp() {
   );
 }
 
+// Dynamic import — landing CSS/JS only loaded when user is NOT authenticated
+const LandingHome = dynamic(
+  () => import('@/components/landing/landing-home').then(mod => ({ default: mod.LandingHome })),
+  { ssr: false }
+);
+
 export default function Home() {
   const { isAuthenticated } = useAuthStore();
   const hydrated = useHydrated();
   const [showLogin, setShowLogin] = useState(false);
 
-  // On first hydration, load stored session (for initial render)
-  // The AuthGuard will then validate it with the server
   const initialized = useRef(false);
   useEffect(() => {
     if (!initialized.current) {
@@ -114,10 +94,7 @@ export default function Home() {
       ) : showLogin ? (
         <LoginView />
       ) : (
-        <LandingPage
-          onSignIn={() => setShowLogin(true)}
-          onGetStarted={() => setShowLogin(true)}
-        />
+        <LandingHome onSignIn={() => setShowLogin(true)} />
       )}
     </SessionProvider>
   );
