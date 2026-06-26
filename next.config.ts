@@ -5,8 +5,13 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
-  // Don't bundle these packages — load at runtime (needed for Turso on Vercel)
-  serverExternalPackages: ['@libsql/client', '@prisma/adapter-libsql'],
+  // Don't bundle these packages — load from node_modules at runtime
+  // This prevents Turbopack from replacing process.env references inside them
+  serverExternalPackages: [
+    '@libsql/client',
+    '@prisma/adapter-libsql',
+    '@prisma/client',
+  ],
 };
 
 export default nextConfig;

@@ -7,11 +7,13 @@ const globalForPrisma = globalThis as unknown as {
 let _db: PrismaClient | undefined
 
 function createPrismaClient(): PrismaClient {
-  // Read env var HERE (at creation time, not module load time)
   const dbUrl = process.env.DATABASE_URL || ''
 
   // Turso / libSQL remote database (Vercel production)
   if (dbUrl.startsWith('libsql://') || dbUrl.startsWith('https://')) {
+    // Force-set DATABASE_URL so Prisma's generated client can read it
+    process.env.DATABASE_URL = dbUrl
+
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { createClient } = require('@libsql/client')
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -48,7 +50,7 @@ function getDb(): PrismaClient {
   return _db
 }
 
-// Proxy that delegates to lazy getter — fully compatible with existing `db.user.findFirst(...)` syntax
+// Proxy that delegates to lazy getter — fully compatible with `db.user.findFirst(...)` syntax
 export const db = new Proxy({} as PrismaClient, {
   get(_target, prop: string | symbol) {
     const client = getDb()
