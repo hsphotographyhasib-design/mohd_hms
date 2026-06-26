@@ -1,8 +1,15 @@
 import { PrismaClient } from '@prisma/client'
 
-const dbUrl = process.env.DATABASE_URL || ''
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined
+}
+
+let _db: PrismaClient | undefined
 
 function createPrismaClient(): PrismaClient {
+  // Read env var HERE (at creation time, not module load time)
+  const dbUrl = process.env.DATABASE_URL || ''
+
   // Turso / libSQL remote database (Vercel production)
   if (dbUrl.startsWith('libsql://') || dbUrl.startsWith('https://')) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -29,12 +36,24 @@ function createPrismaClient(): PrismaClient {
   })
 }
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+// Lazy getter — only creates the client when first accessed at runtime
+function getDb(): PrismaClient {
+  if (_db) return _db
+  if (globalForPrisma.prisma) {
+    _db = globalForPrisma.prisma
+    return _db
+  }
+  _db = createPrismaClient()
+  if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = _db
+  return _db
 }
 
-export const db =
-  globalForPrisma.prisma ??
-  createPrismaClient()
-
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = db
+// Proxy that delegates to lazy getter — fully compatible with existing `db.user.findFirst(...)` syntax
+export const db = new Proxy({} as PrismaClient, {
+  get(_target, prop: string | symbol) {
+    const client = getDb()
+    const val = (client as Record<string | symbol, unknown>)[prop]
+    if (typeof val === 'function') return val.bind(client)
+    return val
+  },
+})
