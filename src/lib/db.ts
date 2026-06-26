@@ -13,12 +13,12 @@ function createPrismaClient(): PrismaClient {
   // Turso / libSQL remote database (Vercel production)
   if (dbUrl.startsWith('libsql://') || dbUrl.startsWith('https://')) {
     const authToken = process.env.DATABASE_AUTH_TOKEN || ''
-    // Embed auth token directly in the URL
     const fullUrl = authToken
       ? `${dbUrl}?authToken=${encodeURIComponent(authToken)}`
       : dbUrl
 
-    // Set env var as safety net before any Prisma module loads
+    // CRITICAL: Set env var BEFORE requiring @prisma/client.
+    // Prisma's generated code captures this value at module load time.
     process.env.DATABASE_URL = fullUrl
 
     const { PrismaClient } = require('@prisma/client')
@@ -28,10 +28,10 @@ function createPrismaClient(): PrismaClient {
     const libsql = createClient({ url: fullUrl })
     const adapter = new PrismaLibSQL(libsql)
 
-    // Pass datasourceUrl EXPLICITLY — Prisma uses this instead of reading env
+    // Do NOT pass datasourceUrl with adapter — they are incompatible.
+    // The adapter handles the connection; Prisma reads URL from env (set above).
     return new PrismaClient({
       adapter,
-      datasourceUrl: fullUrl,
       log: [],
     })
   }
