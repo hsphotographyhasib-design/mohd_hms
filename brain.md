@@ -55,7 +55,18 @@
   - More panel: bottom sheet with framer-motion animation
   - CustomizeSheet: let user pick which 4 items to pin
 
+## DATABASE_URL Undefined Fix (Vercel Runtime)
+- **Root cause**: 38 API routes had `import { Prisma } from '@prisma/client'` (runtime import). This triggered Prisma module init at import time, which reads `process.env.DATABASE_URL` before it was available in Vercel's serverless context. Even the lazy Proxy in db.ts couldn't help because Prisma was already initialized by other files' imports.
+- **Fix (commit 8a3cbc5)**:
+  1. Changed all 38 files to `import type { Prisma } from '@prisma/client'` (type-only, erased at compile time, no runtime module init)
+  2. Changed `db.ts` to use dynamic `require('@prisma/client')` inside the lazy `createPrismaClient()` function instead of top-level `import`
+  3. `db.ts` sets `process.env.DATABASE_URL` before requiring `@prisma/client` as a safety measure
+
+## Always Remember
+- After EVERY code update, push to GitHub: `git add -A && git commit -m "msg" && git push origin main`
+
 ## Session History
 - Invoice/quotation detail pages built matching printed templates (A4 layout, green theme)
 - QR Asset Management System built (public equipment pages, scan logging, label printing)
 - Git remote configured and force-pushed to GitHub
+- Vercel deployment: fixed build errors (serverExternalPackages + force-dynamic), fixed runtime DATABASE_URL undefined (type-only imports + dynamic require)
