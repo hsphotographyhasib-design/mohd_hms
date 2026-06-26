@@ -25,7 +25,7 @@
   - `DATABASE_URL` = `libsql://mohd-hms-amdsajib121.aws-ap-south-1.turso.io`
   - `DATABASE_AUTH_TOKEN` = DB token (created via `turso db tokens create mohd-hms --expiration none`)
   - `JWT_SECRET` = strong random string
-  - `NEXT_PUBLIC_APP_URL` = Vercel deployment URL
+  - `NEXT_PUBLIC_APP_URL` = `https://mohd-hms.vercel.app`
 - **WhatsApp mini-service**: NOT deployed to Vercel (needs persistent process, e.g. Railway)
 
 ## Architecture
