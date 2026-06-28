@@ -48,6 +48,7 @@ export type AppView =
   | 'new-complaint'
   | 'work-orders'
   | 'work-order-detail'
+  | 'new-work-order'
   | 'invoices'
   | 'invoice-detail'
   | 'pm'

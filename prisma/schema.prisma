@@ -86,6 +86,7 @@ model User {
   department    Department? @relation(fields: [departmentId], references: [id])
   assignedComplaints  Complaint[]  @relation("TechnicianComplaints")
   assignedWorkOrders  WorkOrder[]  @relation("TechnicianWorkOrders")
+  supervisedWorkOrders WorkOrder[] @relation("SupervisorWorkOrders")
   createdWorkOrders   WorkOrder[]  @relation("CreatorWorkOrders")
   createdInvoices     Invoice[]    @relation("CreatorInvoices")
   preparedInvoices    Invoice[]    @relation("PreparerInvoices")
@@ -163,6 +164,7 @@ model Customer {
   whatsappSessions     WhatsAppSession[]
   customerFeedbacks    CustomerFeedback[]
   customerReports      CustomerReport[]
+  workOrders           WorkOrder[]
 
   @@index([tenantId])
   @@index([tenantId, phone])
@@ -306,16 +308,42 @@ model Complaint {
 model WorkOrder {
   id              String   @id @default(cuid())
   tenantId        String
+  workOrderNumber String?  @unique // e.g. WO/HMS/2026/000001
   complaintId     String?
+  customerId      String?
   equipmentId     String?
+  assetId         String?  // optional asset linkage
   title           String
   description     String
-  status          String   @default("PENDING") // PENDING, IN_PROGRESS, COMPLETED, READONLY, CANCELLED
-  priority        String   @default("medium")
-  type            String   @default("corrective") // corrective, preventive, emergency
+  source          String   @default("manual") // complaint, preventive, manual, quotation, service_request, inspection_report
+  reference       String?  // e.g. Complaint ID, PM ID, SR ID
+  status          String   @default("DRAFT") // DRAFT, PENDING, ASSIGNED, ACCEPTED, IN_PROGRESS, COMPLETED, CLOSED, CANCELLED
+  priority        String   @default("medium") // emergency, high, medium, low
+  type            String   @default("corrective") // corrective, preventive, emergency, inspection, installation, breakdown
+  category        String?
+  subCategory     String?
+  sla             String?
+  estimatedHours  Float?
   assignedToId    String?
-  createdBy       String?
+  supervisorId    String?
+  teamId          String?
+  createdBy        String?
   scheduledDate   DateTime?
+  startTime       String?  // HH:mm format
+  dueDate         DateTime?
+  dueTime         String?  // HH:mm format
+  siteId          String?
+  building        String?
+  floor           String?
+  internalNotes   String?
+  checklistId     String?
+  // Safety & Compliance
+  permitRequired        Boolean @default(false)
+  lockoutTagoutRequired Boolean @default(false)
+  highRiskWork          Boolean @default(false)
+  safetyEquipmentReq    Boolean @default(false)
+  safetyNotes           String?  // additional safety requirements
+  // Existing fields
   startedAt       DateTime?
   completedAt     DateTime?
   checkInGps      String?  // JSON: {lat, lng, timestamp}
@@ -335,20 +363,25 @@ model WorkOrder {
   technicianSignature String?
   customerSignature   String?
   serviceReportPdf   String?
+  attachments     String?  // JSON: [{name, url, size, type, uploadedAt}]
   isLocked        Boolean  @default(false)
+  isDraft         Boolean  @default(false)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
   tenant          Tenant   @relation(fields: [tenantId], references: [id])
   complaint       Complaint? @relation(fields: [complaintId], references: [id])
+  customer        Customer? @relation(fields: [customerId], references: [id])
   equipment       Equipment? @relation(fields: [equipmentId], references: [id])
   assignedTo      User?    @relation("TechnicianWorkOrders", fields: [assignedToId], references: [id])
+  supervisor      User?    @relation("SupervisorWorkOrders", fields: [supervisorId], references: [id])
   creator         User?    @relation("CreatorWorkOrders", fields: [createdBy], references: [id])
   materials       WorkOrderMaterial[]
   invoices        Invoice[]
 
   @@index([tenantId, status])
   @@index([tenantId, assignedToId])
+  @@index([tenantId, workOrderNumber])
 }
 
 model WorkOrderMaterial {

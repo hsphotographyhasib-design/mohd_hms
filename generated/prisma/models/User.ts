@@ -298,6 +298,7 @@ export type UserWhereInput = {
   department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
   assignedComplaints?: Prisma.ComplaintListRelationFilter
   assignedWorkOrders?: Prisma.WorkOrderListRelationFilter
+  supervisedWorkOrders?: Prisma.WorkOrderListRelationFilter
   createdWorkOrders?: Prisma.WorkOrderListRelationFilter
   createdInvoices?: Prisma.InvoiceListRelationFilter
   preparedInvoices?: Prisma.InvoiceListRelationFilter
@@ -336,6 +337,7 @@ export type UserOrderByWithRelationInput = {
   department?: Prisma.DepartmentOrderByWithRelationInput
   assignedComplaints?: Prisma.ComplaintOrderByRelationAggregateInput
   assignedWorkOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
+  supervisedWorkOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
   createdWorkOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
   createdInvoices?: Prisma.InvoiceOrderByRelationAggregateInput
   preparedInvoices?: Prisma.InvoiceOrderByRelationAggregateInput
@@ -378,6 +380,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
   assignedComplaints?: Prisma.ComplaintListRelationFilter
   assignedWorkOrders?: Prisma.WorkOrderListRelationFilter
+  supervisedWorkOrders?: Prisma.WorkOrderListRelationFilter
   createdWorkOrders?: Prisma.WorkOrderListRelationFilter
   createdInvoices?: Prisma.InvoiceListRelationFilter
   preparedInvoices?: Prisma.InvoiceListRelationFilter
@@ -464,6 +467,7 @@ export type UserCreateInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -500,6 +504,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -536,6 +541,7 @@ export type UserUpdateInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -572,6 +578,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -867,6 +874,12 @@ export type UserCreateNestedOneWithoutAssignedWorkOrdersInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutSupervisedWorkOrdersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutSupervisedWorkOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupervisedWorkOrdersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserCreateNestedOneWithoutCreatedWorkOrdersInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedWorkOrdersInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedWorkOrdersInput
@@ -881,6 +894,16 @@ export type UserUpdateOneWithoutAssignedWorkOrdersNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedWorkOrdersInput, Prisma.UserUpdateWithoutAssignedWorkOrdersInput>, Prisma.UserUncheckedUpdateWithoutAssignedWorkOrdersInput>
+}
+
+export type UserUpdateOneWithoutSupervisedWorkOrdersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutSupervisedWorkOrdersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupervisedWorkOrdersInput
+  upsert?: Prisma.UserUpsertWithoutSupervisedWorkOrdersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupervisedWorkOrdersInput, Prisma.UserUpdateWithoutSupervisedWorkOrdersInput>, Prisma.UserUncheckedUpdateWithoutSupervisedWorkOrdersInput>
 }
 
 export type UserUpdateOneWithoutCreatedWorkOrdersNestedInput = {
@@ -1064,6 +1087,7 @@ export type UserCreateWithoutTenantInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -1099,6 +1123,7 @@ export type UserUncheckedCreateWithoutTenantInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -1185,6 +1210,7 @@ export type UserCreateWithoutDepartmentInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -1220,6 +1246,7 @@ export type UserUncheckedCreateWithoutDepartmentInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -1281,6 +1308,7 @@ export type UserCreateWithoutAssignedComplaintsInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -1316,6 +1344,7 @@ export type UserUncheckedCreateWithoutAssignedComplaintsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -1357,6 +1386,7 @@ export type UserCreateWithoutSupervisorComplaintsInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -1392,6 +1422,7 @@ export type UserUncheckedCreateWithoutSupervisorComplaintsInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -1442,6 +1473,7 @@ export type UserUpdateWithoutAssignedComplaintsInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -1477,6 +1509,7 @@ export type UserUncheckedUpdateWithoutAssignedComplaintsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -1524,6 +1557,7 @@ export type UserUpdateWithoutSupervisorComplaintsInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -1559,6 +1593,7 @@ export type UserUncheckedUpdateWithoutSupervisorComplaintsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -1593,6 +1628,7 @@ export type UserCreateWithoutAssignedWorkOrdersInput = {
   tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -1628,6 +1664,7 @@ export type UserUncheckedCreateWithoutAssignedWorkOrdersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -1645,6 +1682,83 @@ export type UserUncheckedCreateWithoutAssignedWorkOrdersInput = {
 export type UserCreateOrConnectWithoutAssignedWorkOrdersInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutAssignedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutAssignedWorkOrdersInput>
+}
+
+export type UserCreateWithoutSupervisedWorkOrdersInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
+  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
+  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
+  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
+  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
+  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSupervisedWorkOrdersInput = {
+  id?: string
+  tenantId: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
+  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
+  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
+  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSupervisedWorkOrdersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutSupervisedWorkOrdersInput>
 }
 
 export type UserCreateWithoutCreatedWorkOrdersInput = {
@@ -1669,6 +1783,7 @@ export type UserCreateWithoutCreatedWorkOrdersInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
   pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
@@ -1704,6 +1819,7 @@ export type UserUncheckedCreateWithoutCreatedWorkOrdersInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
   pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
@@ -1754,6 +1870,7 @@ export type UserUpdateWithoutAssignedWorkOrdersInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -1789,6 +1906,90 @@ export type UserUncheckedUpdateWithoutAssignedWorkOrdersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
+  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
+  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserUpsertWithoutSupervisedWorkOrdersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedUpdateWithoutSupervisedWorkOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutSupervisedWorkOrdersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSupervisedWorkOrdersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedUpdateWithoutSupervisedWorkOrdersInput>
+}
+
+export type UserUpdateWithoutSupervisedWorkOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
+  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
+  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
+  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
+  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
+  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSupervisedWorkOrdersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
+  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -1836,6 +2037,7 @@ export type UserUpdateWithoutCreatedWorkOrdersInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
   pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
@@ -1871,6 +2073,7 @@ export type UserUncheckedUpdateWithoutCreatedWorkOrdersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
   pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -1906,6 +2109,7 @@ export type UserCreateWithoutPmSchedulesInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -1941,6 +2145,7 @@ export type UserUncheckedCreateWithoutPmSchedulesInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -1992,6 +2197,7 @@ export type UserUpdateWithoutPmSchedulesInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -2027,6 +2233,7 @@ export type UserUncheckedUpdateWithoutPmSchedulesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -2062,6 +2269,7 @@ export type UserCreateWithoutCreatedInvoicesInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
   pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
@@ -2097,6 +2305,7 @@ export type UserUncheckedCreateWithoutCreatedInvoicesInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
   pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
@@ -2137,6 +2346,7 @@ export type UserCreateWithoutPreparedInvoicesInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
@@ -2172,6 +2382,7 @@ export type UserUncheckedCreateWithoutPreparedInvoicesInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
@@ -2223,6 +2434,7 @@ export type UserUpdateWithoutCreatedInvoicesInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
   pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
@@ -2258,6 +2470,7 @@ export type UserUncheckedUpdateWithoutCreatedInvoicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
   pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -2304,6 +2517,7 @@ export type UserUpdateWithoutPreparedInvoicesInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
@@ -2339,6 +2553,7 @@ export type UserUncheckedUpdateWithoutPreparedInvoicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
@@ -2374,6 +2589,7 @@ export type UserCreateWithoutVehicleLogsInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -2409,6 +2625,7 @@ export type UserUncheckedCreateWithoutVehicleLogsInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -2460,6 +2677,7 @@ export type UserUpdateWithoutVehicleLogsInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -2495,6 +2713,7 @@ export type UserUncheckedUpdateWithoutVehicleLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -2530,6 +2749,7 @@ export type UserCreateWithoutAuditLogsInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -2565,6 +2785,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -2616,6 +2837,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -2651,6 +2873,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -2686,6 +2909,7 @@ export type UserCreateWithoutLoginSessionsInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -2721,6 +2945,7 @@ export type UserUncheckedCreateWithoutLoginSessionsInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -2772,6 +2997,7 @@ export type UserUpdateWithoutLoginSessionsInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -2807,6 +3033,7 @@ export type UserUncheckedUpdateWithoutLoginSessionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -2842,6 +3069,7 @@ export type UserCreateWithoutDevicesInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -2877,6 +3105,7 @@ export type UserUncheckedCreateWithoutDevicesInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -2928,6 +3157,7 @@ export type UserUpdateWithoutDevicesInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -2963,6 +3193,7 @@ export type UserUncheckedUpdateWithoutDevicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -2998,6 +3229,7 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -3033,6 +3265,7 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -3084,6 +3317,7 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -3119,6 +3353,7 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -3154,6 +3389,7 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -3189,6 +3425,7 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -3240,6 +3477,7 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -3275,6 +3513,7 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -3310,6 +3549,7 @@ export type UserCreateWithoutTermsAcceptancesInput = {
   department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
   assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
@@ -3345,6 +3585,7 @@ export type UserUncheckedCreateWithoutTermsAcceptancesInput = {
   updatedAt?: Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
   createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
   preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
@@ -3396,6 +3637,7 @@ export type UserUpdateWithoutTermsAcceptancesInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -3431,6 +3673,7 @@ export type UserUncheckedUpdateWithoutTermsAcceptancesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -3486,6 +3729,7 @@ export type UserUpdateWithoutTenantInput = {
   department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -3521,6 +3765,7 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -3598,6 +3843,7 @@ export type UserUpdateWithoutDepartmentInput = {
   tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
   assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
@@ -3633,6 +3879,7 @@ export type UserUncheckedUpdateWithoutDepartmentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
   assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
   createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
   createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
   preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
@@ -3676,6 +3923,7 @@ export type UserUncheckedUpdateManyWithoutDepartmentInput = {
 export type UserCountOutputType = {
   assignedComplaints: number
   assignedWorkOrders: number
+  supervisedWorkOrders: number
   createdWorkOrders: number
   createdInvoices: number
   preparedInvoices: number
@@ -3693,6 +3941,7 @@ export type UserCountOutputType = {
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   assignedComplaints?: boolean | UserCountOutputTypeCountAssignedComplaintsArgs
   assignedWorkOrders?: boolean | UserCountOutputTypeCountAssignedWorkOrdersArgs
+  supervisedWorkOrders?: boolean | UserCountOutputTypeCountSupervisedWorkOrdersArgs
   createdWorkOrders?: boolean | UserCountOutputTypeCountCreatedWorkOrdersArgs
   createdInvoices?: boolean | UserCountOutputTypeCountCreatedInvoicesArgs
   preparedInvoices?: boolean | UserCountOutputTypeCountPreparedInvoicesArgs
@@ -3728,6 +3977,13 @@ export type UserCountOutputTypeCountAssignedComplaintsArgs<ExtArgs extends runti
  * UserCountOutputType without action
  */
 export type UserCountOutputTypeCountAssignedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSupervisedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WorkOrderWhereInput
 }
 
@@ -3840,6 +4096,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
   assignedComplaints?: boolean | Prisma.User$assignedComplaintsArgs<ExtArgs>
   assignedWorkOrders?: boolean | Prisma.User$assignedWorkOrdersArgs<ExtArgs>
+  supervisedWorkOrders?: boolean | Prisma.User$supervisedWorkOrdersArgs<ExtArgs>
   createdWorkOrders?: boolean | Prisma.User$createdWorkOrdersArgs<ExtArgs>
   createdInvoices?: boolean | Prisma.User$createdInvoicesArgs<ExtArgs>
   preparedInvoices?: boolean | Prisma.User$preparedInvoicesArgs<ExtArgs>
@@ -3931,6 +4188,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
   assignedComplaints?: boolean | Prisma.User$assignedComplaintsArgs<ExtArgs>
   assignedWorkOrders?: boolean | Prisma.User$assignedWorkOrdersArgs<ExtArgs>
+  supervisedWorkOrders?: boolean | Prisma.User$supervisedWorkOrdersArgs<ExtArgs>
   createdWorkOrders?: boolean | Prisma.User$createdWorkOrdersArgs<ExtArgs>
   createdInvoices?: boolean | Prisma.User$createdInvoicesArgs<ExtArgs>
   preparedInvoices?: boolean | Prisma.User$preparedInvoicesArgs<ExtArgs>
@@ -3961,6 +4219,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     department: Prisma.$DepartmentPayload<ExtArgs> | null
     assignedComplaints: Prisma.$ComplaintPayload<ExtArgs>[]
     assignedWorkOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
+    supervisedWorkOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
     createdWorkOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
     createdInvoices: Prisma.$InvoicePayload<ExtArgs>[]
     preparedInvoices: Prisma.$InvoicePayload<ExtArgs>[]
@@ -4392,6 +4651,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   department<T extends Prisma.User$departmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$departmentArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   assignedComplaints<T extends Prisma.User$assignedComplaintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedComplaintsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assignedWorkOrders<T extends Prisma.User$assignedWorkOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedWorkOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supervisedWorkOrders<T extends Prisma.User$supervisedWorkOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supervisedWorkOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdWorkOrders<T extends Prisma.User$createdWorkOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdWorkOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   createdInvoices<T extends Prisma.User$createdInvoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   preparedInvoices<T extends Prisma.User$preparedInvoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$preparedInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -4899,6 +5159,30 @@ export type User$assignedComplaintsArgs<ExtArgs extends runtime.Types.Extensions
  * User.assignedWorkOrders
  */
 export type User$assignedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkOrder
+   */
+  select?: Prisma.WorkOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkOrder
+   */
+  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkOrderInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderWhereInput
+  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
+}
+
+/**
+ * User.supervisedWorkOrders
+ */
+export type User$supervisedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the WorkOrder
    */

@@ -128,7 +128,7 @@ export function WorkOrderList() {
           </div>
           <h1 className="text-2xl font-bold">Work Orders</h1>
         </div>
-        <Button onClick={() => { fetchDropdowns(); setDialogOpen(true); }} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+        <Button onClick={() => setView('new-work-order')} className="bg-emerald-600 hover:bg-emerald-700 text-white">
           <Plus className="h-4 w-4 mr-2" /> New Work Order
         </Button>
       </div>
