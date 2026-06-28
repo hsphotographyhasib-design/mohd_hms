@@ -5,15 +5,18 @@
 - **Branch**: main
 - **Auth**: GitHub PAT stored in git remote URL (consider rotating)
 - **Push method**: `git push origin main` (remote already configured)
+- **Secret safety**: `.env` is in `.gitignore` — never commit secrets. Use `git rm --cached .env` if accidentally tracked.
 
 ## Project Overview
 - CMMS (Computerized Maintenance Management System) - HMS
+- Company: MOHD.HMS ENTERPRISE (Brunei)
 - Framework: Next.js 16 with App Router, TypeScript, Tailwind CSS 4, shadcn/ui
 - Single-route SPA: only `/` route, views switched via Zustand store (`useAppStore.setView`)
-- Database: SQLite (local dev) / Turso libSQL (production Vercel) with Prisma ORM
+- Database: PostgreSQL (Prisma adapter) in current dev, SQLite/Turso libSQL (production Vercel) with Prisma ORM
 - Auth: JWT-based with localStorage persistence
 - Primary color: emerald (green)
 - Port: 3000
+- Domain: mohdhms.com
 
 ## Vercel Deployment
 - **Build**: `prisma generate && next build` (postinstall runs prisma generate)
@@ -30,10 +33,14 @@
 
 ## Architecture
 - `src/store/index.ts` — Zustand stores (auth, app, notification) + `canAccess()` permission helper
-- `src/types/index.ts` — All TypeScript types
-- `src/components/nav/floating-nav-bar.tsx` — Desktop floating nav with scrollable items + dropdown submenus
+- `src/types/index.ts` — All TypeScript types (AppView union type for all views)
+- `src/components/nav/floating-nav-bar.tsx` — **PRIMARY navigation** (horizontal floating bar with scroll). NOT the sidebar.
+- `src/components/app/sidebar.tsx` — Legacy sidebar, NOT used in current layout
+- `src/components/app/app-shell.tsx` — Layout shell: AppHeader + FloatingNavBar + ViewRouter
+- `src/components/app/landing-page.tsx` — Public landing page (shown when not authenticated)
 - `src/lib/db.ts` — Prisma client
 - `prisma/schema.prisma` — Database schema
+- `src/app/layout.tsx` — Root layout with OG meta tags, JSON-LD, manifest
 
 ## Key Conventions
 - Use `use client` / `use server` directives
@@ -43,6 +50,26 @@
 - Footer must be sticky/fixed to bottom
 - Mobile-first responsive design
 - No indigo/blue colors unless explicitly requested
+- **Lint rule**: `react-hooks/set-state-in-effect` — avoid calling setState synchronously in useEffect. Use async IIFE inside effect instead.
+- **Landing page**: Users see landing page by default. Auth state is in localStorage (`cmms_token`, `cmms_user`). The `page.tsx` hydrates auth from localStorage in useEffect.
+
+## Email System (Brevo)
+- **Provider**: Brevo (formerly Sendinblue) — HTTP API v3, NOT sib-api-v3-sdk package
+- **Env vars**: `BREVO_API_KEY`, `BREVO_SENDER_NAME`, `BREVO_SENDER_EMAIL`
+- **Single email**: `src/lib/email-service/providers/brevo.ts` — uses `POST /v3/smtp/email`
+- **Campaigns**: `src/app/api/email/campaigns/route.ts` — uses `GET/POST /v3/emailCampaigns`
+- **Campaign actions**: `src/app/api/email/campaigns/[id]/route.ts` — sendNow, sendTest, delete
+- **Campaigns UI**: `src/components/modules/email/campaigns-tab.tsx` — 4th tab in Email Management
+- **Email dashboard**: `src/components/modules/email/email-dashboard.tsx` — tabs: Dashboard, Logs, Templates, Campaigns
+- **Brevo IP whitelist**: Server IP must be whitelisted at https://app.brevo.com/security/authorised_ips
+- **Permission**: `email` feature only accessible by `super_admin` and `admin` roles
+
+## Social Sharing / Open Graph
+- **OG image**: `/public/og-image.png` (1344×768, AI-generated)
+- **Meta tags**: Full OG + Twitter Card + JSON-LD Organization in `layout.tsx`
+- **Canonical URL**: https://mohdhms.com
+- **robots.txt**: Includes WhatsApp, LinkedIn, Telegram, Discord, Facebook, Twitter bots
+- **Manifest**: `/public/manifest.json` (PWA/mobile)
 
 ## Pending Tasks
 - Mobile bottom nav: 4+More pattern (user-customizable pinned items)
@@ -64,9 +91,17 @@
 
 ## Always Remember
 - After EVERY code update, push to GitHub: `git add -A && git commit -m "msg" && git push origin main`
+- **READ brain.md FIRST** at the start of every session
+- The floating nav bar (`floating-nav-bar.tsx`) is the PRIMARY nav, not the sidebar
+- When adding new nav items, add to BOTH `navItems` in `sidebar.tsx` AND `NAV_ITEMS` in `floating-nav-bar.tsx`, plus add the view to `AppView` type and the view router in `app-shell.tsx`
+- `.env` must NEVER be committed to git (GitHub push protection will block it)
 
 ## Session History
 - Invoice/quotation detail pages built matching printed templates (A4 layout, green theme)
 - QR Asset Management System built (public equipment pages, scan logging, label printing)
 - Git remote configured and force-pushed to GitHub
 - Vercel deployment: fixed build errors (serverExternalPackages + force-dynamic), fixed runtime DATABASE_URL undefined (type-only imports + dynamic require)
+- **Brevo Email Campaign system**: Full CRUD for email campaigns via Brevo API. Campaigns tab in Email Management. Backend API routes at `/api/email/campaigns`. Supports create, list, send now, send test, delete. Added Email nav item to floating nav bar.
+- **Open Graph / Social Sharing**: OG image, full meta tags (OG + Twitter Cards + JSON-LD), robots.txt with all social crawlers, web manifest. Verified all tags render in HTML output.
+- **Nav cleanup**: Removed sub-menus from Equipment and Complaints nav items per user request.
+- **Git secret fix**: .env with BREVO_API_KEY was accidentally committed. Fixed with `git rm --cached .env` and force push.
