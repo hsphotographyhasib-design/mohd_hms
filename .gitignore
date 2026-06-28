@@ -67,3 +67,4 @@ server.log
 .zscripts/upload/
 generated/prisma/
 tool-results/
+upload/

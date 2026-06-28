@@ -35,6 +35,8 @@ export type UserMinAggregateOutputType = {
   role: string | null
   employeeNumber: string | null
   departmentId: string | null
+  authProvider: string | null
+  googleId: string | null
   isActive: boolean | null
   isOnline: boolean | null
   lastLogin: Date | null
@@ -55,6 +57,8 @@ export type UserMaxAggregateOutputType = {
   role: string | null
   employeeNumber: string | null
   departmentId: string | null
+  authProvider: string | null
+  googleId: string | null
   isActive: boolean | null
   isOnline: boolean | null
   lastLogin: Date | null
@@ -75,6 +79,8 @@ export type UserCountAggregateOutputType = {
   role: number
   employeeNumber: number
   departmentId: number
+  authProvider: number
+  googleId: number
   isActive: number
   isOnline: number
   lastLogin: number
@@ -97,6 +103,8 @@ export type UserMinAggregateInputType = {
   role?: true
   employeeNumber?: true
   departmentId?: true
+  authProvider?: true
+  googleId?: true
   isActive?: true
   isOnline?: true
   lastLogin?: true
@@ -117,6 +125,8 @@ export type UserMaxAggregateInputType = {
   role?: true
   employeeNumber?: true
   departmentId?: true
+  authProvider?: true
+  googleId?: true
   isActive?: true
   isOnline?: true
   lastLogin?: true
@@ -137,6 +147,8 @@ export type UserCountAggregateInputType = {
   role?: true
   employeeNumber?: true
   departmentId?: true
+  authProvider?: true
+  googleId?: true
   isActive?: true
   isOnline?: true
   lastLogin?: true
@@ -230,6 +242,8 @@ export type UserGroupByOutputType = {
   role: string
   employeeNumber: string | null
   departmentId: string | null
+  authProvider: string | null
+  googleId: string | null
   isActive: boolean
   isOnline: boolean
   lastLogin: Date | null
@@ -271,6 +285,8 @@ export type UserWhereInput = {
   role?: Prisma.StringFilter<"User"> | string
   employeeNumber?: Prisma.StringNullableFilter<"User"> | string | null
   departmentId?: Prisma.StringNullableFilter<"User"> | string | null
+  authProvider?: Prisma.StringNullableFilter<"User"> | string | null
+  googleId?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -306,6 +322,8 @@ export type UserOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   employeeNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  authProvider?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -332,6 +350,7 @@ export type UserOrderByWithRelationInput = {
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  googleId?: string
   tenantId_email?: Prisma.UserTenantIdEmailCompoundUniqueInput
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
@@ -345,6 +364,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.StringFilter<"User"> | string
   employeeNumber?: Prisma.StringNullableFilter<"User"> | string | null
   departmentId?: Prisma.StringNullableFilter<"User"> | string | null
+  authProvider?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -367,7 +387,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   devices?: Prisma.DeviceListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   authAuditLogs?: Prisma.AuthAuditLogListRelationFilter
-}, "id" | "tenantId_email">
+}, "id" | "tenantId_email" | "googleId">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -380,6 +400,8 @@ export type UserOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   employeeNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  authProvider?: Prisma.SortOrderInput | Prisma.SortOrder
+  googleId?: Prisma.SortOrderInput | Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -406,6 +428,8 @@ export type UserScalarWhereWithAggregatesInput = {
   role?: Prisma.StringWithAggregatesFilter<"User"> | string
   employeeNumber?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   departmentId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  authProvider?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  googleId?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   isOnline?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
@@ -424,6 +448,8 @@ export type UserCreateInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -459,6 +485,8 @@ export type UserUncheckedCreateInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -490,6 +518,8 @@ export type UserUpdateInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -525,6 +555,8 @@ export type UserUncheckedUpdateInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -558,6 +590,8 @@ export type UserCreateManyInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -576,6 +610,8 @@ export type UserUpdateManyMutationInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -596,6 +632,8 @@ export type UserUncheckedUpdateManyInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -631,6 +669,8 @@ export type UserCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   employeeNumber?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  authProvider?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
@@ -651,6 +691,8 @@ export type UserMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   employeeNumber?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  authProvider?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
@@ -671,6 +713,8 @@ export type UserMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   employeeNumber?: Prisma.SortOrder
   departmentId?: Prisma.SortOrder
+  authProvider?: Prisma.SortOrder
+  googleId?: Prisma.SortOrder
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
@@ -987,6 +1031,8 @@ export type UserCreateWithoutTenantInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1020,6 +1066,8 @@ export type UserUncheckedCreateWithoutTenantInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1082,6 +1130,8 @@ export type UserScalarWhereInput = {
   role?: Prisma.StringFilter<"User"> | string
   employeeNumber?: Prisma.StringNullableFilter<"User"> | string | null
   departmentId?: Prisma.StringNullableFilter<"User"> | string | null
+  authProvider?: Prisma.StringNullableFilter<"User"> | string | null
+  googleId?: Prisma.StringNullableFilter<"User"> | string | null
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
@@ -1100,6 +1150,8 @@ export type UserCreateWithoutDepartmentInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1133,6 +1185,8 @@ export type UserUncheckedCreateWithoutDepartmentInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1190,6 +1244,8 @@ export type UserCreateWithoutAssignedComplaintsInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1224,6 +1280,8 @@ export type UserUncheckedCreateWithoutAssignedComplaintsInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1259,6 +1317,8 @@ export type UserCreateWithoutSupervisorComplaintsInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1293,6 +1353,8 @@ export type UserUncheckedCreateWithoutSupervisorComplaintsInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1339,6 +1401,8 @@ export type UserUpdateWithoutAssignedComplaintsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1373,6 +1437,8 @@ export type UserUncheckedUpdateWithoutAssignedComplaintsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1414,6 +1480,8 @@ export type UserUpdateWithoutSupervisorComplaintsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1448,6 +1516,8 @@ export type UserUncheckedUpdateWithoutSupervisorComplaintsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1478,6 +1548,8 @@ export type UserCreateWithoutAssignedWorkOrdersInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1512,6 +1584,8 @@ export type UserUncheckedCreateWithoutAssignedWorkOrdersInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1547,6 +1621,8 @@ export type UserCreateWithoutCreatedWorkOrdersInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1581,6 +1657,8 @@ export type UserUncheckedCreateWithoutCreatedWorkOrdersInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1627,6 +1705,8 @@ export type UserUpdateWithoutAssignedWorkOrdersInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1661,6 +1741,8 @@ export type UserUncheckedUpdateWithoutAssignedWorkOrdersInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1702,6 +1784,8 @@ export type UserUpdateWithoutCreatedWorkOrdersInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1736,6 +1820,8 @@ export type UserUncheckedUpdateWithoutCreatedWorkOrdersInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1766,6 +1852,8 @@ export type UserCreateWithoutPmSchedulesInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1800,6 +1888,8 @@ export type UserUncheckedCreateWithoutPmSchedulesInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1846,6 +1936,8 @@ export type UserUpdateWithoutPmSchedulesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1880,6 +1972,8 @@ export type UserUncheckedUpdateWithoutPmSchedulesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -1910,6 +2004,8 @@ export type UserCreateWithoutCreatedInvoicesInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1944,6 +2040,8 @@ export type UserUncheckedCreateWithoutCreatedInvoicesInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -1979,6 +2077,8 @@ export type UserCreateWithoutPreparedInvoicesInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2013,6 +2113,8 @@ export type UserUncheckedCreateWithoutPreparedInvoicesInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2059,6 +2161,8 @@ export type UserUpdateWithoutCreatedInvoicesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2093,6 +2197,8 @@ export type UserUncheckedUpdateWithoutCreatedInvoicesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2134,6 +2240,8 @@ export type UserUpdateWithoutPreparedInvoicesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2168,6 +2276,8 @@ export type UserUncheckedUpdateWithoutPreparedInvoicesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2198,6 +2308,8 @@ export type UserCreateWithoutVehicleLogsInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2232,6 +2344,8 @@ export type UserUncheckedCreateWithoutVehicleLogsInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2278,6 +2392,8 @@ export type UserUpdateWithoutVehicleLogsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2312,6 +2428,8 @@ export type UserUncheckedUpdateWithoutVehicleLogsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2342,6 +2460,8 @@ export type UserCreateWithoutAuditLogsInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2376,6 +2496,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2422,6 +2544,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2456,6 +2580,8 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2486,6 +2612,8 @@ export type UserCreateWithoutLoginSessionsInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2520,6 +2648,8 @@ export type UserUncheckedCreateWithoutLoginSessionsInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2566,6 +2696,8 @@ export type UserUpdateWithoutLoginSessionsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2600,6 +2732,8 @@ export type UserUncheckedUpdateWithoutLoginSessionsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2630,6 +2764,8 @@ export type UserCreateWithoutDevicesInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2664,6 +2800,8 @@ export type UserUncheckedCreateWithoutDevicesInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2710,6 +2848,8 @@ export type UserUpdateWithoutDevicesInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2744,6 +2884,8 @@ export type UserUncheckedUpdateWithoutDevicesInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2774,6 +2916,8 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2808,6 +2952,8 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2854,6 +3000,8 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2888,6 +3036,8 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -2918,6 +3068,8 @@ export type UserCreateWithoutAuthAuditLogsInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2952,6 +3104,8 @@ export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -2998,6 +3152,8 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3032,6 +3188,8 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3063,6 +3221,8 @@ export type UserCreateManyTenantInput = {
   role?: string
   employeeNumber?: string | null
   departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -3081,6 +3241,8 @@ export type UserUpdateWithoutTenantInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3114,6 +3276,8 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3146,6 +3310,8 @@ export type UserUncheckedUpdateManyWithoutTenantInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3165,6 +3331,8 @@ export type UserCreateManyDepartmentInput = {
   avatar?: string | null
   role?: string
   employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
@@ -3183,6 +3351,8 @@ export type UserUpdateWithoutDepartmentInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3216,6 +3386,8 @@ export type UserUncheckedUpdateWithoutDepartmentInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3248,6 +3420,8 @@ export type UserUncheckedUpdateManyWithoutDepartmentInput = {
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.StringFieldUpdateOperationsInput | string
   employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -3407,6 +3581,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   role?: boolean
   employeeNumber?: boolean
   departmentId?: boolean
+  authProvider?: boolean
+  googleId?: boolean
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: boolean
@@ -3443,6 +3619,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   employeeNumber?: boolean
   departmentId?: boolean
+  authProvider?: boolean
+  googleId?: boolean
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: boolean
@@ -3465,6 +3643,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   role?: boolean
   employeeNumber?: boolean
   departmentId?: boolean
+  authProvider?: boolean
+  googleId?: boolean
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: boolean
@@ -3487,6 +3667,8 @@ export type UserSelectScalar = {
   role?: boolean
   employeeNumber?: boolean
   departmentId?: boolean
+  authProvider?: boolean
+  googleId?: boolean
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: boolean
@@ -3496,7 +3678,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "passwordHash" | "name" | "phone" | "avatar" | "role" | "employeeNumber" | "departmentId" | "isActive" | "isOnline" | "lastLogin" | "gpsLocation" | "profileCompleted" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "passwordHash" | "name" | "phone" | "avatar" | "role" | "employeeNumber" | "departmentId" | "authProvider" | "googleId" | "isActive" | "isOnline" | "lastLogin" | "gpsLocation" | "profileCompleted" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
@@ -3554,6 +3736,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     role: string
     employeeNumber: string | null
     departmentId: string | null
+    authProvider: string | null
+    googleId: string | null
     isActive: boolean
     isOnline: boolean
     lastLogin: Date | null
@@ -4009,6 +4193,8 @@ export interface UserFieldRefs {
   readonly role: Prisma.FieldRef<"User", 'String'>
   readonly employeeNumber: Prisma.FieldRef<"User", 'String'>
   readonly departmentId: Prisma.FieldRef<"User", 'String'>
+  readonly authProvider: Prisma.FieldRef<"User", 'String'>
+  readonly googleId: Prisma.FieldRef<"User", 'String'>
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly isOnline: Prisma.FieldRef<"User", 'Boolean'>
   readonly lastLogin: Prisma.FieldRef<"User", 'DateTime'>

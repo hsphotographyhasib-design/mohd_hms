@@ -15,10 +15,11 @@ interface AuthState {
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (data: { name: string; email: string; password: string; role: string }) => Promise<void>;
+  loginWithGoogle: (googleToken: string) => Promise<void>;
+  loginWithWhatsApp: (user: AuthUser, accessToken: string, refreshToken: string) => void;
   logout: () => void;
   secureLogout: (reason?: string) => void;
   updateProfile: (data: Partial<AuthUser>) => void;
-  loginWithWhatsApp: (user: AuthUser, accessToken: string, refreshToken: string) => void;
   loadFromStorage: () => void;
 }
 
@@ -62,6 +63,29 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.setItem('cmms_token', result.token);
       localStorage.setItem('cmms_user', JSON.stringify(result.user));
       set({ user: normalizeUser(result.user), token: result.token, isAuthenticated: true, isLoading: false });
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+  loginWithGoogle: async (googleToken: string) => {
+    set({ isLoading: true });
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: googleToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Google sign-in failed');
+      localStorage.setItem('cmms_token', data.token);
+      localStorage.setItem('cmms_user', JSON.stringify(data.user));
+      set({ user: normalizeUser(data.user), token: data.token, isAuthenticated: true, isLoading: false });
+      window.history.pushState(null, '', '/');
+      window.dispatchEvent(
+        new CustomEvent('cmms:toast', { detail: { type: 'success', message: `Welcome, ${data.user.name}!` } }),
+      );
     } catch (error) {
       set({ isLoading: false });
       throw error;

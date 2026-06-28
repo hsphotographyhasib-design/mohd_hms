@@ -124,11 +124,12 @@ function WhatsAppIcon({ className }: { className?: string }) {
 /* ------------------------------------------------------------------ */
 
 export function LoginView() {
-  const { login, loginWithWhatsApp, isLoading } = useAuthStore();
+  const { login, loginWithGoogle, loginWithWhatsApp, isLoading } = useAuthStore();
 
   /* ---- Panel navigation ---- */
   const [panel, setPanel] = useState<Panel>('choices');
   const [waStep, setWaStep] = useState<WaStep>('phone');
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
 
   /* ---- Email form ---- */
   const [email, setEmail] = useState('');
@@ -501,6 +502,114 @@ export function LoginView() {
     }
   };
 
+  /* ---- Google Sign-In ---- */
+  const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
+  const [gisReady, setGisReady] = useState(false);
+  const [gisError, setGisError] = useState(false);
+
+  const handleGoogleSignIn = useCallback(async () => {
+    if (isGoogleLoading || isLoading) return;
+
+    // Guard: no client ID configured
+    if (!GOOGLE_CLIENT_ID) {
+      toast.error('Google Sign-In is not configured. Please contact the administrator.');
+      return;
+    }
+
+    // Guard: GIS script not loaded yet
+    const google = (window as unknown as { google?: { accounts: { id: { initialize: (c: Record<string, unknown>) => void; prompt: (callback?: (notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean; getNotDisplayedReason: () => number; getSkippedReason: () => number }) => void) => void; renderButton: (parent: HTMLElement, options: Record<string, unknown>) => void } } } }).google;
+    if (!google?.accounts?.id) {
+      toast.error('Google Sign-In is loading. Please wait a moment and try again.');
+      return;
+    }
+
+    setIsGoogleLoading(true);
+    let settled = false;
+    try {
+      let resolveToken: ((token: string) => void) | null = null;
+      let rejectToken: ((err: Error) => void) | null = null;
+      const tokenPromise = new Promise<string>((resolve, reject) => {
+        resolveToken = resolve;
+        rejectToken = reject;
+      });
+
+      // Timeout after 90s
+      const timeout = setTimeout(() => {
+        if (!settled) {
+          settled = true;
+          rejectToken?.(new Error('Google sign-in timed out. Please try again.'));
+        }
+      }, 90_000);
+
+      google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: (response: { credential: string }) => {
+          clearTimeout(timeout);
+          if (!settled && resolveToken) {
+            settled = true;
+            resolveToken(response.credential);
+          }
+        },
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+
+      google.accounts.id.prompt((notification) => {
+        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+          clearTimeout(timeout);
+          if (!settled) {
+            settled = true;
+            // Provide meaningful error based on reason
+            const reason = notification.getNotDisplayedReason?.();
+            const msg =
+              reason === 1 ? 'Browser is in incognito/private mode. Google Sign-In is unavailable.' :
+              reason === 2 ? 'Google cookies are blocked. Please allow third-party cookies.' :
+              reason === 3 ? 'Google Sign-In was suppressed. Please try again.' :
+              reason === 4 ? 'Google Sign-In is not available in this context.' :
+              'Popup closed by user';
+            rejectToken?.(new Error(msg));
+          }
+        }
+      });
+
+      const credential = await tokenPromise;
+      if (credential) {
+        await loginWithGoogle(credential);
+      }
+    } catch (err) {
+      if (err instanceof Error && err.message !== 'Popup closed by user') {
+        toast.error(err.message || 'Google sign-in failed. Please try again.');
+      }
+    } finally {
+      if (!settled) settled = true;
+      setIsGoogleLoading(false);
+    }
+  }, [isGoogleLoading, isLoading, loginWithGoogle, GOOGLE_CLIENT_ID]);
+
+  // Load Google Identity Services script with error handling
+  useEffect(() => {
+    if (!GOOGLE_CLIENT_ID) {
+      setGisError(true);
+      return;
+    }
+    if (document.querySelector('script[src*="accounts.google.com/gsi"]')) {
+      // Script tag exists — wait a tick then check if GIS is ready
+      const check = setInterval(() => {
+        const g = (window as unknown as Record<string, unknown>).google as Record<string, unknown> | undefined;
+        if (g?.accounts) { setGisReady(true); clearInterval(check); }
+      }, 200);
+      const t = setTimeout(() => { clearInterval(check); setGisReady(true); }, 5000);
+      return () => { clearInterval(check); clearTimeout(t); };
+    }
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = () => setGisReady(true);
+    script.onerror = () => setGisError(true);
+    document.head.appendChild(script);
+  }, [GOOGLE_CLIENT_ID]);
+
   /* ================================================================ */
   /*  RENDER                                                           */
   /* ================================================================ */
@@ -540,14 +649,21 @@ export function LoginView() {
           {/* Google */}
           <button
             type="button"
-            onClick={() => {
-              /* TODO: window.location = '/auth/google' */
-              toast.info('Google sign-in coming soon');
-            }}
-            className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
+            disabled={isGoogleLoading || isLoading || gisError || !GOOGLE_CLIENT_ID}
+            onClick={handleGoogleSignIn}
+            title={
+              !GOOGLE_CLIENT_ID ? 'Google Sign-In not configured' :
+              gisError ? 'Google script failed to load. Use email login.' :
+              undefined
+            }
+            className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
           >
-            <GoogleIcon className="w-5 h-5 shrink-0" />
-            <span>Continue with Google</span>
+            {isGoogleLoading ? (
+              <Loader2 className="w-5 h-5 shrink-0 animate-spin" />
+            ) : (
+              <GoogleIcon className="w-5 h-5 shrink-0" />
+            )}
+            <span>{isGoogleLoading ? 'Signing in...' : 'Continue with Google'}</span>
           </button>
 
           {/* Divider */}

@@ -70,6 +70,8 @@ model User {
   role          String   @default("technician") // super_admin, admin, manager, supervisor, technician, finance, customer, vendor, guest
   employeeNumber String?
   departmentId  String?
+  authProvider  String?  // "email", "google", "whatsapp"
+  googleId      String?  // Google sub (unique user ID)
   isActive      Boolean  @default(true)
   isOnline      Boolean  @default(false)
   lastLogin     DateTime?
@@ -95,6 +97,7 @@ model User {
   authAuditLogs AuthAuditLog[]
 
   @@unique([tenantId, email])
+  @@unique([googleId])
   @@index([tenantId])
   @@index([tenantId, phone])
   @@index([tenantId, role])

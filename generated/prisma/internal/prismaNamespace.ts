@@ -4596,6 +4596,8 @@ export const UserScalarFieldEnum = {
   role: 'role',
   employeeNumber: 'employeeNumber',
   departmentId: 'departmentId',
+  authProvider: 'authProvider',
+  googleId: 'googleId',
   isActive: 'isActive',
   isOnline: 'isOnline',
   lastLogin: 'lastLogin',
