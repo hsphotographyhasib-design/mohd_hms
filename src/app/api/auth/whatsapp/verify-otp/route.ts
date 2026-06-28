@@ -121,11 +121,13 @@ export async function POST(request: NextRequest) {
     );
 
     if (existingUser) {
-      // User exists — generate tokens, create session and device
+      // User exists — normalize role and generate tokens
+      const normalizedRole = (existingUser.role as string).toLowerCase() as typeof existingUser.role;
+
       const accessToken = generateToken({
         userId: existingUser.id,
         tenantId: existingUser.tenantId,
-        role: existingUser.role,
+        role: normalizedRole,
         email: existingUser.email,
       });
 
@@ -215,7 +217,7 @@ export async function POST(request: NextRequest) {
           name: existingUser.name,
           phone: existingUser.phone,
           avatar: existingUser.avatar,
-          role: existingUser.role,
+          role: normalizedRole,
           tenantId: existingUser.tenantId,
           tenantName: tenant.name,
           tenantDomain: tenant.domain,

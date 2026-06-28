@@ -60,10 +60,13 @@ export async function POST(request: NextRequest) {
       { label: 'login-updateLastLogin' }
     ).catch(() => {});
 
+    // Normalize role to lowercase for consistent RBAC checks
+    const normalizedRole = (user.role as string).toLowerCase() as typeof user.role;
+
     const token = generateToken({
       userId: user.id,
       tenantId: user.tenantId,
-      role: user.role,
+      role: normalizedRole,
       email: user.email,
     });
 
@@ -75,7 +78,7 @@ export async function POST(request: NextRequest) {
         name: user.name,
         phone: user.phone,
         avatar: user.avatar,
-        role: user.role,
+        role: normalizedRole,
         tenantId: user.tenantId,
         tenantName: user.tenant?.name,
         tenantDomain: user.tenant?.domain,

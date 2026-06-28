@@ -3,6 +3,11 @@ import type { AuthUser, UserRole, AppView } from '@/types';
 
 const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || 'cmms-secret-key';
 
+/** Normalize user role to lowercase to match UserRole type union */
+function normalizeUser(raw: AuthUser): AuthUser {
+  return { ...raw, role: (raw.role as string).toLowerCase() as UserRole };
+}
+
 interface AuthState {
   user: AuthUser | null;
   token: string | null;
@@ -35,7 +40,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (!res.ok) throw new Error(data.error || 'Login failed');
       localStorage.setItem('cmms_token', data.token);
       localStorage.setItem('cmms_user', JSON.stringify(data.user));
-      set({ user: data.user, token: data.token, isAuthenticated: true, isLoading: false });
+      set({ user: normalizeUser(data.user), token: data.token, isAuthenticated: true, isLoading: false });
       // Push history state for back button protection
       window.history.pushState(null, '', '/');
     } catch (error) {
@@ -56,7 +61,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (!res.ok) throw new Error(result.error || 'Registration failed');
       localStorage.setItem('cmms_token', result.token);
       localStorage.setItem('cmms_user', JSON.stringify(result.user));
-      set({ user: result.user, token: result.token, isAuthenticated: true, isLoading: false });
+      set({ user: normalizeUser(result.user), token: result.token, isAuthenticated: true, isLoading: false });
     } catch (error) {
       set({ isLoading: false });
       throw error;
@@ -101,7 +106,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   updateProfile: (data: Partial<AuthUser>) => {
     const currentUser = get().user;
     if (currentUser) {
-      const updated = { ...currentUser, ...data };
+      const updated = normalizeUser({ ...currentUser, ...data });
       localStorage.setItem('cmms_user', JSON.stringify(updated));
       set({ user: updated });
     }
@@ -111,7 +116,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     localStorage.setItem('cmms_token', accessToken);
     localStorage.setItem('cmms_refresh_token', refreshToken);
     localStorage.setItem('cmms_user', JSON.stringify(user));
-    set({ user, token: accessToken, isAuthenticated: true, isLoading: false });
+    set({ user: normalizeUser(user), token: accessToken, isAuthenticated: true, isLoading: false });
     window.history.pushState(null, '', '/');
     window.dispatchEvent(
       new CustomEvent('cmms:toast', { detail: { type: 'success', message: 'Welcome back!' } }),
@@ -123,7 +128,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const userStr = localStorage.getItem('cmms_user');
     if (token && userStr) {
       try {
-        const user = JSON.parse(userStr) as AuthUser;
+        const user = normalizeUser(JSON.parse(userStr) as AuthUser);
         set({ user, token, isAuthenticated: true });
       } catch {
         localStorage.removeItem('cmms_token');
