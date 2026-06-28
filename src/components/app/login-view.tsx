@@ -717,6 +717,16 @@ export function LoginView() {
             )}
           </div>
 
+          {/* Forgot password */}
+          <div className="-mt-1 -mb-1 flex justify-end">
+            <a
+              href="/forgot-password"
+              className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline rounded transition-colors"
+            >
+              Forgot password?
+            </a>
+          </div>
+
           {/* Submit */}
           <button
             type="submit"

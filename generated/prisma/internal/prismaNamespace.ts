@@ -436,7 +436,9 @@ export const ModelName = {
   WhatsAppDeliveryLog: 'WhatsAppDeliveryLog',
   OtpCode: 'OtpCode',
   LoginSession: 'LoginSession',
-  Device: 'Device'
+  Device: 'Device',
+  PasswordResetToken: 'PasswordResetToken',
+  AuthAuditLog: 'AuthAuditLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -452,7 +454,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "department" | "customer" | "equipment" | "equipmentQrCode" | "scanLog" | "complaint" | "workOrder" | "workOrderMaterial" | "checklistTemplate" | "pmSchedule" | "quotation" | "invoice" | "inventoryItem" | "purchaseOrder" | "vehicle" | "vehicleLog" | "complaintTimeline" | "notification" | "auditLog" | "leaveRequest" | "attendance" | "cmsSetting" | "cmsHero" | "cmsService" | "cmsIndustry" | "cmsProject" | "cmsBlogCategory" | "cmsBlog" | "cmsTestimonial" | "cmsCareerJob" | "cmsCareerApplication" | "cmsContactMessage" | "cmsMedia" | "cmsSeo" | "cmsFooter" | "cmsAnnouncement" | "cmsPopup" | "cmsForm" | "cmsActivityLog" | "whatsAppConfig" | "whatsAppSession" | "whatsAppMessage" | "conversationThread" | "whatsAppTemplate" | "customerFeedback" | "customerReport" | "broadcastLog" | "whatsAppDeliveryLog" | "otpCode" | "loginSession" | "device"
+    modelProps: "tenant" | "user" | "department" | "customer" | "equipment" | "equipmentQrCode" | "scanLog" | "complaint" | "workOrder" | "workOrderMaterial" | "checklistTemplate" | "pmSchedule" | "quotation" | "invoice" | "inventoryItem" | "purchaseOrder" | "vehicle" | "vehicleLog" | "complaintTimeline" | "notification" | "auditLog" | "leaveRequest" | "attendance" | "cmsSetting" | "cmsHero" | "cmsService" | "cmsIndustry" | "cmsProject" | "cmsBlogCategory" | "cmsBlog" | "cmsTestimonial" | "cmsCareerJob" | "cmsCareerApplication" | "cmsContactMessage" | "cmsMedia" | "cmsSeo" | "cmsFooter" | "cmsAnnouncement" | "cmsPopup" | "cmsForm" | "cmsActivityLog" | "whatsAppConfig" | "whatsAppSession" | "whatsAppMessage" | "conversationThread" | "whatsAppTemplate" | "customerFeedback" | "customerReport" | "broadcastLog" | "whatsAppDeliveryLog" | "otpCode" | "loginSession" | "device" | "passwordResetToken" | "authAuditLog"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4378,6 +4380,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PasswordResetToken: {
+      payload: Prisma.$PasswordResetTokenPayload<ExtArgs>
+      fields: Prisma.PasswordResetTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PasswordResetTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PasswordResetTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.PasswordResetTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PasswordResetTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>
+        }
+        findMany: {
+          args: Prisma.PasswordResetTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>[]
+        }
+        create: {
+          args: Prisma.PasswordResetTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>
+        }
+        createMany: {
+          args: Prisma.PasswordResetTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PasswordResetTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.PasswordResetTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>
+        }
+        update: {
+          args: Prisma.PasswordResetTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.PasswordResetTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PasswordResetTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PasswordResetTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.PasswordResetTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.PasswordResetTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePasswordResetToken>
+        }
+        groupBy: {
+          args: Prisma.PasswordResetTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PasswordResetTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PasswordResetTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PasswordResetTokenCountAggregateOutputType> | number
+        }
+      }
+    }
+    AuthAuditLog: {
+      payload: Prisma.$AuthAuditLogPayload<ExtArgs>
+      fields: Prisma.AuthAuditLogFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AuthAuditLogFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AuthAuditLogFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>
+        }
+        findFirst: {
+          args: Prisma.AuthAuditLogFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AuthAuditLogFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>
+        }
+        findMany: {
+          args: Prisma.AuthAuditLogFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>[]
+        }
+        create: {
+          args: Prisma.AuthAuditLogCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>
+        }
+        createMany: {
+          args: Prisma.AuthAuditLogCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AuthAuditLogCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>[]
+        }
+        delete: {
+          args: Prisma.AuthAuditLogDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>
+        }
+        update: {
+          args: Prisma.AuthAuditLogUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>
+        }
+        deleteMany: {
+          args: Prisma.AuthAuditLogDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AuthAuditLogUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AuthAuditLogUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>[]
+        }
+        upsert: {
+          args: Prisma.AuthAuditLogUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AuthAuditLogPayload>
+        }
+        aggregate: {
+          args: Prisma.AuthAuditLogAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAuthAuditLog>
+        }
+        groupBy: {
+          args: Prisma.AuthAuditLogGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuthAuditLogGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AuthAuditLogCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AuthAuditLogCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -5529,6 +5679,39 @@ export const DeviceScalarFieldEnum = {
 export type DeviceScalarFieldEnum = (typeof DeviceScalarFieldEnum)[keyof typeof DeviceScalarFieldEnum]
 
 
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
+
+
+export const AuthAuditLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  email: 'email',
+  event: 'event',
+  success: 'success',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  device: 'device',
+  browser: 'browser',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type AuthAuditLogScalarFieldEnum = (typeof AuthAuditLogScalarFieldEnum)[keyof typeof AuthAuditLogScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -5784,6 +5967,8 @@ export type GlobalOmitConfig = {
   otpCode?: Prisma.OtpCodeOmit
   loginSession?: Prisma.LoginSessionOmit
   device?: Prisma.DeviceOmit
+  passwordResetToken?: Prisma.PasswordResetTokenOmit
+  authAuditLog?: Prisma.AuthAuditLogOmit
 }
 
 /* Types for Logging */
