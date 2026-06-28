@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
     'pg',
     '@prisma/adapter-pg',
     '@prisma/client',
+    'google-auth-library',
   ],
 };
 
