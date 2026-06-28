@@ -8,8 +8,8 @@ const nextConfig: NextConfig = {
   // Don't bundle these packages — load from node_modules at runtime
   // This prevents Turbopack from replacing process.env references inside them
   serverExternalPackages: [
-    '@libsql/client',
-    '@prisma/adapter-libsql',
+    'pg',
+    '@prisma/adapter-pg',
     '@prisma/client',
   ],
 };
