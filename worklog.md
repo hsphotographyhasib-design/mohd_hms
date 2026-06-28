@@ -200,3 +200,31 @@ Stage Summary:
 - Fast client-side navigation with browser history and deep linking support
 - CMS integration preserved (same API, same data flow)
 - Landing CSS isolated from auth app via <link> tag loading
+---
+Task ID: 1
+Agent: main
+Task: Set up Prisma Postgres end-to-end
+
+Work Log:
+- Fetched https://www.prisma.io/docs/llms-full.txt and extracted Prisma Postgres quickstart, PrismaPg adapter, prisma.config.ts, and seed configuration sections
+- Detected bun lockfile, installed prisma@7.8.0, @prisma/client@7.8.0, @prisma/adapter-pg, pg, dotenv, @types/node, @types/pg, tsx
+- Ran `prisma postgres link` with provided DATABASE_ID and API key — DATABASE_URL written to .env
+- .env already in .gitignore (confirmed)
+- Updated prisma/schema.prisma: generator → prisma-client with output ../generated/prisma, datasource provider → postgresql
+- Created prisma.config.ts with defineConfig, dotenv override:true, and datasource.url from process.env.DATABASE_URL
+- Ran `prisma migrate dev --name init` — all existing models migrated to Postgres
+- Generated Prisma Client v7.8.0 to ./generated/prisma
+- Created src/lib/prisma.ts singleton with PrismaPg adapter and globalThis caching
+- Created prisma/seed.ts seeding Tenant, User, Department; wired via migrations.seed in prisma.config.ts
+- Ran `prisma db seed` — success
+- Created scripts/verify-prisma.ts — ran, confirmed Tenants:1, Users:1, Departments:1, ✅ Connected
+- Fixed dotenv override issue (shell env had stale SQLite URL, used config({override:true}))
+- Added generated/prisma/ to .gitignore
+- Pushed to GitHub
+
+Stage Summary:
+- Prisma upgraded from 6.19.2 (SQLite + prisma-client-js) to 7.8.0 (PostgreSQL + prisma-client)
+- New import path: `import { PrismaClient } from "@/generated/prisma/client"` or `../../generated/prisma/client`
+- Singleton: `import { prisma } from "@/lib/prisma"`
+- Existing 38+ API routes still import from old `@prisma/client` — need migration
+- prisma.config.ts uses dotenv override:true to handle shell env conflicts
