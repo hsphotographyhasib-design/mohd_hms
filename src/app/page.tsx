@@ -71,6 +71,12 @@ export default function Home() {
           localStorage.clear();
         }
       }
+      // If we just returned from a failed Google sign-in, open the login view
+      // so the error toast (handled inside LoginView) is visible.
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('googleAuthError')) setShowLogin(true);
+      }
     }
   }, []);
 
