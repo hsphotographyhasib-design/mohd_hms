@@ -37,6 +37,8 @@ import {
 type Panel = 'choices' | 'email' | 'whatsapp';
 type WaStep = 'phone' | 'otp' | 'register' | 'success';
 
+const ENABLE_DEMO = process.env.NEXT_PUBLIC_ENABLE_DEMO_LOGIN === 'true';
+
 interface DemoAccount {
   label: string;
   email: string;
@@ -44,13 +46,13 @@ interface DemoAccount {
   icon: React.ReactNode;
 }
 
-const demoAccounts: DemoAccount[] = [
+const demoAccounts: DemoAccount[] = ENABLE_DEMO ? [
   { label: 'Admin', email: 'admin@facilitypro.com', password: 'password123', icon: <Shield className="h-3.5 w-3.5" /> },
   { label: 'Manager', email: 'manager@facilitypro.com', password: 'password123', icon: <UserCog className="h-3.5 w-3.5" /> },
   { label: 'Supervisor', email: 'supervisor@facilitypro.com', password: 'password123', icon: <HardHat className="h-3.5 w-3.5" /> },
   { label: 'Technician', email: 'tech1@facilitypro.com', password: 'password123', icon: <Wrench className="h-3.5 w-3.5" /> },
   { label: 'Finance', email: 'finance@facilitypro.com', password: 'password123', icon: <DollarSign className="h-3.5 w-3.5" /> },
-];
+] : [];
 
 /* ------------------------------------------------------------------ */
 /*  Sub-components                                                     */
@@ -711,7 +713,8 @@ export function LoginView() {
             <span>Skip for now</span>
           </button>
 
-          {/* ---- Demo Accounts ---- */}
+          {/* ---- Demo Accounts (dev only) ---- */}
+          {ENABLE_DEMO && demoAccounts.length > 0 && (
           <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
             <p className="text-xs font-medium text-gray-400 dark:text-gray-500 text-center mb-2.5">
               Quick Demo Access
@@ -731,6 +734,7 @@ export function LoginView() {
               ))}
             </div>
           </div>
+          )}
         </div>
 
         {/* ============================================================ */}
