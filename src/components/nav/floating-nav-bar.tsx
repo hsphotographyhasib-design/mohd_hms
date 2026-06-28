@@ -55,27 +55,8 @@ interface NavItemConfig {
 
 const NAV_ITEMS: NavItemConfig[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, feature: 'dashboard' },
-  {
-    id: 'equipment',
-    label: 'Equipment',
-    icon: Wrench,
-    feature: 'equipment',
-    subItems: [
-      { id: 'equipment', label: 'Equipment Registry' },
-      { id: 'equipment', label: 'Asset Categories' },
-      { id: 'equipment', label: 'QR Codes' },
-    ],
-  },
-  {
-    id: 'complaints',
-    label: 'Complaints',
-    icon: AlertTriangle,
-    feature: 'complaints',
-    subItems: [
-      { id: 'complaints', label: 'All Complaints' },
-      { id: 'new-complaint', label: 'New Complaint' },
-    ],
-  },
+  { id: 'equipment', label: 'Equipment', icon: Wrench, feature: 'equipment' },
+  { id: 'complaints', label: 'Complaints', icon: AlertTriangle, feature: 'complaints' },
   { id: 'work-orders', label: 'Work Orders', icon: ClipboardList, feature: 'work-orders' },
   { id: 'pm', label: 'Preventive Maint.', icon: CalendarClock, feature: 'pm' },
   { id: 'inventory', label: 'Inventory', icon: Package, feature: 'inventory' },
