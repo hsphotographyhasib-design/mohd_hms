@@ -2,15 +2,19 @@
   "cookies": [],
   "origins": [
     {
-      "origin": "http://localhost:3000",
+      "origin": "http://localhost:81",
       "localStorage": [
         {
           "name": "cmms_token",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbXFuZnloM2EwMDBjcDY0a3F6ZTV3ZjZ0IiwidGVuYW50SWQiOiJjbXFuZnlndjEwMDAwcDY0a29vNjN3NWZzIiwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBmYWNpbGl0eXByby5jb20iLCJpYXQiOjE3ODIxMDg1MTcsImV4cCI6MTc4MjcxMzMxN30.Xp2vkVUO3xEpfjU05i7kejHyRGYzEGf2V4h__WMlUKA"
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJjbXF4MzcxMnEwMDAwbmdtMWQ0aTVxazMwIiwidGVuYW50SWQiOiJjbXF4MzZoeGYwMDAwbDltMWV4dmx1NGh0Iiwicm9sZSI6ImFkbWluIiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImlhdCI6MTc4MjY5MDM4MiwiZXhwIjoxNzgzMjk1MTgyfQ.inVFdkUTksZ9tFRDtnsY588-wuNIsABvr92iyXMXrkQ"
+        },
+        {
+          "name": "cmms_tc_accepted",
+          "value": "{\"v\":\"1.0\",\"pv\":\"1.0\",\"exp\":1785282381497}"
         },
         {
           "name": "cmms_user",
-          "value": "{\"id\":\"cmqnfyh3a000cp64kqze5wf6t\",\"email\":\"admin@facilitypro.com\",\"name\":\"Ahmed Al-Rashid\",\"phone\":\"+1-555-0101\",\"avatar\":null,\"role\":\"admin\",\"tenantId\":\"cmqnfygv10000p64koo63w5fs\",\"tenantName\":\"FacilityPro Services\",\"tenantDomain\":\"demo.facilitypro.com\",\"employeeNumber\":\"EMP-001\",\"departmentId\":\"cmqnfygv40006p64k45tjaoxk\",\"profileCompleted\":true}"
+          "value": "{\"id\":\"cmqx3712q0000ngm1d4i5qk30\",\"email\":\"admin@example.com\",\"name\":\"Admin User\",\"phone\":null,\"avatar\":null,\"role\":\"admin\",\"tenantId\":\"cmqx36hxf0000l9m1exvlu4ht\",\"tenantName\":\"Demo Company\",\"tenantDomain\":\"app.example.com\",\"employeeNumber\":null,\"departmentId\":null,\"profileCompleted\":true}"
         }
       ],
       "sessionStorage": []

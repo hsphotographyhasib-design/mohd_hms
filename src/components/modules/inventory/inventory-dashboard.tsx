@@ -23,7 +23,7 @@ const ITEM_TYPE_LABELS: Record<string, string> = {
 };
 
 interface Stats {
-  totalItems: number; activeItems: number; lowStockItems: number; outOfStockItems: number;
+  totalItems: number; activeItems: number; lowStockCount: number; outOfStockItems: number;
   pendingApproval: number; totalCategories: number; totalWarehouses: number; totalSuppliers: number;
   totalValue: number; totalStock: number;
   itemsByType: { type: string; count: number }[];
@@ -59,7 +59,7 @@ export function InventoryDashboard({ token, onNavigate }: { token: string; onNav
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
         <KPICard icon={Package} label="Total Items" value={s.totalItems} color="emerald" />
         <KPICard icon={DollarSign} label="Total Value" value={fmt(s.totalValue)} color="emerald" />
-        <KPICard icon={AlertTriangle} label="Low Stock" value={s.lowStockItems} color="rose" />
+        <KPICard icon={AlertTriangle} label="Low Stock" value={s.lowStockCount} color="rose" />
         <KPICard icon={Clock} label="Pending Approval" value={s.pendingApproval} color="amber" />
         <KPICard icon={CheckCircle} label="Active Items" value={s.activeItems} color="teal" />
         <KPICard icon={Warehouse} label="Warehouses" value={s.totalWarehouses} color="blue" />

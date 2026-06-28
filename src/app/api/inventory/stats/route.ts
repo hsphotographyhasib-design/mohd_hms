@@ -82,7 +82,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       totalItems,
       activeItems,
-      lowStockItems: actualLowStock.length,
+      lowStockCount: actualLowStock.length,
       outOfStockItems,
       pendingApproval,
       totalCategories,
