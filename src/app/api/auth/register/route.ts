@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { hashPassword, generateToken } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
@@ -12,35 +12,49 @@ export async function POST(request: NextRequest) {
     }
 
     // Find or create default tenant for new registrations
-    let tenant = await db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } });
+    let tenant = await withRetry(
+      () => db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } }),
+      { label: 'register-findTenant' }
+    );
     if (!tenant) {
-      tenant = await db.tenant.create({
-        data: {
-          name: 'Default Organization',
-          domain: 'default.facilitypro.com',
-          plan: 'professional',
-          maxUsers: 50,
-        },
-      });
+      tenant = await withRetry(
+        () =>
+          db.tenant.create({
+            data: {
+              name: 'Default Organization',
+              domain: 'default.facilitypro.com',
+              plan: 'professional',
+              maxUsers: 50,
+            },
+          }),
+        { label: 'register-createTenant' }
+      );
     }
 
-    const existing = await db.user.findFirst({ where: { tenantId: tenant.id, email } });
+    const existing = await withRetry(
+      () => db.user.findFirst({ where: { tenantId: tenant.id, email } }),
+      { label: 'register-checkEmail' }
+    );
     if (existing) {
       return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
     }
 
     const passwordHash = await hashPassword(password);
-    const user = await db.user.create({
-      data: {
-        tenantId: tenant.id,
-        email,
-        passwordHash,
-        name,
-        role: role || 'technician',
-        profileCompleted: false,
-      },
-      include: { tenant: { select: { id: true, name: true, domain: true } } },
-    });
+    const user = await withRetry(
+      () =>
+        db.user.create({
+          data: {
+            tenantId: tenant.id,
+            email,
+            passwordHash,
+            name,
+            role: role || 'technician',
+            profileCompleted: false,
+          },
+          include: { tenant: { select: { id: true, name: true, domain: true } } },
+        }),
+      { label: 'register-createUser' }
+    );
 
     const token = generateToken({
       userId: user.id,
@@ -64,6 +78,6 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Register error:', error);
-    return NextResponse.json({ error: 'Registration failed' }, { status: 500 });
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }

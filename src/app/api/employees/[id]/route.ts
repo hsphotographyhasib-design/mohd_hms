@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { verifyToken, hashPassword } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
@@ -16,14 +16,18 @@ export async function GET(
     const tenantId = payload.tenantId as string;
     const { id } = await params;
 
-    const employee = await db.user.findFirst({
-      where: { id, tenantId },
-      include: {
-        department: { select: { id: true, name: true } },
-      },
-    });
+    const employee = await withRetry(
+      () =>
+        db.user.findUnique({
+          where: { id },
+          include: {
+            department: { select: { id: true, name: true } },
+          },
+        }),
+      { label: 'employee-get' }
+    );
 
-    if (!employee) {
+    if (!employee || employee.tenantId !== tenantId) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
 
@@ -48,7 +52,7 @@ export async function GET(
     });
   } catch (error) {
     console.error('Employee get error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }
 
@@ -66,8 +70,14 @@ export async function PUT(
     const { id } = await params;
     const body = await request.json();
 
-    const existing = await db.user.findFirst({ where: { id, tenantId } });
-    if (!existing) return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    // Use findUnique (primary key lookup) instead of findFirst
+    const existing = await withRetry(
+      () => db.user.findUnique({ where: { id } }),
+      { label: 'employee-put-find' }
+    );
+    if (!existing || existing.tenantId !== tenantId) {
+      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    }
 
     const updateData: Record<string, unknown> = {};
     if (body.name !== undefined) updateData.name = body.name;
@@ -81,13 +91,17 @@ export async function PUT(
     if (body.gpsLocation !== undefined) updateData.gpsLocation = body.gpsLocation || null;
     if (body.password) updateData.passwordHash = await hashPassword(body.password);
 
-    const updated = await db.user.update({
-      where: { id },
-      data: updateData,
-      include: {
-        department: { select: { id: true, name: true } },
-      },
-    });
+    const updated = await withRetry(
+      () =>
+        db.user.update({
+          where: { id },
+          data: updateData,
+          include: {
+            department: { select: { id: true, name: true } },
+          },
+        }),
+      { label: 'employee-put-update' }
+    );
 
     return NextResponse.json({
       id: updated.id,
@@ -109,7 +123,7 @@ export async function PUT(
     });
   } catch (error) {
     console.error('Employee update error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }
 
@@ -126,13 +140,22 @@ export async function DELETE(
     const tenantId = payload.tenantId as string;
     const { id } = await params;
 
-    const existing = await db.user.findFirst({ where: { id, tenantId } });
-    if (!existing) return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    // Use findUnique (primary key lookup) instead of findFirst
+    const existing = await withRetry(
+      () => db.user.findUnique({ where: { id } }),
+      { label: 'employee-delete-find' }
+    );
+    if (!existing || existing.tenantId !== tenantId) {
+      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    }
 
-    await db.user.delete({ where: { id } });
+    await withRetry(
+      () => db.user.delete({ where: { id } }),
+      { label: 'employee-delete' }
+    );
     return NextResponse.json({ message: 'Employee deleted successfully' });
   } catch (error) {
     console.error('Employee delete error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { generateToken, generateRefreshToken, generateTempToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -32,24 +32,34 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
     // Find tenant
-    let tenant = await db.tenant.findUnique({ where: { domain: 'mohdhms.com' } });
+    let tenant = await withRetry(
+      () => db.tenant.findUnique({ where: { domain: 'mohdhms.com' } }),
+      { label: 'verifyOtp-findTenant' }
+    );
     if (!tenant) {
-      tenant = await db.tenant.findFirst();
+      tenant = await withRetry(
+        () => db.tenant.findFirst(),
+        { label: 'verifyOtp-findFirstTenant' }
+      );
     }
     if (!tenant) {
       return NextResponse.json({ error: 'No tenant configured' }, { status: 500 });
     }
 
-    // Find the latest unexpired, unverified OTP for this phone
-    const otp = await db.otpCode.findFirst({
-      where: {
-        phoneNumber: fullPhone,
-        tenantId: tenant.id,
-        verifiedAt: null,
-        expiresAt: { gt: new Date() },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+    // Find the latest unexpired, unverified OTP for this phone (indexed: tenantId+phoneNumber, phoneNumber+expiresAt)
+    const otp = await withRetry(
+      () =>
+        db.otpCode.findFirst({
+          where: {
+            phoneNumber: fullPhone,
+            tenantId: tenant.id,
+            verifiedAt: null,
+            expiresAt: { gt: new Date() },
+          },
+          orderBy: { createdAt: 'desc' },
+        }),
+      { label: 'verifyOtp-findOtp' }
+    );
 
     if (!otp) {
       return NextResponse.json(
@@ -68,11 +78,14 @@ export async function POST(request: NextRequest) {
 
     // Validate code
     if (otp.code !== code) {
-      // Increment attempt count
-      await db.otpCode.update({
-        where: { id: otp.id },
-        data: { attempts: { increment: 1 } },
-      });
+      await withRetry(
+        () =>
+          db.otpCode.update({
+            where: { id: otp.id },
+            data: { attempts: { increment: 1 } },
+          }),
+        { label: 'verifyOtp-incrementAttempts' }
+      );
 
       const remainingAttempts = otp.maxAttempts - otp.attempts - 1;
       return NextResponse.json(
@@ -85,19 +98,27 @@ export async function POST(request: NextRequest) {
     }
 
     // Mark OTP as verified
-    await db.otpCode.update({
-      where: { id: otp.id },
-      data: { verifiedAt: new Date() },
-    });
+    await withRetry(
+      () =>
+        db.otpCode.update({
+          where: { id: otp.id },
+          data: { verifiedAt: new Date() },
+        }),
+      { label: 'verifyOtp-markVerified' }
+    );
 
-    // Check if user exists by phone
-    const existingUser = await db.user.findFirst({
-      where: {
-        phone: fullPhone,
-        tenantId: tenant.id,
-        isActive: true,
-      },
-    });
+    // Check if user exists by phone (now indexed: tenantId+phone)
+    const existingUser = await withRetry(
+      () =>
+        db.user.findFirst({
+          where: {
+            phone: fullPhone,
+            tenantId: tenant.id,
+            isActive: true,
+          },
+        }),
+      { label: 'verifyOtp-findUser' }
+    );
 
     if (existingUser) {
       // User exists — generate tokens, create session and device
@@ -112,68 +133,80 @@ export async function POST(request: NextRequest) {
       const refreshTokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
       // Create login session
-      await db.loginSession.create({
-        data: {
-          tenantId: tenant.id,
-          userId: existingUser.id,
-          refreshToken,
-          deviceType: parseDeviceType(userAgent),
-          browser: parseBrowser(userAgent),
-          os: parseOS(userAgent),
-          ipAddress,
-          userAgent,
-          expiresAt: refreshTokenExpiry,
-        },
-      });
+      await withRetry(
+        () =>
+          db.loginSession.create({
+            data: {
+              tenantId: tenant.id,
+              userId: existingUser.id,
+              refreshToken,
+              deviceType: parseDeviceType(userAgent),
+              browser: parseBrowser(userAgent),
+              os: parseOS(userAgent),
+              ipAddress,
+              userAgent,
+              expiresAt: refreshTokenExpiry,
+            },
+          }),
+        { label: 'verifyOtp-createSession' }
+      );
 
-      // Update user last login
-      await db.user.update({
-        where: { id: existingUser.id },
-        data: { lastLogin: new Date().toISOString(), isOnline: true },
-      });
+      // Update user last login (best-effort)
+      withRetry(
+        () =>
+          db.user.update({
+            where: { id: existingUser.id },
+            data: { lastLogin: new Date().toISOString(), isOnline: true },
+          }),
+        { label: 'verifyOtp-updateLastLogin' }
+      ).catch(() => {});
 
-      // Create or update device record
+      // Create device record (best-effort)
       const deviceName = `${parseOS(userAgent)} - ${parseBrowser(userAgent)}`;
-      await db.device.upsert({
-        where: {
-          id: `${existingUser.id}-${crypto.randomUUID().slice(0, 8)}`,
-        },
-        create: {
-          tenantId: tenant.id,
-          userId: existingUser.id,
-          name: deviceName,
-          type: parseDeviceType(userAgent),
-          browser: parseBrowser(userAgent),
-          os: parseOS(userAgent),
-          ipAddress,
-          userAgent,
-          isTrusted: false,
-        },
-        update: {
-          lastSeen: new Date(),
-          ipAddress,
-          userAgent,
-        },
-      });
+      withRetry(
+        () =>
+          db.device.upsert({
+            where: {
+              id: `${existingUser.id}-${crypto.randomUUID().slice(0, 8)}`,
+            },
+            create: {
+              tenantId: tenant.id,
+              userId: existingUser.id,
+              name: deviceName,
+              type: parseDeviceType(userAgent),
+              browser: parseBrowser(userAgent),
+              os: parseOS(userAgent),
+              ipAddress,
+              userAgent,
+              isTrusted: false,
+            },
+            update: {
+              lastSeen: new Date(),
+              ipAddress,
+              userAgent,
+            },
+          }),
+        { label: 'verifyOtp-upsertDevice' }
+      ).catch(() => {});
 
-      // Audit log
-      try {
-        await db.auditLog.create({
-          data: {
-            tenantId: tenant.id,
-            userId: existingUser.id,
-            action: 'whatsapp_login',
-            entity: 'User',
-            entityId: existingUser.id,
-            newValue: JSON.stringify({ phoneNumber: fullPhone }),
-            ipAddress,
-            userAgent,
-            device: deviceName,
-          },
-        });
-      } catch {
-        // Non-critical
-      }
+      // Audit log (non-critical)
+      withRetry(
+        () =>
+          db.auditLog.create({
+            data: {
+              tenantId: tenant.id,
+              userId: existingUser.id,
+              action: 'whatsapp_login',
+              entity: 'User',
+              entityId: existingUser.id,
+              newValue: JSON.stringify({ phoneNumber: fullPhone }),
+              ipAddress,
+              userAgent,
+              device: deviceName,
+            },
+          }),
+        { label: 'verifyOtp-auditLogin' }
+      ).catch(() => {});
 
       return NextResponse.json({
         user: {
@@ -200,8 +233,8 @@ export async function POST(request: NextRequest) {
         tenantId: tenant.id,
       });
 
-      // Audit log (use system user)
-      try {
+      // Audit log with system user (non-critical)
+      withRetry(async () => {
         const systemUser = await db.user.findFirst({
           where: { tenantId: tenant.id, role: 'super_admin' },
           select: { id: true },
@@ -221,9 +254,7 @@ export async function POST(request: NextRequest) {
             },
           });
         }
-      } catch {
-        // Non-critical
-      }
+      }, { label: 'verifyOtp-auditNewUser' }).catch(() => {});
 
       return NextResponse.json({
         isNewUser: true,
@@ -232,8 +263,10 @@ export async function POST(request: NextRequest) {
     }
   } catch (error) {
     console.error('Verify OTP error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: getDbFriendlyMessage(error) },
+      { status: 500 }
+    );
   }
 }
 

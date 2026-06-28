@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { generateOtpCode, generateCustomerNumber } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -41,9 +41,15 @@ export async function POST(request: NextRequest) {
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
     // Find tenant (domain 'mohdhms.com' or fallback to first tenant)
-    let tenant = await db.tenant.findUnique({ where: { domain: 'mohdhms.com' } });
+    let tenant = await withRetry(
+      () => db.tenant.findUnique({ where: { domain: 'mohdhms.com' } }),
+      { label: 'sendOtp-findTenant' }
+    );
     if (!tenant) {
-      tenant = await db.tenant.findFirst();
+      tenant = await withRetry(
+        () => db.tenant.findFirst(),
+        { label: 'sendOtp-findFirstTenant' }
+      );
     }
     if (!tenant) {
       return NextResponse.json(
@@ -52,15 +58,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Rate limit: max 3 OTPs per phone per hour
+    // Rate limit: max 3 OTPs per phone per hour (indexed: tenantId+phoneNumber)
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-    const recentOtpCount = await db.otpCode.count({
-      where: {
-        phoneNumber: fullPhone,
-        tenantId: tenant.id,
-        createdAt: { gte: oneHourAgo },
-      },
-    });
+    const recentOtpCount = await withRetry(
+      () =>
+        db.otpCode.count({
+          where: {
+            phoneNumber: fullPhone,
+            tenantId: tenant.id,
+            createdAt: { gte: oneHourAgo },
+          },
+        }),
+      { label: 'sendOtp-rateLimit' }
+    );
 
     if (recentOtpCount >= 3) {
       return NextResponse.json(
@@ -74,26 +84,31 @@ export async function POST(request: NextRequest) {
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
     // Store OTP in database
-    await db.otpCode.create({
-      data: {
-        tenantId: tenant.id,
-        phoneNumber: fullPhone,
-        code,
-        purpose: 'login',
-        expiresAt,
-        ipAddress,
-        userAgent,
-      },
-    });
+    await withRetry(
+      () =>
+        db.otpCode.create({
+          data: {
+            tenantId: tenant.id,
+            phoneNumber: fullPhone,
+            code,
+            purpose: 'login',
+            expiresAt,
+            ipAddress,
+            userAgent,
+          },
+        }),
+      { label: 'sendOtp-createOtp' }
+    );
 
     // Log OTP for development
     console.log(`[DEV OTP] ${fullPhone}: ${code}`);
 
-    // Attempt to send via WhatsApp Meta Business API
+    // Attempt to send via WhatsApp Meta Business API (best-effort)
     try {
-      const whatsappConfig = await db.whatsAppConfig.findUnique({
-        where: { tenantId: tenant.id },
-      });
+      const whatsappConfig = await withRetry(
+        () => db.whatsAppConfig.findUnique({ where: { tenantId: tenant.id } }),
+        { label: 'sendOtp-getWhatsappConfig', maxRetries: 1 }
+      );
 
       if (
         whatsappConfig?.isEnabled &&
@@ -136,12 +151,10 @@ export async function POST(request: NextRequest) {
       }
     } catch (whatsappError) {
       console.error('[WhatsApp] Meta API error (OTP still stored):', whatsappError);
-      // Dev mode: OTP already stored, log is above
     }
 
-    // Create audit log entry
-    // We need a system user for audit. Use a placeholder.
-    try {
+    // Audit log entry (non-critical)
+    withRetry(async () => {
       const systemUser = await db.user.findFirst({
         where: { tenantId: tenant.id, role: 'super_admin' },
         select: { id: true },
@@ -160,14 +173,14 @@ export async function POST(request: NextRequest) {
           },
         });
       }
-    } catch {
-      // Audit log creation is non-critical
-    }
+    }, { label: 'sendOtp-auditLog' }).catch(() => {});
 
     return NextResponse.json({ success: true, expiresIn: 300 });
   } catch (error) {
     console.error('Send OTP error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: getDbFriendlyMessage(error) },
+      { status: 500 }
+    );
   }
 }

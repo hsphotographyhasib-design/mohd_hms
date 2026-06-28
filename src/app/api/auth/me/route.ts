@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
@@ -12,13 +12,17 @@ export async function GET(request: NextRequest) {
 
     const userId = payload.userId as string;
 
-    const user = await db.user.findUnique({
-      where: { id: userId },
-      include: {
-        tenant: { select: { id: true, name: true, domain: true } },
-        department: { select: { id: true, name: true } },
-      },
-    });
+    const user = await withRetry(
+      () =>
+        db.user.findUnique({
+          where: { id: userId },
+          include: {
+            tenant: { select: { id: true, name: true, domain: true } },
+            department: { select: { id: true, name: true } },
+          },
+        }),
+      { label: 'auth-me-findUser' }
+    );
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -44,6 +48,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Auth me error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }

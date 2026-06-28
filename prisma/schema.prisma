@@ -91,6 +91,13 @@ model User {
   devices      Device[]
 
   @@unique([tenantId, email])
+  @@index([tenantId])
+  @@index([tenantId, phone])
+  @@index([tenantId, role])
+  @@index([tenantId, isActive])
+  @@index([tenantId, departmentId])
+  @@index([tenantId, employeeNumber])
+  @@index([phone])
 }
 
 // ============ DEPARTMENTS ============
@@ -107,6 +114,8 @@ model Department {
 
   tenant      Tenant   @relation(fields: [tenantId], references: [id])
   users       User[]
+
+  @@index([tenantId])
 }
 
 // ============ CUSTOMERS ============
@@ -144,6 +153,10 @@ model Customer {
   whatsappSessions     WhatsAppSession[]
   customerFeedbacks    CustomerFeedback[]
   customerReports      CustomerReport[]
+
+  @@index([tenantId])
+  @@index([tenantId, phone])
+  @@index([tenantId, isActive])
 }
 
 // ============ EQUIPMENT ============
@@ -597,6 +610,11 @@ model Notification {
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
   complaint     Complaint? @relation(fields: [relatedEntityId], references: [id])
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([tenantId, userId])
+  @@index([tenantId, isRead])
 }
 
 // ============ AUDIT LOGS ============
@@ -658,6 +676,8 @@ model Attendance {
   updatedAt     DateTime @updatedAt
 
   @@unique([tenantId, userId, date])
+  @@index([tenantId])
+  @@index([tenantId, userId])
 }
 
 // ============ CMS - CONTENT MANAGEMENT SYSTEM ============

@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { db, withRetry } from '@/lib/db';
 import type { ComplaintStatus } from './state-machine';
 
 // ============================================================================
@@ -200,11 +200,15 @@ async function processRule(
 
   if (complaints.length === 0) return details;
 
-  // Resolve a valid system user for audit logging (first admin in tenant)
-  const systemUser = await db.user.findFirst({
-    where: { tenantId, role: { in: ['super_admin', 'admin'] }, isActive: true },
-    select: { id: true },
-  });
+  // Resolve a valid system user for audit logging (indexed: tenantId+role)
+  const systemUser = await withRetry(
+    () =>
+      db.user.findFirst({
+        where: { tenantId, role: { in: ['super_admin', 'admin'] }, isActive: true },
+        select: { id: true },
+      }),
+    { label: 'escalation-findSystemUser', maxRetries: 2 }
+  );
 
   for (const complaint of complaints) {
     try {

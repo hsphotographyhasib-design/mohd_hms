@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { verifyPassword, generateToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -12,10 +12,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    const user = await db.user.findFirst({
-      where: { email },
-      include: { tenant: { select: { id: true, name: true, domain: true } } },
-    });
+    // Use findFirst with retry — email is unique per tenant but we
+    // don't know the tenantId here, so findFirst is appropriate.
+    const user = await withRetry(
+      () =>
+        db.user.findFirst({
+          where: { email },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            phone: true,
+            avatar: true,
+            role: true,
+            tenantId: true,
+            employeeNumber: true,
+            departmentId: true,
+            profileCompleted: true,
+            isActive: true,
+            passwordHash: true,
+            tenant: { select: { id: true, name: true, domain: true } },
+          },
+        }),
+      { label: 'login-findUser' }
+    );
 
     if (!user || !user.passwordHash) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
@@ -30,11 +50,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
     }
 
-    // Update last login
-    await db.user.update({
-      where: { id: user.id },
-      data: { lastLogin: new Date().toISOString(), isOnline: true },
-    });
+    // Update last login (best-effort, non-blocking)
+    withRetry(
+      () =>
+        db.user.update({
+          where: { id: user.id },
+          data: { lastLogin: new Date().toISOString(), isOnline: true },
+        }),
+      { label: 'login-updateLastLogin' }
+    ).catch(() => {});
 
     const token = generateToken({
       userId: user.id,
@@ -62,7 +86,9 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Login error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return NextResponse.json(
+      { error: getDbFriendlyMessage(error) },
+      { status: 500 }
+    );
   }
 }
