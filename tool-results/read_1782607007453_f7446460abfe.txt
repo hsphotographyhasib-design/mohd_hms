@@ -1,0 +1,570 @@
+     1→'use client'
+     2→
+     3→import { useEffect, useRef, useCallback } from 'react'
+     4→import Link from 'next/link'
+     5→import {
+     6→  I, ic, IMG, fl,
+     7→  defaultSectors, defaultWhy, defaultCaps, defaultIndustries,
+     8→  defaultOpsStats, defaultFeed, defaultSteps, defaultProjects, defaultProjStats,
+     9→  defaultPfeats, defaultDig, defaultTeam, defaultQuotes, defaultPosts,
+    10→  defaultVacs, defaultBenefits,
+    11→  getServices, getIndustries, getTestimonials, getProjects, getBlogs, getCareers,
+    12→  type CMSData,
+    13→} from './landing-data'
+    14→import { useLandingData } from './use-landing-data'
+    15→
+    16→/* ── Reveal hook ── */
+    17→function useReveal(deps?: unknown[]) {
+    18→  const ref = useRef<HTMLDivElement>(null)
+    19→  useEffect(() => {
+    20→    const root = ref.current
+    21→    if (!root) return
+    22→    const io = new IntersectionObserver(
+    23→      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target) } }),
+    24→      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    25→    )
+    26→    root.querySelectorAll('.reveal, .imgrise').forEach(el => io.observe(el))
+    27→    return () => io.disconnect()
+    28→    }, deps)
+    29→  return ref
+    30→}
+    31→
+    32→/* ── Helper to get uploads base64 (simplified) ── */
+    33→function up(key: string) {
+    34→  if (typeof window !== 'undefined' && (window as any).UP?.[key]) {
+    35→    return `<img src="${(window as any).UP[key]}" loading="lazy" alt="">`
+    36→  }
+    37→  return ''
+    38→}
+    39→
+    40→/* ──── SECTION COMPONENTS ──── */
+    41→
+    42→export function HeroSection() {
+    43→  const { cms } = useLandingData()
+    44→  const hero = cms?.hero
+    45→  return (
+    46→    <section className="hero" id="home">
+    47→      <div className="container hero-grid">
+    48→        <div className="reveal in">
+    49→          <div className="kicker">Facility maintenance &amp; engineering</div>
+    50→          <h1 dangerouslySetInnerHTML={{ __html: hero?.headline || 'Engineered upkeep for <em>serious facilities</em>.' }} />
+    51→          <p className="lead">{hero?.subheadline || 'MOHD.HMS ENTERPRISE keeps buildings and plants running — HVAC, electrical, plumbing, mechanical and fire protection, delivered by certified teams and tracked through a modern maintenance system.'}</p>
+    52→          <div className="hero-cta">
+    53→            <Link href="/contact" className="btn btn-fill" id="heroCta1">
+    54→              {hero?.cta1Text || 'Contact us'}
+    55→              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+    56→            </Link>
+    57→            <Link href="/services" className="btn btn-out" id="heroCta2">{hero?.cta2Text || 'Our services'}</Link>
+    58→          </div>
+    59→          <div className="hero-meta">
+    60→            <div className="m"><div className="mn">{hero?.stat1Value || '15+'}</div><div className="ml">{hero?.stat1Label || 'Years experience'}</div></div>
+    61→            <div className="m"><div className="mn">{hero?.stat2Value || '24/7'}</div><div className="ml">{hero?.stat2Label || 'Emergency cover'}</div></div>
+    62→            <div className="m"><div className="mn">{hero?.stat3Value || '1,200+'}</div><div className="ml">{hero?.stat3Label || 'Assets maintained'}</div></div>
+    63→          </div>
+    64→        </div>
+    65→        <div className="hero-figs reveal in d2">
+    66→          <div className="fig hero-fig imgrise">
+    67→            <span className="ico" dangerouslySetInnerHTML={{ __html: ic(IMG, 1.4) }} />
+    68→            <div dangerouslySetInnerHTML={{ __html: up('hero') || '<span style="display:grid;place-items:center;width:100%;height:100%;color:var(--faint);font-family:var(--mono);font-size:.8rem">Hero image</span>' }} />
+    69→            <span className="cap">On site — rooftop HVAC service</span>
+    70→          </div>
+    71→          <div className="fig hero-mini imgrise">
+    72→            <span className="ico" dangerouslySetInnerHTML={{ __html: ic(IMG, 1.4) }} />
+    73→            <div dangerouslySetInnerHTML={{ __html: up('gauges') || '' }} />
+    74→          </div>
+    75→          <div className="hero-chip">
+    76→            <span className="hc-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5" /></svg></span>
+    77→            <div><b>{hero?.chipText || '98% SLA met'}</b><span>{hero?.chipSubtext || 'across active contracts'}</span></div>
+    78→          </div>
+    79→        </div>
+    80→      </div>
+    81→    </section>
+    82→  )
+    83→}
+    84→
+    85→export function SectorsStrip() {
+    86→  const { cms } = useLandingData()
+    87→  const sectors = defaultSectors
+    88→  return (
+    89→    <div className="sectors">
+    90→      <div className="container">
+    91→        <p className="lbl">Maintaining mission-critical facilities across</p>
+    92→        <div className="sect-row" dangerouslySetInnerHTML={{
+    93→          __html: sectors.map(([t, p]) => `<span>${ic(p as string, 1.9)}${t}</span>`).join('')
+    94→        }} />
+    95→      </div>
+    96→    </div>
+    97→  )
+    98→}
+    99→
+   100→export function AboutSection() {
+   101→  const { cms } = useLandingData()
+   102→  const about = cms?.about
+   103→  const ref = useReveal([cms])
+   104→
+   105→  const aboutDesc = about?.description || 'From routine preventive maintenance to emergency breakdowns, our certified technicians respond fast and document every job through our maintenance management system — so clients always know exactly what was done, when, and by whom.'
+   106→  const mvv = about
+   107→    ? [['Mission', about.mission], ['Vision', about.vision], ['Values', about.values]].filter(([, v]) => v)
+   108→    : [['Mission', 'To deliver reliable, safe and efficient maintenance that protects our clients\' assets and uptime.'], ['Vision', 'To be the region\'s most trusted facility maintenance and engineering partner.'], ['Values', '<b>Safety first.</b> Integrity, craftsmanship, responsiveness and continuous improvement.']]
+   109→
+   110→  return (
+   111→    <section className="section" id="about" ref={ref}>
+   112→      <div className="container">
+   113→        <div className="shead">
+   114→          <div className="top"><span className="ix">01 — About</span><span className="rule" /></div>
+   115→          <h2>A maintenance partner built on accountability.</h2>
+   116→        </div>
+   117→        <div className="about-grid">
+   118→          <div className="reveal">
+   119→            <div className="fig about-fig imgrise">
+   120→              <span className="ico" dangerouslySetInnerHTML={{ __html: ic(IMG, 1.4) }} />
+   121→              <div dangerouslySetInnerHTML={{ __html: up('about') || '' }} />
+   122→            </div>
+   123→            <div className="about-stat"><div className="n">500+</div><div className="l">Projects delivered</div></div>
+   124→          </div>
+   125→          <div className="reveal d1">
+   126→            <p className="about-lead">We are a multi-disciplinary engineering and maintenance company serving commercial, industrial, healthcare and government facilities.</p>
+   127→            <p className="about-body">{aboutDesc}</p>
+   128→            <div className="mvv">
+   129→              {mvv.map(([k, v]) => (
+   130→                <div key={k} className="mvv-item"><span className="k">{k}</span><p dangerouslySetInnerHTML={{ __html: v as string }} /></div>
+   131→              ))}
+   132→            </div>
+   133→          </div>
+   134→        </div>
+   135→        <div className="why-row" dangerouslySetInnerHTML={{
+   136→          __html: defaultWhy.map(([t, d, p], i) =>
+   137→            `<div class="why-cell reveal ${i ? 'd' + i : ''}"><span class="wi">${ic(p as string)}</span><b>${t}</b><p>${d}</p></div>`
+   138→          ).join('')
+   139→        }} />
+   140→      </div>
+   141→    </section>
+   142→  )
+   143→}
+   144→
+   145→export function ServicesSection() {
+   146→  const { cms } = useLandingData()
+   147→  const svcData = getServices(cms)
+   148→  const ref = useReveal([cms])
+   149→  return (
+   150→    <section className="section stone" id="services" ref={ref}>
+   151→      <div className="container">
+   152→        <div className="shead">
+   153→          <div className="top"><span className="ix">02 — Services</span><span className="rule" /></div>
+   154→          <h2>Complete maintenance, under one contract.</h2>
+   155→          <p className="lede">A full range of engineering and facility services — available individually or bundled into an annual maintenance contract with guaranteed response times.</p>
+   156→        </div>
+   157→        <div className="cap-grid" dangerouslySetInnerHTML={{
+   158→          __html: svcData.map(([cl, items]) =>
+   159→            `<div class="cap-col reveal"><div class="cl">${cl}</div>${items.map(([n, d, p]) =>
+   160→              `<div class="cap-item"><span class="cci">${ic(p as string)}</span><div><b>${n}</b><span>${d}</span></div></div>`
+   161→            ).join('')}</div>`
+   162→          ).join('')
+   163→        }} />
+   164→      </div>
+   165→    </section>
+   166→  )
+   167→}
+   168→
+   169→export function IndustriesSection() {
+   170→  const { cms } = useLandingData()
+   171→  const indData = getIndustries(cms)
+   172→  const ref = useReveal([cms])
+   173→  return (
+   174→    <section className="section" id="industries" ref={ref}>
+   175→      <div className="container">
+   176→        <div className="shead">
+   177→          <div className="top"><span className="ix">03 — Industries</span><span className="rule" /></div>
+   178→          <h2>Trusted across demanding environments.</h2>
+   179→        </div>
+   180→        <div className="ind-grid" dangerouslySetInnerHTML={{
+   181→          __html: indData.map(([t, p], i) =>
+   182→            `<div class="ind reveal ${i % 4 ? 'd' + (i % 4) : ''}"><span class="ii">${ic(p as string)}</span><span>${t}</span></div>`
+   183→          ).join('')
+   184→        }} />
+   185→      </div>
+   186→    </section>
+   187→  )
+   188→}
+   189→
+   190→export function SystemSection() {
+   191→  const ref = useReveal()
+   192→  const barsData: [string, number][] = [['Sep', 62], ['Oct', 74], ['Nov', 58], ['Dec', 83], ['Jan', 71], ['Feb', 92], ['Mar', 88]]
+   193→  const maxH = Math.max(...barsData.map(([, v]) => v))
+   194→
+   195→  return (
+   196→    <section className="section forest" id="overview" ref={ref}>
+   197→      <div className="container">
+   198→        <div className="shead">
+   199→          <div className="top"><span className="ix">04 — System overview</span><span className="rule" /></div>
+   200→          <h2>Real-time visibility on every facility.</h2>
+   201→          <p className="lede">Our maintenance management system gives clients and teams one live view of equipment, complaints and work orders — connected to real operational data.</p>
+   202→        </div>
+   203→        <div className="ops reveal">
+   204→          <div className="ops-head"><b>Operations overview</b><span className="ops-live"><span className="d" /> Live</span></div>
+   205→          <div className="ops-stats" dangerouslySetInnerHTML={{
+   206→            __html: defaultOpsStats.map(([n, l]) => `<div class="ops-stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('')
+   207→          }} />
+   208→          <div className="ops-low">
+   209→            <div className="ops-chart">
+   210→              <div className="ct">Work orders completed · last 7 months</div>
+   211→              <div className="bars" dangerouslySetInnerHTML={{
+   212→                __html: barsData.map(([m, v]) => `<div class="col"><div class="bar" style="height:${Math.round(v / maxH * 120)}px"></div><div class="bl">${m}</div></div>`).join('')
+   213→              }} />
+   214→            </div>
+   215→            <div className="ops-feed">
+   216→              <div className="ct">Recent activity</div>
+   217→              <div dangerouslySetInnerHTML={{
+   218→                __html: defaultFeed.map(([t, c, tm]) => `<div class="frow"><span class="fk" style="background:${c}"></span>${t}<small>${tm}</small></div>`).join('')
+   219→              }} />
+   220→            </div>
+   221→          </div>
+   222→        </div>
+   223→        <p className="ops-note">Figures are representative until the maintenance system API is connected.</p>
+   224→      </div>
+   225→    </section>
+   226→  )
+   227→}
+   228→
+   229→export function WorkflowSection() {
+   230→  const ref = useReveal()
+   231→  return (
+   232→    <section className="section" id="workflow" ref={ref}>
+   233→      <div className="container">
+   234→        <div className="shead">
+   235→          <div className="top"><span className="ix">05 — Workflow</span><span className="rule" /></div>
+   236→          <h2>A clear, accountable path for every job.</h2>
+   237→        </div>
+   238→        <div className="flow" dangerouslySetInnerHTML={{
+   239→          __html: defaultSteps.map(([t, d, p], i) =>
+   240→            `<div class="fstep reveal"><span class="num">0${i + 1}</span><span class="fic">${ic(p as string)}</span><h4>${t}</h4><p>${d}</p></div>`
+   241→          ).join('')
+   242→        }} />
+   243→      </div>
+   244→    </section>
+   245→  )
+   246→}
+   247→
+   248→export function ProjectsSection() {
+   249→  const { cms } = useLandingData()
+   250→  const projData = getProjects(cms)
+   251→  const ref = useReveal([cms])
+   252→  const filterRef = useRef<HTMLDivElement>(null)
+   253→
+   254→  const handleFilter = useCallback((cat: string) => {
+   255→    if (!filterRef.current) return
+   256→    filterRef.current.querySelectorAll('button').forEach(b => b.classList.remove('active'))
+   257→    filterRef.current.querySelector(`[data-c="${cat}"]`)?.classList.add('active')
+   258→    document.querySelectorAll('.proj').forEach(p => {
+   259→      p.classList.toggle('hide', cat !== 'all' && (p as HTMLElement).dataset.cat !== cat)
+   260→    })
+   261→  }, [])
+   262→
+   263→  const cats: [string, string][] = [['all', 'All'], ['hvac', 'HVAC'], ['electrical', 'Electrical'], ['fire', 'Fire'], ['civil', 'Civil']]
+   264→
+   265→  return (
+   266→    <section className="section stone" id="projects" ref={ref}>
+   267→      <div className="container">
+   268→        <div className="shead">
+   269→          <div className="top"><span className="ix">06 — Projects</span><span className="rule" /></div>
+   270→          <h2>Work delivered across the region.</h2>
+   271→        </div>
+   272→        <div className="pfilter" ref={filterRef} onClick={e => {
+   273→          const b = (e.target as HTMLElement).closest('button')
+   274→          if (b) handleFilter(b.dataset.c || 'all')
+   275→        }} dangerouslySetInnerHTML={{
+   276→          __html: cats.map(([c, l], i) => `<button class="${i ? '' : 'active'}" data-c="${c}">${l}</button>`).join('')
+   277→        }} />
+   278→        <div className="proj-grid" dangerouslySetInnerHTML={{
+   279→          __html: projData.map((p: any) => {
+   280→            const media = `<div class="fig"><span class="ico">${ic(IMG, 1.4)}</span>${p.up ? up(p.up) : fl(600, 450, p.kw, p.lk, p.sd)}</div>`
+   281→            return `<article class="proj reveal" data-cat="${p.cat}"><div style="position:relative"><span class="ptag">${p.meta[0]}</span><span class="pst ${p.st}">${p.st === 'done' ? 'Completed' : 'Ongoing'}</span>${media}</div><h4>${p.t}</h4><div class="pm">${p.m}</div><div class="pmeta"><span>${p.meta[0]}</span><span>${p.meta[1]}</span></div></article>`
+   282→          }).join('')
+   283→        }} />
+   284→        <div className="proj-stats" dangerouslySetInnerHTML={{
+   285→          __html: defaultProjStats.map(([n, l]) => `<div class="pstat reveal"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('')
+   286→        }} />
+   287→      </div>
+   288→    </section>
+   289→  )
+   290→}
+   291→
+   292→export function PortalSection() {
+   293→  const ref = useReveal()
+   294→  return (
+   295→    <section className="section" id="portal" ref={ref}>
+   296→      <div className="container">
+   297→        <div className="shead">
+   298→          <div className="top"><span className="ix">07 — Self-service</span><span className="rule" /></div>
+   299→          <h2>Manage your facility from one place.</h2>
+   300→        </div>
+   301→        <div className="portal-grid">
+   302→          <div className="reveal">
+   303→            <p style={{ color: 'var(--muted)', maxWidth: '48ch' }}>Clients log in to raise complaints, scan equipment, track work and view their full service history — anytime, from any device.</p>
+   304→            <div className="pf-list" dangerouslySetInnerHTML={{
+   305→              __html: defaultPfeats.map(([t, p]) => `<div class="pf"><span class="pi">${ic(p as string)}</span><b>${t}</b></div>`).join('')
+   306→            }} />
+   307→          </div>
+   308→          <div className="reveal d2">
+   309→            <div className="device"><div className="dev-screen">
+   310→              <div className="dev-head"><div className="av" /><span className="t">Client app</span></div>
+   311→              <div className="dev-card"><div className="s">Open requests</div><div className="dev-stat">3 active</div></div>
+   312→              <div className="dev-card"><div className="t">Complaint #2294 · Chiller</div><div className="s">Technician en route · ETA 12 min</div></div>
+   313→              <div className="dev-card"><div className="t">Scan equipment QR</div><div className="s">Pull asset history instantly</div></div>
+   314→              <div className="dev-card"><div className="t">Latest invoice · INV-1043</div><div className="s">Ready to view</div></div>
+   315→              <div className="dev-btn">Submit a complaint</div>
+   316→            </div></div>
+   317→          </div>
+   318→        </div>
+   319→      </div>
+   320→    </section>
+   321→  )
+   322→}
+   323→
+   324→export function DigitalSection() {
+   325→  const ref = useReveal()
+   326→  return (
+   327→    <section className="section stone" id="digital" ref={ref}>
+   328→      <div className="container">
+   329→        <div className="shead">
+   330→          <div className="top"><span className="ix">08 — Technology</span><span className="rule" /></div>
+   331→          <h2>Engineering, backed by smart software.</h2>
+   332→          <p className="lede">A digital layer over every service keeps work transparent, scheduled and measurable.</p>
+   333→        </div>
+   334→        <div className="dig-grid" dangerouslySetInnerHTML={{
+   335→          __html: defaultDig.map(([t, d, p], i) =>
+   336→            `<div class="dig reveal ${i % 4 ? 'd' + (i % 4) : ''}"><span class="di">${ic(p as string)}</span><b>${t}</b><p>${d}</p></div>`
+   337→          ).join('')
+   338→        }} />
+   339→      </div>
+   340→    </section>
+   341→  )
+   342→}
+   343→
+   344→export function TeamSection() {
+   345→  const ref = useReveal()
+   346→  return (
+   347→    <section className="section" id="team" ref={ref}>
+   348→      <div className="container">
+   349→        <div className="shead">
+   350→          <div className="top"><span className="ix">09 — Team</span><span className="rule" /></div>
+   351→          <h2>Certified people behind every job.</h2>
+   352→          <p className="lede">Management, supervisors, technicians and support — working as one accountable team.</p>
+   353→        </div>
+   354→        <div className="team-grid" dangerouslySetInnerHTML={{
+   355→          __html: defaultTeam.map(([n, r, im, d], i) =>
+   356→            `<div class="member reveal ${i ? 'd' + i : ''}"><div class="fig"><span class="ico">${ic(I.user, 1.5)}</span><img src="https://i.pravatar.cc/320?img=${im}" data-fb="https://picsum.photos/seed/tm${im}/320/360" loading="lazy" onerror="imgErr(this)" alt="${n}"></div><b>${n}</b><div class="role">${r}</div><p>${d}</p></div>`
+   357→          ).join('')
+   358→        }} />
+   359→      </div>
+   360→    </section>
+   361→  )
+   362→}
+   363→
+   364→export function TestimonialsSection() {
+   365→  const { cms } = useLandingData()
+   366→  const qData = getTestimonials(cms)
+   367→  const ref = useReveal([cms])
+   368→  const [qi, setQi] = useState(0)
+   369→
+   370→  useEffect(() => {
+   371→    const timer = setInterval(() => setQi(i => (i + 1) % qData.length), 5500)
+   372→    return () => clearInterval(timer)
+   373→  }, [qData.length])
+   374→
+   375→  return (
+   376→    <section className="section stone" id="testimonials" ref={ref}>
+   377→      <div className="container">
+   378→        <div className="quote reveal">
+   379→          <div className="qm">&ldquo;</div>
+   380→          <div>
+   381→            {qData.map((q, i) => (
+   382→              <div key={i} className={`qbody ${i === qi ? 'show' : ''}`} data-q={i}>
+   383→                <blockquote>{q.q}</blockquote>
+   384→                <div className="qwho">
+   385→                  <img src={`https://i.pravatar.cc/120?img=${q.im}`} data-fb={`https://picsum.photos/seed/q${q.im}/120/120`} onerror="imgErr(this)" alt={q.n} />
+   386→                  <div style={{ textAlign: 'left' }}><b>{q.n}</b><span>{q.r}</span></div>
+   387→                </div>
+   388→              </div>
+   389→            ))}
+   390→          </div>
+   391→          <div className="qnav">
+   392→            {qData.map((_, i) => (
+   393→              <button key={i} className={`qdot ${i === qi ? 'active' : ''}`} data-i={i} aria-label={`Quote ${i + 1}`} onClick={() => setQi(i)} />
+   394→            ))}
+   395→          </div>
+   396→        </div>
+   397→      </div>
+   398→    </section>
+   399→  )
+   400→}
+   401→
+   402→export function BlogSection() {
+   403→  const { cms } = useLandingData()
+   404→  const blogData = getBlogs(cms)
+   405→  const ref = useReveal([cms])
+   406→  const f = blogData[0] as any
+   407→
+   408→  return (
+   409→    <section className="section" id="blog" ref={ref}>
+   410→      <div className="container">
+   411→        <div className="shead">
+   412→          <div className="top"><span className="ix">10 — Insights</span><span className="rule" /></div>
+   413→          <h2>Articles &amp; company news.</h2>
+   414→        </div>
+   415→        <div className="blog-grid">
+   416→          {f && (
+   417→            <article className="feature reveal" dangerouslySetInnerHTML={{
+   418→              __html: `<div class="fig imgrise"><span class="ico">${ic(IMG, 1.4)}</span>${f[7] ? up(f[7]) : fl(820, 460, f[4] || 'maintenance', f[5] || 81, f[6] || 'b1')}</div><span class="cat">${f[0]}</span><h3>${f[1]}</h3><p>${f[2]}</p><div class="meta">${f[3]}</div>`
+   419→            }} />
+   420→          )}
+   421→          <div className="blog-side" dangerouslySetInnerHTML={{
+   422→            __html: blogData.slice(1).map((p: any) =>
+   423→              `<div class="mini"><div class="fig"><span class="ico">${ic(IMG, 1.4)}</span>${p[7] ? up(p[7]) : fl(200, 200, p[4] || 'maintenance', p[5] || 82, p[6] || 'b2')}</div><div><span class="cat">${p[0]}</span><h4>${p[1]}</h4><div class="meta">${p[3]}</div></div></div>`
+   424→            ).join('')
+   425→          }} />
+   426→        </div>
+   427→      </div>
+   428→    </section>
+   429→  )
+   430→}
+   431→
+   432→export function CareersSection() {
+   433→  const { cms } = useLandingData()
+   434→  const careerData = getCareers(cms)
+   435→  const ref = useReveal([cms])
+   436→  return (
+   437→    <section className="section stone" id="careers" ref={ref}>
+   438→      <div className="container">
+   439→        <div className="shead">
+   440→          <div className="top"><span className="ix">11 — Careers</span><span className="rule" /></div>
+   441→          <h2>Build your career with our team.</h2>
+   442→          <p className="lede">We invest in our people with training, certification and a strong safety culture.</p>
+   443→        </div>
+   444→        <div className="career-grid">
+   445→          <div className="reveal">
+   446→            <div dangerouslySetInnerHTML={{
+   447→              __html: careerData.map(([t, m]) =>
+   448→                `<div class="vac reveal"><div><b>${t}</b><br><span>${m}</span></div><a href="/contact" class="btn btn-out btn-sm vb">Apply now</a></div>`
+   449→              ).join('')
+   450→            }} />
+   451→            <p className="cnote">Don&apos;t see your role? Send your CV to <Link href="/contact">careers@mohdhms.com</Link> — we&apos;re always hiring skilled technicians.</p>
+   452→          </div>
+   453→          <div className="reveal d1">
+   454→            <div className="fig imgrise" style={{ aspectRatio: '4/2.7', borderRadius: 'var(--r)', border: '1px solid var(--line)', marginBottom: 24 }}>
+   455→              <span className="ico" dangerouslySetInnerHTML={{ __html: ic(IMG, 1.4) }} />
+   456→              <div dangerouslySetInnerHTML={{ __html: up('tools') || '' }} />
+   457→            </div>
+   458→            <div className="ben" dangerouslySetInnerHTML={{
+   459→              __html: defaultBenefits.map(([t, d, p]) =>
+   460→                `<div class="ben-item"><span class="bi">${ic(p as string)}</span><div><b>${t}</b><p>${d}</p></div></div>`
+   461→              ).join('')
+   462→            }} />
+   463→          </div>
+   464→        </div>
+   465→      </div>
+   466→    </section>
+   467→  )
+   468→}
+   469→
+   470→export function ContactSection() {
+   471→  const ref = useReveal()
+   472→  const [submitted, setSubmitted] = useState(false)
+   473→
+   474→  const handleSubmit = useCallback((e: React.FormEvent) => {
+   475→    e.preventDefault()
+   476→    const form = e.target as HTMLFormElement
+   477→    const data = {
+   478→      name: (form.querySelector('#cn') as HTMLInputElement)?.value || '',
+   479→      email: (form.querySelector('#ce') as HTMLInputElement)?.value || '',
+   480→      phone: (form.querySelector('#cp') as HTMLInputElement)?.value || '',
+   481→      subject: 'Website enquiry',
+   482→      message: (form.querySelector('#cmsg') as HTMLTextAreaElement)?.value || '',
+   483→      source: 'website',
+   484→    }
+   485→    fetch('/api/cms/contact', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) }).catch(() => {})
+   486→    setSubmitted(true)
+   487→    form.reset()
+   488→    setTimeout(() => setSubmitted(false), 5000)
+   489→  }, [])
+   490→
+   491→  return (
+   492→    <section className="section" id="contact" ref={ref}>
+   493→      <div className="container">
+   494→        <div className="shead">
+   495→          <div className="top"><span className="ix">12 — Contact</span><span className="rule" /></div>
+   496→          <h2>Talk to our maintenance team.</h2>
+   497→          <p className="lede">Reach out for service enquiries, contracts or emergency support — we respond fast.</p>
+   498→        </div>
+   499→        <div className="contact-grid">
+   500→          <div className="reveal">
+   501→            <div className="cinfo">
+   502→              <div className="crow"><span className="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5" /></svg></span><div><b>Office</b><span>Unit 5, Industrial Avenue, Bandar Seri Begawan, Brunei Darussalam</span></div></div>
+   503→              <div className="crow"><span className="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z" /></svg></span><div><b>Phone &amp; WhatsApp</b><span><a href="tel:+6730000000">+673 000 0000</a> · <a href="#">WhatsApp chat</a></span></div></div>
+   504→              <div className="crow"><span className="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2" /><path d="M22 7l-10 6L2 7" /></svg></span><div><b>Email</b><span><a href="mailto:info@mohdhms.com">info@mohdhms.com</a></span></div></div>
+   505→              <div className="crow"><span className="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg></span><div><b>Working hours</b><span>Monday – Saturday · 8:00am – 6:00pm</span></div></div>
+   506→              <div className="crow em"><span className="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z" /></svg></span><div><b>24/7 emergency line</b><span><a href="tel:+6739999999">+673 999 9999</a> — breakdowns &amp; critical faults</span></div></div>
+   507→            </div>
+   508→            <div className="cmap">
+   509→              <iframe title="Office location" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=114.90%2C4.87%2C114.98%2C4.93&layer=mapnik&marker=4.9031%2C114.9398" />
+   510→            </div>
+   511→          </div>
+   512→          <div className="cform reveal d1">
+   513→            <h3>Send us a message</h3>
+   514→            <p className="csub">Tell us what you need and our team will respond within one business day.</p>
+   515→            <form onSubmit={handleSubmit}>
+   516→              <div className="frow2">
+   517→                <div className="field"><label htmlFor="cn">Full name</label><input id="cn" required placeholder="Your name" /></div>
+   518→                <div className="field"><label htmlFor="cp">Phone</label><input id="cp" placeholder="+673" /></div>
+   519→              </div>
+   520→              <div className="field"><label htmlFor="ce">Email</label><input id="ce" type="email" required placeholder="you@company.com" /></div>
+   521→              <div className="field"><label htmlFor="cserv">Service needed</label>
+   522→                <select id="cserv"><option>HVAC maintenance</option><option>Electrical maintenance</option><option>Plumbing / mechanical</option><option>Fire protection</option><option>Annual maintenance contract</option><option>Emergency breakdown</option><option>Other</option></select>
+   523→              </div>
+   524→              <div className="field"><label htmlFor="cmsg">Message</label><textarea id="cmsg" placeholder="Describe your facility and what you need…" /></div>
+   525→              <button className="btn btn-fill" type="submit">Send message
+   526→                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" /></svg>
+   527→              </button>
+   528→              <div className={`cf-ok ${submitted ? 'show' : ''}`} id="cfOk">Thanks — your message has been sent. Our team will respond within one business day.</div>
+   529→            </form>
+   530→          </div>
+   531→        </div>
+   532→      </div>
+   533→    </section>
+   534→  )
+   535→}
+   536→
+   537→export function SupportSection() {
+   538→  const ref = useReveal()
+   539→  return (
+   540→    <section className="section" ref={ref}>
+   541→      <div className="container">
+   542→        <div className="shead">
+   543→          <div className="top"><span className="ix">Support</span><span className="rule" /></div>
+   544→          <h2>How can we help you?</h2>
+   545→          <p className="lede">Find answers to common questions or reach our support team directly.</p>
+   546→        </div>
+   547→        <div className="cap-grid">
+   548→          <div className="cap-col reveal">
+   549→            <div className="cl">Contact Support</div>
+   550→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.msg) }} /><div><b>Email us</b><span><a href="mailto:info@mohdhms.com">info@mohdhms.com</a></span></div></div>
+   551→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.phone) }} /><div><b>Call us</b><span><a href="tel:+6730000000">+673 000 0000</a></span></div></div>
+   552→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.alert) }} /><div><b>Emergency</b><span><a href="tel:+6739999999">+673 999 9999</a> (24/7)</span></div></div>
+   553→          </div>
+   554→          <div className="cap-col reveal">
+   555→            <div className="cl">Resources</div>
+   556→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.file) }} /><div><b>Service Request Guide</b><span>Learn how to submit and track requests</span></div></div>
+   557→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.qr) }} /><div><b>Equipment QR Scanning</b><span>Scan any asset QR for instant history</span></div></div>
+   558→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.history) }} /><div><b>Invoice &amp; Billing</b><span>View and download invoices online</span></div></div>
+   559→          </div>
+   560→          <div className="cap-col reveal">
+   561→            <div className="cl">System Access</div>
+   562→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.portal) }} /><div><b>Client Portal</b><span>Log in to manage your facilities</span></div></div>
+   563→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.chart) }} /><div><b>Live Dashboard</b><span>Real-time operations overview</span></div></div>
+   564→            <div className="cap-item"><span className="cci" dangerouslySetInnerHTML={{ __html: ic(I.bell) }} /><div><b>Notifications</b><span>Stay updated on work progress</span></div></div>
+   565→          </div>
+   566→        </div>
+   567→      </div>
+   568→    </section>
+   569→  )
+   570→}
