@@ -30,10 +30,13 @@ function useReveal(deps?: unknown[]) {
 
 /* ── Fallback images for upload slots ── */
 const UP_FALLBACKS: Record<string, { src: string; alt: string }> = {
-  hero: { src: '/landing-images/hero.png', alt: 'HVAC technicians servicing a rooftop unit' },
-  gauges: { src: '/landing-images/gauges.png', alt: 'HVAC diagnostic gauges in use' },
-  about: { src: '/landing-images/about.png', alt: 'Engineering team working on a control panel' },
-  tools: { src: '/landing-images/tools.png', alt: 'Maintenance technician with tools' },
+  hero: { src: '/landing-images/hero.jpg', alt: 'HVAC technicians servicing a rooftop unit' },
+  gauges: { src: '/landing-images/gauges.jpg', alt: 'HVAC diagnostic gauges in use' },
+  about: { src: '/landing-images/about.jpg', alt: 'Engineering team working on a control panel' },
+  tools: { src: '/landing-images/tools.jpg', alt: 'Maintenance technician with tools' },
+  ahu: { src: '/landing-images/ahu.jpg', alt: 'Air handling unit' },
+  multimeter: { src: '/landing-images/multimeter.jpg', alt: 'Electrical multimeter testing' },
+  clean: { src: '/landing-images/clean.jpg', alt: 'Facility cleaning service' },
 }
 
 /* ── Helper to get uploads base64 (simplified) ── */

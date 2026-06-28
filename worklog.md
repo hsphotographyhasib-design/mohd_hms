@@ -247,3 +247,21 @@ Stage Summary:
 - Root cause: landing-home.tsx was a minimal version with only 2 sections + incomplete CSS
 - Fix: Added all 15 section imports + extracted complete CSS from original landing.html
 - Vercel deployment should now show the full landing page matching the original HTML design
+---
+Task ID: 1
+Agent: main
+Task: Replace AI-generated images with original images from attached HTML file
+
+Work Log:
+- Read upload/mohd-hms-enterprise (4).html and found window.UP object with 7 base64-encoded images: hero, gauges, ahu, about, multimeter, clean, tools
+- Extracted all 7 images from base64 data and saved as .jpg files in public/landing-images/
+- Removed old AI-generated .png images (hero.png, gauges.png, about.png, tools.png)
+- Updated UP_FALLBACKS in sections/index.tsx to point to .jpg files and added 3 new entries (ahu, multimeter, clean)
+- Verified landing-data.ts text content already matches HTML exactly
+- Verified via agent-browser + VLM that all 7 original images render correctly across hero, about, projects, blog, and careers sections
+
+Stage Summary:
+- 7 original images extracted from HTML: hero.jpg, gauges.jpg, ahu.jpg, about.jpg, multimeter.jpg, clean.jpg, tools.jpg
+- AI-generated .png images removed
+- UP_FALLBACKS updated with all 7 image keys
+- All sections verified working with original images via browser testing
