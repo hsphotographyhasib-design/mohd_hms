@@ -162,17 +162,33 @@ export async function PUT(
     const updateData: Record<string, unknown> = {};
     if (name !== undefined) updateData.name = name;
     if (phone !== undefined) updateData.phone = phone;
-    if (role !== undefined) {
-      // Only super_admin can change roles
-      if ((payload.role as string) !== 'super_admin') {
+    if (role !== undefined && role !== existingUser.role) {
+      const actorRole = (payload.role as string).toLowerCase();
+      // Only admin and super_admin can change roles.
+      if (!['admin', 'super_admin'].includes(actorRole)) {
         return NextResponse.json(
-          { error: 'Only super_admin can change user roles' },
+          { error: 'Only admin or super_admin can change user roles' },
           { status: 403 }
         );
       }
       const validRoles = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer', 'vendor', 'guest'];
       if (!validRoles.includes(role)) {
         return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
+      }
+      // Admins cannot promote to super_admin or change a super_admin's role —
+      // those changes require a super_admin actor.
+      if (actorRole !== 'super_admin' && (role === 'super_admin' || existingUser.role === 'super_admin')) {
+        return NextResponse.json(
+          { error: 'Only super_admin can grant or modify the super_admin role' },
+          { status: 403 }
+        );
+      }
+      // Users cannot change their own role.
+      if (id === (payload.userId as string)) {
+        return NextResponse.json(
+          { error: 'You cannot change your own role' },
+          { status: 400 }
+        );
       }
       updateData.role = role;
     }

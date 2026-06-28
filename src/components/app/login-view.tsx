@@ -175,6 +175,20 @@ export function LoginView() {
   const emailBackRef = useRef<HTMLButtonElement>(null);
   const whatsappBackRef = useRef<HTMLButtonElement>(null);
 
+  /* ---- Google sign-in error ---- */
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('googleAuthError')) {
+      toast.error('Google sign-in could not be completed. Please try again.');
+      params.delete('googleAuthError');
+      const newSearch = params.toString();
+      const newUrl =
+        window.location.pathname + (newSearch ? `?${newSearch}` : '') + window.location.hash;
+      window.history.replaceState(null, '', newUrl);
+    }
+  }, []);
+
   /* ---- Countdown timer ---- */
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const hasCountdown = resendCountdown > 0;
@@ -541,8 +555,7 @@ export function LoginView() {
           <button
             type="button"
             onClick={() => {
-              /* TODO: window.location = '/auth/google' */
-              toast.info('Google sign-in coming soon');
+              window.location.href = '/api/auth/google/start';
             }}
             className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
           >
