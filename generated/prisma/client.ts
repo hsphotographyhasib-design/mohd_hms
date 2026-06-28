@@ -316,3 +316,8 @@ export type PasswordResetToken = Prisma.PasswordResetTokenModel
  * 
  */
 export type AuthAuditLog = Prisma.AuthAuditLogModel
+/**
+ * Model TermsAcceptance
+ * 
+ */
+export type TermsAcceptance = Prisma.TermsAcceptanceModel

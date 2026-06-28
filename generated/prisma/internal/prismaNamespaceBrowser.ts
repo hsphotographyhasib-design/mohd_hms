@@ -105,7 +105,8 @@ export const ModelName = {
   LoginSession: 'LoginSession',
   Device: 'Device',
   PasswordResetToken: 'PasswordResetToken',
-  AuthAuditLog: 'AuthAuditLog'
+  AuthAuditLog: 'AuthAuditLog',
+  TermsAcceptance: 'TermsAcceptance'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1269,6 +1270,19 @@ export const AuthAuditLogScalarFieldEnum = {
 } as const
 
 export type AuthAuditLogScalarFieldEnum = (typeof AuthAuditLogScalarFieldEnum)[keyof typeof AuthAuditLogScalarFieldEnum]
+
+
+export const TermsAcceptanceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tcVersion: 'tcVersion',
+  privacyVersion: 'privacyVersion',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type TermsAcceptanceScalarFieldEnum = (typeof TermsAcceptanceScalarFieldEnum)[keyof typeof TermsAcceptanceScalarFieldEnum]
 
 
 export const SortOrder = {

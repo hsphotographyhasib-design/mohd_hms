@@ -16,6 +16,8 @@ import {
 } from 'lucide-react';
 import { useAuthStore } from '@/store';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -30,6 +32,51 @@ import {
   validatePhone,
   formatPhone,
 } from '@/lib/countries';
+
+/* ------------------------------------------------------------------ */
+/*  Terms acceptance helper                                             */
+/* ------------------------------------------------------------------ */
+const TC_STORAGE_KEY = 'cmms_tc_accepted';
+const TC_VERSION = '1.0';
+const TC_PRIVACY_VERSION = '1.0';
+const TC_COOKIE_DAYS = 30;
+
+function isTermsAccepted(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    const raw = localStorage.getItem(TC_STORAGE_KEY);
+    if (!raw) return false;
+    const data = JSON.parse(raw);
+    if (data.v !== TC_VERSION || data.pv !== TC_PRIVACY_VERSION) return false;
+    if (Date.now() > data.exp) return false;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function saveTermsAcceptance(): void {
+  if (typeof window === 'undefined') return;
+  const exp = Date.now() + TC_COOKIE_DAYS * 24 * 60 * 60 * 1000;
+  localStorage.setItem(TC_STORAGE_KEY, JSON.stringify({ v: TC_VERSION, pv: TC_PRIVACY_VERSION, exp }));
+}
+
+/** Fire-and-forget audit call — never blocks login flow */
+function logTermsAcceptance(userId: string): void {
+  if (typeof window === 'undefined') return;
+  try {
+    fetch('/api/auth/terms-acceptance', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        userId,
+        tcVersion: TC_VERSION,
+        privacyVersion: TC_PRIVACY_VERSION,
+        userAgent: navigator.userAgent,
+      }),
+    }).catch(() => { /* audit should never block login */ });
+  } catch { /* safety net */ }
+}
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -132,6 +179,11 @@ export function LoginView() {
   const [panel, setPanel] = useState<Panel>('choices');
   const [waStep, setWaStep] = useState<WaStep>('phone');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
+  /* ---- Terms & Conditions acceptance ---- */
+  const [tcAccepted, setTcAccepted] = useState(isTermsAccepted);
+  const [tcTouched, setTcTouched] = useState(false);
+  const tcRef = useRef<HTMLDivElement>(null);
 
   /* ---- Email form ---- */
   const [email, setEmail] = useState('');
@@ -238,8 +290,19 @@ export function LoginView() {
   }, []);
 
   /* ---- Email login ---- */
+  const requireTc = useCallback(() => {
+    if (!tcAccepted) {
+      setTcTouched(true);
+      tcRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      tcRef.current?.querySelector('button')?.focus();
+      return false;
+    }
+    return true;
+  }, [tcAccepted]);
+
   const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!requireTc()) return;
     setFormAlert('');
     setEmailError('');
     setPasswordError('');
@@ -259,7 +322,9 @@ export function LoginView() {
     }
 
     try {
+      saveTermsAcceptance();
       await login(email.trim(), password);
+      logTermsAcceptance(useAuthStore.getState().user?.id || '');
       toast.success('Welcome back!');
     } catch (err) {
       setFormAlert(err instanceof Error ? err.message : "We couldn't sign you in. Check your details and try again.");
@@ -268,6 +333,7 @@ export function LoginView() {
 
   /* ---- WhatsApp: Send OTP ---- */
   const handleSendCode = async () => {
+    if (!requireTc()) return;
     setWaAlert('');
     setPhoneError('');
     if (!isPhoneValid) {
@@ -338,7 +404,9 @@ export function LoginView() {
         setTempToken(data.tempToken);
         showWaStep('register');
       } else if (data.user && data.accessToken) {
+        saveTermsAcceptance();
         loginWithWhatsApp(data.user, data.accessToken, data.refreshToken || '');
+        logTermsAcceptance(data.user.id);
         showWaStep('success');
       }
     } catch {
@@ -416,7 +484,9 @@ export function LoginView() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Registration failed');
       if (data.user && data.accessToken) {
+        saveTermsAcceptance();
         loginWithWhatsApp(data.user, data.accessToken, data.refreshToken || '');
+        logTermsAcceptance(data.user.id);
         showWaStep('success');
       }
     } catch (err) {
@@ -496,6 +566,7 @@ export function LoginView() {
 
   /* ---- Demo login ---- */
   const handleDemoLogin = async (account: DemoAccount) => {
+    if (!requireTc()) return;
     try {
       await login(account.email, account.password);
       toast.success(`Logged in as ${account.label}`);
@@ -512,6 +583,7 @@ export function LoginView() {
 
   const handleGoogleSignIn = useCallback(async () => {
     if (isGoogleLoading || isLoading) return;
+    if (!requireTc()) return;
 
     // Guard: no client ID configured
     if (!GOOGLE_CLIENT_ID) {
@@ -577,7 +649,9 @@ export function LoginView() {
 
       const credential = await tokenPromise;
       if (credential) {
+        saveTermsAcceptance();
         await loginWithGoogle(credential);
+        logTermsAcceptance(useAuthStore.getState().user?.id || '');
       }
     } catch (err) {
       if (err instanceof Error && err.message !== 'Popup closed by user') {
@@ -1317,27 +1391,59 @@ export function LoginView() {
           </div>
         </div>
 
+        {/* ---- Terms & Conditions acceptance ---- */}
+        <div ref={tcRef} className="mt-5">
+          <label
+            className={cn(
+              'flex items-start gap-2.5 cursor-pointer select-none rounded-lg p-2 -m-2 transition-colors',
+              tcTouched && !tcAccepted && 'ring-1 ring-red-400 dark:ring-red-500 bg-red-50/50 dark:bg-red-950/20'
+            )}
+          >
+            <Checkbox
+              checked={tcAccepted}
+              onCheckedChange={(checked: boolean) => {
+                setTcAccepted(!!checked);
+                if (checked) setTcTouched(false);
+              }}
+              aria-required="true"
+              aria-describedby="tc-desc"
+              className="mt-0.5 shrink-0"
+            />
+            <span id="tc-desc" className="text-[13px] leading-snug text-gray-600 dark:text-gray-400">
+              I have read and agree to the{' '}
+              <a
+                href="/terms-and-conditions"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-600 dark:text-emerald-400 underline underline-offset-2 hover:text-emerald-700 dark:hover:text-emerald-300 rounded"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Terms &amp; Conditions
+              </a>{' '}and{' '}
+              <a
+                href="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-emerald-600 dark:text-emerald-400 underline underline-offset-2 hover:text-emerald-700 dark:hover:text-emerald-300 rounded"
+                onClick={(e) => e.stopPropagation()}
+              >
+                Privacy Policy
+              </a>
+              .
+              <span className="sr-only"> (required)</span>
+            </span>
+          </label>
+          {tcTouched && !tcAccepted && (
+            <p className="mt-1.5 text-xs text-red-500 dark:text-red-400 ml-[34px]" role="alert">
+              Please accept the Terms &amp; Conditions and Privacy Policy before signing in.
+            </p>
+          )}
+        </div>
+
         {/* ---- Footer ---- */}
-        <footer className="mt-6 text-center text-sm text-gray-400 dark:text-gray-500 leading-relaxed">
-          <p>
-            By continuing, you agree to our{' '}
-            <a
-              href="/terms"
-              className="text-gray-600 dark:text-gray-400 underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100 rounded"
-            >
-              Terms of Service
-            </a>{' '}
-            and{' '}
-            <a
-              href="/privacy"
-              className="text-gray-600 dark:text-gray-400 underline underline-offset-2 hover:text-gray-900 dark:hover:text-gray-100 rounded"
-            >
-              Privacy Policy
-            </a>
-            .
-          </p>
+        <footer className="mt-4 text-center text-sm text-gray-400 dark:text-gray-500 leading-relaxed">
           <p className="mt-2 text-gray-400 dark:text-gray-500">
-            &copy; {new Date().getFullYear()} Smart Facility Maintenance Management
+            &copy; {new Date().getFullYear()} MOHD.HMS ENTERPRISE. All rights reserved.
           </p>
         </footer>
 

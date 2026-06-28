@@ -438,7 +438,8 @@ export const ModelName = {
   LoginSession: 'LoginSession',
   Device: 'Device',
   PasswordResetToken: 'PasswordResetToken',
-  AuthAuditLog: 'AuthAuditLog'
+  AuthAuditLog: 'AuthAuditLog',
+  TermsAcceptance: 'TermsAcceptance'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -454,7 +455,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "department" | "customer" | "equipment" | "equipmentQrCode" | "scanLog" | "complaint" | "workOrder" | "workOrderMaterial" | "checklistTemplate" | "pmSchedule" | "quotation" | "invoice" | "inventoryItem" | "purchaseOrder" | "vehicle" | "vehicleLog" | "complaintTimeline" | "notification" | "auditLog" | "leaveRequest" | "attendance" | "cmsSetting" | "cmsHero" | "cmsService" | "cmsIndustry" | "cmsProject" | "cmsBlogCategory" | "cmsBlog" | "cmsTestimonial" | "cmsCareerJob" | "cmsCareerApplication" | "cmsContactMessage" | "cmsMedia" | "cmsSeo" | "cmsFooter" | "cmsAnnouncement" | "cmsPopup" | "cmsForm" | "cmsActivityLog" | "whatsAppConfig" | "whatsAppSession" | "whatsAppMessage" | "conversationThread" | "whatsAppTemplate" | "customerFeedback" | "customerReport" | "broadcastLog" | "whatsAppDeliveryLog" | "otpCode" | "loginSession" | "device" | "passwordResetToken" | "authAuditLog"
+    modelProps: "tenant" | "user" | "department" | "customer" | "equipment" | "equipmentQrCode" | "scanLog" | "complaint" | "workOrder" | "workOrderMaterial" | "checklistTemplate" | "pmSchedule" | "quotation" | "invoice" | "inventoryItem" | "purchaseOrder" | "vehicle" | "vehicleLog" | "complaintTimeline" | "notification" | "auditLog" | "leaveRequest" | "attendance" | "cmsSetting" | "cmsHero" | "cmsService" | "cmsIndustry" | "cmsProject" | "cmsBlogCategory" | "cmsBlog" | "cmsTestimonial" | "cmsCareerJob" | "cmsCareerApplication" | "cmsContactMessage" | "cmsMedia" | "cmsSeo" | "cmsFooter" | "cmsAnnouncement" | "cmsPopup" | "cmsForm" | "cmsActivityLog" | "whatsAppConfig" | "whatsAppSession" | "whatsAppMessage" | "conversationThread" | "whatsAppTemplate" | "customerFeedback" | "customerReport" | "broadcastLog" | "whatsAppDeliveryLog" | "otpCode" | "loginSession" | "device" | "passwordResetToken" | "authAuditLog" | "termsAcceptance"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4528,6 +4529,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TermsAcceptance: {
+      payload: Prisma.$TermsAcceptancePayload<ExtArgs>
+      fields: Prisma.TermsAcceptanceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TermsAcceptanceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TermsAcceptanceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>
+        }
+        findFirst: {
+          args: Prisma.TermsAcceptanceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TermsAcceptanceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>
+        }
+        findMany: {
+          args: Prisma.TermsAcceptanceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>[]
+        }
+        create: {
+          args: Prisma.TermsAcceptanceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>
+        }
+        createMany: {
+          args: Prisma.TermsAcceptanceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TermsAcceptanceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>[]
+        }
+        delete: {
+          args: Prisma.TermsAcceptanceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>
+        }
+        update: {
+          args: Prisma.TermsAcceptanceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>
+        }
+        deleteMany: {
+          args: Prisma.TermsAcceptanceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TermsAcceptanceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TermsAcceptanceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>[]
+        }
+        upsert: {
+          args: Prisma.TermsAcceptanceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TermsAcceptancePayload>
+        }
+        aggregate: {
+          args: Prisma.TermsAcceptanceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTermsAcceptance>
+        }
+        groupBy: {
+          args: Prisma.TermsAcceptanceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TermsAcceptanceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TermsAcceptanceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TermsAcceptanceCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -5714,6 +5789,19 @@ export const AuthAuditLogScalarFieldEnum = {
 export type AuthAuditLogScalarFieldEnum = (typeof AuthAuditLogScalarFieldEnum)[keyof typeof AuthAuditLogScalarFieldEnum]
 
 
+export const TermsAcceptanceScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tcVersion: 'tcVersion',
+  privacyVersion: 'privacyVersion',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type TermsAcceptanceScalarFieldEnum = (typeof TermsAcceptanceScalarFieldEnum)[keyof typeof TermsAcceptanceScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -5971,6 +6059,7 @@ export type GlobalOmitConfig = {
   device?: Prisma.DeviceOmit
   passwordResetToken?: Prisma.PasswordResetTokenOmit
   authAuditLog?: Prisma.AuthAuditLogOmit
+  termsAcceptance?: Prisma.TermsAcceptanceOmit
 }
 
 /* Types for Logging */

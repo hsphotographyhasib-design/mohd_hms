@@ -95,6 +95,7 @@ model User {
   devices      Device[]
   passwordResetTokens PasswordResetToken[]
   authAuditLogs AuthAuditLog[]
+  termsAcceptances TermsAcceptance[]
 
   @@unique([tenantId, email])
   @@unique([googleId])
@@ -1388,4 +1389,21 @@ model AuthAuditLog {
   @@index([email])
   @@index([ipAddress])
   @@index([event])
+}
+
+// ============ TERMS ACCEPTANCE ============
+
+model TermsAcceptance {
+  id              String   @id @default(cuid())
+  userId          String
+  tcVersion       String
+  privacyVersion  String
+  ip              String?
+  userAgent       String?
+  createdAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([tcVersion])
 }
