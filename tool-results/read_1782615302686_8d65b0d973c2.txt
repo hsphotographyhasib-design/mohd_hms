@@ -1,0 +1,236 @@
+   650→    <p class="lede">We invest in our people with training, certification and a strong safety culture.</p>
+   651→  </div>
+   652→  <div class="career-grid">
+   653→    <div class="reveal">
+   654→      <div id="vacancies"></div>
+   655→      <p class="cnote">Don't see your role? Send your CV to <a href="#contact">careers@mohdhms.com</a> — we're always hiring skilled technicians.</p>
+   656→    </div>
+   657→    <div class="reveal d1">
+   658→      <div class="fig imgrise" style="aspect-ratio:4/2.7;border-radius:var(--r);border:1px solid var(--line);margin-bottom:24px"><img data-up="tools" loading="lazy" alt="Maintenance technician with tools"></div>
+   659→      <div class="ben" id="benefits"></div>
+   660→    </div>
+   661→  </div>
+   662→</div></section>
+   663→
+   664→<!-- CONTACT -->
+   665→<section class="section" id="contact"><div class="container">
+   666→  <div class="shead">
+   667→    <div class="top"><span class="ix">12 — Contact</span><span class="rule"></span></div>
+   668→    <h2>Talk to our maintenance team.</h2>
+   669→    <p class="lede">Reach out for service enquiries, contracts or emergency support — we respond fast.</p>
+   670→  </div>
+   671→  <div class="contact-grid">
+   672→    <div class="reveal">
+   673→      <div class="cinfo">
+   674→        <div class="crow"><span class="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></span><div><b>Office</b><span>Unit 5, Industrial Avenue, Bandar Seri Begawan, Brunei Darussalam</span></div></div>
+   675→        <div class="crow"><span class="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></span><div><b>Phone &amp; WhatsApp</b><span><a href="tel:+6730000000">+673 000 0000</a> · <a href="#">WhatsApp chat</a></span></div></div>
+   676→        <div class="crow"><span class="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></span><div><b>Email</b><span><a href="mailto:info@mohdhms.com">info@mohdhms.com</a></span></div></div>
+   677→        <div class="crow"><span class="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><b>Working hours</b><span>Monday – Saturday · 8:00am – 6:00pm</span></div></div>
+   678→        <div class="crow em"><span class="cci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span><div><b>24/7 emergency line</b><span><a href="tel:+6739999999">+673 999 9999</a> — breakdowns &amp; critical faults</span></div></div>
+   679→      </div>
+   680→      <div class="cmap"><iframe title="Office location" loading="lazy" src="https://www.openstreetmap.org/export/embed.html?bbox=114.90%2C4.87%2C114.98%2C4.93&layer=mapnik&marker=4.9031%2C114.9398"></iframe></div>
+   681→    </div>
+   682→    <div class="cform reveal d1">
+   683→      <h3>Send us a message</h3>
+   684→      <p class="csub">Tell us what you need and our team will respond within one business day.</p>
+   685→      <form onsubmit="return MHMS.contact(event)">
+   686→        <div class="frow2">
+   687→          <div class="field"><label for="cn">Full name</label><input id="cn" required placeholder="Your name" /></div>
+   688→          <div class="field"><label for="cp">Phone</label><input id="cp" placeholder="+673" /></div>
+   689→        </div>
+   690→        <div class="field"><label for="ce">Email</label><input id="ce" type="email" required placeholder="you@company.com" /></div>
+   691→        <div class="field"><label for="cserv">Service needed</label>
+   692→          <select id="cserv"><option>HVAC maintenance</option><option>Electrical maintenance</option><option>Plumbing / mechanical</option><option>Fire protection</option><option>Annual maintenance contract</option><option>Emergency breakdown</option><option>Other</option></select>
+   693→        </div>
+   694→        <div class="field"><label for="cmsg">Message</label><textarea id="cmsg" placeholder="Describe your facility and what you need…"></textarea></div>
+   695→        <button class="btn btn-fill" type="submit">Send message
+   696→          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+   697→        <div class="cf-ok" id="cfOk">Thanks — your message has been captured. Connect this form to your inbox or CRM to receive it.</div>
+   698→      </form>
+   699→    </div>
+   700→  </div>
+   701→</div></section>
+   702→
+   703→<!-- FOOTER -->
+   704→<footer>
+   705→  <div class="fwm">MOHD.HMS</div>
+   706→  <div class="container">
+   707→    <div class="foot-grid">
+   708→      <div class="foot-brand">
+   709→        <div class="brand"><span class="bmark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9z"/><path d="M12 7v6M9 9l3-2 3 2"/></svg></span><span><span class="bname">MOHD.HMS</span><br><span class="bsub" style="color:rgba(247,248,243,.45)">Enterprise</span></span></div>
+   710→        <p>Facility maintenance and engineering services — keeping your assets safe, compliant and running.</p>
+   711→        <div class="foot-c">
+   712→          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg> Bandar Seri Begawan, Brunei</span>
+   713→          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-14.6-9 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.4 2.4 1.3 4 .2 5.2L8.1 9.9a16 16 0 0 0 6 6"/></svg> +673 000 0000</span>
+   714→          <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg> info@mohdhms.com</span>
+   715→        </div>
+   716→      </div>
+   717→      <div class="fcol"><h5>Services</h5><a href="#services">HVAC maintenance</a><a href="#services">Electrical</a><a href="#services">Fire protection</a><a href="#services">Preventive</a><a href="#services">Emergency</a></div>
+   718→      <div class="fcol"><h5>Company</h5><a href="#about">About us</a><a href="#projects">Projects</a><a href="#industries">Industries</a><a href="#careers">Careers</a><a href="#blog">Blog</a></div>
+   719→      <div class="fcol"><h5>Clients</h5><a href="#">Sign in</a><a href="#overview">System overview</a><a href="#projects">Projects</a><a href="#contact">Contact</a></div>
+   720→      <div class="fcol"><h5>Legal</h5><a href="#">Privacy policy</a><a href="#">Terms &amp; conditions</a><a href="#">HSE policy</a></div>
+   721→    </div>
+   722→    <div class="foot-bot">
+   723→      <span>© 2026 MOHD.HMS ENTERPRISE. All rights reserved.</span>
+   724→      <div class="socials">
+   725→        <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.05c.53-1 1.83-2.05 3.77-2.05 4 0 4.75 2.65 4.75 6.1V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9z"/></svg></a>
+   726→        <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12a10 10 0 1 0-11.5 9.9v-7H8v-2.9h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6v1.9H17l-.4 2.9h-2.3v7A10 10 0 0 0 22 12z"/></svg></a>
+   727→        <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></a>
+   728→      </div>
+   729→    </div>
+   730→  </div>
+   731→</footer>
+   732→
+   733→<!-- FLOATING -->
+   734→<div class="fabs">
+   735→  <button class="fab top" id="toTop" aria-label="Scroll to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg></button>
+   736→  <a class="fab em" href="tel:+6739999999" aria-label="Emergency"><span class="tip">24/7 emergency</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></a>
+   737→  <a class="fab call" href="tel:+6730000000" aria-label="Call"><span class="tip">Call us</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.4-1.2a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg></a>
+   738→  <a class="fab wa" href="#" aria-label="WhatsApp"><span class="tip">WhatsApp</span><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.4A10 10 0 1 0 12 2zm5.5 14c-.2.6-1.2 1.2-1.7 1.2-.4 0-1 .1-3-1-1.7-.9-2.9-2.6-3-2.7-.1-.1-.8-1-.8-2s.5-1.4.7-1.6c.2-.2.4-.2.5-.2h.4c.2 0 .3 0 .5.4l.7 1.6c0 .2.1.3 0 .5l-.4.5c-.2.2-.3.3-.1.6.2.3.8 1.2 1.6 1.9 1.1.9 1.8 1.1 2 1.2.2.1.3.1.5-.1l.6-.7c.2-.2.3-.2.5-.1l1.6.7c.2.1.4.2.4.3.1.2.1.7-.1 1.3z"/></svg></a>
+   739→</div>
+   740→
+   741→<script>
+   742→const MHMS=(()=>{
+   743→  const $=(s,e=document)=>e.querySelector(s),$$=(s,e=document)=>[...e.querySelectorAll(s)];
+   744→  const ic=(p,sw=1.8)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+   745→  const IMG=`<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/>`;
+   746→  const I={
+   747→    wind:'<path d="M9.6 4.6A2 2 0 1 1 11 8H2M12.6 19.4A2 2 0 1 0 14 16H2M17.7 7.5A2.5 2.5 0 1 1 19.5 12H2"/>',
+   748→    bolt:'<path d="M13 2L3 14h7l-1 8 10-12h-7z"/>',drop:'<path d="M12 2s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+   749→    gear:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 1 1-4 0v-.2a1.6 1.6 0 0 0-2.7-1.1l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.6 1.6 0 0 0-1.1-2.7H3a2 2 0 1 1 0-4h.2a1.6 1.6 0 0 0 1.1-2.7l-.1-.1A2 2 0 1 1 7 4.6l.1.1a1.6 1.6 0 0 0 2.7-1.1V3a2 2 0 1 1 4 0v.2a1.6 1.6 0 0 0 2.7 1.1l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.6 1.6 0 0 0-1.1 2.7H21a2 2 0 1 1 0 4h-.2a1.6 1.6 0 0 0-1.4 1z"/>',
+   750→    truck:'<rect x="1" y="6" width="13" height="11" rx="1"/><path d="M14 9h4l3 3v5h-7zM5.5 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17.5 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>',
+   751→    flame:'<path d="M12 2s4 4 4 8a4 4 0 0 1-8 0c0-1 .5-2 .5-2S6 11 6 14a6 6 0 0 0 12 0c0-5-6-12-6-12z"/>',
+   752→    bricks:'<path d="M3 9h18M3 15h18M3 3h18v18H3z M9 3v6M15 9v6M9 15v6"/>',
+   753→    building:'<rect x="4" y="2" width="16" height="20" rx="1"/><path d="M9 22v-4h6v4M8 6h.01M12 6h.01M16 6h.01M8 10h.01M12 10h.01M16 10h.01M8 14h.01M12 14h.01M16 14h.01"/>',
+   754→    broom:'<path d="M19 4l-7 7M11 13l-2 2 4 4 2-2M5 21l4-4"/>',
+   755→    bug:'<path d="M12 20a6 6 0 0 0 6-6v-2a6 6 0 0 0-12 0v2a6 6 0 0 0 6 6z"/><path d="M12 8v12M5 9H2M5 13H2M22 9h-3M22 13h-3M8 2l1.5 1.5M16 2l-1.5 1.5"/>',
+   756→    leaf:'<path d="M11 20A7 7 0 0 1 4 13c0-6 6-11 16-11 0 8-3 18-9 18z"/><path d="M4 21c2-4 5-7 9-9"/>',
+   757→    calendar:'<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+   758→    refresh:'<path d="M3 12a9 9 0 0 1 15-6.7L21 8M21 3v5h-5M21 12a9 9 0 0 1-15 6.7L3 16M3 21v-5h5"/>',
+   759→    alert:'<path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+   760→    contract:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',
+   761→    factory:'<path d="M2 20h20V9l-6 4V9l-6 4V4H4l-2 16z"/>',
+   762→    hospital:'<path d="M3 21V8l9-5 9 5v13"/><path d="M12 9v6M9 12h6M9 21v-4h6v4"/>',
+   763→    hotel:'<rect x="3" y="3" width="18" height="18" rx="1"/><path d="M7 21v-5h10v5M8 8h.01M12 8h.01M16 8h.01"/>',
+   764→    mall:'<path d="M3 9l1-5h16l1 5M4 9v11a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V9M9 21v-6h6v6"/>',
+   765→    warehouse:'<path d="M3 21V8l9-4 9 4v13M7 21v-7h10v7"/>',
+   766→    gov:'<path d="M3 21h18M5 21V10M19 21V10M3 10l9-6 9 6M9 14v3M15 14v3M12 14v3"/>',
+   767→    home:'<path d="M3 11l9-7 9 7M5 10v10h14V10M10 20v-6h4v6"/>',
+   768→    server:'<rect x="3" y="4" width="18" height="6" rx="1"/><rect x="3" y="14" width="18" height="6" rx="1"/><path d="M7 7h.01M7 17h.01"/>',
+   769→    power:'<path d="M12 2v10M18.4 6.6a9 9 0 1 1-12.8 0"/>',
+   770→    school:'<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/>',
+   771→    qr:'<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3M21 21v.01M21 17v.01M17 21v.01"/>',
+   772→    map:'<path d="M9 2l6 2 6-2v18l-6 2-6-2-6 2V4z"/><path d="M9 2v18M15 4v18"/>',
+   773→    wa:'<path d="M12 2a10 10 0 0 0-8.5 15.2L2 22l4.9-1.4A10 10 0 1 0 12 2z"/>',
+   774→    chart:'<path d="M3 3v18h18"/><path d="M7 14l3-3 3 3 4-5"/>',
+   775→    phone:'<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>',
+   776→    portal:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>',
+   777→    bell:'<path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/>',
+   778→    msg:'<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+   779→    file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/>',
+   780→    dollar:'<path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>',
+   781→    history:'<path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l4 2"/>',
+   782→    tag:'<path d="M20.6 13.4 12 22l-9-9V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+   783→    wrench:'<path d="M14.7 6.3a4 4 0 0 0-5.66 5.66l-7 7 2.83 2.83 7-7a4 4 0 0 0 5.66-5.66l-2.6 2.6-2.2-2.2z"/>',
+   784→    check:'<path d="M9 11l3 3L22 4M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+   785→    user:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/>',
+   786→    shield:'<path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="M9 12l2 2 4-4"/>',
+   787→    clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+   788→    award:'<circle cx="12" cy="8" r="6"/><path d="M8.2 13.5 7 22l5-3 5 3-1.2-8.5"/>',
+   789→    heart:'<path d="M20.8 5.6a5 5 0 0 0-7.1 0L12 7.3l-1.7-1.7a5 5 0 0 0-7.1 7.1L12 21.5l8.8-8.8a5 5 0 0 0 0-7.1z"/>',
+   790→    book:'<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>',
+   791→    cog:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M5 5l2 2M17 17l2 2M2 12h3M19 12h3M5 19l2-2M17 7l2-2"/>'
+   792→  };
+   793→
+   794→  const sectors=[['Hospitals',I.hospital],['Data centres',I.server],['Factories',I.factory],['Universities',I.school],['Hotels',I.hotel],['Government',I.gov],['Power stations',I.power]];
+   795→  const why=[['Professional engineering','A qualified, multi-disciplinary team.',I.award],['Trusted partner','Long-term contracts, measured performance.',I.shield],['Certified technicians','Trained, safety-certified professionals.',I.user],['24/7 support','Round-the-clock critical response.',I.clock]];
+   796→  const caps=[
+   797→    ['Engineering maintenance',[['HVAC maintenance','Chillers, AHUs, ducting, controls',I.wind],['Electrical maintenance','LV systems, panels, testing',I.bolt],['Plumbing','Supply, drainage, pumps',I.drop],['Mechanical','Rotating equipment & motors',I.gear],['Generator maintenance','Standby power & load testing',I.truck]]],
+   798→    ['Facility & specialist',[['Fire protection','Detection & suppression checks',I.flame],['Civil maintenance','Repairs & waterproofing',I.bricks],['Building maintenance','Day-to-day facility upkeep',I.building],['Cleaning services','Facility & specialist cleaning',I.broom],['Pest control','Scheduled treatment',I.bug],['Landscape','Grounds & irrigation',I.leaf]]],
+   799→    ['Contracts & response',[['Preventive (PPM)','Planned maintenance schedules',I.calendar],['Reactive maintenance','Fast, documented fault response',I.refresh],['Emergency breakdown','24/7 rapid response',I.alert],['Annual contracts (AMC)','Bundled cover with SLAs',I.contract]]]
+   800→  ];
+   801→  const industries=[['Commercial buildings',I.building],['Factories',I.factory],['Industrial plants',I.gear],['Universities',I.school],['Schools',I.book],['Hospitals',I.hospital],['Hotels',I.hotel],['Shopping malls',I.mall],['Office buildings',I.building],['Warehouses',I.warehouse],['Government',I.gov],['Residential',I.home],['Data centres',I.server],['Power stations',I.power]];
+   802→  const opsStats=[['1,248','Active equipment'],['34','Open complaints'],['14,860','Completed work orders'],['186','Active customers'],['64','Technicians'],['14 min','Median response']];
+   803→  const feed=[['Work order WO-4821 completed · Chiller plant','var(--green)','2m'],['New complaint · Lighting fault, Tower B','#D69E2E','6m'],['Technician assigned · WO-4830','var(--forest)','11m'],['PPM schedule generated · 14 assets','var(--green)','25m'],['Invoice INV-1043 issued','var(--forest)','40m']];
+   804→  const steps=[['Customer request','Raised via portal, app or call.',I.msg],['Complaint creation','Logged and prioritized.',I.file],['Technician assignment','Routed by skill & location.',I.user],['Work order','Tasks, parts & SLA set.',I.contract],['Execution','Work carried out & recorded.',I.wrench],['Inspection & testing','Quality & safety verified.',I.shield],['Completion','Sign-off with evidence.',I.check],['Customer feedback','Rating closes the loop.',I.heart]];
+   805→  const projects=[
+   806→    {t:'Hospital HVAC overhaul',m:'Air-handling unit & ductwork upgrade',cat:'hvac',st:'done',meta:['HVAC','9 months'],up:'ahu'},
+   807→    {t:'Mall electrical upgrade',m:'LV distribution & panel testing',cat:'electrical',st:'done',meta:['Electrical','5 months'],up:'multimeter'},
+   808→    {t:'Data centre fire system',m:'Suppression & detection install',cat:'fire',st:'live',meta:['Fire','ongoing'],kw:'fire,datacenter,server',lk:63,sd:'p3'},
+   809→    {t:'Factory PPM contract',m:'Plant-wide preventive maintenance',cat:'hvac',st:'live',meta:['AMC','ongoing'],kw:'factory,industrial,maintenance',lk:64,sd:'p4'},
+   810→    {t:'Office facade refit',m:'Civil & waterproofing works',cat:'civil',st:'done',meta:['Civil','7 months'],kw:'building,facade,construction',lk:65,sd:'p5'},
+   811→    {t:'University generator',m:'Standby power & ATS install',cat:'electrical',st:'done',meta:['Generator','4 months'],kw:'generator,engine,power',lk:66,sd:'p6'}
+   812→  ];
+   813→  const projStats=[['500+','Projects completed'],['38','Active contracts'],['1,200+','Assets serviced'],['99%','On-time delivery']];
+   814→  const pfeats=[['Complaint submission',I.msg],['Equipment QR scan',I.qr],['Service requests',I.contract],['Invoice viewing',I.dollar],['Service history',I.history],['Equipment tracking',I.tag],['Work order tracking',I.file],['Notifications',I.bell]];
+   815→  const dig=[['QR asset management','Every asset carries its record.',I.qr],['Google Maps','Locate & route to any site.',I.map],['WhatsApp updates','Reach clients where they read.',I.wa],['Realtime dashboard','One live view of operations.',I.chart],['Mobile technician app','Field work, offline-ready.',I.phone],['Client self-service','One app for every client request.',I.portal],['PPM scheduling','Automated preventive plans.',I.calendar],['Analytics & reports','Insight on cost & uptime.',I.history]];
+   816→  const team=[['Eng. Hafiz Rahman','Managing Director',47,'15+ years in building services.'],['Sarah Lim','Operations Manager',32,'Leads field teams & SLA delivery.'],['Daniel Wong','Senior HVAC Supervisor',12,'Chiller plant & BMS specialist.'],['Aina Yusof','Customer Support Lead',45,'Single point of contact for clients.']];
+   817→  const quotes=[
+   818→    {q:'Their team turned our reactive maintenance into a planned, measurable operation. Downtime dropped dramatically.',n:'Facilities Director',r:'Regional Hospital',im:13},
+   819→    {q:'Fast emergency response and clear documentation on every job. A genuinely reliable partner.',n:'Operations Head',r:'Manufacturing Plant',im:33},
+   820→    {q:'Their client app gives us full visibility — we always know the status of every request.',n:'Property Manager',r:'Commercial Tower',im:5}
+   821→  ];
+   822→  const posts=[['Maintenance tips','5 signs your chiller needs servicing','Catch performance loss before it becomes a costly breakdown — the early indicators every facility team should track.','6 min read · Mar 2026','hvac,chiller',81,'b1','ahu'],['Energy saving','Lower energy use with smarter PPM','Why planned maintenance directly cuts your bill.','7 min · Feb 2026','energy,building',82,'b2','gauges'],['Company news','We expand our technical team','New certified technicians strengthen field response.','4 min · Feb 2026','team,industrial',83,'b3','clean']];
+   823→  const vacs=[['HVAC Technician','Full-time · Field'],['Electrical Supervisor','Full-time · Field'],['Maintenance Planner','Full-time · Office'],['Customer Support Officer','Full-time · Office']];
+   824→  const benefits=[['Training & certification','Sponsored upskilling and trade certificates.',I.award],['Safe work culture','HSE-first environment and proper PPE.',I.shield],['Career growth','Clear paths from technician to supervisor.',I.chart],['Team support','A collaborative, respectful workplace.',I.heart]];
+   825→
+   826→  const fl=(w,h,kw,lk,sd)=>`<img src="https://loremflickr.com/${w}/${h}/${kw}?lock=${lk}" data-fb="https://picsum.photos/seed/${sd}/${w}/${h}" loading="lazy" onerror="imgErr(this)" alt="">`;
+   827→  const up=k=>`<img src="${(window.UP&&window.UP[k])||''}" loading="lazy" alt="">`;
+   828→
+   829→  function build(){
+   830→    $('#sectors').innerHTML=sectors.map(([t,p])=>`<span>${ic(p,1.9)}${t}</span>`).join('');
+   831→    $('#whyRow').innerHTML=why.map(([t,d,p],i)=>`<div class="why-cell reveal ${i?'d'+i:''}"><span class="wi">${ic(p)}</span><b>${t}</b><p>${d}</p></div>`).join('');
+   832→    $('#capGrid').innerHTML=caps.map(([cl,items])=>`<div class="cap-col reveal"><div class="cl">${cl}</div>${items.map(([n,d,p])=>`<div class="cap-item"><span class="cci">${ic(p)}</span><div><b>${n}</b><span>${d}</span></div></div>`).join('')}</div>`).join('');
+   833→    $('#indGrid').innerHTML=industries.map(([t,p],i)=>`<div class="ind reveal ${i%4?'d'+(i%4):''}"><span class="ii">${ic(p)}</span><span>${t}</span></div>`).join('');
+   834→    $('#opsStats').innerHTML=opsStats.map(([n,l])=>`<div class="ops-stat"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+   835→    const max=Math.max(...[62,74,58,83,71,92,88]);const data=[['Sep',62],['Oct',74],['Nov',58],['Dec',83],['Jan',71],['Feb',92],['Mar',88]];
+   836→    $('#bars').innerHTML=data.map(([m,v])=>`<div class="col"><div class="bar" style="height:${Math.round(v/max*120)}px"></div><div class="bl">${m}</div></div>`).join('');
+   837→    $('#feed').innerHTML=feed.map(([t,c,tm])=>`<div class="frow"><span class="fk" style="background:${c}"></span>${t}<small>${tm}</small></div>`).join('');
+   838→    $('#flow').innerHTML=steps.map(([t,d,p],i)=>`<div class="fstep reveal"><span class="num">0${i+1}</span><span class="fic">${ic(p)}</span><h4>${t}</h4><p>${d}</p></div>`).join('');
+   839→    // projects
+   840→    const cats=[['all','All'],['hvac','HVAC'],['electrical','Electrical'],['fire','Fire'],['civil','Civil']];
+   841→    $('#pfilter').innerHTML=cats.map(([c,l],i)=>`<button class="${i?'':'active'}" data-c="${c}">${l}</button>`).join('');
+   842→    $('#projGrid').innerHTML=projects.map((p,i)=>{
+   843→      const media=`<div class="fig"><span class="ico">${ic(IMG,1.4)}</span>${p.up?up(p.up):fl(600,450,p.kw,p.lk,p.sd)}</div>`;
+   844→      return `<article class="proj reveal" data-cat="${p.cat}"><div style="position:relative"><span class="ptag">${p.meta[0]}</span><span class="pst ${p.st}">${p.st==='done'?'Completed':'Ongoing'}</span>${media}</div><h4>${p.t}</h4><div class="pm">${p.m}</div><div class="pmeta"><span>${p.meta[0]}</span><span>${p.meta[1]}</span></div></article>`;
+   845→    }).join('');
+   846→    $('#projStats').innerHTML=projStats.map(([n,l])=>`<div class="pstat reveal"><div class="n">${n}</div><div class="l">${l}</div></div>`).join('');
+   847→    $('#pfilter').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#pfilter button').forEach(x=>x.classList.remove('active'));b.classList.add('active');const c=b.dataset.c;$$('.proj').forEach(p=>p.classList.toggle('hide',c!=='all'&&p.dataset.cat!==c));});
+   848→    $('#pfList').innerHTML=pfeats.map(([t,p])=>`<div class="pf"><span class="pi">${ic(p)}</span><b>${t}</b></div>`).join('');
+   849→    $('#digGrid').innerHTML=dig.map(([t,d,p],i)=>`<div class="dig reveal ${i%4?'d'+(i%4):''}"><span class="di">${ic(p)}</span><b>${t}</b><p>${d}</p></div>`).join('');
+   850→    $('#teamGrid').innerHTML=team.map(([n,r,im,d],i)=>`<div class="member reveal ${i?'d'+i:''}"><div class="fig"><span class="ico">${ic(I.user,1.5)}</span><img src="https://i.pravatar.cc/320?img=${im}" data-fb="https://picsum.photos/seed/tm${im}/320/360" loading="lazy" onerror="imgErr(this)" alt="${n}"></div><b>${n}</b><div class="role">${r}</div><p>${d}</p></div>`).join('');
+   851→    // quotes
+   852→    $('#quotes').innerHTML=quotes.map((q,i)=>`<div class="qbody ${i?'':'show'}" data-q="${i}"><blockquote>${q.q}</blockquote><div class="qwho"><img src="https://i.pravatar.cc/120?img=${q.im}" data-fb="https://picsum.photos/seed/q${q.im}/120/120" onerror="imgErr(this)" alt="${q.n}"><div style="text-align:left"><b>${q.n}</b><span>${q.r}</span></div></div></div>`).join('');
+   853→    $('#qnav').innerHTML=quotes.map((_,i)=>`<button class="qdot ${i?'':'active'}" data-i="${i}" aria-label="Quote ${i+1}"></button>`).join('');
+   854→    let qi=0,qt;const go=i=>{qi=i;$$('.qbody').forEach(e=>e.classList.remove('show'));$$('.qdot').forEach(e=>e.classList.remove('active'));$(`.qbody[data-q="${i}"]`).classList.add('show');$$('.qdot')[i].classList.add('active');};
+   855→    $('#qnav').addEventListener('click',e=>{const d=e.target.closest('.qdot');if(d){go(+d.dataset.i);reset();}});
+   856→    const reset=()=>{clearInterval(qt);qt=setInterval(()=>go((qi+1)%quotes.length),5500);};reset();
+   857→    // blog
+   858→    const f=posts[0];
+   859→    $('#feature').innerHTML=`<div class="fig imgrise"><span class="ico">${ic(IMG,1.4)}</span>${f[7]?up(f[7]):fl(820,460,f[4],f[5],f[6])}</div><span class="cat">${f[0]}</span><h3>${f[1]}</h3><p>${f[2]}</p><div class="meta">${f[3]}</div>`;
+   860→    $('#blogSide').innerHTML=posts.slice(1).map(p=>`<div class="mini"><div class="fig"><span class="ico">${ic(IMG,1.4)}</span>${p[7]?up(p[7]):fl(200,200,p[4],p[5],p[6])}</div><div><span class="cat">${p[0]}</span><h4>${p[1]}</h4><div class="meta">${p[3]}</div></div></div>`).join('');
+   861→    // careers
+   862→    $('#vacancies').innerHTML=vacs.map(([t,m])=>`<div class="vac reveal"><div><b>${t}</b><br><span>${m}</span></div><a href="#contact" class="btn btn-out btn-sm vb">Apply now</a></div>`).join('');
+   863→    $('#benefits').innerHTML=benefits.map(([t,d,p])=>`<div class="ben-item"><span class="bi">${ic(p)}</span><div><b>${t}</b><p>${d}</p></div></div>`).join('');
+   864→  }
+   865→
+   866→  function reveal(){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}}),{threshold:.1,rootMargin:'0px 0px -50px 0px'});$$('.reveal,.imgrise').forEach(el=>io.observe(el));}
+   867→  function chrome(){
+   868→    const hdr=$('#hdr');
+   869→    addEventListener('scroll',()=>{hdr.classList.toggle('scrolled',scrollY>10);$('#toTop').classList.toggle('show',scrollY>700);});
+   870→    $('#toTop').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+   871→    const b=$('#burger'),p=$('#mpanel');
+   872→    b.addEventListener('click',()=>{const o=p.classList.toggle('open');b.setAttribute('aria-expanded',o);});
+   873→    $$('#mpanel a').forEach(a=>a.addEventListener('click',()=>{p.classList.remove('open');b.setAttribute('aria-expanded',false);}));
+   874→  }
+   875→  function contact(e){e.preventDefault();$('#cfOk').classList.add('show');e.target.reset();return false;}
+   876→  async function loadOverview(){ /* const d=await fetch('/api/overview').then(r=>r.json()); map -> #opsStats; */ return null; }
+   877→  function applyUploads(){$$('[data-up]').forEach(el=>{const k=el.dataset.up;if(window.UP&&window.UP[k])el.src=window.UP[k];});}
+   878→  function init(){build();applyUploads();reveal();chrome();}
+   879→  return {init,contact,loadOverview};
+   880→})();
+   881→document.addEventListener('DOMContentLoaded',MHMS.init);
+   882→</script>
+   883→</body>
+   884→</html>
+   885→
