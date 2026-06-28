@@ -60,6 +60,7 @@ const WhatsAppSettings = lazy(() => import('@/components/modules/whatsapp/whatsa
 
 // Admin views
 const UserManagement = lazy(() => import('@/components/admin/user-management').then(m => ({ default: m.UserManagement })));
+const EmailManagement = lazy(() => import('@/components/modules/email/email-dashboard').then(m => ({ default: m.EmailManagement })));
 
 // Customer views
 const CustomerPortal = lazy(() => import('@/components/customer/customer-portal').then(m => ({ default: m.CustomerPortal })));
@@ -133,6 +134,7 @@ function ViewRouter() {
       {currentView === 'whatsapp-campaigns' && <WhatsAppCampaigns />}
       {currentView === 'whatsapp-settings' && <WhatsAppSettings />}
       {currentView === 'user-management' && <UserManagement />}
+      {currentView === 'email-management' && <EmailManagement />}
       {currentView === 'customer-portal' && <CustomerPortal />}
     </Suspense>
   );

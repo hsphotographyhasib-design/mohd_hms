@@ -93,7 +93,9 @@ export type AppView =
   // Customer views
   | 'customer-portal'
   // Admin views
-  | 'user-management';
+  | 'user-management'
+  // Email management views
+  | 'email-management';
 
 // ============ EQUIPMENT ============
 

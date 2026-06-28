@@ -53,6 +53,7 @@ import {
   Paintbrush,
   Footprints,
   Shield,
+  Mail,
   type LucideIcon,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -82,6 +83,7 @@ const navItems: NavItemConfig[] = [
   { id: 'reports', label: 'Reports', icon: BarChart3, feature: 'reports' },
   { id: 'notifications', label: 'Notifications', icon: Bell, feature: 'notifications', badge: 'notifications' },
   { id: 'user-management', label: 'User Management', icon: Shield, feature: 'user-management' },
+  { id: 'email-management', label: 'Email Management', icon: Mail, feature: 'email' },
   { id: 'settings', label: 'Settings', icon: Settings, feature: 'settings' },
 ];
 

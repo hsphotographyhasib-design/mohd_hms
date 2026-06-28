@@ -28,6 +28,7 @@ import {
   Receipt,
   FileText,
   MessageCircle,
+  Mail,
 } from 'lucide-react';
 
 // ============================================================
@@ -88,6 +89,7 @@ const NAV_ITEMS: NavItemConfig[] = [
   { id: 'reports', label: 'Reports', icon: BarChart3, feature: 'reports' },
   { id: 'user-management', label: 'Users', icon: Shield, feature: 'user-management' },
   { id: 'notifications', label: 'Notifications', icon: Bell, feature: 'notifications' },
+  { id: 'email-management', label: 'Email', icon: Mail, feature: 'email' },
   {
     id: 'whatsapp',
     label: 'WhatsApp',

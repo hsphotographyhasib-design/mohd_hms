@@ -1,16 +1,14 @@
 /**
- * Lightweight email helper.
+ * Lightweight email helper — LEGACY COMPATIBILITY LAYER.
  *
- * Default behaviour is environment-aware:
- *   - If RESEND_API_KEY + EMAIL_FROM are set, send via Resend HTTP API.
- *   - Else if SMTP_* env vars are set, send via SMTP_RELAY_URL (a generic
- *     HTTP relay that accepts { to, from, subject, html, text }).
- *   - Else (no provider configured): log the message + reset URL to the
- *     server console so developers can copy the link locally.
+ * Kept for backward compatibility with existing password-reset flows.
+ * New code should import from '@/lib/email-service' directly.
  *
- * No SMTP library is bundled to keep the dependency surface minimal —
- * production deployments should set RESEND_API_KEY or SMTP_RELAY_URL.
+ * Delegates to the centralized EmailService when BREVO_API_KEY is set,
+ * otherwise falls back to Resend → SMTP relay → console logging.
  */
+
+import { sendViaProvider, getActiveProvider } from '@/lib/email-service/providers';
 
 export interface SendEmailParams {
   to: string;
@@ -21,7 +19,7 @@ export interface SendEmailParams {
 
 export interface SendEmailResult {
   ok: boolean;
-  provider: 'resend' | 'smtp-relay' | 'console';
+  provider: 'resend' | 'smtp-relay' | 'console' | 'brevo';
   id?: string;
   error?: string;
 }
@@ -99,13 +97,30 @@ function logToConsole(p: SendEmailParams): SendEmailResult {
 }
 
 export async function sendEmail(p: SendEmailParams): Promise<SendEmailResult> {
+  // Use Brevo if configured (new centralized service)
+  if (process.env.BREVO_API_KEY) {
+    const result = await sendViaProvider({
+      to: p.to,
+      subject: p.subject,
+      html: p.html,
+      text: p.text,
+      module: 'auth',
+      templateName: 'Legacy Email',
+    });
+    return {
+      ok: result.ok,
+      provider: result.provider as SendEmailResult['provider'],
+      id: result.messageId,
+      error: result.error,
+    };
+  }
   if (process.env.RESEND_API_KEY) return sendViaResend(p);
   if (process.env.SMTP_RELAY_URL) return sendViaSmtpRelay(p);
   return logToConsole(p);
 }
 
 /* ------------------------------------------------------------------ */
-/*  Email templates                                                    */
+/*  Email templates (legacy — kept for backward compat)                */
 /* ------------------------------------------------------------------ */
 
 const BRAND = 'MOHD.HMS ENTERPRISE';
