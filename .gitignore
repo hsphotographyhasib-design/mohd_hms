@@ -65,3 +65,4 @@ server.log
 
 # z-scripts runtime
 .zscripts/upload/
+generated/prisma/
