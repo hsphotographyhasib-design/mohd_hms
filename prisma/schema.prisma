@@ -53,6 +53,8 @@ model Tenant {
   otpCodes             OtpCode[]
   loginSessions        LoginSession[]
   devices              Device[]
+  passwordResetTokens  PasswordResetToken[]
+  authAuditLogs        AuthAuditLog[]
 }
 
 // ============ USERS & AUTH ============
@@ -89,6 +91,8 @@ model User {
   vehicleLogs  VehicleLog[]
   loginSessions LoginSession[]
   devices      Device[]
+  passwordResetTokens PasswordResetToken[]
+  authAuditLogs AuthAuditLog[]
 
   @@unique([tenantId, email])
   @@index([tenantId])
@@ -1338,4 +1342,47 @@ model Device {
 
   @@index([userId])
   @@index([tenantId, userId])
+}
+// ============ PASSWORD RESET & AUTH AUDIT ============
+
+model PasswordResetToken {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String
+  tokenHash     String   @unique  // SHA-256 hash of the raw token (raw token never stored)
+  expiresAt     DateTime
+  usedAt        DateTime?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tenantId, userId])
+  @@index([expiresAt])
+}
+
+model AuthAuditLog {
+  id            String   @id @default(cuid())
+  tenantId      String?
+  userId        String?
+  email         String?  // captured even for unknown-account events
+  event         String   // password_reset_requested, reset_email_sent, token_verified, token_invalid, token_expired, password_changed, reset_failed, rate_limited
+  success       Boolean  @default(true)
+  ipAddress     String?
+  userAgent     String?
+  device        String?
+  browser       String?
+  metadata      String?  // JSON
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant?  @relation(fields: [tenantId], references: [id])
+  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tenantId, createdAt])
+  @@index([email])
+  @@index([ipAddress])
+  @@index([event])
 }

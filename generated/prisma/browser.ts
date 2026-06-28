@@ -282,3 +282,13 @@ export type LoginSession = Prisma.LoginSessionModel
  * 
  */
 export type Device = Prisma.DeviceModel
+/**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
+ * Model AuthAuditLog
+ * 
+ */
+export type AuthAuditLog = Prisma.AuthAuditLogModel
