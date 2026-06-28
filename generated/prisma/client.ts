@@ -321,3 +321,13 @@ export type AuthAuditLog = Prisma.AuthAuditLogModel
  * 
  */
 export type TermsAcceptance = Prisma.TermsAcceptanceModel
+/**
+ * Model EmailLog
+ * 
+ */
+export type EmailLog = Prisma.EmailLogModel
+/**
+ * Model EmailTemplate
+ * 
+ */
+export type EmailTemplate = Prisma.EmailTemplateModel

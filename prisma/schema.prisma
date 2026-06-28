@@ -55,6 +55,8 @@ model Tenant {
   devices              Device[]
   passwordResetTokens  PasswordResetToken[]
   authAuditLogs        AuthAuditLog[]
+  emailLogs            EmailLog[]
+  emailTemplates       EmailTemplate[]
 }
 
 // ============ USERS & AUTH ============
@@ -1406,4 +1408,72 @@ model TermsAcceptance {
 
   @@index([userId, createdAt])
   @@index([tcVersion])
+}
+
+// ============ EMAIL SYSTEM ============
+
+model EmailLog {
+  id              String   @id @default(cuid())
+  tenantId        String
+  recipient       String
+  cc              String?
+  bcc             String?
+  subject         String
+  templateId      String?
+  templateName    String?
+  module          String?  // complaints, work-orders, invoices, quotations, auth, pm, equipment, inventory, finance, hr, inspection
+  status          String   @default("queued") // queued, sending, delivered, opened, clicked, bounced, failed, spam, unsubscribed
+  provider        String   @default("brevo") // brevo, console
+  providerMessageId String?
+  errorCode       String?
+  errorMessage    String?
+  retryCount      Int      @default(0)
+  maxRetries      Int      @default(5)
+  nextRetryAt     DateTime?
+  scheduledFor    DateTime?
+  ip              String?
+  userAgent       String?
+  metadata        String?  // JSON — stores module-specific data
+  attachmentCount Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  sentAt          DateTime?
+  deliveredAt     DateTime?
+  openedAt        DateTime?
+  bouncedAt       DateTime?
+
+  template        EmailTemplate? @relation(fields: [templateId], references: [id])
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@index([tenantId, status])
+  @@index([tenantId, module])
+  @@index([recipient])
+  @@index([status])
+  @@index([scheduledFor])
+  @@index([nextRetryAt])
+  @@index([providerMessageId])
+  @@index([createdAt])
+}
+
+model EmailTemplate {
+  id              String   @id @default(cuid())
+  tenantId        String
+  name            String
+  identifier      String   // e.g., "complaint.created", "invoice.sent"
+  subject         String
+  module          String
+  description     String?
+  bodyHtml        String   // HTML template with {{variables}}
+  bodyText        String?  // Plain text fallback
+  variables       String?  // JSON array of variable names
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  emailLogs       EmailLog[]
+
+  @@unique([tenantId, identifier])
+  @@index([tenantId, module])
 }

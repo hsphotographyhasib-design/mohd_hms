@@ -106,7 +106,9 @@ export const ModelName = {
   Device: 'Device',
   PasswordResetToken: 'PasswordResetToken',
   AuthAuditLog: 'AuthAuditLog',
-  TermsAcceptance: 'TermsAcceptance'
+  TermsAcceptance: 'TermsAcceptance',
+  EmailLog: 'EmailLog',
+  EmailTemplate: 'EmailTemplate'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1283,6 +1285,59 @@ export const TermsAcceptanceScalarFieldEnum = {
 } as const
 
 export type TermsAcceptanceScalarFieldEnum = (typeof TermsAcceptanceScalarFieldEnum)[keyof typeof TermsAcceptanceScalarFieldEnum]
+
+
+export const EmailLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  recipient: 'recipient',
+  cc: 'cc',
+  bcc: 'bcc',
+  subject: 'subject',
+  templateId: 'templateId',
+  templateName: 'templateName',
+  module: 'module',
+  status: 'status',
+  provider: 'provider',
+  providerMessageId: 'providerMessageId',
+  errorCode: 'errorCode',
+  errorMessage: 'errorMessage',
+  retryCount: 'retryCount',
+  maxRetries: 'maxRetries',
+  nextRetryAt: 'nextRetryAt',
+  scheduledFor: 'scheduledFor',
+  ip: 'ip',
+  userAgent: 'userAgent',
+  metadata: 'metadata',
+  attachmentCount: 'attachmentCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  sentAt: 'sentAt',
+  deliveredAt: 'deliveredAt',
+  openedAt: 'openedAt',
+  bouncedAt: 'bouncedAt'
+} as const
+
+export type EmailLogScalarFieldEnum = (typeof EmailLogScalarFieldEnum)[keyof typeof EmailLogScalarFieldEnum]
+
+
+export const EmailTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  identifier: 'identifier',
+  subject: 'subject',
+  module: 'module',
+  description: 'description',
+  bodyHtml: 'bodyHtml',
+  bodyText: 'bodyText',
+  variables: 'variables',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type EmailTemplateScalarFieldEnum = (typeof EmailTemplateScalarFieldEnum)[keyof typeof EmailTemplateScalarFieldEnum]
 
 
 export const SortOrder = {
