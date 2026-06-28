@@ -29,11 +29,21 @@ function useReveal(deps?: unknown[]) {
   return ref
 }
 
+/* ── Fallback images for upload slots ── */
+const UP_FALLBACKS: Record<string, { src: string; alt: string }> = {
+  hero: { src: '/landing-images/hero.png', alt: 'HVAC technicians servicing a rooftop unit' },
+  gauges: { src: '/landing-images/gauges.png', alt: 'HVAC diagnostic gauges in use' },
+  about: { src: '/landing-images/about.png', alt: 'Engineering team working on a control panel' },
+  tools: { src: '/landing-images/tools.png', alt: 'Maintenance technician with tools' },
+}
+
 /* ── Helper to get uploads base64 (simplified) ── */
 function up(key: string) {
   if (typeof window !== 'undefined' && (window as any).UP?.[key]) {
     return `<img src="${(window as any).UP[key]}" loading="lazy" alt="">`
   }
+  const fb = UP_FALLBACKS[key]
+  if (fb) return `<img src="${fb.src}" loading="lazy" alt="${fb.alt}">`
   return ''
 }
 
@@ -65,7 +75,7 @@ export function HeroSection() {
         <div className="hero-figs reveal in d2">
           <div className="fig hero-fig imgrise">
             <span className="ico" dangerouslySetInnerHTML={{ __html: ic(IMG, 1.4) }} />
-            <div dangerouslySetInnerHTML={{ __html: up('hero') || '<span style="display:grid;place-items:center;width:100%;height:100%;color:var(--faint);font-family:var(--mono);font-size:.8rem">Hero image</span>' }} />
+            <div dangerouslySetInnerHTML={{ __html: up('hero') || '' }} />
             <span className="cap">On site — rooftop HVAC service</span>
           </div>
           <div className="fig hero-mini imgrise">
