@@ -401,3 +401,28 @@ Stage Summary:
 - 14 new database indexes added across User, Notification, Customer, Department, Attendance models
 - Friendly error messages replace raw Prisma errors in all auth routes
 - Zero lint errors
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Complete T&C acceptance feature — fix bugs, add audit logging, push to GitHub
+
+Work Log:
+- Found and fixed missing `cn` import from `@/lib/utils` (would cause runtime error on T&C error state)
+- Found and fixed WhatsApp `handleSendCode` missing `requireTc()` check (security bypass — users could skip T&C via WhatsApp)
+- Created `TermsAcceptance` Prisma model with userId, tcVersion, privacyVersion, ip, userAgent, createdAt fields
+- Added `termsAcceptances` relation to User model
+- Ran `prisma db push` and `prisma generate` successfully
+- Added `logTermsAcceptance()` fire-and-forget audit function that calls `/api/auth/terms-acceptance` after successful login
+- Wired audit logging into all 4 login success paths: email, Google, WhatsApp OTP verify, WhatsApp register
+- Verified via browser: checkbox renders correctly, red ring + error message on unaccepted click, error clears on check
+- Confirmed Terms & Conditions and Privacy Policy page links open correctly (target="_blank")
+- Lint: 0 errors, 7 warnings (generated Prisma files only)
+- Dev server: compiles clean, no runtime errors
+
+Stage Summary:
+- 4 files changed: login-view.tsx (cn import, requireTc in WhatsApp, logTermsAcceptance calls), schema.prisma (TermsAcceptance model + User relation), generated/prisma (regenerated)
+- All login methods now enforce T&C acceptance: Email, Google, WhatsApp OTP, Demo
+- Audit trail records userId, T&C version, privacy version, IP, and user agent on every successful login
+- 30-day localStorage remember mechanism with version checking
+- Terms & Conditions and Privacy Policy pages already existed with full content
