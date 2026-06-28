@@ -289,6 +289,8 @@ export type UserWhereInput = {
   supervisorComplaints?: Prisma.ComplaintListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   vehicleLogs?: Prisma.VehicleLogListRelationFilter
+  loginSessions?: Prisma.LoginSessionListRelationFilter
+  devices?: Prisma.DeviceListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -320,6 +322,8 @@ export type UserOrderByWithRelationInput = {
   supervisorComplaints?: Prisma.ComplaintOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   vehicleLogs?: Prisma.VehicleLogOrderByRelationAggregateInput
+  loginSessions?: Prisma.LoginSessionOrderByRelationAggregateInput
+  devices?: Prisma.DeviceOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -355,6 +359,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   supervisorComplaints?: Prisma.ComplaintListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   vehicleLogs?: Prisma.VehicleLogListRelationFilter
+  loginSessions?: Prisma.LoginSessionListRelationFilter
+  devices?: Prisma.DeviceListRelationFilter
 }, "id" | "tenantId_email">
 
 export type UserOrderByWithAggregationInput = {
@@ -430,6 +436,8 @@ export type UserCreateInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -459,6 +467,8 @@ export type UserUncheckedCreateInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -488,6 +498,8 @@ export type UserUpdateInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -517,6 +529,8 @@ export type UserUncheckedUpdateInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -892,6 +906,34 @@ export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type UserCreateNestedOneWithoutLoginSessionsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionsInput, Prisma.UserUncheckedCreateWithoutLoginSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoginSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutLoginSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionsInput, Prisma.UserUncheckedCreateWithoutLoginSessionsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoginSessionsInput
+  upsert?: Prisma.UserUpsertWithoutLoginSessionsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLoginSessionsInput, Prisma.UserUpdateWithoutLoginSessionsInput>, Prisma.UserUncheckedUpdateWithoutLoginSessionsInput>
+}
+
+export type UserCreateNestedOneWithoutDevicesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDevicesInput, Prisma.UserUncheckedCreateWithoutDevicesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDevicesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutDevicesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDevicesInput, Prisma.UserUncheckedCreateWithoutDevicesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDevicesInput
+  upsert?: Prisma.UserUpsertWithoutDevicesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDevicesInput, Prisma.UserUpdateWithoutDevicesInput>, Prisma.UserUncheckedUpdateWithoutDevicesInput>
+}
+
 export type UserCreateWithoutTenantInput = {
   id?: string
   email: string
@@ -918,6 +960,8 @@ export type UserCreateWithoutTenantInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutTenantInput = {
@@ -946,6 +990,8 @@ export type UserUncheckedCreateWithoutTenantInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutTenantInput = {
@@ -1023,6 +1069,8 @@ export type UserCreateWithoutDepartmentInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutDepartmentInput = {
@@ -1051,6 +1099,8 @@ export type UserUncheckedCreateWithoutDepartmentInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -1105,6 +1155,8 @@ export type UserCreateWithoutAssignedComplaintsInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAssignedComplaintsInput = {
@@ -1133,6 +1185,8 @@ export type UserUncheckedCreateWithoutAssignedComplaintsInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAssignedComplaintsInput = {
@@ -1166,6 +1220,8 @@ export type UserCreateWithoutSupervisorComplaintsInput = {
   pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSupervisorComplaintsInput = {
@@ -1194,6 +1250,8 @@ export type UserUncheckedCreateWithoutSupervisorComplaintsInput = {
   pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSupervisorComplaintsInput = {
@@ -1238,6 +1296,8 @@ export type UserUpdateWithoutAssignedComplaintsInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignedComplaintsInput = {
@@ -1266,6 +1326,8 @@ export type UserUncheckedUpdateWithoutAssignedComplaintsInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutSupervisorComplaintsInput = {
@@ -1305,6 +1367,8 @@ export type UserUpdateWithoutSupervisorComplaintsInput = {
   pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSupervisorComplaintsInput = {
@@ -1333,6 +1397,8 @@ export type UserUncheckedUpdateWithoutSupervisorComplaintsInput = {
   pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAssignedWorkOrdersInput = {
@@ -1361,6 +1427,8 @@ export type UserCreateWithoutAssignedWorkOrdersInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAssignedWorkOrdersInput = {
@@ -1389,6 +1457,8 @@ export type UserUncheckedCreateWithoutAssignedWorkOrdersInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAssignedWorkOrdersInput = {
@@ -1422,6 +1492,8 @@ export type UserCreateWithoutCreatedWorkOrdersInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedWorkOrdersInput = {
@@ -1450,6 +1522,8 @@ export type UserUncheckedCreateWithoutCreatedWorkOrdersInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedWorkOrdersInput = {
@@ -1494,6 +1568,8 @@ export type UserUpdateWithoutAssignedWorkOrdersInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAssignedWorkOrdersInput = {
@@ -1522,6 +1598,8 @@ export type UserUncheckedUpdateWithoutAssignedWorkOrdersInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutCreatedWorkOrdersInput = {
@@ -1561,6 +1639,8 @@ export type UserUpdateWithoutCreatedWorkOrdersInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedWorkOrdersInput = {
@@ -1589,6 +1669,8 @@ export type UserUncheckedUpdateWithoutCreatedWorkOrdersInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPmSchedulesInput = {
@@ -1617,6 +1699,8 @@ export type UserCreateWithoutPmSchedulesInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPmSchedulesInput = {
@@ -1645,6 +1729,8 @@ export type UserUncheckedCreateWithoutPmSchedulesInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPmSchedulesInput = {
@@ -1689,6 +1775,8 @@ export type UserUpdateWithoutPmSchedulesInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPmSchedulesInput = {
@@ -1717,6 +1805,8 @@ export type UserUncheckedUpdateWithoutPmSchedulesInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCreatedInvoicesInput = {
@@ -1745,6 +1835,8 @@ export type UserCreateWithoutCreatedInvoicesInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCreatedInvoicesInput = {
@@ -1773,6 +1865,8 @@ export type UserUncheckedCreateWithoutCreatedInvoicesInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCreatedInvoicesInput = {
@@ -1806,6 +1900,8 @@ export type UserCreateWithoutPreparedInvoicesInput = {
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPreparedInvoicesInput = {
@@ -1834,6 +1930,8 @@ export type UserUncheckedCreateWithoutPreparedInvoicesInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPreparedInvoicesInput = {
@@ -1878,6 +1976,8 @@ export type UserUpdateWithoutCreatedInvoicesInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCreatedInvoicesInput = {
@@ -1906,6 +2006,8 @@ export type UserUncheckedUpdateWithoutCreatedInvoicesInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutPreparedInvoicesInput = {
@@ -1945,6 +2047,8 @@ export type UserUpdateWithoutPreparedInvoicesInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPreparedInvoicesInput = {
@@ -1973,6 +2077,8 @@ export type UserUncheckedUpdateWithoutPreparedInvoicesInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutVehicleLogsInput = {
@@ -2001,6 +2107,8 @@ export type UserCreateWithoutVehicleLogsInput = {
   pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutVehicleLogsInput = {
@@ -2029,6 +2137,8 @@ export type UserUncheckedCreateWithoutVehicleLogsInput = {
   pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutVehicleLogsInput = {
@@ -2073,6 +2183,8 @@ export type UserUpdateWithoutVehicleLogsInput = {
   pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutVehicleLogsInput = {
@@ -2101,6 +2213,8 @@ export type UserUncheckedUpdateWithoutVehicleLogsInput = {
   pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -2129,6 +2243,8 @@ export type UserCreateWithoutAuditLogsInput = {
   pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
   supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
   vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -2157,6 +2273,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
   supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
   vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -2201,6 +2319,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -2229,6 +2349,280 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutLoginSessionsInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
+  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
+  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
+  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
+  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
+  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutLoginSessionsInput = {
+  id?: string
+  tenantId: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
+  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
+  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
+  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutLoginSessionsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionsInput, Prisma.UserUncheckedCreateWithoutLoginSessionsInput>
+}
+
+export type UserUpsertWithoutLoginSessionsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLoginSessionsInput, Prisma.UserUncheckedUpdateWithoutLoginSessionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionsInput, Prisma.UserUncheckedCreateWithoutLoginSessionsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLoginSessionsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLoginSessionsInput, Prisma.UserUncheckedUpdateWithoutLoginSessionsInput>
+}
+
+export type UserUpdateWithoutLoginSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
+  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
+  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
+  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
+  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
+  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLoginSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
+  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
+  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutDevicesInput = {
+  id?: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
+  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
+  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
+  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
+  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
+  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
+  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutDevicesInput = {
+  id?: string
+  tenantId: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
+  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
+  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
+  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
+  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
+  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutDevicesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutDevicesInput, Prisma.UserUncheckedCreateWithoutDevicesInput>
+}
+
+export type UserUpsertWithoutDevicesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDevicesInput, Prisma.UserUncheckedUpdateWithoutDevicesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDevicesInput, Prisma.UserUncheckedCreateWithoutDevicesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDevicesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDevicesInput, Prisma.UserUncheckedUpdateWithoutDevicesInput>
+}
+
+export type UserUpdateWithoutDevicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
+  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
+  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
+  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
+  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
+  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
+  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDevicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
+  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
+  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
+  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
+  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
+  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyTenantInput = {
@@ -2276,6 +2670,8 @@ export type UserUpdateWithoutTenantInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutTenantInput = {
@@ -2304,6 +2700,8 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutTenantInput = {
@@ -2370,6 +2768,8 @@ export type UserUpdateWithoutDepartmentInput = {
   supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -2398,6 +2798,8 @@ export type UserUncheckedUpdateWithoutDepartmentInput = {
   supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
   vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -2434,6 +2836,8 @@ export type UserCountOutputType = {
   supervisorComplaints: number
   auditLogs: number
   vehicleLogs: number
+  loginSessions: number
+  devices: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2446,6 +2850,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   supervisorComplaints?: boolean | UserCountOutputTypeCountSupervisorComplaintsArgs
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   vehicleLogs?: boolean | UserCountOutputTypeCountVehicleLogsArgs
+  loginSessions?: boolean | UserCountOutputTypeCountLoginSessionsArgs
+  devices?: boolean | UserCountOutputTypeCountDevicesArgs
 }
 
 /**
@@ -2521,6 +2927,20 @@ export type UserCountOutputTypeCountVehicleLogsArgs<ExtArgs extends runtime.Type
   where?: Prisma.VehicleLogWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLoginSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LoginSessionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDevicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeviceWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2551,6 +2971,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   supervisorComplaints?: boolean | Prisma.User$supervisorComplaintsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   vehicleLogs?: boolean | Prisma.User$vehicleLogsArgs<ExtArgs>
+  loginSessions?: boolean | Prisma.User$loginSessionsArgs<ExtArgs>
+  devices?: boolean | Prisma.User$devicesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2631,6 +3053,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   supervisorComplaints?: boolean | Prisma.User$supervisorComplaintsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   vehicleLogs?: boolean | Prisma.User$vehicleLogsArgs<ExtArgs>
+  loginSessions?: boolean | Prisma.User$loginSessionsArgs<ExtArgs>
+  devices?: boolean | Prisma.User$devicesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2656,6 +3080,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     supervisorComplaints: Prisma.$ComplaintPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     vehicleLogs: Prisma.$VehicleLogPayload<ExtArgs>[]
+    loginSessions: Prisma.$LoginSessionPayload<ExtArgs>[]
+    devices: Prisma.$DevicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3080,6 +3506,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   supervisorComplaints<T extends Prisma.User$supervisorComplaintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supervisorComplaintsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   vehicleLogs<T extends Prisma.User$vehicleLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vehicleLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehicleLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  loginSessions<T extends Prisma.User$loginSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$loginSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  devices<T extends Prisma.User$devicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3759,6 +4187,54 @@ export type User$vehicleLogsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.VehicleLogScalarFieldEnum | Prisma.VehicleLogScalarFieldEnum[]
+}
+
+/**
+ * User.loginSessions
+ */
+export type User$loginSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LoginSession
+   */
+  select?: Prisma.LoginSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LoginSession
+   */
+  omit?: Prisma.LoginSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoginSessionInclude<ExtArgs> | null
+  where?: Prisma.LoginSessionWhereInput
+  orderBy?: Prisma.LoginSessionOrderByWithRelationInput | Prisma.LoginSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LoginSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LoginSessionScalarFieldEnum | Prisma.LoginSessionScalarFieldEnum[]
+}
+
+/**
+ * User.devices
+ */
+export type User$devicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Device
+   */
+  select?: Prisma.DeviceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Device
+   */
+  omit?: Prisma.DeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceInclude<ExtArgs> | null
+  where?: Prisma.DeviceWhereInput
+  orderBy?: Prisma.DeviceOrderByWithRelationInput | Prisma.DeviceOrderByWithRelationInput[]
+  cursor?: Prisma.DeviceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeviceScalarFieldEnum | Prisma.DeviceScalarFieldEnum[]
 }
 
 /**

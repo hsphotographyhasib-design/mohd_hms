@@ -1,6 +1,6 @@
 // ============ AUTH & USER TYPES ============
 
-export type UserRole = 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'finance' | 'customer';
+export type UserRole = 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'finance' | 'customer' | 'vendor' | 'guest';
 
 export interface LoginRequest {
   email: string;
@@ -89,7 +89,11 @@ export type AppView =
   | 'whatsapp-chats'
   | 'whatsapp-templates'
   | 'whatsapp-campaigns'
-  | 'whatsapp-settings';
+  | 'whatsapp-settings'
+  // Customer views
+  | 'customer-portal'
+  // Admin views
+  | 'user-management';
 
 // ============ EQUIPMENT ============
 

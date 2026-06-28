@@ -23,6 +23,7 @@ import {
   Globe,
   ChevronLeft,
   ChevronRight,
+  Shield,
   type LucideIcon,
   Receipt,
   FileText,
@@ -85,6 +86,7 @@ const NAV_ITEMS: NavItemConfig[] = [
   { id: 'purchases', label: 'Purchases', icon: ShoppingCart, feature: 'purchases' },
   { id: 'vehicles', label: 'Vehicles', icon: Truck, feature: 'vehicles' },
   { id: 'reports', label: 'Reports', icon: BarChart3, feature: 'reports' },
+  { id: 'user-management', label: 'Users', icon: Shield, feature: 'user-management' },
   { id: 'notifications', label: 'Notifications', icon: Bell, feature: 'notifications' },
   {
     id: 'whatsapp',

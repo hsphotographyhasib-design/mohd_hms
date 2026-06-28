@@ -265,3 +265,106 @@ Stage Summary:
 - AI-generated .png images removed
 - UP_FALLBACKS updated with all 7 image keys
 - All sections verified working with original images via browser testing
+---
+Task ID: 1
+Agent: schema-updater
+Task: Update Prisma schema for WhatsApp auth (OtpCode, LoginSession, Device models)
+
+Work Log:
+- Read existing schema
+- Added OtpCode, LoginSession, Device models
+- Added relations to User and Tenant models
+- Generated Prisma client
+- Pushed schema to database
+
+Stage Summary:
+- 3 new models created: OtpCode, LoginSession, Device
+- User model now has LoginSession[] and Device[] relations
+- Tenant model now has OtpCode[], LoginSession[], Device[] relations
+- User.role comment updated to include vendor, guest
+---
+Task ID: 3
+Agent: auth-api-builder
+Task: Build WhatsApp OTP auth API routes
+
+Work Log:
+- Created send-otp, verify-otp, register, refresh, logout API routes
+- Created user management API routes (list, get, update, delete)
+- Added OTP and refresh token helpers to auth.ts
+- All routes include IP logging, audit trails, rate limiting
+
+Stage Summary:
+- 7 new API route files created
+- auth.ts enhanced with OTP/refresh token utilities
+- Full WhatsApp login flow supported via API
+---
+Task ID: 2
+Agent: frontend-builder
+Task: Build WhatsApp login frontend UI
+
+Work Log:
+- Read existing login-view.tsx structure (702 lines, 3-panel: choices/email/whatsapp)
+- Created src/lib/countries.ts with 17 countries, Brunei (+673) as default
+- Built 4-step WhatsApp login flow (phone → OTP → register → success)
+- Added loginWithWhatsApp to auth store (stores token, refreshToken, user in localStorage)
+- Updated UserRole type with vendor and guest roles
+- Updated ROLE_HIERARCHY in store with vendor (30) and guest (5)
+- Replaced WhatsApp panel stub with complete UI:
+  - Step 1: Country selector (shadcn Select) + phone input with auto-format
+  - Step 2: 6 individual digit OTP inputs with auto-advance, auto-submit (300ms), paste support
+  - Step 3: Registration form (8 fields) with validation
+  - Step 4: Success animation with CheckCircle2 icon
+- 5-minute countdown timer with mm:ss display
+- Rate limit display (attempts remaining)
+- Error states: wrong code, expired code, too many attempts, network error
+- All existing login panels (choices, email, demo accounts) preserved
+- Lint: 0 errors, 7 warnings (all from generated prisma files)
+
+Stage Summary:
+- Complete WhatsApp OTP login UI with phone, OTP, registration, and success steps
+- Country auto-detection with Brunei (+673) as default, 17 countries available
+- Responsive design matching existing MOHD.HMS emerald green theme
+- 6-digit OTP input with auto-focus, auto-advance, paste, and auto-submit
+- Registration form with proper validation for new WhatsApp users
+- API integration: POST send-otp, POST verify-otp, POST register
+---
+Task ID: 6
+Agent: admin-panel-builder
+Task: Build Admin User Management Panel
+
+Work Log:
+- Created user-management.tsx with list, detail, audit log views
+- Added user-management AppView type
+- Integrated into app navigation for admin/super_admin
+- Role badges, search, filters, pagination all working
+- Created session revoke API endpoint for force logout functionality
+- Added Shield icon import to sidebar and floating nav
+- Added user-management route to app-shell ViewRouter
+- Added user-management permission to canAccess (admin/super_admin)
+
+Stage Summary:
+- Complete user management panel with CRUD operations
+- Role assignment, activate/suspend, force logout, delete
+- Audit log viewer per user
+- Responsive design with mobile card layout
+- Color-coded role badges (super_admin=red, admin=orange, manager=blue, supervisor=purple, technician=cyan, finance=yellow, customer=green, vendor=gray, guest=gray)
+- All actions protected by role permissions (change role=super_admin, delete=super_admin, activate/suspend=admin+, force logout=admin+)
+---
+Task ID: 7
+Agent: main
+Task: Build Customer Portal and role-based dashboard routing
+
+Work Log:
+- Created src/components/customer/customer-portal.tsx with self-contained customer portal
+- Portal includes: Dashboard home, Complaints, Invoices, Work Orders, Equipment, Profile views
+- Added 'customer-portal' to AppView type
+- Added CustomerPortal lazy import to app-shell.tsx
+- Added role-based routing: customer role → CustomerPortal (bypasses normal app shell)
+- Non-customer roles continue to normal dashboard with full navigation
+
+Stage Summary:
+- Customer portal with dedicated navigation bar (no sidebar/floating nav)
+- Dashboard shows stats cards, quick actions, recent activity
+- Simple list views for complaints, invoices, work orders, equipment
+- Profile view with edit capability
+- Mobile responsive with hamburger menu

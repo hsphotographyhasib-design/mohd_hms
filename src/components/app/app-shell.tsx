@@ -1,7 +1,7 @@
 'use client';
 
 import { lazy, Suspense } from 'react';
-import { useAppStore } from '@/store';
+import { useAppStore, useAuthStore } from '@/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AppHeader } from '@/components/nav/app-header';
 import { FloatingNavBar } from '@/components/nav/floating-nav-bar';
@@ -57,6 +57,12 @@ const WhatsAppChats = lazy(() => import('@/components/modules/whatsapp/whatsapp-
 const WhatsAppTemplates = lazy(() => import('@/components/modules/whatsapp/whatsapp-templates').then(m => ({ default: m.WhatsAppTemplates })));
 const WhatsAppCampaigns = lazy(() => import('@/components/modules/whatsapp/whatsapp-campaigns').then(m => ({ default: m.WhatsAppCampaigns })));
 const WhatsAppSettings = lazy(() => import('@/components/modules/whatsapp/whatsapp-settings').then(m => ({ default: m.WhatsAppSettings })));
+
+// Admin views
+const UserManagement = lazy(() => import('@/components/admin/user-management').then(m => ({ default: m.UserManagement })));
+
+// Customer views
+const CustomerPortal = lazy(() => import('@/components/customer/customer-portal').then(m => ({ default: m.CustomerPortal })));
 
 function ViewLoader() {
   return (
@@ -126,11 +132,25 @@ function ViewRouter() {
       {currentView === 'whatsapp-templates' && <WhatsAppTemplates />}
       {currentView === 'whatsapp-campaigns' && <WhatsAppCampaigns />}
       {currentView === 'whatsapp-settings' && <WhatsAppSettings />}
+      {currentView === 'user-management' && <UserManagement />}
+      {currentView === 'customer-portal' && <CustomerPortal />}
     </Suspense>
   );
 }
 
 export function AppShell() {
+  const { currentView } = useAppStore();
+  const user = useAuthStore(s => s.user);
+
+  // Customer role gets a dedicated portal (no sidebar/floating nav)
+  if (user?.role === 'customer') {
+    return (
+      <Suspense fallback={<ViewLoader />}>
+        <CustomerPortal />
+      </Suspense>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Header */}

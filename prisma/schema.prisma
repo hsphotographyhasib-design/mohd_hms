@@ -50,6 +50,9 @@ model Tenant {
   complaintTimelines   ComplaintTimeline[]
   equipmentQrCodes     EquipmentQrCode[]
   scanLogs             ScanLog[]
+  otpCodes             OtpCode[]
+  loginSessions        LoginSession[]
+  devices              Device[]
 }
 
 // ============ USERS & AUTH ============
@@ -62,7 +65,7 @@ model User {
   name          String
   phone         String?
   avatar        String?
-  role          String   @default("technician") // super_admin, admin, manager, supervisor, technician, finance, customer
+  role          String   @default("technician") // super_admin, admin, manager, supervisor, technician, finance, customer, vendor, guest
   employeeNumber String?
   departmentId  String?
   isActive      Boolean  @default(true)
@@ -84,6 +87,8 @@ model User {
   supervisorComplaints Complaint[] @relation("SupervisorComplaints")
   auditLogs    AuditLog[]
   vehicleLogs  VehicleLog[]
+  loginSessions LoginSession[]
+  devices      Device[]
 
   @@unique([tenantId, email])
 }
@@ -1245,4 +1250,72 @@ model WhatsAppDeliveryLog {
 
   @@index([tenantId, messageId])
   @@index([messageId])
+}
+
+// ============ WHATSAPP OTP AUTH ============
+
+model OtpCode {
+  id            String   @id @default(cuid())
+  tenantId      String
+  phoneNumber   String
+  code          String
+  purpose       String   @default("login") // login, registration, reset
+  attempts      Int      @default(0)
+  maxAttempts   Int      @default(5)
+  expiresAt     DateTime
+  verifiedAt    DateTime?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, phoneNumber])
+  @@index([phoneNumber, expiresAt])
+  @@index([expiresAt])
+}
+
+model LoginSession {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String
+  refreshToken  String   @unique
+  deviceName    String?
+  deviceType    String?  // mobile, tablet, desktop
+  browser       String?
+  os            String?
+  ipAddress     String?
+  userAgent     String?
+  isRevoked     Boolean  @default(false)
+  lastActivity  DateTime @default(now())
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([refreshToken])
+  @@index([tenantId, userId])
+}
+
+model Device {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String
+  name          String?
+  type          String?  // mobile, tablet, desktop
+  browser       String?
+  os            String?
+  ipAddress     String?
+  userAgent     String?
+  lastSeen      DateTime @default(now())
+  isTrusted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([tenantId, userId])
 }

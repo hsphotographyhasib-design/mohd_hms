@@ -299,6 +299,9 @@ export type TenantWhereInput = {
   complaintTimelines?: Prisma.ComplaintTimelineListRelationFilter
   equipmentQrCodes?: Prisma.EquipmentQrCodeListRelationFilter
   scanLogs?: Prisma.ScanLogListRelationFilter
+  otpCodes?: Prisma.OtpCodeListRelationFilter
+  loginSessions?: Prisma.LoginSessionListRelationFilter
+  devices?: Prisma.DeviceListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -341,6 +344,9 @@ export type TenantOrderByWithRelationInput = {
   complaintTimelines?: Prisma.ComplaintTimelineOrderByRelationAggregateInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeOrderByRelationAggregateInput
   scanLogs?: Prisma.ScanLogOrderByRelationAggregateInput
+  otpCodes?: Prisma.OtpCodeOrderByRelationAggregateInput
+  loginSessions?: Prisma.LoginSessionOrderByRelationAggregateInput
+  devices?: Prisma.DeviceOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -386,6 +392,9 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   complaintTimelines?: Prisma.ComplaintTimelineListRelationFilter
   equipmentQrCodes?: Prisma.EquipmentQrCodeListRelationFilter
   scanLogs?: Prisma.ScanLogListRelationFilter
+  otpCodes?: Prisma.OtpCodeListRelationFilter
+  loginSessions?: Prisma.LoginSessionListRelationFilter
+  devices?: Prisma.DeviceListRelationFilter
 }, "id" | "domain">
 
 export type TenantOrderByWithAggregationInput = {
@@ -466,6 +475,9 @@ export type TenantCreateInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -508,6 +520,9 @@ export type TenantUncheckedCreateInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -550,6 +565,9 @@ export type TenantUpdateInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -592,6 +610,9 @@ export type TenantUncheckedUpdateInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -1099,6 +1120,48 @@ export type TenantUpdateOneRequiredWithoutWhatsappDeliveryLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutWhatsappDeliveryLogsInput, Prisma.TenantUpdateWithoutWhatsappDeliveryLogsInput>, Prisma.TenantUncheckedUpdateWithoutWhatsappDeliveryLogsInput>
 }
 
+export type TenantCreateNestedOneWithoutOtpCodesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutOtpCodesInput, Prisma.TenantUncheckedCreateWithoutOtpCodesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOtpCodesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutOtpCodesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutOtpCodesInput, Prisma.TenantUncheckedCreateWithoutOtpCodesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutOtpCodesInput
+  upsert?: Prisma.TenantUpsertWithoutOtpCodesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutOtpCodesInput, Prisma.TenantUpdateWithoutOtpCodesInput>, Prisma.TenantUncheckedUpdateWithoutOtpCodesInput>
+}
+
+export type TenantCreateNestedOneWithoutLoginSessionsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLoginSessionsInput, Prisma.TenantUncheckedCreateWithoutLoginSessionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLoginSessionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutLoginSessionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutLoginSessionsInput, Prisma.TenantUncheckedCreateWithoutLoginSessionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutLoginSessionsInput
+  upsert?: Prisma.TenantUpsertWithoutLoginSessionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutLoginSessionsInput, Prisma.TenantUpdateWithoutLoginSessionsInput>, Prisma.TenantUncheckedUpdateWithoutLoginSessionsInput>
+}
+
+export type TenantCreateNestedOneWithoutDevicesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutDevicesInput, Prisma.TenantUncheckedCreateWithoutDevicesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDevicesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutDevicesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutDevicesInput, Prisma.TenantUncheckedCreateWithoutDevicesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDevicesInput
+  upsert?: Prisma.TenantUpsertWithoutDevicesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutDevicesInput, Prisma.TenantUpdateWithoutDevicesInput>, Prisma.TenantUncheckedUpdateWithoutDevicesInput>
+}
+
 export type TenantCreateWithoutUsersInput = {
   id?: string
   name: string
@@ -1138,6 +1201,9 @@ export type TenantCreateWithoutUsersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -1179,6 +1245,9 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -1236,6 +1305,9 @@ export type TenantUpdateWithoutUsersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -1277,6 +1349,9 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDepartmentsInput = {
@@ -1318,6 +1393,9 @@ export type TenantCreateWithoutDepartmentsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDepartmentsInput = {
@@ -1359,6 +1437,9 @@ export type TenantUncheckedCreateWithoutDepartmentsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDepartmentsInput = {
@@ -1416,6 +1497,9 @@ export type TenantUpdateWithoutDepartmentsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDepartmentsInput = {
@@ -1457,6 +1541,9 @@ export type TenantUncheckedUpdateWithoutDepartmentsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomersInput = {
@@ -1498,6 +1585,9 @@ export type TenantCreateWithoutCustomersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomersInput = {
@@ -1539,6 +1629,9 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomersInput = {
@@ -1596,6 +1689,9 @@ export type TenantUpdateWithoutCustomersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomersInput = {
@@ -1637,6 +1733,9 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEquipmentInput = {
@@ -1678,6 +1777,9 @@ export type TenantCreateWithoutEquipmentInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEquipmentInput = {
@@ -1719,6 +1821,9 @@ export type TenantUncheckedCreateWithoutEquipmentInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEquipmentInput = {
@@ -1776,6 +1881,9 @@ export type TenantUpdateWithoutEquipmentInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEquipmentInput = {
@@ -1817,6 +1925,9 @@ export type TenantUncheckedUpdateWithoutEquipmentInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEquipmentQrCodesInput = {
@@ -1858,6 +1969,9 @@ export type TenantCreateWithoutEquipmentQrCodesInput = {
   customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEquipmentQrCodesInput = {
@@ -1899,6 +2013,9 @@ export type TenantUncheckedCreateWithoutEquipmentQrCodesInput = {
   customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEquipmentQrCodesInput = {
@@ -1956,6 +2073,9 @@ export type TenantUpdateWithoutEquipmentQrCodesInput = {
   customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEquipmentQrCodesInput = {
@@ -1997,6 +2117,9 @@ export type TenantUncheckedUpdateWithoutEquipmentQrCodesInput = {
   customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutScanLogsInput = {
@@ -2038,6 +2161,9 @@ export type TenantCreateWithoutScanLogsInput = {
   customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutScanLogsInput = {
@@ -2079,6 +2205,9 @@ export type TenantUncheckedCreateWithoutScanLogsInput = {
   customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutScanLogsInput = {
@@ -2136,6 +2265,9 @@ export type TenantUpdateWithoutScanLogsInput = {
   customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutScanLogsInput = {
@@ -2177,6 +2309,9 @@ export type TenantUncheckedUpdateWithoutScanLogsInput = {
   customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutComplaintsInput = {
@@ -2218,6 +2353,9 @@ export type TenantCreateWithoutComplaintsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutComplaintsInput = {
@@ -2259,6 +2397,9 @@ export type TenantUncheckedCreateWithoutComplaintsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutComplaintsInput = {
@@ -2316,6 +2457,9 @@ export type TenantUpdateWithoutComplaintsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutComplaintsInput = {
@@ -2357,6 +2501,9 @@ export type TenantUncheckedUpdateWithoutComplaintsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWorkOrdersInput = {
@@ -2398,6 +2545,9 @@ export type TenantCreateWithoutWorkOrdersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWorkOrdersInput = {
@@ -2439,6 +2589,9 @@ export type TenantUncheckedCreateWithoutWorkOrdersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWorkOrdersInput = {
@@ -2496,6 +2649,9 @@ export type TenantUpdateWithoutWorkOrdersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWorkOrdersInput = {
@@ -2537,6 +2693,9 @@ export type TenantUncheckedUpdateWithoutWorkOrdersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutChecklistTemplatesInput = {
@@ -2578,6 +2737,9 @@ export type TenantCreateWithoutChecklistTemplatesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutChecklistTemplatesInput = {
@@ -2619,6 +2781,9 @@ export type TenantUncheckedCreateWithoutChecklistTemplatesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutChecklistTemplatesInput = {
@@ -2676,6 +2841,9 @@ export type TenantUpdateWithoutChecklistTemplatesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutChecklistTemplatesInput = {
@@ -2717,6 +2885,9 @@ export type TenantUncheckedUpdateWithoutChecklistTemplatesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPmSchedulesInput = {
@@ -2758,6 +2929,9 @@ export type TenantCreateWithoutPmSchedulesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPmSchedulesInput = {
@@ -2799,6 +2973,9 @@ export type TenantUncheckedCreateWithoutPmSchedulesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPmSchedulesInput = {
@@ -2856,6 +3033,9 @@ export type TenantUpdateWithoutPmSchedulesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPmSchedulesInput = {
@@ -2897,6 +3077,9 @@ export type TenantUncheckedUpdateWithoutPmSchedulesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutQuotationsInput = {
@@ -2938,6 +3121,9 @@ export type TenantCreateWithoutQuotationsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutQuotationsInput = {
@@ -2979,6 +3165,9 @@ export type TenantUncheckedCreateWithoutQuotationsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutQuotationsInput = {
@@ -3036,6 +3225,9 @@ export type TenantUpdateWithoutQuotationsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutQuotationsInput = {
@@ -3077,6 +3269,9 @@ export type TenantUncheckedUpdateWithoutQuotationsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInvoicesInput = {
@@ -3118,6 +3313,9 @@ export type TenantCreateWithoutInvoicesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInvoicesInput = {
@@ -3159,6 +3357,9 @@ export type TenantUncheckedCreateWithoutInvoicesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInvoicesInput = {
@@ -3216,6 +3417,9 @@ export type TenantUpdateWithoutInvoicesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInvoicesInput = {
@@ -3257,6 +3461,9 @@ export type TenantUncheckedUpdateWithoutInvoicesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventoryInput = {
@@ -3298,6 +3505,9 @@ export type TenantCreateWithoutInventoryInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventoryInput = {
@@ -3339,6 +3549,9 @@ export type TenantUncheckedCreateWithoutInventoryInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventoryInput = {
@@ -3396,6 +3609,9 @@ export type TenantUpdateWithoutInventoryInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventoryInput = {
@@ -3437,6 +3653,9 @@ export type TenantUncheckedUpdateWithoutInventoryInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPurchaseOrdersInput = {
@@ -3478,6 +3697,9 @@ export type TenantCreateWithoutPurchaseOrdersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -3519,6 +3741,9 @@ export type TenantUncheckedCreateWithoutPurchaseOrdersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -3576,6 +3801,9 @@ export type TenantUpdateWithoutPurchaseOrdersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -3617,6 +3845,9 @@ export type TenantUncheckedUpdateWithoutPurchaseOrdersInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVehiclesInput = {
@@ -3658,6 +3889,9 @@ export type TenantCreateWithoutVehiclesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVehiclesInput = {
@@ -3699,6 +3933,9 @@ export type TenantUncheckedCreateWithoutVehiclesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVehiclesInput = {
@@ -3756,6 +3993,9 @@ export type TenantUpdateWithoutVehiclesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVehiclesInput = {
@@ -3797,6 +4037,9 @@ export type TenantUncheckedUpdateWithoutVehiclesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutComplaintTimelinesInput = {
@@ -3838,6 +4081,9 @@ export type TenantCreateWithoutComplaintTimelinesInput = {
   customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutComplaintTimelinesInput = {
@@ -3879,6 +4125,9 @@ export type TenantUncheckedCreateWithoutComplaintTimelinesInput = {
   customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutComplaintTimelinesInput = {
@@ -3936,6 +4185,9 @@ export type TenantUpdateWithoutComplaintTimelinesInput = {
   customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutComplaintTimelinesInput = {
@@ -3977,6 +4229,9 @@ export type TenantUncheckedUpdateWithoutComplaintTimelinesInput = {
   customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutNotificationsInput = {
@@ -4018,6 +4273,9 @@ export type TenantCreateWithoutNotificationsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutNotificationsInput = {
@@ -4059,6 +4317,9 @@ export type TenantUncheckedCreateWithoutNotificationsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutNotificationsInput = {
@@ -4116,6 +4377,9 @@ export type TenantUpdateWithoutNotificationsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutNotificationsInput = {
@@ -4157,6 +4421,9 @@ export type TenantUncheckedUpdateWithoutNotificationsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAuditLogsInput = {
@@ -4198,6 +4465,9 @@ export type TenantCreateWithoutAuditLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuditLogsInput = {
@@ -4239,6 +4509,9 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuditLogsInput = {
@@ -4296,6 +4569,9 @@ export type TenantUpdateWithoutAuditLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuditLogsInput = {
@@ -4337,6 +4613,9 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappConfigsInput = {
@@ -4378,6 +4657,9 @@ export type TenantCreateWithoutWhatsappConfigsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappConfigsInput = {
@@ -4419,6 +4701,9 @@ export type TenantUncheckedCreateWithoutWhatsappConfigsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappConfigsInput = {
@@ -4476,6 +4761,9 @@ export type TenantUpdateWithoutWhatsappConfigsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappConfigsInput = {
@@ -4517,6 +4805,9 @@ export type TenantUncheckedUpdateWithoutWhatsappConfigsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappSessionsInput = {
@@ -4558,6 +4849,9 @@ export type TenantCreateWithoutWhatsappSessionsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappSessionsInput = {
@@ -4599,6 +4893,9 @@ export type TenantUncheckedCreateWithoutWhatsappSessionsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappSessionsInput = {
@@ -4656,6 +4953,9 @@ export type TenantUpdateWithoutWhatsappSessionsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappSessionsInput = {
@@ -4697,6 +4997,9 @@ export type TenantUncheckedUpdateWithoutWhatsappSessionsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappMessagesInput = {
@@ -4738,6 +5041,9 @@ export type TenantCreateWithoutWhatsappMessagesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappMessagesInput = {
@@ -4779,6 +5085,9 @@ export type TenantUncheckedCreateWithoutWhatsappMessagesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappMessagesInput = {
@@ -4836,6 +5145,9 @@ export type TenantUpdateWithoutWhatsappMessagesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappMessagesInput = {
@@ -4877,6 +5189,9 @@ export type TenantUncheckedUpdateWithoutWhatsappMessagesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutConversationThreadsInput = {
@@ -4918,6 +5233,9 @@ export type TenantCreateWithoutConversationThreadsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutConversationThreadsInput = {
@@ -4959,6 +5277,9 @@ export type TenantUncheckedCreateWithoutConversationThreadsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutConversationThreadsInput = {
@@ -5016,6 +5337,9 @@ export type TenantUpdateWithoutConversationThreadsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutConversationThreadsInput = {
@@ -5057,6 +5381,9 @@ export type TenantUncheckedUpdateWithoutConversationThreadsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappTemplatesInput = {
@@ -5098,6 +5425,9 @@ export type TenantCreateWithoutWhatsappTemplatesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappTemplatesInput = {
@@ -5139,6 +5469,9 @@ export type TenantUncheckedCreateWithoutWhatsappTemplatesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappTemplatesInput = {
@@ -5196,6 +5529,9 @@ export type TenantUpdateWithoutWhatsappTemplatesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappTemplatesInput = {
@@ -5237,6 +5573,9 @@ export type TenantUncheckedUpdateWithoutWhatsappTemplatesInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerFeedbacksInput = {
@@ -5278,6 +5617,9 @@ export type TenantCreateWithoutCustomerFeedbacksInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerFeedbacksInput = {
@@ -5319,6 +5661,9 @@ export type TenantUncheckedCreateWithoutCustomerFeedbacksInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerFeedbacksInput = {
@@ -5376,6 +5721,9 @@ export type TenantUpdateWithoutCustomerFeedbacksInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerFeedbacksInput = {
@@ -5417,6 +5765,9 @@ export type TenantUncheckedUpdateWithoutCustomerFeedbacksInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerReportsInput = {
@@ -5458,6 +5809,9 @@ export type TenantCreateWithoutCustomerReportsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerReportsInput = {
@@ -5499,6 +5853,9 @@ export type TenantUncheckedCreateWithoutCustomerReportsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerReportsInput = {
@@ -5556,6 +5913,9 @@ export type TenantUpdateWithoutCustomerReportsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerReportsInput = {
@@ -5597,6 +5957,9 @@ export type TenantUncheckedUpdateWithoutCustomerReportsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutBroadcastLogsInput = {
@@ -5638,6 +6001,9 @@ export type TenantCreateWithoutBroadcastLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBroadcastLogsInput = {
@@ -5679,6 +6045,9 @@ export type TenantUncheckedCreateWithoutBroadcastLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBroadcastLogsInput = {
@@ -5736,6 +6105,9 @@ export type TenantUpdateWithoutBroadcastLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBroadcastLogsInput = {
@@ -5777,6 +6149,9 @@ export type TenantUncheckedUpdateWithoutBroadcastLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappDeliveryLogsInput = {
@@ -5818,6 +6193,9 @@ export type TenantCreateWithoutWhatsappDeliveryLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappDeliveryLogsInput = {
@@ -5859,6 +6237,9 @@ export type TenantUncheckedCreateWithoutWhatsappDeliveryLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
   scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappDeliveryLogsInput = {
@@ -5916,6 +6297,9 @@ export type TenantUpdateWithoutWhatsappDeliveryLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappDeliveryLogsInput = {
@@ -5957,6 +6341,585 @@ export type TenantUncheckedUpdateWithoutWhatsappDeliveryLogsInput = {
   complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
   equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
   scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutOtpCodesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutOtpCodesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutOtpCodesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutOtpCodesInput, Prisma.TenantUncheckedCreateWithoutOtpCodesInput>
+}
+
+export type TenantUpsertWithoutOtpCodesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutOtpCodesInput, Prisma.TenantUncheckedUpdateWithoutOtpCodesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutOtpCodesInput, Prisma.TenantUncheckedCreateWithoutOtpCodesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutOtpCodesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutOtpCodesInput, Prisma.TenantUncheckedUpdateWithoutOtpCodesInput>
+}
+
+export type TenantUpdateWithoutOtpCodesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutOtpCodesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutLoginSessionsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutLoginSessionsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutLoginSessionsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLoginSessionsInput, Prisma.TenantUncheckedCreateWithoutLoginSessionsInput>
+}
+
+export type TenantUpsertWithoutLoginSessionsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutLoginSessionsInput, Prisma.TenantUncheckedUpdateWithoutLoginSessionsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutLoginSessionsInput, Prisma.TenantUncheckedCreateWithoutLoginSessionsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutLoginSessionsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutLoginSessionsInput, Prisma.TenantUncheckedUpdateWithoutLoginSessionsInput>
+}
+
+export type TenantUpdateWithoutLoginSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutLoginSessionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutDevicesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutDevicesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutDevicesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutDevicesInput, Prisma.TenantUncheckedCreateWithoutDevicesInput>
+}
+
+export type TenantUpsertWithoutDevicesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutDevicesInput, Prisma.TenantUncheckedUpdateWithoutDevicesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutDevicesInput, Prisma.TenantUncheckedCreateWithoutDevicesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutDevicesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutDevicesInput, Prisma.TenantUncheckedUpdateWithoutDevicesInput>
+}
+
+export type TenantUpdateWithoutDevicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutDevicesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -5992,6 +6955,9 @@ export type TenantCountOutputType = {
   complaintTimelines: number
   equipmentQrCodes: number
   scanLogs: number
+  otpCodes: number
+  loginSessions: number
+  devices: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -6022,6 +6988,9 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   complaintTimelines?: boolean | TenantCountOutputTypeCountComplaintTimelinesArgs
   equipmentQrCodes?: boolean | TenantCountOutputTypeCountEquipmentQrCodesArgs
   scanLogs?: boolean | TenantCountOutputTypeCountScanLogsArgs
+  otpCodes?: boolean | TenantCountOutputTypeCountOtpCodesArgs
+  loginSessions?: boolean | TenantCountOutputTypeCountLoginSessionsArgs
+  devices?: boolean | TenantCountOutputTypeCountDevicesArgs
 }
 
 /**
@@ -6223,6 +7192,27 @@ export type TenantCountOutputTypeCountScanLogsArgs<ExtArgs extends runtime.Types
   where?: Prisma.ScanLogWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountOtpCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.OtpCodeWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountLoginSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LoginSessionWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountDevicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeviceWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -6264,6 +7254,9 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   complaintTimelines?: boolean | Prisma.Tenant$complaintTimelinesArgs<ExtArgs>
   equipmentQrCodes?: boolean | Prisma.Tenant$equipmentQrCodesArgs<ExtArgs>
   scanLogs?: boolean | Prisma.Tenant$scanLogsArgs<ExtArgs>
+  otpCodes?: boolean | Prisma.Tenant$otpCodesArgs<ExtArgs>
+  loginSessions?: boolean | Prisma.Tenant$loginSessionsArgs<ExtArgs>
+  devices?: boolean | Prisma.Tenant$devicesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -6341,6 +7334,9 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   complaintTimelines?: boolean | Prisma.Tenant$complaintTimelinesArgs<ExtArgs>
   equipmentQrCodes?: boolean | Prisma.Tenant$equipmentQrCodesArgs<ExtArgs>
   scanLogs?: boolean | Prisma.Tenant$scanLogsArgs<ExtArgs>
+  otpCodes?: boolean | Prisma.Tenant$otpCodesArgs<ExtArgs>
+  loginSessions?: boolean | Prisma.Tenant$loginSessionsArgs<ExtArgs>
+  devices?: boolean | Prisma.Tenant$devicesArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -6376,6 +7372,9 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     complaintTimelines: Prisma.$ComplaintTimelinePayload<ExtArgs>[]
     equipmentQrCodes: Prisma.$EquipmentQrCodePayload<ExtArgs>[]
     scanLogs: Prisma.$ScanLogPayload<ExtArgs>[]
+    otpCodes: Prisma.$OtpCodePayload<ExtArgs>[]
+    loginSessions: Prisma.$LoginSessionPayload<ExtArgs>[]
+    devices: Prisma.$DevicePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -6811,6 +7810,9 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   complaintTimelines<T extends Prisma.Tenant$complaintTimelinesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$complaintTimelinesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintTimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   equipmentQrCodes<T extends Prisma.Tenant$equipmentQrCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$equipmentQrCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipmentQrCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   scanLogs<T extends Prisma.Tenant$scanLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$scanLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  otpCodes<T extends Prisma.Tenant$otpCodesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$otpCodesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OtpCodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  loginSessions<T extends Prisma.Tenant$loginSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$loginSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  devices<T extends Prisma.Tenant$devicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7890,6 +8892,78 @@ export type Tenant$scanLogsArgs<ExtArgs extends runtime.Types.Extensions.Interna
   take?: number
   skip?: number
   distinct?: Prisma.ScanLogScalarFieldEnum | Prisma.ScanLogScalarFieldEnum[]
+}
+
+/**
+ * Tenant.otpCodes
+ */
+export type Tenant$otpCodesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the OtpCode
+   */
+  select?: Prisma.OtpCodeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the OtpCode
+   */
+  omit?: Prisma.OtpCodeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.OtpCodeInclude<ExtArgs> | null
+  where?: Prisma.OtpCodeWhereInput
+  orderBy?: Prisma.OtpCodeOrderByWithRelationInput | Prisma.OtpCodeOrderByWithRelationInput[]
+  cursor?: Prisma.OtpCodeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.OtpCodeScalarFieldEnum | Prisma.OtpCodeScalarFieldEnum[]
+}
+
+/**
+ * Tenant.loginSessions
+ */
+export type Tenant$loginSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LoginSession
+   */
+  select?: Prisma.LoginSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LoginSession
+   */
+  omit?: Prisma.LoginSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoginSessionInclude<ExtArgs> | null
+  where?: Prisma.LoginSessionWhereInput
+  orderBy?: Prisma.LoginSessionOrderByWithRelationInput | Prisma.LoginSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LoginSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LoginSessionScalarFieldEnum | Prisma.LoginSessionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.devices
+ */
+export type Tenant$devicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Device
+   */
+  select?: Prisma.DeviceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Device
+   */
+  omit?: Prisma.DeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceInclude<ExtArgs> | null
+  where?: Prisma.DeviceWhereInput
+  orderBy?: Prisma.DeviceOrderByWithRelationInput | Prisma.DeviceOrderByWithRelationInput[]
+  cursor?: Prisma.DeviceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeviceScalarFieldEnum | Prisma.DeviceScalarFieldEnum[]
 }
 
 /**

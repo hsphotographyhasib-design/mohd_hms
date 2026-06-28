@@ -13,6 +13,7 @@ interface AuthState {
   logout: () => void;
   secureLogout: (reason?: string) => void;
   updateProfile: (data: Partial<AuthUser>) => void;
+  loginWithWhatsApp: (user: AuthUser, accessToken: string, refreshToken: string) => void;
   loadFromStorage: () => void;
 }
 
@@ -106,6 +107,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  loginWithWhatsApp: (user: AuthUser, accessToken: string, refreshToken: string) => {
+    localStorage.setItem('cmms_token', accessToken);
+    localStorage.setItem('cmms_refresh_token', refreshToken);
+    localStorage.setItem('cmms_user', JSON.stringify(user));
+    set({ user, token: accessToken, isAuthenticated: true, isLoading: false });
+    window.history.pushState(null, '', '/');
+    window.dispatchEvent(
+      new CustomEvent('cmms:toast', { detail: { type: 'success', message: 'Welcome back!' } }),
+    );
+  },
+
   loadFromStorage: () => {
     const token = localStorage.getItem('cmms_token');
     const userStr = localStorage.getItem('cmms_user');
@@ -189,7 +201,9 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   supervisor: 70,
   finance: 60,
   technician: 50,
+  vendor: 30,
   customer: 10,
+  guest: 5,
 };
 
 export function hasPermission(userRole: UserRole, requiredRoles: UserRole[]): boolean {
@@ -219,6 +233,7 @@ export function canAccess(userRole: UserRole, feature: string): boolean {
     reports: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
     notifications: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
     settings: ['super_admin', 'admin'],
+    'user-management': ['super_admin', 'admin'],
     cms: ['super_admin', 'admin'],
     whatsapp: ['super_admin', 'admin', 'manager', 'supervisor'],
   };

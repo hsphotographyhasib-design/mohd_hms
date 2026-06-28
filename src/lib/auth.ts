@@ -63,6 +63,35 @@ export function sanitizeInput(input: string): string {
   return input.replace(/<[^>]*>/g, '').trim();
 }
 
+// ============ WhatsApp OTP & Refresh Token Helpers ============
+
+export function generateOtpCode(): string {
+  const digits = '0123456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += digits[Math.floor(Math.random() * digits.length)];
+  }
+  return code;
+}
+
+export function generateRefreshToken(): string {
+  return crypto.randomBytes(16).toString('hex');
+}
+
+const TEMP_TOKEN_EXPIRES_IN = '30m';
+
+export function generateTempToken(payload: object): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: TEMP_TOKEN_EXPIRES_IN } as jwt.SignOptions);
+}
+
+export function verifyTempToken(token: string): jwt.JwtPayload | null {
+  try {
+    return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+  } catch {
+    return null;
+  }
+}
+
 export function parseJsonSafe<T>(str: string | null | undefined, fallback: T): T {
   if (!str) return fallback;
   try {

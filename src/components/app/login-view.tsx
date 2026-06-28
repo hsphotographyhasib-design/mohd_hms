@@ -10,18 +10,32 @@ import {
   Wrench,
   DollarSign,
   Mail,
-  MessageCircle,
   ArrowLeft,
   Loader2,
+  CheckCircle2,
 } from 'lucide-react';
 import { useAuthStore } from '@/store';
 import { toast } from 'sonner';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  countries,
+  DEFAULT_COUNTRY,
+  getCountryByCode,
+  validatePhone,
+  formatPhone,
+} from '@/lib/countries';
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
 /* ------------------------------------------------------------------ */
 type Panel = 'choices' | 'email' | 'whatsapp';
-type OtpStep = 'phone' | 'code';
+type WaStep = 'phone' | 'otp' | 'register' | 'success';
 
 interface DemoAccount {
   label: string;
@@ -110,11 +124,11 @@ function WhatsAppIcon({ className }: { className?: string }) {
 /* ------------------------------------------------------------------ */
 
 export function LoginView() {
-  const { login, isLoading } = useAuthStore();
+  const { login, loginWithWhatsApp, isLoading } = useAuthStore();
 
   /* ---- Panel navigation ---- */
   const [panel, setPanel] = useState<Panel>('choices');
-  const [otpStep, setOtpStep] = useState<OtpStep>('phone');
+  const [waStep, setWaStep] = useState<WaStep>('phone');
 
   /* ---- Email form ---- */
   const [email, setEmail] = useState('');
@@ -124,25 +138,45 @@ export function LoginView() {
   const [passwordError, setPasswordError] = useState('');
   const [formAlert, setFormAlert] = useState('');
 
-  /* ---- WhatsApp form ---- */
-  const [phone, setPhone] = useState('');
-  const [otpCode, setOtpCode] = useState('');
+  /* ---- WhatsApp: Phone step ---- */
+  const [selectedCountry, setSelectedCountry] = useState(DEFAULT_COUNTRY);
+  const [rawPhone, setRawPhone] = useState('');
   const [phoneError, setPhoneError] = useState('');
+  const [waAlert, setWaAlert] = useState('');
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+
+  /* ---- WhatsApp: OTP step ---- */
+  const [otpDigits, setOtpDigits] = useState<string[]>(Array(6).fill(''));
   const [otpError, setOtpError] = useState('');
-  const [whatsappAlert, setWhatsappAlert] = useState('');
-  const [otpSentTo, setOtpSentTo] = useState('');
+  const [attemptsRemaining, setAttemptsRemaining] = useState(3);
   const [resendCountdown, setResendCountdown] = useState(0);
-  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [tempToken, setTempToken] = useState<string | null>(null);
+
+  /* ---- WhatsApp: Register step ---- */
+  const [regForm, setRegForm] = useState({
+    fullName: '',
+    companyName: '',
+    email: '',
+    address: '',
+    city: '',
+    district: '',
+    country: 'Brunei Darussalam',
+    preferredLanguage: 'English',
+  });
+  const [regErrors, setRegErrors] = useState<Record<string, string>>({});
+  const [isRegistering, setIsRegistering] = useState(false);
 
   /* ---- Refs for focus management ---- */
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
-  const otpInputRef = useRef<HTMLInputElement>(null);
+  const otpRefs = useRef<(HTMLInputElement | null)[]>([]);
   const emailBackRef = useRef<HTMLButtonElement>(null);
   const whatsappBackRef = useRef<HTMLButtonElement>(null);
 
   /* ---- Countdown timer ---- */
+  const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const hasCountdown = resendCountdown > 0;
   useEffect(() => {
     if (!hasCountdown) {
@@ -163,13 +197,19 @@ export function LoginView() {
     };
   }, [hasCountdown]);
 
+  /* ---- Helpers ---- */
+  const selectedCountryData = getCountryByCode(selectedCountry) ?? countries[0];
+  const displayPhone = `${selectedCountryData.dialCode} ${formatPhone(rawPhone, selectedCountryData)}`;
+  const rawDigits = rawPhone.replace(/\D/g, '');
+  const isPhoneValid = validatePhone(rawPhone, selectedCountryData);
+
   /* ---- Panel switching ---- */
   const showPanel = useCallback((name: Panel) => {
     setPanel(name);
     setFormAlert('');
     setEmailError('');
     setPasswordError('');
-    setWhatsappAlert('');
+    setWaAlert('');
     setPhoneError('');
     setOtpError('');
     // Focus management after panel switch
@@ -182,6 +222,17 @@ export function LoginView() {
       }
     });
   }, [panel]);
+
+  const showWaStep = useCallback((step: WaStep) => {
+    setWaStep(step);
+    setWaAlert('');
+    setPhoneError('');
+    setOtpError('');
+    requestAnimationFrame(() => {
+      if (step === 'phone') phoneInputRef.current?.focus();
+      if (step === 'otp') otpRefs.current[0]?.focus();
+    });
+  }, []);
 
   /* ---- Email login ---- */
   const handleEmailSubmit = async (e: React.FormEvent) => {
@@ -212,43 +263,233 @@ export function LoginView() {
     }
   };
 
-  /* ---- WhatsApp OTP ---- */
-  const validPhone = (v: string) => /^\+?[0-9][0-9 ]{7,16}$/.test(v.trim());
-
-  const handleSendCode = () => {
-    setWhatsappAlert('');
+  /* ---- WhatsApp: Send OTP ---- */
+  const handleSendCode = async () => {
+    setWaAlert('');
     setPhoneError('');
-    if (!validPhone(phone)) {
-      setPhoneError('Enter a valid phone number with country code.');
+    if (!isPhoneValid) {
+      setPhoneError(`Enter a valid ${selectedCountryData.name} phone number.`);
       phoneInputRef.current?.focus();
       return;
     }
-    // Simulate sending OTP
-    setOtpSentTo(phone.trim());
-    setOtpStep('code');
-    setResendCountdown(30);
-    requestAnimationFrame(() => otpInputRef.current?.focus());
+    setIsSendingOtp(true);
+    try {
+      const res = await fetch('/api/auth/whatsapp/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phoneNumber: rawDigits,
+          countryCode: selectedCountryData.code,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send code');
+      showWaStep('otp');
+      setResendCountdown(300); // 5 minutes
+      setAttemptsRemaining(3);
+    } catch (err) {
+      setWaAlert(err instanceof Error ? err.message : 'Failed to send verification code. Please try again.');
+    } finally {
+      setIsSendingOtp(false);
+    }
   };
 
-  const handleVerifyOtp = (e: React.FormEvent) => {
-    e.preventDefault();
-    setWhatsappAlert('');
+  /* ---- WhatsApp: Verify OTP ---- */
+  const handleVerifyOtp = async () => {
+    setWaAlert('');
     setOtpError('');
-    if (otpCode.length !== 6) {
-      setOtpError('Enter the 6-digit code.');
-      otpInputRef.current?.focus();
+    const code = otpDigits.join('');
+    if (code.length !== 6) {
+      setOtpError('Enter the complete 6-digit code.');
+      otpRefs.current.find((r) => r)?.focus();
       return;
     }
-    // TODO: Real WhatsApp OTP verification
-    setWhatsappAlert("That code didn't match. Check it and try again, or resend.");
-    otpInputRef.current?.focus();
+    setIsVerifying(true);
+    try {
+      const res = await fetch('/api/auth/whatsapp/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phoneNumber: rawDigits,
+          countryCode: selectedCountryData.code,
+          code,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        const err = data.error || 'Verification failed';
+        if (res.status === 429) {
+          setAttemptsRemaining(0);
+          setOtpError('Too many attempts. Please request a new code.');
+        } else if (res.status === 410) {
+          setOtpError('Code has expired. Please request a new one.');
+        } else {
+          setAttemptsRemaining((prev) => Math.max(0, prev - 1));
+          setOtpError(err);
+        }
+        otpRefs.current[0]?.focus();
+        return;
+      }
+      // Check if user needs registration
+      if (data.needsRegistration && data.tempToken) {
+        setTempToken(data.tempToken);
+        showWaStep('register');
+      } else if (data.user && data.accessToken) {
+        loginWithWhatsApp(data.user, data.accessToken, data.refreshToken || '');
+        showWaStep('success');
+      }
+    } catch {
+      setOtpError('Network error. Please check your connection and try again.');
+      otpRefs.current[0]?.focus();
+    } finally {
+      setIsVerifying(false);
+    }
   };
 
-  const handleResend = () => {
+  /* ---- WhatsApp: Auto-submit OTP when all 6 filled ---- */
+  useEffect(() => {
+    const code = otpDigits.join('');
+    if (code.length === 6) {
+      const timer = setTimeout(() => handleVerifyOtp(), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [otpDigits]);
+
+  /* ---- WhatsApp: Resend OTP ---- */
+  const handleResend = async () => {
     if (resendCountdown > 0) return;
-    // TODO: Re-trigger backend OTP send
-    setResendCountdown(30);
+    setOtpError('');
+    setOtpDigits(Array(6).fill(''));
+    setAttemptsRemaining(3);
+    try {
+      const res = await fetch('/api/auth/whatsapp/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phoneNumber: rawDigits,
+          countryCode: selectedCountryData.code,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to resend code');
+      setResendCountdown(300);
+      otpRefs.current[0]?.focus();
+    } catch {
+      setOtpError('Failed to resend code. Please try again.');
+    }
   };
+
+  /* ---- WhatsApp: Register ---- */
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const errors: Record<string, string> = {};
+    if (!regForm.fullName.trim()) errors.fullName = 'Full name is required.';
+    if (!regForm.address.trim()) errors.address = 'Address is required.';
+    if (!regForm.city.trim()) errors.city = 'City is required.';
+    if (!regForm.district.trim()) errors.district = 'District is required.';
+    if (regForm.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regForm.email)) {
+      errors.email = 'Enter a valid email address.';
+    }
+    setRegErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
+    setIsRegistering(true);
+    try {
+      const res = await fetch('/api/auth/whatsapp/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tempToken,
+          fullName: regForm.fullName.trim(),
+          companyName: regForm.companyName.trim() || undefined,
+          email: regForm.email.trim() || undefined,
+          address: regForm.address.trim(),
+          city: regForm.city.trim(),
+          district: regForm.district.trim(),
+          country: regForm.country,
+          preferredLanguage: regForm.preferredLanguage,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Registration failed');
+      if (data.user && data.accessToken) {
+        loginWithWhatsApp(data.user, data.accessToken, data.refreshToken || '');
+        showWaStep('success');
+      }
+    } catch (err) {
+      setWaAlert(err instanceof Error ? err.message : 'Registration failed. Please try again.');
+    } finally {
+      setIsRegistering(false);
+    }
+  };
+
+  const updateReg = (field: string, value: string) => {
+    setRegForm((prev) => ({ ...prev, [field]: value }));
+    setRegErrors((prev) => {
+      if (prev[field]) {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      }
+      return prev;
+    });
+  };
+
+  /* ---- OTP digit input handler ---- */
+  const handleOtpInput = (index: number, value: string) => {
+    const digit = value.replace(/\D/g, '').slice(0, 1);
+    setOtpDigits((prev) => {
+      const next = [...prev];
+      next[index] = digit;
+      return next;
+    });
+    if (digit && index < 5) {
+      requestAnimationFrame(() => otpRefs.current[index + 1]?.focus());
+    }
+    if (otpError) setOtpError('');
+    if (waAlert) setWaAlert('');
+  };
+
+  const handleOtpKeyDown = (index: number, e: React.KeyboardEvent) => {
+    if (e.key === 'Backspace' && !otpDigits[index] && index > 0) {
+      requestAnimationFrame(() => otpRefs.current[index - 1]?.focus());
+    }
+    if (e.key === 'ArrowLeft' && index > 0) {
+      e.preventDefault();
+      otpRefs.current[index - 1]?.focus();
+    }
+    if (e.key === 'ArrowRight' && index < 5) {
+      e.preventDefault();
+      otpRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleOtpPaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const text = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+    if (text.length === 0) return;
+    setOtpDigits((prev) => {
+      const next = [...prev];
+      for (let i = 0; i < 6; i++) next[i] = text[i] ?? '';
+      return next;
+    });
+    requestAnimationFrame(() => otpRefs.current[Math.min(text.length, 5)]?.focus());
+  };
+
+  /* ---- Phone input handler (auto-format) ---- */
+  const handlePhoneChange = (value: string) => {
+    const digits = value.replace(/\D/g, '').slice(0, 15);
+    setRawPhone(digits);
+    if (phoneError) setPhoneError('');
+    if (waAlert) setWaAlert('');
+  };
+
+  /* ---- Countdown display ---- */
+  const countdownDisplay = (() => {
+    const m = Math.floor(resendCountdown / 60);
+    const s = resendCountdown % 60;
+    return `${m}:${String(s).padStart(2, '0')}`;
+  })();
 
   /* ---- Demo login ---- */
   const handleDemoLogin = async (account: DemoAccount) => {
@@ -332,7 +573,7 @@ export function LoginView() {
             type="button"
             ref={whatsappBackRef}
             onClick={() => {
-              setOtpStep('phone');
+              setWaStep('phone');
               showPanel('whatsapp');
             }}
             className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-900 dark:text-gray-100 font-medium text-base transition-colors duration-120 cursor-pointer border border-gray-200 dark:border-gray-700"
@@ -504,57 +745,83 @@ export function LoginView() {
         </form>
 
         {/* ============================================================ */}
-        {/*  PANEL: WhatsApp OTP                                           */}
+        {/*  PANEL: WhatsApp OTP (4-step flow)                            */}
         {/* ============================================================ */}
-        <form
+        <div
           className={`flex flex-col gap-4 ${panel === 'whatsapp' ? '' : 'hidden'}`}
-          onSubmit={handleVerifyOtp}
-          noValidate
           aria-labelledby="auth-title"
         >
           {/* Alert */}
-          {whatsappAlert && (
+          {waAlert && (
             <div
               role="alert"
               aria-live="assertive"
               className="flex items-start gap-2 p-3 text-sm rounded-lg bg-rose-50 dark:bg-rose-950/50 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800"
             >
-              <span>{whatsappAlert}</span>
+              <span>{waAlert}</span>
             </div>
           )}
 
-          {/* ---- Step 1: Phone ---- */}
-          <div className={`flex flex-col gap-4 ${otpStep === 'phone' ? '' : 'hidden'}`}>
+          {/* ========== STEP 1: Phone Number ========== */}
+          <div className={`flex flex-col gap-4 ${waStep === 'phone' ? '' : 'hidden'}`}>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center m-0">
+              Continue with WhatsApp
+            </h2>
+
+            {/* Country selector */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Country / Region
+              </label>
+              <Select value={selectedCountry} onValueChange={(val) => setSelectedCountry(val)}>
+                <SelectTrigger className="w-full min-h-[48px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-64 overflow-y-auto">
+                  {countries.map((c) => (
+                    <SelectItem key={c.code} value={c.code}>
+                      <span className="mr-2">{c.flag}</span>
+                      <span>{c.name}</span>
+                      <span className="ml-2 text-gray-400 dark:text-gray-500">{c.dialCode}</span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Phone number */}
             <div className="flex flex-col gap-1">
               <label
                 htmlFor="wa-phone"
                 className="text-sm font-medium text-gray-900 dark:text-gray-100"
               >
-                WhatsApp phone number
+                Phone number
               </label>
-              <input
-                ref={phoneInputRef}
-                id="wa-phone"
-                name="phone"
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel"
-                placeholder="+673 712 3456"
-                value={phone}
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                  if (phoneError) setPhoneError('');
-                  if (whatsappAlert) setWhatsappAlert('');
-                }}
-                aria-invalid={phoneError ? 'true' : undefined}
-                className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
-                  phoneError
-                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
-                    : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
-                }`}
-              />
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-medium text-gray-500 dark:text-gray-400 pointer-events-none select-none">
+                  {selectedCountryData.dialCode}
+                </span>
+                <input
+                  ref={phoneInputRef}
+                  id="wa-phone"
+                  name="phone"
+                  type="tel"
+                  inputMode="numeric"
+                  autoComplete="tel-national"
+                  placeholder={selectedCountryData.format.replace(/X/g, '0')}
+                  value={formatPhone(rawPhone, selectedCountryData)}
+                  onChange={(e) => handlePhoneChange(e.target.value)}
+                  aria-invalid={phoneError ? 'true' : undefined}
+                  className={`w-full min-h-[48px] pl-[calc(var(--dial-w,52px))] pr-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none tabular-nums ${
+                    phoneError
+                      ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+                      : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+                  }`}
+                  style={{ '--dial-w': `${Math.max(selectedCountryData.dialCode.length * 9 + 12, 52)}px` } as React.CSSProperties}
+                />
+              </div>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                Include your country code. We&apos;ll send a 6-digit code on WhatsApp.
+                We&apos;ll send a 6-digit verification code via WhatsApp.
               </span>
               {phoneError && (
                 <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">
@@ -563,15 +830,21 @@ export function LoginView() {
               )}
             </div>
 
+            {/* Send Code */}
             <button
               type="button"
               onClick={handleSendCode}
-              className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
+              disabled={!isPhoneValid || isSendingOtp}
+              className={`flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 border-none ${
+                !isPhoneValid || isSendingOtp ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+              }`}
             >
+              {isSendingOtp && <Loader2 className="w-[18px] h-[18px] animate-spin" />}
               <WhatsAppIcon className="w-5 h-5 shrink-0" />
-              <span>Send code via WhatsApp</span>
+              <span>{isSendingOtp ? 'Sending...' : 'Send Code'}</span>
             </button>
 
+            {/* Back link */}
             <button
               type="button"
               onClick={() => showPanel('choices')}
@@ -579,86 +852,112 @@ export function LoginView() {
             >
               <span className="inline-flex items-center gap-1">
                 <ArrowLeft className="w-3.5 h-3.5" />
-                Other sign-in options
+                Sign in with email
               </span>
             </button>
           </div>
 
-          {/* ---- Step 2: OTP Code ---- */}
-          <div className={`flex flex-col gap-4 ${otpStep === 'code' ? '' : 'hidden'}`}>
-            <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
-              Enter the 6-digit code we sent to{' '}
+          {/* ========== STEP 2: OTP Verification ========== */}
+          <div className={`flex flex-col gap-4 ${waStep === 'otp' ? '' : 'hidden'}`}>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center m-0">
+              Enter verification code
+            </h2>
+
+            {/* Phone display with Change link */}
+            <p className="text-sm text-gray-600 dark:text-gray-400 text-center m-0">
+              Code sent to{' '}
               <strong className="text-gray-900 dark:text-gray-100 font-semibold">
-                {otpSentTo}
+                {displayPhone}
               </strong>
-              .
+              {' '}
+              <button
+                type="button"
+                onClick={() => {
+                  if (countdownRef.current) clearInterval(countdownRef.current);
+                  setResendCountdown(0);
+                  showWaStep('phone');
+                }}
+                className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline bg-transparent border-none cursor-pointer font-[inherit] text-sm font-medium p-0 ml-0.5 rounded"
+              >
+                Change
+              </button>
             </p>
 
-            <div className="flex flex-col gap-1">
-              <label
-                htmlFor="wa-otp"
-                className="text-sm font-medium text-gray-900 dark:text-gray-100"
-              >
-                Verification code
-              </label>
-              <input
-                ref={otpInputRef}
-                id="wa-otp"
-                name="otp"
-                type="text"
-                inputMode="numeric"
-                autoComplete="one-time-code"
-                maxLength={6}
-                placeholder="------"
-                value={otpCode}
-                onChange={(e) => {
-                  setOtpCode(e.target.value.replace(/\D/g, '').slice(0, 6));
-                  if (otpError) setOtpError('');
-                  if (whatsappAlert) setWhatsappAlert('');
-                }}
-                aria-invalid={otpError ? 'true' : undefined}
-                className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-lg text-center tracking-[0.5em] font-variant-numeric tabular-nums text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none pr-[calc(12px-0.5em)] ${
-                  otpError
-                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
-                    : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
-                }`}
-              />
-              {otpError && (
-                <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">
-                  {otpError}
+            {/* 6-digit OTP inputs */}
+            <div className="flex justify-center gap-2" onPaste={handleOtpPaste}>
+              {otpDigits.map((digit, i) => (
+                <input
+                  key={i}
+                  ref={(el) => { otpRefs.current[i] = el; }}
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={1}
+                  value={digit}
+                  onChange={(e) => handleOtpInput(i, e.target.value)}
+                  onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                  aria-label={`Digit ${i + 1} of 6`}
+                  aria-invalid={otpError ? 'true' : undefined}
+                  className={`w-12 h-14 sm:w-[52px] sm:h-[56px] text-center text-xl font-semibold rounded-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none tabular-nums focus:outline-none ${
+                    otpError
+                      ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+                      : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+                  } ${isVerifying ? 'opacity-60' : ''}`}
+                />
+              ))}
+            </div>
+
+            {/* OTP error */}
+            {otpError && (
+              <span className="text-sm text-rose-600 dark:text-rose-400 text-center" role="alert">
+                {otpError}
+              </span>
+            )}
+
+            {/* Attempts remaining */}
+            {attemptsRemaining > 0 && attemptsRemaining < 3 && !otpError && (
+              <p className="text-xs text-amber-600 dark:text-amber-400 text-center m-0">
+                {attemptsRemaining} attempt{attemptsRemaining > 1 ? 's' : ''} remaining
+              </p>
+            )}
+
+            {/* Verify button */}
+            <button
+              type="button"
+              onClick={handleVerifyOtp}
+              disabled={otpDigits.join('').length !== 6 || isVerifying}
+              className={`flex items-center justify-center gap-2 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 border-none ${
+                otpDigits.join('').length !== 6 || isVerifying ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
+              }`}
+            >
+              {isVerifying && <Loader2 className="w-[18px] h-[18px] animate-spin" />}
+              <span>{isVerifying ? 'Verifying...' : 'Verify'}</span>
+            </button>
+
+            {/* Resend / countdown */}
+            <div className="text-center">
+              {resendCountdown > 0 ? (
+                <span className="text-sm text-gray-400 dark:text-gray-500 cursor-not-allowed">
+                  Resend code in {countdownDisplay}
                 </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline bg-transparent border-none cursor-pointer font-[inherit] p-0 rounded"
+                >
+                  Resend code
+                </button>
               )}
             </div>
 
-            <button
-              type="submit"
-              className="flex items-center justify-center gap-2 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
-            >
-              <span>Verify and sign in</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleResend}
-              disabled={resendCountdown > 0}
-              className={`self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm p-1 px-2 rounded-lg transition-colors ${
-                resendCountdown > 0
-                  ? 'text-gray-400 dark:text-gray-500 cursor-not-allowed'
-                  : 'text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline'
-              }`}
-            >
-              {resendCountdown > 0
-                ? `Resend code in ${resendCountdown}s`
-                : 'Resend code'}
-            </button>
-
+            {/* Back */}
             <button
               type="button"
               onClick={() => {
-                setOtpStep('phone');
-                requestAnimationFrame(() => phoneInputRef.current?.focus());
                 if (countdownRef.current) clearInterval(countdownRef.current);
                 setResendCountdown(0);
+                showWaStep('phone');
               }}
               className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors"
             >
@@ -668,7 +967,224 @@ export function LoginView() {
               </span>
             </button>
           </div>
-        </form>
+
+          {/* ========== STEP 3: Registration ========== */}
+          <form
+            className={`flex flex-col gap-4 ${waStep === 'register' ? '' : 'hidden'}`}
+            onSubmit={handleRegister}
+            noValidate
+          >
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center m-0">
+              Complete your profile
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 text-center m-0">
+              It looks like you&apos;re new here. Please fill in your details to create an account.
+            </p>
+
+            {/* Full Name */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="reg-name" className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Full Name <span className="text-rose-500">*</span>
+              </label>
+              <input
+                id="reg-name"
+                type="text"
+                autoComplete="name"
+                placeholder="Your full name"
+                value={regForm.fullName}
+                onChange={(e) => updateReg('fullName', e.target.value)}
+                aria-invalid={regErrors.fullName ? 'true' : undefined}
+                className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
+                  regErrors.fullName
+                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+                    : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+                }`}
+              />
+              {regErrors.fullName && <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">{regErrors.fullName}</span>}
+            </div>
+
+            {/* Company Name */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="reg-company" className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Company Name
+              </label>
+              <input
+                id="reg-company"
+                type="text"
+                autoComplete="organization"
+                placeholder="Company name (optional)"
+                value={regForm.companyName}
+                onChange={(e) => updateReg('companyName', e.target.value)}
+                className="w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25 transition-colors duration-120 font-[inherit] outline-none"
+              />
+            </div>
+
+            {/* Email */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="reg-email" className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Email Address
+              </label>
+              <input
+                id="reg-email"
+                type="email"
+                autoComplete="email"
+                placeholder="you@company.com (optional)"
+                value={regForm.email}
+                onChange={(e) => updateReg('email', e.target.value)}
+                aria-invalid={regErrors.email ? 'true' : undefined}
+                className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
+                  regErrors.email
+                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+                    : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+                }`}
+              />
+              {regErrors.email && <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">{regErrors.email}</span>}
+            </div>
+
+            {/* Address */}
+            <div className="flex flex-col gap-1">
+              <label htmlFor="reg-address" className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Address <span className="text-rose-500">*</span>
+              </label>
+              <input
+                id="reg-address"
+                type="text"
+                autoComplete="street-address"
+                placeholder="Street address"
+                value={regForm.address}
+                onChange={(e) => updateReg('address', e.target.value)}
+                aria-invalid={regErrors.address ? 'true' : undefined}
+                className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
+                  regErrors.address
+                    ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+                    : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+                }`}
+              />
+              {regErrors.address && <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">{regErrors.address}</span>}
+            </div>
+
+            {/* City + District row */}
+            <div className="grid grid-cols-2 gap-3">
+              <div className="flex flex-col gap-1">
+                <label htmlFor="reg-city" className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  City <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  id="reg-city"
+                  type="text"
+                  autoComplete="address-level2"
+                  placeholder="City"
+                  value={regForm.city}
+                  onChange={(e) => updateReg('city', e.target.value)}
+                  aria-invalid={regErrors.city ? 'true' : undefined}
+                  className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
+                    regErrors.city
+                      ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+                      : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+                  }`}
+                />
+                {regErrors.city && <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">{regErrors.city}</span>}
+              </div>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="reg-district" className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                  District <span className="text-rose-500">*</span>
+                </label>
+                <input
+                  id="reg-district"
+                  type="text"
+                  autoComplete="address-level3"
+                  placeholder="District"
+                  value={regForm.district}
+                  onChange={(e) => updateReg('district', e.target.value)}
+                  aria-invalid={regErrors.district ? 'true' : undefined}
+                  className={`w-full min-h-[48px] px-3 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
+                    regErrors.district
+                      ? 'border-rose-500 bg-rose-50 dark:bg-rose-950/30'
+                      : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25'
+                  }`}
+                />
+                {regErrors.district && <span className="text-sm text-rose-600 dark:text-rose-400" role="alert">{regErrors.district}</span>}
+              </div>
+            </div>
+
+            {/* Country */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Country <span className="text-rose-500">*</span>
+              </label>
+              <Select value={regForm.country} onValueChange={(val) => updateReg('country', val)}>
+                <SelectTrigger className="w-full min-h-[48px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-64 overflow-y-auto">
+                  {countries.map((c) => (
+                    <SelectItem key={c.code} value={c.name}>
+                      <span className="mr-2">{c.flag}</span>
+                      {c.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Preferred Language */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-gray-900 dark:text-gray-100">
+                Preferred Language
+              </label>
+              <Select value={regForm.preferredLanguage} onValueChange={(val) => updateReg('preferredLanguage', val)}>
+                <SelectTrigger className="w-full min-h-[48px] bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="English">English</SelectItem>
+                  <SelectItem value="Malay">Bahasa Melayu</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Create Account */}
+            <button
+              type="submit"
+              disabled={isRegistering}
+              className={`flex items-center justify-center gap-2 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 border-none ${
+                isRegistering ? 'opacity-60 cursor-progress' : 'cursor-pointer'
+              }`}
+            >
+              {isRegistering && <Loader2 className="w-[18px] h-[18px] animate-spin" />}
+              <span className={isRegistering ? 'invisible' : ''}>Create Account</span>
+            </button>
+
+            {/* Back */}
+            <button
+              type="button"
+              onClick={() => {
+                if (countdownRef.current) clearInterval(countdownRef.current);
+                setResendCountdown(0);
+                showWaStep('phone');
+              }}
+              className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors"
+            >
+              <span className="inline-flex items-center gap-1">
+                <ArrowLeft className="w-3.5 h-3.5" />
+                Change phone number
+              </span>
+            </button>
+          </form>
+
+          {/* ========== STEP 4: Success ========== */}
+          <div className={`flex flex-col items-center justify-center gap-4 py-8 ${waStep === 'success' ? '' : 'hidden'}`}>
+            <div className="w-16 h-16 rounded-full bg-emerald-100 dark:bg-emerald-900/40 grid place-items-center">
+              <CheckCircle2 className="w-9 h-9 text-emerald-600 dark:text-emerald-400" />
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 text-center m-0">
+              Welcome aboard!
+            </h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400 text-center m-0">
+              Redirecting you to the dashboard...
+            </p>
+          </div>
+        </div>
 
         {/* ---- Footer ---- */}
         <footer className="mt-6 text-center text-sm text-gray-400 dark:text-gray-500 leading-relaxed">

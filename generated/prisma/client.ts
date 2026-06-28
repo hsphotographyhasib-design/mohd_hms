@@ -291,3 +291,18 @@ export type BroadcastLog = Prisma.BroadcastLogModel
  * 
  */
 export type WhatsAppDeliveryLog = Prisma.WhatsAppDeliveryLogModel
+/**
+ * Model OtpCode
+ * 
+ */
+export type OtpCode = Prisma.OtpCodeModel
+/**
+ * Model LoginSession
+ * 
+ */
+export type LoginSession = Prisma.LoginSessionModel
+/**
+ * Model Device
+ * 
+ */
+export type Device = Prisma.DeviceModel

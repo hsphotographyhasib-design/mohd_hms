@@ -433,7 +433,10 @@ export const ModelName = {
   CustomerFeedback: 'CustomerFeedback',
   CustomerReport: 'CustomerReport',
   BroadcastLog: 'BroadcastLog',
-  WhatsAppDeliveryLog: 'WhatsAppDeliveryLog'
+  WhatsAppDeliveryLog: 'WhatsAppDeliveryLog',
+  OtpCode: 'OtpCode',
+  LoginSession: 'LoginSession',
+  Device: 'Device'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -449,7 +452,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "department" | "customer" | "equipment" | "equipmentQrCode" | "scanLog" | "complaint" | "workOrder" | "workOrderMaterial" | "checklistTemplate" | "pmSchedule" | "quotation" | "invoice" | "inventoryItem" | "purchaseOrder" | "vehicle" | "vehicleLog" | "complaintTimeline" | "notification" | "auditLog" | "leaveRequest" | "attendance" | "cmsSetting" | "cmsHero" | "cmsService" | "cmsIndustry" | "cmsProject" | "cmsBlogCategory" | "cmsBlog" | "cmsTestimonial" | "cmsCareerJob" | "cmsCareerApplication" | "cmsContactMessage" | "cmsMedia" | "cmsSeo" | "cmsFooter" | "cmsAnnouncement" | "cmsPopup" | "cmsForm" | "cmsActivityLog" | "whatsAppConfig" | "whatsAppSession" | "whatsAppMessage" | "conversationThread" | "whatsAppTemplate" | "customerFeedback" | "customerReport" | "broadcastLog" | "whatsAppDeliveryLog"
+    modelProps: "tenant" | "user" | "department" | "customer" | "equipment" | "equipmentQrCode" | "scanLog" | "complaint" | "workOrder" | "workOrderMaterial" | "checklistTemplate" | "pmSchedule" | "quotation" | "invoice" | "inventoryItem" | "purchaseOrder" | "vehicle" | "vehicleLog" | "complaintTimeline" | "notification" | "auditLog" | "leaveRequest" | "attendance" | "cmsSetting" | "cmsHero" | "cmsService" | "cmsIndustry" | "cmsProject" | "cmsBlogCategory" | "cmsBlog" | "cmsTestimonial" | "cmsCareerJob" | "cmsCareerApplication" | "cmsContactMessage" | "cmsMedia" | "cmsSeo" | "cmsFooter" | "cmsAnnouncement" | "cmsPopup" | "cmsForm" | "cmsActivityLog" | "whatsAppConfig" | "whatsAppSession" | "whatsAppMessage" | "conversationThread" | "whatsAppTemplate" | "customerFeedback" | "customerReport" | "broadcastLog" | "whatsAppDeliveryLog" | "otpCode" | "loginSession" | "device"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -4153,6 +4156,228 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    OtpCode: {
+      payload: Prisma.$OtpCodePayload<ExtArgs>
+      fields: Prisma.OtpCodeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.OtpCodeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.OtpCodeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
+        }
+        findFirst: {
+          args: Prisma.OtpCodeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.OtpCodeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
+        }
+        findMany: {
+          args: Prisma.OtpCodeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>[]
+        }
+        create: {
+          args: Prisma.OtpCodeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
+        }
+        createMany: {
+          args: Prisma.OtpCodeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.OtpCodeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>[]
+        }
+        delete: {
+          args: Prisma.OtpCodeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
+        }
+        update: {
+          args: Prisma.OtpCodeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
+        }
+        deleteMany: {
+          args: Prisma.OtpCodeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.OtpCodeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.OtpCodeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>[]
+        }
+        upsert: {
+          args: Prisma.OtpCodeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$OtpCodePayload>
+        }
+        aggregate: {
+          args: Prisma.OtpCodeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateOtpCode>
+        }
+        groupBy: {
+          args: Prisma.OtpCodeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OtpCodeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.OtpCodeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.OtpCodeCountAggregateOutputType> | number
+        }
+      }
+    }
+    LoginSession: {
+      payload: Prisma.$LoginSessionPayload<ExtArgs>
+      fields: Prisma.LoginSessionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.LoginSessionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.LoginSessionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>
+        }
+        findFirst: {
+          args: Prisma.LoginSessionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.LoginSessionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>
+        }
+        findMany: {
+          args: Prisma.LoginSessionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>[]
+        }
+        create: {
+          args: Prisma.LoginSessionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>
+        }
+        createMany: {
+          args: Prisma.LoginSessionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.LoginSessionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>[]
+        }
+        delete: {
+          args: Prisma.LoginSessionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>
+        }
+        update: {
+          args: Prisma.LoginSessionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>
+        }
+        deleteMany: {
+          args: Prisma.LoginSessionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.LoginSessionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.LoginSessionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>[]
+        }
+        upsert: {
+          args: Prisma.LoginSessionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$LoginSessionPayload>
+        }
+        aggregate: {
+          args: Prisma.LoginSessionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateLoginSession>
+        }
+        groupBy: {
+          args: Prisma.LoginSessionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LoginSessionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.LoginSessionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.LoginSessionCountAggregateOutputType> | number
+        }
+      }
+    }
+    Device: {
+      payload: Prisma.$DevicePayload<ExtArgs>
+      fields: Prisma.DeviceFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.DeviceFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.DeviceFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        findFirst: {
+          args: Prisma.DeviceFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.DeviceFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        findMany: {
+          args: Prisma.DeviceFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>[]
+        }
+        create: {
+          args: Prisma.DeviceCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        createMany: {
+          args: Prisma.DeviceCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.DeviceCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>[]
+        }
+        delete: {
+          args: Prisma.DeviceDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        update: {
+          args: Prisma.DeviceUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        deleteMany: {
+          args: Prisma.DeviceDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.DeviceUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.DeviceUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>[]
+        }
+        upsert: {
+          args: Prisma.DeviceUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$DevicePayload>
+        }
+        aggregate: {
+          args: Prisma.DeviceAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateDevice>
+        }
+        groupBy: {
+          args: Prisma.DeviceGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.DeviceCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.DeviceCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -5248,6 +5473,62 @@ export const WhatsAppDeliveryLogScalarFieldEnum = {
 export type WhatsAppDeliveryLogScalarFieldEnum = (typeof WhatsAppDeliveryLogScalarFieldEnum)[keyof typeof WhatsAppDeliveryLogScalarFieldEnum]
 
 
+export const OtpCodeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  phoneNumber: 'phoneNumber',
+  code: 'code',
+  purpose: 'purpose',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  expiresAt: 'expiresAt',
+  verifiedAt: 'verifiedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type OtpCodeScalarFieldEnum = (typeof OtpCodeScalarFieldEnum)[keyof typeof OtpCodeScalarFieldEnum]
+
+
+export const LoginSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  refreshToken: 'refreshToken',
+  deviceName: 'deviceName',
+  deviceType: 'deviceType',
+  browser: 'browser',
+  os: 'os',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  isRevoked: 'isRevoked',
+  lastActivity: 'lastActivity',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type LoginSessionScalarFieldEnum = (typeof LoginSessionScalarFieldEnum)[keyof typeof LoginSessionScalarFieldEnum]
+
+
+export const DeviceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  name: 'name',
+  type: 'type',
+  browser: 'browser',
+  os: 'os',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  lastSeen: 'lastSeen',
+  isTrusted: 'isTrusted',
+  createdAt: 'createdAt'
+} as const
+
+export type DeviceScalarFieldEnum = (typeof DeviceScalarFieldEnum)[keyof typeof DeviceScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -5500,6 +5781,9 @@ export type GlobalOmitConfig = {
   customerReport?: Prisma.CustomerReportOmit
   broadcastLog?: Prisma.BroadcastLogOmit
   whatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogOmit
+  otpCode?: Prisma.OtpCodeOmit
+  loginSession?: Prisma.LoginSessionOmit
+  device?: Prisma.DeviceOmit
 }
 
 /* Types for Logging */

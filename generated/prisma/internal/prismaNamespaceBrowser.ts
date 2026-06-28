@@ -100,7 +100,10 @@ export const ModelName = {
   CustomerFeedback: 'CustomerFeedback',
   CustomerReport: 'CustomerReport',
   BroadcastLog: 'BroadcastLog',
-  WhatsAppDeliveryLog: 'WhatsAppDeliveryLog'
+  WhatsAppDeliveryLog: 'WhatsAppDeliveryLog',
+  OtpCode: 'OtpCode',
+  LoginSession: 'LoginSession',
+  Device: 'Device'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1173,6 +1176,62 @@ export const WhatsAppDeliveryLogScalarFieldEnum = {
 } as const
 
 export type WhatsAppDeliveryLogScalarFieldEnum = (typeof WhatsAppDeliveryLogScalarFieldEnum)[keyof typeof WhatsAppDeliveryLogScalarFieldEnum]
+
+
+export const OtpCodeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  phoneNumber: 'phoneNumber',
+  code: 'code',
+  purpose: 'purpose',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  expiresAt: 'expiresAt',
+  verifiedAt: 'verifiedAt',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  createdAt: 'createdAt'
+} as const
+
+export type OtpCodeScalarFieldEnum = (typeof OtpCodeScalarFieldEnum)[keyof typeof OtpCodeScalarFieldEnum]
+
+
+export const LoginSessionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  refreshToken: 'refreshToken',
+  deviceName: 'deviceName',
+  deviceType: 'deviceType',
+  browser: 'browser',
+  os: 'os',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  isRevoked: 'isRevoked',
+  lastActivity: 'lastActivity',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt'
+} as const
+
+export type LoginSessionScalarFieldEnum = (typeof LoginSessionScalarFieldEnum)[keyof typeof LoginSessionScalarFieldEnum]
+
+
+export const DeviceScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  name: 'name',
+  type: 'type',
+  browser: 'browser',
+  os: 'os',
+  ipAddress: 'ipAddress',
+  userAgent: 'userAgent',
+  lastSeen: 'lastSeen',
+  isTrusted: 'isTrusted',
+  createdAt: 'createdAt'
+} as const
+
+export type DeviceScalarFieldEnum = (typeof DeviceScalarFieldEnum)[keyof typeof DeviceScalarFieldEnum]
 
 
 export const SortOrder = {
