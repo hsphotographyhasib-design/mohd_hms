@@ -31,7 +31,15 @@ model Tenant {
   invoices    Invoice[]
   quotations  Quotation[]
   pmSchedules PmSchedule[]
-  inventory   InventoryItem[]
+  inventory             InventoryItem[]
+  inventoryCategories   InventoryCategory[]
+  inventorySubcategories InventorySubcategory[]
+  inventoryWarehouses   Warehouse[]
+  inventorySuppliers    ItemSupplier[]
+  stockMovements        StockMovement[]
+  warehouseStocks       WarehouseStock[]
+  priceBooks            PriceBook[]
+  priceBookEntries      PriceBookEntry[]
   purchaseOrders PurchaseOrder[]
   vehicles    Vehicle[]
   departments Department[]
@@ -528,28 +536,333 @@ model Invoice {
   @@index([tenantId, status])
 }
 
-// ============ INVENTORY ============
+// ============ INVENTORY - ENTERPRISE ITEM MASTER ============
 
-model InventoryItem {
+model InventoryCategory {
   id            String   @id @default(cuid())
   tenantId      String
   name          String
-  sku           String?
-  category      String?
+  code          String?  // e.g. HVAC, ELEC, PLMB
   description   String?
-  unit          String   @default("pcs")
-  quantity      Int      @default(0)
-  minStock      Int      @default(0)
-  unitCost      Float    @default(0)
-  supplier      String?
-  location      String?
-  photos        String?
+  icon          String?
+  color         String?  // hex color
+  displayOrder  Int      @default(0)
   isActive      Boolean  @default(true)
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  items         InventoryItem[]
+  subcategories InventorySubcategory[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+}
+
+model InventorySubcategory {
+  id            String   @id @default(cuid())
+  tenantId      String
+  categoryId    String
+  name          String
+  code          String?
+  description   String?
+  displayOrder  Int      @default(0)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  category      InventoryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  items         InventoryItem[]
+
+  @@unique([tenantId, categoryId, name])
+  @@index([tenantId])
+  @@index([categoryId])
+}
+
+model InventoryItem {
+  id            String   @id @default(cuid())
+  tenantId      String
+
+  // === IDENTITY ===
+  itemCode      String?  @unique  // Auto-generated: ITM/HMS/2026/000001
+  sku           String?  @unique
+  barcode       String?  @unique
+  qrCode        String?
+  name          String
+  shortName     String?
+
+  // === CLASSIFICATION ===
+  itemType      String   @default("inventory") // inventory, spare_part, consumable, service, manpower, equipment_package, supply_only, supply_install, rental
+  categoryId    String?
+  subcategoryId String?
+
+  // === DESCRIPTION ===
+  description   String?
+  shortDescription String?
+
+  // === PHYSICAL ATTRIBUTES ===
+  brand         String?
+  manufacturer  String?
+  model         String?
+  partNumber    String?
+  serialNumber  String?
+  unit          String   @default("pcs")
+  unitWeight    Float?
+  dimensions    String?  // JSON: {length, width, height, unit}
+
+  // === PRICING ===
+  purchaseCost      Float    @default(0)
+  averageCost       Float    @default(0)
+  standardCost      Float    @default(0)
+  lastPurchaseCost  Float    @default(0)
+  sellingPrice      Float    @default(0)
+  dealerPrice       Float    @default(0)
+  contractorPrice   Float    @default(0)
+  customerPrice     Float    @default(0)
+  vipPrice          Float    @default(0)
+  internalCost      Float    @default(0)
+  labourCost        Float    @default(0)
+  installationCost  Float    @default(0)
+  serviceCost       Float    @default(0)
+  transportationCost Float    @default(0)
+  mobilizationCost  Float    @default(0)
+  equipmentRental   Float    @default(0)
+  emergencyCallOut  Float    @default(0)
+  afterHoursCharge  Float    @default(0)
+  weekendCharge     Float    @default(0)
+  publicHolidayCharge Float  @default(0)
+  currency          String   @default("BND")
+
+  // === STOCK (for physical items) ===
+  quantity      Int      @default(0)
+  minStock      Int      @default(0)
+  maxStock      Int?
+  reorderLevel  Int      @default(0)
+  safetyStock   Int      @default(0)
+
+  // === LEGACY FIELDS (kept for backward compat) ===
+  unitCost      Float    @default(0)
+  supplier      String?
+  location      String?
+
+  // === MEDIA ===
+  photos        String?  // JSON array of URLs
+  attachments   String?  // JSON array of document URLs
+  technicalDatasheet String?
+  msds          String?
+
+  // === WARRANTY & ORIGIN ===
+  warranty      String?
+  warrantyExpiry DateTime?
+  countryOfOrigin String?
+  hsCode        String?
+
+  // === TAGS & STATUS ===
+  tags          String?  // JSON array of strings
+  status        String   @default("draft") // draft, pending_approval, active, inactive, archived, discontinued
+  approvalStatus String  @default("pending") // pending, supervisor_review, manager_approved, admin_approved, rejected
+  approvedBy    String?
+  approvedAt    DateTime?
+
+  // === VERSIONING ===
+  version       Int      @default(1)
+
+  // === MANPOWER-SPECIFIC ===
+  hourlyRate    Float?
+  dailyRate     Float?
+  overtimeRate  Float?
+  weekendRate   Float?
+  publicHolidayRate Float?
+
+  // === RENTAL-SPECIFIC ===
+  dailyRentalRate  Float?
+  monthlyRentalRate Float?
+
+  // === SERVICE PACKAGE-SPECIFIC ===
+  estimatedHours  Float?
+  requiredSkills  String? // JSON array
+  sop             String? // Standard Operating Procedure
+
+  // === MISC ===
+  remarks       String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  category      InventoryCategory? @relation(fields: [categoryId], references: [id])
+  subcategory   InventorySubcategory? @relation(fields: [subcategoryId], references: [id])
   workOrderMaterials WorkOrderMaterial[]
+  suppliers     ItemSupplier[]
+  stockMovements StockMovement[]
+  warehouseStock WarehouseStock[]
+  priceBookEntries PriceBookEntry[]
+
+  @@index([tenantId])
+  @@index([tenantId, itemType])
+  @@index([tenantId, categoryId])
+  @@index([tenantId, status])
+  @@index([tenantId, isActive])
+  @@index([sku])
+  @@index([barcode])
+  @@index([name])
+}
+
+// ============ WAREHOUSES ============
+
+model Warehouse {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  code          String?
+  type          String   @default("main") // main, sub_warehouse, vehicle, technician, project, temporary
+  address       String?
+  manager       String?
+  phone         String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  stocks        WarehouseStock[]
+  movements     StockMovement[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+}
+
+model WarehouseStock {
+  id            String   @id @default(cuid())
+  tenantId      String
+  warehouseId   String
+  itemId        String
+  quantity      Int      @default(0)
+  reserved      Int      @default(0)
+  damaged       Int      @default(0)
+  returned      Int      @default(0)
+  batchNo       String?
+  lotNumber     String?
+  expiryDate    DateTime?
+  costMethod    String   @default("fifo") // fifo, lifo, weighted_average
+  updatedAt     DateTime @updatedAt
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  warehouse     Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([warehouseId, itemId])
+  @@index([tenantId])
+  @@index([warehouseId])
+  @@index([itemId])
+}
+
+// ============ ITEM SUPPLIERS ============
+
+model ItemSupplier {
+  id            String   @id @default(cuid())
+  tenantId      String
+  itemId        String
+  supplierName  String
+  supplierCode  String?
+  contactPerson String?
+  phone         String?
+  email         String?
+  address       String?
+  leadTimeDays  Int      @default(0)
+  purchasePrice Float    @default(0)
+  moq           Int      @default(1) // Minimum Order Quantity
+  warranty      String?
+  paymentTerms  String?
+  rating        Int?     // 1-5
+  isPrimary     Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([itemId])
+  @@index([supplierName])
+}
+
+// ============ STOCK MOVEMENTS ============
+
+model StockMovement {
+  id            String   @id @default(cuid())
+  tenantId      String
+  itemId        String
+  warehouseId   String?
+  type          String   // stock_in, stock_out, adjustment, transfer, return, damage
+  quantity      Int
+  previousQty   Int      @default(0)
+  newQty        Int      @default(0)
+  reason        String?
+  referenceNo   String?  // PO number, WO number, etc.
+  referenceType String?  // purchase_order, work_order, adjustment, transfer
+  fromWarehouseId String? // For transfers
+  batchNo       String?
+  lotNumber     String?
+  expiryDate    DateTime?
+  unitCost      Float    @default(0)
+  notes         String?
+  performedBy   String?  // userId
+  createdAt     DateTime @default(now())
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  warehouse     Warehouse? @relation(fields: [warehouseId], references: [id])
+
+  @@index([tenantId, createdAt])
+  @@index([tenantId, itemId])
+  @@index([tenantId, type])
+  @@index([warehouseId])
+}
+
+// ============ PRICE BOOKS ============
+
+model PriceBook {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  code          String?  // e.g. RETAIL, CORPORATE, GOV, VIP
+  description   String?
+  isDefault     Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  entries       PriceBookEntry[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+}
+
+model PriceBookEntry {
+  id            String   @id @default(cuid())
+  tenantId      String
+  priceBookId   String
+  itemId        String
+  price         Float    @default(0)
+  discount      Float    @default(0) // percentage
+  currency      String   @default("BND")
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  priceBook     PriceBook @relation(fields: [priceBookId], references: [id], onDelete: Cascade)
+  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([priceBookId, itemId])
+  @@index([tenantId])
+  @@index([priceBookId])
+  @@index([itemId])
 }
 
 // ============ PURCHASE ORDERS ============

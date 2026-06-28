@@ -65,7 +65,15 @@ export const ModelName = {
   PmSchedule: 'PmSchedule',
   Quotation: 'Quotation',
   Invoice: 'Invoice',
+  InventoryCategory: 'InventoryCategory',
+  InventorySubcategory: 'InventorySubcategory',
   InventoryItem: 'InventoryItem',
+  Warehouse: 'Warehouse',
+  WarehouseStock: 'WarehouseStock',
+  ItemSupplier: 'ItemSupplier',
+  StockMovement: 'StockMovement',
+  PriceBook: 'PriceBook',
+  PriceBookEntry: 'PriceBookEntry',
   PurchaseOrder: 'PurchaseOrder',
   Vehicle: 'Vehicle',
   VehicleLog: 'VehicleLog',
@@ -510,26 +518,240 @@ export const InvoiceScalarFieldEnum = {
 export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
 
 
-export const InventoryItemScalarFieldEnum = {
+export const InventoryCategoryScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
   name: 'name',
-  sku: 'sku',
-  category: 'category',
+  code: 'code',
   description: 'description',
+  icon: 'icon',
+  color: 'color',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InventoryCategoryScalarFieldEnum = (typeof InventoryCategoryScalarFieldEnum)[keyof typeof InventoryCategoryScalarFieldEnum]
+
+
+export const InventorySubcategoryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  categoryId: 'categoryId',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  displayOrder: 'displayOrder',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InventorySubcategoryScalarFieldEnum = (typeof InventorySubcategoryScalarFieldEnum)[keyof typeof InventorySubcategoryScalarFieldEnum]
+
+
+export const InventoryItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  itemCode: 'itemCode',
+  sku: 'sku',
+  barcode: 'barcode',
+  qrCode: 'qrCode',
+  name: 'name',
+  shortName: 'shortName',
+  itemType: 'itemType',
+  categoryId: 'categoryId',
+  subcategoryId: 'subcategoryId',
+  description: 'description',
+  shortDescription: 'shortDescription',
+  brand: 'brand',
+  manufacturer: 'manufacturer',
+  model: 'model',
+  partNumber: 'partNumber',
+  serialNumber: 'serialNumber',
   unit: 'unit',
+  unitWeight: 'unitWeight',
+  dimensions: 'dimensions',
+  purchaseCost: 'purchaseCost',
+  averageCost: 'averageCost',
+  standardCost: 'standardCost',
+  lastPurchaseCost: 'lastPurchaseCost',
+  sellingPrice: 'sellingPrice',
+  dealerPrice: 'dealerPrice',
+  contractorPrice: 'contractorPrice',
+  customerPrice: 'customerPrice',
+  vipPrice: 'vipPrice',
+  internalCost: 'internalCost',
+  labourCost: 'labourCost',
+  installationCost: 'installationCost',
+  serviceCost: 'serviceCost',
+  transportationCost: 'transportationCost',
+  mobilizationCost: 'mobilizationCost',
+  equipmentRental: 'equipmentRental',
+  emergencyCallOut: 'emergencyCallOut',
+  afterHoursCharge: 'afterHoursCharge',
+  weekendCharge: 'weekendCharge',
+  publicHolidayCharge: 'publicHolidayCharge',
+  currency: 'currency',
   quantity: 'quantity',
   minStock: 'minStock',
+  maxStock: 'maxStock',
+  reorderLevel: 'reorderLevel',
+  safetyStock: 'safetyStock',
   unitCost: 'unitCost',
   supplier: 'supplier',
   location: 'location',
   photos: 'photos',
+  attachments: 'attachments',
+  technicalDatasheet: 'technicalDatasheet',
+  msds: 'msds',
+  warranty: 'warranty',
+  warrantyExpiry: 'warrantyExpiry',
+  countryOfOrigin: 'countryOfOrigin',
+  hsCode: 'hsCode',
+  tags: 'tags',
+  status: 'status',
+  approvalStatus: 'approvalStatus',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  version: 'version',
+  hourlyRate: 'hourlyRate',
+  dailyRate: 'dailyRate',
+  overtimeRate: 'overtimeRate',
+  weekendRate: 'weekendRate',
+  publicHolidayRate: 'publicHolidayRate',
+  dailyRentalRate: 'dailyRentalRate',
+  monthlyRentalRate: 'monthlyRentalRate',
+  estimatedHours: 'estimatedHours',
+  requiredSkills: 'requiredSkills',
+  sop: 'sop',
+  remarks: 'remarks',
   isActive: 'isActive',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type InventoryItemScalarFieldEnum = (typeof InventoryItemScalarFieldEnum)[keyof typeof InventoryItemScalarFieldEnum]
+
+
+export const WarehouseScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  code: 'code',
+  type: 'type',
+  address: 'address',
+  manager: 'manager',
+  phone: 'phone',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type WarehouseScalarFieldEnum = (typeof WarehouseScalarFieldEnum)[keyof typeof WarehouseScalarFieldEnum]
+
+
+export const WarehouseStockScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  warehouseId: 'warehouseId',
+  itemId: 'itemId',
+  quantity: 'quantity',
+  reserved: 'reserved',
+  damaged: 'damaged',
+  returned: 'returned',
+  batchNo: 'batchNo',
+  lotNumber: 'lotNumber',
+  expiryDate: 'expiryDate',
+  costMethod: 'costMethod',
+  updatedAt: 'updatedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type WarehouseStockScalarFieldEnum = (typeof WarehouseStockScalarFieldEnum)[keyof typeof WarehouseStockScalarFieldEnum]
+
+
+export const ItemSupplierScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  itemId: 'itemId',
+  supplierName: 'supplierName',
+  supplierCode: 'supplierCode',
+  contactPerson: 'contactPerson',
+  phone: 'phone',
+  email: 'email',
+  address: 'address',
+  leadTimeDays: 'leadTimeDays',
+  purchasePrice: 'purchasePrice',
+  moq: 'moq',
+  warranty: 'warranty',
+  paymentTerms: 'paymentTerms',
+  rating: 'rating',
+  isPrimary: 'isPrimary',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ItemSupplierScalarFieldEnum = (typeof ItemSupplierScalarFieldEnum)[keyof typeof ItemSupplierScalarFieldEnum]
+
+
+export const StockMovementScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  itemId: 'itemId',
+  warehouseId: 'warehouseId',
+  type: 'type',
+  quantity: 'quantity',
+  previousQty: 'previousQty',
+  newQty: 'newQty',
+  reason: 'reason',
+  referenceNo: 'referenceNo',
+  referenceType: 'referenceType',
+  fromWarehouseId: 'fromWarehouseId',
+  batchNo: 'batchNo',
+  lotNumber: 'lotNumber',
+  expiryDate: 'expiryDate',
+  unitCost: 'unitCost',
+  notes: 'notes',
+  performedBy: 'performedBy',
+  createdAt: 'createdAt'
+} as const
+
+export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
+
+
+export const PriceBookScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  code: 'code',
+  description: 'description',
+  isDefault: 'isDefault',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PriceBookScalarFieldEnum = (typeof PriceBookScalarFieldEnum)[keyof typeof PriceBookScalarFieldEnum]
+
+
+export const PriceBookEntryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  priceBookId: 'priceBookId',
+  itemId: 'itemId',
+  price: 'price',
+  discount: 'discount',
+  currency: 'currency',
+  effectiveFrom: 'effectiveFrom',
+  effectiveTo: 'effectiveTo',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PriceBookEntryScalarFieldEnum = (typeof PriceBookEntryScalarFieldEnum)[keyof typeof PriceBookEntryScalarFieldEnum]
 
 
 export const PurchaseOrderScalarFieldEnum = {

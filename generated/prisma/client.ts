@@ -112,10 +112,50 @@ export type Quotation = Prisma.QuotationModel
  */
 export type Invoice = Prisma.InvoiceModel
 /**
+ * Model InventoryCategory
+ * 
+ */
+export type InventoryCategory = Prisma.InventoryCategoryModel
+/**
+ * Model InventorySubcategory
+ * 
+ */
+export type InventorySubcategory = Prisma.InventorySubcategoryModel
+/**
  * Model InventoryItem
  * 
  */
 export type InventoryItem = Prisma.InventoryItemModel
+/**
+ * Model Warehouse
+ * 
+ */
+export type Warehouse = Prisma.WarehouseModel
+/**
+ * Model WarehouseStock
+ * 
+ */
+export type WarehouseStock = Prisma.WarehouseStockModel
+/**
+ * Model ItemSupplier
+ * 
+ */
+export type ItemSupplier = Prisma.ItemSupplierModel
+/**
+ * Model StockMovement
+ * 
+ */
+export type StockMovement = Prisma.StockMovementModel
+/**
+ * Model PriceBook
+ * 
+ */
+export type PriceBook = Prisma.PriceBookModel
+/**
+ * Model PriceBookEntry
+ * 
+ */
+export type PriceBookEntry = Prisma.PriceBookEntryModel
 /**
  * Model PurchaseOrder
  * 
