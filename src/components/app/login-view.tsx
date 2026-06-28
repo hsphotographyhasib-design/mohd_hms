@@ -503,7 +503,8 @@ export function LoginView() {
   };
 
   /* ---- Google Sign-In ---- */
-  const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '';
+  const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
+    '337910166543-9vr0i0bqudf53stnqbcvjr9o6kt6gtei.apps.googleusercontent.com';
   const [gisReady, setGisReady] = useState(false);
   const [gisError, setGisError] = useState(false);
 
