@@ -1,0 +1,21 @@
+{
+  "name": "MOHD.HMS ENTERPRISE",
+  "short_name": "MOHD.HMS",
+  "description": "Smart Facility Maintenance & Engineering",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#059669",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/og-image.png",
+      "sizes": "1344x768",
+      "type": "image/png"
+    }
+  ]
+}
