@@ -10,8 +10,8 @@ import {
   defaultVacs, defaultBenefits,
   getServices, getIndustries, getTestimonials, getProjects, getBlogs, getCareers,
   type CMSData,
-} from './landing-data'
-import { useLandingData } from './use-landing-data'
+} from '../landing-data'
+import { useLandingData } from '../use-landing-data'
 
 /* ── Reveal hook ── */
 function useReveal(deps?: unknown[]) {
