@@ -17,7 +17,6 @@ import {
   BlogSection,
   CareersSection,
   ContactSection,
-  SupportSection,
 } from './sections'
 
 export function LandingHome({ onSignIn }: { onSignIn: () => void }) {
@@ -38,7 +37,6 @@ export function LandingHome({ onSignIn }: { onSignIn: () => void }) {
       <BlogSection />
       <CareersSection />
       <ContactSection />
-      <SupportSection />
     </PublicLayout>
   )
 }

@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useCallback, useState } from 'react'
-import Link from 'next/link'
 import {
   I, ic, IMG, fl,
   defaultSectors, defaultWhy, defaultCaps, defaultIndustries,
@@ -60,11 +59,11 @@ export function HeroSection() {
           <h1 dangerouslySetInnerHTML={{ __html: hero?.headline || 'Engineered upkeep for <em>serious facilities</em>.' }} />
           <p className="lead">{hero?.subheadline || 'MOHD.HMS ENTERPRISE keeps buildings and plants running — HVAC, electrical, plumbing, mechanical and fire protection, delivered by certified teams and tracked through a modern maintenance system.'}</p>
           <div className="hero-cta">
-            <Link href="/contact" className="btn btn-fill" id="heroCta1">
+            <a href="#contact" className="btn btn-fill" id="heroCta1">
               {hero?.cta1Text || 'Contact us'}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-            </Link>
-            <Link href="/services" className="btn btn-out" id="heroCta2">{hero?.cta2Text || 'Our services'}</Link>
+            </a>
+            <a href="#services" className="btn btn-out" id="heroCta2">{hero?.cta2Text || 'Our services'}</a>
           </div>
           <div className="hero-meta">
             <div className="m"><div className="mn">{hero?.stat1Value || '15+'}</div><div className="ml">{hero?.stat1Label || 'Years experience'}</div></div>
@@ -230,7 +229,7 @@ export function SystemSection() {
             </div>
           </div>
         </div>
-        <p className="ops-note">Figures are representative until the maintenance system API is connected.</p>
+        <p className="ops-note" dangerouslySetInnerHTML={{ __html: 'Figures are representative until the maintenance system API is connected — bind <span class="mono">GET /api/overview</span> in <span class="mono">MHMS.loadOverview()</span> to render live data.' }} />
       </div>
     </section>
   )
@@ -455,10 +454,10 @@ export function CareersSection() {
           <div className="reveal">
             <div dangerouslySetInnerHTML={{
               __html: careerData.map(([t, m]) =>
-                `<div class="vac reveal"><div><b>${t}</b><br><span>${m}</span></div><a href="/contact" class="btn btn-out btn-sm vb">Apply now</a></div>`
+                `<div class="vac reveal"><div><b>${t}</b><br><span>${m}</span></div><a href="#contact" class="btn btn-out btn-sm vb">Apply now</a></div>`
               ).join('')
             }} />
-            <p className="cnote">Don&apos;t see your role? Send your CV to <Link href="/contact">careers@mohdhms.com</Link> — we&apos;re always hiring skilled technicians.</p>
+            <p className="cnote">Don&apos;t see your role? Send your CV to <a href="#contact">careers@mohdhms.com</a> — we&apos;re always hiring skilled technicians.</p>
           </div>
           <div className="reveal d1">
             <div className="fig imgrise" style={{ aspectRatio: '4/2.7', borderRadius: 'var(--r)', border: '1px solid var(--line)', marginBottom: 24 }}>
@@ -535,7 +534,7 @@ export function ContactSection() {
               <button className="btn btn-fill" type="submit">Send message
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z" /></svg>
               </button>
-              <div className={`cf-ok ${submitted ? 'show' : ''}`} id="cfOk">Thanks — your message has been sent. Our team will respond within one business day.</div>
+              <div className={`cf-ok ${submitted ? 'show' : ''}`} id="cfOk">Thanks — your message has been captured. Connect this form to your inbox or CRM to receive it.</div>
             </form>
           </div>
         </div>

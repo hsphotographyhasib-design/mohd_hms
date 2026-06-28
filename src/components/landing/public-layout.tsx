@@ -1,23 +1,30 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 // CSS loaded via <link> tag below to avoid affecting authenticated app styles
 
 const NAV_ITEMS = [
-  { label: 'Home', href: '/' },
-  { label: 'About', href: '/about' },
-  { label: 'Services', href: '/services' },
-  { label: 'Industries', href: '/industries' },
-  { label: 'Projects', href: '/projects' },
-  { label: 'System', href: '/system' },
-  { label: 'Careers', href: '/careers' },
-  { label: 'Blog', href: '/blog' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Home', href: '#home' },
+  { label: 'About', href: '#about' },
+  { label: 'Services', href: '#services' },
+  { label: 'Industries', href: '#industries' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'System', href: '#overview' },
+  { label: 'Careers', href: '#careers' },
+  { label: 'Blog', href: '#blog' },
+  { label: 'Contact', href: '#contact' },
 ]
 
-const MOBILE_NAV_ITEMS = NAV_ITEMS.filter(n => n.label !== 'Home')
+const MOBILE_NAV_ITEMS = [
+  { label: 'About', href: '#about' },
+  { label: 'Services', href: '#services' },
+  { label: 'Industries', href: '#industries' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'System Overview', href: '#overview' },
+  { label: 'Careers', href: '#careers' },
+  { label: 'Blog', href: '#blog' },
+  { label: 'Contact', href: '#contact' },
+]
 
 interface PublicLayoutProps {
   children: ReactNode
@@ -25,7 +32,6 @@ interface PublicLayoutProps {
 }
 
 export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
-  const pathname = usePathname()
   const [menuOpen, setMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
@@ -59,15 +65,47 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
     return () => io.disconnect()
   })
 
-  // Close mobile menu on route change
-  const [currentPath, setCurrentPath] = useState(pathname)
-  if (pathname !== currentPath) { setCurrentPath(pathname); setMenuOpen(false) }
+  // Active nav tracking based on scroll position
+  const [, forceUpdate] = useState(0)
+  useEffect(() => {
+    const onScroll = () => {
+      if (!scrollRun.current) {
+        scrollRun.current = true
+        requestAnimationFrame(() => {
+          forceUpdate(n => n + 1)
+          scrollRun.current = false
+        })
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  // Close mobile menu on hash change
+  const [activeSection, setActiveSection] = useState('home')
+  useEffect(() => {
+    const sections = NAV_ITEMS.map(n => n.href.replace('#', '')).map(id => document.getElementById(id)).filter(Boolean) as HTMLElement[]
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setActiveSection(e.target.id)
+            break
+          }
+        }
+      },
+      { threshold: 0.2, rootMargin: '-80px 0px -50% 0px' }
+    )
+    sections.forEach(s => observer.observe(s))
+    return () => observer.disconnect()
+  }, [])
 
   const scrollToTop = useCallback(() => window.scrollTo({ top: 0, behavior: 'smooth' }), [])
 
   const isActive = (href: string) => {
-    if (href === '/') return pathname === '/'
-    return pathname === href || pathname.startsWith(href + '/')
+    const id = href.replace('#', '')
+    if (!activeSection && id === 'home') return true
+    return activeSection === id
   }
 
   return (
@@ -83,14 +121,14 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
       {/* Utility bar */}
       <div className="util">
         <div className="container">
-          <a href="mailto:info@mohdhms.com">
+          <a href="mailto:info@mohdhms.com" className="hide-sm">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>
             info@mohdhms.com
           </a>
           <div className="u-r">
             <a href="tel:+6739999999" className="emr">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-              Emergency: +673 999 9999
+              24/7 Emergency: +673 999 9999
             </a>
           </div>
         </div>
@@ -99,22 +137,22 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
       {/* Header */}
       <header id="hdr" className={scrolled ? 'scrolled' : ''}>
         <div className="container nav">
-          <Link href="/" className="brand" aria-label="MOHD.HMS Enterprise">
+          <a href="#home" className="brand" aria-label="MOHD.HMS Enterprise">
             <span className="bmark">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9z"/><path d="M12 7v6M9 9l3-2 3 2M9 15l3 2 3-2"/></svg>
             </span>
             <span><span className="bname">MOHD.HMS</span><br /><span className="bsub">Enterprise</span></span>
-          </Link>
+          </a>
           <nav className="nav-links" aria-label="Primary">
             {NAV_ITEMS.map(item => (
-              <Link
+              <a
                 key={item.href}
                 href={item.href}
                 style={isActive(item.href) ? { color: 'var(--forest)' } : undefined}
                 data-active={isActive(item.href) ? 'true' : undefined}
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
           </nav>
           <div className="nav-actions">
@@ -142,9 +180,9 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
       {/* Mobile panel */}
       <div className={`mpanel ${menuOpen ? 'open' : ''}`}>
         {MOBILE_NAV_ITEMS.map(item => (
-          <Link key={item.href} href={item.href} onClick={() => setMenuOpen(false)} style={isActive(item.href) ? { color: 'var(--green)' } : undefined}>
-            {item.label === 'System' ? 'System Overview' : item.label}
-          </Link>
+          <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)} style={isActive(item.href) ? { color: 'var(--green)' } : undefined}>
+            {item.label}
+          </a>
         ))}
         <div className="mp-act">
           <a
@@ -181,26 +219,26 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
             </div>
             <div className="fcol">
               <h5>Services</h5>
-              <Link href="/services">HVAC maintenance</Link>
-              <Link href="/services">Electrical</Link>
-              <Link href="/services">Fire protection</Link>
-              <Link href="/services">Preventive</Link>
-              <Link href="/services">Emergency</Link>
+              <a href="#services">HVAC maintenance</a>
+              <a href="#services">Electrical</a>
+              <a href="#services">Fire protection</a>
+              <a href="#services">Preventive</a>
+              <a href="#services">Emergency</a>
             </div>
             <div className="fcol">
               <h5>Company</h5>
-              <Link href="/about">About us</Link>
-              <Link href="/projects">Projects</Link>
-              <Link href="/industries">Industries</Link>
-              <Link href="/careers">Careers</Link>
-              <Link href="/blog">Blog</Link>
+              <a href="#about">About us</a>
+              <a href="#projects">Projects</a>
+              <a href="#industries">Industries</a>
+              <a href="#careers">Careers</a>
+              <a href="#blog">Blog</a>
             </div>
             <div className="fcol">
               <h5>Clients</h5>
-              <a href="#" onClick={e => { e.preventDefault(); onSignIn?.() }}>Sign in</a>
-              <Link href="/system">System overview</Link>
-              <Link href="/projects">Projects</Link>
-              <Link href="/contact">Contact</Link>
+              <a href="#">Sign in</a>
+              <a href="#overview">System overview</a>
+              <a href="#projects">Projects</a>
+              <a href="#contact">Contact</a>
             </div>
             <div className="fcol">
               <h5>Legal</h5>
