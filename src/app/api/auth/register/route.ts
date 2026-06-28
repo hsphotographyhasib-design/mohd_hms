@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { hashPassword, generateToken } from '@/lib/auth';
+import { sendEmail, renderWelcomeEmail } from '@/lib/email';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
@@ -62,6 +63,26 @@ export async function POST(request: NextRequest) {
       role: user.role,
       email: user.email,
     });
+
+    // Send welcome email (best-effort, non-blocking)
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || '';
+      const tpl = renderWelcomeEmail({
+        name: user.name,
+        email: user.email,
+        loginUrl: `${baseUrl}/login`,
+      });
+      await sendEmail({
+        to: user.email,
+        subject: tpl.subject,
+        html: tpl.html,
+        text: tpl.text,
+        module: 'auth',
+        templateName: 'Welcome Email',
+      });
+    } catch (err) {
+      console.error('[register] welcome email failed', err);
+    }
 
     return NextResponse.json({
       token,

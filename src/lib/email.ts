@@ -4,17 +4,19 @@
  * Kept for backward compatibility with existing password-reset flows.
  * New code should import from '@/lib/email-service' directly.
  *
- * Delegates to the centralized EmailService when BREVO_API_KEY is set,
- * otherwise falls back to Resend → SMTP relay → console logging.
+ * Delegates to the centralized EmailService for proper logging,
+ * queue, retry, and tenant resolution.
  */
 
-import { sendViaProvider, getActiveProvider } from '@/lib/email-service/providers';
+import { sendEmail as sendViaService } from '@/lib/email-service';
 
 export interface SendEmailParams {
   to: string;
   subject: string;
   html: string;
   text: string;
+  module?: string;
+  templateName?: string;
 }
 
 export interface SendEmailResult {
@@ -22,101 +24,33 @@ export interface SendEmailResult {
   provider: 'resend' | 'smtp-relay' | 'console' | 'brevo';
   id?: string;
   error?: string;
+  logId?: string;
 }
 
-const FROM_DEFAULT = 'MOHD.HMS ENTERPRISE <no-reply@mohd-hms.local>';
-
-function fromAddress(): string {
-  return process.env.EMAIL_FROM || FROM_DEFAULT;
-}
-
-async function sendViaResend(p: SendEmailParams): Promise<SendEmailResult> {
-  const apiKey = process.env.RESEND_API_KEY!;
-  try {
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: fromAddress(),
-        to: [p.to],
-        subject: p.subject,
-        html: p.html,
-        text: p.text,
-      }),
-    });
-    if (!res.ok) {
-      const body = await res.text();
-      return { ok: false, provider: 'resend', error: `Resend ${res.status}: ${body}` };
-    }
-    const data = (await res.json()) as { id?: string };
-    return { ok: true, provider: 'resend', id: data.id };
-  } catch (err) {
-    return { ok: false, provider: 'resend', error: err instanceof Error ? err.message : 'unknown' };
-  }
-}
-
-async function sendViaSmtpRelay(p: SendEmailParams): Promise<SendEmailResult> {
-  const url = process.env.SMTP_RELAY_URL!;
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(process.env.SMTP_RELAY_KEY ? { Authorization: `Bearer ${process.env.SMTP_RELAY_KEY}` } : {}),
-      },
-      body: JSON.stringify({
-        from: fromAddress(),
-        to: p.to,
-        subject: p.subject,
-        html: p.html,
-        text: p.text,
-      }),
-    });
-    if (!res.ok) {
-      const body = await res.text();
-      return { ok: false, provider: 'smtp-relay', error: `Relay ${res.status}: ${body}` };
-    }
-    return { ok: true, provider: 'smtp-relay' };
-  } catch (err) {
-    return { ok: false, provider: 'smtp-relay', error: err instanceof Error ? err.message : 'unknown' };
-  }
-}
-
-function logToConsole(p: SendEmailParams): SendEmailResult {
-  console.log('\n========= EMAIL (dev fallback — no provider configured) =========');
-  console.log('To:     ', p.to);
-  console.log('From:   ', fromAddress());
-  console.log('Subject:', p.subject);
-  console.log('---------------- TEXT ----------------');
-  console.log(p.text);
-  console.log('==================================================================\n');
-  return { ok: true, provider: 'console' };
-}
-
-export async function sendEmail(p: SendEmailParams): Promise<SendEmailResult> {
-  // Use Brevo if configured (new centralized service)
-  if (process.env.BREVO_API_KEY) {
-    const result = await sendViaProvider({
+/**
+ * Send an email using the centralized EmailService.
+ * This provides proper DB logging, queue, retry, and tenant resolution.
+ */
+export async function sendEmail(p: SendEmailParams, opts?: { tenantId?: string }): Promise<SendEmailResult> {
+  const result = await sendViaService(
+    {
       to: p.to,
       subject: p.subject,
       html: p.html,
       text: p.text,
-      module: 'auth',
-      templateName: 'Legacy Email',
-    });
-    return {
-      ok: result.ok,
-      provider: result.provider as SendEmailResult['provider'],
-      id: result.messageId,
-      error: result.error,
-    };
-  }
-  if (process.env.RESEND_API_KEY) return sendViaResend(p);
-  if (process.env.SMTP_RELAY_URL) return sendViaSmtpRelay(p);
-  return logToConsole(p);
+      module: (p.module as 'auth' | 'complaints' | 'work-orders' | 'invoices' | 'quotations' | 'pm' | 'equipment' | 'inventory' | 'finance' | 'hr' | 'inspection' | 'general') || 'auth',
+      templateName: p.templateName || 'Legacy Email',
+    },
+    { tenantId: opts?.tenantId },
+  );
+
+  return {
+    ok: result.ok,
+    provider: result.provider as SendEmailResult['provider'],
+    id: result.messageId,
+    error: result.error,
+    logId: result.logId,
+  };
 }
 
 /* ------------------------------------------------------------------ */
@@ -125,6 +59,15 @@ export async function sendEmail(p: SendEmailParams): Promise<SendEmailResult> {
 
 const BRAND = 'MOHD.HMS ENTERPRISE';
 const BRAND_GREEN = '#059669';
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
 
 function shell(title: string, bodyHtml: string): string {
   return `<!doctype html>
@@ -152,15 +95,6 @@ function shell(title: string, bodyHtml: string): string {
 </table>
 </body>
 </html>`;
-}
-
-function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
 }
 
 export function renderResetEmail(opts: { resetUrl: string; userName?: string | null }) {
@@ -200,6 +134,37 @@ ${BRAND}`;
   return { subject, html, text };
 }
 
+export function renderWelcomeEmail(opts: { name: string; email: string; loginUrl: string; portalUrl?: string }) {
+  const subject = `Welcome to ${BRAND}`;
+  const greeting = opts.name ? `Hello ${escapeHtml(opts.name)},` : 'Hello,';
+  const html = shell(
+    subject,
+    `
+    <h1 style="margin:0 0 16px 0;font-size:22px;color:#111827;">Welcome to ${BRAND}, ${escapeHtml(opts.name)}!</h1>
+    <p style="margin:0 0 14px 0;">Your account has been successfully created.</p>
+    <p style="margin:0 0 14px 0;">You can now access the Smart Facility Maintenance Management System and manage all your maintenance operations from one place.</p>
+    <p style="margin:0 0 22px 0;">Click the button below to log in to your account.</p>
+    ${opts.portalUrl ? `<p style="margin:0 0 8px 0;">Customer Portal: <a href="${escapeHtml(opts.portalUrl)}" style="color:#059669;">${escapeHtml(opts.portalUrl)}</a></p>` : ''}
+    <p style="margin:0 0 14px 0;color:#6B280;">If you have any questions, contact our support team.</p>
+    <p style="margin:24px 0 0 0;">Thank you,<br/>${BRAND} Team</p>
+    `
+  );
+  const text = `${greeting}
+
+Welcome to ${BRAND}!
+
+Your account has been successfully created.
+
+Login: ${opts.loginUrl}
+${opts.portalUrl ? `Customer Portal: ${opts.portalUrl}` : ''}
+
+If you have any questions, contact our support team.
+
+Thank you,
+${BRAND}`;
+  return { subject, html, text };
+}
+
 export function renderPasswordChangedEmail(opts: { userName?: string | null; ip?: string | null; when?: Date }) {
   const subject = `Your ${BRAND} password was changed`;
   const greeting = opts.userName ? `Hello ${escapeHtml(opts.userName)},` : 'Hello,';
@@ -218,7 +183,9 @@ export function renderPasswordChangedEmail(opts: { userName?: string | null; ip?
   const text = `${greeting}
 
 Your password has been changed successfully.
-When: ${when}${opts.ip ? `\nIP address: ${opts.ip}` : ''}
+
+When: ${when}${opts.ip ? `
+IP address: ${opts.ip}` : ''}
 
 If you did not perform this action, contact support immediately.
 

@@ -104,7 +104,7 @@ async function attemptSend(
     return { ...result, logId };
   }
 
-  // Failed — queue for retry or mark as failed
+  // Failed — store HTML in metadata for DB retry, queue for in-memory retry
   if (retryCount < MAX_RETRIES) {
     const nextDelay = RETRY_DELAYS_MS[Math.min(retryCount, RETRY_DELAYS_MS.length - 1)];
     const nextRetryAt = new Date(Date.now() + nextDelay);
@@ -117,10 +117,12 @@ async function attemptSend(
         errorCode: 'RETRY',
         retryCount,
         nextRetryAt,
+        // Persist the HTML so DB queue processor can resend it
+        metadata: JSON.stringify({ htmlBody: params.html, textBody: params.text }),
       },
     }).catch(() => {});
 
-    // Add to in-memory queue
+    // Add to in-memory queue (has full params)
     queue.push({
       logId,
       params,
@@ -201,12 +203,22 @@ export function startQueueProcessor() {
 
       for (const log of ready) {
         try {
+          // Recover HTML from metadata (stored during retry queueing)
+          let recoveredHtml = '';
+          let recoveredText = '';
+          try {
+            const meta = log.metadata ? JSON.parse(log.metadata) : null;
+            if (meta?.htmlBody) recoveredHtml = meta.htmlBody;
+            if (meta?.textBody) recoveredText = meta.textBody;
+          } catch {}
+
           const params: SendEmailParams = {
             to: log.recipient,
             cc: log.cc ? log.cc.split(',').map((s) => s.trim()) : undefined,
             bcc: log.bcc ? log.bcc.split(',').map((s) => s.trim()) : undefined,
             subject: log.subject,
-            html: '', // Re-render from template or stored HTML
+            html: recoveredHtml,
+            text: recoveredText,
             module: (log.module as EmailModule) || undefined,
             templateName: log.templateName || undefined,
           };
@@ -365,7 +377,7 @@ export async function retryFailedEmail(tenantId: string, logId: string): Promise
     params: {
       to: log.recipient,
       subject: log.subject,
-      html: '',
+      html: '', // Will be recovered from metadata by attemptSend
       module: (log.module as EmailModule) || undefined,
       templateName: log.templateName || undefined,
     },

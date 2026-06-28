@@ -1,113 +1,108 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, withRetry } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { hashPassword, generateToken } from '@/lib/auth';
+import { sendEmail, renderWelcomeEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest) {
+/**
+ * POST /api/auth/users — Invite a new user (admin/super_admin only).
+ * Sends an invitation email with a one-time login link.
+ */
+export async function POST(request: NextRequest) {
   try {
-    // Auth check
     const authHeader = request.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Authorization required' }, { status: 401 });
-    }
-
-    const payload = verifyToken(authHeader.replace('Bearer ', ''));
-    if (!payload || !payload.userId) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
-
-    const userId = payload.userId as string;
-    const userRole = payload.role as string;
-
-    // Only admin and super_admin can list users
-    if (!['admin', 'super_admin'].includes(userRole)) {
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload || !['super_admin', 'admin'].includes(payload.role as string)) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
     }
 
-    // Query params
-    const { searchParams } = new URL(request.url);
-    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
-    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '20', 10)));
-    const search = searchParams.get('search') || '';
-    const role = searchParams.get('role') || '';
-    const status = searchParams.get('status') || '';
+    const tenantId = payload.tenantId as string;
+    const inviterId = payload.userId as string;
+    const body = await request.json();
+    const { name, email, password, role, departmentId, phone, sendInvite } = body;
 
-    // Build where clause
-    const where: Record<string, unknown> = {
-      tenantId: payload.tenantId,
-    };
-
-    if (search) {
-      where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search } },
-      ];
+    // Validate required fields
+    if (!name || !email || !password) {
+      return NextResponse.json({ error: 'Name, email, and password are required' }, { status: 400 });
     }
 
-    if (role) {
-      where.role = role;
+    // Check for duplicate email
+    const existing = await withRetry(
+      () => db.user.findFirst({ where: { tenantId, email } }),
+      { label: 'invite-checkDuplicate' },
+    );
+    if (existing) {
+      return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
     }
 
-    if (status === 'active') {
-      where.isActive = true;
-    } else if (status === 'inactive') {
-      where.isActive = false;
-    }
+    // Create the user with hashed password
+    const passwordHash = await hashPassword(password);
+    const user = await withRetry(
+      () =>
+        db.user.create({
+          data: {
+            tenantId,
+            email,
+            passwordHash,
+            name,
+            role: role || 'technician',
+            profileCompleted: false,
+            departmentId: departmentId || null,
+            phone: phone || null,
+          },
+          include: { tenant: { select: { id: true, name: true, domain: true } } },
+        }),
+      { label: 'invite-createUser' },
+    );
 
-    // Get total count
-    const total = await db.user.count({ where });
-
-    // Get users with pagination
-    const users = await db.user.findMany({
-      where,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        role: true,
-        isActive: true,
-        lastLogin: true,
-        createdAt: true,
-        profileCompleted: true,
-        avatar: true,
-        employeeNumber: true,
-        department: {
-          select: { id: true, name: true },
-        },
-      },
-      orderBy: { createdAt: 'desc' },
-      skip: (page - 1) * pageSize,
-      take: pageSize,
+    // Generate invitation token (one-time use, same as JWT but for invitations)
+    const inviteToken = generateToken({
+      userId: user.id,
+      tenantId,
+      role: user.role,
+      email: user.email,
+      isInvitation: true,
     });
+
+    // Send invitation email
+    if (sendInvite !== false) {
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || '';
+        const tpl = renderWelcomeEmail({
+          name: user.name,
+          email: user.email,
+          loginUrl: `${baseUrl}/reset-password?token=${encodeURIComponent(inviteToken)}`,
+        });
+        await sendEmail({
+          to: user.email,
+          subject: tpl.subject,
+          html: tpl.html,
+          text: tpl.text,
+          module: 'auth',
+          templateName: 'User Invitation',
+        });
+      } catch (err) {
+        console.error('[invite-user] invitation email failed', err);
+      }
+    }
 
     return NextResponse.json({
-      users: users.map((u) => ({
-        id: u.id,
-        name: u.name,
-        email: u.email,
-        phone: u.phone,
-        role: u.role,
-        isActive: u.isActive,
-        lastLogin: u.lastLogin,
-        createdAt: u.createdAt,
-        profileCompleted: u.profileCompleted,
-        avatar: u.avatar,
-        employeeNumber: u.employeeNumber,
-        department: u.department,
-      })),
-      pagination: {
-        page,
-        pageSize,
-        total,
-        totalPages: Math.ceil(total / pageSize),
+      message: `User invited successfully: ${user.name} (${user.email})`,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        tenantId: user.tenantId,
+        tenantName: user.tenant?.name,
+        profileCompleted: user.profileCompleted,
       },
-    });
+    }, { status: 201 });
   } catch (error) {
-    console.error('List users error:', error);
-    const message = error instanceof Error ? error.message : 'Internal server error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error('Invite user error:', error);
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }
