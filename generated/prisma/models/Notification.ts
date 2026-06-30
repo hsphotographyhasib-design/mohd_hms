@@ -592,7 +592,6 @@ export type NotificationCreateOrConnectWithoutTenantInput = {
 
 export type NotificationCreateManyTenantInputEnvelope = {
   data: Prisma.NotificationCreateManyTenantInput | Prisma.NotificationCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type NotificationUpsertWithWhereUniqueWithoutTenantInput = {
@@ -664,7 +663,6 @@ export type NotificationCreateOrConnectWithoutComplaintInput = {
 
 export type NotificationCreateManyComplaintInputEnvelope = {
   data: Prisma.NotificationCreateManyComplaintInput | Prisma.NotificationCreateManyComplaintInput[]
-  skipDuplicates?: boolean
 }
 
 export type NotificationUpsertWithWhereUniqueWithoutComplaintInput = {
@@ -1567,7 +1565,6 @@ export type NotificationCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many Notifications.
    */
   data: Prisma.NotificationCreateManyInput | Prisma.NotificationCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1586,7 +1583,6 @@ export type NotificationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many Notifications.
    */
   data: Prisma.NotificationCreateManyInput | Prisma.NotificationCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

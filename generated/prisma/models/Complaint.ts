@@ -27,10 +27,12 @@ export type AggregateComplaint = {
 }
 
 export type ComplaintAvgAggregateOutputType = {
+  reassignmentCount: number | null
   customerRating: number | null
 }
 
 export type ComplaintSumAggregateOutputType = {
+  reassignmentCount: number | null
   customerRating: number | null
 }
 
@@ -49,6 +51,14 @@ export type ComplaintMinAggregateOutputType = {
   gpsLocation: string | null
   assignedToId: string | null
   supervisorId: string | null
+  assignedBy: string | null
+  assignedByRole: string | null
+  assignedAt: Date | null
+  lastReassignedAt: Date | null
+  assignmentReason: string | null
+  assignmentStatus: string | null
+  reassignmentCount: number | null
+  slaResponseDeadline: Date | null
   workOrderId: string | null
   invoiceId: string | null
   eta: string | null
@@ -82,6 +92,14 @@ export type ComplaintMaxAggregateOutputType = {
   gpsLocation: string | null
   assignedToId: string | null
   supervisorId: string | null
+  assignedBy: string | null
+  assignedByRole: string | null
+  assignedAt: Date | null
+  lastReassignedAt: Date | null
+  assignmentReason: string | null
+  assignmentStatus: string | null
+  reassignmentCount: number | null
+  slaResponseDeadline: Date | null
   workOrderId: string | null
   invoiceId: string | null
   eta: string | null
@@ -115,6 +133,14 @@ export type ComplaintCountAggregateOutputType = {
   gpsLocation: number
   assignedToId: number
   supervisorId: number
+  assignedBy: number
+  assignedByRole: number
+  assignedAt: number
+  lastReassignedAt: number
+  assignmentReason: number
+  assignmentStatus: number
+  reassignmentCount: number
+  slaResponseDeadline: number
   workOrderId: number
   invoiceId: number
   eta: number
@@ -136,10 +162,12 @@ export type ComplaintCountAggregateOutputType = {
 
 
 export type ComplaintAvgAggregateInputType = {
+  reassignmentCount?: true
   customerRating?: true
 }
 
 export type ComplaintSumAggregateInputType = {
+  reassignmentCount?: true
   customerRating?: true
 }
 
@@ -158,6 +186,14 @@ export type ComplaintMinAggregateInputType = {
   gpsLocation?: true
   assignedToId?: true
   supervisorId?: true
+  assignedBy?: true
+  assignedByRole?: true
+  assignedAt?: true
+  lastReassignedAt?: true
+  assignmentReason?: true
+  assignmentStatus?: true
+  reassignmentCount?: true
+  slaResponseDeadline?: true
   workOrderId?: true
   invoiceId?: true
   eta?: true
@@ -191,6 +227,14 @@ export type ComplaintMaxAggregateInputType = {
   gpsLocation?: true
   assignedToId?: true
   supervisorId?: true
+  assignedBy?: true
+  assignedByRole?: true
+  assignedAt?: true
+  lastReassignedAt?: true
+  assignmentReason?: true
+  assignmentStatus?: true
+  reassignmentCount?: true
+  slaResponseDeadline?: true
   workOrderId?: true
   invoiceId?: true
   eta?: true
@@ -224,6 +268,14 @@ export type ComplaintCountAggregateInputType = {
   gpsLocation?: true
   assignedToId?: true
   supervisorId?: true
+  assignedBy?: true
+  assignedByRole?: true
+  assignedAt?: true
+  lastReassignedAt?: true
+  assignmentReason?: true
+  assignmentStatus?: true
+  reassignmentCount?: true
+  slaResponseDeadline?: true
   workOrderId?: true
   invoiceId?: true
   eta?: true
@@ -344,6 +396,14 @@ export type ComplaintGroupByOutputType = {
   gpsLocation: string | null
   assignedToId: string | null
   supervisorId: string | null
+  assignedBy: string | null
+  assignedByRole: string | null
+  assignedAt: Date | null
+  lastReassignedAt: Date | null
+  assignmentReason: string | null
+  assignmentStatus: string
+  reassignmentCount: number
+  slaResponseDeadline: Date | null
   workOrderId: string | null
   invoiceId: string | null
   eta: string | null
@@ -400,6 +460,14 @@ export type ComplaintWhereInput = {
   gpsLocation?: Prisma.StringNullableFilter<"Complaint"> | string | null
   assignedToId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   supervisorId?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedBy?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedByRole?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedAt?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
+  lastReassignedAt?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
+  assignmentReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignmentStatus?: Prisma.StringFilter<"Complaint"> | string
+  reassignmentCount?: Prisma.IntFilter<"Complaint"> | number
+  slaResponseDeadline?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
   workOrderId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   invoiceId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   eta?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -441,6 +509,14 @@ export type ComplaintOrderByWithRelationInput = {
   gpsLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   assignedToId?: Prisma.SortOrderInput | Prisma.SortOrder
   supervisorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedByRole?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastReassignedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignmentReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignmentStatus?: Prisma.SortOrder
+  reassignmentCount?: Prisma.SortOrder
+  slaResponseDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
   workOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   invoiceId?: Prisma.SortOrderInput | Prisma.SortOrder
   eta?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -485,6 +561,14 @@ export type ComplaintWhereUniqueInput = Prisma.AtLeast<{
   gpsLocation?: Prisma.StringNullableFilter<"Complaint"> | string | null
   assignedToId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   supervisorId?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedBy?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedByRole?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedAt?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
+  lastReassignedAt?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
+  assignmentReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignmentStatus?: Prisma.StringFilter<"Complaint"> | string
+  reassignmentCount?: Prisma.IntFilter<"Complaint"> | number
+  slaResponseDeadline?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
   workOrderId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   invoiceId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   eta?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -526,6 +610,14 @@ export type ComplaintOrderByWithAggregationInput = {
   gpsLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   assignedToId?: Prisma.SortOrderInput | Prisma.SortOrder
   supervisorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedBy?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedByRole?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastReassignedAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignmentReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  assignmentStatus?: Prisma.SortOrder
+  reassignmentCount?: Prisma.SortOrder
+  slaResponseDeadline?: Prisma.SortOrderInput | Prisma.SortOrder
   workOrderId?: Prisma.SortOrderInput | Prisma.SortOrder
   invoiceId?: Prisma.SortOrderInput | Prisma.SortOrder
   eta?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -567,6 +659,14 @@ export type ComplaintScalarWhereWithAggregatesInput = {
   gpsLocation?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   assignedToId?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   supervisorId?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
+  assignedBy?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
+  assignedByRole?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
+  assignedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Complaint"> | Date | string | null
+  lastReassignedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Complaint"> | Date | string | null
+  assignmentReason?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
+  assignmentStatus?: Prisma.StringWithAggregatesFilter<"Complaint"> | string
+  reassignmentCount?: Prisma.IntWithAggregatesFilter<"Complaint"> | number
+  slaResponseDeadline?: Prisma.DateTimeNullableWithAggregatesFilter<"Complaint"> | Date | string | null
   workOrderId?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   invoiceId?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   eta?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
@@ -595,6 +695,14 @@ export type ComplaintCreateInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -636,6 +744,14 @@ export type ComplaintUncheckedCreateInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -667,6 +783,14 @@ export type ComplaintUpdateInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -708,6 +832,14 @@ export type ComplaintUncheckedUpdateInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -744,6 +876,14 @@ export type ComplaintCreateManyInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -772,6 +912,14 @@ export type ComplaintUpdateManyMutationInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -805,6 +953,14 @@ export type ComplaintUncheckedUpdateManyInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -848,6 +1004,14 @@ export type ComplaintCountOrderByAggregateInput = {
   gpsLocation?: Prisma.SortOrder
   assignedToId?: Prisma.SortOrder
   supervisorId?: Prisma.SortOrder
+  assignedBy?: Prisma.SortOrder
+  assignedByRole?: Prisma.SortOrder
+  assignedAt?: Prisma.SortOrder
+  lastReassignedAt?: Prisma.SortOrder
+  assignmentReason?: Prisma.SortOrder
+  assignmentStatus?: Prisma.SortOrder
+  reassignmentCount?: Prisma.SortOrder
+  slaResponseDeadline?: Prisma.SortOrder
   workOrderId?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
   eta?: Prisma.SortOrder
@@ -867,6 +1031,7 @@ export type ComplaintCountOrderByAggregateInput = {
 }
 
 export type ComplaintAvgOrderByAggregateInput = {
+  reassignmentCount?: Prisma.SortOrder
   customerRating?: Prisma.SortOrder
 }
 
@@ -885,6 +1050,14 @@ export type ComplaintMaxOrderByAggregateInput = {
   gpsLocation?: Prisma.SortOrder
   assignedToId?: Prisma.SortOrder
   supervisorId?: Prisma.SortOrder
+  assignedBy?: Prisma.SortOrder
+  assignedByRole?: Prisma.SortOrder
+  assignedAt?: Prisma.SortOrder
+  lastReassignedAt?: Prisma.SortOrder
+  assignmentReason?: Prisma.SortOrder
+  assignmentStatus?: Prisma.SortOrder
+  reassignmentCount?: Prisma.SortOrder
+  slaResponseDeadline?: Prisma.SortOrder
   workOrderId?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
   eta?: Prisma.SortOrder
@@ -918,6 +1091,14 @@ export type ComplaintMinOrderByAggregateInput = {
   gpsLocation?: Prisma.SortOrder
   assignedToId?: Prisma.SortOrder
   supervisorId?: Prisma.SortOrder
+  assignedBy?: Prisma.SortOrder
+  assignedByRole?: Prisma.SortOrder
+  assignedAt?: Prisma.SortOrder
+  lastReassignedAt?: Prisma.SortOrder
+  assignmentReason?: Prisma.SortOrder
+  assignmentStatus?: Prisma.SortOrder
+  reassignmentCount?: Prisma.SortOrder
+  slaResponseDeadline?: Prisma.SortOrder
   workOrderId?: Prisma.SortOrder
   invoiceId?: Prisma.SortOrder
   eta?: Prisma.SortOrder
@@ -937,6 +1118,7 @@ export type ComplaintMinOrderByAggregateInput = {
 }
 
 export type ComplaintSumOrderByAggregateInput = {
+  reassignmentCount?: Prisma.SortOrder
   customerRating?: Prisma.SortOrder
 }
 
@@ -1224,6 +1406,14 @@ export type ComplaintCreateWithoutTenantInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1263,6 +1453,14 @@ export type ComplaintUncheckedCreateWithoutTenantInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1291,7 +1489,6 @@ export type ComplaintCreateOrConnectWithoutTenantInput = {
 
 export type ComplaintCreateManyTenantInputEnvelope = {
   data: Prisma.ComplaintCreateManyTenantInput | Prisma.ComplaintCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type ComplaintUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1328,6 +1525,14 @@ export type ComplaintScalarWhereInput = {
   gpsLocation?: Prisma.StringNullableFilter<"Complaint"> | string | null
   assignedToId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   supervisorId?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedBy?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedByRole?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignedAt?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
+  lastReassignedAt?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
+  assignmentReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  assignmentStatus?: Prisma.StringFilter<"Complaint"> | string
+  reassignmentCount?: Prisma.IntFilter<"Complaint"> | number
+  slaResponseDeadline?: Prisma.DateTimeNullableFilter<"Complaint"> | Date | string | null
   workOrderId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   invoiceId?: Prisma.StringNullableFilter<"Complaint"> | string | null
   eta?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -1356,6 +1561,14 @@ export type ComplaintCreateWithoutAssignedToInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1395,6 +1608,14 @@ export type ComplaintUncheckedCreateWithoutAssignedToInput = {
   photos?: string | null
   gpsLocation?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1423,7 +1644,6 @@ export type ComplaintCreateOrConnectWithoutAssignedToInput = {
 
 export type ComplaintCreateManyAssignedToInputEnvelope = {
   data: Prisma.ComplaintCreateManyAssignedToInput | Prisma.ComplaintCreateManyAssignedToInput[]
-  skipDuplicates?: boolean
 }
 
 export type ComplaintCreateWithoutSupervisorInput = {
@@ -1436,6 +1656,14 @@ export type ComplaintCreateWithoutSupervisorInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1475,6 +1703,14 @@ export type ComplaintUncheckedCreateWithoutSupervisorInput = {
   photos?: string | null
   gpsLocation?: string | null
   assignedToId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1503,7 +1739,6 @@ export type ComplaintCreateOrConnectWithoutSupervisorInput = {
 
 export type ComplaintCreateManySupervisorInputEnvelope = {
   data: Prisma.ComplaintCreateManySupervisorInput | Prisma.ComplaintCreateManySupervisorInput[]
-  skipDuplicates?: boolean
 }
 
 export type ComplaintUpsertWithWhereUniqueWithoutAssignedToInput = {
@@ -1548,6 +1783,14 @@ export type ComplaintCreateWithoutCustomerInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1587,6 +1830,14 @@ export type ComplaintUncheckedCreateWithoutCustomerInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1615,7 +1866,6 @@ export type ComplaintCreateOrConnectWithoutCustomerInput = {
 
 export type ComplaintCreateManyCustomerInputEnvelope = {
   data: Prisma.ComplaintCreateManyCustomerInput | Prisma.ComplaintCreateManyCustomerInput[]
-  skipDuplicates?: boolean
 }
 
 export type ComplaintUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -1644,6 +1894,14 @@ export type ComplaintCreateWithoutEquipmentInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1683,6 +1941,14 @@ export type ComplaintUncheckedCreateWithoutEquipmentInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1711,7 +1977,6 @@ export type ComplaintCreateOrConnectWithoutEquipmentInput = {
 
 export type ComplaintCreateManyEquipmentInputEnvelope = {
   data: Prisma.ComplaintCreateManyEquipmentInput | Prisma.ComplaintCreateManyEquipmentInput[]
-  skipDuplicates?: boolean
 }
 
 export type ComplaintUpsertWithWhereUniqueWithoutEquipmentInput = {
@@ -1740,6 +2005,14 @@ export type ComplaintCreateWithoutWorkOrdersInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1780,6 +2053,14 @@ export type ComplaintUncheckedCreateWithoutWorkOrdersInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1826,6 +2107,14 @@ export type ComplaintUpdateWithoutWorkOrdersInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1866,6 +2155,14 @@ export type ComplaintUncheckedUpdateWithoutWorkOrdersInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1896,6 +2193,14 @@ export type ComplaintCreateWithoutTimelineInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1936,6 +2241,14 @@ export type ComplaintUncheckedCreateWithoutTimelineInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -1982,6 +2295,14 @@ export type ComplaintUpdateWithoutTimelineInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2022,6 +2343,14 @@ export type ComplaintUncheckedUpdateWithoutTimelineInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2052,6 +2381,14 @@ export type ComplaintCreateWithoutNotificationsInput = {
   category?: string | null
   photos?: string | null
   gpsLocation?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -2092,6 +2429,14 @@ export type ComplaintUncheckedCreateWithoutNotificationsInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -2138,6 +2483,14 @@ export type ComplaintUpdateWithoutNotificationsInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2178,6 +2531,14 @@ export type ComplaintUncheckedUpdateWithoutNotificationsInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2212,6 +2573,14 @@ export type ComplaintCreateManyTenantInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -2240,6 +2609,14 @@ export type ComplaintUpdateWithoutTenantInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2279,6 +2656,14 @@ export type ComplaintUncheckedUpdateWithoutTenantInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2314,6 +2699,14 @@ export type ComplaintUncheckedUpdateManyWithoutTenantInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2346,6 +2739,14 @@ export type ComplaintCreateManyAssignedToInput = {
   photos?: string | null
   gpsLocation?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -2378,6 +2779,14 @@ export type ComplaintCreateManySupervisorInput = {
   photos?: string | null
   gpsLocation?: string | null
   assignedToId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -2406,6 +2815,14 @@ export type ComplaintUpdateWithoutAssignedToInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2445,6 +2862,14 @@ export type ComplaintUncheckedUpdateWithoutAssignedToInput = {
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2480,6 +2905,14 @@ export type ComplaintUncheckedUpdateManyWithoutAssignedToInput = {
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2508,6 +2941,14 @@ export type ComplaintUpdateWithoutSupervisorInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2547,6 +2988,14 @@ export type ComplaintUncheckedUpdateWithoutSupervisorInput = {
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2582,6 +3031,14 @@ export type ComplaintUncheckedUpdateManyWithoutSupervisorInput = {
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2614,6 +3071,14 @@ export type ComplaintCreateManyCustomerInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -2642,6 +3107,14 @@ export type ComplaintUpdateWithoutCustomerInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2681,6 +3154,14 @@ export type ComplaintUncheckedUpdateWithoutCustomerInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2716,6 +3197,14 @@ export type ComplaintUncheckedUpdateManyWithoutCustomerInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2748,6 +3237,14 @@ export type ComplaintCreateManyEquipmentInput = {
   gpsLocation?: string | null
   assignedToId?: string | null
   supervisorId?: string | null
+  assignedBy?: string | null
+  assignedByRole?: string | null
+  assignedAt?: Date | string | null
+  lastReassignedAt?: Date | string | null
+  assignmentReason?: string | null
+  assignmentStatus?: string
+  reassignmentCount?: number
+  slaResponseDeadline?: Date | string | null
   workOrderId?: string | null
   invoiceId?: string | null
   eta?: string | null
@@ -2776,6 +3273,14 @@ export type ComplaintUpdateWithoutEquipmentInput = {
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2815,6 +3320,14 @@ export type ComplaintUncheckedUpdateWithoutEquipmentInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2850,6 +3363,14 @@ export type ComplaintUncheckedUpdateManyWithoutEquipmentInput = {
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
+  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2932,6 +3453,14 @@ export type ComplaintSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   gpsLocation?: boolean
   assignedToId?: boolean
   supervisorId?: boolean
+  assignedBy?: boolean
+  assignedByRole?: boolean
+  assignedAt?: boolean
+  lastReassignedAt?: boolean
+  assignmentReason?: boolean
+  assignmentStatus?: boolean
+  reassignmentCount?: boolean
+  slaResponseDeadline?: boolean
   workOrderId?: boolean
   invoiceId?: boolean
   eta?: boolean
@@ -2974,6 +3503,14 @@ export type ComplaintSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   gpsLocation?: boolean
   assignedToId?: boolean
   supervisorId?: boolean
+  assignedBy?: boolean
+  assignedByRole?: boolean
+  assignedAt?: boolean
+  lastReassignedAt?: boolean
+  assignmentReason?: boolean
+  assignmentStatus?: boolean
+  reassignmentCount?: boolean
+  slaResponseDeadline?: boolean
   workOrderId?: boolean
   invoiceId?: boolean
   eta?: boolean
@@ -3012,6 +3549,14 @@ export type ComplaintSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   gpsLocation?: boolean
   assignedToId?: boolean
   supervisorId?: boolean
+  assignedBy?: boolean
+  assignedByRole?: boolean
+  assignedAt?: boolean
+  lastReassignedAt?: boolean
+  assignmentReason?: boolean
+  assignmentStatus?: boolean
+  reassignmentCount?: boolean
+  slaResponseDeadline?: boolean
   workOrderId?: boolean
   invoiceId?: boolean
   eta?: boolean
@@ -3050,6 +3595,14 @@ export type ComplaintSelectScalar = {
   gpsLocation?: boolean
   assignedToId?: boolean
   supervisorId?: boolean
+  assignedBy?: boolean
+  assignedByRole?: boolean
+  assignedAt?: boolean
+  lastReassignedAt?: boolean
+  assignmentReason?: boolean
+  assignmentStatus?: boolean
+  reassignmentCount?: boolean
+  slaResponseDeadline?: boolean
   workOrderId?: boolean
   invoiceId?: boolean
   eta?: boolean
@@ -3068,7 +3621,7 @@ export type ComplaintSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ComplaintOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "equipmentId" | "title" | "description" | "priority" | "status" | "source" | "category" | "photos" | "gpsLocation" | "assignedToId" | "supervisorId" | "workOrderId" | "invoiceId" | "eta" | "rejectionReason" | "reworkReason" | "resolutionNotes" | "customerRating" | "customerFeedback" | "acceptedAt" | "startedAt" | "completedAt" | "clientConfirmedAt" | "resolvedAt" | "closedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["complaint"]>
+export type ComplaintOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "equipmentId" | "title" | "description" | "priority" | "status" | "source" | "category" | "photos" | "gpsLocation" | "assignedToId" | "supervisorId" | "assignedBy" | "assignedByRole" | "assignedAt" | "lastReassignedAt" | "assignmentReason" | "assignmentStatus" | "reassignmentCount" | "slaResponseDeadline" | "workOrderId" | "invoiceId" | "eta" | "rejectionReason" | "reworkReason" | "resolutionNotes" | "customerRating" | "customerFeedback" | "acceptedAt" | "startedAt" | "completedAt" | "clientConfirmedAt" | "resolvedAt" | "closedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["complaint"]>
 export type ComplaintInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
@@ -3122,6 +3675,14 @@ export type $ComplaintPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     gpsLocation: string | null
     assignedToId: string | null
     supervisorId: string | null
+    assignedBy: string | null
+    assignedByRole: string | null
+    assignedAt: Date | null
+    lastReassignedAt: Date | null
+    assignmentReason: string | null
+    assignmentStatus: string
+    reassignmentCount: number
+    slaResponseDeadline: Date | null
     workOrderId: string | null
     invoiceId: string | null
     eta: string | null
@@ -3583,6 +4144,14 @@ export interface ComplaintFieldRefs {
   readonly gpsLocation: Prisma.FieldRef<"Complaint", 'String'>
   readonly assignedToId: Prisma.FieldRef<"Complaint", 'String'>
   readonly supervisorId: Prisma.FieldRef<"Complaint", 'String'>
+  readonly assignedBy: Prisma.FieldRef<"Complaint", 'String'>
+  readonly assignedByRole: Prisma.FieldRef<"Complaint", 'String'>
+  readonly assignedAt: Prisma.FieldRef<"Complaint", 'DateTime'>
+  readonly lastReassignedAt: Prisma.FieldRef<"Complaint", 'DateTime'>
+  readonly assignmentReason: Prisma.FieldRef<"Complaint", 'String'>
+  readonly assignmentStatus: Prisma.FieldRef<"Complaint", 'String'>
+  readonly reassignmentCount: Prisma.FieldRef<"Complaint", 'Int'>
+  readonly slaResponseDeadline: Prisma.FieldRef<"Complaint", 'DateTime'>
   readonly workOrderId: Prisma.FieldRef<"Complaint", 'String'>
   readonly invoiceId: Prisma.FieldRef<"Complaint", 'String'>
   readonly eta: Prisma.FieldRef<"Complaint", 'String'>
@@ -3833,7 +4402,6 @@ export type ComplaintCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many Complaints.
    */
   data: Prisma.ComplaintCreateManyInput | Prisma.ComplaintCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -3852,7 +4420,6 @@ export type ComplaintCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many Complaints.
    */
   data: Prisma.ComplaintCreateManyInput | Prisma.ComplaintCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

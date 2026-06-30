@@ -728,7 +728,6 @@ export type PmScheduleCreateOrConnectWithoutTenantInput = {
 
 export type PmScheduleCreateManyTenantInputEnvelope = {
   data: Prisma.PmScheduleCreateManyTenantInput | Prisma.PmScheduleCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type PmScheduleUpsertWithWhereUniqueWithoutTenantInput = {
@@ -806,7 +805,6 @@ export type PmScheduleCreateOrConnectWithoutAssignedToInput = {
 
 export type PmScheduleCreateManyAssignedToInputEnvelope = {
   data: Prisma.PmScheduleCreateManyAssignedToInput | Prisma.PmScheduleCreateManyAssignedToInput[]
-  skipDuplicates?: boolean
 }
 
 export type PmScheduleUpsertWithWhereUniqueWithoutAssignedToInput = {
@@ -864,7 +862,6 @@ export type PmScheduleCreateOrConnectWithoutEquipmentInput = {
 
 export type PmScheduleCreateManyEquipmentInputEnvelope = {
   data: Prisma.PmScheduleCreateManyEquipmentInput | Prisma.PmScheduleCreateManyEquipmentInput[]
-  skipDuplicates?: boolean
 }
 
 export type PmScheduleUpsertWithWhereUniqueWithoutEquipmentInput = {
@@ -1867,7 +1864,6 @@ export type PmScheduleCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many PmSchedules.
    */
   data: Prisma.PmScheduleCreateManyInput | Prisma.PmScheduleCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1886,7 +1882,6 @@ export type PmScheduleCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many PmSchedules.
    */
   data: Prisma.PmScheduleCreateManyInput | Prisma.PmScheduleCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

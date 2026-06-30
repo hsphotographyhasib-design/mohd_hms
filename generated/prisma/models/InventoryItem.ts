@@ -2594,7 +2594,6 @@ export type InventoryItemCreateOrConnectWithoutTenantInput = {
 
 export type InventoryItemCreateManyTenantInputEnvelope = {
   data: Prisma.InventoryItemCreateManyTenantInput | Prisma.InventoryItemCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type InventoryItemUpsertWithWhereUniqueWithoutTenantInput = {
@@ -3230,7 +3229,6 @@ export type InventoryItemCreateOrConnectWithoutCategoryInput = {
 
 export type InventoryItemCreateManyCategoryInputEnvelope = {
   data: Prisma.InventoryItemCreateManyCategoryInput | Prisma.InventoryItemCreateManyCategoryInput[]
-  skipDuplicates?: boolean
 }
 
 export type InventoryItemUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -3426,7 +3424,6 @@ export type InventoryItemCreateOrConnectWithoutSubcategoryInput = {
 
 export type InventoryItemCreateManySubcategoryInputEnvelope = {
   data: Prisma.InventoryItemCreateManySubcategoryInput | Prisma.InventoryItemCreateManySubcategoryInput[]
-  skipDuplicates?: boolean
 }
 
 export type InventoryItemUpsertWithWhereUniqueWithoutSubcategoryInput = {
@@ -7122,7 +7119,6 @@ export type InventoryItemCreateManyArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many InventoryItems.
    */
   data: Prisma.InventoryItemCreateManyInput | Prisma.InventoryItemCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -7141,7 +7137,6 @@ export type InventoryItemCreateManyAndReturnArgs<ExtArgs extends runtime.Types.E
    * The data used to create many InventoryItems.
    */
   data: Prisma.InventoryItemCreateManyInput | Prisma.InventoryItemCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

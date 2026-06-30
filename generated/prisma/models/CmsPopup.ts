@@ -1184,7 +1184,6 @@ export type CmsPopupCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many CmsPopups.
    */
   data: Prisma.CmsPopupCreateManyInput | Prisma.CmsPopupCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1203,7 +1202,6 @@ export type CmsPopupCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many CmsPopups.
    */
   data: Prisma.CmsPopupCreateManyInput | Prisma.CmsPopupCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

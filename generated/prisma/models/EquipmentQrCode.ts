@@ -559,7 +559,6 @@ export type EquipmentQrCodeCreateOrConnectWithoutTenantInput = {
 
 export type EquipmentQrCodeCreateManyTenantInputEnvelope = {
   data: Prisma.EquipmentQrCodeCreateManyTenantInput | Prisma.EquipmentQrCodeCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type EquipmentQrCodeUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1451,7 +1450,6 @@ export type EquipmentQrCodeCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many EquipmentQrCodes.
    */
   data: Prisma.EquipmentQrCodeCreateManyInput | Prisma.EquipmentQrCodeCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1470,7 +1468,6 @@ export type EquipmentQrCodeCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many EquipmentQrCodes.
    */
   data: Prisma.EquipmentQrCodeCreateManyInput | Prisma.EquipmentQrCodeCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

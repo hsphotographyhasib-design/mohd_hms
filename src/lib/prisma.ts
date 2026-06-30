@@ -1,35 +1,38 @@
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../../generated/prisma/client";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 
 /**
- * Prisma 7 singleton with PrismaPg adapter.
+ * Prisma 7 singleton — auto-detects SQLite vs PostgreSQL.
  *
- * Fixes applied:
- *  1. Explicitly reads DATABASE_URL from .env file to avoid shell
- *     environment pollution (e.g. a SQLite URL injected at OS level).
- *  2. Connection pool with bounded size, idle timeout, connect timeout.
- *  3. Global singleton to survive HMR in development.
- *  4. Query-level timeout defaults.
- *  5. Graceful error classification for callers.
+ * - SQLite (file:): uses @prisma/adapter-libsql (required by Prisma 7 client engine).
+ * - PostgreSQL (postgres://): uses @prisma/adapter-pg with connection pool.
+ *
+ * Also supports:
+ * 1. Global singleton to survive HMR in development.
+ * 2. Slow-query logging in dev mode.
+ * 3. Graceful error classification for callers.
  */
 
 // ---------------------------------------------------------------------------
-// 1. Read DATABASE_URL directly from .env file (shell env may be polluted)
+// 1. Detect database type from DATABASE_URL
 // ---------------------------------------------------------------------------
 
-function loadDatabaseUrl(): string {
-  // Priority: process.env (if explicitly set by Next.js .env loading)
-  // then fall back to reading .env file directly
+type DbKind = "sqlite" | "postgresql";
+
+function detectDatabaseConfig(): { url: string; kind: DbKind } {
   const shellUrl = process.env.DATABASE_URL ?? "";
 
-  // If it looks like the real PostgreSQL URL, use it
+  // Fast path: shell env already has a valid URL
   if (shellUrl.startsWith("postgres://") || shellUrl.startsWith("postgresql://")) {
-    return shellUrl;
+    return { url: shellUrl, kind: "postgresql" };
+  }
+  if (shellUrl.startsWith("file:")) {
+    return { url: shellUrl, kind: "sqlite" };
   }
 
-  // Otherwise, read .env file directly
+  // Read .env file directly (avoids shell pollution)
   try {
     const envPath = resolve(process.cwd(), ".env");
     const envContent = readFileSync(envPath, "utf-8");
@@ -40,47 +43,61 @@ function loadDatabaseUrl(): string {
           .replace(/^DATABASE_URL=/, "")
           .replace(/^["']|["']$/g, "")
           .trim();
+
         if (value.startsWith("postgres://") || value.startsWith("postgresql://")) {
-          console.log(
-            "[Prisma] Overriding shell DATABASE_URL (was SQLite) with PostgreSQL from .env"
-          );
-          return value;
+          return { url: value, kind: "postgresql" };
+        }
+        if (value.startsWith("file:")) {
+          return { url: value, kind: "sqlite" };
         }
       }
     }
   } catch {
-    // .env not found — fall through
+    // .env not found
   }
 
-  // Last resort: use whatever process.env has
+  // Fallback
   console.warn(
-    "[Prisma] WARNING: DATABASE_URL is not a PostgreSQL URL.",
-    "Current value starts with:",
-    shellUrl.substring(0, 20)
+    "[Prisma] WARNING: Cannot determine database type from DATABASE_URL:",
+    shellUrl.substring(0, 30)
   );
-  return shellUrl;
+  return { url: shellUrl, kind: "sqlite" };
 }
 
-const connectionString = loadDatabaseUrl();
+const { url: connectionString, kind: dbKind } = detectDatabaseConfig();
 
 // ---------------------------------------------------------------------------
-// 2. Adapter – connection pool & timeout configuration
+// 2. Build adapter based on database type
 // ---------------------------------------------------------------------------
 
-const adapter = new PrismaPg(connectionString, {
-  // Connection pool settings
-  max: 10,              // Maximum connections in the pool
-  idleTimeout: 20,      // Close idle connections after 20 seconds
-  connectTimeout: 10,   // Wait up to 10 seconds to establish a new connection
-});
+function buildAdapter() {
+  if (dbKind === "sqlite") {
+    // Extract file path from "file:/path/to/db.db"
+    const filePath = connectionString.replace(/^file:/, "");
+    console.log("[Prisma] Using SQLite adapter:", filePath);
+    return new PrismaLibSql({ url: connectionString });
+  }
+
+  // PostgreSQL
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PrismaPg } = require("@prisma/adapter-pg");
+  console.log("[Prisma] Using PostgreSQL adapter");
+  return new PrismaPg(connectionString, {
+    max: 10,
+    idleTimeout: 20,
+    connectTimeout: 10,
+  });
+}
 
 // ---------------------------------------------------------------------------
-// 3. PrismaClient singleton (survives Next.js HMR)
+// 3. PrismaClient singleton (survives HMR)
 // ---------------------------------------------------------------------------
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
+
+const adapter = buildAdapter();
 
 export const prisma =
   globalForPrisma.prisma ??

@@ -1464,7 +1464,6 @@ export type CmsHeroCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many CmsHeroes.
    */
   data: Prisma.CmsHeroCreateManyInput | Prisma.CmsHeroCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1483,7 +1482,6 @@ export type CmsHeroCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many CmsHeroes.
    */
   data: Prisma.CmsHeroCreateManyInput | Prisma.CmsHeroCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

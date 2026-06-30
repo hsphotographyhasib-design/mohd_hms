@@ -1200,7 +1200,6 @@ export type CmsAnnouncementCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many CmsAnnouncements.
    */
   data: Prisma.CmsAnnouncementCreateManyInput | Prisma.CmsAnnouncementCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1219,7 +1218,6 @@ export type CmsAnnouncementCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many CmsAnnouncements.
    */
   data: Prisma.CmsAnnouncementCreateManyInput | Prisma.CmsAnnouncementCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

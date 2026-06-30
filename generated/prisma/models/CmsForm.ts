@@ -1072,7 +1072,6 @@ export type CmsFormCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many CmsForms.
    */
   data: Prisma.CmsFormCreateManyInput | Prisma.CmsFormCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1091,7 +1090,6 @@ export type CmsFormCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many CmsForms.
    */
   data: Prisma.CmsFormCreateManyInput | Prisma.CmsFormCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

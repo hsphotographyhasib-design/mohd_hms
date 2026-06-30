@@ -496,7 +496,6 @@ export type WhatsAppDeliveryLogCreateOrConnectWithoutTenantInput = {
 
 export type WhatsAppDeliveryLogCreateManyTenantInputEnvelope = {
   data: Prisma.WhatsAppDeliveryLogCreateManyTenantInput | Prisma.WhatsAppDeliveryLogCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutTenantInput = {
@@ -556,7 +555,6 @@ export type WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput = {
 
 export type WhatsAppDeliveryLogCreateManyMessageInputEnvelope = {
   data: Prisma.WhatsAppDeliveryLogCreateManyMessageInput | Prisma.WhatsAppDeliveryLogCreateManyMessageInput[]
-  skipDuplicates?: boolean
 }
 
 export type WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutMessageInput = {
@@ -1403,7 +1401,6 @@ export type WhatsAppDeliveryLogCreateManyArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many WhatsAppDeliveryLogs.
    */
   data: Prisma.WhatsAppDeliveryLogCreateManyInput | Prisma.WhatsAppDeliveryLogCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1422,7 +1419,6 @@ export type WhatsAppDeliveryLogCreateManyAndReturnArgs<ExtArgs extends runtime.T
    * The data used to create many WhatsAppDeliveryLogs.
    */
   data: Prisma.WhatsAppDeliveryLogCreateManyInput | Prisma.WhatsAppDeliveryLogCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
