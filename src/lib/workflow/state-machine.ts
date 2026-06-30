@@ -102,6 +102,17 @@ export const WORKFLOW_TRANSITIONS: TransitionRule[] = [
       'Assign the complaint to a technician and supervisor. Requires assignedToId and supervisorId.',
   },
 
+  // ── ASSIGNED → ASSIGNED (admin/supervisor reassigns technician) ──────────
+  {
+    from: 'ASSIGNED',
+    to: 'ASSIGNED',
+    allowedRoles: ['super_admin', 'admin', 'supervisor'],
+    isAutomatic: false,
+    action: 'reassigned',
+    description:
+      'Admin or Supervisor reassigns the complaint to a different technician. Records full reassignment history with reason.',
+  },
+
   // ── ASSIGNED → ACCEPTED (technician accepts) ───────────────────────────
   {
     from: 'ASSIGNED',
@@ -323,8 +334,8 @@ export function validateTransition(
     };
   }
 
-  // ── 3. Same-status guard ──────────────────────────────────────────────
-  if (currentStatus === targetStatus) {
+  // ── 3. Same-status guard (allow reassignment: ASSIGNED → ASSIGNED) ────
+  if (currentStatus === targetStatus && !(currentStatus === 'ASSIGNED' && targetStatus === 'ASSIGNED')) {
     return {
       success: false,
       error: `Transition from "${currentStatus}" to itself is not allowed. The complaint is already in "${currentStatus}" status.`,
@@ -706,6 +717,7 @@ export const STATUS_CONFIG: Record<ComplaintStatus, StatusDisplayConfig> = {
 function getActionLabel(action: string, _targetStatus: ComplaintStatus): string {
   const labels: Record<string, string> = {
     assigned: 'Assign Complaint',
+    reassigned: 'Reassign Technician',
     accepted: 'Accept Assignment',
     assignment_rejected: 'Reject Assignment',
     work_order_created: 'Create Work Order',

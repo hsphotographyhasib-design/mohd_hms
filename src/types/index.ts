@@ -96,7 +96,9 @@ export type AppView =
   // Admin views
   | 'user-management'
   // Email management views
-  | 'email-management';
+  | 'email-management'
+  // Assignment views
+  | 'complaint-assignment';
 
 // ============ EQUIPMENT ============
 

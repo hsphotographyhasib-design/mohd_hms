@@ -9,7 +9,9 @@ import {
   MessageSquare, MapPin, Phone, Building2, Package, Send,
   ShieldAlert, Banknote, Lock, RotateCcw, ThumbsUp, ClipboardList,
   CirclePlus, BadgeCheck, Eye, Camera, PenTool, Timer, X, Plus, Trash2,
+  Users, RefreshCw, Shield,
 } from 'lucide-react';
+import { TechnicianAssignmentPanel } from './technician-assignment-panel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -133,6 +135,10 @@ export function ComplaintDetail() {
   const [dialogType, setDialogType] = useState<string | null>(null);
   const [dialogData, setDialogData] = useState<Record<string, unknown>>({});
 
+  // Technician assignment panel state
+  const [assignmentPanelOpen, setAssignmentPanelOpen] = useState(false);
+  const [reassignPanelOpen, setReassignPanelOpen] = useState(false);
+
   // Form state
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [materials, setMaterials] = useState<Array<{ name: string; qty: string; unit: string; cost: string }>>([]);
@@ -226,9 +232,14 @@ export function ComplaintDetail() {
     if (!dialogType) return;
     switch (dialogType) {
       case 'assigned':
-        if (!formData.assignedToId) { toast.error('Select a technician'); return; }
-        executeTransition('assign', { assignedToId: formData.assignedToId, supervisorId: formData.supervisorId });
-        break;
+        // Use the new TechnicianAssignmentPanel instead
+        setDialogType(null);
+        setAssignmentPanelOpen(true);
+        return;
+      case 'reassigned':
+        setDialogType(null);
+        setReassignPanelOpen(true);
+        return;
       case 'accepted':
         executeTransition('accept', { eta: formData.eta });
         break;
@@ -393,6 +404,17 @@ export function ComplaintDetail() {
                 {complaint.supervisorName && <div className="flex items-center gap-2"><Eye className="h-4 w-4 text-gray-400" /><span className="text-gray-500">Supervisor:</span><span className="font-medium">{complaint.supervisorName}</span></div>}
                 {complaint.eta && <div className="flex items-center gap-2"><Timer className="h-4 w-4 text-amber-400" /><span className="text-gray-500">ETA:</span><span className="font-medium">{complaint.eta}</span></div>}
               </div>
+              {/* Manage Assignment link */}
+              {['super_admin','admin','supervisor','manager'].includes(user?.role || '') && (
+                <button
+                  type="button"
+                  onClick={() => setView('complaint-assignment', { id: complaintId })}
+                  className="inline-flex items-center gap-1.5 text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
+                >
+                  <Shield className="h-3.5 w-3.5" />
+                  Open full assignment screen
+                </button>
+              )}
               {/* Timestamps */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-gray-500">
                 <div>Created: {fmtDate(complaint.createdAt)}</div>
@@ -448,7 +470,7 @@ export function ComplaintDetail() {
             <Card className="border-dashed border-2 border-emerald-200 bg-emerald-50/30">
               <CardHeader className="pb-3"><CardTitle className="text-base font-semibold flex items-center gap-2"><Play className="h-4 w-4 text-emerald-600" /> Available Actions</CardTitle></CardHeader>
               <CardContent className="space-y-2">
-                {actions.filter(a => !a.isAutomatic).map((action, i) => (
+                {actions.filter(a => !a.isAutomatic && a.action !== 'reassigned').map((action, i) => (
                   <Button
                     key={i}
                     variant="outline"
@@ -460,6 +482,18 @@ export function ComplaintDetail() {
                     {transitioning && <Loader2 className="h-3.5 w-3.5 animate-spin ml-auto" />}
                   </Button>
                 ))}
+                {/* Reassign button — show separately for ASSIGNED status */}
+                {complaint.status === 'ASSIGNED' && complaint.assignedToId && (
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2 h-10 text-amber-600 border-amber-200 hover:bg-amber-50"
+                    onClick={() => setReassignPanelOpen(true)}
+                    disabled={transitioning}
+                  >
+                    <RefreshCw className="h-4 w-4" />
+                    Reassign Technician
+                  </Button>
+                )}
               </CardContent>
             </Card>
           )}
@@ -498,10 +532,34 @@ export function ComplaintDetail() {
         </div>
       </div>
 
+      {/* ============ TECHNICIAN ASSIGNMENT PANEL ============ */}
+      <TechnicianAssignmentPanel
+        complaintId={complaintId}
+        isReassignment={!!complaint?.assignedToId}
+        currentTechnicianName={complaint?.assignedToName}
+        onSuccess={async () => {
+          await fetchComplaint();
+        }}
+        open={assignmentPanelOpen}
+        onOpenChange={setAssignmentPanelOpen}
+      />
+
+      {/* ============ TECHNICIAN REASSIGNMENT PANEL ============ */}
+      <TechnicianAssignmentPanel
+        complaintId={complaintId}
+        isReassignment={true}
+        currentTechnicianName={complaint?.assignedToName}
+        onSuccess={async () => {
+          await fetchComplaint();
+        }}
+        open={reassignPanelOpen}
+        onOpenChange={setReassignPanelOpen}
+      />
+
       {/* ============ DIALOGS ============ */}
       <AnimatePresence>
-        {/* ASSIGN DIALOG */}
-        {dialogType === 'assigned' && (
+        {/* ASSIGN DIALOG — kept as lightweight fallback, but primary flow uses TechnicianAssignmentPanel */}
+        {dialogType === 'assigned' && !assignmentPanelOpen && (
           <Dialog open onOpenChange={() => setDialogType(null)}>
             <DialogContent className="sm:max-w-md">
               <DialogHeader><DialogTitle>Assign Technician</DialogTitle><DialogDescription>Select a technician and supervisor for this complaint.</DialogDescription></DialogHeader>

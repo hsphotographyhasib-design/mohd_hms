@@ -66,6 +66,8 @@ const WhatsAppSettings = lazy(() => import('@/components/modules/whatsapp/whatsa
 const UserManagement = lazy(() => import('@/components/admin/user-management').then(m => ({ default: m.UserManagement })));
 const EmailManagement = lazy(() => import('@/components/modules/email/email-dashboard').then(m => ({ default: m.EmailManagement })));
 
+const TechnicianAssignmentScreen = lazy(() => import('@/components/modules/complaints/complaint-assignment-screen').then(m => ({ default: m.ComplaintAssignmentScreen })));
+
 // Customer views
 const CustomerPortal = lazy(() => import('@/components/customer/customer-portal').then(m => ({ default: m.CustomerPortal })));
 
@@ -140,6 +142,7 @@ function ViewRouter() {
       {currentView === 'whatsapp-settings' && <WhatsAppSettings />}
       {currentView === 'user-management' && <UserManagement />}
       {currentView === 'email-management' && <EmailManagement />}
+      {currentView === 'complaint-assignment' && <TechnicianAssignmentScreen complaintId={useAppStore.getState().viewParams?.id} />}
       {currentView === 'customer-portal' && <CustomerPortal />}
     </Suspense>
   );

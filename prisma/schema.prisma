@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 // ============ TENANT & MULTI-TENANCY ============
@@ -281,6 +281,14 @@ model Complaint {
   gpsLocation     String?  // JSON: {lat, lng}
   assignedToId    String?
   supervisorId    String?
+  assignedBy      String?  // userId of the admin/supervisor who assigned the technician
+  assignedByRole  String?  // role of the assigner (admin, supervisor, super_admin, manager)
+  assignedAt      DateTime? // when the current technician was assigned
+  lastReassignedAt DateTime? // last reassignment timestamp
+  assignmentReason String?  // reason for assignment or reassignment
+  assignmentStatus String  @default("UNASSIGNED") // UNASSIGNED, PENDING_ACCEPTANCE, ACCEPTED, REJECTED
+  reassignmentCount Int    @default(0) // tracks how many times this complaint has been reassigned
+  slaResponseDeadline DateTime?  // deadline for technician to accept (e.g. 15min from assignment)
   workOrderId     String?  // linked work order (generated on ACCEPTED)
   invoiceId       String?  // linked invoice (generated on CLIENT_CONFIRMED)
   eta             String?  // technician ETA
@@ -309,6 +317,7 @@ model Complaint {
 
   @@index([tenantId, status])
   @@index([tenantId, assignedToId])
+  @@index([tenantId, assignedBy])
 }
 
 // ============ WORK ORDERS ============
