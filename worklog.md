@@ -86,3 +86,28 @@ Stage Summary:
 - Verified Dashboard, Complaints, Complaint Detail, Quotations, New Quotation all render correctly
 - ESLint: 0 errors, 7 warnings (all in generated Prisma files)
 - Dev log: all API responses returning 200
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix Vercel deployment error - switch from SQLite to PostgreSQL
+
+Work Log:
+- Identified root cause: schema.prisma had `provider = "sqlite"` but Vercel needs PostgreSQL
+- Read all files with raw SQL to identify SQLite-specific syntax
+- Changed `provider = "sqlite"` → `"postgresql"` in prisma/schema.prisma
+- Removed `url = env("DATABASE_URL")` from schema (Prisma 7 uses prisma.config.ts instead)
+- Simplified src/lib/prisma.ts to PostgreSQL-only with PrismaPg adapter (removed SQLite/libsql code path)
+- Fixed src/app/api/equipment/qr-analytics/route.ts: replaced SQLite `?` parameter placeholders with PostgreSQL `$1, $2, $3` syntax and quoted identifiers
+- Converted src/lib/quotation-helpers.ts `$executeRawUnsafe` to Prisma's type-safe `db.quotation.update()` API (also fixes SQL injection vulnerability)
+- Verified no other raw SQL files need PostgreSQL changes
+- Regenerated Prisma client with `prisma generate` (PostgreSQL dialect)
+- ESLint: 0 errors
+- Created .env.example with PostgreSQL connection string template
+- Committed and pushed to GitHub
+
+Stage Summary:
+- All code changes are PostgreSQL-compatible
+- The app will now correctly connect to a PostgreSQL database on Vercel
+- User MUST add a PostgreSQL DATABASE_URL to Vercel Environment Variables for deployment to work
+- Recommended: Use Neon (free tier) or Vercel Postgres
+- After setting DATABASE_URL on Vercel, run `npx prisma db push` to create tables on the remote database
