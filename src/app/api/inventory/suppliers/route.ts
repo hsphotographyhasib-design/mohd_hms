@@ -25,11 +25,11 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.OR = [
-        { supplierName: { contains: search, mode: 'insensitive' } },
-        { supplierCode: { contains: search, mode: 'insensitive' } },
-        { contactPerson: { contains: search, mode: 'insensitive' } },
-        { email: { contains: search, mode: 'insensitive' } },
-        { phone: { contains: search, mode: 'insensitive' } },
+        { supplierName: { contains: search } },
+        { supplierCode: { contains: search } },
+        { contactPerson: { contains: search } },
+        { email: { contains: search } },
+        { phone: { contains: search } },
       ];
     }
     if (itemId) where.itemId = itemId;

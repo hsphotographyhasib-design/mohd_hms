@@ -18,23 +18,32 @@ export async function GET(request: NextRequest) {
 
     if (q.length < 1) return NextResponse.json({ results: [] });
 
-    const customers = await db.$queryRawUnsafe<any[]>(`
-      SELECT c.*,
-        (SELECT COUNT(*) FROM Quotation q WHERE q.customerId = c.id) as "quotationCount",
-        (SELECT COUNT(*) FROM Invoice i WHERE i.customerId = c.id AND i.status IN ('PENDING','APPROVED','OVERDUE')) as "activeInvoiceCount"
-      FROM Customer c
-      WHERE c.tenantId = '${tenantId}'
-        AND c.isActive = 1
-        AND (
-          LOWER(c.name) LIKE '%${q.toLowerCase().replace(/'/g, "''")}%'
-          OR LOWER(c."companyName") LIKE '%${q.toLowerCase().replace(/'/g, "''")}%'
-          OR LOWER(c.email) LIKE '%${q.toLowerCase().replace(/'/g, "''")}%'
-          OR c.phone LIKE '%${q.replace(/'/g, "''")}%'
-          OR LOWER(c."customerNumber") LIKE '%${q.toLowerCase().replace(/'/g, "''")}%'
-        )
-      ORDER BY c."companyName" IS NULL, c."companyName" ASC, c.name ASC
-      LIMIT ${limit}
-    `);
+    const customers = await db.customer.findMany({
+      where: {
+        tenantId,
+        isActive: true,
+        OR: [
+          { name: { contains: q } },
+          { companyName: { contains: q } },
+          { email: { contains: q } },
+          { phone: { contains: q } },
+          { customerNumber: { contains: q } },
+        ],
+      },
+      include: {
+        _count: {
+          select: {
+            quotations: true,
+            invoices: { where: { status: { in: ['PENDING', 'APPROVED', 'OVERDUE'] } } },
+          },
+        },
+      },
+      orderBy: [
+        { companyName: 'asc' as const },
+        { name: 'asc' as const },
+      ],
+      take: limit,
+    });
 
     return NextResponse.json({
       results: customers.map(c => ({
@@ -50,8 +59,8 @@ export async function GET(request: NextRequest) {
         district: c.district,
         taxRate: c.taxRate ? Number(c.taxRate) : 0,
         paymentTerms: c.paymentTerms,
-        quotationCount: Number(c.quotationCount || 0),
-        activeInvoiceCount: Number(c.activeInvoiceCount || 0),
+        quotationCount: c._count.quotations,
+        activeInvoiceCount: c._count.invoices,
       })),
     });
   } catch (error) {

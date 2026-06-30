@@ -1,19 +1,17 @@
-import { readFileSync } from "fs";
-import { resolve } from "path";
-import { PrismaClient } from "../../generated/prisma/client";
-import { PrismaLibSql } from "@prisma/adapter-libsql";
-
 /**
  * Prisma 7 singleton — auto-detects SQLite vs PostgreSQL.
  *
- * - SQLite (file:): uses @prisma/adapter-libsql (required by Prisma 7 client engine).
- * - PostgreSQL (postgres://): uses @prisma/adapter-pg with connection pool.
+ * Runtime behaviour:
+ * - SQLite (file:): uses @prisma/adapter-libsql (local dev).
+ * - PostgreSQL (postgres:// / postgresql://): uses @prisma/adapter-pg.
  *
- * Also supports:
- * 1. Global singleton to survive HMR in development.
- * 2. Slow-query logging in dev mode.
- * 3. Graceful error classification for callers.
+ * Vercel / serverless notes:
+ * - Never reads .env from the filesystem in production.
+ * - Uses a lightweight connection pool suitable for serverless.
+ * - Lazy-imports the PG adapter so the SQLite bundle stays small.
  */
+
+import { PrismaClient } from "../../generated/prisma/client";
 
 // ---------------------------------------------------------------------------
 // 1. Detect database type from DATABASE_URL
@@ -22,46 +20,57 @@ import { PrismaLibSql } from "@prisma/adapter-libsql";
 type DbKind = "sqlite" | "postgresql";
 
 function detectDatabaseConfig(): { url: string; kind: DbKind } {
-  const shellUrl = process.env.DATABASE_URL ?? "";
+  const url = process.env.DATABASE_URL ?? "";
 
-  // Fast path: shell env already has a valid URL
-  if (shellUrl.startsWith("postgres://") || shellUrl.startsWith("postgresql://")) {
-    return { url: shellUrl, kind: "postgresql" };
-  }
-  if (shellUrl.startsWith("file:")) {
-    return { url: shellUrl, kind: "sqlite" };
+  if (url.startsWith("postgres://") || url.startsWith("postgresql://")) {
+    return { url, kind: "postgresql" };
   }
 
-  // Read .env file directly (avoids shell pollution)
+  if (url.startsWith("file:")) {
+    return { url, kind: "sqlite" };
+  }
+
+  // In production (Vercel) there MUST be a valid DATABASE_URL.
+  if (process.env.NODE_ENV === "production") {
+    throw new Error(
+      "[Prisma] DATABASE_URL is missing or invalid in production. " +
+      'It must start with "postgres://" or "postgresql://". ' +
+      "Please add a PostgreSQL connection string to your Vercel environment variables."
+    );
+  }
+
+  // In development, try reading .env directly (works around shell issues).
   try {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { readFileSync } = require("fs");
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { resolve } = require("path");
     const envPath = resolve(process.cwd(), ".env");
     const envContent = readFileSync(envPath, "utf-8");
     for (const line of envContent.split("\n")) {
       const trimmed = line.trim();
-      if (trimmed.startsWith("DATABASE_URL=")) {
-        const value = trimmed
-          .replace(/^DATABASE_URL=/, "")
-          .replace(/^["']|["']$/g, "")
-          .trim();
+      if (!trimmed.startsWith("DATABASE_URL=")) continue;
+      const value = trimmed
+        .replace(/^DATABASE_URL=/, "")
+        .replace(/^["']|["']$/g, "")
+        .trim();
 
-        if (value.startsWith("postgres://") || value.startsWith("postgresql://")) {
-          return { url: value, kind: "postgresql" };
-        }
-        if (value.startsWith("file:")) {
-          return { url: value, kind: "sqlite" };
-        }
+      if (value.startsWith("postgres://") || value.startsWith("postgresql://")) {
+        return { url: value, kind: "postgresql" };
+      }
+      if (value.startsWith("file:")) {
+        return { url: value, kind: "sqlite" };
       }
     }
   } catch {
-    // .env not found
+    // .env not found — acceptable in dev
   }
 
-  // Fallback
   console.warn(
     "[Prisma] WARNING: Cannot determine database type from DATABASE_URL:",
-    shellUrl.substring(0, 30)
+    url.substring(0, 30)
   );
-  return { url: shellUrl, kind: "sqlite" };
+  return { url, kind: "sqlite" };
 }
 
 const { url: connectionString, kind: dbKind } = detectDatabaseConfig();
@@ -72,25 +81,30 @@ const { url: connectionString, kind: dbKind } = detectDatabaseConfig();
 
 function buildAdapter() {
   if (dbKind === "sqlite") {
-    // Extract file path from "file:/path/to/db.db"
-    const filePath = connectionString.replace(/^file:/, "");
-    console.log("[Prisma] Using SQLite adapter:", filePath);
+    // Dynamic require so the PG adapter is never bundled when using SQLite
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const { PrismaLibSql } = require("@prisma/adapter-libsql") as {
+      PrismaLibSql: typeof import("@prisma/adapter-libsql").PrismaLibSql;
+    };
+    console.log("[Prisma] Using SQLite adapter:", connectionString.replace(/^file:/, ""));
     return new PrismaLibSql({ url: connectionString });
   }
 
-  // PostgreSQL
+  // PostgreSQL — use a pool tuned for serverless / Vercel
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { PrismaPg } = require("@prisma/adapter-pg");
+  const { PrismaPg } = require("@prisma/adapter-pg") as {
+    PrismaPg: typeof import("@prisma/adapter-pg").PrismaPg;
+  };
   console.log("[Prisma] Using PostgreSQL adapter");
   return new PrismaPg(connectionString, {
-    max: 10,
-    idleTimeout: 20,
+    max: 5,           // Vercel serverless has limited concurrency per instance
+    idleTimeout: 10,  // Shorter idle timeout to free connections faster
     connectTimeout: 10,
   });
 }
 
 // ---------------------------------------------------------------------------
-// 3. PrismaClient singleton (survives HMR)
+// 3. PrismaClient singleton (survives HMR in development)
 // ---------------------------------------------------------------------------
 
 const globalForPrisma = globalThis as unknown as {

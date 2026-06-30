@@ -96,21 +96,21 @@ export async function POST(request: NextRequest) {
       acceptedAt: null,
     });
 
-    // 3. Fetch with all fields for response
-    const rows = await db.$queryRawUnsafe<any[]>(`
-      SELECT q.*, c.name as "customerName", u.name as "preparedByName"
-      FROM Quotation q
-      LEFT JOIN Customer c ON q.customerId = c.id
-      LEFT JOIN User u ON q.preparedBy = u.id
-      WHERE q.id = '${quotation.id}'
-    `);
-    const q = rows[0];
+    // 3. Fetch with joined names for response
+    const q = await db.quotation.findFirst({
+      where: { id: quotation.id },
+      include: {
+        customer: { select: { name: true } },
+        preparedByUser: { select: { name: true } },
+      },
+    });
+    if (!q) throw new Error('Quotation not found after creation');
 
     return NextResponse.json({
       id: q.id,
       tenantId: q.tenantId,
       customerId: q.customerId,
-      customerName: q.customerName,
+      customerName: q.customer?.name || null,
       complaintId: q.complaintId,
       quotationNo: q.quotationNo,
       title: q.title,
@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
       projectName: q.projectName,
       site: q.site,
       preparedBy: q.preparedBy,
-      preparedByName: q.preparedByName,
+      preparedByName: q.preparedByUser?.name || null,
       currency: q.currency,
       items: q.items,
       terms: q.terms,

@@ -196,40 +196,43 @@ export async function POST(request: NextRequest) {
     const sequential = String(count + 1).padStart(4, '0');
     const quotationNo = `QTN/${tenantCode}/${month}/${sequential}`;
 
-    const qId = crypto.randomUUID();
-    const sqlStr = (s: string | undefined | null) => s ? s.replace(/'/g, "''") : null;
-    const safeItems = sqlStr(JSON.stringify(parsedItems));
-    const safeTerms = terms ? sqlStr(JSON.stringify(terms)) : null;
-    const safeTitle = sqlStr(title);
-    const safeDesc = description ? `'${sqlStr(description)}'` : 'NULL';
-    const safeRef = referenceNo ? `'${sqlStr(referenceNo)}'` : 'NULL';
-    const safeProject = projectName ? `'${sqlStr(projectName)}'` : 'NULL';
-    const safeSite = site ? `'${sqlStr(site)}'` : 'NULL';
-    const safeNotes = notes ? `'${sqlStr(notes)}'` : 'NULL';
-    const safeValidUntil = validUntil ? `'${new Date(validUntil).toISOString()}'` : 'NULL';
-    const safeComplaintId = complaintId ? `'${complaintId}'` : 'NULL';
-    const dt = new Date();
-    const isoNow = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')} ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')}:${String(dt.getSeconds()).padStart(2,'0')}`;
-
-    console.log('[QUOTATION SQL]:', `INSERT INTO Quotation ... VALUES ('${qId.substring(0,8)}...', '${safeItems.substring(0, 30)}...`);
-    await db.$executeRawUnsafe(`
-      INSERT INTO Quotation (id, tenantId, customerId, complaintId, quotationNo, title, description, referenceNo, projectName, site, preparedBy, items, terms, currency, subtotal, taxRate, tax, discount, shipping, total, status, validUntil, notes, createdAt, updatedAt)
-      VALUES ('${qId}', '${tenantId}', '${customerId}', ${safeComplaintId}, '${quotationNo}', '${safeTitle}', ${safeDesc}, ${safeRef}, ${safeProject}, ${safeSite}, '${userId}', '${safeItems}', ${safeTerms}, '${currency || 'BND'}', ${subtotal}, ${finalTaxRate}, ${tax}, ${finalDiscount}, ${finalShipping}, ${total}, 'DRAFT', ${safeValidUntil}, ${safeNotes}, '${now.toISOString()}', '${now.toISOString()}')
-    `);
-
-    const rows = await db.$queryRawUnsafe<any[]>(`
-      SELECT q.*, c.name as "customerName"
-      FROM Quotation q
-      LEFT JOIN Customer c ON q.customerId = c.id
-      WHERE q.id = '${qId}'
-    `);
-    const q = rows[0];
+    console.log('[QUOTATION]: Creating', quotationNo, 'for', customerId);
+    const q = await db.quotation.create({
+      data: {
+        id: qId,
+        tenantId,
+        customerId,
+        complaintId: complaintId || null,
+        quotationNo,
+        title,
+        description: description || null,
+        referenceNo: referenceNo || null,
+        projectName: projectName || null,
+        site: site || null,
+        preparedBy: userId,
+        items: JSON.stringify(parsedItems),
+        terms: terms ? JSON.stringify(terms) : null,
+        currency: currency || 'BND',
+        subtotal,
+        taxRate: finalTaxRate,
+        tax,
+        discount: finalDiscount,
+        shipping: finalShipping,
+        total,
+        status: 'DRAFT',
+        validUntil: validUntil ? new Date(validUntil) : null,
+        notes: notes || null,
+      },
+      include: {
+        customer: { select: { name: true } },
+      },
+    });
 
     return NextResponse.json({
       id: q.id,
       tenantId: q.tenantId,
       customerId: q.customerId,
-      customerName: q.customerName,
+      customerName: q.customer?.name || null,
       quotationNo: q.quotationNo,
       title: q.title,
       description: q.description,

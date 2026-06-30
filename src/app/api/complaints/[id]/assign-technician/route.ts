@@ -22,12 +22,11 @@ function parseDevice(ua?: string): string | null {
   return 'desktop';
 }
 
-// ============ Helper: Escape SQL strings ============
-function esc(val: string): string {
-  return val.replace(/'/g, "''");
-}
-
 // ============ GET: Search technicians available for assignment ============
+// Fully database-agnostic (uses Prisma query builder, no raw SQL).
+
+const ACTIVE_COMPLAINT_STATUSES = ['ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS'] as const;
+const ACTIVE_WO_STATUSES = ['PENDING', 'ASSIGNED', 'ACCEPTED', 'IN_PROGRESS'] as const;
 
 export async function GET(
   request: NextRequest,
@@ -51,201 +50,225 @@ export async function GET(
     const q = searchParams.get('q') || '';
     const status = searchParams.get('status') || '';
     const department = searchParams.get('department') || '';
-    const sortBy = searchParams.get('sortBy') || 'availability'; // availability, workload, name, recently_active
+    const sortBy = searchParams.get('sortBy') || 'availability';
     const limit = Math.min(parseInt(searchParams.get('limit') || '25', 10), 50);
 
-    // Build WHERE clause
-    const conditions: string[] = [`u.tenantId = '${esc(tenantId)}'`, `u.isActive = 1`];
-    conditions.push(`(u.role = 'technician' OR u.role = 'supervisor')`);
+    // --- Build Prisma where filter ---
+    const and: any[] = [
+      { tenantId, isActive: true, role: { in: ['technician', 'supervisor'] } },
+    ];
 
-    // Text search
     if (q.length >= 1) {
-      const escaped = esc(q.toLowerCase());
-      conditions.push(`(
-        LOWER(u.name) LIKE '%${escaped}%'
-        OR LOWER(u.email) LIKE '%${escaped}%'
-        OR LOWER(u."employeeNumber") LIKE '%${escaped}%'
-        OR u.phone LIKE '%${esc(q)}%'
-      )`);
-    }
-
-    // Status filter
-    if (status === 'available') {
-      conditions.push(`u.isOnline = 1`);
-    } else if (status === 'busy') {
-      conditions.push(`u.isOnline = 0`);
-    } else if (status === 'on_leave') {
-      // Handled below in post-processing — we still fetch them but flag them
-    }
-
-    // Department filter
-    if (department) {
-      conditions.push(`u."departmentId" = '${esc(department)}'`);
-    }
-
-    const whereClause = conditions.join(' AND ');
-
-    // ORDER BY clause
-    let orderBy = 'u.isOnline DESC, u.name ASC';
-    switch (sortBy) {
-      case 'workload':
-        orderBy = '"activeJobs" ASC, u.isOnline DESC, u.name ASC';
-        break;
-      case 'name':
-        orderBy = 'u.name ASC';
-        break;
-      case 'recently_active':
-        orderBy = 'u."lastLogin" IS NULL, u."lastLogin" DESC, u.isOnline DESC';
-        break;
-      case 'availability':
-      default:
-        orderBy = 'CASE WHEN (SELECT COUNT(*) FROM LeaveRequest lr WHERE lr.userId = u.id AND lr.status = \'APPROVED\' AND lr.startDate <= date(\'now\') AND lr.endDate >= date(\'now\')) > 0 THEN 2 WHEN u.isOnline = 1 THEN 0 ELSE 1 END, "activeJobs" ASC, u.name ASC';
-        break;
-    }
-
-    // Query technicians with rich data
-    const technicians = await db.$queryRawUnsafe<any[]>(`
-      SELECT
-        u.id,
-        u.name,
-        u.email,
-        u.phone,
-        u.role,
-        u."employeeNumber",
-        u.avatar,
-        u."departmentId",
-        d.name as "departmentName",
-        u.isOnline,
-        u."lastLogin",
-        u."profileCompleted",
-        (SELECT COUNT(*) FROM Complaint c
-          WHERE c."assignedToId" = u.id
-            AND c.status IN ('ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS')
-        ) as "activeJobs",
-        (SELECT COUNT(*) FROM WorkOrder wo
-          WHERE wo."assignedToId" = u.id
-            AND wo.status IN ('PENDING', 'ASSIGNED', 'ACCEPTED', 'IN_PROGRESS')
-        ) as "activeWorkOrders",
-        (SELECT COUNT(*) FROM LeaveRequest lr
-          WHERE lr.userId = u.id
-            AND lr.status = 'APPROVED'
-            AND lr.startDate <= date('now')
-            AND lr.endDate >= date('now')
-        ) as "onLeave",
-        (SELECT AVG(
-            CAST((julianday(c."completedAt") - julianday(c."startedAt")) * 24 AS REAL)
-          )
-          FROM Complaint c
-          WHERE c."assignedToId" = u.id
-            AND c.status IN ('CLOSED', 'PAID')
-            AND c."startedAt" IS NOT NULL
-            AND c."completedAt" IS NOT NULL
-        ) as "avgCompletionHours",
-        (SELECT COUNT(*) FROM Complaint c
-          WHERE c."assignedToId" = u.id
-            AND c.status IN ('CLOSED', 'PAID')
-        ) as "totalCompleted",
-        (SELECT GROUP_CONCAT(DISTINCT c.category)
-          FROM Complaint c
-          WHERE c."assignedToId" = u.id
-            AND c.category IS NOT NULL
-            AND c.category != ''
-          LIMIT 1
-        ) as "skillCategories"
-      FROM User u
-      LEFT JOIN Department d ON u."departmentId" = d.id
-      WHERE ${whereClause}
-      ORDER BY ${orderBy}
-      LIMIT ${limit}
-    `);
-
-    // Get current complaint assignment info
-    const complaint = await db.complaint.findFirst({
-      where: { id, tenantId },
-      select: {
-        assignedToId: true,
-        supervisorId: true,
-        category: true,
-        status: true,
-        assignmentStatus: true,
-        assignedAt: true,
-        slaResponseDeadline: true,
-        priority: true,
-      },
-    });
-
-    // Get current active tasks for each technician (for expansion)
-    const technicianIds = technicians.map(t => t.id);
-    const activeTasks = technicianIds.length > 0
-      ? await db.$queryRawUnsafe<any[]>(`
-          SELECT c."assignedToId", c.id, c.title, c.status, c.priority, c.category, c."createdAt"
-          FROM Complaint c
-          WHERE c."assignedToId" IN (${technicianIds.map(id => `'${esc(id)}'`).join(',')})
-            AND c.status IN ('ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS')
-          ORDER BY c.priority DESC, c."createdAt" DESC
-        `)
-      : [];
-
-    // Build task map
-    const taskMap: Record<string, any[]> = {};
-    for (const task of activeTasks) {
-      if (!taskMap[task.assignedToId]) taskMap[task.assignedToId] = [];
-      taskMap[task.assignedToId].push({
-        id: task.id,
-        title: task.title,
-        status: task.status,
-        priority: task.priority,
-        category: task.category,
-        createdAt: task.createdAt,
+      and.push({
+        OR: [
+          { name: { contains: q } },
+          { email: { contains: q } },
+          { employeeNumber: { contains: q } },
+          { phone: { contains: q } },
+        ],
       });
     }
 
-    // SLA urgency for current assignment
+    if (status === 'available') and.push({ isOnline: true });
+    else if (status === 'busy') and.push({ isOnline: false });
+
+    if (department) and.push({ departmentId: department });
+
+    // --- Fetch technicians with department ---
+    let technicians = await db.user.findMany({
+      where: { AND: and },
+      select: {
+        id: true, name: true, email: true, phone: true, role: true,
+        employeeNumber: true, avatar: true, departmentId: true,
+        isOnline: true, lastLogin: true, profileCompleted: true,
+        department: { select: { name: true } },
+        assignedComplaints: {
+          where: { status: { in: [...ACTIVE_COMPLAINT_STATUSES] } },
+          select: { id: true, title: true, status: true, priority: true, category: true, createdAt: true },
+        },
+        assignedWorkOrders: {
+          where: { status: { in: [...ACTIVE_WO_STATUSES] } },
+          select: { id: true },
+        },
+      },
+      take: limit * 2, // over-fetch, we'll trim after enrichment
+    });
+
+    // --- Enrich with leave, completion stats, skill categories ---
+    const now = new Date();
+    const techIds = technicians.map(t => t.id);
+
+    // Parallel enrichment queries
+    const [leaveMap, completedStats, skillMap] = await Promise.all([
+      // On-leave check
+      db.leaveRequest.groupBy({
+        by: ['userId'],
+        where: {
+          userId: { in: techIds },
+          status: 'APPROVED',
+          startDate: { lte: now },
+          endDate: { gte: now },
+        },
+        _count: { id: true },
+      }).then(rows => Object.fromEntries(rows.map(r => [r.userId, r._count.id]))),
+
+      // Completed complaints — fetch for count + avg completion time calculation
+      db.complaint.findMany({
+        where: {
+          assignedToId: { in: techIds },
+          status: { in: ['CLOSED', 'PAID'] },
+          startedAt: { not: null },
+          completedAt: { not: null },
+        },
+        select: { assignedToId: true, startedAt: true, completedAt: true },
+      }).then(rows => {
+        const map: Record<string, { count: number; totalMs: number }> = {};
+        for (const r of rows) {
+          if (!r.assignedToId || !r.startedAt || !r.completedAt) continue;
+          const ms = new Date(r.completedAt).getTime() - new Date(r.startedAt).getTime();
+          if (!map[r.assignedToId]) map[r.assignedToId] = { count: 0, totalMs: 0 };
+          map[r.assignedToId].count++;
+          map[r.assignedToId].totalMs += ms;
+        }
+        // Convert to avgHours
+        const result: Record<string, { count: number; avgHours: number | null }> = {};
+        for (const [id, data] of Object.entries(map)) {
+          result[id] = {
+            count: data.count,
+            avgHours: data.totalMs > 0 ? (data.totalMs / data.count) / (1000 * 60 * 60) : null,
+          };
+        }
+        return result;
+      }),
+
+      // Skill categories (distinct categories from completed complaints)
+      db.complaint.findMany({
+        where: {
+          assignedToId: { in: techIds },
+          category: { not: null, not: '' },
+        },
+        select: { assignedToId: true, category: true },
+        distinct: ['assignedToId', 'category'],
+      }).then(rows => {
+        const map: Record<string, string[]> = {};
+        for (const r of rows) {
+          if (!map[r.assignedToId]) map[r.assignedToId] = [];
+          if (r.category && !map[r.assignedToId].includes(r.category)) {
+            map[r.assignedToId].push(r.category);
+          }
+        }
+        return map;
+      }),
+    ]);
+
+    // --- Build enriched technician list ---
+    let enriched = technicians.map(t => {
+      const onLeave = (leaveMap[t.id] ?? 0) > 0;
+      const activeJobs = t.assignedComplaints.length;
+      const activeWorkOrders = t.assignedWorkOrders.length;
+      const completed = completedStats[t.id];
+      const skills = (skillMap[t.id] || []).slice(0, 8);
+
+      return {
+        id: t.id,
+        name: t.name,
+        email: t.email,
+        phone: t.phone,
+        role: t.role,
+        employeeNumber: t.employeeNumber,
+        avatar: t.avatar,
+        departmentId: t.departmentId,
+        departmentName: t.department?.name || null,
+        isOnline: Boolean(t.isOnline),
+        lastLogin: t.lastLogin?.toISOString() || null,
+        activeJobs,
+        activeWorkOrders,
+        maxJobs: MAX_ACTIVE_JOBS,
+        workloadPercent: Math.round((activeJobs / MAX_ACTIVE_JOBS) * 100),
+        onLeave,
+        availabilityStatus: onLeave
+          ? 'on_leave' as const
+          : t.isOnline
+            ? 'available' as const
+            : 'offline' as const,
+        avgCompletionHours: completed?.avgHours ? parseFloat(completed.avgHours.toFixed(1)) : null,
+        totalCompleted: completed?.count ?? 0,
+        skills,
+        currentTasks: t.assignedComplaints.map(c => ({
+          id: c.id, title: c.title, status: c.status,
+          priority: c.priority, category: c.category, createdAt: c.createdAt,
+        })),
+        canAssign: !onLeave && activeJobs < MAX_ACTIVE_JOBS,
+        // For sorting
+        _lastLogin: t.lastLogin,
+        _name: t.name,
+        _onLeave: onLeave,
+        _isOnline: t.isOnline,
+      };
+    });
+
+    // Filter on_leave after enrichment
+    if (status === 'on_leave') {
+      enriched = enriched.filter(t => t._onLeave);
+    }
+
+    // Sort
+    switch (sortBy) {
+      case 'workload':
+        enriched.sort((a, b) => a.activeJobs - b.activeJobs || (b._isOnline ? 1 : 0) - (a._isOnline ? 1 : 0) || a._name.localeCompare(b._name));
+        break;
+      case 'name':
+        enriched.sort((a, b) => a._name.localeCompare(b._name));
+        break;
+      case 'recently_active':
+        enriched.sort((a, b) => {
+          if (!a._lastLogin && !b._lastLogin) return 0;
+          if (!a._lastLogin) return 1;
+          if (!b._lastLogin) return -1;
+          return b._lastLogin.getTime() - a._lastLogin.getTime();
+        });
+        break;
+      case 'availability':
+      default:
+        enriched.sort((a, b) => {
+          const aPri = a._onLeave ? 2 : a._isOnline ? 0 : 1;
+          const bPri = b._onLeave ? 2 : b._isOnline ? 0 : 1;
+          if (aPri !== bPri) return aPri - bPri;
+          if (a.activeJobs !== b.activeJobs) return a.activeJobs - b.activeJobs;
+          return a._name.localeCompare(b._name);
+        });
+        break;
+    }
+
+    // Trim to limit
+    enriched = enriched.slice(0, limit);
+
+    // Strip internal sort keys
+    const result = enriched.map(({ _lastLogin, _name, _onLeave, _isOnline, ...rest }) => rest);
+
+    // --- Get current complaint assignment info ---
+    const complaint = await db.complaint.findFirst({
+      where: { id, tenantId },
+      select: {
+        assignedToId: true, supervisorId: true, category: true,
+        status: true, assignmentStatus: true, assignedAt: true,
+        slaResponseDeadline: true, priority: true,
+      },
+    });
+
+    // Mark currently assigned
+    for (const t of result) {
+      (t as any).isCurrentlyAssigned = t.id === complaint?.assignedToId;
+    }
+
+    // SLA urgency
     let slaUrgent = false;
     if (complaint?.slaResponseDeadline && complaint.assignmentStatus === 'PENDING_ACCEPTANCE') {
       slaUrgent = new Date(complaint.slaResponseDeadline) < new Date(Date.now() + 5 * 60 * 1000);
     }
 
     return NextResponse.json({
-      technicians: technicians.map(t => {
-        const onLeave = Number(t.onLeave || 0) > 0;
-        const jobs = Number(t.activeJobs || 0);
-        const categories = (t.skillCategories || '').split(',').filter(Boolean).slice(0, 8);
-        const avgHrs = t.avgCompletionHours ? Number(t.avgCompletionHours).toFixed(1) : null;
-
-        // Filter by on_leave status if specifically requested
-        if (status === 'on_leave' && !onLeave) return null;
-
-        return {
-          id: t.id,
-          name: t.name,
-          email: t.email,
-          phone: t.phone,
-          role: t.role,
-          employeeNumber: t.employeeNumber,
-          avatar: t.avatar,
-          departmentId: t.departmentId,
-          departmentName: t.departmentName,
-          isOnline: Boolean(t.isOnline),
-          lastLogin: t.lastLogin ? new Date(t.lastLogin).toISOString() : null,
-          activeJobs: jobs,
-          activeWorkOrders: Number(t.activeWorkOrders || 0),
-          maxJobs: MAX_ACTIVE_JOBS,
-          workloadPercent: Math.round((jobs / MAX_ACTIVE_JOBS) * 100),
-          onLeave,
-          availabilityStatus: onLeave
-            ? 'on_leave' as const
-            : Boolean(t.isOnline)
-              ? 'available' as const
-              : 'offline' as const,
-          isCurrentlyAssigned: t.id === complaint?.assignedToId,
-          avgCompletionHours: avgHrs ? parseFloat(avgHrs) : null,
-          totalCompleted: Number(t.totalCompleted || 0),
-          skills: categories,
-          currentTasks: taskMap[t.id] || [],
-          canAssign: !onLeave && jobs < MAX_ACTIVE_JOBS,
-        };
-      }).filter(Boolean),
+      technicians: result,
       currentAssignment: complaint ? {
         assignedToId: complaint.assignedToId,
         supervisorId: complaint.supervisorId,

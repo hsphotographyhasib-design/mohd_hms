@@ -63,12 +63,12 @@ export async function GET(request: NextRequest) {
 
     if (search) {
       where.OR = [
-        { name: { contains: search, mode: 'insensitive' } },
-        { sku: { contains: search, mode: 'insensitive' } },
-        { itemCode: { contains: search, mode: 'insensitive' } },
-        { barcode: { contains: search, mode: 'insensitive' } },
-        { partNumber: { contains: search, mode: 'insensitive' } },
-        { supplier: { contains: search, mode: 'insensitive' } },
+        { name: { contains: search } },
+        { sku: { contains: search } },
+        { itemCode: { contains: search } },
+        { barcode: { contains: search } },
+        { partNumber: { contains: search } },
+        { supplier: { contains: search } },
       ];
     }
     if (itemType) where.itemType = itemType;
