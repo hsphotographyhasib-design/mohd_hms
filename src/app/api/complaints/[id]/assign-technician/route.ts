@@ -95,7 +95,7 @@ export async function GET(
         orderBy = 'u.name ASC';
         break;
       case 'recently_active':
-        orderBy = 'u."lastLogin" DESC NULLS LAST, u.isOnline DESC';
+        orderBy = 'u."lastLogin" IS NULL, u."lastLogin" DESC, u.isOnline DESC';
         break;
       case 'availability':
       default:
@@ -145,7 +145,7 @@ export async function GET(
           WHERE c."assignedToId" = u.id
             AND c.status IN ('CLOSED', 'PAID')
         ) as "totalCompleted",
-        (SELECT GROUP_CONCAT(DISTINCT c.category, ',')
+        (SELECT GROUP_CONCAT(DISTINCT c.category)
           FROM Complaint c
           WHERE c."assignedToId" = u.id
             AND c.category IS NOT NULL

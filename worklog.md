@@ -64,3 +64,25 @@ Stage Summary:
 - Dialog panel enhanced with link to full-screen view
 - Complaint detail page links to assignment screen
 - Zero lint errors
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix critical runtime errors preventing app functionality
+
+Work Log:
+- Identified dev server was running but API returning 500 due to `PrismaLibSQL` import casing error (from previous session, already fixed in file)
+- Discovered all user passwords in SQLite database were placeholder hashes (no actual bcrypt hash), preventing login
+- Reset all 6 user passwords: admin (admin123), manager (manager123), supervisor (super123), tech1/tech2 (tech123), finance (finance123)
+- Found and fixed critical SQL error in `assign-technician/route.ts`: `GROUP_CONCAT(DISTINCT c.category, ',')` is invalid in SQLite (DISTINCT aggregates must have exactly one argument) → changed to `GROUP_CONCAT(DISTINCT c.category)`
+- Found and fixed PostgreSQL-specific `NULLS LAST` in same file's ORDER BY → changed to `u."lastLogin" IS NULL, u."lastLogin" DESC`
+- Found and fixed same `NULLS LAST` issue in `quotations/smart-search-customer/route.ts`
+- Fixed React error in `complaint-assignment-screen.tsx`: `SelectItem value=""` is forbidden by Radix UI → changed to `value="__all__"` with corresponding state/handler updates
+- Fixed landing page `onerror="imgErr(this)"` HTML attribute warning in JSX → converted to proper React `onError` handler
+
+Stage Summary:
+- Root cause of "An unexpected error occurred": Two-fold — (1) Raw SQL queries written for PostgreSQL syntax but running on SQLite, (2) Radix SelectItem with empty string value
+- All fixes are SQLite-compatible while remaining portable for future PostgreSQL migration
+- Verified full assignment workflow end-to-end: technician list loads → select technician → assign → SLA timer starts → reassign mode activates
+- Verified Dashboard, Complaints, Complaint Detail, Quotations, New Quotation all render correctly
+- ESLint: 0 errors, 7 warnings (all in generated Prisma files)
+- Dev log: all API responses returning 200

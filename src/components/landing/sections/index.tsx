@@ -394,7 +394,7 @@ export function TestimonialsSection() {
               <div key={i} className={`qbody ${i === qi ? 'show' : ''}`} data-q={i}>
                 <blockquote>{q.q}</blockquote>
                 <div className="qwho">
-                  <img src={`https://i.pravatar.cc/120?img=${q.im}`} data-fb={`https://picsum.photos/seed/q${q.im}/120/120`} onerror="imgErr(this)" alt={q.n} />
+                  <img src={`https://i.pravatar.cc/120?img=${q.im}`} data-fb={`https://picsum.photos/seed/q${q.im}/120/120`} onError={(e) => { const t = e.currentTarget; if (t.dataset.fb) { t.src = t.dataset.fb; delete t.dataset.fb; } else { t.style.display = 'none'; } }} alt={q.n} />
                   <div style={{ textAlign: 'left' }}><b>{q.n}</b><span>{q.r}</span></div>
                 </div>
               </div>

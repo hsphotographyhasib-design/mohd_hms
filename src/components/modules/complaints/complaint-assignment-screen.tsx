@@ -574,7 +574,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
   // State
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  const [departmentFilter, setDepartmentFilter] = useState('');
+  const [departmentFilter, setDepartmentFilter] = useState('__all__');
   const [sortBy, setSortBy] = useState('availability');
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const [currentAssignment, setCurrentAssignment] = useState<CurrentAssignment | null>(null);
@@ -627,7 +627,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
         const params = new URLSearchParams();
         if (search) params.set('q', search);
         if (statusFilter) params.set('status', statusFilter);
-        if (departmentFilter) params.set('department', departmentFilter);
+        if (departmentFilter && departmentFilter !== '__all__') params.set('department', departmentFilter);
         if (sortBy) params.set('sortBy', sortBy);
         params.set('limit', '30');
 
@@ -871,7 +871,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
                       <SelectValue placeholder="Department" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Departments</SelectItem>
+                      <SelectItem value="__all__">All Departments</SelectItem>
                       {departments.map(d => (
                         <SelectItem key={d.id} value={d.id}>{d.name}</SelectItem>
                       ))}

@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
           OR c.phone LIKE '%${q.replace(/'/g, "''")}%'
           OR LOWER(c."customerNumber") LIKE '%${q.toLowerCase().replace(/'/g, "''")}%'
         )
-      ORDER BY c."companyName" ASC NULLS LAST, c.name ASC
+      ORDER BY c."companyName" IS NULL, c."companyName" ASC, c.name ASC
       LIMIT ${limit}
     `);
 
