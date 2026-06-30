@@ -22,7 +22,10 @@ const PmList = lazy(() => import('@/components/modules/pm/pm-list').then(m => ({
 const QuotationList = lazy(() => import('@/components/modules/quotations/quotation-list').then(m => ({ default: m.QuotationList })));
 const QuotationDetail = lazy(() => import('@/components/modules/quotations/quotation-detail').then(m => ({ default: m.QuotationDetail })));
 const QuotationForm = lazy(() => import('@/components/modules/quotations/quotation-form').then(m => ({ default: m.QuotationForm })));
+const NewQuotation = lazy(() => import('@/components/modules/quotations/new-quotation').then(m => ({ default: m.NewQuotation })));
+const InventoryDashboard = lazy(() => import('@/components/modules/inventory/inventory-dashboard').then(m => ({ default: m.InventoryDashboard })));
 const InventoryList = lazy(() => import('@/components/modules/inventory/inventory-list').then(m => ({ default: m.InventoryList })));
+const InventoryDetail = lazy(() => import('@/components/modules/inventory/inventory-detail').then(m => ({ default: m.InventoryDetail })));
 const CustomerList = lazy(() => import('@/components/modules/customers/customer-list').then(m => ({ default: m.CustomerList })));
 const EmployeeList = lazy(() => import('@/components/modules/employees/employee-list').then(m => ({ default: m.EmployeeList })));
 const PurchaseList = lazy(() => import('@/components/modules/purchases/purchase-list').then(m => ({ default: m.PurchaseList })));
@@ -101,7 +104,7 @@ function ViewRouter() {
       {currentView === 'quotations' && <QuotationList />}
       {currentView === 'quotation-detail' && <QuotationDetail quotationId={useAppStore.getState().viewParams?.id} />}
       {currentView === 'quotation-edit' && <QuotationForm quotationId={useAppStore.getState().viewParams?.id} />}
-      {currentView === 'new-quotation' && <QuotationForm />}
+      {currentView === 'new-quotation' && <NewQuotation />}
       {currentView === 'inventory' && <InventoryList />}
       {currentView === 'customers' && <CustomerList />}
       {currentView === 'employees' && <EmployeeList />}
