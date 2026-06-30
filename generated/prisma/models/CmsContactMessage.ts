@@ -1240,6 +1240,7 @@ export type CmsContactMessageCreateManyArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many CmsContactMessages.
    */
   data: Prisma.CmsContactMessageCreateManyInput | Prisma.CmsContactMessageCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1258,6 +1259,7 @@ export type CmsContactMessageCreateManyAndReturnArgs<ExtArgs extends runtime.Typ
    * The data used to create many CmsContactMessages.
    */
   data: Prisma.CmsContactMessageCreateManyInput | Prisma.CmsContactMessageCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

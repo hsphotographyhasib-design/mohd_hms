@@ -61,22 +61,19 @@ export async function addNewQuotationFields(
     acceptedAt?: null;
   },
 ): Promise<void> {
-  const sqlStr = (s: string | undefined | null) => s ? s.replace(/'/g, "''") : null;
-  const sqlNum = (n: number | undefined | null) => n ?? 0;
-
-  await db.$executeRawUnsafe(`
-    UPDATE Quotation
-    SET
-      quotationNo = '${sqlStr(fields.quotationNo)}',
-      referenceNo = ${fields.referenceNo ? `'${sqlStr(fields.referenceNo)}'` : 'NULL'},
-      projectName = ${fields.projectName ? `'${sqlStr(fields.projectName)}'` : 'NULL'},
-      site = ${fields.site ? `'${sqlStr(fields.site)}'` : 'NULL'},
-      preparedBy = ${fields.preparedBy ? `'${fields.preparedBy}'` : 'NULL'},
-      terms = ${fields.terms ? `'${sqlStr(JSON.stringify(fields.terms))}'` : 'NULL'},
-      currency = '${fields.currency || 'BND'}',
-      taxRate = ${sqlNum(fields.taxRate)},
-      discount = ${sqlNum(fields.discount)},
-      shipping = ${sqlNum(fields.shipping)}
-    WHERE id = '${quotationId}'
-  `);
+  await db.quotation.update({
+    where: { id: quotationId },
+    data: {
+      quotationNo: fields.quotationNo,
+      referenceNo: fields.referenceNo ?? null,
+      projectName: fields.projectName ?? null,
+      site: fields.site ?? null,
+      preparedBy: fields.preparedBy ?? null,
+      terms: fields.terms ? JSON.stringify(fields.terms) : null,
+      currency: fields.currency || 'BND',
+      taxRate: fields.taxRate ?? 0,
+      discount: fields.discount ?? 0,
+      shipping: fields.shipping ?? 0,
+    },
+  });
 }

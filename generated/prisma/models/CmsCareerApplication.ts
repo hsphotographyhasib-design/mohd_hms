@@ -524,6 +524,7 @@ export type CmsCareerApplicationCreateOrConnectWithoutJobInput = {
 
 export type CmsCareerApplicationCreateManyJobInputEnvelope = {
   data: Prisma.CmsCareerApplicationCreateManyJobInput | Prisma.CmsCareerApplicationCreateManyJobInput[]
+  skipDuplicates?: boolean
 }
 
 export type CmsCareerApplicationUpsertWithWhereUniqueWithoutJobInput = {
@@ -1369,6 +1370,7 @@ export type CmsCareerApplicationCreateManyArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many CmsCareerApplications.
    */
   data: Prisma.CmsCareerApplicationCreateManyInput | Prisma.CmsCareerApplicationCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1387,6 +1389,7 @@ export type CmsCareerApplicationCreateManyAndReturnArgs<ExtArgs extends runtime.
    * The data used to create many CmsCareerApplications.
    */
   data: Prisma.CmsCareerApplicationCreateManyInput | Prisma.CmsCareerApplicationCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

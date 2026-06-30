@@ -1256,6 +1256,7 @@ export type LeaveRequestCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many LeaveRequests.
    */
   data: Prisma.LeaveRequestCreateManyInput | Prisma.LeaveRequestCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1274,6 +1275,7 @@ export type LeaveRequestCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many LeaveRequests.
    */
   data: Prisma.LeaveRequestCreateManyInput | Prisma.LeaveRequestCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

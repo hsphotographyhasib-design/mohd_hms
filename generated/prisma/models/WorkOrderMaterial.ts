@@ -504,6 +504,7 @@ export type WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput = {
 
 export type WorkOrderMaterialCreateManyWorkOrderInputEnvelope = {
   data: Prisma.WorkOrderMaterialCreateManyWorkOrderInput | Prisma.WorkOrderMaterialCreateManyWorkOrderInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput = {
@@ -557,6 +558,7 @@ export type WorkOrderMaterialCreateOrConnectWithoutInventoryItemInput = {
 
 export type WorkOrderMaterialCreateManyInventoryItemInputEnvelope = {
   data: Prisma.WorkOrderMaterialCreateManyInventoryItemInput | Prisma.WorkOrderMaterialCreateManyInventoryItemInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderMaterialUpsertWithWhereUniqueWithoutInventoryItemInput = {
@@ -1375,6 +1377,7 @@ export type WorkOrderMaterialCreateManyArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many WorkOrderMaterials.
    */
   data: Prisma.WorkOrderMaterialCreateManyInput | Prisma.WorkOrderMaterialCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1393,6 +1396,7 @@ export type WorkOrderMaterialCreateManyAndReturnArgs<ExtArgs extends runtime.Typ
    * The data used to create many WorkOrderMaterials.
    */
   data: Prisma.WorkOrderMaterialCreateManyInput | Prisma.WorkOrderMaterialCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

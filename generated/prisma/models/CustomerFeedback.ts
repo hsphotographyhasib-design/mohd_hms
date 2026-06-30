@@ -564,6 +564,7 @@ export type CustomerFeedbackCreateOrConnectWithoutTenantInput = {
 
 export type CustomerFeedbackCreateManyTenantInputEnvelope = {
   data: Prisma.CustomerFeedbackCreateManyTenantInput | Prisma.CustomerFeedbackCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput = {
@@ -626,6 +627,7 @@ export type CustomerFeedbackCreateOrConnectWithoutCustomerInput = {
 
 export type CustomerFeedbackCreateManyCustomerInputEnvelope = {
   data: Prisma.CustomerFeedbackCreateManyCustomerInput | Prisma.CustomerFeedbackCreateManyCustomerInput[]
+  skipDuplicates?: boolean
 }
 
 export type CustomerFeedbackUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -1486,6 +1488,7 @@ export type CustomerFeedbackCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many CustomerFeedbacks.
    */
   data: Prisma.CustomerFeedbackCreateManyInput | Prisma.CustomerFeedbackCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1504,6 +1507,7 @@ export type CustomerFeedbackCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many CustomerFeedbacks.
    */
   data: Prisma.CustomerFeedbackCreateManyInput | Prisma.CustomerFeedbackCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

@@ -1382,6 +1382,7 @@ export type CmsCareerJobCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many CmsCareerJobs.
    */
   data: Prisma.CmsCareerJobCreateManyInput | Prisma.CmsCareerJobCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1400,6 +1401,7 @@ export type CmsCareerJobCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many CmsCareerJobs.
    */
   data: Prisma.CmsCareerJobCreateManyInput | Prisma.CmsCareerJobCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

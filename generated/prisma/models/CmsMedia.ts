@@ -1352,6 +1352,7 @@ export type CmsMediaCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * The data used to create many CmsMedias.
    */
   data: Prisma.CmsMediaCreateManyInput | Prisma.CmsMediaCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1370,6 +1371,7 @@ export type CmsMediaCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many CmsMedias.
    */
   data: Prisma.CmsMediaCreateManyInput | Prisma.CmsMediaCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

@@ -1489,6 +1489,7 @@ export type ComplaintCreateOrConnectWithoutTenantInput = {
 
 export type ComplaintCreateManyTenantInputEnvelope = {
   data: Prisma.ComplaintCreateManyTenantInput | Prisma.ComplaintCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type ComplaintUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1644,6 +1645,7 @@ export type ComplaintCreateOrConnectWithoutAssignedToInput = {
 
 export type ComplaintCreateManyAssignedToInputEnvelope = {
   data: Prisma.ComplaintCreateManyAssignedToInput | Prisma.ComplaintCreateManyAssignedToInput[]
+  skipDuplicates?: boolean
 }
 
 export type ComplaintCreateWithoutSupervisorInput = {
@@ -1739,6 +1741,7 @@ export type ComplaintCreateOrConnectWithoutSupervisorInput = {
 
 export type ComplaintCreateManySupervisorInputEnvelope = {
   data: Prisma.ComplaintCreateManySupervisorInput | Prisma.ComplaintCreateManySupervisorInput[]
+  skipDuplicates?: boolean
 }
 
 export type ComplaintUpsertWithWhereUniqueWithoutAssignedToInput = {
@@ -1866,6 +1869,7 @@ export type ComplaintCreateOrConnectWithoutCustomerInput = {
 
 export type ComplaintCreateManyCustomerInputEnvelope = {
   data: Prisma.ComplaintCreateManyCustomerInput | Prisma.ComplaintCreateManyCustomerInput[]
+  skipDuplicates?: boolean
 }
 
 export type ComplaintUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -1977,6 +1981,7 @@ export type ComplaintCreateOrConnectWithoutEquipmentInput = {
 
 export type ComplaintCreateManyEquipmentInputEnvelope = {
   data: Prisma.ComplaintCreateManyEquipmentInput | Prisma.ComplaintCreateManyEquipmentInput[]
+  skipDuplicates?: boolean
 }
 
 export type ComplaintUpsertWithWhereUniqueWithoutEquipmentInput = {
@@ -4402,6 +4407,7 @@ export type ComplaintCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many Complaints.
    */
   data: Prisma.ComplaintCreateManyInput | Prisma.ComplaintCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -4420,6 +4426,7 @@ export type ComplaintCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many Complaints.
    */
   data: Prisma.ComplaintCreateManyInput | Prisma.ComplaintCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

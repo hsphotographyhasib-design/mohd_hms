@@ -108,14 +108,21 @@ export async function GET(request: NextRequest) {
 
     // Daily trend
     const dailyTrend = await db.$queryRawUnsafe<Array<{ date: string; scans: number }>>(
-      `
-      SELECT DATE(createdAt) as date, COUNT(*) as scans
-      FROM ScanLog
-      WHERE tenantId = ? AND createdAt >= ?
-      ${equipmentId ? 'AND equipmentId = ?' : ''}
-      GROUP BY DATE(createdAt)
-      ORDER BY date ASC
-      `,
+      equipmentId
+        ? `
+          SELECT DATE("createdAt") as date, COUNT(*)::int as scans
+          FROM "ScanLog"
+          WHERE "tenantId" = $1 AND "createdAt" >= $2 AND "equipmentId" = $3
+          GROUP BY DATE("createdAt")
+          ORDER BY date ASC
+        `
+        : `
+          SELECT DATE("createdAt") as date, COUNT(*)::int as scans
+          FROM "ScanLog"
+          WHERE "tenantId" = $1 AND "createdAt" >= $2
+          GROUP BY DATE("createdAt")
+          ORDER BY date ASC
+        `,
       ...(equipmentId ? [tenantId, periodStart.toISOString(), equipmentId] : [tenantId, periodStart.toISOString()])
     );
 

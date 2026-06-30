@@ -1218,6 +1218,7 @@ export type CmsSeoCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    * The data used to create many CmsSeos.
    */
   data: Prisma.CmsSeoCreateManyInput | Prisma.CmsSeoCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1236,6 +1237,7 @@ export type CmsSeoCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many CmsSeos.
    */
   data: Prisma.CmsSeoCreateManyInput | Prisma.CmsSeoCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

@@ -1514,6 +1514,7 @@ export type InvoiceCreateOrConnectWithoutTenantInput = {
 
 export type InvoiceCreateManyTenantInputEnvelope = {
   data: Prisma.InvoiceCreateManyTenantInput | Prisma.InvoiceCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type InvoiceUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1669,6 +1670,7 @@ export type InvoiceCreateOrConnectWithoutCreatorInput = {
 
 export type InvoiceCreateManyCreatorInputEnvelope = {
   data: Prisma.InvoiceCreateManyCreatorInput | Prisma.InvoiceCreateManyCreatorInput[]
+  skipDuplicates?: boolean
 }
 
 export type InvoiceCreateWithoutPreparerInput = {
@@ -1762,6 +1764,7 @@ export type InvoiceCreateOrConnectWithoutPreparerInput = {
 
 export type InvoiceCreateManyPreparerInputEnvelope = {
   data: Prisma.InvoiceCreateManyPreparerInput | Prisma.InvoiceCreateManyPreparerInput[]
+  skipDuplicates?: boolean
 }
 
 export type InvoiceUpsertWithWhereUniqueWithoutCreatorInput = {
@@ -1887,6 +1890,7 @@ export type InvoiceCreateOrConnectWithoutCustomerInput = {
 
 export type InvoiceCreateManyCustomerInputEnvelope = {
   data: Prisma.InvoiceCreateManyCustomerInput | Prisma.InvoiceCreateManyCustomerInput[]
+  skipDuplicates?: boolean
 }
 
 export type InvoiceUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -1996,6 +2000,7 @@ export type InvoiceCreateOrConnectWithoutWorkOrderInput = {
 
 export type InvoiceCreateManyWorkOrderInputEnvelope = {
   data: Prisma.InvoiceCreateManyWorkOrderInput | Prisma.InvoiceCreateManyWorkOrderInput[]
+  skipDuplicates?: boolean
 }
 
 export type InvoiceUpsertWithWhereUniqueWithoutWorkOrderInput = {
@@ -2105,6 +2110,7 @@ export type InvoiceCreateOrConnectWithoutQuotationInput = {
 
 export type InvoiceCreateManyQuotationInputEnvelope = {
   data: Prisma.InvoiceCreateManyQuotationInput | Prisma.InvoiceCreateManyQuotationInput[]
+  skipDuplicates?: boolean
 }
 
 export type InvoiceUpsertWithWhereUniqueWithoutQuotationInput = {
@@ -4103,6 +4109,7 @@ export type InvoiceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many Invoices.
    */
   data: Prisma.InvoiceCreateManyInput | Prisma.InvoiceCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -4121,6 +4128,7 @@ export type InvoiceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many Invoices.
    */
   data: Prisma.InvoiceCreateManyInput | Prisma.InvoiceCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

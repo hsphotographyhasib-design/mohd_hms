@@ -1145,6 +1145,7 @@ export type UserCreateOrConnectWithoutTenantInput = {
 
 export type UserCreateManyTenantInputEnvelope = {
   data: Prisma.UserCreateManyTenantInput | Prisma.UserCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type UserUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1267,6 +1268,7 @@ export type UserCreateOrConnectWithoutDepartmentInput = {
 
 export type UserCreateManyDepartmentInputEnvelope = {
   data: Prisma.UserCreateManyDepartmentInput | Prisma.UserCreateManyDepartmentInput[]
+  skipDuplicates?: boolean
 }
 
 export type UserUpsertWithWhereUniqueWithoutDepartmentInput = {
@@ -4944,6 +4946,7 @@ export type UserCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * The data used to create many Users.
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -4962,6 +4965,7 @@ export type UserCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions
    * The data used to create many Users.
    */
   data: Prisma.UserCreateManyInput | Prisma.UserCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

@@ -554,6 +554,7 @@ export type WhatsAppTemplateCreateOrConnectWithoutTenantInput = {
 
 export type WhatsAppTemplateCreateManyTenantInputEnvelope = {
   data: Prisma.WhatsAppTemplateCreateManyTenantInput | Prisma.WhatsAppTemplateCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type WhatsAppTemplateUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1410,6 +1411,7 @@ export type WhatsAppTemplateCreateManyArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many WhatsAppTemplates.
    */
   data: Prisma.WhatsAppTemplateCreateManyInput | Prisma.WhatsAppTemplateCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1428,6 +1430,7 @@ export type WhatsAppTemplateCreateManyAndReturnArgs<ExtArgs extends runtime.Type
    * The data used to create many WhatsAppTemplates.
    */
   data: Prisma.WhatsAppTemplateCreateManyInput | Prisma.WhatsAppTemplateCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
