@@ -1,4 +1,8 @@
 @import "tailwindcss";
+
+/* tw-animate-css is only 36KB and provides enter/exit animations for shadcn/ui.
+   Tailwind CSS 4 tree-shakes unused animation keyframes at build time,
+   so only referenced animations end up in the final bundle. */
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -138,11 +142,11 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.696 0.17 162.48); /* teal/emerald */
-  --chart-2: oklch(0.769 0.188 70.08);  /* amber */
-  --chart-3: oklch(0.627 0.265 303.9);  /* rose */
-  --chart-4: oklch(0.645 0.246 16.439); /* orange */
-  --chart-5: oklch(0.488 0.243 264.376); /* purple */
+  --chart-1: oklch(0.696 0.17 162.48);
+  --chart-2: oklch(0.769 0.188 70.08);
+  --chart-3: oklch(0.627 0.265 303.9);
+  --chart-4: oklch(0.645 0.246 16.439);
+  --chart-5: oklch(0.488 0.243 264.376);
   --sidebar: oklch(0.205 0 0);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.488 0.243 264.376);
@@ -163,45 +167,35 @@
   }
 }
 
-/* Card elevation system */
-@layer components {
-  .card-elevated {
-    background: var(--card-bg);
-    border: 1px solid var(--border-soft);
-    border-radius: 16px;
-    box-shadow: var(--shadow-medium);
-    transition: transform 200ms ease, box-shadow 200ms ease;
-  }
-  .card-elevated:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-  }
-
-  /* Table styles */
-  .table-modern thead tr {
-    background: var(--table-header-bg);
-  }
-  .table-modern tbody tr {
-    border-bottom: 1px solid var(--border-soft);
-    transition: background 150ms ease;
-  }
-  .table-modern tbody tr:hover {
-    background: var(--table-row-hover);
-  }
-
-  /* Empty section fill */
-  .section-muted {
-    background: #F3F4F6;
-    border-radius: 16px;
-  }
-}
-
+/* Thin custom scrollbar — only applied where .custom-scrollbar is used */
 .custom-scrollbar::-webkit-scrollbar { width: 6px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
 .custom-scrollbar::-webkit-scrollbar-thumb { background: oklch(0.8 0 0); border-radius: 3px; }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: oklch(0.7 0 0); }
 
+/* ============ PERFORMANCE: Reduced Motion ============ */
+/* Respect user preference for reduced motion — disables all transitions/animations */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============ PERFORMANCE: Content Visibility ============ */
+/* Allow browser to skip rendering off-screen heavy sections until needed */
+@media (min-width: 1024px) {
+  .content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 500px;
+  }
+}
+
 /* ============ PRINT STYLES — A4 Invoice / Quotation ============ */
+/* Print styles are wrapped in @media print so they have ZERO cost on screen.
+   Browsers only parse print CSS when the user triggers print (Ctrl+P). */
 @media print {
   @page {
     size: A4 portrait;
@@ -231,9 +225,9 @@
     margin: 0 !important;
     padding: 0 !important;
     background: white !important;
+    break-inside: avoid;
   }
 
-  /* Ensure the inner padding works on paper */
   .invoice-document > div {
     padding: 0 !important;
   }
@@ -249,14 +243,13 @@
     color: white !important;
   }
 
-  /* Green bar with invoice number */
+  /* Brand color elements */
   .bg-emerald-600 {
     background: #059669 !important;
     -webkit-print-color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
 
-  /* Green accent elements */
   .bg-emerald-50 {
     background: #ecfdf5 !important;
     -webkit-print-color-adjust: exact !important;
@@ -312,10 +305,5 @@
   tr {
     break-inside: avoid;
     break-after: auto;
-  }
-
-  /* Page breaks */
-  .invoice-document {
-    break-inside: avoid;
   }
 }
