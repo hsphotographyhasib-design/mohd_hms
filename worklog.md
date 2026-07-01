@@ -111,3 +111,18 @@ Stage Summary:
 - User MUST add a PostgreSQL DATABASE_URL to Vercel Environment Variables for deployment to work
 - Recommended: Use Neon (free tier) or Vercel Postgres
 - After setting DATABASE_URL on Vercel, run `npx prisma db push` to create tables on the remote database
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix env var name mismatch on Vercel
+
+Work Log:
+- User's Vercel env vars are prefixed: mohd_hms_DATABASE_URL, mohd_hms_POSTGRES_URL, mohd_hms_PRISMA_DATABASE_URL
+- Code only looked for exact name "DATABASE_URL" — never found the connection string
+- Updated prisma.ts and prisma.config.ts to scan ALL env vars for any postgres:// value
+- Committed and pushed — deployment works now
+
+Stage Summary:
+- IMPORTANT: This project's Vercel env vars are named with "mohd_hms_" prefix (e.g. mohd_hms_DATABASE_URL)
+- The code now auto-scans all env vars — DO NOT revert to only checking "DATABASE_URL"
+- This is a permanent project configuration — always keep the fallback scan logic
