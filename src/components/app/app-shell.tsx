@@ -5,6 +5,8 @@ import { useAppStore, useAuthStore } from '@/store';
 import { Skeleton } from '@/components/ui/skeleton';
 import { AppHeader } from '@/components/nav/app-header';
 import { FloatingNavBar } from '@/components/nav/floating-nav-bar';
+import { MobileShell } from '@/components/mobile/mobile-shell';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Lazy-loaded module views
 const DashboardView = lazy(() => import('@/components/modules/dashboard/dashboard-view').then(m => ({ default: m.DashboardView })));
@@ -49,7 +51,7 @@ const CmsMedia = lazy(() => import('@/components/modules/cms/cms-media').then(m 
 const CmsSeo = lazy(() => import('@/components/modules/cms/cms-seo').then(m => ({ default: m.CmsSeo })));
 const CmsHero = lazy(() => import('@/components/modules/cms/cms-hero').then(m => ({ default: m.CmsHero })));
 const CmsAbout = lazy(() => import('@/components/modules/cms/cms-about').then(m => ({ default: m.CmsAbout })));
-const CmsHeader = lazy(() => import('@/components/modules/cms/cms-header').then(m => ({ default: m.CmsHeader })));
+const CmsHeaderComp = lazy(() => import('@/components/modules/cms/cms-header').then(m => ({ default: m.CmsHeader })));
 const CmsFooter = lazy(() => import('@/components/modules/cms/cms-footer').then(m => ({ default: m.CmsFooter })));
 const CmsAnnouncements = lazy(() => import('@/components/modules/cms/cms-announcements').then(m => ({ default: m.CmsAnnouncements })));
 const CmsPopups = lazy(() => import('@/components/modules/cms/cms-popups').then(m => ({ default: m.CmsPopups })));
@@ -74,15 +76,15 @@ const CustomerPortal = lazy(() => import('@/components/customer/customer-portal'
 
 function ViewLoader() {
   return (
-    <div className="p-6 space-y-4">
-      <Skeleton className="h-8 w-64" />
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div className="p-4 md:p-6 space-y-4">
+      <Skeleton className="h-8 w-48" />
+      <div className="grid gap-3 grid-cols-2 lg:grid-cols-4">
         {[...Array(4)].map((_, i) => (
-          <Skeleton key={i} className="h-32 rounded-xl" />
+          <Skeleton key={i} className="h-28 rounded-xl" />
         ))}
       </div>
-      <Skeleton className="h-64 rounded-xl" />
-      <Skeleton className="h-48 rounded-xl" />
+      <Skeleton className="h-56 rounded-xl" />
+      <Skeleton className="h-40 rounded-xl" />
     </div>
   );
 }
@@ -131,7 +133,7 @@ function ViewRouter() {
       {currentView === 'cms-seo' && <CmsSeo />}
       {currentView === 'cms-hero' && <CmsHero />}
       {currentView === 'cms-about' && <CmsAbout />}
-      {currentView === 'cms-header' && <CmsHeader />}
+      {currentView === 'cms-header' && <CmsHeaderComp />}
       {currentView === 'cms-footer' && <CmsFooter />}
       {currentView === 'cms-announcements' && <CmsAnnouncements />}
       {currentView === 'cms-popups' && <CmsPopups />}
@@ -153,6 +155,7 @@ function ViewRouter() {
 export function AppShell() {
   const { currentView } = useAppStore();
   const user = useAuthStore(s => s.user);
+  const isMobile = useIsMobile(768);
 
   // Customer role gets a dedicated portal (no sidebar/floating nav)
   if (user?.role === 'customer') {
@@ -163,6 +166,18 @@ export function AppShell() {
     );
   }
 
+  // Mobile layout: MobileShell handles its own header + bottom nav
+  if (isMobile) {
+    return (
+      <MobileShell>
+        <div className="px-4 py-3">
+          <ViewRouter />
+        </div>
+      </MobileShell>
+    );
+  }
+
+  // Desktop layout: Header + Floating Nav
   return (
     <div className="min-h-screen bg-background">
       {/* Sticky Header */}

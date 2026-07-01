@@ -240,7 +240,7 @@ export function AppHeader() {
       {/* ============================================================ */}
       <header
         ref={headerRef}
-        className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-xl border-b border-gray-200/80 dark:bg-gray-950/70 dark:border-white/10"
+        className="hidden md:block sticky top-0 z-50 w-full bg-white/90 backdrop-blur-xl border-b border-gray-200/80 dark:bg-gray-950/70 dark:border-white/10"
       >
         <div className="flex items-center justify-between h-16 px-4 lg:px-6 gap-4">
           {/* ---- LEFT: Logo + Company Name ---- */}
