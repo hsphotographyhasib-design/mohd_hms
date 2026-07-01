@@ -1,52 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { generateToken, generateRefreshToken, generateTempToken } from '@/lib/auth';
+import { normalizePhone, verifyOtpHash, getFriendlyPhoneError } from '@/lib/phone';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { phoneNumber, countryCode, code } = body;
+    const { phoneNumber, dialCode, code } = body;
 
-    // Validate inputs
-    if (!phoneNumber || !countryCode || !code) {
-      return NextResponse.json(
-        { error: 'Phone number, country code, and OTP code are required' },
-        { status: 400 }
-      );
-    }
-
-    if (!/^\d{6}$/.test(code)) {
-      return NextResponse.json(
-        { error: 'Invalid OTP code format' },
-        { status: 400 }
-      );
-    }
-
-    const fullPhone = `${countryCode}${phoneNumber}`;
     const ipAddress =
       request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
       request.headers.get('x-real-ip') ||
       'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    // Find tenant
-    let tenant = await withRetry(
-      () => db.tenant.findUnique({ where: { domain: 'mohdhms.com' } }),
-      { label: 'verifyOtp-findTenant' }
-    );
-    if (!tenant) {
-      tenant = await withRetry(
-        () => db.tenant.findFirst(),
-        { label: 'verifyOtp-findFirstTenant' }
+    // ── 1. Validate OTP code format ──
+    if (!code || !/^\d{6}$/.test(code)) {
+      return NextResponse.json(
+        { error: 'Enter the complete 6-digit verification code.' },
+        { status: 400 },
       );
     }
-    if (!tenant) {
-      return NextResponse.json({ error: 'No tenant configured' }, { status: 500 });
+
+    // ── 2. Normalize phone number (server-side) ──
+    const normalized = normalizePhone(phoneNumber, dialCode);
+
+    if (!normalized.valid) {
+      console.warn('[WhatsApp Verify] Validation failed:', { raw: phoneNumber, dialCode, error: normalized.error });
+      return NextResponse.json(
+        { error: getFriendlyPhoneError(normalized.error || 'Invalid phone number.') },
+        { status: 400 },
+      );
     }
 
-    // Find the latest unexpired, unverified OTP for this phone (indexed: tenantId+phoneNumber, phoneNumber+expiresAt)
+    const fullPhone = normalized.e164;
+
+    console.log('[WhatsApp Verify] Attempt:', { phone: fullPhone, ip: ipAddress });
+
+    // ── 3. Find tenant ──
+    let tenant = await withRetry(
+      () => db.tenant.findUnique({ where: { domain: 'mohdhms.com' } }),
+      { label: 'verifyOtp-findTenant' },
+    );
+    if (!tenant) {
+      tenant = await withRetry(() => db.tenant.findFirst(), { label: 'verifyOtp-findFirstTenant' });
+    }
+    if (!tenant) {
+      return NextResponse.json({ error: 'Service is not configured.' }, { status: 500 });
+    }
+
+    // ── 4. Find the latest unexpired, unverified OTP ──
     const otp = await withRetry(
       () =>
         db.otpCode.findFirst({
@@ -58,70 +63,74 @@ export async function POST(request: NextRequest) {
           },
           orderBy: { createdAt: 'desc' },
         }),
-      { label: 'verifyOtp-findOtp' }
+      { label: 'verifyOtp-findOtp' },
     );
 
     if (!otp) {
       return NextResponse.json(
-        { error: 'No valid OTP found. Please request a new one.' },
-        { status: 400 }
+        { error: 'No valid code found. Please request a new one.' },
+        { status: 410 },
       );
     }
 
-    // Check max attempts
+    // ── 5. Check max attempts ──
     if (otp.attempts >= otp.maxAttempts) {
       return NextResponse.json(
-        { error: 'Maximum attempts exceeded. Please request a new OTP.' },
-        { status: 400 }
+        { error: 'Maximum attempts exceeded. Please request a new code.' },
+        { status: 429 },
       );
     }
 
-    // Validate code
-    if (otp.code !== code) {
+    // ── 6. Verify OTP against hash (constant-time comparison) ──
+    const isMatch = await verifyOtpHash(code, otp.code);
+
+    if (!isMatch) {
       await withRetry(
         () =>
           db.otpCode.update({
             where: { id: otp.id },
             data: { attempts: { increment: 1 } },
           }),
-        { label: 'verifyOtp-incrementAttempts' }
+        { label: 'verifyOtp-incrementAttempts' },
       );
 
       const remainingAttempts = otp.maxAttempts - otp.attempts - 1;
+      console.warn('[WhatsApp Verify] Wrong code:', { phone: fullPhone, remainingAttempts });
       return NextResponse.json(
         {
-          error: 'Invalid OTP code',
+          error: 'Incorrect code. Please check and try again.',
           remainingAttempts,
         },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
-    // Mark OTP as verified
+    // ── 7. Mark OTP as verified ──
     await withRetry(
       () =>
         db.otpCode.update({
           where: { id: otp.id },
           data: { verifiedAt: new Date() },
         }),
-      { label: 'verifyOtp-markVerified' }
+      { label: 'verifyOtp-markVerified' },
     );
 
-    // Check if user exists by phone (now indexed: tenantId+phone)
+    // ── 8. Check if user exists ──
     const existingUser = await withRetry(
       () =>
         db.user.findFirst({
-          where: {
-            phone: fullPhone,
-            tenantId: tenant.id,
-            isActive: true,
+          where: { phone: fullPhone, tenantId: tenant.id, isActive: true },
+          select: {
+            id: true, email: true, name: true, phone: true, avatar: true,
+            role: true, tenantId: true, employeeNumber: true, departmentId: true,
+            profileCompleted: true, tenant: { select: { id: true, name: true, domain: true } },
           },
         }),
-      { label: 'verifyOtp-findUser' }
+      { label: 'verifyOtp-findUser' },
     );
 
     if (existingUser) {
-      // User exists — normalize role and generate tokens
+      // ── Existing user: generate tokens and log in ──
       const normalizedRole = (existingUser.role as string).toLowerCase() as typeof existingUser.role;
 
       const accessToken = generateToken({
@@ -132,9 +141,8 @@ export async function POST(request: NextRequest) {
       });
 
       const refreshToken = generateRefreshToken();
-      const refreshTokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      const refreshTokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-      // Create login session
       await withRetry(
         () =>
           db.loginSession.create({
@@ -150,124 +158,83 @@ export async function POST(request: NextRequest) {
               expiresAt: refreshTokenExpiry,
             },
           }),
-        { label: 'verifyOtp-createSession' }
+        { label: 'verifyOtp-createSession' },
       );
 
-      // Update user last login (best-effort)
+      // Update last login (best-effort)
       withRetry(
         () =>
           db.user.update({
             where: { id: existingUser.id },
             data: { lastLogin: new Date().toISOString(), isOnline: true },
           }),
-        { label: 'verifyOtp-updateLastLogin' }
+        { label: 'verifyOtp-updateLastLogin' },
       ).catch(() => {});
 
-      // Create device record (best-effort)
+      // Device record (best-effort)
       const deviceName = `${parseOS(userAgent)} - ${parseBrowser(userAgent)}`;
       withRetry(
         () =>
           db.device.upsert({
-            where: {
-              id: `${existingUser.id}-${crypto.randomUUID().slice(0, 8)}`,
-            },
+            where: { id: `${existingUser.id}-${crypto.randomUUID().slice(0, 8)}` },
             create: {
-              tenantId: tenant.id,
-              userId: existingUser.id,
-              name: deviceName,
-              type: parseDeviceType(userAgent),
-              browser: parseBrowser(userAgent),
-              os: parseOS(userAgent),
-              ipAddress,
-              userAgent,
-              isTrusted: false,
+              tenantId: tenant.id, userId: existingUser.id, name: deviceName,
+              type: parseDeviceType(userAgent), browser: parseBrowser(userAgent),
+              os: parseOS(userAgent), ipAddress, userAgent, isTrusted: false,
             },
-            update: {
-              lastSeen: new Date(),
-              ipAddress,
-              userAgent,
-            },
+            update: { lastSeen: new Date(), ipAddress, userAgent },
           }),
-        { label: 'verifyOtp-upsertDevice' }
+        { label: 'verifyOtp-upsertDevice' },
       ).catch(() => {});
 
-      // Audit log (non-critical)
+      // Audit log
       withRetry(
         () =>
           db.auditLog.create({
             data: {
-              tenantId: tenant.id,
-              userId: existingUser.id,
-              action: 'whatsapp_login',
-              entity: 'User',
-              entityId: existingUser.id,
+              tenantId: tenant.id, userId: existingUser.id,
+              action: 'whatsapp_login', entity: 'User', entityId: existingUser.id,
               newValue: JSON.stringify({ phoneNumber: fullPhone }),
-              ipAddress,
-              userAgent,
-              device: deviceName,
+              ipAddress, userAgent, device: deviceName,
             },
           }),
-        { label: 'verifyOtp-auditLogin' }
+        { label: 'verifyOtp-auditLogin' },
       ).catch(() => {});
+
+      console.log('[WhatsApp Verify] Login success:', { userId: existingUser.id, phone: fullPhone });
 
       return NextResponse.json({
         user: {
-          id: existingUser.id,
-          email: existingUser.email,
-          name: existingUser.name,
-          phone: existingUser.phone,
-          avatar: existingUser.avatar,
-          role: normalizedRole,
-          tenantId: existingUser.tenantId,
-          tenantName: tenant.name,
-          tenantDomain: tenant.domain,
-          profileCompleted: existingUser.profileCompleted,
+          id: existingUser.id, email: existingUser.email, name: existingUser.name,
+          phone: existingUser.phone, avatar: existingUser.avatar, role: normalizedRole,
+          tenantId: existingUser.tenantId, tenantName: tenant.name,
+          tenantDomain: tenant.domain, profileCompleted: existingUser.profileCompleted,
         },
         accessToken,
         refreshToken,
         isNewUser: false,
       });
     } else {
-      // User doesn't exist — return temp token for registration
+      // ── New user: return temp token for registration ──
       const tempToken = generateTempToken({
         phoneNumber: fullPhone,
-        countryCode,
+        dialCode: normalized.dialCode,
         tenantId: tenant.id,
       });
 
-      // Audit log with system user (non-critical)
-      withRetry(async () => {
-        const systemUser = await db.user.findFirst({
-          where: { tenantId: tenant.id, role: 'super_admin' },
-          select: { id: true },
-        });
-        if (systemUser) {
-          await db.auditLog.create({
-            data: {
-              tenantId: tenant.id,
-              userId: systemUser.id,
-              action: 'otp_verified_new_user',
-              entity: 'OtpCode',
-              entityId: otp.id,
-              newValue: JSON.stringify({ phoneNumber: fullPhone }),
-              ipAddress,
-              userAgent,
-              device: 'api',
-            },
-          });
-        }
-      }, { label: 'verifyOtp-auditNewUser' }).catch(() => {});
+      console.log('[WhatsApp Verify] New user, temp token issued:', { phone: fullPhone });
 
       return NextResponse.json({
         isNewUser: true,
+        needsRegistration: true,
         tempToken,
       });
     }
   } catch (error) {
-    console.error('Verify OTP error:', error);
+    console.error('[WhatsApp Verify] Error:', error);
     return NextResponse.json(
-      { error: getDbFriendlyMessage(error) },
-      { status: 500 }
+      { error: 'Something went wrong verifying your code. Please try again.' },
+      { status: 500 },
     );
   }
 }

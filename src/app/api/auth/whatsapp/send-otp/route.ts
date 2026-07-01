@@ -1,64 +1,57 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
-import { generateOtpCode, generateCustomerNumber } from '@/lib/auth';
+import { generateOtpCode } from '@/lib/auth';
+import { normalizePhone, normalizeDialCode, hashOtp, getFriendlyPhoneError } from '@/lib/phone';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { phoneNumber, countryCode } = body;
+    const { phoneNumber, dialCode } = body;
 
-    // Validate inputs
-    if (!phoneNumber || !countryCode) {
-      return NextResponse.json(
-        { error: 'Phone number and country code are required' },
-        { status: 400 }
-      );
-    }
-
-    // Validate phone format (digits only, 6-15 digits)
-    if (!/^\d{6,15}$/.test(phoneNumber)) {
-      return NextResponse.json(
-        { error: 'Invalid phone number format. Must be 6-15 digits.' },
-        { status: 400 }
-      );
-    }
-
-    // Validate country code format
-    if (!/^\+\d{1,4}$/.test(countryCode)) {
-      return NextResponse.json(
-        { error: 'Invalid country code format. Must start with + followed by 1-4 digits.' },
-        { status: 400 }
-      );
-    }
-
-    const fullPhone = `${countryCode}${phoneNumber}`;
     const ipAddress =
       request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
       request.headers.get('x-real-ip') ||
       'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    // Find tenant (domain 'mohdhms.com' or fallback to first tenant)
-    let tenant = await withRetry(
-      () => db.tenant.findUnique({ where: { domain: 'mohdhms.com' } }),
-      { label: 'sendOtp-findTenant' }
-    );
-    if (!tenant) {
-      tenant = await withRetry(
-        () => db.tenant.findFirst(),
-        { label: 'sendOtp-findFirstTenant' }
-      );
-    }
-    if (!tenant) {
+    // ── 1. Normalize phone number (server-side, never trust client) ──
+    const normalized = normalizePhone(phoneNumber, dialCode);
+
+    if (!normalized.valid) {
+      console.warn('[WhatsApp OTP] Validation failed:', { raw: phoneNumber, dialCode, error: normalized.error });
       return NextResponse.json(
-        { error: 'No tenant configured' },
-        { status: 500 }
+        { error: getFriendlyPhoneError(normalized.error || 'Invalid phone number.') },
+        { status: 400 },
       );
     }
 
-    // Rate limit: max 3 OTPs per phone per hour (indexed: tenantId+phoneNumber)
+    const fullPhone = normalized.e164; // e.g. "+6737137462"
+
+    console.log('[WhatsApp OTP] Normalized phone:', {
+      raw: phoneNumber,
+      dialCode,
+      normalized: fullPhone,
+      ip: ipAddress,
+    });
+
+    // ── 2. Find tenant ──
+    let tenant = await withRetry(
+      () => db.tenant.findUnique({ where: { domain: 'mohdhms.com' } }),
+      { label: 'sendOtp-findTenant' },
+    );
+    if (!tenant) {
+      tenant = await withRetry(() => db.tenant.findFirst(), { label: 'sendOtp-findFirstTenant' });
+    }
+    if (!tenant) {
+      return NextResponse.json(
+        { error: 'Service is not configured. Please contact support.' },
+        { status: 500 },
+      );
+    }
+
+    // ── 3. Rate limit: max 3 OTPs per phone per hour ──
     const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
     const recentOtpCount = await withRetry(
       () =>
@@ -69,45 +62,48 @@ export async function POST(request: NextRequest) {
             createdAt: { gte: oneHourAgo },
           },
         }),
-      { label: 'sendOtp-rateLimit' }
+      { label: 'sendOtp-rateLimit' },
     );
 
     if (recentOtpCount >= 3) {
       return NextResponse.json(
-        { error: 'Too many OTP requests. Please try again later.', retryAfter: 3600 },
-        { status: 429 }
+        { error: 'Too many verification codes sent. Please try again in an hour.', retryAfter: 3600 },
+        { status: 429 },
       );
     }
 
-    // Generate 6-digit OTP code
-    const code = generateOtpCode();
+    // ── 4. Generate 6-digit OTP ──
+    const otpPlain = generateOtpCode();
+    const otpHash = await hashOtp(otpPlain);
     const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
-    // Store OTP in database
-    await withRetry(
+    // ── 5. Store OTP (hashed) in database ──
+    const otpRecord = await withRetry(
       () =>
         db.otpCode.create({
           data: {
             tenantId: tenant.id,
             phoneNumber: fullPhone,
-            code,
+            code: otpHash, // Store HASH, not plaintext
             purpose: 'login',
             expiresAt,
             ipAddress,
             userAgent,
           },
         }),
-      { label: 'sendOtp-createOtp' }
+      { label: 'sendOtp-createOtp' },
     );
 
-    // Log OTP for development
-    console.log(`[DEV OTP] ${fullPhone}: ${code}`);
+    // Log OTP for development only
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[DEV OTP] ${fullPhone}: ${otpPlain} (id: ${otpRecord.id})`);
+    }
 
-    // Attempt to send via WhatsApp Meta Business API (best-effort)
+    // ── 6. Send via WhatsApp Meta Business API (best-effort) ──
     try {
       const whatsappConfig = await withRetry(
         () => db.whatsAppConfig.findUnique({ where: { tenantId: tenant.id } }),
-        { label: 'sendOtp-getWhatsappConfig', maxRetries: 1 }
+        { label: 'sendOtp-getWhatsappConfig', maxRetries: 1 },
       );
 
       if (
@@ -115,6 +111,8 @@ export async function POST(request: NextRequest) {
         whatsappConfig.metaAccessToken &&
         whatsappConfig.metaPhoneNumberId
       ) {
+        console.log('[WhatsApp OTP] Sending via Meta API to:', fullPhone);
+
         const metaResponse = await fetch(
           `https://graph.facebook.com/v19.0/${whatsappConfig.metaPhoneNumberId}/messages`,
           {
@@ -133,27 +131,29 @@ export async function POST(request: NextRequest) {
                 components: [
                   {
                     type: 'body',
-                    parameters: [{ type: 'text', text: code }],
+                    parameters: [{ type: 'text', text: otpPlain }],
                   },
                 ],
               },
             }),
-          }
+          },
         );
 
         if (!metaResponse.ok) {
-          console.error(
-            `[WhatsApp] Failed to send OTP via Meta API: ${metaResponse.status}`,
-            await metaResponse.text()
-          );
-          // OTP still stored — dev mode fallback
+          const metaBody = await metaResponse.text();
+          console.error('[WhatsApp OTP] Meta API error:', metaResponse.status, metaBody);
+          // OTP still stored — dev mode / manual entry fallback
+        } else {
+          console.log('[WhatsApp OTP] Meta API success for:', fullPhone);
         }
+      } else {
+        console.log('[WhatsApp OTP] WhatsApp not configured — OTP stored for dev entry');
       }
     } catch (whatsappError) {
-      console.error('[WhatsApp] Meta API error (OTP still stored):', whatsappError);
+      console.error('[WhatsApp OTP] Meta API exception (OTP still stored):', whatsappError);
     }
 
-    // Audit log entry (non-critical)
+    // ── 7. Audit log (non-critical) ──
     withRetry(async () => {
       const systemUser = await db.user.findFirst({
         where: { tenantId: tenant.id, role: 'super_admin' },
@@ -166,6 +166,7 @@ export async function POST(request: NextRequest) {
             userId: systemUser.id,
             action: 'otp_sent',
             entity: 'OtpCode',
+            entityId: otpRecord.id,
             newValue: JSON.stringify({ phoneNumber: fullPhone }),
             ipAddress,
             userAgent,
@@ -177,10 +178,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, expiresIn: 300 });
   } catch (error) {
-    console.error('Send OTP error:', error);
+    console.error('[WhatsApp OTP] Send error:', error);
     return NextResponse.json(
-      { error: getDbFriendlyMessage(error) },
-      { status: 500 }
+      { error: 'Unable to send the verification code at the moment. Please try again in a few minutes.' },
+      { status: 500 },
     );
   }
 }

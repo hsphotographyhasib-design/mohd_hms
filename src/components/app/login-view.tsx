@@ -348,7 +348,7 @@ export function LoginView() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           phoneNumber: rawDigits,
-          countryCode: selectedCountryData.code,
+          dialCode: selectedCountryData.dialCode,
         }),
       });
       const data = await res.json();
@@ -380,7 +380,7 @@ export function LoginView() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           phoneNumber: rawDigits,
-          countryCode: selectedCountryData.code,
+          dialCode: selectedCountryData.dialCode,
           code,
         }),
       });
@@ -438,7 +438,7 @@ export function LoginView() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           phoneNumber: rawDigits,
-          countryCode: selectedCountryData.code,
+          dialCode: selectedCountryData.dialCode,
         }),
       });
       const data = await res.json();

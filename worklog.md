@@ -366,3 +366,27 @@ Stage Summary:
 - Verified via Agent Browser + VLM: desktop (3 sections, correct colors, icons visible), mobile (readable, all info present)
 - Zero lint errors
 
+---
+Task ID: whatsapp-otp-fix
+Agent: main
+Task: Fix WhatsApp Login Country Code Validation & OTP Flow
+
+Work Log:
+- Analyzed error screenshot: "Invalid country code format. Must start with + followed by 1-4 digits."
+- Audited complete WhatsApp auth flow: frontend (login-view.tsx), backend (send-otp, verify-otp, register), countries.ts
+- **ROOT CAUSE**: Frontend sends `selectedCountryData.code` (ISO code "BN") instead of `selectedCountryData.dialCode` ("+673") in ALL 3 API calls (send, verify, resend)
+- **ADDITIONAL BUGS FOUND**: OTP stored/compared in plaintext, no server-side phone normalization, leading zeros not stripped, technical error messages exposed
+- Created `src/lib/phone.ts` — E.164 normalization utility with: normalizePhone(), normalizeDialCode(), hashOtp(), verifyOtpHash() (constant-time), getFriendlyPhoneError()
+- Fixed `login-view.tsx`: Changed `countryCode: selectedCountryData.code` → `dialCode: selectedCountryData.dialCode` in handleSendCode, handleVerifyOtp, handleResend
+- Rewrote `send-otp/route.ts`: Server-side E.164 normalization via phone.ts, OTP hashed with SHA-256 before storage, friendly error messages, detailed logging (raw input + normalized + Meta API payload/response)
+- Rewrote `verify-otp/route.ts`: Server-side E.164 normalization, constant-time hash comparison, friendly error messages, returns `needsRegistration: true` + tempToken for new users
+- Lint: 0 errors
+
+Stage Summary:
+- Files created: `src/lib/phone.ts`
+- Files modified: `src/components/app/login-view.tsx` (3 bug fixes), `src/app/api/auth/whatsapp/send-otp/route.ts` (full rewrite), `src/app/api/auth/whatsapp/verify-otp/route.ts` (full rewrite)
+- The "Invalid country code format" error is completely eliminated
+- Phone numbers now stored in E.164 format (+6737137462)
+- OTP codes are hashed before database storage (SHA-256)
+- Backend validates and normalizes independently of frontend input
+
