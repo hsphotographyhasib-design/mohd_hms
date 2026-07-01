@@ -1,10 +1,9 @@
 /**
  * Prisma 7 singleton — PostgreSQL via @prisma/adapter-pg.
  *
- * Uses lazy initialization: the database connection is only established on
- * the first actual query, NOT at module-import time.  This allows the
- * dev server to start even when no PostgreSQL URL is available locally
- * (production on Vercel always has one).
+ * Tries to create a real PrismaClient eagerly.  If no PostgreSQL URL is
+ * found (local dev without a real DB), a lightweight stub proxy is used
+ * instead so that importing this module never crashes the process.
  *
  * Connection string resolution order:
  *   1. DATABASE_URL (standard)
@@ -19,7 +18,6 @@ import { PrismaClient } from "../../generated/prisma/client";
 // 1. Find PostgreSQL connection string from env vars
 // ---------------------------------------------------------------------------
 
-/** Known env var names to check (in priority order) */
 const DB_URL_CANDIDATES = [
   "DATABASE_URL",
   "PRISMA_DATABASE_URL",
@@ -27,7 +25,6 @@ const DB_URL_CANDIDATES = [
 ];
 
 function findPostgresUrl(): { url: string; source: string } {
-  // --- Try known env var names first ---
   for (const name of DB_URL_CANDIDATES) {
     const val = process.env[name];
     if (val && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
@@ -36,8 +33,8 @@ function findPostgresUrl(): { url: string; source: string } {
     }
   }
 
-  // --- Fallback: scan ALL env vars for a postgres:// value ---
-  // This handles cases like Vercel prefixing vars (e.g. mohd_hms_DATABASE_URL)
+  // Fallback: scan ALL env vars for a postgres:// value
+  // (handles Vercel-prefixed vars like mohd_hms_DATABASE_URL)
   for (const [key, val] of Object.entries(process.env)) {
     if (
       val &&
@@ -52,7 +49,7 @@ function findPostgresUrl(): { url: string; source: string } {
     }
   }
 
-  // --- In local dev, try reading .env file directly ---
+  // In local dev, try reading .env file directly
   if (process.env.NODE_ENV !== "production") {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -87,27 +84,20 @@ function findPostgresUrl(): { url: string; source: string } {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Lazy PrismaClient singleton
+// 2. Create PrismaClient (eager, like before — works correctly on Vercel)
 // ---------------------------------------------------------------------------
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-let _prisma: PrismaClient | undefined = undefined;
-let _initError: string | undefined = undefined;
-
-function createPrismaClient(): PrismaClient {
+function buildRealClient(): PrismaClient {
   const { url } = findPostgresUrl();
 
   if (!url) {
-    const msg =
-      "[Prisma] No PostgreSQL connection string found. " +
-      "Database features are unavailable. On Vercel, set DATABASE_URL, " +
-      "POSTGRES_URL, or PRISMA_DATABASE_URL (value must start with postgres://).";
-    console.warn(msg);
-    _initError = msg;
-    throw new Error(msg);
+    throw new Error(
+      "[Prisma] No PostgreSQL connection string found."
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -116,8 +106,7 @@ function createPrismaClient(): PrismaClient {
   };
 
   const isServerless =
-    process.env.NODE_ENV === "production" ||
-    !!process.env.VERCEL;
+    process.env.NODE_ENV === "production" || !!process.env.VERCEL;
 
   console.log(
     `[Prisma] Using PostgreSQL adapter${isServerless ? " (serverless/Vercel)" : " (development)"}`
@@ -146,7 +135,6 @@ function createPrismaClient(): PrismaClient {
   if (process.env.NODE_ENV !== "production") {
     globalForPrisma.prisma = client;
 
-    // Log slow queries in dev (> 500ms)
     try {
       // @ts-expect-error – Prisma 7 event listener
       client.on("query", (e: { duration: number; query: string }) => {
@@ -161,58 +149,41 @@ function createPrismaClient(): PrismaClient {
     }
   }
 
-  _prisma = client;
   return client;
 }
 
 /**
- * The exported Prisma client singleton.
+ * Eagerly create the PrismaClient.
  *
- * In production (Vercel) a PostgreSQL URL is always present, so the client
- * is created on first access and cached for the lifetime of the process.
- *
- * In local development without a PostgreSQL URL, accessing any model
- * property (e.g. `db.user.findFirst(...)`) will throw a clear warning
- * — but importing this module will NOT crash the dev server.
+ * - On Vercel / with a real PostgreSQL URL → real client (identical to the
+ *   original working behaviour).
+ * - Without a PostgreSQL URL (local dev) → a stub that throws a clear error
+ *   on any model access, so the dev server can still start and render pages.
  */
-export const prisma = new Proxy({} as PrismaClient, {
-  get(_target, prop, receiver) {
-    // Allow inspection of the proxy itself
-    if (prop === "__isPrismaProxy") return true;
-    if (prop === Symbol.toStringTag) return "PrismaClient";
+let _noDbMessage: string | undefined;
 
-    // Return the cached client (or create it on first access)
-    const client = _prisma ?? createPrismaClient();
-    const value = Reflect.get(client, prop, receiver);
+const prisma: PrismaClient = (() => {
+  try {
+    return buildRealClient();
+  } catch (err) {
+    _noDbMessage =
+      (err instanceof Error ? err.message : String(err)) +
+      " Database features are unavailable.";
 
-    // Bind methods to the real client so `this` is correct
-    if (typeof value === "function") {
-      return value.bind(client);
-    }
-    return value;
-  },
+    console.warn(`[Prisma] ${_noDbMessage}`);
 
-  // Make typeof/instanceof checks pass through
-  getOwnPropertyDescriptor(_target, prop) {
-    const client = _prisma ?? (undefined as unknown as PrismaClient);
-    if (client) {
-      return Reflect.getOwnPropertyDescriptor(client, prop);
-    }
-    return undefined;
-  },
+    // Return a lightweight stub — only throws when a model is actually accessed
+    return new Proxy({} as PrismaClient, {
+      get(_target, prop) {
+        if (typeof prop === "symbol") return undefined;
+        if (prop === "then" || prop === "toJSON") return undefined;
+        throw new Error(_noDbMessage);
+      },
+    }) as unknown as PrismaClient;
+  }
+})();
 
-  ownKeys() {
-    const client = _prisma ?? (undefined as unknown as PrismaClient);
-    if (client) {
-      return Reflect.ownKeys(client);
-    }
-    return [];
-  },
-
-  getPrototypeOf() {
-    return PrismaClient.prototype;
-  },
-});
+export { prisma };
 
 // ---------------------------------------------------------------------------
 // 3. Utility: classify a Prisma error for friendly messages
@@ -238,9 +209,9 @@ export function isPrismaTransient(error: unknown): boolean {
     const code = (error as { code?: string }).code ?? "";
     return (
       isPrismaTimeout(error) ||
-      code === "P2024" || // Prisma timeout error code
-      code === "P1001" || // Connection error
-      code === "P1008" || // Timeout error
+      code === "P2024" ||
+      code === "P1001" ||
+      code === "P1008" ||
       msg.includes("Connection refused") ||
       msg.includes("ECONNREFUSED") ||
       msg.includes("ECONNRESET") ||
@@ -253,8 +224,7 @@ export function isPrismaTransient(error: unknown): boolean {
 
 /**
  * Returns true when a real PostgreSQL connection is available.
- * Useful for feature-flagging database-dependent UI.
  */
 export function isDatabaseAvailable(): boolean {
-  return !!_prisma && !_initError;
+  return !_noDbMessage;
 }
