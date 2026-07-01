@@ -82,11 +82,17 @@ export async function POST(request: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+    // RBAC: only admin, hr, and super_admin can manage employees
+    const role = payload.role as string;
+    if (!['super_admin', 'admin', 'hr'].includes(role)) {
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+    }
+
     const tenantId = payload.tenantId as string;
     const body = await request.json();
-    const { email, name, phone, role, employeeNumber, departmentId, password } = body;
+    const { email, name, phone, role: employeeRole, employeeNumber, departmentId, password } = body;
 
-    if (!email || !name || !role) {
+    if (!email || !name || !employeeRole) {
       return NextResponse.json({ error: 'Email, name, and role are required' }, { status: 400 });
     }
 
@@ -99,9 +105,8 @@ export async function POST(request: NextRequest) {
         passwordHash,
         name,
         phone: phone || null,
-        role,
+        role: employeeRole,
         employeeNumber: employeeNumber || null,
-        departmentId: departmentId || null,
         profileCompleted: true,
       },
       include: {

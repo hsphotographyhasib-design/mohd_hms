@@ -173,25 +173,27 @@ export async function POST(request: NextRequest) {
     const { subtotal, tax, total } = computeTotals(parsedItems, finalTaxRate, finalDiscount, finalShipping);
 
     // Generate quotation number: QTN/{tenant_code}/{month}/{sequential_4digit}
-    const tenant = await db.tenant.findUnique({ where: { id: tenantId } });
+    const now = new Date();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const monthStart = new Date(year, now.getMonth(), 1);
+    const monthEnd = new Date(year, now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+    const [tenant, count] = await Promise.all([
+      db.tenant.findUnique({ where: { id: tenantId } }),
+      db.quotation.count({
+        where: {
+          tenantId,
+          createdAt: { gte: monthStart, lte: monthEnd },
+        },
+      }),
+    ]);
+
     if (!tenant) {
       return NextResponse.json({ error: 'Tenant not found' }, { status: 400 });
     }
 
-    const now = new Date();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const year = now.getFullYear();
     const tenantCode = tenant.name.substring(0, 4).toUpperCase();
-
-    const monthStart = new Date(year, now.getMonth(), 1);
-    const monthEnd = new Date(year, now.getMonth() + 1, 0, 23, 59, 59, 999);
-
-    const count = await db.quotation.count({
-      where: {
-        tenantId,
-        createdAt: { gte: monthStart, lte: monthEnd },
-      },
-    });
 
     const sequential = String(count + 1).padStart(4, '0');
     const quotationNo = `QTN/${tenantCode}/${month}/${sequential}`;

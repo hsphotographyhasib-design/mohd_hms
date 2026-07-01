@@ -1,10 +1,16 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { hashPassword, generateAssetNumber, generateInvoiceNumber, generatePONumber, generateCustomerNumber } from '@/lib/auth';
+import { hashPassword, generateAssetNumber, generateInvoiceNumber, generatePONumber, generateCustomerNumber, verifyToken } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   try {
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (payload.role !== 'super_admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
     // Check if seed data already exists
     const existingTenant = await db.tenant.findFirst({ where: { domain: 'demo.facilitypro.com' } });
     if (existingTenant) {

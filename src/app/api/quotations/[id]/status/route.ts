@@ -77,17 +77,11 @@ export async function POST(
       data: updateData,
       include: {
         customer: { select: { name: true, phone: true, email: true, address: true } },
+        preparedByUser: { select: { name: true } },
       },
     });
 
-    let preparedByName: string | null = null;
-    if (updated.preparedBy) {
-      const user = await db.user.findUnique({
-        where: { id: updated.preparedBy },
-        select: { name: true },
-      });
-      if (user) preparedByName = user.name;
-    }
+    const preparedByName = updated.preparedByUser?.name || null;
 
     return NextResponse.json({
       id: updated.id,

@@ -107,6 +107,7 @@ model User {
   passwordResetTokens PasswordResetToken[]
   authAuditLogs AuthAuditLog[]
   termsAcceptances TermsAcceptance[]
+  preparedQuotations Quotation[] @relation("QuotationPreparedBy")
 
   @@unique([tenantId, email])
   @@unique([googleId])
@@ -488,6 +489,7 @@ model Quotation {
 
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
   customer      Customer @relation(fields: [customerId], references: [id])
+  preparedByUser User?  @relation("QuotationPreparedBy", fields: [preparedBy], references: [id])
   invoices      Invoice[]
 }
 

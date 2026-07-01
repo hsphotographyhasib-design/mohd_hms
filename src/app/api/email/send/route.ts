@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sendEmail as emailServiceSend } from '@/lib/email-service';
 import * as templates from '@/lib/email-service/templates';
+import { verifyToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +13,11 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(req: NextRequest) {
   try {
+    const authHeader = req.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const body = await req.json();
     const { to, subject, template, templateData, html, text: plainText, cc, bcc, attachments, scheduledFor, module, metadata, replyTo, tags } = body;
 

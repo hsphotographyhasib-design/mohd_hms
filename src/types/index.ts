@@ -85,6 +85,7 @@ export type AppView =
   | 'cms-popups'
   | 'cms-forms'
   | 'cms-activity'
+  | 'system-health'
   // WhatsApp views
   | 'whatsapp'
   | 'whatsapp-chats'
@@ -100,7 +101,9 @@ export type AppView =
   // Assignment views
   | 'complaint-assignment'
   // Technician Operations Center
-  | 'technicians';
+  | 'technicians'
+  // System health
+  | 'system-health';
 
 // ============ EQUIPMENT ============
 

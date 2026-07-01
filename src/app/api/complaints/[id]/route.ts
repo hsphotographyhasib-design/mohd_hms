@@ -107,8 +107,8 @@ export async function PUT(
     if (body.description !== undefined) updateData.description = body.description;
     if (body.priority !== undefined) updateData.priority = body.priority;
     if (body.category !== undefined) updateData.category = body.category || null;
-    if (body.photos !== undefined) updateData.photos = body.photos || null;
-    if (body.gpsLocation !== undefined) updateData.gpsLocation = body.gpsLocation || null;
+    if (body.photos !== undefined) updateData.photos = body.photos ? JSON.stringify(body.photos) : null;
+    if (body.gpsLocation !== undefined) updateData.gpsLocation = body.gpsLocation ? JSON.stringify(body.gpsLocation) : null;
     if (body.resolutionNotes !== undefined) updateData.resolutionNotes = body.resolutionNotes || null;
     if (body.customerRating !== undefined) updateData.customerRating = body.customerRating || null;
     if (body.customerFeedback !== undefined) updateData.customerFeedback = body.customerFeedback || null;

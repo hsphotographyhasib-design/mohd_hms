@@ -1,7 +1,16 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'cmms-enterprise-secret-key-2024';
+const JWT_SECRET = (() => {
+  const secret = process.env.JWT_SECRET;
+  if (secret && secret.length > 0) return secret;
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error('[AUTH] CRITICAL: JWT_SECRET environment variable is not set in production. Refusing to start without a secure secret.');
+  }
+  // Dev-only fallback so local development works without env var
+  console.warn('[AUTH] WARNING: JWT_SECRET not set — using dev-only fallback. DO NOT use in production.');
+  return '__dev_only_jwt_secret_do_not_use_in_prod__';
+})();
 const JWT_EXPIRES_IN = '7d';
 
 export async function hashPassword(password: string): Promise<string> {

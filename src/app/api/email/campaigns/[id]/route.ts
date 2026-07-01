@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyToken } from '@/lib/auth';
 
 const BREVO_API_URL = 'https://api.brevo.com/v3';
 
@@ -11,6 +12,11 @@ export async function GET(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authHeader = _req.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+  const payload = verifyToken(token || '');
+  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   const apiKey = getApiKey();
   if (!apiKey) {
     return NextResponse.json(
@@ -52,6 +58,11 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authHeader = _req.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+  const payload = verifyToken(token || '');
+  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   const apiKey = getApiKey();
   if (!apiKey) {
     return NextResponse.json(
@@ -93,6 +104,11 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const authHeader = req.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+  const payload = verifyToken(token || '');
+  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   const apiKey = getApiKey();
   if (!apiKey) {
     return NextResponse.json(

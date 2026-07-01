@@ -105,12 +105,12 @@ export async function PUT(
     if (body.equipmentId !== undefined) updateData.equipmentId = body.equipmentId || null;
     if (body.scheduledDate !== undefined) updateData.scheduledDate = body.scheduledDate ? new Date(body.scheduledDate) : null;
     if (body.notes !== undefined) updateData.notes = body.notes || null;
-    if (body.photos !== undefined) updateData.photos = body.photos || null;
-    if (body.checklistData !== undefined) updateData.checklistData = body.checklistData || null;
+    if (body.photos !== undefined) updateData.photos = body.photos ? JSON.stringify(body.photos) : null;
+    if (body.checklistData !== undefined) updateData.checklistData = body.checklistData ? JSON.stringify(body.checklistData) : null;
     if (body.technicianSignature !== undefined) updateData.technicianSignature = body.technicianSignature || null;
     if (body.customerSignature !== undefined) updateData.customerSignature = body.customerSignature || null;
-    if (body.checkInGps !== undefined) updateData.checkInGps = body.checkInGps || null;
-    if (body.checkOutGps !== undefined) updateData.checkOutGps = body.checkOutGps || null;
+    if (body.checkInGps !== undefined) updateData.checkInGps = body.checkInGps ? JSON.stringify(body.checkInGps) : null;
+    if (body.checkOutGps !== undefined) updateData.checkOutGps = body.checkOutGps ? JSON.stringify(body.checkOutGps) : null;
     if (body.laborHours !== undefined) updateData.laborHours = body.laborHours || null;
     if (body.laborCost !== undefined) updateData.laborCost = body.laborCost || null;
     if (body.materialCost !== undefined) updateData.materialCost = body.materialCost || null;

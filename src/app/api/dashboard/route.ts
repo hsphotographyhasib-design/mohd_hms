@@ -27,7 +27,6 @@ export async function GET(request: NextRequest) {
       pmAll,
       monthlyRevenueRaw,
       complaintsByCategoryRaw,
-      complaintsByStatusRaw,
       recentComplaints,
       recentWorkOrders,
       upcomingPm,
@@ -74,12 +73,6 @@ export async function GET(request: NextRequest) {
       db.complaint.groupBy({
         by: ['category'],
         where: { tenantId, category: { not: null } },
-        _count: { id: true },
-      }),
-      // Complaints by status (already have this but re-query for consistency)
-      db.complaint.groupBy({
-        by: ['status'],
-        where: { tenantId },
         _count: { id: true },
       }),
       // Recent 5 complaints
@@ -218,8 +211,8 @@ export async function GET(request: NextRequest) {
       count: c._count.id,
     }));
 
-    // Format complaints by status
-    const complaintsByStatus = complaintsByStatusRaw.map((c) => ({
+    // Format complaints by status (reuse complaintStatusCounts)
+    const complaintsByStatus = complaintStatusCounts.map((c) => ({
       status: c.status,
       count: c._count.id,
     }));

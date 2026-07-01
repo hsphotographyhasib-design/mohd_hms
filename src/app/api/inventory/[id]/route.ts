@@ -78,21 +78,29 @@ export async function PUT(
     const scalarFields: (keyof Prisma.InventoryItemCreateInput)[] = [
       'name', 'sku', 'barcode', 'shortName', 'itemType', 'description', 'shortDescription',
       'brand', 'manufacturer', 'model', 'partNumber', 'serialNumber', 'unit', 'unitWeight',
-      'dimensions', 'purchaseCost', 'averageCost', 'standardCost', 'lastPurchaseCost',
+      'purchaseCost', 'averageCost', 'standardCost', 'lastPurchaseCost',
       'sellingPrice', 'dealerPrice', 'contractorPrice', 'customerPrice', 'vipPrice',
       'internalCost', 'labourCost', 'installationCost', 'serviceCost', 'transportationCost',
       'mobilizationCost', 'equipmentRental', 'emergencyCallOut', 'afterHoursCharge',
       'weekendCharge', 'publicHolidayCharge', 'currency', 'quantity', 'minStock',
-      'maxStock', 'reorderLevel', 'safetyStock', 'photos', 'attachments',
+      'maxStock', 'reorderLevel', 'safetyStock',
       'technicalDatasheet', 'msds', 'warranty', 'countryOfOrigin', 'hsCode',
-      'tags', 'status', 'remarks', 'hourlyRate', 'dailyRate', 'overtimeRate',
+      'status', 'remarks', 'hourlyRate', 'dailyRate', 'overtimeRate',
       'weekendRate', 'publicHolidayRate', 'dailyRentalRate', 'monthlyRentalRate',
-      'estimatedHours', 'requiredSkills', 'sop',
+      'estimatedHours', 'sop',
     ] as (keyof Prisma.InventoryItemCreateInput)[];
 
     for (const field of scalarFields) {
       if (body[field] !== undefined) {
         (data as Record<string, unknown>)[field] = body[field];
+      }
+    }
+
+    // JSON fields must be serialized before passing to Prisma String? fields
+    const jsonFields = ['dimensions', 'photos', 'attachments', 'tags', 'requiredSkills'];
+    for (const field of jsonFields) {
+      if (body[field] !== undefined) {
+        (data as Record<string, unknown>)[field] = body[field] ? JSON.stringify(body[field]) : null;
       }
     }
 

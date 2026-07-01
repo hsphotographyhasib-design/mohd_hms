@@ -57,6 +57,7 @@ const CmsAnnouncements = lazy(() => import('@/components/modules/cms/cms-announc
 const CmsPopups = lazy(() => import('@/components/modules/cms/cms-popups').then(m => ({ default: m.CmsPopups })));
 const CmsForms = lazy(() => import('@/components/modules/cms/cms-forms').then(m => ({ default: m.CmsForms })));
 const CmsActivity = lazy(() => import('@/components/modules/cms/cms-activity').then(m => ({ default: m.CmsActivity })));
+const SystemHealth = lazy(() => import('@/components/modules/system/health-dashboard').then(m => ({ default: m.HealthDashboard })));
 
 // WhatsApp views
 const WhatsAppDashboard = lazy(() => import('@/components/modules/whatsapp/whatsapp-dashboard').then(m => ({ default: m.WhatsAppDashboard })));
@@ -139,6 +140,7 @@ function ViewRouter() {
       {currentView === 'cms-popups' && <CmsPopups />}
       {currentView === 'cms-forms' && <CmsForms />}
       {currentView === 'cms-activity' && <CmsActivity />}
+      {currentView === 'system-health' && <SystemHealth />}
       {currentView === 'whatsapp' && <WhatsAppDashboard />}
       {currentView === 'whatsapp-chats' && <WhatsAppChats />}
       {currentView === 'whatsapp-templates' && <WhatsAppTemplates />}

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { sanitizeInput } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
@@ -7,7 +8,12 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { equipmentId, qrId, tenantId, customerName, customerPhone, customerEmail, description } = body;
 
-    if (!equipmentId || !description || !description.trim()) {
+    const safeDescription = description ? sanitizeInput(description) : description;
+    const safeCustomerName = customerName ? sanitizeInput(customerName) : customerName;
+    const safeCustomerPhone = customerPhone ? sanitizeInput(customerPhone) : customerPhone;
+    const safeCustomerEmail = customerEmail ? sanitizeInput(customerEmail) : customerEmail;
+
+    if (!equipmentId || !safeDescription || !safeDescription.trim()) {
       return NextResponse.json(
         { error: 'Equipment ID and description are required' },
         { status: 400 }
@@ -42,13 +48,13 @@ export async function POST(request: NextRequest) {
         customerId: equipment.customerId || 'anonymous',
         equipmentId: equipment.id,
         title: `QR Service Request: ${equipment.name}`,
-        description: description.trim(),
+        description: safeDescription!.trim(),
         priority: 'medium',
         status: 'NEW',
         source: 'qr_scan',
         category: equipment.category,
-        resolutionNotes: customerName
-          ? `Submitted via QR scan by: ${customerName}${customerPhone ? ` (${customerPhone})` : ''}${customerEmail ? ` - ${customerEmail}` : ''}`
+        resolutionNotes: safeCustomerName
+          ? `Submitted via QR scan by: ${safeCustomerName}${safeCustomerPhone ? ` (${safeCustomerPhone})` : ''}${safeCustomerEmail ? ` - ${safeCustomerEmail}` : ''}`
           : 'Submitted via QR scan (anonymous)',
       },
     });
@@ -60,7 +66,7 @@ export async function POST(request: NextRequest) {
         tenantId: equipment.tenantId,
         action: 'created',
         description: `Service request submitted via QR scan for equipment: ${equipment.name}`,
-        performedByName: customerName || 'Anonymous (QR Scan)',
+        performedByName: safeCustomerName || 'Anonymous (QR Scan)',
         performedByRole: 'customer',
       },
     });

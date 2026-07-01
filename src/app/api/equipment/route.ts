@@ -113,39 +113,44 @@ export async function POST(request: NextRequest) {
     const domain = request.headers.get('host') || 'smartms.com';
     const qrUrl = buildQrUrl(domain, qrId);
 
-    const equipment = await db.equipment.create({
-      data: {
-        tenantId,
-        name,
-        category,
-        customerId: customerId || null,
-        assetNumber,
-        qrCode,
-        qrId,
-        brand: brand || null,
-        model: model || null,
-        serialNumber: serialNumber || null,
-        location: location || null,
-        building: body.building || null,
-        room: body.room || null,
-        installDate: installDate ? new Date(installDate) : null,
-        warrantyExpiry: warrantyExpiry ? new Date(warrantyExpiry) : null,
-        warrantyInfo: body.warrantyInfo || null,
-        status: status || 'active',
-        condition: body.condition || 'good',
-        photos: photos || null,
-        documents: documents || null,
-        specifications: specifications ? JSON.stringify(specifications) : null,
-        notes: notes || null,
-      },
-      include: {
-        customer: { select: { name: true } },
-      },
-    });
+    // Atomic: create equipment + QR code in a single transaction
+    const equipment = await db.$transaction(async (tx) => {
+      const eq = await tx.equipment.create({
+        data: {
+          tenantId,
+          name,
+          category,
+          customerId: customerId || null,
+          assetNumber,
+          qrCode,
+          qrId,
+          brand: brand || null,
+          model: model || null,
+          serialNumber: serialNumber || null,
+          location: location || null,
+          building: body.building || null,
+          room: body.room || null,
+          installDate: installDate ? new Date(installDate) : null,
+          warrantyExpiry: warrantyExpiry ? new Date(warrantyExpiry) : null,
+          warrantyInfo: body.warrantyInfo || null,
+          status: status || 'active',
+          condition: body.condition || 'good',
+          photos: photos ? JSON.stringify(photos) : null,
+          documents: documents ? JSON.stringify(documents) : null,
+          specifications: specifications ? JSON.stringify(specifications) : null,
+          notes: notes || null,
+        },
+        include: {
+          customer: { select: { name: true } },
+        },
+      });
 
-    // Create QR code record
-    await db.equipmentQrCode.create({
-      data: { tenantId, equipmentId: equipment.id, qrId, qrUrl },
+      // Create QR code record atomically
+      await tx.equipmentQrCode.create({
+        data: { tenantId, equipmentId: eq.id, qrId, qrUrl },
+      });
+
+      return eq;
     });
 
     return NextResponse.json({

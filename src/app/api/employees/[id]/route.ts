@@ -137,6 +137,11 @@ export async function DELETE(
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+    // RBAC: only admin and super_admin can delete employees
+    if (!['super_admin', 'admin'].includes(payload.role as string)) {
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+    }
+
     const tenantId = payload.tenantId as string;
     const { id } = await params;
 

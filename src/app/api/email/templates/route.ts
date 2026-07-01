@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import * as T from '@/lib/email-service/templates';
+import { verifyToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,7 +8,11 @@ export const dynamic = 'force-dynamic';
  * GET /api/email/templates
  * Returns list of all available email templates with their variable definitions.
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+  const payload = verifyToken(token || '');
+  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const templateList = [
     { identifier: 'welcomeEmail', name: 'Welcome Email', module: 'auth', description: 'Sent when new customer/employee registers', variables: T.welcomeEmail({ name: '', email: '', loginUrl: '' }).variables },
     { identifier: 'emailVerification', name: 'Email Verification', module: 'auth', description: 'Email verification after registration', variables: T.emailVerification({ name: '', verificationUrl: '' }).variables },

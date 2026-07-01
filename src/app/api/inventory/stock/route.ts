@@ -75,142 +75,144 @@ export async function POST(request: NextRequest) {
         break;
     }
 
-    // Update item quantity (except for transfer which only moves between warehouses)
-    if (type !== 'transfer') {
-      await db.inventoryItem.update({
-        where: { id: itemId },
-        data: { quantity: newQty },
-      });
-    }
-
-    // Update warehouse stock
-    if (warehouseId) {
-      const parsedExpiry = expiryDate ? new Date(expiryDate) : undefined;
-
-      const existingStock = await db.warehouseStock.findUnique({
-        where: { warehouseId_itemId: { warehouseId, itemId } },
-      });
-
-      if (type === 'stock_in' || type === 'return') {
-        if (existingStock) {
-          await db.warehouseStock.update({
-            where: { id: existingStock.id },
-            data: { quantity: existingStock.quantity + quantity },
-          });
-        } else {
-          await db.warehouseStock.create({
-            data: {
-              tenantId,
-              warehouseId,
-              itemId,
-              quantity,
-              batchNo: batchNo || null,
-              lotNumber: lotNumber || null,
-              expiryDate: parsedExpiry,
-              costMethod: 'fifo',
-            },
-          });
-        }
-      } else if (type === 'stock_out' || type === 'damage') {
-        if (existingStock) {
-          await db.warehouseStock.update({
-            where: { id: existingStock.id },
-            data: {
-              quantity: Math.max(0, existingStock.quantity - quantity),
-              ...(type === 'damage' ? { damaged: existingStock.damaged + quantity } : {}),
-            },
-          });
-        } else {
-          // No stock exists — create with 0 and record damage
-          await db.warehouseStock.create({
-            data: {
-              tenantId,
-              warehouseId,
-              itemId,
-              quantity: 0,
-              damaged: type === 'damage' ? quantity : 0,
-              batchNo: batchNo || null,
-              lotNumber: lotNumber || null,
-              expiryDate: parsedExpiry,
-            },
-          });
-        }
-      } else if (type === 'adjustment' && warehouseId) {
-        if (existingStock) {
-          await db.warehouseStock.update({
-            where: { id: existingStock.id },
-            data: { quantity: Math.max(0, newQty) },
-          });
-        } else {
-          await db.warehouseStock.create({
-            data: {
-              tenantId,
-              warehouseId,
-              itemId,
-              quantity: Math.max(0, newQty),
-              batchNo: batchNo || null,
-              lotNumber: lotNumber || null,
-              expiryDate: parsedExpiry,
-            },
-          });
-        }
-      }
-    }
-
-    // Handle transfer: decrement from source, increment at destination
-    if (type === 'transfer' && fromWarehouseId && warehouseId) {
-      const fromStock = await db.warehouseStock.findUnique({
-        where: { warehouseId_itemId: { warehouseId: fromWarehouseId, itemId } },
-      });
-      const toStock = await db.warehouseStock.findUnique({
-        where: { warehouseId_itemId: { warehouseId, itemId } },
-      });
-
-      if (fromStock) {
-        await db.warehouseStock.update({
-          where: { id: fromStock.id },
-          data: { quantity: Math.max(0, fromStock.quantity - quantity) },
-        });
-      }
-
-      if (toStock) {
-        await db.warehouseStock.update({
-          where: { id: toStock.id },
-          data: { quantity: toStock.quantity + quantity },
-        });
-      } else {
-        await db.warehouseStock.create({
-          data: { tenantId, warehouseId, itemId, quantity },
-        });
-      }
-    }
-
-    // Create stock movement record
+    // Atomic: all stock writes in a single transaction
     const parsedExpiryDate = expiryDate ? new Date(expiryDate) : undefined;
-    const movement = await db.stockMovement.create({
-      data: {
-        tenantId,
-        itemId,
-        warehouseId: warehouseId || null,
-        type,
-        quantity,
-        previousQty,
-        newQty: type === 'adjustment' ? newQty : newQty,
-        reason: reason || null,
-        referenceNo: referenceNo || null,
-        referenceType: referenceType || null,
-        fromWarehouseId: fromWarehouseId || null,
-        batchNo: batchNo || null,
-        lotNumber: lotNumber || null,
-        expiryDate: parsedExpiryDate,
-        unitCost: unitCost || 0,
-        notes: notes || null,
-        performedBy: userId,
-      },
-      include: {
-        item: { select: { id: true, name: true, itemCode: true, unit: true } },
-        warehouse: { select: { id: true, name: true, code: true } },
-      },
+    const movement = await db.$transaction(async (tx) => {
+      // Update item quantity (except for transfer which only moves between warehouses)
+      if (type !== 'transfer') {
+        await tx.inventoryItem.update({
+          where: { id: itemId },
+          data: { quantity: newQty },
+        });
+      }
+
+      // Update warehouse stock
+      if (warehouseId) {
+        const parsedExpiry = parsedExpiryDate;
+
+        const existingStock = await tx.warehouseStock.findUnique({
+          where: { warehouseId_itemId: { warehouseId, itemId } },
+        });
+
+        if (type === 'stock_in' || type === 'return') {
+          if (existingStock) {
+            await tx.warehouseStock.update({
+              where: { id: existingStock.id },
+              data: { quantity: existingStock.quantity + quantity },
+            });
+          } else {
+            await tx.warehouseStock.create({
+              data: {
+                tenantId,
+                warehouseId,
+                itemId,
+                quantity,
+                batchNo: batchNo || null,
+                lotNumber: lotNumber || null,
+                expiryDate: parsedExpiry,
+                costMethod: 'fifo',
+              },
+            });
+          }
+        } else if (type === 'stock_out' || type === 'damage') {
+          if (existingStock) {
+            await tx.warehouseStock.update({
+              where: { id: existingStock.id },
+              data: {
+                quantity: Math.max(0, existingStock.quantity - quantity),
+                ...(type === 'damage' ? { damaged: existingStock.damaged + quantity } : {}),
+              },
+            });
+          } else {
+            await tx.warehouseStock.create({
+              data: {
+                tenantId,
+                warehouseId,
+                itemId,
+                quantity: 0,
+                damaged: type === 'damage' ? quantity : 0,
+                batchNo: batchNo || null,
+                lotNumber: lotNumber || null,
+                expiryDate: parsedExpiry,
+              },
+            });
+          }
+        } else if (type === 'adjustment' && warehouseId) {
+          if (existingStock) {
+            await tx.warehouseStock.update({
+              where: { id: existingStock.id },
+              data: { quantity: Math.max(0, newQty) },
+            });
+          } else {
+            await tx.warehouseStock.create({
+              data: {
+                tenantId,
+                warehouseId,
+                itemId,
+                quantity: Math.max(0, newQty),
+                batchNo: batchNo || null,
+                lotNumber: lotNumber || null,
+                expiryDate: parsedExpiry,
+              },
+            });
+          }
+        }
+      }
+
+      // Handle transfer: decrement from source, increment at destination
+      if (type === 'transfer' && fromWarehouseId && warehouseId) {
+        const fromStock = await tx.warehouseStock.findUnique({
+          where: { warehouseId_itemId: { warehouseId: fromWarehouseId, itemId } },
+        });
+        const toStock = await tx.warehouseStock.findUnique({
+          where: { warehouseId_itemId: { warehouseId, itemId } },
+        });
+
+        if (fromStock) {
+          await tx.warehouseStock.update({
+            where: { id: fromStock.id },
+            data: { quantity: Math.max(0, fromStock.quantity - quantity) },
+          });
+        }
+
+        if (toStock) {
+          await tx.warehouseStock.update({
+            where: { id: toStock.id },
+            data: { quantity: toStock.quantity + quantity },
+          });
+        } else {
+          await tx.warehouseStock.create({
+            data: { tenantId, warehouseId, itemId, quantity },
+          });
+        }
+      }
+
+      // Create stock movement record
+      return tx.stockMovement.create({
+        data: {
+          tenantId,
+          itemId,
+          warehouseId: warehouseId || null,
+          type,
+          quantity,
+          previousQty,
+          newQty: type === 'adjustment' ? newQty : newQty,
+          reason: reason || null,
+          referenceNo: referenceNo || null,
+          referenceType: referenceType || null,
+          fromWarehouseId: fromWarehouseId || null,
+          batchNo: batchNo || null,
+          lotNumber: lotNumber || null,
+          expiryDate: parsedExpiryDate,
+          unitCost: unitCost || 0,
+          notes: notes || null,
+          performedBy: userId,
+        },
+        include: {
+          item: { select: { id: true, name: true, itemCode: true, unit: true } },
+          warehouse: { select: { id: true, name: true, code: true } },
+        },
+      });
     });
 
     logAudit(tenantId, userId, `stock_${type}`, itemId, JSON.stringify({ type, quantity, warehouseId, fromWarehouseId, referenceNo }));

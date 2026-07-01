@@ -197,103 +197,108 @@ export async function POST(request: NextRequest) {
       parsedWarrantyExpiry = new Date(warrantyExpiry);
     }
 
-    const item = await db.inventoryItem.create({
-      data: {
-        tenantId,
-        itemCode,
-        name,
-        sku: sku || null,
-        barcode: barcode || null,
-        shortName: shortName || null,
-        itemType: itemType || 'inventory',
-        categoryId: categoryId || null,
-        subcategoryId: subcategoryId || null,
-        description: description || null,
-        shortDescription: shortDescription || null,
-        brand: brand || null,
-        manufacturer: manufacturer || null,
-        model: model || null,
-        partNumber: partNumber || null,
-        serialNumber: serialNumber || null,
-        unit: unit || 'pcs',
-        unitWeight: unitWeight || null,
-        dimensions: dimensions || null,
-        purchaseCost: purchaseCost || 0,
-        averageCost: averageCost || 0,
-        standardCost: standardCost || 0,
-        lastPurchaseCost: lastPurchaseCost || 0,
-        sellingPrice: sellingPrice || 0,
-        dealerPrice: dealerPrice || 0,
-        contractorPrice: contractorPrice || 0,
-        customerPrice: customerPrice || 0,
-        vipPrice: vipPrice || 0,
-        internalCost: internalCost || 0,
-        labourCost: labourCost || 0,
-        installationCost: installationCost || 0,
-        serviceCost: serviceCost || 0,
-        transportationCost: transportationCost || 0,
-        mobilizationCost: mobilizationCost || 0,
-        equipmentRental: equipmentRental || 0,
-        emergencyCallOut: emergencyCallOut || 0,
-        afterHoursCharge: afterHoursCharge || 0,
-        weekendCharge: weekendCharge || 0,
-        publicHolidayCharge: publicHolidayCharge || 0,
-        currency: currency || 'BND',
-        quantity: quantity || 0,
-        minStock: minStock || 0,
-        maxStock: maxStock || null,
-        reorderLevel: reorderLevel || 0,
-        safetyStock: safetyStock || 0,
-        photos: photos || null,
-        attachments: attachments || null,
-        technicalDatasheet: technicalDatasheet || null,
-        msds: msds || null,
-        warranty: warranty || null,
-        warrantyExpiry: parsedWarrantyExpiry,
-        countryOfOrigin: countryOfOrigin || null,
-        hsCode: hsCode || null,
-        tags: tags || null,
-        status: status || 'draft',
-        remarks: remarks || null,
-        hourlyRate: hourlyRate || null,
-        dailyRate: dailyRate || null,
-        overtimeRate: overtimeRate || null,
-        weekendRate: weekendRate || null,
-        publicHolidayRate: publicHolidayRate || null,
-        dailyRentalRate: dailyRentalRate || null,
-        monthlyRentalRate: monthlyRentalRate || null,
-        estimatedHours: estimatedHours || null,
-        requiredSkills: requiredSkills || null,
-        sop: sop || null,
-      },
-      include: {
-        category: { select: { id: true, name: true, code: true, color: true } },
-        subcategory: { select: { id: true, name: true, code: true } },
-      },
-    });
-
-    // Create suppliers if provided
-    if (Array.isArray(suppliers) && suppliers.length > 0) {
-      await db.itemSupplier.createMany({
-        data: suppliers.map((s: Record<string, unknown>) => ({
+    // Create item and suppliers atomically
+    const item = await db.$transaction(async (tx) => {
+      const created = await tx.inventoryItem.create({
+        data: {
           tenantId,
-          itemId: item.id,
-          supplierName: s.supplierName as string,
-          supplierCode: (s.supplierCode as string) || null,
-          contactPerson: (s.contactPerson as string) || null,
-          phone: (s.phone as string) || null,
-          email: (s.email as string) || null,
-          address: (s.address as string) || null,
-          leadTimeDays: (s.leadTimeDays as number) || 0,
-          purchasePrice: (s.purchasePrice as number) || 0,
-          moq: (s.moq as number) || 1,
-          warranty: (s.warranty as string) || null,
-          paymentTerms: (s.paymentTerms as string) || null,
-          rating: (s.rating as number) || null,
-          isPrimary: (s.isPrimary as boolean) || false,
-        })),
+          itemCode,
+          name,
+          sku: sku || null,
+          barcode: barcode || null,
+          shortName: shortName || null,
+          itemType: itemType || 'inventory',
+          categoryId: categoryId || null,
+          subcategoryId: subcategoryId || null,
+          description: description || null,
+          shortDescription: shortDescription || null,
+          brand: brand || null,
+          manufacturer: manufacturer || null,
+          model: model || null,
+          partNumber: partNumber || null,
+          serialNumber: serialNumber || null,
+          unit: unit || 'pcs',
+          unitWeight: unitWeight || null,
+          dimensions: dimensions ? JSON.stringify(dimensions) : null,
+          purchaseCost: purchaseCost || 0,
+          averageCost: averageCost || 0,
+          standardCost: standardCost || 0,
+          lastPurchaseCost: lastPurchaseCost || 0,
+          sellingPrice: sellingPrice || 0,
+          dealerPrice: dealerPrice || 0,
+          contractorPrice: contractorPrice || 0,
+          customerPrice: customerPrice || 0,
+          vipPrice: vipPrice || 0,
+          internalCost: internalCost || 0,
+          labourCost: labourCost || 0,
+          installationCost: installationCost || 0,
+          serviceCost: serviceCost || 0,
+          transportationCost: transportationCost || 0,
+          mobilizationCost: mobilizationCost || 0,
+          equipmentRental: equipmentRental || 0,
+          emergencyCallOut: emergencyCallOut || 0,
+          afterHoursCharge: afterHoursCharge || 0,
+          weekendCharge: weekendCharge || 0,
+          publicHolidayCharge: publicHolidayCharge || 0,
+          currency: currency || 'BND',
+          quantity: quantity || 0,
+          minStock: minStock || 0,
+          maxStock: maxStock || null,
+          reorderLevel: reorderLevel || 0,
+          safetyStock: safetyStock || 0,
+          photos: photos ? JSON.stringify(photos) : null,
+          attachments: attachments ? JSON.stringify(attachments) : null,
+          technicalDatasheet: technicalDatasheet || null,
+          msds: msds || null,
+          warranty: warranty || null,
+          warrantyExpiry: parsedWarrantyExpiry,
+          countryOfOrigin: countryOfOrigin || null,
+          hsCode: hsCode || null,
+          tags: tags ? JSON.stringify(tags) : null,
+          status: status || 'draft',
+          remarks: remarks || null,
+          hourlyRate: hourlyRate || null,
+          dailyRate: dailyRate || null,
+          overtimeRate: overtimeRate || null,
+          weekendRate: weekendRate || null,
+          publicHolidayRate: publicHolidayRate || null,
+          dailyRentalRate: dailyRentalRate || null,
+          monthlyRentalRate: monthlyRentalRate || null,
+          estimatedHours: estimatedHours || null,
+          requiredSkills: requiredSkills || null,
+          sop: sop || null,
+        },
+        include: {
+          category: { select: { id: true, name: true, code: true, color: true } },
+          subcategory: { select: { id: true, name: true, code: true } },
+        },
       });
-    }
+
+      // Create suppliers if provided
+      if (Array.isArray(suppliers) && suppliers.length > 0) {
+        await tx.itemSupplier.createMany({
+          data: suppliers.map((s: Record<string, unknown>) => ({
+            tenantId,
+            itemId: created.id,
+            supplierName: s.supplierName as string,
+            supplierCode: (s.supplierCode as string) || null,
+            contactPerson: (s.contactPerson as string) || null,
+            phone: (s.phone as string) || null,
+            email: (s.email as string) || null,
+            address: (s.address as string) || null,
+            leadTimeDays: (s.leadTimeDays as number) || 0,
+            purchasePrice: (s.purchasePrice as number) || 0,
+            moq: (s.moq as number) || 1,
+            warranty: (s.warranty as string) || null,
+            paymentTerms: (s.paymentTerms as string) || null,
+            rating: (s.rating as number) || null,
+            isPrimary: (s.isPrimary as boolean) || false,
+          })),
+        });
+      }
+
+      return created;
+    });
 
     // Fire-and-forget audit log
     logAudit(tenantId, userId, 'create', item.id, null, JSON.stringify({ name: item.name, itemCode: item.itemCode }));
@@ -325,9 +330,17 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: 'ids (array) and updates (object) are required' }, { status: 400 });
     }
 
+    const JSON_FIELDS = ['dimensions', 'photos', 'attachments', 'tags', 'requiredSkills'];
+    const safeUpdates = { ...updates };
+    for (const f of JSON_FIELDS) {
+      if (safeUpdates[f] !== undefined && safeUpdates[f] !== null) {
+        safeUpdates[f] = typeof safeUpdates[f] === 'string' ? safeUpdates[f] : JSON.stringify(safeUpdates[f]);
+      }
+    }
+
     const result = await db.inventoryItem.updateMany({
       where: { id: { in: ids }, tenantId },
-      data: updates,
+      data: safeUpdates,
     });
 
     // Audit log for each

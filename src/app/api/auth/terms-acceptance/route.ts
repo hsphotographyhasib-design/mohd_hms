@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
+import { verifyToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,10 +15,21 @@ export const dynamic = 'force-dynamic';
  */
 export async function POST(request: NextRequest) {
   try {
+    // Auth: verify caller is the user they claim to be
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const { userId, tcVersion, privacyVersion, userAgent } = await request.json();
 
     if (!userId || !tcVersion || !privacyVersion) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
+    // Security: ensure the caller can only accept terms for themselves
+    if (payload.userId !== userId && payload.role !== 'super_admin') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||

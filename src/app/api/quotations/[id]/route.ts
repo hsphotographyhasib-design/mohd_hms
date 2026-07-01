@@ -35,6 +35,7 @@ export async function GET(
       where: { id, tenantId },
       include: {
         customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
+        preparedByUser: { select: { name: true } },
       },
     });
 
@@ -42,14 +43,7 @@ export async function GET(
       return NextResponse.json({ error: 'Quotation not found' }, { status: 404 });
     }
 
-    let preparedByName: string | null = null;
-    if (quotation.preparedBy) {
-      const user = await db.user.findUnique({
-        where: { id: quotation.preparedBy },
-        select: { name: true },
-      });
-      if (user) preparedByName = user.name;
-    }
+    const preparedByName = quotation.preparedByUser?.name || null;
 
     return NextResponse.json({
       id: quotation.id,
@@ -161,17 +155,11 @@ export async function PUT(
       data: updateData,
       include: {
         customer: { select: { name: true, phone: true, email: true, address: true } },
+        preparedByUser: { select: { name: true } },
       },
     });
 
-    let preparedByName: string | null = null;
-    if (updated.preparedBy) {
-      const user = await db.user.findUnique({
-        where: { id: updated.preparedBy },
-        select: { name: true },
-      });
-      if (user) preparedByName = user.name;
-    }
+    const preparedByName = updated.preparedByUser?.name || null;
 
     return NextResponse.json({
       id: updated.id,

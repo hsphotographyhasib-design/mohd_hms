@@ -92,50 +92,52 @@ export async function POST(request: NextRequest) {
       assetNumber: string;
     }> = [];
 
-    // Process each equipment
-    for (const equipment of equipmentList) {
-      const newQrId = getUniqueQrId();
-      const newQrUrl = `https://${tenantDomain}/equipment/${newQrId}`;
+    // Process each equipment inside a single transaction to avoid partial state
+    await db.$transaction(async (tx) => {
+      for (const equipment of equipmentList) {
+        const newQrId = getUniqueQrId();
+        const newQrUrl = `https://${tenantDomain}/equipment/${newQrId}`;
 
-      // Deactivate old QR record if exists
-      if (equipment.qrCodeRecord) {
-        await db.equipmentQrCode.update({
-          where: { id: equipment.qrCodeRecord.id },
-          data: { isActive: false },
+        // Deactivate old QR record if exists
+        if (equipment.qrCodeRecord) {
+          await tx.equipmentQrCode.update({
+            where: { id: equipment.qrCodeRecord.id },
+            data: { isActive: false },
+          });
+        }
+
+        const newVersion = equipment.qrCodeRecord ? equipment.qrCodeRecord.version + 1 : 1;
+
+        // Create new QR code record
+        await tx.equipmentQrCode.create({
+          data: {
+            tenantId,
+            equipmentId: equipment.id,
+            qrId: newQrId,
+            qrUrl: newQrUrl,
+            isActive: true,
+            lastRegeneratedAt: new Date(),
+            version: newVersion,
+          },
         });
-      }
 
-      const newVersion = equipment.qrCodeRecord ? equipment.qrCodeRecord.version + 1 : 1;
+        // Update equipment
+        await tx.equipment.update({
+          where: { id: equipment.id },
+          data: {
+            qrId: newQrId,
+            qrCode: newQrUrl,
+          },
+        });
 
-      // Create new QR code record
-      await db.equipmentQrCode.create({
-        data: {
-          tenantId,
+        results.push({
           equipmentId: equipment.id,
           qrId: newQrId,
           qrUrl: newQrUrl,
-          isActive: true,
-          lastRegeneratedAt: new Date(),
-          version: newVersion,
-        },
-      });
-
-      // Update equipment
-      await db.equipment.update({
-        where: { id: equipment.id },
-        data: {
-          qrId: newQrId,
-          qrCode: newQrUrl,
-        },
-      });
-
-      results.push({
-        equipmentId: equipment.id,
-        qrId: newQrId,
-        qrUrl: newQrUrl,
-        assetNumber: equipment.assetNumber,
-      });
-    }
+          assetNumber: equipment.assetNumber,
+        });
+      }
+    });
 
     return NextResponse.json({
       success: true,

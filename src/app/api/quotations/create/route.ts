@@ -4,7 +4,6 @@ import { verifyToken } from '@/lib/auth';
 import {
   generateQuotationNo,
   computeTotals,
-  addNewQuotationFields,
   type LineItem,
 } from '@/lib/quotation-helpers';
 
@@ -57,88 +56,71 @@ export async function POST(request: NextRequest) {
     // Generate quotation number
     const quotationNo = await generateQuotationNo(tenantId);
 
-    // 1. Create quotation with original fields only (Turbopack-compatible)
+    // Single atomic create — all fields set in one operation
     const quotation = await db.quotation.create({
       data: {
         tenantId,
         customerId,
         complaintId: complaintId || null,
-        quotationNo: '',  // placeholder, will update below
+        quotationNo,
         title,
         description: description || null,
         items: JSON.stringify(parsedItems),
         subtotal,
-        tax: 0,
-        discount: 0,
+        tax,
+        discount: finalDiscount,
+        shipping: finalShipping,
         total,
+        taxRate: finalTaxRate,
         status: 'DRAFT',
         validUntil: validUntil ? new Date(validUntil) : null,
         notes: notes || null,
+        referenceNo: referenceNo || null,
+        projectName: projectName || null,
+        site: site || null,
+        preparedBy: userId,
+        terms: terms ? JSON.stringify(terms) : null,
+        currency: currency || 'BND',
       },
-      include: {
-        customer: { select: { name: true, phone: true, email: true } },
-      },
-    });
-
-    // 2. Set the new schema fields using raw SQL (bypasses Turbopack's cached Prisma client)
-    await addNewQuotationFields(quotation.id, {
-      quotationNo,
-      referenceNo,
-      projectName,
-      site,
-      preparedBy: userId,
-      terms,
-      currency,
-      taxRate: finalTaxRate,
-      discount: finalDiscount,
-      shipping: finalShipping,
-      sentAt: null,
-      acceptedAt: null,
-    });
-
-    // 3. Fetch with joined names for response
-    const q = await db.quotation.findFirst({
-      where: { id: quotation.id },
       include: {
         customer: { select: { name: true } },
         preparedByUser: { select: { name: true } },
       },
     });
-    if (!q) throw new Error('Quotation not found after creation');
 
     return NextResponse.json({
-      id: q.id,
-      tenantId: q.tenantId,
-      customerId: q.customerId,
-      customerName: q.customer?.name || null,
-      complaintId: q.complaintId,
-      quotationNo: q.quotationNo,
-      title: q.title,
-      description: q.description,
-      referenceNo: q.referenceNo,
-      projectName: q.projectName,
-      site: q.site,
-      preparedBy: q.preparedBy,
-      preparedByName: q.preparedByUser?.name || null,
-      currency: q.currency,
-      items: q.items,
-      terms: q.terms,
-      subtotal: Number(q.subtotal),
-      taxRate: Number(q.taxRate),
-      tax: Number(q.tax),
-      discount: Number(q.discount),
-      shipping: Number(q.shipping),
-      total: Number(q.total),
-      status: q.status,
-      validUntil: q.validUntil,
-      approvedBy: q.approvedBy,
-      approvedAt: q.approvedAt,
-      sentAt: q.sentAt,
-      acceptedAt: q.acceptedAt,
-      pdfUrl: q.pdfUrl,
-      notes: q.notes,
-      createdAt: q.createdAt,
-      updatedAt: q.updatedAt,
+      id: quotation.id,
+      tenantId: quotation.tenantId,
+      customerId: quotation.customerId,
+      customerName: quotation.customer?.name || null,
+      complaintId: quotation.complaintId,
+      quotationNo: quotation.quotationNo,
+      title: quotation.title,
+      description: quotation.description,
+      referenceNo: quotation.referenceNo,
+      projectName: quotation.projectName,
+      site: quotation.site,
+      preparedBy: quotation.preparedBy,
+      preparedByName: quotation.preparedByUser?.name || null,
+      currency: quotation.currency,
+      items: quotation.items,
+      terms: quotation.terms,
+      subtotal: Number(quotation.subtotal),
+      taxRate: Number(quotation.taxRate),
+      tax: Number(quotation.tax),
+      discount: Number(quotation.discount),
+      shipping: Number(quotation.shipping),
+      total: Number(quotation.total),
+      status: quotation.status,
+      validUntil: quotation.validUntil,
+      approvedBy: quotation.approvedBy,
+      approvedAt: quotation.approvedAt,
+      sentAt: quotation.sentAt,
+      acceptedAt: quotation.acceptedAt,
+      pdfUrl: quotation.pdfUrl,
+      notes: quotation.notes,
+      createdAt: quotation.createdAt,
+      updatedAt: quotation.updatedAt,
     }, { status: 201 });
   } catch (error) {
     console.error('Quotation create error:', error);

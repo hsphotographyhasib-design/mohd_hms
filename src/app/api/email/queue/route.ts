@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { retryFailedEmail, getQueueStatus } from '@/lib/email-service';
+import { verifyToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -7,8 +8,13 @@ export const dynamic = 'force-dynamic';
  * GET /api/email/queue — Queue status
  * POST /api/email/queue — Retry a failed email
  */
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const status = getQueueStatus();
     return NextResponse.json(status);
   } catch (err) {
@@ -18,6 +24,11 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const authHeader = req.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     const { logId } = await req.json();
     if (!logId) {
       return NextResponse.json({ error: 'logId is required' }, { status: 400 });
