@@ -98,7 +98,9 @@ export type AppView =
   // Email management views
   | 'email-management'
   // Assignment views
-  | 'complaint-assignment';
+  | 'complaint-assignment'
+  // Technician Operations Center
+  | 'technicians';
 
 // ============ EQUIPMENT ============
 

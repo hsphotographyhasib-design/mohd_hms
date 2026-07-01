@@ -28,6 +28,7 @@ const InventoryList = lazy(() => import('@/components/modules/inventory/inventor
 const InventoryDetail = lazy(() => import('@/components/modules/inventory/inventory-detail').then(m => ({ default: m.InventoryDetail })));
 const CustomerList = lazy(() => import('@/components/modules/customers/customer-list').then(m => ({ default: m.CustomerList })));
 const EmployeeList = lazy(() => import('@/components/modules/employees/employee-list').then(m => ({ default: m.EmployeeList })));
+const TechnicianOpsCenter = lazy(() => import('@/components/modules/technicians/technician-ops-center').then(m => ({ default: m.TechnicianOpsCenter })));
 const PurchaseList = lazy(() => import('@/components/modules/purchases/purchase-list').then(m => ({ default: m.PurchaseList })));
 const VehicleList = lazy(() => import('@/components/modules/vehicles/vehicle-list').then(m => ({ default: m.VehicleList })));
 const FinanceView = lazy(() => import('@/components/modules/finance/finance-view').then(m => ({ default: m.FinanceView })));
@@ -110,6 +111,7 @@ function ViewRouter() {
       {currentView === 'inventory' && <InventoryList />}
       {currentView === 'customers' && <CustomerList />}
       {currentView === 'employees' && <EmployeeList />}
+      {currentView === 'technicians' && <TechnicianOpsCenter />}
       {currentView === 'purchases' && <PurchaseList />}
       {currentView === 'vehicles' && <VehicleList />}
       {currentView === 'finance' && <FinanceView />}

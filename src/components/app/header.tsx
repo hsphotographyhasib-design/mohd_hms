@@ -46,6 +46,7 @@ const viewLabels: Record<AppView, string> = {
   inventory: 'Inventory',
   customers: 'Customers',
   employees: 'Employees',
+  technicians: 'Technician Ops Center',
   purchases: 'Purchases',
   vehicles: 'Vehicles',
   finance: 'Finance',

@@ -256,6 +256,7 @@ export function canAccess(userRole: UserRole, feature: string): boolean {
     inventory: ['super_admin', 'admin', 'manager', 'supervisor'],
     customers: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
     employees: ['super_admin', 'admin', 'manager'],
+    technicians: ['super_admin', 'admin', 'manager', 'supervisor'],
     purchases: ['super_admin', 'admin', 'manager'],
     vehicles: ['super_admin', 'admin', 'manager'],
     finance: ['super_admin', 'admin', 'manager', 'finance'],
