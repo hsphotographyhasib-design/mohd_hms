@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "next-themes";
+import { TopUtilityBar } from "@/components/layout/top-utility-bar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -180,6 +181,7 @@ export default function RootLayout({
           disableTransitionOnChange
           storageKey="facilitypro-theme"
         >
+          <TopUtilityBar />
           {children}
           <Toaster />
         </ThemeProvider>

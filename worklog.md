@@ -344,3 +344,25 @@ Stage Summary:
 ### Schema Changes:
 - prisma/schema.prisma: Added QuotationPreparedBy named relation
 
+---
+Task ID: top-utility-bar
+Agent: main
+Task: Build TopUtilityBar matching reference image with exact MOHD.HMS branding
+
+Work Log:
+- Analyzed reference image with VLM to confirm layout: left (location), center (email), right (emergency)
+- Created `/src/components/layout/top-utility-bar.tsx` — Server Component, pure CSS hover effects, no JS
+- Three inline SVG icons (location pin, envelope, warning triangle) at 16×16px, white stroke
+- Desktop: 3-column flexbox with 32px padding, Poppins 14px/500, white on #0A2F1F
+- Tablet (768-1024px): reduced font to 13px, same layout
+- Mobile (<768px): two-row centered layout (location row 1, email|emergency row 2)
+- Added `.utility-link` hover styles to globals.css (underline + brightness filter, 0.25s ease)
+- Integrated into `src/app/layout.tsx` above `{children}` inside ThemeProvider
+- All links have proper aria-labels, 44px minimum touch targets, focus-visible outlines
+
+Stage Summary:
+- Files created: `src/components/layout/top-utility-bar.tsx`
+- Files modified: `src/app/layout.tsx` (import + render), `src/app/globals.css` (hover CSS)
+- Verified via Agent Browser + VLM: desktop (3 sections, correct colors, icons visible), mobile (readable, all info present)
+- Zero lint errors
+

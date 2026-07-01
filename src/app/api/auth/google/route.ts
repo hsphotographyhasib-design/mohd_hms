@@ -6,17 +6,74 @@ import { generateToken } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
 // ──────────────────────────────────────────────
+// GOOGLE AUTH CONFIG (env var scanning)
+// ──────────────────────────────────────────────
+
+/**
+ * Find GOOGLE_CLIENT_ID from environment variables.
+ * Mirrors the same scanning logic used for DATABASE_URL — checks
+ * well-known names first, then scans all env vars.
+ */
+function findGoogleClientId(): string | null {
+  // 1. Well-known names
+  const candidates = [
+    'GOOGLE_CLIENT_ID',
+    'NEXT_PUBLIC_GOOGLE_CLIENT_ID',
+    'GOOGLE_OAUTH_CLIENT_ID',
+  ];
+  for (const name of candidates) {
+    const val = process.env[name];
+    if (val && val.includes('.apps.googleusercontent.com')) {
+      console.log(`[Google Auth] Found client ID in env: ${name}`);
+      return val;
+    }
+  }
+
+  // 2. Scan all env vars for a Google client ID value
+  for (const [key, val] of Object.entries(process.env)) {
+    if (
+      val &&
+      typeof val === 'string' &&
+      val.includes('.apps.googleusercontent.com') &&
+      !key.includes('SECRET')
+    ) {
+      console.log(`[Google Auth] Found client ID in env (scan): ${key}`);
+      return val;
+    }
+  }
+
+  return null;
+}
+
+function findGoogleClientSecret(): string | undefined {
+  const candidates = ['GOOGLE_CLIENT_SECRET', 'GOOGLE_OAUTH_CLIENT_SECRET'];
+  for (const name of candidates) {
+    if (process.env[name]) return process.env[name];
+  }
+  return undefined;
+}
+
+// ──────────────────────────────────────────────
 // GOOGLE AUTH CLIENT (singleton per process)
 // ──────────────────────────────────────────────
 
 let googleClient: OAuth2Client | null = null;
+let _resolvedClientId: string | null = null;
 
-function getGoogleClient(): OAuth2Client {
+function getGoogleClientId(): string | null {
+  if (_resolvedClientId === null) {
+    _resolvedClientId = findGoogleClientId();
+  }
+  return _resolvedClientId;
+}
+
+function getGoogleClient(): OAuth2Client | null {
   if (!googleClient) {
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+    const clientId = getGoogleClientId();
+    const clientSecret = findGoogleClientSecret();
     if (!clientId) {
-      throw new Error('GOOGLE_CLIENT_ID is not configured in environment variables.');
+      console.error('[Google Auth] GOOGLE_CLIENT_ID not found in any environment variable.');
+      return null;
     }
     googleClient = new OAuth2Client(clientId, clientSecret);
   }
@@ -43,8 +100,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // ── 0. Check if Google auth is configured ──
+    const clientId = getGoogleClientId();
+    if (!clientId) {
+      return NextResponse.json(
+        { error: 'Google Sign-In is not configured on the server. Please contact the administrator.' },
+        { status: 503 },
+      );
+    }
+
     // ── 1. Verify the Google ID token using google-auth-library ──
-    const googleUser = await verifyGoogleToken(googleToken);
+    const googleUser = await verifyGoogleToken(googleToken, clientId);
     if (!googleUser) {
       return NextResponse.json(
         { error: 'Invalid Google token. Please try again.' },
@@ -259,9 +325,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error('Google auth error:', error);
-    const message = error instanceof Error && error.message.includes('GOOGLE_CLIENT_ID')
-      ? 'Google Sign-In is not configured on the server.'
-      : getDbFriendlyMessage(error);
+    const message = getDbFriendlyMessage(error);
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
@@ -280,14 +344,18 @@ interface GoogleUserInfo {
   family_name?: string;
 }
 
-async function verifyGoogleToken(idToken: string): Promise<GoogleUserInfo | null> {
+async function verifyGoogleToken(idToken: string, clientId: string): Promise<GoogleUserInfo | null> {
   try {
     const client = getGoogleClient();
+    if (!client) {
+      console.error('[Google Auth] Cannot verify token — OAuth2Client not initialized');
+      return null;
+    }
 
     // Verify the ID token: checks signature, audience (client_id), expiry, issuer
     const ticket = await client.verifyIdToken({
       idToken,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: clientId,
     });
 
     const payload = ticket.getPayload();

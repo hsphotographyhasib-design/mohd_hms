@@ -351,3 +351,26 @@ body {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.3);
 }
+
+/* ── Top Utility Bar ── */
+.utility-link {
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.utility-link:hover {
+  text-decoration: underline;
+  filter: brightness(1.15);
+}
+.utility-link:focus-visible {
+  outline: 2px solid #FFFFFF;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Tablet spacing reduction */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .utility-link span {
+    font-size: 13px;
+  }
+}

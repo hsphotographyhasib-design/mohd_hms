@@ -1,6 +1,11 @@
 /**
  * Prisma 7 singleton — PostgreSQL via @prisma/adapter-pg.
  *
+ * IMPORTANT: This module must NEVER throw at import/load time.
+ * The PrismaClient constructor is safe to call even without a valid DB URL —
+ * it only fails when an actual query is executed. This allows routes to
+ * import `db` without crashing, and handle DB errors in their try/catch.
+ *
  * Automatically finds the PostgreSQL connection string from environment
  * variables, trying multiple naming conventions:
  *   1. DATABASE_URL (standard)
@@ -12,10 +17,9 @@
 import { PrismaClient } from "../../generated/prisma/client";
 
 // ---------------------------------------------------------------------------
-// 1. Find PostgreSQL connection string from env vars
+// 1. Find PostgreSQL connection string from env vars (never throws)
 // ---------------------------------------------------------------------------
 
-/** Known env var names to check (in priority order) */
 const DB_URL_CANDIDATES = [
   "DATABASE_URL",
   "PRISMA_DATABASE_URL",
@@ -23,7 +27,6 @@ const DB_URL_CANDIDATES = [
 ];
 
 function findPostgresUrl(): { url: string; source: string } {
-  // --- Try known env var names first ---
   for (const name of DB_URL_CANDIDATES) {
     const val = process.env[name];
     if (val && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
@@ -32,8 +35,7 @@ function findPostgresUrl(): { url: string; source: string } {
     }
   }
 
-  // --- Fallback: scan ALL env vars for a postgres:// value ---
-  // This handles cases like Vercel prefixing vars (e.g. PROJECT_DATABASE_URL)
+  // Fallback: scan ALL env vars for a postgres:// value
   for (const [key, val] of Object.entries(process.env)) {
     if (
       val &&
@@ -48,7 +50,7 @@ function findPostgresUrl(): { url: string; source: string } {
     }
   }
 
-  // --- In local dev, try reading .env file directly ---
+  // In local dev, try reading .env file directly
   if (process.env.NODE_ENV !== "production") {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -82,49 +84,40 @@ function findPostgresUrl(): { url: string; source: string } {
   return { url: "", source: "" };
 }
 
-function getDatabaseUrl(): string {
-  const { url, source } = findPostgresUrl();
-
-  if (!url) {
-    throw new Error(
-      "[Prisma] No PostgreSQL connection string found. " +
-        "Set one of these Vercel Environment Variables:\n" +
-        "  - DATABASE_URL\n" +
-        "  - POSTGRES_URL\n" +
-        "  - PRISMA_DATABASE_URL\n" +
-        'Value must start with "postgres://" or "postgresql://".'
-    );
-  }
-
-  return url;
-}
-
-const connectionString = getDatabaseUrl();
-
 // ---------------------------------------------------------------------------
-// 2. Build PostgreSQL adapter
+// 2. Create PrismaClient (never throws — queries fail later if no DB)
 // ---------------------------------------------------------------------------
 
-function buildAdapter() {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { PrismaPg } = require("@prisma/adapter-pg") as {
-    PrismaPg: typeof import("@prisma/adapter-pg").PrismaPg;
-  };
+const { url: dbUrl, source: dbSource } = findPostgresUrl();
 
-  const isServerless =
-    process.env.NODE_ENV === "production" ||
-    !!process.env.VERCEL;
-
-  console.log(
-    `[Prisma] Using PostgreSQL adapter${isServerless ? " (serverless/Vercel)" : " (development)"}`
+if (!dbUrl) {
+  console.warn(
+    "[Prisma] No PostgreSQL connection string found. " +
+      "Database features are unavailable until a real postgres:// URL is provided. " +
+      "The server will start, but any DB query will fail."
   );
-
-  return new PrismaPg(connectionString, {
-    max: isServerless ? 3 : 10,
-    idleTimeout: isServerless ? 10 : 20,
-    connectTimeout: isServerless ? 10 : 15,
-  });
 }
+
+const isServerless = process.env.NODE_ENV === "production" || !!process.env.VERCEL;
+
+// Use placeholder URL if no real one found — constructor won't throw,
+// but queries will fail at runtime (which route handlers can catch).
+const effectiveUrl = dbUrl || "postgresql://localhost:5432/__no_db_placeholder__";
+
+console.log(
+  `[Prisma] Init${dbUrl ? ` using ${dbSource}` : " (no DB URL)"}${isServerless ? " [serverless]" : " [dev]"}`
+);
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const { PrismaPg } = require("@prisma/adapter-pg") as {
+  PrismaPg: typeof import("@prisma/adapter-pg").PrismaPg;
+};
+
+const adapter = new PrismaPg(effectiveUrl, {
+  max: isServerless ? 3 : 10,
+  idleTimeout: isServerless ? 10 : 20,
+  connectTimeout: isServerless ? 10 : 15,
+});
 
 // ---------------------------------------------------------------------------
 // 3. PrismaClient singleton (survives HMR in development)
@@ -133,8 +126,6 @@ function buildAdapter() {
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
-
-const adapter = buildAdapter();
 
 export const prisma =
   globalForPrisma.prisma ??
@@ -153,7 +144,6 @@ export const prisma =
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 
-  // Log slow queries in dev (> 500ms)
   try {
     // @ts-expect-error – Prisma 7 event listener
     prisma.on("query", (e: { duration: number; query: string }) => {
