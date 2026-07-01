@@ -1,24 +1,55 @@
 /**
  * Prisma 7 singleton — PostgreSQL via @prisma/adapter-pg.
  *
- * Requirements:
- *   - DATABASE_URL must be a valid PostgreSQL connection string
- *     (e.g. postgresql://user:pass@host:5432/dbname?sslmode=require)
- *   - For Vercel: add DATABASE_URL to Vercel Environment Variables
- *   - For local dev: set DATABASE_URL in your .env file
+ * Automatically finds the PostgreSQL connection string from environment
+ * variables, trying multiple naming conventions:
+ *   1. DATABASE_URL (standard)
+ *   2. POSTGRES_URL (Vercel Postgres / Neon)
+ *   3. PRISMA_DATABASE_URL (Vercel Postgres)
+ *   4. Any env var whose value starts with postgres:// or postgresql://
  */
 
 import { PrismaClient } from "../../generated/prisma/client";
 
 // ---------------------------------------------------------------------------
-// 1. Validate DATABASE_URL
+// 1. Find PostgreSQL connection string from env vars
 // ---------------------------------------------------------------------------
 
-function getDatabaseUrl(): string {
-  const url = process.env.DATABASE_URL ?? "";
+/** Known env var names to check (in priority order) */
+const DB_URL_CANDIDATES = [
+  "DATABASE_URL",
+  "PRISMA_DATABASE_URL",
+  "POSTGRES_URL",
+];
 
-  // In development, try reading .env directly (works around shell issues)
-  if (!url && process.env.NODE_ENV !== "production") {
+function findPostgresUrl(): { url: string; source: string } {
+  // --- Try known env var names first ---
+  for (const name of DB_URL_CANDIDATES) {
+    const val = process.env[name];
+    if (val && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
+      console.log(`[Prisma] Found PostgreSQL URL in env: ${name}`);
+      return { url: val, source: name };
+    }
+  }
+
+  // --- Fallback: scan ALL env vars for a postgres:// value ---
+  // This handles cases like Vercel prefixing vars (e.g. PROJECT_DATABASE_URL)
+  for (const [key, val] of Object.entries(process.env)) {
+    if (
+      val &&
+      typeof val === "string" &&
+      (val.startsWith("postgres://") || val.startsWith("postgresql://")) &&
+      !key.includes("SECRET") &&
+      !key.includes("KEY") &&
+      !key.includes("PASSWORD")
+    ) {
+      console.log(`[Prisma] Found PostgreSQL URL in env (fallback scan): ${key}`);
+      return { url: val, source: key };
+    }
+  }
+
+  // --- In local dev, try reading .env file directly ---
+  if (process.env.NODE_ENV !== "production") {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { readFileSync } = require("fs");
@@ -28,30 +59,40 @@ function getDatabaseUrl(): string {
       const envContent = readFileSync(envPath, "utf-8");
       for (const line of envContent.split("\n")) {
         const trimmed = line.trim();
-        if (!trimmed.startsWith("DATABASE_URL=")) continue;
+        if (!trimmed.includes("=")) continue;
+        const eqIdx = trimmed.indexOf("=");
+        const name = trimmed.slice(0, eqIdx).trim();
         const value = trimmed
-          .replace(/^DATABASE_URL=/, "")
+          .slice(eqIdx + 1)
           .replace(/^["']|["']$/g, "")
           .trim();
-        if (value.length > 0) return value;
+        if (
+          value &&
+          (value.startsWith("postgres://") || value.startsWith("postgresql://"))
+        ) {
+          console.log(`[Prisma] Found PostgreSQL URL in .env: ${name}`);
+          return { url: value, source: name };
+        }
       }
     } catch {
       // .env not found — acceptable in dev
     }
   }
 
+  return { url: "", source: "" };
+}
+
+function getDatabaseUrl(): string {
+  const { url, source } = findPostgresUrl();
+
   if (!url) {
     throw new Error(
-      "[Prisma] DATABASE_URL is not set. " +
-        'It must be a PostgreSQL connection string starting with "postgres://" or "postgresql://". ' +
-        "Local dev: add it to your .env file. " +
-        "Vercel: add it to Vercel Environment Variables."
-    );
-  }
-
-  if (!url.startsWith("postgres://") && !url.startsWith("postgresql://")) {
-    throw new Error(
-      `[Prisma] DATABASE_URL must start with "postgres://" or "postgresql://". Got: ${url.substring(0, 20)}...`
+      "[Prisma] No PostgreSQL connection string found. " +
+        "Set one of these Vercel Environment Variables:\n" +
+        "  - DATABASE_URL\n" +
+        "  - POSTGRES_URL\n" +
+        "  - PRISMA_DATABASE_URL\n" +
+        'Value must start with "postgres://" or "postgresql://".'
     );
   }
 
