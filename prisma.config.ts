@@ -39,10 +39,13 @@ function findDatabaseUrl(): string {
     }
   }
 
-  throw new Error(
-    "[prisma.config] No PostgreSQL URL found in environment variables.\n" +
-      "Set DATABASE_URL, POSTGRES_URL, or PRISMA_DATABASE_URL."
+  // No PostgreSQL URL found — use a dummy URL so `prisma generate` still succeeds.
+  // Runtime code in src/lib/prisma.ts will handle the missing-DB case gracefully.
+  console.warn(
+    "[prisma.config] No PostgreSQL URL found — using placeholder. " +
+      "Database features will be unavailable until a real postgres:// URL is provided."
   );
+  return "postgresql://localhost:5432/__placeholder_no_db__";
 }
 
 export default defineConfig({
