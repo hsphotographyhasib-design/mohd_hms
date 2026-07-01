@@ -213,13 +213,17 @@ export async function GET(request: NextRequest) {
       db.complaint.findMany({
         where: {
           assignedToId: { in: pageTechIds },
-          category: { not: null, not: '' },
+          AND: [
+            { category: { not: null } },
+            { category: { not: '' } },
+          ],
         },
         select: { assignedToId: true, category: true },
         distinct: ['assignedToId', 'category'],
       }).then(rows => {
         const map: Record<string, string[]> = {};
         for (const r of rows) {
+          if (!r.assignedToId) continue;
           if (!map[r.assignedToId]) map[r.assignedToId] = [];
           if (r.category && !map[r.assignedToId].includes(r.category)) {
             map[r.assignedToId].push(r.category);

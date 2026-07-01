@@ -473,7 +473,7 @@ function OverviewTab({ tech }: { tech: TechnicianDetail }) {
     <div className="space-y-6">
       {/* Profile Header */}
       <div className="flex items-center gap-4">
-        <Avatar className="h-16 w-16 ring-2 ring-offset-2 ring-offset-white" style={{ ringColor: 'var(--tw-ring-color)' }}>
+        <Avatar className="h-16 w-16 ring-2 ring-offset-2 ring-offset-white ring-emerald-500">
           <AvatarFallback className={cn('text-xl font-bold bg-emerald-50 text-emerald-700')}>
             {tech.avatar ? <img src={tech.avatar} alt={tech.name} className="h-full w-full rounded-full object-cover" /> : initials}
           </AvatarFallback>
