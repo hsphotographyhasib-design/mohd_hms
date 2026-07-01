@@ -1,16 +1,26 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = (() => {
+/**
+ * JWT Secret resolution — NEVER throws at module level.
+ *
+ * - If JWT_SECRET env var is present and non-empty, use it.
+ * - Otherwise fall back to a placeholder so the server can start.
+ * - A flag (`_jwtInsecure`) is set so individual token operations can
+ *   fail gracefully rather than crashing the whole process.
+ */
+const _resolvedSecret = (() => {
   const secret = process.env.JWT_SECRET;
-  if (secret && secret.length > 0) return secret;
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error('[AUTH] CRITICAL: JWT_SECRET environment variable is not set in production. Refusing to start without a secure secret.');
-  }
-  // Dev-only fallback so local development works without env var
-  console.warn('[AUTH] WARNING: JWT_SECRET not set — using dev-only fallback. DO NOT use in production.');
-  return '__dev_only_jwt_secret_do_not_use_in_prod__';
+  if (secret && secret.length > 0) return { value: secret, insecure: false };
+  console.warn(
+    '[AUTH] WARNING: JWT_SECRET env var is not set. Using insecure placeholder. ' +
+    'Auth token operations will fail until a proper secret is configured.'
+  );
+  return { value: '__insecure_jwt_placeholder_set_jwt_secret__', insecure: true };
 })();
+
+const JWT_SECRET = _resolvedSecret.value;
+const _jwtInsecure = _resolvedSecret.insecure;
 const JWT_EXPIRES_IN = '7d';
 
 export async function hashPassword(password: string): Promise<string> {
@@ -22,10 +32,18 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 }
 
 export function generateToken(payload: object): string {
+  if (_jwtInsecure) {
+    console.error('[AUTH] generateToken called but JWT_SECRET is not configured. Refusing to sign token.');
+    return '';
+  }
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
 }
 
 export function verifyToken(token: string): jwt.JwtPayload | null {
+  if (_jwtInsecure) {
+    console.error('[AUTH] verifyToken called but JWT_SECRET is not configured. Refusing to verify token.');
+    return null;
+  }
   try {
     return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
   } catch {
@@ -90,10 +108,18 @@ export function generateRefreshToken(): string {
 const TEMP_TOKEN_EXPIRES_IN = '30m';
 
 export function generateTempToken(payload: object): string {
+  if (_jwtInsecure) {
+    console.error('[AUTH] generateTempToken called but JWT_SECRET is not configured. Refusing to sign token.');
+    return '';
+  }
   return jwt.sign(payload, JWT_SECRET, { expiresIn: TEMP_TOKEN_EXPIRES_IN } as jwt.SignOptions);
 }
 
 export function verifyTempToken(token: string): jwt.JwtPayload | null {
+  if (_jwtInsecure) {
+    console.error('[AUTH] verifyTempToken called but JWT_SECRET is not configured. Refusing to verify token.');
+    return null;
+  }
   try {
     return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
   } catch {

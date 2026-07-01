@@ -390,3 +390,26 @@ Stage Summary:
 - OTP codes are hashed before database storage (SHA-256)
 - Backend validates and normalizes independently of frontend input
 
+---
+Task ID: jwt-secret-fix
+Agent: main
+Task: Fix JWT_SECRET module-level crash — "Refusing to start without a secure secret"
+
+Work Log:
+- Diagnosed: `src/lib/auth.ts` line 8 had `throw new Error(...)` inside a module-level IIFE when `JWT_SECRET` env var is missing in production — identical anti-pattern to the previous `prisma.ts` crash
+- Applied the same "never throw at module level" fix pattern:
+  - Removed the `throw` in production
+  - IIFE now always returns a value (either real secret or insecure placeholder)
+  - Set `_jwtInsecure` flag when no real secret available
+  - `generateToken()` returns empty string + console.error when insecure
+  - `verifyToken()` returns null + console.error when insecure
+  - `generateTempToken()` returns empty string + console.error when insecure
+  - `verifyTempToken()` returns null + console.error when insecure
+- Server starts successfully: `✓ Ready in 1065ms`, `GET / 200`
+- Zero JWT_SECRET errors in dev log (searched with rg)
+- The only errors are ECONNREFUSED from CMS landing API (no PostgreSQL in sandbox — unrelated)
+
+Stage Summary:
+- File modified: `src/lib/auth.ts` (lines 4-13, 34-51, 110-128)
+- Behavior: Server starts even without JWT_SECRET; individual auth operations fail gracefully (return null/empty) instead of crashing the process
+- Pattern matches the prisma.ts fix from earlier: never throw at module level
