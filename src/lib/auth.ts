@@ -15,10 +15,10 @@ function findDatabaseUrl(): string | null {
   const candidates = ['DATABASE_URL', 'PRISMA_DATABASE_URL', 'POSTGRES_URL'];
   for (const name of candidates) {
     const val = process.env[name];
-    if (val && (val.startsWith('postgres://') || val.startsWith('postgresql://') || val.startsWith('file:'))) return val;
+    if (val && (val.startsWith('postgres://') || val.startsWith('postgresql://'))) return val;
   }
   for (const [key, val] of Object.entries(process.env)) {
-    if (val && typeof val === 'string' && (val.startsWith('postgres://') || val.startsWith('postgresql://') || val.startsWith('file:'))) {
+    if (val && typeof val === 'string' && (val.startsWith('postgres://') || val.startsWith('postgresql://'))) {
       return val;
     }
   }

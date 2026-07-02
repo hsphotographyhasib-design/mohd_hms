@@ -26,7 +26,6 @@ export async function GET() {
   result.dbUrl = {
     found: !!dbUrlInfo.url,
     source: dbUrlInfo.source || 'none',
-    isSQLite: dbUrlInfo.isSQLite,
     urlPrefix: dbUrlInfo.url ? dbUrlInfo.url.split('://')[0] + '://' : 'none',
     urlMasked: dbUrlInfo.url
       ? dbUrlInfo.url.replace(/(\/\/[^:]+:)([^@]+)(@.+)/, '$1****$3')
@@ -45,8 +44,7 @@ export async function GET() {
     if (typeof val === 'string' && val.length > 10) {
       if (
         val.startsWith('postgres://') ||
-        val.startsWith('postgresql://') ||
-        val.startsWith('file:')
+        val.startsWith('postgresql://')
       ) {
         dbLikeEnvVars[key] = val.replace(/(\/\/[^:]+:)([^@]+)(@.+)/, '$1****$3');
       }

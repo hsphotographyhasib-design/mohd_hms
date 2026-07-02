@@ -169,25 +169,6 @@ function classifyError(error: unknown): ErrorCategory {
   )
     return "auth";
 
-  // SQLite-specific
-  if (
-    msg.includes("sqlite") ||
-    msg.includes("SQLITE") ||
-    msg.includes("database is locked")
-  )
-    return "prisma";
-
-  // LibSQL / Turso / file-based database errors
-  if (
-    msg.includes("unable to open database file") ||
-    msg.includes("no such file or directory") ||
-    msg.includes("libsql") ||
-    msg.includes("turso") ||
-    msg.includes("file:") && msg.includes("not found") ||
-    msg.includes("IO_ERROR: No such file")
-  )
-    return "prisma";
-
   // PostgreSQL patterns (even without a pg error code)
   if (
     msg.includes("relation") &&
@@ -456,9 +437,6 @@ export function getDbFriendlyMessage(error: unknown): string {
 
       // Prisma errors with no code but matching message patterns
       const msgLower = msg.toLowerCase();
-      if (msgLower.includes("sqlite_busy") || msgLower.includes("database is locked")) {
-        return "The database is busy. Please try again in a moment.";
-      }
       if (msgLower.includes("no such table")) {
         return "Database tables are missing. Please contact support.";
       }
@@ -476,13 +454,6 @@ export function getDbFriendlyMessage(error: unknown): string {
       }
       if (msgLower.includes("check constraint") || msgLower.includes("constraint failed")) {
         return "A data validation error occurred.";
-      }
-      // LibSQL / file database errors
-      if (msgLower.includes("unable to open database file") || msgLower.includes("no such file or directory")) {
-        return "Database file not found. The database is not configured properly.";
-      }
-      if (msgLower.includes("libsql") || msgLower.includes("turso")) {
-        return "Database connection failed. Please check your database configuration.";
       }
 
       // Prisma Client initialization errors

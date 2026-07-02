@@ -1172,6 +1172,7 @@ export type QuotationCreateOrConnectWithoutTenantInput = {
 
 export type QuotationCreateManyTenantInputEnvelope = {
   data: Prisma.QuotationCreateManyTenantInput | Prisma.QuotationCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type QuotationUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1299,6 +1300,7 @@ export type QuotationCreateOrConnectWithoutPreparedByUserInput = {
 
 export type QuotationCreateManyPreparedByUserInputEnvelope = {
   data: Prisma.QuotationCreateManyPreparedByUserInput | Prisma.QuotationCreateManyPreparedByUserInput[]
+  skipDuplicates?: boolean
 }
 
 export type QuotationUpsertWithWhereUniqueWithoutPreparedByUserInput = {
@@ -1390,6 +1392,7 @@ export type QuotationCreateOrConnectWithoutCustomerInput = {
 
 export type QuotationCreateManyCustomerInputEnvelope = {
   data: Prisma.QuotationCreateManyCustomerInput | Prisma.QuotationCreateManyCustomerInput[]
+  skipDuplicates?: boolean
 }
 
 export type QuotationUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -2869,6 +2872,7 @@ export type QuotationCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many Quotations.
    */
   data: Prisma.QuotationCreateManyInput | Prisma.QuotationCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -2887,6 +2891,7 @@ export type QuotationCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many Quotations.
    */
   data: Prisma.QuotationCreateManyInput | Prisma.QuotationCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

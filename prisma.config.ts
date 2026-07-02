@@ -19,18 +19,11 @@ import { defineConfig } from "prisma/config";
  */
 function findDatabaseUrl(): string {
   // Try known names first
-  for (const name of ["DATABASE_URL", "PRISMA_DATABASE_URL", "POSTGRES_URL"]) {
+  for (const name of ["DATABASE_URL", "PRISMA_DATABASE_URL", "POSTGRES_URL", "POSTGRES_URL_NON_POOLING", "POSTGRES_PRISMA_URL", "DIRECT_URL"]) {
     const val = process.env[name];
-    if (val) {
-      // Accept postgres://, postgresql://, or file: URLs
-      if (
-        val.startsWith("postgres://") ||
-        val.startsWith("postgresql://") ||
-        val.startsWith("file:")
-      ) {
-        console.log(`[prisma.config] Using ${name}`);
-        return val;
-      }
+    if (val && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
+      console.log(`[prisma.config] Using ${name}`);
+      return val;
     }
   }
 
@@ -46,11 +39,12 @@ function findDatabaseUrl(): string {
     }
   }
 
-  // No database URL found — use a placeholder so `prisma generate` still succeeds.
-  console.warn(
-    "[prisma.config] No database URL found — using placeholder."
+  // No database URL found — this is fatal for any prisma CLI operation.
+  console.error(
+    "[prisma.config] FATAL: No postgres:// URL found in any environment variable. " +
+    "Set DATABASE_URL or POSTGRES_URL to a PostgreSQL connection string."
   );
-  return "file:./db/dev.db";
+  return "";
 }
 
 export default defineConfig({

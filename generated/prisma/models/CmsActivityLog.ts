@@ -1072,6 +1072,7 @@ export type CmsActivityLogCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many CmsActivityLogs.
    */
   data: Prisma.CmsActivityLogCreateManyInput | Prisma.CmsActivityLogCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1090,6 +1091,7 @@ export type CmsActivityLogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many CmsActivityLogs.
    */
   data: Prisma.CmsActivityLogCreateManyInput | Prisma.CmsActivityLogCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

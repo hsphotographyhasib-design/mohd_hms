@@ -1050,6 +1050,7 @@ export type CmsSettingCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many CmsSettings.
    */
   data: Prisma.CmsSettingCreateManyInput | Prisma.CmsSettingCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1068,6 +1069,7 @@ export type CmsSettingCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many CmsSettings.
    */
   data: Prisma.CmsSettingCreateManyInput | Prisma.CmsSettingCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

@@ -1234,6 +1234,7 @@ export type CmsTestimonialCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many CmsTestimonials.
    */
   data: Prisma.CmsTestimonialCreateManyInput | Prisma.CmsTestimonialCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1252,6 +1253,7 @@ export type CmsTestimonialCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many CmsTestimonials.
    */
   data: Prisma.CmsTestimonialCreateManyInput | Prisma.CmsTestimonialCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

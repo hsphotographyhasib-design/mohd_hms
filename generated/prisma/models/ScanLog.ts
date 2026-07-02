@@ -616,6 +616,7 @@ export type ScanLogCreateOrConnectWithoutTenantInput = {
 
 export type ScanLogCreateManyTenantInputEnvelope = {
   data: Prisma.ScanLogCreateManyTenantInput | Prisma.ScanLogCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type ScanLogUpsertWithWhereUniqueWithoutTenantInput = {
@@ -690,6 +691,7 @@ export type ScanLogCreateOrConnectWithoutEquipmentInput = {
 
 export type ScanLogCreateManyEquipmentInputEnvelope = {
   data: Prisma.ScanLogCreateManyEquipmentInput | Prisma.ScanLogCreateManyEquipmentInput[]
+  skipDuplicates?: boolean
 }
 
 export type ScanLogUpsertWithWhereUniqueWithoutEquipmentInput = {
@@ -1606,6 +1608,7 @@ export type ScanLogCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many ScanLogs.
    */
   data: Prisma.ScanLogCreateManyInput | Prisma.ScanLogCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1624,6 +1627,7 @@ export type ScanLogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many ScanLogs.
    */
   data: Prisma.ScanLogCreateManyInput | Prisma.ScanLogCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

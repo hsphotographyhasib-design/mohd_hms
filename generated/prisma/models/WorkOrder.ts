@@ -2098,6 +2098,7 @@ export type WorkOrderCreateOrConnectWithoutTenantInput = {
 
 export type WorkOrderCreateManyTenantInputEnvelope = {
   data: Prisma.WorkOrderCreateManyTenantInput | Prisma.WorkOrderCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderUpsertWithWhereUniqueWithoutTenantInput = {
@@ -2317,6 +2318,7 @@ export type WorkOrderCreateOrConnectWithoutAssignedToInput = {
 
 export type WorkOrderCreateManyAssignedToInputEnvelope = {
   data: Prisma.WorkOrderCreateManyAssignedToInput | Prisma.WorkOrderCreateManyAssignedToInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderCreateWithoutSupervisorInput = {
@@ -2454,6 +2456,7 @@ export type WorkOrderCreateOrConnectWithoutSupervisorInput = {
 
 export type WorkOrderCreateManySupervisorInputEnvelope = {
   data: Prisma.WorkOrderCreateManySupervisorInput | Prisma.WorkOrderCreateManySupervisorInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderCreateWithoutCreatorInput = {
@@ -2591,6 +2594,7 @@ export type WorkOrderCreateOrConnectWithoutCreatorInput = {
 
 export type WorkOrderCreateManyCreatorInputEnvelope = {
   data: Prisma.WorkOrderCreateManyCreatorInput | Prisma.WorkOrderCreateManyCreatorInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderUpsertWithWhereUniqueWithoutAssignedToInput = {
@@ -2776,6 +2780,7 @@ export type WorkOrderCreateOrConnectWithoutCustomerInput = {
 
 export type WorkOrderCreateManyCustomerInputEnvelope = {
   data: Prisma.WorkOrderCreateManyCustomerInput | Prisma.WorkOrderCreateManyCustomerInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -2929,6 +2934,7 @@ export type WorkOrderCreateOrConnectWithoutEquipmentInput = {
 
 export type WorkOrderCreateManyEquipmentInputEnvelope = {
   data: Prisma.WorkOrderCreateManyEquipmentInput | Prisma.WorkOrderCreateManyEquipmentInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderUpsertWithWhereUniqueWithoutEquipmentInput = {
@@ -3082,6 +3088,7 @@ export type WorkOrderCreateOrConnectWithoutComplaintInput = {
 
 export type WorkOrderCreateManyComplaintInputEnvelope = {
   data: Prisma.WorkOrderCreateManyComplaintInput | Prisma.WorkOrderCreateManyComplaintInput[]
+  skipDuplicates?: boolean
 }
 
 export type WorkOrderUpsertWithWhereUniqueWithoutComplaintInput = {
@@ -6556,6 +6563,7 @@ export type WorkOrderCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many WorkOrders.
    */
   data: Prisma.WorkOrderCreateManyInput | Prisma.WorkOrderCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -6574,6 +6582,7 @@ export type WorkOrderCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many WorkOrders.
    */
   data: Prisma.WorkOrderCreateManyInput | Prisma.WorkOrderCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

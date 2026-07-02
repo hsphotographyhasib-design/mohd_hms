@@ -1430,6 +1430,7 @@ export type CmsProjectCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many CmsProjects.
    */
   data: Prisma.CmsProjectCreateManyInput | Prisma.CmsProjectCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1448,6 +1449,7 @@ export type CmsProjectCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many CmsProjects.
    */
   data: Prisma.CmsProjectCreateManyInput | Prisma.CmsProjectCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**

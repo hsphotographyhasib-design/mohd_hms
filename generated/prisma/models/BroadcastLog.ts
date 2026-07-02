@@ -736,6 +736,7 @@ export type BroadcastLogCreateOrConnectWithoutTenantInput = {
 
 export type BroadcastLogCreateManyTenantInputEnvelope = {
   data: Prisma.BroadcastLogCreateManyTenantInput | Prisma.BroadcastLogCreateManyTenantInput[]
+  skipDuplicates?: boolean
 }
 
 export type BroadcastLogUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1647,6 +1648,7 @@ export type BroadcastLogCreateManyArgs<ExtArgs extends runtime.Types.Extensions.
    * The data used to create many BroadcastLogs.
    */
   data: Prisma.BroadcastLogCreateManyInput | Prisma.BroadcastLogCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1665,6 +1667,7 @@ export type BroadcastLogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ex
    * The data used to create many BroadcastLogs.
    */
   data: Prisma.BroadcastLogCreateManyInput | Prisma.BroadcastLogCreateManyInput[]
+  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

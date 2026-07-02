@@ -1172,6 +1172,7 @@ export type CmsIndustryCreateManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * The data used to create many CmsIndustries.
    */
   data: Prisma.CmsIndustryCreateManyInput | Prisma.CmsIndustryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
@@ -1190,6 +1191,7 @@ export type CmsIndustryCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Ext
    * The data used to create many CmsIndustries.
    */
   data: Prisma.CmsIndustryCreateManyInput | Prisma.CmsIndustryCreateManyInput[]
+  skipDuplicates?: boolean
 }
 
 /**
