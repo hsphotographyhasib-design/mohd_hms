@@ -22,3 +22,35 @@ Stage Summary:
 - **Fixed**: `allowedDevOrigins` configured for all dev environments
 - **Verified**: Dashboard loads with zero errors, all APIs (login, auth/me, dashboard, CMS) return 200
 - **Known limitation**: Turbopack in this dev environment has memory constraints with very heavy pages (landing page with 14 sections). Server stays alive when bound to specific IP (`-H 21.0.9.89`) and routes are pre-compiled. Not a production issue.
+
+---
+Task ID: 2
+Agent: main
+Task: Fix persistent "An unexpected error occurred" on Vercel/PostgreSQL
+
+Work Log:
+- Investigated all callers of `getDbFriendlyMessage()` — found 10 API routes using it as a catch-all error handler
+- Traced the error flow: API route catch block → `getDbFriendlyMessage(error)` → falls through all 30+ Prisma/SQLite checks → returns default fallback message
+- **Root cause identified**: On Vercel with PostgreSQL, the PrismaPg adapter can throw raw PostgreSQL errors (e.g., `code: "3D000"` for missing database, `code: "28P01"` for auth failure, `code: "42P01"` for missing table). These 5-char PostgreSQL error codes were NOT recognized by the old function which only handled Prisma P-codes and SQLite patterns
+- Additionally, non-DB errors (JSON parse, JWT, bcrypt) routed through the DB message function would also fall through to the default
+- Complete rewrite of `getDbFriendlyMessage()` in `src/lib/db.ts`:
+  - Added `classifyError()` system with 8 categories: prisma, pg_native, network, json_parse, auth, timeout, validation, unknown
+  - Added `getPgFriendlyMessage()` with 20+ PostgreSQL native error code mappings (08xxx connection, 28xxx auth, 42xxx schema, 23xxx constraint, 40P01 deadlock, etc.)
+  - Added message-based fallback detection for pg errors without proper codes
+  - Added network error detection (ECONNREFUSED, ENOTFOUND, socket hang up, etc.)
+  - Added JSON parse / auth / timeout error detection
+  - Enhanced server-side logging: now logs `type=ErrorName code=xxx msg="..."` with first 5 stack frames
+- Updated `/api/auth/login/route.ts` — cleaner structure, enhanced logging labels
+- Updated `/api/auth/me/route.ts` — separated JWT verification from DB error handling
+- Updated `/api/auth/register/route.ts` — separated request parsing from DB errors
+- Updated `/api/dashboard/route.ts` — now uses `getDbFriendlyMessage()` instead of generic "Internal server error"
+- Fixed pre-existing bug: `src/app/api/auth/users/route.ts` was missing `getDbFriendlyMessage` import
+- All changes pass ESLint (0 errors, 7 pre-existing warnings in generated Prisma files)
+- Pushed as commit `e9cf1d7`
+
+Stage Summary:
+- **Fixed**: `getDbFriendlyMessage()` now handles ALL error types — Prisma, PostgreSQL native, network, JSON parse, auth, timeout
+- **Fixed**: PostgreSQL error codes (3D000, 28P01, 42P01, 42703, 23502, 23505, 08001, etc.) now produce specific user-facing messages
+- **Fixed**: Non-DB errors no longer fall through to the generic default message
+- **Fixed**: Missing import in users/route.ts
+- **Impact**: On Vercel, database schema issues, connection failures, or auth errors will now show specific messages (e.g., "Database tables are missing" instead of "An unexpected error occurred")
