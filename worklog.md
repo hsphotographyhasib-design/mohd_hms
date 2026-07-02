@@ -413,3 +413,26 @@ Stage Summary:
 - File modified: `src/lib/auth.ts` (lines 4-13, 34-51, 110-128)
 - Behavior: Server starts even without JWT_SECRET; individual auth operations fail gracefully (return null/empty) instead of crashing the process
 - Pattern matches the prisma.ts fix from earlier: never throw at module level
+---
+Task ID: google-login-audit
+Agent: main
+Task: Audit and fix Google login + all auth routes for silent empty-token bug
+
+Work Log:
+- Audited full Google login flow: frontend (login-view.tsx GIS script) → store (loginWithGoogle) → API (POST /api/auth/google) → DB
+- **CRITICAL BUG FOUND**: When JWT_SECRET is not set, generateToken() returns '' but API returned HTTP 200 with { token: '', user: {...} }. Frontend stored empty token, set isAuthenticated: true, then every subsequent request failed with 401. User saw "Welcome!" flash then immediate logout.
+- Added `if (!token) return 503` guard after EVERY generateToken() call across ALL auth routes:
+  - src/app/api/auth/google/route.ts (3 locations: existingByGoogle, existingByEmail, newUser)
+  - src/app/api/auth/login/route.ts (1 location)
+  - src/app/api/auth/register/route.ts (1 location)
+  - src/app/api/auth/whatsapp/verify-otp/route.ts (1 location)
+  - src/app/api/auth/whatsapp/register/route.ts (1 location)
+  - src/app/api/auth/whatsapp/refresh/route.ts (1 location)
+  - src/app/api/auth/users/route.ts (1 location — invite token)
+- Fixed lastLogin: new Date().toISOString() → new Date() in 4 auth routes (login, google ×3, whatsapp/verify-otp)
+- Lint: 0 errors (7 warnings in generated Prisma files only)
+
+Stage Summary:
+- 7 files modified with empty-token guard (returns 503 with clear message)
+- 4 files modified with lastLogin DateTime fix
+- Google login flow is now safe: if JWT_SECRET is misconfigured, user sees "Server authentication is not configured" instead of a confusing silent failure

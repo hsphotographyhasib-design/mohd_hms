@@ -67,6 +67,13 @@ export async function POST(request: NextRequest) {
       isInvitation: true,
     });
 
+    if (!inviteToken) {
+      return NextResponse.json(
+        { error: 'Server authentication is not configured. Invitation cannot be sent.' },
+        { status: 503 },
+      );
+    }
+
     // Send invitation email
     if (sendInvite !== false) {
       try {

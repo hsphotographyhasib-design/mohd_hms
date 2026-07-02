@@ -64,6 +64,13 @@ export async function POST(request: NextRequest) {
       email: user.email,
     });
 
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Server authentication is not configured. Please contact the administrator.' },
+        { status: 503 },
+      );
+    }
+
     // Send welcome email (best-effort, non-blocking)
     try {
       const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || '';

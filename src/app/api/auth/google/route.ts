@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
           db.user.update({
             where: { id: existingByGoogle.id },
             data: {
-              lastLogin: new Date().toISOString(),
+              lastLogin: new Date(),
               isOnline: true,
               avatar: picture || existingByGoogle.avatar,
               authProvider: 'google',
@@ -167,6 +167,13 @@ export async function POST(request: NextRequest) {
         role: normalizedRole,
         email: existingByGoogle.email,
       });
+
+      if (!token) {
+        return NextResponse.json(
+          { error: 'Server authentication is not configured. Please contact the administrator.' },
+          { status: 503 },
+        );
+      }
 
       return NextResponse.json({
         token,
@@ -214,7 +221,7 @@ export async function POST(request: NextRequest) {
               googleId,
               authProvider: 'google',
               avatar: picture || existingByEmail.avatar,
-              lastLogin: new Date().toISOString(),
+              lastLogin: new Date(),
               isOnline: true,
             },
           }),
@@ -228,6 +235,13 @@ export async function POST(request: NextRequest) {
         role: normalizedRole,
         email: existingByEmail.email,
       });
+
+      if (!token) {
+        return NextResponse.json(
+          { error: 'Server authentication is not configured. Please contact the administrator.' },
+          { status: 503 },
+        );
+      }
 
       return NextResponse.json({
         token,
@@ -286,7 +300,7 @@ export async function POST(request: NextRequest) {
             googleId,
             isActive: true,
             isOnline: true,
-            lastLogin: new Date().toISOString(),
+            lastLogin: new Date(),
             profileCompleted: false,
           },
           select: {
@@ -305,6 +319,13 @@ export async function POST(request: NextRequest) {
       role: normalizedRole,
       email: newUser.email,
     });
+
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Server authentication is not configured. Please contact the administrator.' },
+        { status: 503 },
+      );
+    }
 
     return NextResponse.json({
       token,

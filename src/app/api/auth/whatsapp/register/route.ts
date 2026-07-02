@@ -146,6 +146,13 @@ export async function POST(request: NextRequest) {
       email: user.email,
     });
 
+    if (!accessToken) {
+      return NextResponse.json(
+        { error: 'Server authentication is not configured. Please contact the administrator.' },
+        { status: 503 },
+      );
+    }
+
     const refreshToken = generateRefreshToken();
     const refreshTokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
 

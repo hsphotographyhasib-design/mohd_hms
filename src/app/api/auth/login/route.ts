@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
       () =>
         db.user.update({
           where: { id: user.id },
-          data: { lastLogin: new Date().toISOString(), isOnline: true },
+          data: { lastLogin: new Date(), isOnline: true },
         }),
       { label: 'login-updateLastLogin' }
     ).catch(() => {});
@@ -69,6 +69,13 @@ export async function POST(request: NextRequest) {
       role: normalizedRole,
       email: user.email,
     });
+
+    if (!token) {
+      return NextResponse.json(
+        { error: 'Server authentication is not configured. Please contact the administrator.' },
+        { status: 503 },
+      );
+    }
 
     return NextResponse.json({
       token,
