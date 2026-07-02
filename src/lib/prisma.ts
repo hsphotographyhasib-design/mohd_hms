@@ -18,7 +18,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 // 1. Find database URL (never throws)
 // ---------------------------------------------------------------------------
 
-function findDatabaseUrl(): { url: string; source: string; isSQLite: boolean } {
+export function findDatabaseUrl(): { url: string; source: string; isSQLite: boolean } {
   const candidates = ["DATABASE_URL", "PRISMA_DATABASE_URL", "POSTGRES_URL"];
 
   for (const name of candidates) {

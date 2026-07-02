@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
+import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
 import { verifyPassword, generateToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
     // Prisma, PostgreSQL native, network, JSON parse, JWT, bcrypt, timeout, etc.
     return NextResponse.json(
       { error: getDbFriendlyMessage(error) },
-      { status: 500 }
+      { status: 500, headers: getErrorHeaders(error) }
     );
   }
 }

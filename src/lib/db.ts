@@ -129,7 +129,24 @@ function classifyError(error: unknown): ErrorCategory {
     msg.includes("Connection terminated") ||
     msg.includes("connect timeout") ||
     msg.includes("Too many connections") ||
-    msg.includes("Connection pool exhausted")
+    msg.includes("Connection pool exhausted") ||
+    msg.includes("read ECONNRESET") ||
+    msg.includes("write ECONNRESET") ||
+    msg.includes("connect ENETUNREACH") ||
+    msg.includes("hostname") && msg.includes("does not resolve")
+  )
+    return "network";
+
+  // SSL/TLS errors
+  if (
+    msg.includes("self signed certificate") ||
+    msg.includes("unable to verify") ||
+    msg.includes("UNABLE_TO_VERIFY_LEAF_SIGNATURE") ||
+    msg.includes("CERT_HAS_EXPIRED") ||
+    msg.includes("ssl") && msg.includes("certificate") ||
+    msg.includes("tls") && msg.includes("handshake") ||
+    msg.includes("DEPTH_ZERO_SELF_SIGNED_CERT") ||
+    msg.includes("ERR_TLS_")
   )
     return "network";
 
@@ -137,7 +154,8 @@ function classifyError(error: unknown): ErrorCategory {
   if (
     msg.includes("timed out") ||
     msg.includes("timeout") ||
-    msg.includes("Timeout")
+    msg.includes("Timeout") ||
+    msg.includes("TIMEOUT")
   )
     return "timeout";
 
@@ -156,6 +174,17 @@ function classifyError(error: unknown): ErrorCategory {
     msg.includes("sqlite") ||
     msg.includes("SQLITE") ||
     msg.includes("database is locked")
+  )
+    return "prisma";
+
+  // LibSQL / Turso / file-based database errors
+  if (
+    msg.includes("unable to open database file") ||
+    msg.includes("no such file or directory") ||
+    msg.includes("libsql") ||
+    msg.includes("turso") ||
+    msg.includes("file:") && msg.includes("not found") ||
+    msg.includes("IO_ERROR: No such file")
   )
     return "prisma";
 
@@ -448,6 +477,13 @@ export function getDbFriendlyMessage(error: unknown): string {
       if (msgLower.includes("check constraint") || msgLower.includes("constraint failed")) {
         return "A data validation error occurred.";
       }
+      // LibSQL / file database errors
+      if (msgLower.includes("unable to open database file") || msgLower.includes("no such file or directory")) {
+        return "Database file not found. The database is not configured properly.";
+      }
+      if (msgLower.includes("libsql") || msgLower.includes("turso")) {
+        return "Database connection failed. Please check your database configuration.";
+      }
 
       // Prisma Client initialization errors
       if (msgLower.includes("prisma client") && msgLower.includes("not")) {
@@ -469,6 +505,42 @@ export function getDbFriendlyMessage(error: unknown): string {
 
   // ---- Final fallback — provide the MOST specific message possible ----
 
+  // BROAD SAFETY NET: Check for ANY database-related keywords in the error message
+  // This catches errors from adapters, drivers, connection pools that we haven't explicitly classified
+  const fallbackLower = msg.toLowerCase();
+  if (fallbackLower.includes("database") || fallbackLower.includes("db ") || fallbackLower.includes("query")) {
+    if (fallbackLower.includes("does not exist") || fallbackLower.includes("not found") || fallbackLower.includes("no such")) {
+      return "Database setup incomplete. Tables or data may be missing. Please contact support.";
+    }
+    if (fallbackLower.includes("connect") || fallbackLower.includes("connection")) {
+      return "Cannot connect to the database. Please check your database configuration.";
+    }
+    if (fallbackLower.includes("permission") || fallbackLower.includes("denied") || fallbackLower.includes("access")) {
+      return "Database access denied. Please check your database permissions.";
+    }
+    if (fallbackLower.includes("ssl") || fallbackLower.includes("certificate")) {
+      return "Database SSL/TLS error. Please check your database connection settings.";
+    }
+    if (fallbackLower.includes("pool") || fallbackLower.includes("exhausted")) {
+      return "Too many database connections. Please try again in a moment.";
+    }
+    if (fallbackLower.includes("timeout") || fallbackLower.includes("timed out")) {
+      return "Database request timed out. Please try again.";
+    }
+    // Generic DB error but more specific than "unexpected"
+    return "A database error occurred. Please try again or contact support.";
+  }
+
+  // Check for adapter-specific errors
+  if (fallbackLower.includes("adapter") || fallbackLower.includes("prismapg") || fallbackLower.includes("prismalibsql")) {
+    return "Database adapter error. Please check your database configuration.";
+  }
+
+  // Check for common Vercel/Edge runtime errors
+  if (fallbackLower.includes("edge") || fallbackLower.includes("serverless") || fallbackLower.includes("lambda")) {
+    return "A server environment error occurred. Please try again.";
+  }
+
   // Check for common non-Error thrown values
   if (error === null || error === undefined) {
     return "An unexpected error occurred. Please try again.";
@@ -482,4 +554,31 @@ export function getDbFriendlyMessage(error: unknown): string {
   // For any Error object we haven't classified, give a generic but different message
   // from the old "unexpected" default so we can distinguish in user reports
   return "An unexpected error occurred. Please try again.";
+}
+
+/**
+ * Extract a short diagnostic string from an error for response headers.
+ * Used by API routes to include X-Error-Info header for debugging.
+ *
+ * Format: "ErrorType:code:short-message"
+ * Example: "PgProtocolError:3D000:database does not exist"
+ */
+export function getErrorInfo(error: unknown): string {
+  const typeName = getErrorTypeName(error);
+  const code = getErrorCode(error);
+  const msg = error instanceof Error ? error.message : String(error);
+  const shortMsg = msg.length > 80 ? msg.slice(0, 77) + '...' : msg;
+  return `${typeName}:${code || 'none'}:${shortMsg}`;
+}
+
+/**
+ * Create error response headers with diagnostic info.
+ * Include these in your 500 responses for debugging.
+ */
+export function getErrorHeaders(error: unknown): Record<string, string> {
+  return {
+    'X-Error-Type': getErrorTypeName(error),
+    'X-Error-Code': getErrorCode(error) || 'none',
+    'X-Error-Info': getErrorInfo(error).slice(0, 200),
+  };
 }

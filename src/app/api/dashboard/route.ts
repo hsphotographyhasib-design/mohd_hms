@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, getDbFriendlyMessage } from '@/lib/db';
+import { db, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
@@ -243,6 +243,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Dashboard DB error:', error);
-    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500, headers: getErrorHeaders(error) });
   }
 }
