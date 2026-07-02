@@ -54,3 +54,28 @@ Stage Summary:
 - **Fixed**: Non-DB errors no longer fall through to the generic default message
 - **Fixed**: Missing import in users/route.ts
 - **Impact**: On Vercel, database schema issues, connection failures, or auth errors will now show specific messages (e.g., "Database tables are missing" instead of "An unexpected error occurred")
+
+---
+Task ID: 3
+Agent: main
+Task: Add diagnostic endpoint and broad error safety net for persistent error
+
+Work Log:
+- User reported error still persists after commit e9cf1d7
+- Created `/api/debug/db-test` diagnostic endpoint — tests DB connection, URL detection, and schema existence with full error details
+- Exported `findDatabaseUrl()` from `prisma.ts` for diagnostic use
+- Added SSL/TLS error patterns to classifyError() (self signed cert, TLS handshake, etc.)
+- Added libsql/turso/file-based DB error patterns
+- Added ENETUNREACH, ECONNRESET (read/write), hostname resolution errors
+- Added broad keyword-based safety net in getDbFriendlyMessage() final fallback: ANY error containing "database", "query", "connect", "pool", "ssl" etc. now gets a specific message
+- Added adapter-specific detection (PrismaPg, PrismaLibSql)
+- Added Vercel/edge runtime error detection
+- Created `getErrorHeaders()` and `getErrorInfo()` helpers for diagnostic response headers
+- Updated login, auth/me, dashboard routes to include X-Error-Type, X-Error-Code, X-Error-Info headers
+- Pushed as commit 12d9861
+
+Stage Summary:
+- **New**: `/api/debug/db-test` endpoint for self-diagnosing database issues
+- **Fixed**: Broad safety net catches ANY error with database-related keywords
+- **New**: Error diagnostic headers in API responses for DevTools debugging
+- **User action needed**: Visit `/api/debug/db-test` on their Vercel deployment to see the actual database error
