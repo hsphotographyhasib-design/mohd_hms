@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
+import { TopUtilityBar } from '@/components/layout/top-utility-bar'
 // CSS loaded via <link> tag below to avoid affecting authenticated app styles
 
 const NAV_ITEMS = [
@@ -118,7 +119,7 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
       <link rel="stylesheet" href="/landing-styles.css" />
       <script dangerouslySetInnerHTML={{ __html: 'function imgErr(el){if(el.dataset.fb){el.src=el.dataset.fb;el.removeAttribute("data-fb")}else{el.style.display="none"}}' }} />
 
-      {/* Utility bar is rendered once in layout.tsx via <TopUtilityBar /> */}
+      <TopUtilityBar />
 
       {/* Header */}
       <header id="hdr" className={scrolled ? 'scrolled' : ''}>
