@@ -1125,7 +1125,6 @@ export type EquipmentCreateOrConnectWithoutTenantInput = {
 
 export type EquipmentCreateManyTenantInputEnvelope = {
   data: Prisma.EquipmentCreateManyTenantInput | Prisma.EquipmentCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type EquipmentUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1252,7 +1251,6 @@ export type EquipmentCreateOrConnectWithoutCustomerInput = {
 
 export type EquipmentCreateManyCustomerInputEnvelope = {
   data: Prisma.EquipmentCreateManyCustomerInput | Prisma.EquipmentCreateManyCustomerInput[]
-  skipDuplicates?: boolean
 }
 
 export type EquipmentUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -3223,7 +3221,6 @@ export type EquipmentCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many Equipment.
    */
   data: Prisma.EquipmentCreateManyInput | Prisma.EquipmentCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -3242,7 +3239,6 @@ export type EquipmentCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many Equipment.
    */
   data: Prisma.EquipmentCreateManyInput | Prisma.EquipmentCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

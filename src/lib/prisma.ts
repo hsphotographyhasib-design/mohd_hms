@@ -1,62 +1,45 @@
 /**
- * Prisma 7 singleton — PostgreSQL via @prisma/adapter-pg.
+ * Prisma 7 singleton — supports both SQLite (local dev) and PostgreSQL (production).
  *
  * IMPORTANT: This module must NEVER throw at import/load time.
- * The PrismaClient constructor is safe to call even without a valid DB URL —
- * it only fails when an actual query is executed. This allows routes to
- * import `db` without crashing, and handle DB errors in their try/catch.
  *
- * Automatically finds the PostgreSQL connection string from environment
- * variables, trying multiple naming conventions:
- *   1. DATABASE_URL (standard)
- *   2. POSTGRES_URL (Vercel Postgres / Neon)
- *   3. PRISMA_DATABASE_URL (Vercel Postgres)
- *   4. Any env var whose value starts with postgres:// or postgresql://
+ * Auto-detects database type from DATABASE_URL:
+ *   - file: → SQLite via @prisma/adapter-libsql
+ *   - postgres:// / postgresql:// → PostgreSQL via @prisma/adapter-pg
  */
 
+import { readFileSync } from "fs";
+import { resolve } from "path";
 import { PrismaClient } from "../../generated/prisma/client";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
+import { PrismaPg } from "@prisma/adapter-pg";
 
 // ---------------------------------------------------------------------------
-// 1. Find PostgreSQL connection string from env vars (never throws)
+// 1. Find database URL (never throws)
 // ---------------------------------------------------------------------------
 
-const DB_URL_CANDIDATES = [
-  "DATABASE_URL",
-  "PRISMA_DATABASE_URL",
-  "POSTGRES_URL",
-];
+function findDatabaseUrl(): { url: string; source: string; isSQLite: boolean } {
+  const candidates = ["DATABASE_URL", "PRISMA_DATABASE_URL", "POSTGRES_URL"];
 
-function findPostgresUrl(): { url: string; source: string } {
-  for (const name of DB_URL_CANDIDATES) {
+  for (const name of candidates) {
     const val = process.env[name];
-    if (val && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
-      console.log(`[Prisma] Found PostgreSQL URL in env: ${name}`);
-      return { url: val, source: name };
-    }
+    if (!val) continue;
+    if (val.startsWith("file:")) return { url: val, source: name, isSQLite: true };
+    if (val.startsWith("postgres://") || val.startsWith("postgresql://"))
+      return { url: val, source: name, isSQLite: false };
   }
 
-  // Fallback: scan ALL env vars for a postgres:// value
   for (const [key, val] of Object.entries(process.env)) {
-    if (
-      val &&
-      typeof val === "string" &&
-      (val.startsWith("postgres://") || val.startsWith("postgresql://")) &&
-      !key.includes("SECRET") &&
-      !key.includes("KEY") &&
-      !key.includes("PASSWORD")
-    ) {
-      console.log(`[Prisma] Found PostgreSQL URL in env (fallback scan): ${key}`);
-      return { url: val, source: key };
-    }
+    if (!val || typeof val !== "string") continue;
+    if (key.includes("SECRET") || key.includes("KEY") || key.includes("PASSWORD")) continue;
+    if (val.startsWith("file:")) return { url: val, source: `scan:${key}`, isSQLite: true };
+    if (val.startsWith("postgres://") || val.startsWith("postgresql://"))
+      return { url: val, source: `scan:${key}`, isSQLite: false };
   }
 
   // In local dev, try reading .env file directly
   if (process.env.NODE_ENV !== "production") {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { readFileSync } = require("fs");
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const { resolve } = require("path");
       const envPath = resolve(process.cwd(), ".env");
       const envContent = readFileSync(envPath, "utf-8");
       for (const line of envContent.split("\n")) {
@@ -64,60 +47,43 @@ function findPostgresUrl(): { url: string; source: string } {
         if (!trimmed.includes("=")) continue;
         const eqIdx = trimmed.indexOf("=");
         const name = trimmed.slice(0, eqIdx).trim();
-        const value = trimmed
-          .slice(eqIdx + 1)
-          .replace(/^["']|["']$/g, "")
-          .trim();
-        if (
-          value &&
-          (value.startsWith("postgres://") || value.startsWith("postgresql://"))
-        ) {
-          console.log(`[Prisma] Found PostgreSQL URL in .env: ${name}`);
-          return { url: value, source: name };
-        }
+        const value = trimmed.slice(eqIdx + 1).replace(/^["']|["']$/g, "").trim();
+        if (!value) continue;
+        if (value.startsWith("file:")) return { url: value, source: `.env:${name}`, isSQLite: true };
+        if (value.startsWith("postgres://") || value.startsWith("postgresql://"))
+          return { url: value, source: `.env:${name}`, isSQLite: false };
       }
     } catch {
-      // .env not found — acceptable in dev
+      // .env not found — acceptable
     }
   }
 
-  return { url: "", source: "" };
+  return { url: "", source: "", isSQLite: false };
 }
 
 // ---------------------------------------------------------------------------
-// 2. Create PrismaClient (never throws — queries fail later if no DB)
+// 2. Create adapter and PrismaClient
 // ---------------------------------------------------------------------------
 
-const { url: dbUrl, source: dbSource } = findPostgresUrl();
-
-if (!dbUrl) {
-  console.warn(
-    "[Prisma] No PostgreSQL connection string found. " +
-      "Database features are unavailable until a real postgres:// URL is provided. " +
-      "The server will start, but any DB query will fail."
-  );
-}
-
+const { url: dbUrl, source: dbSource, isSQLite } = findDatabaseUrl();
 const isServerless = process.env.NODE_ENV === "production" || !!process.env.VERCEL;
-
-// Use placeholder URL if no real one found — constructor won't throw,
-// but queries will fail at runtime (which route handlers can catch).
-const effectiveUrl = dbUrl || "postgresql://localhost:5432/__no_db_placeholder__";
+const effectiveUrl = dbUrl || "file:./db/dev.db";
 
 console.log(
-  `[Prisma] Init${dbUrl ? ` using ${dbSource}` : " (no DB URL)"}${isServerless ? " [serverless]" : " [dev]"}`
+  `[Prisma] Init${dbUrl ? ` using ${dbSource} (${isSQLite ? "SQLite" : "PostgreSQL"})` : " (no DB URL)"}${isServerless ? " [serverless]" : " [dev]"}`
 );
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { PrismaPg } = require("@prisma/adapter-pg") as {
-  PrismaPg: typeof import("@prisma/adapter-pg").PrismaPg;
-};
+// Create the appropriate adapter
+const adapter =
+  isSQLite || effectiveUrl.startsWith("file:")
+    ? new PrismaLibSql({ url: effectiveUrl })
+    : new PrismaPg(effectiveUrl, {
+        max: isServerless ? 3 : 10,
+        idleTimeout: isServerless ? 10 : 20,
+        connectTimeout: isServerless ? 10 : 15,
+      });
 
-const adapter = new PrismaPg(effectiveUrl, {
-  max: isServerless ? 3 : 10,
-  idleTimeout: isServerless ? 10 : 20,
-  connectTimeout: isServerless ? 10 : 15,
-});
+console.log(`[Prisma] Adapter: ${isSQLite || effectiveUrl.startsWith("file:") ? "libsql/SQLite" : "pg/PostgreSQL"}`);
 
 // ---------------------------------------------------------------------------
 // 3. PrismaClient singleton (survives HMR in development)
@@ -148,9 +114,7 @@ if (process.env.NODE_ENV !== "production") {
     // @ts-expect-error – Prisma 7 event listener
     prisma.on("query", (e: { duration: number; query: string }) => {
       if (e.duration > 500) {
-        console.warn(
-          `[Prisma Slow Query] ${e.duration}ms\n${e.query.slice(0, 200)}`
-        );
+        console.warn(`[Prisma Slow Query] ${e.duration}ms\n${e.query.slice(0, 200)}`);
       }
     });
   } catch {
@@ -182,9 +146,9 @@ export function isPrismaTransient(error: unknown): boolean {
     const code = (error as { code?: string }).code ?? "";
     return (
       isPrismaTimeout(error) ||
-      code === "P2024" || // Prisma timeout error code
-      code === "P1001" || // Connection error
-      code === "P1008" || // Timeout error
+      code === "P2024" ||
+      code === "P1001" ||
+      code === "P1008" ||
       msg.includes("Connection refused") ||
       msg.includes("ECONNREFUSED") ||
       msg.includes("ECONNRESET") ||

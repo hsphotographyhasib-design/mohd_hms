@@ -1318,7 +1318,6 @@ export type CmsServiceCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many CmsServices.
    */
   data: Prisma.CmsServiceCreateManyInput | Prisma.CmsServiceCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1337,7 +1336,6 @@ export type CmsServiceCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many CmsServices.
    */
   data: Prisma.CmsServiceCreateManyInput | Prisma.CmsServiceCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

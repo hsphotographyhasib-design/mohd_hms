@@ -904,7 +904,6 @@ export type WhatsAppMessageCreateOrConnectWithoutTenantInput = {
 
 export type WhatsAppMessageCreateManyTenantInputEnvelope = {
   data: Prisma.WhatsAppMessageCreateManyTenantInput | Prisma.WhatsAppMessageCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type WhatsAppMessageUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1008,7 +1007,6 @@ export type WhatsAppMessageCreateOrConnectWithoutSessionInput = {
 
 export type WhatsAppMessageCreateManySessionInputEnvelope = {
   data: Prisma.WhatsAppMessageCreateManySessionInput | Prisma.WhatsAppMessageCreateManySessionInput[]
-  skipDuplicates?: boolean
 }
 
 export type WhatsAppMessageUpsertWithWhereUniqueWithoutSessionInput = {
@@ -1084,7 +1082,6 @@ export type WhatsAppMessageCreateOrConnectWithoutThreadInput = {
 
 export type WhatsAppMessageCreateManyThreadInputEnvelope = {
   data: Prisma.WhatsAppMessageCreateManyThreadInput | Prisma.WhatsAppMessageCreateManyThreadInput[]
-  skipDuplicates?: boolean
 }
 
 export type WhatsAppMessageUpsertWithWhereUniqueWithoutThreadInput = {
@@ -2388,7 +2385,6 @@ export type WhatsAppMessageCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many WhatsAppMessages.
    */
   data: Prisma.WhatsAppMessageCreateManyInput | Prisma.WhatsAppMessageCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -2407,7 +2403,6 @@ export type WhatsAppMessageCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many WhatsAppMessages.
    */
   data: Prisma.WhatsAppMessageCreateManyInput | Prisma.WhatsAppMessageCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

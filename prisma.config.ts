@@ -11,8 +11,8 @@ if (existsSync(envPath)) {
 import { defineConfig } from "prisma/config";
 
 /**
- * Find PostgreSQL URL from any of these sources (priority order):
- *   1. DATABASE_URL
+ * Find database URL from environment:
+ *   1. DATABASE_URL (standard — can be postgres://, file:, etc.)
  *   2. PRISMA_DATABASE_URL (Vercel Postgres)
  *   3. POSTGRES_URL (Vercel Postgres / Neon)
  *   4. Any env var whose value starts with postgres:// or postgresql://
@@ -21,9 +21,16 @@ function findDatabaseUrl(): string {
   // Try known names first
   for (const name of ["DATABASE_URL", "PRISMA_DATABASE_URL", "POSTGRES_URL"]) {
     const val = process.env[name];
-    if (val && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
-      console.log(`[prisma.config] Using ${name}`);
-      return val;
+    if (val) {
+      // Accept postgres://, postgresql://, or file: URLs
+      if (
+        val.startsWith("postgres://") ||
+        val.startsWith("postgresql://") ||
+        val.startsWith("file:")
+      ) {
+        console.log(`[prisma.config] Using ${name}`);
+        return val;
+      }
     }
   }
 
@@ -39,13 +46,11 @@ function findDatabaseUrl(): string {
     }
   }
 
-  // No PostgreSQL URL found — use a dummy URL so `prisma generate` still succeeds.
-  // Runtime code in src/lib/prisma.ts will handle the missing-DB case gracefully.
+  // No database URL found — use a placeholder so `prisma generate` still succeeds.
   console.warn(
-    "[prisma.config] No PostgreSQL URL found — using placeholder. " +
-      "Database features will be unavailable until a real postgres:// URL is provided."
+    "[prisma.config] No database URL found — using placeholder."
   );
-  return "postgresql://localhost:5432/__placeholder_no_db__";
+  return "file:./db/dev.db";
 }
 
 export default defineConfig({

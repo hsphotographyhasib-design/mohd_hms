@@ -1198,7 +1198,6 @@ export type CmsBlogCategoryCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many CmsBlogCategories.
    */
   data: Prisma.CmsBlogCategoryCreateManyInput | Prisma.CmsBlogCategoryCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1217,7 +1216,6 @@ export type CmsBlogCategoryCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many CmsBlogCategories.
    */
   data: Prisma.CmsBlogCategoryCreateManyInput | Prisma.CmsBlogCategoryCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

@@ -11,14 +11,14 @@ import { createHash, randomBytes } from 'crypto';
  *   3. Derive a deterministic secret from the database URL (SHA-256)
  *   4. Last resort: random bytes (tokens invalidate on server restart)
  */
-function findPostgresUrl(): string | null {
+function findDatabaseUrl(): string | null {
   const candidates = ['DATABASE_URL', 'PRISMA_DATABASE_URL', 'POSTGRES_URL'];
   for (const name of candidates) {
     const val = process.env[name];
-    if (val && (val.startsWith('postgres://') || val.startsWith('postgresql://'))) return val;
+    if (val && (val.startsWith('postgres://') || val.startsWith('postgresql://') || val.startsWith('file:'))) return val;
   }
   for (const [key, val] of Object.entries(process.env)) {
-    if (val && typeof val === 'string' && (val.startsWith('postgres://') || val.startsWith('postgresql://'))) {
+    if (val && typeof val === 'string' && (val.startsWith('postgres://') || val.startsWith('postgresql://') || val.startsWith('file:'))) {
       return val;
     }
   }
@@ -51,7 +51,7 @@ const _resolvedSecret = (() => {
 
   // 3. Derive a deterministic secret from the database URL (SHA-256)
   //    Same DB = same secret = tokens survive server restarts
-  const dbUrl = findPostgresUrl();
+  const dbUrl = findDatabaseUrl();
   if (dbUrl) {
     // Use a fixed prefix so the hash can never collide with a plaintext secret
     const derived = createHash('sha256')

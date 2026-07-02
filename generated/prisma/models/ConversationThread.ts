@@ -686,7 +686,6 @@ export type ConversationThreadCreateOrConnectWithoutTenantInput = {
 
 export type ConversationThreadCreateManyTenantInputEnvelope = {
   data: Prisma.ConversationThreadCreateManyTenantInput | Prisma.ConversationThreadCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type ConversationThreadUpsertWithWhereUniqueWithoutTenantInput = {
@@ -757,7 +756,6 @@ export type ConversationThreadCreateOrConnectWithoutCustomerInput = {
 
 export type ConversationThreadCreateManyCustomerInputEnvelope = {
   data: Prisma.ConversationThreadCreateManyCustomerInput | Prisma.ConversationThreadCreateManyCustomerInput[]
-  skipDuplicates?: boolean
 }
 
 export type ConversationThreadUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -811,7 +809,6 @@ export type ConversationThreadCreateOrConnectWithoutSessionInput = {
 
 export type ConversationThreadCreateManySessionInputEnvelope = {
   data: Prisma.ConversationThreadCreateManySessionInput | Prisma.ConversationThreadCreateManySessionInput[]
-  skipDuplicates?: boolean
 }
 
 export type ConversationThreadUpsertWithWhereUniqueWithoutSessionInput = {
@@ -1873,7 +1870,6 @@ export type ConversationThreadCreateManyArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many ConversationThreads.
    */
   data: Prisma.ConversationThreadCreateManyInput | Prisma.ConversationThreadCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1892,7 +1888,6 @@ export type ConversationThreadCreateManyAndReturnArgs<ExtArgs extends runtime.Ty
    * The data used to create many ConversationThreads.
    */
   data: Prisma.ConversationThreadCreateManyInput | Prisma.ConversationThreadCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
