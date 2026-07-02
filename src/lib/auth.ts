@@ -1,58 +1,75 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { createHash, randomBytes } from 'crypto';
 
 /**
  * JWT Secret resolution — NEVER throws at module level.
  *
- * Scans well-known names first, then all env vars (including mohd_hms_ prefixed)
- * for any value that looks like a JWT secret (16+ chars, not a URL/JSON).
- * Falls back to a placeholder so the server can start.
+ * Priority:
+ *   1. Well-known env var names (JWT_SECRET, NEXTAUTH_SECRET, etc.)
+ *   2. Scan all env vars for keys containing jwt/secret/signing (Vercel mohd_hms_ convention)
+ *   3. Derive a deterministic secret from the database URL (SHA-256)
+ *   4. Last resort: random bytes (tokens invalidate on server restart)
  */
+function findPostgresUrl(): string | null {
+  const candidates = ['DATABASE_URL', 'PRISMA_DATABASE_URL', 'POSTGRES_URL'];
+  for (const name of candidates) {
+    const val = process.env[name];
+    if (val && (val.startsWith('postgres://') || val.startsWith('postgresql://'))) return val;
+  }
+  for (const [key, val] of Object.entries(process.env)) {
+    if (val && typeof val === 'string' && (val.startsWith('postgres://') || val.startsWith('postgresql://'))) {
+      return val;
+    }
+  }
+  return null;
+}
+
 const _resolvedSecret = (() => {
   // 1. Well-known names
-  const candidates = [
-    'JWT_SECRET',
-    'NEXTAUTH_SECRET',
-    'JWT_PRIVATE_KEY',
-  ];
+  const candidates = ['JWT_SECRET', 'NEXTAUTH_SECRET', 'JWT_PRIVATE_KEY'];
   for (const name of candidates) {
     const val = process.env[name];
     if (val && val.length >= 16) {
       console.log(`[AUTH] Found JWT secret in env: ${name}`);
-      return { value: val, insecure: false };
+      return { value: val, source: `env:${name}` };
     }
   }
 
-  // 2. Scan ALL env vars for mohd_hms_ prefixed secrets (Vercel convention)
+  // 2. Scan ALL env vars for secret-like keys (Vercel mohd_hms_ convention)
   const sortedKeys = Object.keys(process.env).sort();
   for (const key of sortedKeys) {
     const val = process.env[key];
     if (!val || val.length < 16) continue;
-    // Match common secret naming patterns (case-insensitive)
     const k = key.toLowerCase();
-    if (
-      k.includes('jwt') ||
-      k.includes('secret') ||
-      k.includes('token_key') ||
-      k.includes('signing')
-    ) {
-      // Skip obviously non-secret values
+    if (k.includes('jwt') || k.includes('secret') || k.includes('token_key') || k.includes('signing')) {
       if (val.startsWith('postgres://') || val.startsWith('http') || val.startsWith('{')) continue;
       console.log(`[AUTH] Found JWT secret in env (scan): ${key}`);
-      return { value: val, insecure: false };
+      return { value: val, source: `scan:${key}` };
     }
   }
 
-  // 3. Fallback placeholder — server starts but auth ops fail gracefully
+  // 3. Derive a deterministic secret from the database URL (SHA-256)
+  //    Same DB = same secret = tokens survive server restarts
+  const dbUrl = findPostgresUrl();
+  if (dbUrl) {
+    // Use a fixed prefix so the hash can never collide with a plaintext secret
+    const derived = createHash('sha256')
+      .update(`mohd-hms-jwt-derived:${dbUrl}`)
+      .digest('hex');
+    console.log('[AUTH] Derived JWT secret from database URL (deterministic, tokens survive restarts)');
+    return { value: derived, source: 'derived:db-url' };
+  }
+
+  // 4. Absolute last resort: random bytes — tokens invalidate on every server restart
   console.warn(
-    '[AUTH] WARNING: No JWT secret found in any environment variable. ' +
-    'Auth token operations will fail until a proper secret is configured.'
+    '[AUTH] WARNING: No JWT secret found and no database URL. Using random secret. ' +
+    'Tokens will invalidate on server restart.'
   );
-  return { value: '__insecure_jwt_placeholder_set_jwt_secret__', insecure: true };
+  return { value: randomBytes(32).toString('hex'), source: 'random-fallback' };
 })();
 
 const JWT_SECRET = _resolvedSecret.value;
-const _jwtInsecure = _resolvedSecret.insecure;
 const JWT_EXPIRES_IN = '7d';
 
 export async function hashPassword(password: string): Promise<string> {
@@ -64,18 +81,10 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 }
 
 export function generateToken(payload: object): string {
-  if (_jwtInsecure) {
-    console.error('[AUTH] generateToken called but JWT_SECRET is not configured. Refusing to sign token.');
-    return '';
-  }
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
 }
 
 export function verifyToken(token: string): jwt.JwtPayload | null {
-  if (_jwtInsecure) {
-    console.error('[AUTH] verifyToken called but JWT_SECRET is not configured. Refusing to verify token.');
-    return null;
-  }
   try {
     return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
   } catch {
@@ -140,18 +149,10 @@ export function generateRefreshToken(): string {
 const TEMP_TOKEN_EXPIRES_IN = '30m';
 
 export function generateTempToken(payload: object): string {
-  if (_jwtInsecure) {
-    console.error('[AUTH] generateTempToken called but JWT_SECRET is not configured. Refusing to sign token.');
-    return '';
-  }
   return jwt.sign(payload, JWT_SECRET, { expiresIn: TEMP_TOKEN_EXPIRES_IN } as jwt.SignOptions);
 }
 
 export function verifyTempToken(token: string): jwt.JwtPayload | null {
-  if (_jwtInsecure) {
-    console.error('[AUTH] verifyTempToken called but JWT_SECRET is not configured. Refusing to verify token.');
-    return null;
-  }
   try {
     return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
   } catch {

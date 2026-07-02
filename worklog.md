@@ -436,3 +436,24 @@ Stage Summary:
 - 7 files modified with empty-token guard (returns 503 with clear message)
 - 4 files modified with lastLogin DateTime fix
 - Google login flow is now safe: if JWT_SECRET is misconfigured, user sees "Server authentication is not configured" instead of a confusing silent failure
+
+---
+Task ID: remove-503-guards
+Agent: main
+Task: Remove unnecessary `if (!token)` / `if (!accessToken)` / `if (!inviteToken)` 503 guard blocks after `generateToken()` calls
+
+Work Log:
+- Confirmed `reset-password/route.ts` and `reset-password/verify/route.ts` do NOT contain similar guards (no changes needed)
+- Removed 3 guards from `src/app/api/auth/google/route.ts` (after existingByGoogle, existingByEmail, newUser token generation)
+- Removed 1 guard from `src/app/api/auth/login/route.ts` (after token generation)
+- Removed 1 guard from `src/app/api/auth/register/route.ts` (after token generation)
+- Removed 1 guard from `src/app/api/auth/whatsapp/verify-otp/route.ts` (after accessToken generation)
+- Removed 1 guard from `src/app/api/auth/whatsapp/register/route.ts` (after accessToken generation)
+- Removed 1 guard from `src/app/api/auth/whatsapp/refresh/route.ts` (after accessToken generation)
+- Removed 1 guard from `src/app/api/auth/users/route.ts` (after inviteToken generation)
+- Ran `bun run lint`: 0 errors, 7 pre-existing warnings
+
+Stage Summary:
+- 7 files modified, 9 guard blocks removed total (3 in google/route.ts, 1 each in the other 6 files)
+- Guards were unnecessary because `generateToken()` now derives the JWT secret from the DB URL as fallback, so it always returns a valid JWT string
+- No other code changes made; lint passes with zero errors

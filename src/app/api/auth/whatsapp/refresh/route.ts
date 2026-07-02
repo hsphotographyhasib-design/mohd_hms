@@ -83,13 +83,6 @@ export async function POST(request: NextRequest) {
       email: session.user.email,
     });
 
-    if (!accessToken) {
-      return NextResponse.json(
-        { error: 'Server authentication is not configured. Please contact the administrator.' },
-        { status: 503 },
-      );
-    }
-
     // Audit log
     try {
       await db.auditLog.create({

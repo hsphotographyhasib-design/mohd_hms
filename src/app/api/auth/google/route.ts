@@ -168,13 +168,6 @@ export async function POST(request: NextRequest) {
         email: existingByGoogle.email,
       });
 
-      if (!token) {
-        return NextResponse.json(
-          { error: 'Server authentication is not configured. Please contact the administrator.' },
-          { status: 503 },
-        );
-      }
-
       return NextResponse.json({
         token,
         user: {
@@ -235,13 +228,6 @@ export async function POST(request: NextRequest) {
         role: normalizedRole,
         email: existingByEmail.email,
       });
-
-      if (!token) {
-        return NextResponse.json(
-          { error: 'Server authentication is not configured. Please contact the administrator.' },
-          { status: 503 },
-        );
-      }
 
       return NextResponse.json({
         token,
@@ -319,13 +305,6 @@ export async function POST(request: NextRequest) {
       role: normalizedRole,
       email: newUser.email,
     });
-
-    if (!token) {
-      return NextResponse.json(
-        { error: 'Server authentication is not configured. Please contact the administrator.' },
-        { status: 503 },
-      );
-    }
 
     return NextResponse.json({
       token,
