@@ -9,6 +9,7 @@ import { AppShell } from '@/components/app/app-shell';
 import { AuthGuard } from '@/components/session/auth-guard';
 import { IdleTimerProvider } from '@/components/session/idle-timer';
 import { SessionProvider } from '@/components/session/session-provider';
+import { NotificationProvider } from '@/components/notifications/notification-provider';
 import { setupFetchInterceptor } from '@/hooks/use-secure-fetch';
 
 const emptySubscribe = () => () => {};
@@ -26,8 +27,14 @@ function ToastListener() {
   useEffect(() => {
     const handleToast = (e: Event) => {
       const { type = 'info', message = '' } = (e as CustomEvent).detail || {};
+      // Bridge to existing sonner toast
       import('@/hooks/use-toast').then(({ toast }) => {
         toast({ title: type === 'error' ? 'Error' : type === 'success' ? 'Success' : 'Info', description: message, variant: type === 'error' ? 'destructive' : 'default' });
+      });
+      // Bridge to new enterprise notification system
+      import('@/lib/notifications/store').then(({ useNotificationStore }) => {
+        const nType = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
+        useNotificationStore.getState().add({ type: nType, title: message || (type === 'error' ? 'Error' : 'Info') });
       });
     };
     window.addEventListener('cmms:toast', handleToast);
@@ -87,15 +94,17 @@ export default function Home() {
 
   return (
     <SessionProvider>
-      <FetchInterceptorSetup />
-      <ToastListener />
-      {isAuthenticated ? (
-        <ProtectedApp />
-      ) : showLogin ? (
-        <LoginView />
-      ) : (
-        <LandingHome onSignIn={() => setShowLogin(true)} />
-      )}
+      <NotificationProvider>
+        <FetchInterceptorSetup />
+        <ToastListener />
+        {isAuthenticated ? (
+          <ProtectedApp />
+        ) : showLogin ? (
+          <LoginView />
+        ) : (
+          <LandingHome onSignIn={() => setShowLogin(true)} />
+        )}
+      </NotificationProvider>
     </SessionProvider>
   );
 }
