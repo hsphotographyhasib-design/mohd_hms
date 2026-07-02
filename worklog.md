@@ -79,3 +79,24 @@ Stage Summary:
 - **Fixed**: Broad safety net catches ANY error with database-related keywords
 - **New**: Error diagnostic headers in API responses for DevTools debugging
 - **User action needed**: Visit `/api/debug/db-test` on their Vercel deployment to see the actual database error
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix "Cannot connect to the database" error — 4th attempt, comprehensive root cause fix
+
+Work Log:
+- Identified that `findDatabaseUrl()` in `src/lib/prisma.ts` line 34 was skipping env vars containing "KEY", "SECRET", or "PASSWORD" in the name — too aggressive, could skip valid DB URLs on Vercel with `mohd_hms_` prefixed env vars
+- Removed the KEY/SECRET/PASSWORD exclusion from the env var scan
+- Added 5 more candidate env var names: POSTGRES_URL_NON_POOLING, POSTGRES_PRISMA_URL, DIRECT_URL, DATABASE_URL_VERCEL, DATABASE_PUBLIC_URL
+- Added `ensureSsl()` function that auto-appends `?sslmode=require` to postgres:// URLs missing SSL params — critical for Vercel/Neon
+- Removed invalid PrismaPg constructor options (max, idleTimeout, connectTimeout) — PrismaPgOptions only supports `schema` and `disposeExternalPool`
+- Added comprehensive logging: logs env var name when URL found, logs all URL-like env vars scanned, logs all env var names when no URL found
+- Enhanced `getDbFriendlyMessage()` fallback to include actual error details: `[ErrorType:code] message` — so the user can report the real error
+- Enhanced `/api/debug/db-test` diagnostic endpoint: lists ALL env var names, DB-named env vars, checks SSL, includes package versions
+
+Stage Summary:
+- **Root cause hypotheses**: (1) URL not found due to KEY exclusion, (2) SSL not configured for Postgres, (3) Invalid PrismaPg options
+- **All 3 hypotheses addressed** in this fix
+- **Key files changed**: `src/lib/prisma.ts`, `src/lib/db.ts`, `src/app/api/debug/db-test/route.ts`
+- **User action needed**: Deploy to Vercel, test login. Error messages now include actual error details for further debugging if still broken.
