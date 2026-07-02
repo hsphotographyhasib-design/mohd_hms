@@ -1,12 +1,13 @@
 /**
  * TopUtilityBar — Full-width sticky contact information bar.
  *
- * Three-section layout (desktop):
+ * Three-section layout (desktop & tablet only):
  *   Left:   📍 Bandar Seri Begawan, Brunei  (opens Google Maps)
  *   Center: ✉ info@mohdhms.com             (opens mailto)
- *   Right:  ⚠ 24/7 Emergency: +673 999 9999 (tel: on mobile)
+ *   Right:  ⚠ 24/7 Emergency: +673 999 9999 (tel: link)
  *
- * Mobile (<768px): two rows — location first, email + emergency second.
+ * On mobile (<768px) this component is NOT rendered at all
+ * (conditional rendering in public-layout.tsx).
  *
  * Pure CSS hover effects — no client JavaScript required.
  * Server Component.
@@ -78,9 +79,8 @@ export function TopUtilityBar() {
       role="banner"
       aria-label="Company contact information"
     >
-      {/* ── Desktop & Tablet: single row, 42px ── */}
       <div
-        className="hidden md:flex items-center justify-between w-full"
+        className="flex items-center justify-between w-full"
         style={{
           height: '42px',
           paddingLeft: '32px',
@@ -126,56 +126,6 @@ export function TopUtilityBar() {
           >
             <WarningIcon />
             <span className="whitespace-nowrap">24/7 Emergency: +673 999 9999</span>
-          </a>
-        </div>
-      </div>
-
-      {/* ── Mobile (<768px): two rows ── */}
-      <div
-        className="flex md:hidden flex-col items-center justify-center w-full"
-        style={{
-          minHeight: '42px',
-          paddingLeft: '16px',
-          paddingRight: '16px',
-          paddingTop: '6px',
-          paddingBottom: '6px',
-          fontFamily: 'var(--font-poppins), Poppins, sans-serif',
-          fontSize: '13px',
-          fontWeight: 500,
-          color: '#FFFFFF',
-          gap: '4px',
-        }}
-      >
-        {/* Row 1: Location */}
-        <a
-          href="https://www.google.com/maps/search/Bandar+Seri+Begawan,+Brunei"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Open location on Google Maps: Bandar Seri Begawan, Brunei"
-          className="utility-link flex items-center justify-center gap-2 min-h-[44px] min-w-[44px]"
-        >
-          <LocationIcon />
-          <span>Bandar Seri Begawan, Brunei</span>
-        </a>
-
-        {/* Row 2: Email + Emergency */}
-        <div className="flex items-center justify-center gap-4">
-          <a
-            href="mailto:info@mohdhms.com"
-            aria-label="Send email to info@mohdhms.com"
-            className="utility-link flex items-center gap-1.5 min-h-[44px] min-w-[44px] px-1"
-          >
-            <EmailIcon />
-            <span>info@mohdhms.com</span>
-          </a>
-          <span className="text-white/30">|</span>
-          <a
-            href="tel:+6739999999"
-            aria-label="Call 24/7 Emergency: +673 999 9999"
-            className="utility-link flex items-center gap-1.5 min-h-[44px] min-w-[44px] px-1"
-          >
-            <WarningIcon />
-            <span>24/7 Emergency: +673 999 9999</span>
           </a>
         </div>
       </div>

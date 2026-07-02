@@ -4,6 +4,23 @@ import { useState, useEffect, useCallback, useRef, type ReactNode } from 'react'
 import { TopUtilityBar } from '@/components/layout/top-utility-bar'
 // CSS loaded via <link> tag below to avoid affecting authenticated app styles
 
+/** Returns true when viewport is below the mobile breakpoint (767px). */
+function useIsMobile(breakpoint = 768): boolean {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia(`(max-width: ${breakpoint - 1}px)`).matches
+  })
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [breakpoint])
+
+  return isMobile
+}
+
 const NAV_ITEMS = [
   { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
@@ -37,6 +54,7 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
   const [scrolled, setScrolled] = useState(false)
   const [showTop, setShowTop] = useState(false)
   const scrollRun = useRef(false)
+  const isMobile = useIsMobile()
 
   // Scroll effects
   useEffect(() => {
@@ -119,7 +137,7 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
       <link rel="stylesheet" href="/landing-styles.css" />
       <script dangerouslySetInnerHTML={{ __html: 'function imgErr(el){if(el.dataset.fb){el.src=el.dataset.fb;el.removeAttribute("data-fb")}else{el.style.display="none"}}' }} />
 
-      <TopUtilityBar />
+      {!isMobile && <TopUtilityBar />}
 
       {/* Header */}
       <header id="hdr" className={scrolled ? 'scrolled' : ''}>
