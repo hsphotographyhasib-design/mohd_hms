@@ -540,7 +540,9 @@ export function getErrorInfo(error: unknown): string {
   const typeName = getErrorTypeName(error);
   const code = getErrorCode(error);
   const msg = error instanceof Error ? error.message : String(error);
-  const shortMsg = msg.length > 80 ? msg.slice(0, 77) + '...' : msg;
+  // Sanitize for use in HTTP headers: replace newlines and trim
+  const sanitized = msg.replace(/[\r\n]+/g, ' ').trim();
+  const shortMsg = sanitized.length > 80 ? sanitized.slice(0, 77) + '...' : sanitized;
   return `${typeName}:${code || 'none'}:${shortMsg}`;
 }
 
@@ -549,9 +551,10 @@ export function getErrorInfo(error: unknown): string {
  * Include these in your 500 responses for debugging.
  */
 export function getErrorHeaders(error: unknown): Record<string, string> {
+  const info = getErrorInfo(error);
   return {
     'X-Error-Type': getErrorTypeName(error),
     'X-Error-Code': getErrorCode(error) || 'none',
-    'X-Error-Info': getErrorInfo(error).slice(0, 200),
+    'X-Error-Info': info.slice(0, 200),
   };
 }

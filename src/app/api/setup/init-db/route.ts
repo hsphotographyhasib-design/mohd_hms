@@ -66,7 +66,7 @@ export async function POST() {
   // --- Step 3: Try to push schema using Prisma CLI ---
   try {
     const { execSync } = await import('child_process');
-    const output = execSync('npx prisma db push --accept-data-loss --skip-generate 2>&1', {
+    const output = execSync('npx prisma db push --skip-generate 2>&1', {
       encoding: 'utf-8',
       timeout: 60000,
       env: {
