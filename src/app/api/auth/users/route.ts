@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry } from '@/lib/db';
+import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { hashPassword, generateToken } from '@/lib/auth';
 import { sendEmail, renderWelcomeEmail } from '@/lib/email';

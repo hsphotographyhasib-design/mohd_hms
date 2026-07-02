@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db, getDbFriendlyMessage } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  // --- Phase 1: Auth check ---
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+  const payload = verifyToken(token || '');
+  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const tenantId = payload.tenantId as string;
+
+  // --- Phase 2: Database queries ---
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-
     // Run all queries in parallel
     const [
       totalEquipment,
@@ -240,7 +242,7 @@ export async function GET(request: NextRequest) {
       upcomingPm: formattedPm,
     });
   } catch (error) {
-    console.error('Dashboard error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Dashboard DB error:', error);
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }

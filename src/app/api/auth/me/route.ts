@@ -4,14 +4,21 @@ import { verifyToken } from '@/lib/auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  // --- Phase 1: Token verification (auth errors) ---
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+
+  if (!token) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const payload = verifyToken(token);
+  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const userId = payload.userId as string;
+
+  // --- Phase 2: Database lookup (DB errors) ---
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const userId = payload.userId as string;
-
     const user = await withRetry(
       () =>
         db.user.findUnique({
@@ -47,7 +54,7 @@ export async function GET(request: NextRequest) {
       lastLogin: user.lastLogin,
     });
   } catch (error) {
-    console.error('Auth me error:', error);
+    console.error('Auth me DB error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }

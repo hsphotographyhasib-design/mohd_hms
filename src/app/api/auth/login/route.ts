@@ -88,7 +88,8 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Login error:', error);
+    // The enhanced getDbFriendlyMessage now handles ALL error types:
+    // Prisma, PostgreSQL native, network, JSON parse, JWT, bcrypt, timeout, etc.
     return NextResponse.json(
       { error: getDbFriendlyMessage(error) },
       { status: 500 }

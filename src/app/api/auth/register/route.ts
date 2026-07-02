@@ -5,13 +5,27 @@ import { sendEmail, renderWelcomeEmail } from '@/lib/email';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  // --- Phase 1: Parse request (non-DB errors) ---
+  let name: string;
+  let email: string;
+  let password: string;
+  let role: string;
   try {
-    const { name, email, password, role } = await request.json();
+    const body = await request.json();
+    name = body.name;
+    email = body.email;
+    password = body.password;
+    role = body.role;
+  } catch {
+    return NextResponse.json({ error: 'Invalid request data. Please check your input.' }, { status: 400 });
+  }
 
-    if (!name || !email || !password) {
-      return NextResponse.json({ error: 'Name, email, and password are required' }, { status: 400 });
-    }
+  if (!name || !email || !password) {
+    return NextResponse.json({ error: 'Name, email, and password are required' }, { status: 400 });
+  }
 
+  // --- Phase 2: Database operations (DB errors) ---
+  try {
     // Find or create default tenant for new registrations
     let tenant = await withRetry(
       () => db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } }),
@@ -57,6 +71,7 @@ export async function POST(request: NextRequest) {
       { label: 'register-createUser' }
     );
 
+    // --- Phase 3: Token generation ---
     const token = generateToken({
       userId: user.id,
       tenantId: user.tenantId,
@@ -98,7 +113,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    console.error('Register error:', error);
+    console.error('Register DB error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }

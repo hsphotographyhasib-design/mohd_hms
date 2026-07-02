@@ -1,9 +1,24 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, createContext, useContext, type ReactNode } from 'react'
 import type { CMSData } from './landing-data'
 
+/**
+ * Shared CMS data context — prevents 10+ duplicate fetches.
+ * Each landing section used to call useLandingData() independently,
+ * causing 10 parallel /api/cms/public/landing requests per page load.
+ */
+
+const CMSContext = createContext<{ cms: CMSData | null; ready: boolean }>({
+  cms: null,
+  ready: false,
+})
+
 export function useLandingData() {
+  return useContext(CMSContext)
+}
+
+export function LandingDataProvider({ children }: { children: ReactNode }) {
   const [cms, setCms] = useState<CMSData | null>(null)
   const [ready, setReady] = useState(false)
 
@@ -24,5 +39,9 @@ export function useLandingData() {
     return () => { cancelled = true }
   }, [])
 
-  return { cms, ready }
+  return (
+    <CMSContext.Provider value={{ cms, ready }}>
+      {children}
+    </CMSContext.Provider>
+  )
 }
