@@ -19,12 +19,16 @@ import { PrismaPg } from "@prisma/adapter-pg";
 // ---------------------------------------------------------------------------
 
 export function findDatabaseUrl(): { url: string; source: string; isSQLite: boolean } {
+  const isProd = process.env.NODE_ENV === "production" || !!process.env.VERCEL;
+
+  // --- PHASE 1: Check well-known env vars for POSTGRES URLs FIRST ---
+  // Postgres URLs are always preferred, especially in production.
   const candidates = [
-    "DATABASE_URL",
-    "PRISMA_DATABASE_URL",
-    "POSTGRES_URL",
-    "POSTGRES_URL_NON_POOLING",
     "POSTGRES_PRISMA_URL",
+    "POSTGRES_URL_NON_POOLING",
+    "POSTGRES_URL",
+    "PRISMA_DATABASE_URL",
+    "DATABASE_URL",
     "DIRECT_URL",
     "DATABASE_URL_VERCEL",
     "DATABASE_PUBLIC_URL",
@@ -33,37 +37,45 @@ export function findDatabaseUrl(): { url: string; source: string; isSQLite: bool
   for (const name of candidates) {
     const val = process.env[name];
     if (!val) continue;
-    if (val.startsWith("file:")) return { url: val, source: name, isSQLite: true };
-    if (val.startsWith("postgres://") || val.startsWith("postgresql://"))
+    if (val.startsWith("postgres://") || val.startsWith("postgresql://")) {
+      console.log(`[Prisma] Found postgres URL in env var: ${name}`);
       return { url: val, source: name, isSQLite: false };
+    }
   }
 
-  // Scan ALL env vars for database URLs.
-  // IMPORTANT: Do NOT skip keys containing SECRET/KEY/PASSWORD —
-  // on Vercel, the database URL may be stored in an env var with such a name.
-  const scanned: string[] = [];
+  // --- PHASE 2: Scan ALL env vars for POSTGRES URLs ---
+  // Scan entire env for any postgres:// URL (handles mohd_hms_ prefix etc.)
   for (const [key, val] of Object.entries(process.env)) {
     if (!val || typeof val !== "string") continue;
-    if (val.startsWith("file:")) {
-      console.log(`[Prisma] Found file: URL in env var: ${key}`);
-      return { url: val, source: `scan:${key}`, isSQLite: true };
-    }
     if (val.startsWith("postgres://") || val.startsWith("postgresql://")) {
-      console.log(`[Prisma] Found postgres URL in env var: ${key}`);
+      console.log(`[Prisma] Found postgres URL in env var (scan): ${key}`);
       return { url: val, source: `scan:${key}`, isSQLite: false };
     }
-    // Track what we scanned for debugging
-    if (val.length > 20 && (val.includes("://") || val.includes("@"))) {
-      scanned.push(key);
+  }
+
+  // --- PHASE 3: Only in LOCAL DEV, look for file: (SQLite) URLs ---
+  // CRITICAL: Never use file: URLs in production — Vercel has no filesystem.
+  if (!isProd) {
+    // Check well-known env vars
+    for (const name of candidates) {
+      const val = process.env[name];
+      if (!val) continue;
+      if (val.startsWith("file:")) {
+        console.log(`[Prisma] Using file: URL in dev from env var: ${name}`);
+        return { url: val, source: name, isSQLite: true };
+      }
     }
-  }
 
-  if (scanned.length > 0) {
-    console.log(`[Prisma] Scanned URL-like env vars (no DB URL found): ${scanned.join(", ")}`);
-  }
+    // Scan all env vars for file: URLs
+    for (const [key, val] of Object.entries(process.env)) {
+      if (!val || typeof val !== "string") continue;
+      if (val.startsWith("file:")) {
+        console.log(`[Prisma] Using file: URL in dev from env var (scan): ${key}`);
+        return { url: val, source: `scan:${key}`, isSQLite: true };
+      }
+    }
 
-  // In local dev, try reading .env file directly
-  if (process.env.NODE_ENV !== "production") {
+    // Read .env file directly as last resort
     try {
       const envPath = resolve(process.cwd(), ".env");
       const envContent = readFileSync(envPath, "utf-8");
@@ -74,18 +86,33 @@ export function findDatabaseUrl(): { url: string; source: string; isSQLite: bool
         const name = trimmed.slice(0, eqIdx).trim();
         const value = trimmed.slice(eqIdx + 1).replace(/^["']|["']$/g, "").trim();
         if (!value) continue;
-        if (value.startsWith("file:")) return { url: value, source: `.env:${name}`, isSQLite: true };
         if (value.startsWith("postgres://") || value.startsWith("postgresql://"))
           return { url: value, source: `.env:${name}`, isSQLite: false };
+        if (value.startsWith("file:")) return { url: value, source: `.env:${name}`, isSQLite: true };
       }
     } catch {
       // .env not found — acceptable
     }
   }
 
-  // Log ALL env var names for debugging when no DB URL is found
-  const envKeys = Object.keys(process.env).sort();
-  console.error(`[Prisma] ERROR: No database URL found. Env vars available: ${envKeys.join(", ")}`);
+  // --- NO DATABASE URL FOUND ---
+  if (isProd) {
+    // In production, this is a fatal misconfiguration.
+    // Log ALL env var names so the admin can see what's available.
+    const envKeys = Object.keys(process.env).sort();
+    const dbLikeKeys = envKeys.filter(k => {
+      const ku = k.toUpperCase();
+      return ku.includes('DATABASE') || ku.includes('POSTGRES') || ku.includes('DB_') ||
+             ku.includes('PRISMA') || ku.includes('NEON') || ku.includes('CONN');
+    });
+    console.error(
+      `[Prisma] FATAL: No postgres URL found in production. ` +
+      `DB-related env vars: [${dbLikeKeys.join(', ')}]. ` +
+      `All env vars: [${envKeys.join(', ')}]`
+    );
+  } else {
+    console.warn(`[Prisma] No database URL found. Using fallback dev.db`);
+  }
 
   return { url: "", source: "", isSQLite: false };
 }
