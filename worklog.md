@@ -100,3 +100,25 @@ Stage Summary:
 - **All 3 hypotheses addressed** in this fix
 - **Key files changed**: `src/lib/prisma.ts`, `src/lib/db.ts`, `src/app/api/debug/db-test/route.ts`
 - **User action needed**: Deploy to Vercel, test login. Error messages now include actual error details for further debugging if still broken.
+
+---
+Task ID: 0
+Agent: Main Agent
+Task: PERMANENT PROJECT RULES — DO NOT VIOLATE
+
+Work Log:
+- The database connection issue took 5 attempts to fix due to fundamental misunderstandings
+- Root cause was schema provider mismatch (sqlite vs postgresql) that should have been caught immediately
+
+CRITICAL PROJECT RULES (NEVER FORGET):
+1. **Prisma schema provider = "postgresql"** — This project uses PostgreSQL ONLY. No SQLite. No file: URLs.
+2. **Prisma 7: schema provider MUST match the adapter** — PrismaPg ↔ postgresql, PrismaLibSql ↔ sqlite. A mismatch causes PrismaClientInitializationError at runtime.
+3. **Vercel env vars use "mohd_hms_" prefix** — The user's Vercel environment variables are prefixed with mohd_hms_
+4. **Never use file: URLs in production** — Vercel serverless has no filesystem. Always prefer postgres:// URLs.
+5. **Database URL priority on Vercel**: POSTGRES_PRISMA_URL > POSTGRES_URL_NON_POOLING > POSTGRES_URL > scan all env vars for postgres://
+6. **Always append ?sslmode=require** to postgres URLs missing SSL params — required by Neon/Vercel Postgres
+7. **PrismaPg constructor** only accepts (string | PoolConfig | Pool, PrismaPgOptions?) — PrismaPgOptions only has `schema` and `disposeExternalPool`. Do NOT pass `max`, `idleTimeout`, `connectTimeout` as second arg.
+
+Stage Summary:
+- These rules are PERMANENT. Any future database-related changes MUST follow them.
+- This project is PostgreSQL-only. All code, schema, and configuration must reflect this.
