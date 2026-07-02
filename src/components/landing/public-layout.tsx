@@ -118,21 +118,7 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
       <link rel="stylesheet" href="/landing-styles.css" />
       <script dangerouslySetInnerHTML={{ __html: 'function imgErr(el){if(el.dataset.fb){el.src=el.dataset.fb;el.removeAttribute("data-fb")}else{el.style.display="none"}}' }} />
 
-      {/* Utility bar */}
-      <div className="util">
-        <div className="container">
-          <a href="mailto:info@mohdhms.com" className="hide-sm">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg>
-            info@mohdhms.com
-          </a>
-          <div className="u-r">
-            <a href="tel:+6739999999" className="emr">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
-              24/7 Emergency: +673 999 9999
-            </a>
-          </div>
-        </div>
-      </div>
+      {/* Utility bar is rendered once in layout.tsx via <TopUtilityBar /> */}
 
       {/* Header */}
       <header id="hdr" className={scrolled ? 'scrolled' : ''}>
