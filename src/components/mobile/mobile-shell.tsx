@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Home,
   AlertTriangle,
-  Plus,
   ClipboardList,
   Menu,
   Search,
@@ -16,7 +15,6 @@ import {
   Receipt,
   ChevronRight,
   X,
-  Package,
   CalendarClock,
   Warehouse,
   Users,
@@ -30,10 +28,7 @@ import {
   Settings,
   UserCircle,
   MonitorSmartphone,
-  Mail,
-  Megaphone,
-  MessageCircle,
-  Briefcase,
+  LogOut,
 } from 'lucide-react';
 import { useAppStore, useAuthStore, useNotificationStore } from '@/store';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
@@ -41,6 +36,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
 import type { AppView } from '@/types';
+import { QrScannerModal } from './qr-scanner-modal';
 
 // ─── Quick Action Items ────────────────────────────────────────
 const quickActions = [
@@ -54,8 +50,9 @@ const quickActions = [
 interface MoreMenuItem {
   label: string;
   icon: React.ElementType;
-  view: AppView;
-  feature: string;
+  view?: AppView;
+  feature?: string;
+  action?: 'logout';
 }
 
 interface MoreMenuGroup {
@@ -100,6 +97,8 @@ const moreMenuGroups: MoreMenuGroup[] = [
     items: [
       { label: 'Reports', icon: BarChart3, view: 'reports', feature: 'reports' },
       { label: 'Settings', icon: Settings, view: 'settings', feature: 'settings' },
+      { label: 'Profile', icon: UserCircle, view: 'profile', feature: 'dashboard' },
+      { label: 'Logout', icon: LogOut, action: 'logout' },
     ],
   },
 ];
@@ -107,7 +106,7 @@ const moreMenuGroups: MoreMenuGroup[] = [
 // ─── Mobile Header ─────────────────────────────────────────────
 function MobileHeader() {
   const { setView, searchOpen, setSearchOpen } = useAppStore();
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const { unreadCount } = useNotificationStore();
   const [searchQuery, setSearchQuery] = useState('');
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -129,10 +128,6 @@ function MobileHeader() {
     },
     [searchQuery],
   );
-
-  const handleLogout = useCallback(() => {
-    logout();
-  }, [logout]);
 
   const initials = user?.name
     ? user.name
@@ -301,7 +296,7 @@ function MoreMenuSheet({
   onOpenChange: (open: boolean) => void;
 }) {
   const { setView } = useAppStore();
-  const { user } = useAuthStore();
+  const { logout } = useAuthStore();
 
   const handleNavigate = useCallback(
     (view: AppView) => {
@@ -310,6 +305,11 @@ function MoreMenuSheet({
     },
     [setView, onOpenChange],
   );
+
+  const handleLogout = useCallback(() => {
+    onOpenChange(false);
+    logout();
+  }, [logout, onOpenChange]);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -328,13 +328,41 @@ function MoreMenuSheet({
                 {group.items.map((item) => (
                   <button
                     key={item.label}
-                    onClick={() => handleNavigate(item.view)}
-                    className="flex flex-col items-center gap-1.5 rounded-xl px-2 py-3 text-center transition-colors active:bg-gray-100 hover:bg-gray-50"
+                    onClick={() => {
+                      if (item.action === 'logout') {
+                        handleLogout();
+                      } else if (item.view) {
+                        handleNavigate(item.view);
+                      }
+                    }}
+                    className={cn(
+                      'flex flex-col items-center gap-1.5 rounded-xl px-2 py-3 text-center transition-colors active:bg-gray-100 hover:bg-gray-50',
+                      item.action === 'logout' && 'col-span-3 flex-row gap-3 rounded-xl px-3 py-3 mt-1',
+                    )}
                   >
-                    <div className="flex size-10 items-center justify-center rounded-xl bg-gray-100">
-                      <item.icon className="size-5 text-gray-600" />
+                    <div
+                      className={cn(
+                        'flex size-10 items-center justify-center rounded-xl',
+                        item.action === 'logout' ? 'bg-red-50' : 'bg-gray-100',
+                      )}
+                    >
+                      <item.icon
+                        className={cn(
+                          'size-5',
+                          item.action === 'logout' ? 'text-red-500' : 'text-gray-600',
+                        )}
+                      />
                     </div>
-                    <span className="text-xs font-medium leading-tight text-gray-700">{item.label}</span>
+                    <span
+                      className={cn(
+                        'text-xs font-medium leading-tight',
+                        item.action === 'logout'
+                          ? 'text-red-600'
+                          : 'text-gray-700',
+                      )}
+                    >
+                      {item.label}
+                    </span>
                   </button>
                 ))}
               </div>
@@ -346,95 +374,175 @@ function MoreMenuSheet({
   );
 }
 
-// ─── Bottom Navigation ─────────────────────────────────────────
-function MobileBottomNav() {
+// ─── Floating Glassmorphism Bottom Navigation ──────────────────
+function FloatingBottomNav() {
   const { currentView, setView } = useAppStore();
-  const [fabOpen, setFabOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [qrOpen, setQrOpen] = useState(false);
 
-  const tabs = [
+  const navTabs = [
     { id: 'dashboard' as AppView, label: 'Dashboard', icon: Home },
     { id: 'complaints' as AppView, label: 'Complaints', icon: AlertTriangle },
-    { id: '__fab__' as const, label: '', icon: Plus },
     { id: 'work-orders' as AppView, label: 'Work Orders', icon: ClipboardList },
-    { id: '__more__' as const, label: 'More', icon: Menu },
   ] as const;
 
-  const handleTabPress = useCallback(
-    (tab: (typeof tabs)[number]) => {
-      if (tab.id === '__fab__') {
-        setFabOpen(true);
-        return;
-      }
-      if (tab.id === '__more__') {
-        setMoreOpen(true);
-        return;
-      }
-      setView(tab.id);
+  const isActive = (id: string) => currentView === id;
+
+  const handleQrScan = useCallback(
+    (data: string) => {
+      // Log the scan via API (fire and forget)
+      fetch('/api/qr/scan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ qrId: data }),
+      }).catch(() => {
+        // Silently ignore — scan still works
+      });
+
+      // Navigate to equipment view and show toast
+      setView('equipment', { qrId: data });
+      toast.success(`QR Scanned: ${data}`, {
+        description: 'Navigating to equipment details...',
+      });
     },
     [setView],
   );
 
-  const isActive = (id: string) => {
-    if (id === '__fab__' || id === '__more__') return false;
-    return currentView === id;
-  };
-
   return (
     <>
-      <nav
-        className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-gray-200 bg-white"
-        style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
+      <motion.nav
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5, ease: 'easeOut' }}
+        className="fixed left-4 right-4 z-40 flex items-center"
+        style={{
+          bottom: 'calc(20px + env(safe-area-inset-bottom, 0px))',
+          height: 72,
+          borderRadius: 36,
+          background: 'rgba(255,255,255,0.92)',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.12)',
+          border: '1px solid rgba(255,255,255,0.35)',
+        }}
         role="tablist"
         aria-label="Main navigation"
       >
-        {tabs.map((tab) => {
-          if (tab.id === '__fab__') {
+        {/* Left tabs: Dashboard, Complaints */}
+        <div className="flex flex-1 items-center justify-around pl-4">
+          {navTabs.slice(0, 2).map((tab) => {
+            const active = isActive(tab.id);
+            const Icon = tab.icon;
             return (
-              <div key="__fab__" className="relative -mt-6 flex items-center justify-center">
-                <button
-                  onClick={() => setFabOpen(true)}
-                  className="flex size-14 items-center justify-center rounded-full bg-emerald-600 shadow-lg shadow-emerald-600/30 active:bg-emerald-700 transition-colors"
-                  aria-label="Quick actions"
-                >
-                  <Plus className="size-6 text-white" strokeWidth={2.5} />
-                </button>
-              </div>
-            );
-          }
-
-          const active = isActive(tab.id);
-          const Icon = tab.icon;
-
-          return (
-            <button
-              key={tab.id}
-              onClick={() => handleTabPress(tab)}
-              role="tab"
-              aria-selected={active}
-              aria-label={tab.label}
-              className={cn(
-                'relative flex min-h-[44px] flex-col items-center justify-center gap-0.5 px-3 py-1 transition-colors',
-                active ? 'text-emerald-600' : 'text-gray-500',
-              )}
-            >
-              {/* Active indicator dot */}
-              {active && (
-                <motion.div
-                  layoutId="mobile-tab-dot"
-                  className="absolute -top-0.5 size-1 rounded-full bg-emerald-600"
-                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              <motion.button
+                key={tab.id}
+                onClick={() => setView(tab.id)}
+                role="tab"
+                aria-selected={active}
+                aria-label={tab.label}
+                whileTap={{ scale: 0.9 }}
+                className="relative flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 py-1"
+              >
+                {active && (
+                  <motion.div
+                    layoutId="floating-tab-indicator"
+                    className="absolute -bottom-1 size-1.5 rounded-full bg-emerald-600"
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  />
+                )}
+                <Icon
+                  className={cn('size-5', active ? 'text-emerald-600' : 'text-gray-400')}
+                  strokeWidth={active ? 2.2 : 1.8}
                 />
-              )}
-              <Icon className={cn('size-5', active && 'text-emerald-600')} strokeWidth={active ? 2.2 : 1.8} />
-              <span className="text-[10px] font-medium leading-none">{tab.label}</span>
-            </button>
-          );
-        })}
-      </nav>
+                <span
+                  className={cn(
+                    'text-[10px] font-medium leading-none',
+                    active ? 'text-emerald-600' : 'text-gray-400',
+                  )}
+                >
+                  {tab.label}
+                </span>
+              </motion.button>
+            );
+          })}
+        </div>
 
-      <QuickActionsSheet open={fabOpen} onOpenChange={setFabOpen} />
+        {/* Center spacer for QR button */}
+        <div className="relative flex w-20 shrink-0 items-center justify-center">
+          {/* QR Scan Button — floats above the bar */}
+          <motion.button
+            onClick={() => setQrOpen(true)}
+            whileTap={{ scale: 0.9 }}
+            animate={{ scale: [1, 1.04, 1] }}
+            transition={{
+              scale: { repeat: Infinity, duration: 3, ease: 'easeInOut' },
+            }}
+            className="absolute bottom-full left-1/2 -translate-x-1/2 translate-y-1/2 flex size-16 items-center justify-center rounded-full text-white"
+            style={{
+              background: '#059669',
+              boxShadow: '0 12px 30px rgba(0,120,70,0.35)',
+            }}
+            aria-label="Scan QR Code"
+          >
+            <QrCode className="size-7" strokeWidth={2} />
+          </motion.button>
+        </div>
+
+        {/* Right tabs: Work Orders, More */}
+        <div className="flex flex-1 items-center justify-around pr-4">
+          {navTabs.slice(2).map((tab) => {
+            const active = isActive(tab.id);
+            const Icon = tab.icon;
+            return (
+              <motion.button
+                key={tab.id}
+                onClick={() => setView(tab.id)}
+                role="tab"
+                aria-selected={active}
+                aria-label={tab.label}
+                whileTap={{ scale: 0.9 }}
+                className="relative flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 py-1"
+              >
+                {active && (
+                  <motion.div
+                    layoutId="floating-tab-indicator"
+                    className="absolute -bottom-1 size-1.5 rounded-full bg-emerald-600"
+                    transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                  />
+                )}
+                <Icon
+                  className={cn('size-5', active ? 'text-emerald-600' : 'text-gray-400')}
+                  strokeWidth={active ? 2.2 : 1.8}
+                />
+                <span
+                  className={cn(
+                    'text-[10px] font-medium leading-none',
+                    active ? 'text-emerald-600' : 'text-gray-400',
+                  )}
+                >
+                  {tab.label}
+                </span>
+              </motion.button>
+            );
+          })}
+
+          {/* More button */}
+          <motion.button
+            onClick={() => setMoreOpen(true)}
+            role="tab"
+            aria-selected={false}
+            aria-label="More"
+            whileTap={{ scale: 0.9 }}
+            className="relative flex min-h-[48px] min-w-[48px] flex-col items-center justify-center gap-0.5 py-1"
+          >
+            <Menu className="size-5 text-gray-400" strokeWidth={1.8} />
+            <span className="text-[10px] font-medium leading-none text-gray-400">More</span>
+          </motion.button>
+        </div>
+      </motion.nav>
+
       <MoreMenuSheet open={moreOpen} onOpenChange={setMoreOpen} />
+      <QrScannerModal open={qrOpen} onOpenChange={setQrOpen} onScan={handleQrScan} />
     </>
   );
 }
@@ -447,12 +555,12 @@ export function MobileShell({ children }: { children: React.ReactNode }) {
       <MobileHeader />
 
       {/* Scrollable Content Area */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-28">
         {children}
       </main>
 
-      {/* Bottom Navigation */}
-      <MobileBottomNav />
+      {/* Floating Bottom Navigation */}
+      <FloatingBottomNav />
     </div>
   );
 }

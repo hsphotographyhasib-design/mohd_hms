@@ -477,3 +477,43 @@ Stage Summary:
 - Dashboard loading failure fixed — was a complete database mismatch (PostgreSQL schema + SQLite data + no PostgreSQL server)
 - Files modified: `prisma/schema.prisma`, `prisma.config.ts`, `src/lib/prisma.ts`, `src/lib/auth.ts`
 - Verified via curl: `/api/auth/login` → 200 with JWT, `/api/dashboard` → 200 with all stats
+
+---
+Task ID: 3
+Agent: full-stack-developer
+Task: Replace mobile bottom navigation with floating glassmorphism nav + QR scanner
+
+Work Log:
+- Created `src/components/mobile/qr-scanner-modal.tsx` — full-screen modal QR scanner with lazy-loaded `@zxing/library`
+  - Camera permission request with fallback UI ("Open Settings" / "Cancel" buttons, 48px touch targets)
+  - Video drawn to `<video>` element, frames scanned via `BrowserMultiFormatReader.decodeFromImageElement`
+  - Animated green viewfinder corner brackets + scan line moving up/down
+  - Semi-transparent dark overlay outside viewfinder (radial-gradient cutout)
+  - Torch toggle button when device supports it (`track.getCapabilities().torch`)
+  - Close button (X) in top-right, white color on black background
+  - "Scanning..." pulsing text below viewfinder
+  - Proper cleanup: stops all camera tracks on close/unmount
+- Rewrote `MobileBottomNav` → `FloatingBottomNav` in `mobile-shell.tsx`
+  - Floating pill: `position: fixed; bottom: 20px; left: 16px; right: 16px; height: 72px; border-radius: 36px`
+  - Glassmorphism: `rgba(255,255,255,0.92)` bg, `blur(20px)` backdrop-filter, white border
+  - Center QR button: 64px circle, emerald-600, floats above bar via `bottom: 100%; translateY(50%)`
+  - Pulse animation: `scale: [1, 1.04, 1]` repeating every 3s
+  - `whileTap={{ scale: 0.9 }}` on all nav items and QR button
+  - Active state: emerald-600 icon+label with animated dot indicator (`layoutId` spring transition)
+  - Entry animation: fade-in + slide-up with 0.3s delay
+  - 5 items: Dashboard, Complaints, [QR], Work Orders, More
+  - Safe-area support: `bottom: calc(20px + env(safe-area-inset-bottom, 0px))`
+- Updated `MoreMenuSheet`:
+  - Added Profile (`UserCircle` icon, view `'profile'`, feature `'dashboard'`) to System group
+  - Added Logout (`LogOut` icon, calls `logout()` directly) to System group
+  - Logout styled with red accent, full-width button
+- Updated `MobileShell` content area: `pb-20` → `pb-28` for floating nav clearance
+- Removed unused imports (Plus, Package, Mail, Megaphone, MessageCircle, Briefcase)
+- QR scan handler: POSTs to `/api/qr/scan`, navigates to `equipment` view with `qrId` param, shows toast
+- Lint: 0 errors (8 warnings from generated/prisma files, acceptable)
+
+Stage Summary:
+- Desktop nav unchanged (`floating-nav-bar.tsx`, `app-shell.tsx` untouched)
+- Mobile nav: floating glassmorphism pill with 5 tabs + center QR scanner button
+- QR scanner: lazy camera load, permission handling with settings fallback, torch toggle, scan → navigate
+- More menu: now includes Profile and Logout in System group
