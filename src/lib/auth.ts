@@ -4,16 +4,48 @@ import jwt from 'jsonwebtoken';
 /**
  * JWT Secret resolution — NEVER throws at module level.
  *
- * - If JWT_SECRET env var is present and non-empty, use it.
- * - Otherwise fall back to a placeholder so the server can start.
- * - A flag (`_jwtInsecure`) is set so individual token operations can
- *   fail gracefully rather than crashing the whole process.
+ * Scans well-known names first, then all env vars (including mohd_hms_ prefixed)
+ * for any value that looks like a JWT secret (16+ chars, not a URL/JSON).
+ * Falls back to a placeholder so the server can start.
  */
 const _resolvedSecret = (() => {
-  const secret = process.env.JWT_SECRET;
-  if (secret && secret.length > 0) return { value: secret, insecure: false };
+  // 1. Well-known names
+  const candidates = [
+    'JWT_SECRET',
+    'NEXTAUTH_SECRET',
+    'JWT_PRIVATE_KEY',
+  ];
+  for (const name of candidates) {
+    const val = process.env[name];
+    if (val && val.length >= 16) {
+      console.log(`[AUTH] Found JWT secret in env: ${name}`);
+      return { value: val, insecure: false };
+    }
+  }
+
+  // 2. Scan ALL env vars for mohd_hms_ prefixed secrets (Vercel convention)
+  const sortedKeys = Object.keys(process.env).sort();
+  for (const key of sortedKeys) {
+    const val = process.env[key];
+    if (!val || val.length < 16) continue;
+    // Match common secret naming patterns (case-insensitive)
+    const k = key.toLowerCase();
+    if (
+      k.includes('jwt') ||
+      k.includes('secret') ||
+      k.includes('token_key') ||
+      k.includes('signing')
+    ) {
+      // Skip obviously non-secret values
+      if (val.startsWith('postgres://') || val.startsWith('http') || val.startsWith('{')) continue;
+      console.log(`[AUTH] Found JWT secret in env (scan): ${key}`);
+      return { value: val, insecure: false };
+    }
+  }
+
+  // 3. Fallback placeholder — server starts but auth ops fail gracefully
   console.warn(
-    '[AUTH] WARNING: JWT_SECRET env var is not set. Using insecure placeholder. ' +
+    '[AUTH] WARNING: No JWT secret found in any environment variable. ' +
     'Auth token operations will fail until a proper secret is configured.'
   );
   return { value: '__insecure_jwt_placeholder_set_jwt_secret__', insecure: true };
