@@ -7,26 +7,48 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
 
   // Allow preview iframe origins in dev
-  allowedDevOrigins: ['https://*.space-z.ai'],
+  allowedDevOrigins: [
+    'https://*.space-z.ai',
+    'http://127.0.0.1:3000',
+    'http://localhost:3000',
+    'http://21.0.9.89:3000',
+    'http://0.0.0.0:3000',
+  ],
 
   // Don't bundle these packages — load from node_modules at runtime.
   // This prevents Turbopack from replacing process.env references inside them.
   serverExternalPackages: [
     'pg',
     '@prisma/adapter-pg',
+    '@prisma/adapter-libsql',
     '@prisma/client',
     'google-auth-library',
   ],
 
   // ============================================================
+  // SECURITY HEADERS (moved from middleware.ts to fix Turbopack crash)
+  // ============================================================
+  async headers() {
+    return [
+      {
+        source: '/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|css|js|woff2?|ttf|eot)$).*)',
+        headers: [
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-Frame-Options', value: 'ALLOWALL' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
+          { key: 'Pragma', value: 'no-cache' },
+          { key: 'Expires', value: '0' },
+        ],
+      },
+    ];
+  },
+
+  // ============================================================
   // CSS PERFORMANCE OPTIMIZATIONS
   // ============================================================
 
-  // Tree-shake icon libraries: only bundle the icons actually imported.
-  // lucide-react has ~1,500 icons (38MB dist). Without this, the bundler
-  // may include large barrel files. optimizePackageImports converts
-  //   import { ArrowLeft, Search } from 'lucide-react'
-  // into individual module imports, so unused icons are never included.
   experimental: {
     optimizePackageImports: [
       'lucide-react',
@@ -40,19 +62,13 @@ const nextConfig: NextConfig = {
   // PRODUCTION-ONLY SETTINGS
   // ============================================================
 
-  // Enable React compiler for automatic memoization in production
-  // (reduces unnecessary re-renders → less CSS recalculation)
   ...(process.env.NODE_ENV === 'production' && {
     compiler: {
-      // Remove console.log in production for smaller bundles
       removeConsole: false,
     },
   }),
 
-  // Compress responses with gzip (default in Next.js, explicit for clarity)
   compress: true,
-
-  // Power performance hints for the browser
   poweredByHeader: false,
 };
 
