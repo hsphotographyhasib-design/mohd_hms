@@ -505,45 +505,48 @@ export function getDbFriendlyMessage(error: unknown): string {
 
   // ---- Final fallback — provide the MOST specific message possible ----
 
+  // Build a debug snippet from the actual error (for diagnostics)
+  const debugSnippet = `[${typeName}${code ? ':' + code : ''}] ${msg.length > 120 ? msg.slice(0, 117) + '...' : msg}`;
+
   // BROAD SAFETY NET: Check for ANY database-related keywords in the error message
   // This catches errors from adapters, drivers, connection pools that we haven't explicitly classified
   const fallbackLower = msg.toLowerCase();
   if (fallbackLower.includes("database") || fallbackLower.includes("db ") || fallbackLower.includes("query")) {
     if (fallbackLower.includes("does not exist") || fallbackLower.includes("not found") || fallbackLower.includes("no such")) {
-      return "Database setup incomplete. Tables or data may be missing. Please contact support.";
+      return `Database setup incomplete. Tables or data may be missing. (${debugSnippet})`;
     }
     if (fallbackLower.includes("connect") || fallbackLower.includes("connection")) {
-      return "Cannot connect to the database. Please check your database configuration.";
+      return `Cannot connect to the database. (${debugSnippet})`;
     }
     if (fallbackLower.includes("permission") || fallbackLower.includes("denied") || fallbackLower.includes("access")) {
-      return "Database access denied. Please check your database permissions.";
+      return `Database access denied. (${debugSnippet})`;
     }
     if (fallbackLower.includes("ssl") || fallbackLower.includes("certificate")) {
-      return "Database SSL/TLS error. Please check your database connection settings.";
+      return `Database SSL/TLS error. (${debugSnippet})`;
     }
     if (fallbackLower.includes("pool") || fallbackLower.includes("exhausted")) {
-      return "Too many database connections. Please try again in a moment.";
+      return `Too many database connections. (${debugSnippet})`;
     }
     if (fallbackLower.includes("timeout") || fallbackLower.includes("timed out")) {
-      return "Database request timed out. Please try again.";
+      return `Database request timed out. (${debugSnippet})`;
     }
     // Generic DB error but more specific than "unexpected"
-    return "A database error occurred. Please try again or contact support.";
+    return `A database error occurred. (${debugSnippet})`;
   }
 
   // Check for adapter-specific errors
   if (fallbackLower.includes("adapter") || fallbackLower.includes("prismapg") || fallbackLower.includes("prismalibsql")) {
-    return "Database adapter error. Please check your database configuration.";
+    return `Database adapter error. (${debugSnippet})`;
   }
 
   // Check for common Vercel/Edge runtime errors
   if (fallbackLower.includes("edge") || fallbackLower.includes("serverless") || fallbackLower.includes("lambda")) {
-    return "A server environment error occurred. Please try again.";
+    return `A server environment error occurred. (${debugSnippet})`;
   }
 
   // Check for common non-Error thrown values
   if (error === null || error === undefined) {
-    return "An unexpected error occurred. Please try again.";
+    return "An unexpected error occurred (null/undefined thrown). Please try again.";
   }
   if (typeof error === "string") {
     // If someone threw a plain string error
@@ -551,9 +554,8 @@ export function getDbFriendlyMessage(error: unknown): string {
     return "An unexpected error occurred. Please try again.";
   }
 
-  // For any Error object we haven't classified, give a generic but different message
-  // from the old "unexpected" default so we can distinguish in user reports
-  return "An unexpected error occurred. Please try again.";
+  // For any Error object we haven't classified, include debug info
+  return `An unexpected error occurred. (${debugSnippet})`;
 }
 
 /**

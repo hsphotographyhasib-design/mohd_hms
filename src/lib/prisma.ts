@@ -19,7 +19,16 @@ import { PrismaPg } from "@prisma/adapter-pg";
 // ---------------------------------------------------------------------------
 
 export function findDatabaseUrl(): { url: string; source: string; isSQLite: boolean } {
-  const candidates = ["DATABASE_URL", "PRISMA_DATABASE_URL", "POSTGRES_URL"];
+  const candidates = [
+    "DATABASE_URL",
+    "PRISMA_DATABASE_URL",
+    "POSTGRES_URL",
+    "POSTGRES_URL_NON_POOLING",
+    "POSTGRES_PRISMA_URL",
+    "DIRECT_URL",
+    "DATABASE_URL_VERCEL",
+    "DATABASE_PUBLIC_URL",
+  ];
 
   for (const name of candidates) {
     const val = process.env[name];
@@ -29,12 +38,28 @@ export function findDatabaseUrl(): { url: string; source: string; isSQLite: bool
       return { url: val, source: name, isSQLite: false };
   }
 
+  // Scan ALL env vars for database URLs.
+  // IMPORTANT: Do NOT skip keys containing SECRET/KEY/PASSWORD —
+  // on Vercel, the database URL may be stored in an env var with such a name.
+  const scanned: string[] = [];
   for (const [key, val] of Object.entries(process.env)) {
     if (!val || typeof val !== "string") continue;
-    if (key.includes("SECRET") || key.includes("KEY") || key.includes("PASSWORD")) continue;
-    if (val.startsWith("file:")) return { url: val, source: `scan:${key}`, isSQLite: true };
-    if (val.startsWith("postgres://") || val.startsWith("postgresql://"))
+    if (val.startsWith("file:")) {
+      console.log(`[Prisma] Found file: URL in env var: ${key}`);
+      return { url: val, source: `scan:${key}`, isSQLite: true };
+    }
+    if (val.startsWith("postgres://") || val.startsWith("postgresql://")) {
+      console.log(`[Prisma] Found postgres URL in env var: ${key}`);
       return { url: val, source: `scan:${key}`, isSQLite: false };
+    }
+    // Track what we scanned for debugging
+    if (val.length > 20 && (val.includes("://") || val.includes("@"))) {
+      scanned.push(key);
+    }
+  }
+
+  if (scanned.length > 0) {
+    console.log(`[Prisma] Scanned URL-like env vars (no DB URL found): ${scanned.join(", ")}`);
   }
 
   // In local dev, try reading .env file directly
@@ -58,6 +83,10 @@ export function findDatabaseUrl(): { url: string; source: string; isSQLite: bool
     }
   }
 
+  // Log ALL env var names for debugging when no DB URL is found
+  const envKeys = Object.keys(process.env).sort();
+  console.error(`[Prisma] ERROR: No database URL found. Env vars available: ${envKeys.join(", ")}`);
+
   return { url: "", source: "", isSQLite: false };
 }
 
@@ -73,17 +102,26 @@ console.log(
   `[Prisma] Init${dbUrl ? ` using ${dbSource} (${isSQLite ? "SQLite" : "PostgreSQL"})` : " (no DB URL)"}${isServerless ? " [serverless]" : " [dev]"}`
 );
 
+/**
+ * Ensure postgres:// URLs have SSL parameters for Vercel/Neon/cloud providers.
+ * Most cloud Postgres providers require SSL but the URL might not include it.
+ */
+function ensureSsl(url: string): string {
+  if (!url.startsWith("postgres")) return url;
+  // Already has SSL params
+  if (url.includes("sslmode=") || url.includes("ssl=")) return url;
+  // Append ? or & depending on whether the URL already has query params
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}sslmode=require`;
+}
+
 // Create the appropriate adapter
 const adapter =
   isSQLite || effectiveUrl.startsWith("file:")
     ? new PrismaLibSql({ url: effectiveUrl })
-    : new PrismaPg(effectiveUrl, {
-        max: isServerless ? 3 : 10,
-        idleTimeout: isServerless ? 10 : 20,
-        connectTimeout: isServerless ? 10 : 15,
-      });
+    : new PrismaPg(ensureSsl(effectiveUrl));
 
-console.log(`[Prisma] Adapter: ${isSQLite || effectiveUrl.startsWith("file:") ? "libsql/SQLite" : "pg/PostgreSQL"}`);
+console.log(`[Prisma] Adapter: ${isSQLite || effectiveUrl.startsWith("file:") ? "libsql/SQLite" : "pg/PostgreSQL"}${isServerless ? " (serverless mode)" : ""}`);
 
 // ---------------------------------------------------------------------------
 // 3. PrismaClient singleton (survives HMR in development)
