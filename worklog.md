@@ -192,3 +192,61 @@ Stage Summary:
 - Password policy: 12 chars, mixed case, number, special char, common password block, sequential pattern detection
 - Professional OTP email template with security notice
 - Backward compatible: old token-based PasswordResetToken model untouched
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Build Enterprise Mobile App UI for All Users
+
+Work Log:
+- Analyzed existing mobile shell, dashboard, complaints, invoices, notifications, profile, help components
+- Identified critical issue: customer role bypassed MobileShell on mobile (went to CustomerPortal)
+- Identified issue: bottom nav not role-adaptive, "More" menu not filtered by permissions
+- Identified issue: MobileViewRouter redirected work-orders to complaints list, used desktop EquipmentList
+- Removed customer bypass in app-shell.tsx (all roles now use MobileShell on mobile)
+- Rebuilt mobile-shell.tsx with role-adaptive bottom nav:
+  - Customer sees: Home, Complaints, [QR], Invoices, More
+  - Technician sees: Home, Complaints, [QR], Tasks, More
+  - Admin/Manager sees: Home, Complaints, [QR], W. Orders, More
+  - Finance sees: Home, Complaints, [QR], Invoices, More
+- Added canAccess() filtering to More menu sheet (groups/items hidden if role lacks permission)
+- Rebuilt mobile-dashboard.tsx as fully role-aware:
+  - Different stat cards per role (technician: tasks/completed/pending; admin: equipment/open/revenue/employees; finance: revenue/pending/overdue; customer: my complaints/in-progress)
+  - Role-filtered quick actions (max 4, based on canAccess)
+  - Role-specific greeting message and section titles
+  - Fetches from /api/dashboard for full stats, falls back to complaint-based stats
+- Created mobile-work-orders.tsx: dedicated work orders list with tabs (All/Pending/In Progress/Completed), search, infinite scroll, pull-to-refresh
+- Created mobile-equipment.tsx: compact equipment list with status tabs, search, infinite scroll, category/status badges, complaint/WO counts
+- Updated MobileViewRouter: work-orders now routes to MobileWorkOrders, equipment routes to MobileEquipment, inventory uses InventoryList
+- Added lazy imports for MobileWorkOrders and MobileEquipment in app-shell.tsx
+- Added missing AppView types: 'rate-feedback', 'help', 'documents' to types/index.ts
+- Fixed all TypeScript errors: NavTab interface, itemVariants type, EquipmentItem property access
+- All checks pass: 0 ESLint errors, 0 TypeScript errors in modified files
+
+Stage Summary:
+- **Modified files**: app-shell.tsx, mobile-shell.tsx, mobile-dashboard.tsx, types/index.ts
+- **New files**: mobile-work-orders.tsx, mobile-equipment.tsx
+- **Key change**: ALL user roles now use MobileShell on mobile (not just non-customer roles)
+- **Key change**: Bottom nav adapts per role (technician→Tasks, admin→W.Orders, etc.)
+- **Key change**: Dashboard stats/quick actions are role-aware
+- **Zero errors** in both TypeScript and ESLint for all modified/new files
+
+---
+Task ID: 8-10
+Agent: Main Agent
+Task: Create MobileInvoiceDetail, MobileDocuments, and wire into MobileViewRouter
+
+Work Log:
+- Identified critical bug: `MobileViewRouter` line 98 had `{currentView === 'invoice-detail' && <MobileInvoices />}` — tapping an invoice showed the list again instead of detail
+- Identified `documents` view was aliased to `<MobileInvoices />` instead of a dedicated component
+- Read InvoiceItem type (30+ fields), invoice detail API (`/api/invoices/[id]`), and InvoiceLineItem type to understand data shape
+- Created `mobile-invoice-detail.tsx` (350+ lines): full invoice detail with status badge, amount hero card (emerald gradient), bill-to info, invoice details grid (work order, quotation, dates, reference, PO, terms), line items with qty/rate/amount, financial summary (subtotal/tax/discount/shipping/total), payment info section, shipping-to section, notes/description, metadata footer, copy invoice number, share button
+- Created `mobile-documents.tsx` (280+ lines): documents browser with type tabs (All/Invoices/Quotations/Photos/Reports), search, aggregates documents from invoices API and complaint photos, file type icons, tap-to-navigate (invoice→detail, photo→complaint)
+- Updated `app-shell.tsx`: added lazy imports for `MobileInvoiceDetail` and `MobileDocuments`, fixed `invoice-detail` routing from `<MobileInvoices />` to `<MobileInvoiceDetail />`, fixed `documents` routing from `<MobileInvoices />` to `<MobileDocuments />`
+
+Stage Summary:
+- **New files**: mobile-invoice-detail.tsx, mobile-documents.tsx
+- **Fixed bug**: Invoice tap now opens detail view instead of list
+- **New feature**: Dedicated documents browser (aggregates from invoices + complaint photos)
+- **ESLint**: 0 errors, 7 warnings (all pre-existing Prisma generated files)
+- **Note**: Browser verification blocked by sandbox networking (port 3000 not internally connectable); compilation confirmed via Turbopack + ESLint

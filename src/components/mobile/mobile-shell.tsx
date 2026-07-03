@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useCallback, useRef, useEffect } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion';
 import {
   Home,
@@ -35,14 +35,17 @@ import {
   CreditCard,
   Globe,
   Info,
+  ClipboardList,
+  LayoutDashboard,
+  MessageSquare,
 } from 'lucide-react';
-import { useAppStore, useAuthStore, useNotificationStore } from '@/store';
+import { useAppStore, useAuthStore, useNotificationStore, canAccess } from '@/store';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';
-import type { AppView } from '@/types';
+import type { AppView, UserRole } from '@/types';
 import { QrScannerModal } from './qr-scanner-modal';
 
 // ─── More Menu Items ──────────────────────────────────────────
@@ -52,6 +55,7 @@ interface MoreMenuItem {
   view?: AppView;
   feature?: string;
   action?: 'logout';
+  roles?: UserRole[];
 }
 
 interface MoreMenuGroup {
@@ -64,7 +68,7 @@ const moreMenuGroups: MoreMenuGroup[] = [
     title: 'Operations',
     items: [
       { label: 'Equipment', icon: MonitorSmartphone, view: 'equipment', feature: 'equipment' },
-      { label: 'Work Orders', icon: Wrench, view: 'work-orders', feature: 'work-orders' },
+      { label: 'Work Orders', icon: ClipboardList, view: 'work-orders', feature: 'work-orders' },
       { label: 'PM Schedules', icon: CalendarClock, view: 'pm', feature: 'pm' },
       { label: 'Inventory', icon: Warehouse, view: 'inventory', feature: 'inventory' },
     ],
@@ -79,22 +83,30 @@ const moreMenuGroups: MoreMenuGroup[] = [
     ],
   },
   {
+    title: 'Team',
+    items: [
+      { label: 'Employees', icon: UserCog, view: 'employees', feature: 'employees', roles: ['super_admin', 'admin', 'manager'] },
+      { label: 'Technicians', icon: Wrench, view: 'technicians', feature: 'technicians', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
+      { label: 'Vehicles', icon: Car, view: 'vehicles', feature: 'vehicles', roles: ['super_admin', 'admin', 'manager'] },
+      { label: 'Reports', icon: BarChart3, view: 'reports', feature: 'reports' },
+    ],
+  },
+  {
     title: 'Account',
     items: [
       { label: 'Profile', icon: UserCircle, view: 'profile', feature: 'dashboard' },
       { label: 'My Documents', icon: FolderOpen, view: 'documents', feature: 'dashboard' },
-      { label: 'Help & Support', icon: HelpCircle, view: 'help', feature: 'dashboard' },
       { label: 'Notifications', icon: Bell, view: 'notifications', feature: 'dashboard' },
+      { label: 'Help & Support', icon: HelpCircle, view: 'help', feature: 'dashboard' },
     ],
   },
   {
     title: 'System',
     items: [
-      { label: 'Employees', icon: UserCog, view: 'employees', feature: 'employees' },
-      { label: 'Technicians', icon: Wrench, view: 'technicians', feature: 'technicians' },
-      { label: 'Vehicles', icon: Car, view: 'vehicles', feature: 'vehicles' },
-      { label: 'Reports', icon: BarChart3, view: 'reports', feature: 'reports' },
-      { label: 'Settings', icon: Settings, view: 'settings', feature: 'settings' },
+      { label: 'Settings', icon: Settings, view: 'settings', feature: 'settings', roles: ['super_admin', 'admin'] },
+      { label: 'User Mgmt', icon: Shield, view: 'user-management', feature: 'user-management', roles: ['super_admin', 'admin'] },
+      { label: 'WhatsApp', icon: MessageSquare, view: 'whatsapp', feature: 'whatsapp', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
+      { label: 'Email', icon: Smartphone, view: 'email-management', feature: 'email', roles: ['super_admin', 'admin'] },
     ],
   },
   {
@@ -103,6 +115,32 @@ const moreMenuGroups: MoreMenuGroup[] = [
       { label: 'Logout', icon: LogOut, action: 'logout' },
     ],
   },
+];
+
+// ─── Role-based Bottom Nav Config ─────────────────────────────
+interface NavTab {
+  id: AppView;
+  label: string;
+  icon: React.ElementType;
+  roles?: UserRole[];
+  feature?: string;
+}
+
+const LEFT_NAV_TABS: NavTab[] = [
+  { id: 'dashboard', label: 'Home', icon: Home },
+  { id: 'complaints', label: 'Complaints', icon: AlertTriangle },
+];
+
+const RIGHT_NAV_TABS: NavTab[] = [
+  { id: 'invoices', label: 'Invoices', icon: Receipt, roles: ['super_admin', 'admin', 'manager', 'finance', 'customer'] },
+];
+
+const TECHNICIAN_RIGHT_TABS: NavTab[] = [
+  { id: 'work-orders', label: 'Tasks', icon: ClipboardList },
+];
+
+const ADMIN_RIGHT_TABS: NavTab[] = [
+  { id: 'work-orders', label: 'W. Orders', icon: ClipboardList },
 ];
 
 // ─── Mobile Header ─────────────────────────────────────────────
@@ -123,10 +161,12 @@ function MobileHeader() {
     (e: React.FormEvent) => {
       e.preventDefault();
       if (searchQuery.trim()) {
-        toast.info(`Searching for "${searchQuery.trim()}"...`);
+        setView('complaints', { search: searchQuery.trim() });
+        setSearchOpen(false);
+        setSearchQuery('');
       }
     },
-    [searchQuery],
+    [searchQuery, setView, setSearchOpen],
   );
 
   const initials = user?.name
@@ -164,7 +204,6 @@ function MobileHeader() {
                 <img src={user.avatar} alt={user.name} className="size-8 rounded-full object-cover"
                   onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; (e.target as HTMLImageElement).parentElement!.textContent = initials; }} />
               ) : initials}
-              {/* Online dot */}
               <span className="absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-white bg-emerald-500" />
             </div>
           </Button>
@@ -194,13 +233,28 @@ function MobileHeader() {
   );
 }
 
-// ─── More Menu Sheet ───────────────────────────────────────────
+// ─── More Menu Sheet (Role-filtered) ──────────────────────────
 function MoreMenuSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
   const { setView } = useAppStore();
-  const { logout } = useAuthStore();
+  const { logout, user } = useAuthStore();
 
   const handleNavigate = useCallback((view: AppView) => { onOpenChange(false); setView(view); }, [setView, onOpenChange]);
   const handleLogout = useCallback(() => { onOpenChange(false); logout(); }, [logout, onOpenChange]);
+
+  const role = user?.role;
+
+  // Filter menu items by role
+  const filteredGroups = useMemo(() => {
+    if (!role) return moreMenuGroups;
+    return moreMenuGroups.map((group) => ({
+      ...group,
+      items: group.items.filter((item) => {
+        if (!item.feature) return true; // Always show (logout, profile, etc.)
+        if (item.roles) return item.roles.includes(role);
+        return canAccess(role, item.feature);
+      }),
+    })).filter((group) => group.items.length > 0 || group.title === '');
+  }, [role]);
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
@@ -210,7 +264,7 @@ function MoreMenuSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o
           <SheetDescription className="text-xs text-gray-500">Navigate to any section</SheetDescription>
         </SheetHeader>
         <div className="mt-3 overflow-y-auto px-4 pb-2" style={{ maxHeight: 'calc(85vh - 80px)' }}>
-          {moreMenuGroups.map((group) => (
+          {filteredGroups.map((group) => (
             <div key={group.title || 'logout'} className="mb-4">
               {group.title && <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-gray-400">{group.title}</h3>}
               <div className="grid grid-cols-3 gap-2">
@@ -238,14 +292,17 @@ function MoreMenuSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o
   );
 }
 
-// ─── Floating Glassmorphism Bottom Navigation ──────────────────
+// ─── Floating Glassmorphism Bottom Navigation (Role-Adaptive) ─
 function FloatingBottomNav() {
   const { currentView, setView } = useAppStore();
+  const { user } = useAuthStore();
   const [moreOpen, setMoreOpen] = useState(false);
   const [qrOpen, setQrOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const { scrollY } = useScroll();
   const lastY = useRef(0);
+
+  const role = user?.role || 'customer';
 
   // Auto-hide on scroll down, show on scroll up
   useMotionValueEvent(scrollY, 'change', (y) => {
@@ -254,14 +311,12 @@ function FloatingBottomNav() {
     lastY.current = y;
   });
 
-  const navTabs = [
-    { id: 'dashboard' as AppView, label: 'Home', icon: Home },
-    { id: 'complaints' as AppView, label: 'Complaints', icon: AlertTriangle },
-  ] as const;
-
-  const rightTabs = [
-    { id: 'invoices' as AppView, label: 'Invoices', icon: Receipt },
-  ] as const;
+  // Pick right tabs based on role
+  const rightTabs = useMemo(() => {
+    if (role === 'technician') return TECHNICIAN_RIGHT_TABS;
+    if (['super_admin', 'admin', 'manager', 'supervisor'].includes(role)) return ADMIN_RIGHT_TABS;
+    return RIGHT_NAV_TABS;
+  }, [role]);
 
   const isActive = (id: string) => currentView === id;
 
@@ -274,6 +329,24 @@ function FloatingBottomNav() {
     setView('equipment', { qrId: data });
     toast.success(`QR Scanned: ${data}`, { description: 'Navigating to details...' });
   }, [setView]);
+
+  // Filter left tabs by role
+  const visibleLeftTabs = useMemo(() => {
+    return LEFT_NAV_TABS.filter((tab) => {
+      if (!tab.feature) return true;
+      if (tab.roles) return tab.roles.includes(role);
+      return canAccess(role, tab.feature);
+    });
+  }, [role]);
+
+  // Filter right tabs by role
+  const visibleRightTabs = useMemo(() => {
+    return rightTabs.filter((tab) => {
+      if (!tab.feature) return true;
+      if (tab.roles) return tab.roles.includes(role);
+      return canAccess(role, tab.feature);
+    });
+  }, [role, rightTabs]);
 
   return (
     <>
@@ -293,9 +366,9 @@ function FloatingBottomNav() {
         role="tablist"
         aria-label="Main navigation"
       >
-        {/* Left: Home, Complaints */}
+        {/* Left: Home, Complaints (or role-filtered) */}
         <div className="flex flex-1 items-center justify-around pl-5">
-          {navTabs.map((tab) => {
+          {visibleLeftTabs.map((tab) => {
             const active = isActive(tab.id);
             const Icon = tab.icon;
             return (
@@ -319,9 +392,9 @@ function FloatingBottomNav() {
           </motion.button>
         </div>
 
-        {/* Right: Invoices, More */}
+        {/* Right: Role-specific tabs + More */}
         <div className="flex flex-1 items-center justify-around pr-5">
-          {rightTabs.map((tab) => {
+          {visibleRightTabs.map((tab) => {
             const active = isActive(tab.id);
             const Icon = tab.icon;
             return (

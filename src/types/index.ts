@@ -103,7 +103,11 @@ export type AppView =
   // Technician Operations Center
   | 'technicians'
   // System health
-  | 'system-health';
+  | 'system-health'
+  // Mobile-specific views
+  | 'rate-feedback'
+  | 'help'
+  | 'documents';
 
 // ============ EQUIPMENT ============
 
