@@ -23,6 +23,9 @@ const nextConfig: NextConfig = {
     '@prisma/adapter-libsql',
     '@prisma/client',
     'google-auth-library',
+    // Prisma 7 generated client uses node:path — mark as external
+    // so Turbopack doesn't try to bundle Node.js built-ins
+    'generated/prisma',
   ],
 
   // ============================================================
