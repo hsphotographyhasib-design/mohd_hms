@@ -316,6 +316,8 @@ export const ComplaintScalarFieldEnum = {
   eta: 'eta',
   rejectionReason: 'rejectionReason',
   reworkReason: 'reworkReason',
+  customerSnapshot: 'customerSnapshot',
+  locationInfo: 'locationInfo',
   resolutionNotes: 'resolutionNotes',
   customerRating: 'customerRating',
   customerFeedback: 'customerFeedback',

@@ -64,6 +64,8 @@ export type ComplaintMinAggregateOutputType = {
   eta: string | null
   rejectionReason: string | null
   reworkReason: string | null
+  customerSnapshot: string | null
+  locationInfo: string | null
   resolutionNotes: string | null
   customerRating: number | null
   customerFeedback: string | null
@@ -105,6 +107,8 @@ export type ComplaintMaxAggregateOutputType = {
   eta: string | null
   rejectionReason: string | null
   reworkReason: string | null
+  customerSnapshot: string | null
+  locationInfo: string | null
   resolutionNotes: string | null
   customerRating: number | null
   customerFeedback: string | null
@@ -146,6 +150,8 @@ export type ComplaintCountAggregateOutputType = {
   eta: number
   rejectionReason: number
   reworkReason: number
+  customerSnapshot: number
+  locationInfo: number
   resolutionNotes: number
   customerRating: number
   customerFeedback: number
@@ -199,6 +205,8 @@ export type ComplaintMinAggregateInputType = {
   eta?: true
   rejectionReason?: true
   reworkReason?: true
+  customerSnapshot?: true
+  locationInfo?: true
   resolutionNotes?: true
   customerRating?: true
   customerFeedback?: true
@@ -240,6 +248,8 @@ export type ComplaintMaxAggregateInputType = {
   eta?: true
   rejectionReason?: true
   reworkReason?: true
+  customerSnapshot?: true
+  locationInfo?: true
   resolutionNotes?: true
   customerRating?: true
   customerFeedback?: true
@@ -281,6 +291,8 @@ export type ComplaintCountAggregateInputType = {
   eta?: true
   rejectionReason?: true
   reworkReason?: true
+  customerSnapshot?: true
+  locationInfo?: true
   resolutionNotes?: true
   customerRating?: true
   customerFeedback?: true
@@ -409,6 +421,8 @@ export type ComplaintGroupByOutputType = {
   eta: string | null
   rejectionReason: string | null
   reworkReason: string | null
+  customerSnapshot: string | null
+  locationInfo: string | null
   resolutionNotes: string | null
   customerRating: number | null
   customerFeedback: string | null
@@ -473,6 +487,8 @@ export type ComplaintWhereInput = {
   eta?: Prisma.StringNullableFilter<"Complaint"> | string | null
   rejectionReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
   reworkReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  customerSnapshot?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  locationInfo?: Prisma.StringNullableFilter<"Complaint"> | string | null
   resolutionNotes?: Prisma.StringNullableFilter<"Complaint"> | string | null
   customerRating?: Prisma.IntNullableFilter<"Complaint"> | number | null
   customerFeedback?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -522,6 +538,8 @@ export type ComplaintOrderByWithRelationInput = {
   eta?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   reworkReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  locationInfo?: Prisma.SortOrderInput | Prisma.SortOrder
   resolutionNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   customerRating?: Prisma.SortOrderInput | Prisma.SortOrder
   customerFeedback?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -574,6 +592,8 @@ export type ComplaintWhereUniqueInput = Prisma.AtLeast<{
   eta?: Prisma.StringNullableFilter<"Complaint"> | string | null
   rejectionReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
   reworkReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  customerSnapshot?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  locationInfo?: Prisma.StringNullableFilter<"Complaint"> | string | null
   resolutionNotes?: Prisma.StringNullableFilter<"Complaint"> | string | null
   customerRating?: Prisma.IntNullableFilter<"Complaint"> | number | null
   customerFeedback?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -623,6 +643,8 @@ export type ComplaintOrderByWithAggregationInput = {
   eta?: Prisma.SortOrderInput | Prisma.SortOrder
   rejectionReason?: Prisma.SortOrderInput | Prisma.SortOrder
   reworkReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  customerSnapshot?: Prisma.SortOrderInput | Prisma.SortOrder
+  locationInfo?: Prisma.SortOrderInput | Prisma.SortOrder
   resolutionNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   customerRating?: Prisma.SortOrderInput | Prisma.SortOrder
   customerFeedback?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -672,6 +694,8 @@ export type ComplaintScalarWhereWithAggregatesInput = {
   eta?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   rejectionReason?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   reworkReason?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
+  customerSnapshot?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
+  locationInfo?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   resolutionNotes?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   customerRating?: Prisma.IntNullableWithAggregatesFilter<"Complaint"> | number | null
   customerFeedback?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
@@ -708,6 +732,8 @@ export type ComplaintCreateInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -757,6 +783,8 @@ export type ComplaintUncheckedCreateInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -796,6 +824,8 @@ export type ComplaintUpdateInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -845,6 +875,8 @@ export type ComplaintUncheckedUpdateInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -889,6 +921,8 @@ export type ComplaintCreateManyInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -925,6 +959,8 @@ export type ComplaintUpdateManyMutationInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -966,6 +1002,8 @@ export type ComplaintUncheckedUpdateManyInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1017,6 +1055,8 @@ export type ComplaintCountOrderByAggregateInput = {
   eta?: Prisma.SortOrder
   rejectionReason?: Prisma.SortOrder
   reworkReason?: Prisma.SortOrder
+  customerSnapshot?: Prisma.SortOrder
+  locationInfo?: Prisma.SortOrder
   resolutionNotes?: Prisma.SortOrder
   customerRating?: Prisma.SortOrder
   customerFeedback?: Prisma.SortOrder
@@ -1063,6 +1103,8 @@ export type ComplaintMaxOrderByAggregateInput = {
   eta?: Prisma.SortOrder
   rejectionReason?: Prisma.SortOrder
   reworkReason?: Prisma.SortOrder
+  customerSnapshot?: Prisma.SortOrder
+  locationInfo?: Prisma.SortOrder
   resolutionNotes?: Prisma.SortOrder
   customerRating?: Prisma.SortOrder
   customerFeedback?: Prisma.SortOrder
@@ -1104,6 +1146,8 @@ export type ComplaintMinOrderByAggregateInput = {
   eta?: Prisma.SortOrder
   rejectionReason?: Prisma.SortOrder
   reworkReason?: Prisma.SortOrder
+  customerSnapshot?: Prisma.SortOrder
+  locationInfo?: Prisma.SortOrder
   resolutionNotes?: Prisma.SortOrder
   customerRating?: Prisma.SortOrder
   customerFeedback?: Prisma.SortOrder
@@ -1419,6 +1463,8 @@ export type ComplaintCreateWithoutTenantInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1466,6 +1512,8 @@ export type ComplaintUncheckedCreateWithoutTenantInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1539,6 +1587,8 @@ export type ComplaintScalarWhereInput = {
   eta?: Prisma.StringNullableFilter<"Complaint"> | string | null
   rejectionReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
   reworkReason?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  customerSnapshot?: Prisma.StringNullableFilter<"Complaint"> | string | null
+  locationInfo?: Prisma.StringNullableFilter<"Complaint"> | string | null
   resolutionNotes?: Prisma.StringNullableFilter<"Complaint"> | string | null
   customerRating?: Prisma.IntNullableFilter<"Complaint"> | number | null
   customerFeedback?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -1575,6 +1625,8 @@ export type ComplaintCreateWithoutAssignedToInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1622,6 +1674,8 @@ export type ComplaintUncheckedCreateWithoutAssignedToInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1671,6 +1725,8 @@ export type ComplaintCreateWithoutSupervisorInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1718,6 +1774,8 @@ export type ComplaintUncheckedCreateWithoutSupervisorInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1799,6 +1857,8 @@ export type ComplaintCreateWithoutCustomerInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1846,6 +1906,8 @@ export type ComplaintUncheckedCreateWithoutCustomerInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1911,6 +1973,8 @@ export type ComplaintCreateWithoutEquipmentInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -1958,6 +2022,8 @@ export type ComplaintUncheckedCreateWithoutEquipmentInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2023,6 +2089,8 @@ export type ComplaintCreateWithoutWorkOrdersInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2071,6 +2139,8 @@ export type ComplaintUncheckedCreateWithoutWorkOrdersInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2125,6 +2195,8 @@ export type ComplaintUpdateWithoutWorkOrdersInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2173,6 +2245,8 @@ export type ComplaintUncheckedUpdateWithoutWorkOrdersInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2211,6 +2285,8 @@ export type ComplaintCreateWithoutTimelineInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2259,6 +2335,8 @@ export type ComplaintUncheckedCreateWithoutTimelineInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2313,6 +2391,8 @@ export type ComplaintUpdateWithoutTimelineInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2361,6 +2441,8 @@ export type ComplaintUncheckedUpdateWithoutTimelineInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2399,6 +2481,8 @@ export type ComplaintCreateWithoutNotificationsInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2447,6 +2531,8 @@ export type ComplaintUncheckedCreateWithoutNotificationsInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2501,6 +2587,8 @@ export type ComplaintUpdateWithoutNotificationsInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2549,6 +2637,8 @@ export type ComplaintUncheckedUpdateWithoutNotificationsInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2591,6 +2681,8 @@ export type ComplaintCreateManyTenantInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2627,6 +2719,8 @@ export type ComplaintUpdateWithoutTenantInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2674,6 +2768,8 @@ export type ComplaintUncheckedUpdateWithoutTenantInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2717,6 +2813,8 @@ export type ComplaintUncheckedUpdateManyWithoutTenantInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2757,6 +2855,8 @@ export type ComplaintCreateManyAssignedToInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2797,6 +2897,8 @@ export type ComplaintCreateManySupervisorInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -2833,6 +2935,8 @@ export type ComplaintUpdateWithoutAssignedToInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2880,6 +2984,8 @@ export type ComplaintUncheckedUpdateWithoutAssignedToInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2923,6 +3029,8 @@ export type ComplaintUncheckedUpdateManyWithoutAssignedToInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2959,6 +3067,8 @@ export type ComplaintUpdateWithoutSupervisorInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3006,6 +3116,8 @@ export type ComplaintUncheckedUpdateWithoutSupervisorInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3049,6 +3161,8 @@ export type ComplaintUncheckedUpdateManyWithoutSupervisorInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3089,6 +3203,8 @@ export type ComplaintCreateManyCustomerInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -3125,6 +3241,8 @@ export type ComplaintUpdateWithoutCustomerInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3172,6 +3290,8 @@ export type ComplaintUncheckedUpdateWithoutCustomerInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3215,6 +3335,8 @@ export type ComplaintUncheckedUpdateManyWithoutCustomerInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3255,6 +3377,8 @@ export type ComplaintCreateManyEquipmentInput = {
   eta?: string | null
   rejectionReason?: string | null
   reworkReason?: string | null
+  customerSnapshot?: string | null
+  locationInfo?: string | null
   resolutionNotes?: string | null
   customerRating?: number | null
   customerFeedback?: string | null
@@ -3291,6 +3415,8 @@ export type ComplaintUpdateWithoutEquipmentInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3338,6 +3464,8 @@ export type ComplaintUncheckedUpdateWithoutEquipmentInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3381,6 +3509,8 @@ export type ComplaintUncheckedUpdateManyWithoutEquipmentInput = {
   eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3471,6 +3601,8 @@ export type ComplaintSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   eta?: boolean
   rejectionReason?: boolean
   reworkReason?: boolean
+  customerSnapshot?: boolean
+  locationInfo?: boolean
   resolutionNotes?: boolean
   customerRating?: boolean
   customerFeedback?: boolean
@@ -3521,6 +3653,8 @@ export type ComplaintSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   eta?: boolean
   rejectionReason?: boolean
   reworkReason?: boolean
+  customerSnapshot?: boolean
+  locationInfo?: boolean
   resolutionNotes?: boolean
   customerRating?: boolean
   customerFeedback?: boolean
@@ -3567,6 +3701,8 @@ export type ComplaintSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   eta?: boolean
   rejectionReason?: boolean
   reworkReason?: boolean
+  customerSnapshot?: boolean
+  locationInfo?: boolean
   resolutionNotes?: boolean
   customerRating?: boolean
   customerFeedback?: boolean
@@ -3613,6 +3749,8 @@ export type ComplaintSelectScalar = {
   eta?: boolean
   rejectionReason?: boolean
   reworkReason?: boolean
+  customerSnapshot?: boolean
+  locationInfo?: boolean
   resolutionNotes?: boolean
   customerRating?: boolean
   customerFeedback?: boolean
@@ -3626,7 +3764,7 @@ export type ComplaintSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ComplaintOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "equipmentId" | "title" | "description" | "priority" | "status" | "source" | "category" | "photos" | "gpsLocation" | "assignedToId" | "supervisorId" | "assignedBy" | "assignedByRole" | "assignedAt" | "lastReassignedAt" | "assignmentReason" | "assignmentStatus" | "reassignmentCount" | "slaResponseDeadline" | "workOrderId" | "invoiceId" | "eta" | "rejectionReason" | "reworkReason" | "resolutionNotes" | "customerRating" | "customerFeedback" | "acceptedAt" | "startedAt" | "completedAt" | "clientConfirmedAt" | "resolvedAt" | "closedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["complaint"]>
+export type ComplaintOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "equipmentId" | "title" | "description" | "priority" | "status" | "source" | "category" | "photos" | "gpsLocation" | "assignedToId" | "supervisorId" | "assignedBy" | "assignedByRole" | "assignedAt" | "lastReassignedAt" | "assignmentReason" | "assignmentStatus" | "reassignmentCount" | "slaResponseDeadline" | "workOrderId" | "invoiceId" | "eta" | "rejectionReason" | "reworkReason" | "customerSnapshot" | "locationInfo" | "resolutionNotes" | "customerRating" | "customerFeedback" | "acceptedAt" | "startedAt" | "completedAt" | "clientConfirmedAt" | "resolvedAt" | "closedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["complaint"]>
 export type ComplaintInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
@@ -3693,6 +3831,8 @@ export type $ComplaintPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     eta: string | null
     rejectionReason: string | null
     reworkReason: string | null
+    customerSnapshot: string | null
+    locationInfo: string | null
     resolutionNotes: string | null
     customerRating: number | null
     customerFeedback: string | null
@@ -4162,6 +4302,8 @@ export interface ComplaintFieldRefs {
   readonly eta: Prisma.FieldRef<"Complaint", 'String'>
   readonly rejectionReason: Prisma.FieldRef<"Complaint", 'String'>
   readonly reworkReason: Prisma.FieldRef<"Complaint", 'String'>
+  readonly customerSnapshot: Prisma.FieldRef<"Complaint", 'String'>
+  readonly locationInfo: Prisma.FieldRef<"Complaint", 'String'>
   readonly resolutionNotes: Prisma.FieldRef<"Complaint", 'String'>
   readonly customerRating: Prisma.FieldRef<"Complaint", 'Int'>
   readonly customerFeedback: Prisma.FieldRef<"Complaint", 'String'>
