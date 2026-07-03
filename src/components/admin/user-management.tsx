@@ -1012,7 +1012,7 @@ export function UserManagement() {
             {!isSuperAdmin && (
               <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 flex items-center gap-1">
                 <AlertTriangle className="h-3 w-3" />
-                Only super_admin can change roles. You may not have permission.
+                You cannot assign the super_admin role.
               </p>
             )}
           </div>
