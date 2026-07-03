@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 /**
  * Auto-sync missing columns from the Prisma schema into the actual database.

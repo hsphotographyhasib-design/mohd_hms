@@ -9,7 +9,7 @@
  *   - Consistent defaults
  */
 
-import path from 'path';
+import path from 'node:path';
 
 // ─── Helpers ────────────────────────────────────────────────────
 

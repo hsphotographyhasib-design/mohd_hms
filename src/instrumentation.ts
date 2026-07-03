@@ -1,13 +1,9 @@
 // Next.js instrumentation - runs once when the server starts
-// This warms up the Prisma/Turso connection before any API requests
+// Note: DB warm-up is deferred to first API request to avoid
+// pulling Node-only modules (Prisma/pg) into Edge Runtime analysis.
+
+export const runtime = 'nodejs'
 
 export async function register() {
-  try {
-    const { db } = await import('@/lib/db')
-    // Trigger connection by running a lightweight query
-    await db.$queryRaw`SELECT 1`
-    console.log('[Instrumentation] Database connection initialized')
-  } catch (err) {
-    console.error('[Instrumentation] Database initialization failed:', err)
-  }
+  console.log('[Instrumentation] Server started')
 }

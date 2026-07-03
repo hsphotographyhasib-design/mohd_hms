@@ -1,6 +1,6 @@
-import path from 'path';
-import fs from 'fs';
-import { spawn, ChildProcess, execSync } from 'child_process';
+import path from 'node:path';
+import fs from 'node:fs';
+import { spawn, ChildProcess, execSync } from 'node:child_process';
 
 // ============ CONFIGURATION ============
 const SERVICE_URL = process.env.WHATSAPP_SERVICE_URL || 'http://127.0.0.1:3001';

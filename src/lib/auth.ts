@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { createHash, randomBytes } from 'crypto';
+import { createHash, randomBytes } from 'node:crypto';
+import type { NextRequest } from 'next/server';
 
 /**
  * JWT Secret resolution — NEVER throws at module level.
@@ -167,4 +168,26 @@ export function parseJsonSafe<T>(str: string | null | undefined, fallback: T): T
   } catch {
     return fallback;
   }
+}
+
+/**
+ * Verify authentication from a Next.js request.
+ *
+ * Extracts the Bearer token from the Authorization header, verifies it,
+ * and returns the decoded payload wrapped in an object.
+ *
+ * Usage:
+ *   const auth = await verifyAuth(request);
+ *   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+ *   // auth.user.id, auth.user.role, auth.user.tenantId, etc.
+ */
+export async function verifyAuth(request: NextRequest): Promise<{ user: jwt.JwtPayload } | null> {
+  const authHeader = request.headers.get('authorization');
+  const token = authHeader?.replace('Bearer ', '');
+  if (!token) return null;
+
+  const payload = verifyToken(token);
+  if (!payload) return null;
+
+  return { user: payload };
 }
