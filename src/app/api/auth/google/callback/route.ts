@@ -265,9 +265,25 @@ export async function GET(request: NextRequest) {
       profileCompleted: user.profileCompleted,
     });
 
-    // Redirect to app with token in URL fragment (fragment is not sent to server)
-    const appUrl = `${origin}/#google_auth=1&token=${encodeURIComponent(token)}&user=${encodeURIComponent(userData)}`;
-    return NextResponse.redirect(appUrl);
+    // Return an HTML page that sets localStorage and navigates to app
+    // (hash fragments in server redirects can be stripped by CDNs/proxies)
+    const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Signing in...</title></head><body>
+<script>
+  try {
+    localStorage.setItem('cmms_token', ${JSON.stringify(token)});
+    localStorage.setItem('cmms_user', ${JSON.stringify(userData)});
+    window.location.replace('${origin}/');
+  } catch(e) {
+    document.body.innerHTML = '<p style="color:red;padding:40px;font-family:sans-serif">Sign-in failed. Please try again.</p>';
+  }
+</script>
+<noscript><p style="padding:40px">JavaScript is required to sign in. Please enable JavaScript and try again.</p></noscript>
+</body></html>`;
+    return new NextResponse(html, {
+      status: 200,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
   } catch (error) {
     console.error('[Google OAuth Callback] Unexpected error:', error);
     return redirectToAppWithError(request, getDbFriendlyMessage(error));
@@ -276,7 +292,17 @@ export async function GET(request: NextRequest) {
 
 function redirectToAppWithError(request: NextRequest, message: string) {
   const origin = new URL(request.url).origin;
-  const url = new URL('/', origin);
-  url.hash = `google_auth=1&error=${encodeURIComponent(message)}`;
-  return NextResponse.redirect(url.toString());
+  const safeMsg = message.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/</g, '\\x3c').replace(/\n/g, ' ');
+  const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Sign-in error</title></head><body>
+<script>
+  alert('${safeMsg}');
+  window.location.replace('${origin}/');
+</script>
+<noscript><p style="padding:40px;color:red;font-family:sans-serif">${safeMsg}</p></noscript>
+</body></html>`;
+  return new NextResponse(html, {
+    status: 200,
+    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+  });
 }
