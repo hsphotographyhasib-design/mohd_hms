@@ -108,6 +108,7 @@ export async function POST(request: NextRequest) {
             name: fullName,
             phone: phoneNumber as string,
             role: 'customer',
+            authProvider: 'whatsapp',
             profileCompleted: true,
             isActive: true,
           },

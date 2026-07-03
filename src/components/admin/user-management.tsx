@@ -5,6 +5,7 @@ import {
   Users, Search, Filter, MoreHorizontal, Shield, UserCog, Lock, Unlock,
   Trash2, History, LogOut, RefreshCw, ChevronLeft, ChevronRight,
   Loader2, Eye, AlertTriangle, CheckCircle2, XCircle,
+  Mail, MessageCircle, Globe,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -48,6 +49,8 @@ interface UserListItem {
   avatar: string | null;
   employeeNumber: string | null;
   department: { id: string; name: string } | null;
+  isOnline: boolean;
+  authProvider: string | null;
 }
 
 interface LoginSession {
@@ -92,6 +95,7 @@ interface UserDetail {
   departmentId: string | null;
   isActive: boolean;
   isOnline: boolean;
+  authProvider: string | null;
   lastLogin: string | null;
   profileCompleted: boolean;
   createdAt: string;
@@ -173,6 +177,64 @@ function StatusBadge({ active }: { active: boolean }) {
   );
 }
 
+function AuthProviderBadge({ provider }: { provider: string | null }) {
+  if (!provider || !['email', 'google', 'whatsapp'].includes(provider)) {
+    return (
+      <Badge variant="outline" className="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+        Unknown
+      </Badge>
+    );
+  }
+
+  if (provider === 'email') {
+    return (
+      <Badge variant="outline" className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+        <Mail className="h-3 w-3 mr-1" />
+        Email
+      </Badge>
+    );
+  }
+
+  if (provider === 'google') {
+    return (
+      <Badge variant="outline" className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400">
+        <Globe className="h-3 w-3 mr-1" />
+        Google
+      </Badge>
+    );
+  }
+
+  if (provider === 'whatsapp') {
+    return (
+      <Badge variant="outline" className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+        <MessageCircle className="h-3 w-3 mr-1" />
+        WhatsApp
+      </Badge>
+    );
+  }
+
+  return (
+    <Badge variant="outline" className="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400">
+      Unknown
+    </Badge>
+  );
+}
+
+function OnlineStatusIndicator({ isOnline }: { isOnline: boolean }) {
+  return (
+    <span className="inline-flex items-center gap-1.5 text-xs font-medium">
+      <span
+        className={`h-2 w-2 rounded-full ${
+          isOnline
+            ? 'bg-emerald-500 animate-pulse'
+            : 'bg-gray-400 dark:bg-gray-600'
+        }`}
+      />
+      {isOnline ? 'Online' : 'Offline'}
+    </span>
+  );
+}
+
 function formatDate(dateStr: string | null): string {
   if (!dateStr) return '—';
   return new Date(dateStr).toLocaleDateString('en-GB', {
@@ -203,6 +265,8 @@ function TableSkeleton() {
           <TableCell><Skeleton className="h-5 w-20" /></TableCell>
           <TableCell><Skeleton className="h-5 w-16" /></TableCell>
           <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+          <TableCell><Skeleton className="h-5 w-20" /></TableCell>
+          <TableCell><Skeleton className="h-5 w-28" /></TableCell>
           <TableCell><Skeleton className="h-5 w-28" /></TableCell>
           <TableCell><Skeleton className="h-5 w-10" /></TableCell>
         </TableRow>
@@ -247,6 +311,8 @@ export function UserManagement() {
   const [search, setSearch] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [providerFilter, setProviderFilter] = useState('');
+  const [onlineFilter, setOnlineFilter] = useState('');
   const [searchInput, setSearchInput] = useState('');
 
   // Detail modal state
@@ -273,6 +339,8 @@ export function UserManagement() {
       if (search) params.set('search', search);
       if (roleFilter) params.set('role', roleFilter);
       if (statusFilter) params.set('status', statusFilter);
+      if (providerFilter) params.set('provider', providerFilter);
+      if (onlineFilter) params.set('online', onlineFilter);
 
       const res = await fetch(`/api/auth/users?${params}`, {
         headers: { Authorization: `Bearer ${token()}` },
@@ -291,7 +359,7 @@ export function UserManagement() {
     } finally {
       setLoading(false);
     }
-  }, [page, search, roleFilter, statusFilter]);
+  }, [page, search, roleFilter, statusFilter, providerFilter, onlineFilter]);
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
 
@@ -438,11 +506,22 @@ export function UserManagement() {
 
   const activeCount = users.filter((u) => u.isActive).length;
   const inactiveCount = users.length - activeCount;
+  const onlineCount = users.filter((u) => u.isOnline).length;
 
   const stats = [
     { label: 'Total Users', value: pagination?.total ?? 0, icon: <Users className="h-4 w-4 text-emerald-600" />, color: 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800 dark:bg-emerald-950/50' },
     { label: 'Active', value: activeCount, icon: <CheckCircle2 className="h-4 w-4 text-emerald-600" />, color: 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800 dark:bg-emerald-950/50' },
     { label: 'Inactive', value: inactiveCount, icon: <XCircle className="h-4 w-4 text-gray-500" />, color: 'border-gray-200 bg-gray-50/50 dark:border-gray-700 dark:bg-gray-900/50' },
+    {
+      label: 'Online Now',
+      value: onlineCount,
+      icon: (
+        <span className="relative flex h-4 w-4 items-center justify-center">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+        </span>
+      ),
+      color: 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800 dark:bg-emerald-950/50',
+    },
   ];
 
   // ============ FILTERED AUDIT LOGS ============
@@ -477,7 +556,7 @@ export function UserManagement() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {stats.map((s) => (
           <Card key={s.label} className={`border ${s.color}`}>
             <CardContent className="p-4 flex items-center gap-3">
@@ -504,7 +583,7 @@ export function UserManagement() {
                 className="pl-9"
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <Select value={roleFilter || 'all'} onValueChange={(v) => { setRoleFilter(v === 'all' ? '' : v); setPage(1); }}>
                 <SelectTrigger className="w-full sm:w-[160px]">
                   <Filter className="h-4 w-4 mr-2 text-muted-foreground" />
@@ -527,6 +606,27 @@ export function UserManagement() {
                   <SelectItem value="inactive">Inactive</SelectItem>
                 </SelectContent>
               </Select>
+              <Select value={providerFilter || 'all'} onValueChange={(v) => { setProviderFilter(v === 'all' ? '' : v); setPage(1); }}>
+                <SelectTrigger className="w-full sm:w-[140px]">
+                  <SelectValue placeholder="All Providers" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Providers</SelectItem>
+                  <SelectItem value="email">Email</SelectItem>
+                  <SelectItem value="google">Google</SelectItem>
+                  <SelectItem value="whatsapp">WhatsApp</SelectItem>
+                </SelectContent>
+              </Select>
+              <Select value={onlineFilter || 'all'} onValueChange={(v) => { setOnlineFilter(v === 'all' ? '' : v); setPage(1); }}>
+                <SelectTrigger className="w-full sm:w-[130px]">
+                  <SelectValue placeholder="All Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="online">Online</SelectItem>
+                  <SelectItem value="offline">Offline</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </CardContent>
@@ -544,6 +644,7 @@ export function UserManagement() {
                   <TableHead className="min-w-[180px]">Email</TableHead>
                   <TableHead className="min-w-[120px]">Company</TableHead>
                   <TableHead>Role</TableHead>
+                  <TableHead className="min-w-[100px]">Provider</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="min-w-[130px]">Registered</TableHead>
                   <TableHead className="min-w-[130px]">Last Login</TableHead>
@@ -555,7 +656,7 @@ export function UserManagement() {
                   <TableSkeleton />
                 ) : users.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={9} className="text-center py-12 text-muted-foreground">
+                    <TableCell colSpan={10} className="text-center py-12 text-muted-foreground">
                       <Users className="h-10 w-10 mx-auto mb-3 text-muted-foreground/50" />
                       <p className="font-medium">No users found</p>
                       <p className="text-sm">Try adjusting your search or filters</p>
@@ -576,7 +677,16 @@ export function UserManagement() {
                             </AvatarFallback>
                           </Avatar>
                           <div className="min-w-0">
-                            <p className="font-medium truncate">{u.name}</p>
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium truncate">{u.name}</p>
+                              <span
+                                className={`h-2 w-2 rounded-full shrink-0 ${
+                                  u.isOnline
+                                    ? 'bg-emerald-500 animate-pulse'
+                                    : 'bg-gray-400 dark:bg-gray-600'
+                                }`}
+                              />
+                            </div>
                             {u.employeeNumber && (
                               <p className="text-xs text-muted-foreground">{u.employeeNumber}</p>
                             )}
@@ -587,7 +697,13 @@ export function UserManagement() {
                       <TableCell className="text-sm text-muted-foreground max-w-[200px] truncate">{u.email}</TableCell>
                       <TableCell className="text-sm">{u.department?.name || '—'}</TableCell>
                       <TableCell><RoleBadge role={u.role} /></TableCell>
-                      <TableCell><StatusBadge active={u.isActive} /></TableCell>
+                      <TableCell><AuthProviderBadge provider={u.authProvider} /></TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-1">
+                          <StatusBadge active={u.isActive} />
+                          <OnlineStatusIndicator isOnline={u.isOnline} />
+                        </div>
+                      </TableCell>
                       <TableCell className="text-sm text-muted-foreground">{formatDate(u.createdAt)}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">{formatDate(u.lastLogin)}</TableCell>
                       <TableCell>
@@ -675,11 +791,20 @@ export function UserManagement() {
               <CardContent className="p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
-                    <Avatar className="h-10 w-10 shrink-0">
-                      <AvatarFallback className="bg-emerald-100 text-emerald-700 text-sm font-semibold dark:bg-emerald-900 dark:text-emerald-300">
-                        {getInitials(u.name)}
-                      </AvatarFallback>
-                    </Avatar>
+                    <div className="relative">
+                      <Avatar className="h-10 w-10 shrink-0">
+                        <AvatarFallback className="bg-emerald-100 text-emerald-700 text-sm font-semibold dark:bg-emerald-900 dark:text-emerald-300">
+                          {getInitials(u.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span
+                        className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background ${
+                          u.isOnline
+                            ? 'bg-emerald-500'
+                            : 'bg-gray-400 dark:bg-gray-600'
+                        }`}
+                      />
+                    </div>
                     <div className="min-w-0">
                       <p className="font-medium truncate">{u.name}</p>
                       <p className="text-sm text-muted-foreground truncate">{u.email}</p>
@@ -690,9 +815,12 @@ export function UserManagement() {
                     <StatusBadge active={u.isActive} />
                   </div>
                 </div>
-                <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-                  <span>{u.phone || u.department?.name || '—'}</span>
-                  <span>{formatDate(u.lastLogin)}</span>
+                <div className="mt-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <AuthProviderBadge provider={u.authProvider} />
+                    <OnlineStatusIndicator isOnline={u.isOnline} />
+                  </div>
+                  <span className="text-xs text-muted-foreground">{formatDate(u.lastLogin)}</span>
                 </div>
               </CardContent>
             </Card>
@@ -748,7 +876,7 @@ export function UserManagement() {
                     <div className="flex items-center gap-2">
                       {selectedUser.name}
                       {selectedUser.isOnline && (
-                        <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" title="Online" />
+                        <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" title="Online" />
                       )}
                     </div>
                     <p className="text-sm font-normal text-muted-foreground">{selectedUser.email}</p>
@@ -761,6 +889,8 @@ export function UserManagement() {
                 <div className="flex flex-wrap gap-2">
                   <RoleBadge role={selectedUser.role} />
                   <StatusBadge active={selectedUser.isActive} />
+                  <OnlineStatusIndicator isOnline={selectedUser.isOnline} />
+                  <AuthProviderBadge provider={selectedUser.authProvider} />
                   {selectedUser.profileCompleted && (
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
                       Profile Complete
@@ -795,6 +925,14 @@ export function UserManagement() {
                   <div>
                     <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider mb-1">Last Login</p>
                     <p className="font-medium">{formatDate(selectedUser.lastLogin)}</p>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider mb-1">Authentication Provider</p>
+                    <div className="mt-0.5"><AuthProviderBadge provider={selectedUser.authProvider} /></div>
+                  </div>
+                  <div>
+                    <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider mb-1">Online Status</p>
+                    <div className="mt-0.5"><OnlineStatusIndicator isOnline={selectedUser.isOnline} /></div>
                   </div>
                 </div>
 

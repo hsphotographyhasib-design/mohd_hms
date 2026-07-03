@@ -50,12 +50,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
     }
 
-    // Update last login (best-effort, non-blocking)
+    // Update last login and auth provider (best-effort, non-blocking)
     withRetry(
       () =>
         db.user.update({
           where: { id: user.id },
-          data: { lastLogin: new Date(), isOnline: true },
+          data: { lastLogin: new Date(), isOnline: true, authProvider: 'email' },
         }),
       { label: 'login-updateLastLogin' }
     ).catch(() => {});

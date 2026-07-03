@@ -63,7 +63,8 @@ export async function POST(request: NextRequest) {
             email,
             passwordHash,
             name,
-            role: role || 'technician',
+            role: role || 'customer',
+            authProvider: 'email',
             profileCompleted: false,
           },
           include: { tenant: { select: { id: true, name: true, domain: true } } },
@@ -97,6 +98,28 @@ export async function POST(request: NextRequest) {
       });
     } catch (err) {
       console.error('[register] welcome email failed', err);
+    }
+
+    // Notify admins about new registration (best-effort, non-blocking)
+    try {
+      const admins = await db.user.findMany({
+        where: { tenantId: tenant.id, role: { in: ['super_admin', 'admin'] }, isActive: true },
+        select: { id: true },
+      });
+      if (admins.length > 0) {
+        await db.notification.createMany({
+          data: admins.map((admin) => ({
+            tenantId: tenant.id,
+            userId: admin.id,
+            title: 'New User Registered',
+            message: `${user.name} has successfully registered as a ${user.role}.`,
+            type: 'info',
+            isRead: false,
+          })),
+        });
+      }
+    } catch (err) {
+      console.error('[register] admin notification failed', err);
     }
 
     return NextResponse.json({

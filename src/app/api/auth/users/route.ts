@@ -6,10 +6,118 @@ import { sendEmail, renderWelcomeEmail } from '@/lib/email';
 
 export const dynamic = 'force-dynamic';
 
-/**
- * POST /api/auth/users — Invite a new user (admin/super_admin only).
- * Sends an invitation email with a one-time login link.
- */
+// ============ GET: List users (admin/super_admin only) ============
+
+export async function GET(request: NextRequest) {
+  try {
+    // Authenticate
+    const authHeader = request.headers.get('authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return NextResponse.json({ error: 'Authorization required' }, { status: 401 });
+    }
+
+    const payload = verifyToken(authHeader.replace('Bearer ', ''));
+    if (!payload || !payload.userId) {
+      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    }
+
+    if (!['admin', 'super_admin'].includes(payload.role as string)) {
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+    }
+
+    const tenantId = payload.tenantId as string;
+
+    // Parse query params
+    const { searchParams } = new URL(request.url);
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '20', 10)));
+    const search = searchParams.get('search')?.trim() || '';
+    const roleFilter = searchParams.get('role') || '';
+    const statusFilter = searchParams.get('status') || '';
+    const providerFilter = searchParams.get('provider') || '';
+    const onlineFilter = searchParams.get('online') || '';
+
+    // Build where clause
+    const where: Record<string, unknown> = { tenantId };
+
+    if (search) {
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { email: { contains: search, mode: 'insensitive' } },
+        { phone: { contains: search } },
+        { employeeNumber: { contains: search, mode: 'insensitive' } },
+      ];
+    }
+
+    if (roleFilter) {
+      where.role = roleFilter;
+    }
+
+    if (statusFilter === 'active') {
+      where.isActive = true;
+    } else if (statusFilter === 'inactive') {
+      where.isActive = false;
+    }
+
+    if (providerFilter) {
+      where.authProvider = providerFilter;
+    }
+
+    if (onlineFilter === 'online') {
+      where.isOnline = true;
+    } else if (onlineFilter === 'offline') {
+      where.isOnline = false;
+    }
+
+    const skip = (page - 1) * pageSize;
+
+    const [users, total] = await Promise.all([
+      withRetry(
+        () =>
+          db.user.findMany({
+            where,
+            skip,
+            take: pageSize,
+            orderBy: { createdAt: 'desc' },
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              phone: true,
+              avatar: true,
+              role: true,
+              isActive: true,
+              isOnline: true,
+              lastLogin: true,
+              createdAt: true,
+              profileCompleted: true,
+              employeeNumber: true,
+              authProvider: true,
+              department: { select: { id: true, name: true } },
+            },
+          }),
+        { label: 'listUsers-findMany' }
+      ),
+      withRetry(
+        () => db.user.count({ where }),
+        { label: 'listUsers-count' }
+      ),
+    ]);
+
+    const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+    return NextResponse.json({
+      users,
+      pagination: { page, pageSize, total, totalPages },
+    });
+  } catch (error) {
+    console.error('List users error:', error);
+    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
+  }
+}
+
+// ============ POST: Invite a new user (admin/super_admin only) ============
+
 export async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization');
@@ -52,13 +160,14 @@ export async function POST(request: NextRequest) {
             profileCompleted: false,
             departmentId: departmentId || null,
             phone: phone || null,
+            authProvider: 'email',
           },
           include: { tenant: { select: { id: true, name: true, domain: true } } },
         }),
       { label: 'invite-createUser' },
     );
 
-    // Generate invitation token (one-time use, same as JWT but for invitations)
+    // Generate invitation token
     const inviteToken = generateToken({
       userId: user.id,
       tenantId,
@@ -88,6 +197,25 @@ export async function POST(request: NextRequest) {
         console.error('[invite-user] invitation email failed', err);
       }
     }
+
+    // Audit log (non-critical)
+    withRetry(
+      () =>
+        db.auditLog.create({
+          data: {
+            tenantId,
+            userId: inviterId,
+            action: 'invite_user',
+            entity: 'User',
+            entityId: user.id,
+            newValue: JSON.stringify({ name: user.name, email: user.email, role: user.role }),
+            ipAddress: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown',
+            userAgent: request.headers.get('user-agent') || 'unknown',
+            device: 'api',
+          },
+        }),
+      { label: 'invite-audit' }
+    ).catch(() => {});
 
     return NextResponse.json({
       message: `User invited successfully: ${user.name} (${user.email})`,

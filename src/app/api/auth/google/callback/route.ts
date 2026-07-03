@@ -250,6 +250,28 @@ export async function GET(request: NextRequest) {
           }),
         { label: 'google-callback-createUser' },
       );
+
+      // Notify admins about new Google registration (best-effort)
+      (async () => {
+        try {
+          const admins = await db.user.findMany({
+            where: { tenantId: tenant.id, role: { in: ['super_admin', 'admin'] }, isActive: true },
+            select: { id: true },
+          });
+          if (admins.length > 0) {
+            await db.notification.createMany({
+              data: admins.map((admin) => ({
+                tenantId: tenant.id,
+                userId: admin.id,
+                title: 'New User Registered',
+                message: `${name} has registered via Google as a customer.`,
+                type: 'info',
+                isRead: false,
+              })),
+            });
+          }
+        } catch {}
+      })();
     } else {
       // Update last login
       withRetry(
