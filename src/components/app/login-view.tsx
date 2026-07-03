@@ -108,7 +108,7 @@ const demoAccounts: DemoAccount[] = ENABLE_DEMO ? [
 /** Brand logo using the official MOHD.HMS ENTERPRISE icon */
 function BrandLogo({ className }: { className?: string }) {
   return (
-    <img src="/icon.svg" alt="MOHD.HMS ENTERPRISE" className={className} />
+    <img src="/logo-512.png" alt="MOHD.HMS ENTERPRISE" className={className} />
   );
 }
 

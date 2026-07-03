@@ -6,7 +6,7 @@ import Image from 'next/image';
 export function BrandLogo({ className }: { className?: string }) {
   return (
     <Image
-      src="/icon.svg"
+      src="/logo-512.png"
       alt="MOHD.HMS ENTERPRISE"
       width={30}
       height={30}

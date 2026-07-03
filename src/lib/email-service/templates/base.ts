@@ -82,7 +82,7 @@ export function renderEmailShell(opts: ShellOptions): string {
               <tr>
                 <td>
                   <div style="display:inline-block;width:44px;height:44px;border-radius:12px;overflow:hidden;">
-                    <img src="${SITE_URL}/icon.svg" alt="MOHD.HMS ENTERPRISE" width="44" height="44" style="display:block;width:44px;height:44px;" />
+                    <img src="${SITE_URL}/logo-512.png" alt="MOHD.HMS ENTERPRISE" width="44" height="44" style="display:block;width:44px;height:44px;object-fit:contain;" />
                   </div>
                 </td>
                 <td style="padding-left:12px;">
