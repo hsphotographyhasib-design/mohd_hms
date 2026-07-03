@@ -8,7 +8,10 @@ import { useNotificationStore } from '@/lib/notifications/store';
 /**
  * Global Notification Provider.
  * Place this once in the app tree (inside page.tsx, above AppShell).
- * Renders the floating notification container + history bell icon.
+ * Renders the floating notification container + history bell icon (desktop only).
+ *
+ * On mobile, the MobileHeader already has its own notification bell,
+ * so the enterprise history panel is hidden to avoid duplication.
  */
 export function NotificationProvider({ children }: { children: React.ReactNode }) {
   const { updateSettings } = useNotificationStore();
@@ -26,7 +29,11 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     <>
       {children}
       <NotificationContainer />
-      <NotificationHistoryPanel />
+      {/* Desktop-only: enterprise notification history bell.
+          Mobile has its own bell inside MobileHeader. */}
+      <div className="hidden md:block">
+        <NotificationHistoryPanel />
+      </div>
     </>
   );
 }
