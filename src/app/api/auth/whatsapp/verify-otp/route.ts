@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
         () =>
           db.user.update({
             where: { id: existingUser.id },
-            data: { lastLogin: new Date(), isOnline: true },
+            data: { lastLogin: new Date(), isOnline: true, authProvider: 'whatsapp' },
           }),
         { label: 'verifyOtp-updateLastLogin' },
       ).catch(() => {});

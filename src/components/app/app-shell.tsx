@@ -68,6 +68,69 @@ const WhatsAppSettings = lazy(() => import('@/components/modules/whatsapp/whatsa
 
 // Admin views
 const UserManagement = lazy(() => import('@/components/admin/user-management').then(m => ({ default: m.UserManagement })));
+
+// Mobile-specific views
+const MobileDashboard = lazy(() => import('@/components/mobile/mobile-dashboard').then(m => ({ default: m.MobileDashboard })));
+const MobileComplaints = lazy(() => import('@/components/mobile/mobile-complaints').then(m => ({ default: m.MobileComplaints })));
+const MobileNewComplaint = lazy(() => import('@/components/mobile/mobile-new-complaint').then(m => ({ default: m.MobileNewComplaint })));
+const MobileComplaintDetail = lazy(() => import('@/components/mobile/mobile-complaint-detail').then(m => ({ default: m.MobileComplaintDetail })));
+const MobileWorkOrderDetail = lazy(() => import('@/components/mobile/mobile-work-order-detail').then(m => ({ default: m.MobileWorkOrderDetail })));
+const MobileRateFeedback = lazy(() => import('@/components/mobile/mobile-rate-feedback').then(m => ({ default: m.MobileRateFeedback })));
+const MobileInvoices = lazy(() => import('@/components/mobile/mobile-invoices').then(m => ({ default: m.MobileInvoices })));
+const MobileNotifications = lazy(() => import('@/components/mobile/mobile-notifications').then(m => ({ default: m.MobileNotifications })));
+const MobileProfile = lazy(() => import('@/components/mobile/mobile-profile').then(m => ({ default: m.MobileProfile })));
+const MobileHelp = lazy(() => import('@/components/mobile/mobile-help').then(m => ({ default: m.MobileHelp })));
+const MobileWorkOrders = lazy(() => import('@/components/mobile/mobile-work-orders').then(m => ({ default: m.MobileWorkOrders })));
+const MobileEquipment = lazy(() => import('@/components/mobile/mobile-equipment').then(m => ({ default: m.MobileEquipment })));
+const MobileInvoiceDetail = lazy(() => import('@/components/mobile/mobile-invoice-detail').then(m => ({ default: m.MobileInvoiceDetail })));
+const MobileDocuments = lazy(() => import('@/components/mobile/mobile-documents').then(m => ({ default: m.MobileDocuments })));
+
+function MobileViewRouter() {
+  const { currentView, viewParams } = useAppStore();
+  return (
+    <Suspense fallback={<ViewLoader />}>
+      {currentView === 'dashboard' && <MobileDashboard />}
+      {currentView === 'complaints' && <MobileComplaints />}
+      {currentView === 'complaint-detail' && <MobileComplaintDetail />}
+      {currentView === 'new-complaint' && <MobileNewComplaint />}
+      {currentView === 'work-orders' && <MobileWorkOrders />}
+      {currentView === 'work-order-detail' && <MobileWorkOrderDetail />}
+      {currentView === 'rate-feedback' && <MobileRateFeedback />}
+      {currentView === 'invoices' && <MobileInvoices />}
+      {currentView === 'invoice-detail' && <MobileInvoiceDetail />}
+      {currentView === 'notifications' && <MobileNotifications />}
+      {currentView === 'profile' && <MobileProfile />}
+      {currentView === 'help' && <MobileHelp />}
+      {currentView === 'documents' && <MobileDocuments />}
+      {currentView === 'settings' && <MobileProfile />}
+      {currentView === 'equipment' && <MobileEquipment />}
+      {/* Fallback: reuse desktop views for admin-only modules */}
+      {currentView === 'equipment-detail' && <EquipmentDetail />}
+      {currentView === 'pm' && <PmList />}
+      {currentView === 'quotations' && <QuotationList />}
+      {currentView === 'quotation-detail' && <QuotationDetail quotationId={viewParams?.id} />}
+      {currentView === 'new-quotation' && <NewQuotation />}
+      {currentView === 'inventory' && <InventoryList />}
+      {currentView === 'customers' && <CustomerList />}
+      {currentView === 'employees' && <EmployeeList />}
+      {currentView === 'technicians' && <TechnicianOpsCenter />}
+      {currentView === 'purchases' && <PurchaseList />}
+      {currentView === 'vehicles' && <VehicleList />}
+      {currentView === 'finance' && <FinanceView />}
+      {currentView === 'reports' && <ReportView />}
+      {currentView === 'user-management' && <UserManagement />}
+      {currentView === 'email-management' && <EmailManagement />}
+      {currentView === 'whatsapp' && <WhatsAppDashboard />}
+      {currentView === 'whatsapp-chats' && <WhatsAppChats />}
+      {currentView === 'whatsapp-templates' && <WhatsAppTemplates />}
+      {currentView === 'whatsapp-campaigns' && <WhatsAppCampaigns />}
+      {currentView === 'whatsapp-settings' && <WhatsAppSettings />}
+      {currentView === 'cms-dashboard' && <CmsDashboard />}
+      {currentView === 'new-work-order' && <NewWorkOrder />}
+    </Suspense>
+  );
+}
+
 const EmailManagement = lazy(() => import('@/components/modules/email/email-dashboard').then(m => ({ default: m.EmailManagement })));
 
 const TechnicianAssignmentScreen = lazy(() => import('@/components/modules/complaints/complaint-assignment-screen').then(m => ({ default: m.ComplaintAssignmentScreen })));
@@ -159,22 +222,11 @@ export function AppShell() {
   const user = useAuthStore(s => s.user);
   const isMobile = useIsMobile(768);
 
-  // Customer role gets a dedicated portal (no sidebar/floating nav)
-  if (user?.role === 'customer') {
-    return (
-      <Suspense fallback={<ViewLoader />}>
-        <CustomerPortal />
-      </Suspense>
-    );
-  }
-
-  // Mobile layout: MobileShell handles its own header + bottom nav
+  // Mobile layout: ALL roles use MobileShell on mobile (role-aware nav inside)
   if (isMobile) {
     return (
       <MobileShell>
-        <div className="px-4 py-3">
-          <ViewRouter />
-        </div>
+        <MobileViewRouter />
       </MobileShell>
     );
   }

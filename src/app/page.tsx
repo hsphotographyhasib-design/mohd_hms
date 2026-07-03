@@ -10,7 +10,9 @@ import { AuthGuard } from '@/components/session/auth-guard';
 import { IdleTimerProvider } from '@/components/session/idle-timer';
 import { SessionProvider } from '@/components/session/session-provider';
 import { NotificationProvider } from '@/components/notifications/notification-provider';
+import { ConfirmProvider } from '@/components/ui/confirm-provider';
 import { setupFetchInterceptor } from '@/hooks/use-secure-fetch';
+import { useNotificationPolling } from '@/hooks/use-notification-polling';
 
 const emptySubscribe = () => () => {};
 
@@ -20,6 +22,11 @@ function useHydrated() {
 
 function FetchInterceptorSetup() {
   useEffect(() => { setupFetchInterceptor(); }, []);
+  return null;
+}
+
+function NotificationPollingSetup() {
+  useNotificationPolling();
   return null;
 }
 
@@ -94,17 +101,20 @@ export default function Home() {
 
   return (
     <SessionProvider>
-      <NotificationProvider>
-        <FetchInterceptorSetup />
-        <ToastListener />
-        {isAuthenticated ? (
-          <ProtectedApp />
-        ) : showLogin ? (
-          <LoginView />
-        ) : (
-          <LandingHome onSignIn={() => setShowLogin(true)} />
-        )}
-      </NotificationProvider>
+      <ConfirmProvider>
+        <NotificationProvider>
+          <FetchInterceptorSetup />
+          <NotificationPollingSetup />
+          <ToastListener />
+          {isAuthenticated ? (
+            <ProtectedApp />
+          ) : showLogin ? (
+            <LoginView />
+          ) : (
+            <LandingHome onSignIn={() => setShowLogin(true)} />
+          )}
+        </NotificationProvider>
+      </ConfirmProvider>
     </SessionProvider>
   );
 }

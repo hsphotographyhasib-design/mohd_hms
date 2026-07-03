@@ -163,16 +163,31 @@ export async function PUT(
     if (name !== undefined) updateData.name = name;
     if (phone !== undefined) updateData.phone = phone;
     if (role !== undefined) {
-      // Only super_admin can change roles
-      if ((payload.role as string) !== 'super_admin') {
+      // Only admin or super_admin can change roles
+      const callerRole = payload.role as string;
+      if (!['admin', 'super_admin'].includes(callerRole)) {
         return NextResponse.json(
-          { error: 'Only super_admin can change user roles' },
+          { error: 'Only admins can change user roles' },
           { status: 403 }
         );
       }
       const validRoles = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer', 'vendor', 'guest'];
       if (!validRoles.includes(role)) {
         return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
+      }
+      // Only super_admin can assign super_admin role
+      if (role === 'super_admin' && callerRole !== 'super_admin') {
+        return NextResponse.json(
+          { error: 'Only super_admin can assign the super_admin role' },
+          { status: 403 }
+        );
+      }
+      // Non-super_admin cannot modify super_admin users
+      if (existingUser.role === 'super_admin' && callerRole !== 'super_admin') {
+        return NextResponse.json(
+          { error: 'Only super_admin can modify other super_admin accounts' },
+          { status: 403 }
+        );
       }
       updateData.role = role;
     }

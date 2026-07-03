@@ -1,17 +1,13 @@
 'use client';
 
 import { ReactNode } from 'react';
-import Image from 'next/image';
 
 export function BrandLogo({ className }: { className?: string }) {
   return (
-    <Image
-      src="/icon.svg"
+    <img
+      src="/logo-512.png"
       alt="MOHD.HMS ENTERPRISE"
-      width={30}
-      height={30}
       className={className}
-      priority
     />
   );
 }
@@ -39,10 +35,10 @@ export function AuthShell({ title, subtitle, children, titleId = 'auth-title' }:
         {/* Brand */}
         <div className="flex flex-col items-center text-center gap-3 mb-6">
           <span
-            className="w-14 h-14 rounded-xl bg-emerald-600 text-white grid place-items-center"
+            className="w-16 h-16"
             aria-hidden="true"
           >
-            <BrandLogo className="w-[30px] h-[30px]" />
+            <BrandLogo className="w-full h-full object-contain" />
           </span>
           <h1
             id={titleId}

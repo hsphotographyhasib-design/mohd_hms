@@ -218,6 +218,12 @@ export const useNotificationStore = create<NotificationState>((set, get) => ({
   markAllAsRead: () => {
     const notifications = get().notifications.map((n) => ({ ...n, isRead: true }));
     set({ notifications, unreadCount: 0 });
+    // Cross-tab sync
+    try {
+      const channel = new BroadcastChannel('cmms-notifications');
+      channel.postMessage({ type: 'ALL_READ' });
+      channel.close();
+    } catch { /* BroadcastChannel not supported */ }
   },
 }));
 

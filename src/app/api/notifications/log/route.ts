@@ -5,9 +5,9 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Enterprise notification logging endpoint.
- * Stores notification events in the database for auditing and troubleshooting.
+ * Creates notification records for auditing and cross-module event tracking.
  *
- * POST /api/notifications/log — Log a notification event
+ * POST /api/notifications/log — Create a notification event
  * GET  /api/notifications/log — List recent notification logs (admin only)
  */
 
@@ -16,26 +16,31 @@ export async function POST(request: NextRequest) {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
-    const userId = payload?.userId;
 
     const body = await request.json();
-    const { type, title, description, notifModule, action, result, referenceId } = body;
+    const { type, title, message, module: notifModule, action, result, referenceId, relatedEntityType, relatedEntityId } = body;
 
     if (!type || !title) {
       return NextResponse.json({ error: 'type and title are required' }, { status: 400 });
     }
 
+    // Build the data JSON blob for extra metadata
+    const dataObj: Record<string, unknown> = {};
+    if (notifModule) dataObj.module = notifModule;
+    if (action) dataObj.action = action;
+    if (result) dataObj.result = result;
+
     await db.notification.create({
       data: {
-        userId: userId || null,
+        tenantId: payload?.tenantId || 'default',
+        userId: payload?.userId || null,
         type: type.toUpperCase(),
         title,
-        description: description || null,
-        module: notifModule || null,
-        action: action || 'display',
-        result: result || 'success',
-        referenceId: referenceId || null,
+        message: message || '',
+        data: Object.keys(dataObj).length > 0 ? JSON.stringify(dataObj) : null,
         isRead: false,
+        relatedEntityType: relatedEntityType || null,
+        relatedEntityId: referenceId || relatedEntityId || null,
       },
     });
 
@@ -57,32 +62,44 @@ export async function GET(request: NextRequest) {
     const offset = parseInt(searchParams.get('offset') || '0');
     const type = searchParams.get('type');
     const notifModule = searchParams.get('module');
+    const relatedType = searchParams.get('relatedEntityType');
 
     const where: Record<string, unknown> = {};
     if (type) where.type = type.toUpperCase();
-    if (notifModule) where.module = notifModule;
+    if (relatedType) where.relatedEntityType = relatedType;
 
-    const [logs, total] = await Promise.all([
-      db.notification.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        take: limit,
-        skip: offset,
-        select: {
-          id: true,
-          type: true,
-          title: true,
-          description: true,
-          module: true,
-          action: true,
-          result: true,
-          referenceId: true,
-          isRead: true,
-          createdAt: true,
-        },
-      }),
-      db.notification.count({ where }),
-    ]);
+    // If filtering by module, search within the JSON data field
+    const notifications = await db.notification.findMany({
+      where,
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip: offset,
+      select: {
+        id: true,
+        type: true,
+        title: true,
+        message: true,
+        data: true,
+        isRead: true,
+        relatedEntityType: true,
+        relatedEntityId: true,
+        createdAt: true,
+      },
+    });
+
+    const total = await db.notification.count({ where });
+
+    // Post-process: parse data JSON for module/action filtering
+    const logs = notifModule
+      ? notifications.filter((n) => {
+          try {
+            const d = n.data ? JSON.parse(n.data) : {};
+            return d.module === notifModule;
+          } catch {
+            return false;
+          }
+        })
+      : notifications;
 
     return NextResponse.json({ logs, total, limit, offset });
   } catch (error) {

@@ -297,6 +297,8 @@ model Complaint {
   eta             String?  // technician ETA
   rejectionReason String?  // if technician rejects
   reworkReason    String?  // if customer requests rework
+  customerSnapshot String?  // JSON: snapshot of customer info at complaint creation time
+  locationInfo    String?  // JSON: {building, floor, unit, room, address, district, postalCode, country}
   resolutionNotes String?
   customerRating  Int?
   customerFeedback String?

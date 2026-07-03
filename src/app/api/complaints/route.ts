@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
 
     const tenantId = payload.tenantId as string;
     const body = await request.json();
-    const { customerId, equipmentId, title, description, priority, category, photos, gpsLocation, assignedToId, supervisorId } = body;
+    const { customerId, equipmentId, title, description, priority, category, photos, gpsLocation, assignedToId, supervisorId, source, customerSnapshot, locationInfo } = body;
 
     if (!title?.trim()) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 });
@@ -111,6 +111,30 @@ export async function POST(request: NextRequest) {
     }
     if (!customerId) {
       return NextResponse.json({ error: 'Customer is required' }, { status: 400 });
+    }
+
+    // ─── Security: Customer-role users can only create complaints for themselves ───
+    if (payload.role === 'customer') {
+      const user = await db.user.findUnique({
+        where: { id: payload.userId as string },
+        select: { id: true, email: true, phone: true },
+      });
+      if (!user) return NextResponse.json({ error: 'User not found' }, { status: 401 });
+
+      const linkedCustomer = await db.customer.findFirst({
+        where: {
+          tenantId,
+          id: customerId,
+          OR: [
+            ...(user.email ? [{ email: user.email }] : []),
+            ...(user.phone ? [{ phone: user.phone }] : []),
+          ],
+        },
+        select: { id: true },
+      });
+      if (!linkedCustomer) {
+        return NextResponse.json({ error: 'You can only create complaints for your own account' }, { status: 403 });
+      }
     }
 
     // Generate complaint number: CMP/YYYY/NNNNNN
@@ -127,22 +151,34 @@ export async function POST(request: NextRequest) {
     });
     const complaintNumber = `CMP/${year}/${String(countThisYear + 1).padStart(6, '0')}`;
 
+    // Build creation data
+    const createData: Record<string, unknown> = {
+      tenantId,
+      customerId,
+      equipmentId: equipmentId || null,
+      title: title.trim(),
+      description: description.trim(),
+      priority: priority || 'medium',
+      status: 'NEW',
+      source: source || 'admin',
+      category: category || null,
+      photos: photos ? JSON.stringify(photos) : null,
+      gpsLocation: gpsLocation ? JSON.stringify(gpsLocation) : null,
+      assignedToId: assignedToId || null,
+      supervisorId: supervisorId || null,
+    };
+
+    // Store customer snapshot for historical accuracy
+    if (customerSnapshot) {
+      createData.customerSnapshot = JSON.stringify(customerSnapshot);
+    }
+    // Store location info (building, floor, unit, room, etc.)
+    if (locationInfo) {
+      createData.locationInfo = JSON.stringify(locationInfo);
+    }
+
     const complaint = await db.complaint.create({
-      data: {
-        tenantId,
-        customerId,
-        equipmentId: equipmentId || null,
-        title: title.trim(),
-        description: description.trim(),
-        priority: priority || 'medium',
-        status: 'NEW',
-        source: 'admin',
-        category: category || null,
-        photos: photos ? JSON.stringify(photos) : null,
-        gpsLocation: gpsLocation ? JSON.stringify(gpsLocation) : null,
-        assignedToId: assignedToId || null,
-        supervisorId: supervisorId || null,
-      },
+      data: createData,
       include: {
         customer: { select: { name: true } },
         equipment: { select: { name: true } },

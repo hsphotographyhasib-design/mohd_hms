@@ -108,7 +108,7 @@ const demoAccounts: DemoAccount[] = ENABLE_DEMO ? [
 /** Brand logo using the official MOHD.HMS ENTERPRISE icon */
 function BrandLogo({ className }: { className?: string }) {
   return (
-    <img src="/icon.svg" alt="MOHD.HMS ENTERPRISE" className={className} />
+    <img src="/logo-512.png" alt="MOHD.HMS ENTERPRISE" className={className} />
   );
 }
 
@@ -157,12 +157,13 @@ function WhatsAppIcon({ className }: { className?: string }) {
 /* ------------------------------------------------------------------ */
 
 export function LoginView() {
-  const { login, loginWithGoogle, loginWithWhatsApp, isLoading } = useAuthStore();
+  const { login, loginWithWhatsApp, isLoading } = useAuthStore();
 
   /* ---- Panel navigation ---- */
   const [panel, setPanel] = useState<Panel>('choices');
   const [waStep, setWaStep] = useState<WaStep>('phone');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  // isGoogleLoading kept for button UI but redirect is instant so it rarely shows
 
   /* ---- Terms & Conditions acceptance ---- */
   const [tcAccepted, setTcAccepted] = useState(isTermsAccepted);
@@ -321,7 +322,10 @@ export function LoginView() {
     setWaAlert('');
     setPhoneError('');
     if (!isPhoneValid) {
-      setPhoneError(`Enter a valid ${selectedCountryData.name} phone number.`);
+      const lenInfo = Array.isArray(selectedCountryData.phoneLength)
+        ? `${selectedCountryData.phoneLength[0]}–${selectedCountryData.phoneLength[1]}`
+        : String(selectedCountryData.phoneLength);
+      setPhoneError(`Enter a valid ${selectedCountryData.name} number (${lenInfo} digits, e.g. ${selectedCountryData.format.replace(/X/g, '0')}).`);
       phoneInputRef.current?.focus();
       return;
     }
@@ -535,7 +539,12 @@ export function LoginView() {
 
   /* ---- Phone input handler (auto-format) ---- */
   const handlePhoneChange = (value: string) => {
-    const digits = value.replace(/\D/g, '').slice(0, 15);
+    let digits = value.replace(/\D/g, '').slice(0, 15);
+    // Strip leading zeros when more digits follow (e.g. Brunei "07137462" → "7137462")
+    // Keep a solitary "0" so the field doesn't appear dead while typing
+    if (digits.length > 1) {
+      digits = digits.replace(/^0+/, '');
+    }
     setRawPhone(digits);
     if (phoneError) setPhoneError('');
     if (waAlert) setWaAlert('');
@@ -559,117 +568,14 @@ export function LoginView() {
     }
   };
 
-  /* ---- Google Sign-In ---- */
-  const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ||
-    '337910166543-9vr0i0bqudf53stnqbcvjr9o6kt6gtei.apps.googleusercontent.com';
-  const [gisReady, setGisReady] = useState(false);
-  const [gisError, setGisError] = useState(false);
-
-  const handleGoogleSignIn = useCallback(async () => {
+  /* ---- Google Sign-In (server-side OAuth redirect flow) ---- */
+  const handleGoogleSignIn = useCallback(() => {
     if (isGoogleLoading || isLoading) return;
     if (!requireTc()) return;
-
-    // Guard: no client ID configured
-    if (!GOOGLE_CLIENT_ID) {
-      toast.error('Google Sign-In is not configured. Please contact the administrator.');
-      return;
-    }
-
-    // Guard: GIS script not loaded yet
-    const google = (window as unknown as { google?: { accounts: { id: { initialize: (c: Record<string, unknown>) => void; prompt: (callback?: (notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean; getNotDisplayedReason: () => number; getSkippedReason: () => number }) => void) => void; renderButton: (parent: HTMLElement, options: Record<string, unknown>) => void } } } }).google;
-    if (!google?.accounts?.id) {
-      toast.error('Google Sign-In is loading. Please wait a moment and try again.');
-      return;
-    }
-
-    setIsGoogleLoading(true);
-    let settled = false;
-    try {
-      let resolveToken: ((token: string) => void) | null = null;
-      let rejectToken: ((err: Error) => void) | null = null;
-      const tokenPromise = new Promise<string>((resolve, reject) => {
-        resolveToken = resolve;
-        rejectToken = reject;
-      });
-
-      // Timeout after 90s
-      const timeout = setTimeout(() => {
-        if (!settled) {
-          settled = true;
-          rejectToken?.(new Error('Google sign-in timed out. Please try again.'));
-        }
-      }, 90_000);
-
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: (response: { credential: string }) => {
-          clearTimeout(timeout);
-          if (!settled && resolveToken) {
-            settled = true;
-            resolveToken(response.credential);
-          }
-        },
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-
-      google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          clearTimeout(timeout);
-          if (!settled) {
-            settled = true;
-            // Provide meaningful error based on reason
-            const reason = notification.getNotDisplayedReason?.();
-            const msg =
-              reason === 1 ? 'Browser is in incognito/private mode. Google Sign-In is unavailable.' :
-              reason === 2 ? 'Google cookies are blocked. Please allow third-party cookies.' :
-              reason === 3 ? 'Google Sign-In was suppressed. Please try again.' :
-              reason === 4 ? 'Google Sign-In is not available in this context.' :
-              'Popup closed by user';
-            rejectToken?.(new Error(msg));
-          }
-        }
-      });
-
-      const credential = await tokenPromise;
-      if (credential) {
-        saveTermsAcceptance();
-        await loginWithGoogle(credential);
-        logTermsAcceptance(useAuthStore.getState().user?.id || '');
-      }
-    } catch (err) {
-      if (err instanceof Error && err.message !== 'Popup closed by user') {
-        toast.error(err.message || 'Google sign-in failed. Please try again.');
-      }
-    } finally {
-      if (!settled) settled = true;
-      setIsGoogleLoading(false);
-    }
-  }, [isGoogleLoading, isLoading, loginWithGoogle, GOOGLE_CLIENT_ID]);
-
-  // Load Google Identity Services script with error handling
-  useEffect(() => {
-    if (!GOOGLE_CLIENT_ID) {
-      setGisError(true);
-      return;
-    }
-    if (document.querySelector('script[src*="accounts.google.com/gsi"]')) {
-      // Script tag exists — wait a tick then check if GIS is ready
-      const check = setInterval(() => {
-        const g = (window as unknown as Record<string, unknown>).google as Record<string, unknown> | undefined;
-        if (g?.accounts) { setGisReady(true); clearInterval(check); }
-      }, 200);
-      const t = setTimeout(() => { clearInterval(check); setGisReady(true); }, 5000);
-      return () => { clearInterval(check); clearTimeout(t); };
-    }
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => setGisReady(true);
-    script.onerror = () => setGisError(true);
-    document.head.appendChild(script);
-  }, [GOOGLE_CLIENT_ID]);
+    saveTermsAcceptance();
+    // Redirect to server endpoint which handles PKCE + Google redirect
+    window.location.href = '/api/auth/google/authorize';
+  }, [isGoogleLoading, isLoading, requireTc]);
 
   /* ================================================================ */
   /*  RENDER                                                           */
@@ -684,10 +590,10 @@ export function LoginView() {
         {/* ---- Brand ---- */}
         <div className="flex flex-col items-center text-center gap-3 mb-6">
           <span
-            className="w-14 h-14 rounded-xl bg-emerald-600 text-white grid place-items-center"
+            className="w-16 h-16"
             aria-hidden="true"
           >
-            <BrandLogo className="w-[30px] h-[30px]" />
+            <BrandLogo className="w-full h-full object-contain" />
           </span>
           <h1
             id="auth-title"
@@ -710,13 +616,8 @@ export function LoginView() {
           {/* Google */}
           <button
             type="button"
-            disabled={isGoogleLoading || isLoading || gisError || !GOOGLE_CLIENT_ID}
+            disabled={isGoogleLoading || isLoading}
             onClick={handleGoogleSignIn}
-            title={
-              !GOOGLE_CLIENT_ID ? 'Google Sign-In not configured' :
-              gisError ? 'Google script failed to load. Use email login.' :
-              undefined
-            }
             className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
           >
             {isGoogleLoading ? (

@@ -44,8 +44,19 @@ export function getCountryByDial(dialCode: string): Country | undefined {
 
 export function validatePhone(phone: string, country: Country): boolean {
   // Strip non-digit characters
-  const digits = phone.replace(/\D/g, '');
+  let digits = phone.replace(/\D/g, '');
+
+  // Strip leading zeros (common in many countries, e.g. Brunei "07137462")
+  digits = digits.replace(/^0+/, '');
+
+  // If user typed the country code in the phone field (e.g. "6737137462" for Brunei), strip it
+  const dialDigits = country.dialCode.replace(/[^\d]/g, '');
+  if (dialDigits && digits.startsWith(dialDigits) && digits.length > dialDigits.length + 5) {
+    digits = digits.slice(dialDigits.length);
+  }
+
   const len = digits.length;
+  if (len === 0) return false;
 
   if (Array.isArray(country.phoneLength)) {
     return len >= country.phoneLength[0] && len <= country.phoneLength[1];
@@ -56,9 +67,17 @@ export function validatePhone(phone: string, country: Country): boolean {
 /**
  * Format a phone number string based on a country's format pattern.
  * "XXX XXXX" with digits "7123456" → "712 3456"
+ * Also handles leading zeros and country-code prefixes gracefully.
  */
 export function formatPhone(digits: string, country: Country): string {
-  const d = digits.replace(/\D/g, '');
+  let d = digits.replace(/\D/g, '');
+  // Strip leading zeros for formatting (same as validatePhone)
+  d = d.replace(/^0+/, '');
+  // Strip dial code if user typed it
+  const dialDigits = country.dialCode.replace(/[^\d]/g, '');
+  if (dialDigits && d.startsWith(dialDigits) && d.length > dialDigits.length + 5) {
+    d = d.slice(dialDigits.length);
+  }
   let di = 0;
   return country.format
     .split('')

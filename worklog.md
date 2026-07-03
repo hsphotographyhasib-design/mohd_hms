@@ -192,3 +192,149 @@ Stage Summary:
 - Password policy: 12 chars, mixed case, number, special char, common password block, sequential pattern detection
 - Professional OTP email template with security notice
 - Backward compatible: old token-based PasswordResetToken model untouched
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Build Enterprise Mobile App UI for All Users
+
+Work Log:
+- Analyzed existing mobile shell, dashboard, complaints, invoices, notifications, profile, help components
+- Identified critical issue: customer role bypassed MobileShell on mobile (went to CustomerPortal)
+- Identified issue: bottom nav not role-adaptive, "More" menu not filtered by permissions
+- Identified issue: MobileViewRouter redirected work-orders to complaints list, used desktop EquipmentList
+- Removed customer bypass in app-shell.tsx (all roles now use MobileShell on mobile)
+- Rebuilt mobile-shell.tsx with role-adaptive bottom nav:
+  - Customer sees: Home, Complaints, [QR], Invoices, More
+  - Technician sees: Home, Complaints, [QR], Tasks, More
+  - Admin/Manager sees: Home, Complaints, [QR], W. Orders, More
+  - Finance sees: Home, Complaints, [QR], Invoices, More
+- Added canAccess() filtering to More menu sheet (groups/items hidden if role lacks permission)
+- Rebuilt mobile-dashboard.tsx as fully role-aware:
+  - Different stat cards per role (technician: tasks/completed/pending; admin: equipment/open/revenue/employees; finance: revenue/pending/overdue; customer: my complaints/in-progress)
+  - Role-filtered quick actions (max 4, based on canAccess)
+  - Role-specific greeting message and section titles
+  - Fetches from /api/dashboard for full stats, falls back to complaint-based stats
+- Created mobile-work-orders.tsx: dedicated work orders list with tabs (All/Pending/In Progress/Completed), search, infinite scroll, pull-to-refresh
+- Created mobile-equipment.tsx: compact equipment list with status tabs, search, infinite scroll, category/status badges, complaint/WO counts
+- Updated MobileViewRouter: work-orders now routes to MobileWorkOrders, equipment routes to MobileEquipment, inventory uses InventoryList
+- Added lazy imports for MobileWorkOrders and MobileEquipment in app-shell.tsx
+- Added missing AppView types: 'rate-feedback', 'help', 'documents' to types/index.ts
+- Fixed all TypeScript errors: NavTab interface, itemVariants type, EquipmentItem property access
+- All checks pass: 0 ESLint errors, 0 TypeScript errors in modified files
+
+Stage Summary:
+- **Modified files**: app-shell.tsx, mobile-shell.tsx, mobile-dashboard.tsx, types/index.ts
+- **New files**: mobile-work-orders.tsx, mobile-equipment.tsx
+- **Key change**: ALL user roles now use MobileShell on mobile (not just non-customer roles)
+- **Key change**: Bottom nav adapts per role (technician→Tasks, admin→W.Orders, etc.)
+- **Key change**: Dashboard stats/quick actions are role-aware
+- **Zero errors** in both TypeScript and ESLint for all modified/new files
+
+---
+Task ID: 8-10
+Agent: Main Agent
+Task: Create MobileInvoiceDetail, MobileDocuments, and wire into MobileViewRouter
+
+Work Log:
+- Identified critical bug: `MobileViewRouter` line 98 had `{currentView === 'invoice-detail' && <MobileInvoices />}` — tapping an invoice showed the list again instead of detail
+- Identified `documents` view was aliased to `<MobileInvoices />` instead of a dedicated component
+- Read InvoiceItem type (30+ fields), invoice detail API (`/api/invoices/[id]`), and InvoiceLineItem type to understand data shape
+- Created `mobile-invoice-detail.tsx` (350+ lines): full invoice detail with status badge, amount hero card (emerald gradient), bill-to info, invoice details grid (work order, quotation, dates, reference, PO, terms), line items with qty/rate/amount, financial summary (subtotal/tax/discount/shipping/total), payment info section, shipping-to section, notes/description, metadata footer, copy invoice number, share button
+- Created `mobile-documents.tsx` (280+ lines): documents browser with type tabs (All/Invoices/Quotations/Photos/Reports), search, aggregates documents from invoices API and complaint photos, file type icons, tap-to-navigate (invoice→detail, photo→complaint)
+- Updated `app-shell.tsx`: added lazy imports for `MobileInvoiceDetail` and `MobileDocuments`, fixed `invoice-detail` routing from `<MobileInvoices />` to `<MobileInvoiceDetail />`, fixed `documents` routing from `<MobileInvoices />` to `<MobileDocuments />`
+
+Stage Summary:
+- **New files**: mobile-invoice-detail.tsx, mobile-documents.tsx
+- **Fixed bug**: Invoice tap now opens detail view instead of list
+- **New feature**: Dedicated documents browser (aggregates from invoices + complaint photos)
+- **ESLint**: 0 errors, 7 warnings (all pre-existing Prisma generated files)
+- **Note**: Browser verification blocked by sandbox networking (port 3000 not internally connectable); compilation confirmed via Turbopack + ESLint
+
+---
+Task ID: auto-fill-complaint
+Agent: Main Agent
+Task: Enterprise auto-fill customer info when creating complaints
+
+Work Log:
+- Added `customerSnapshot` and `locationInfo` fields to Complaint model in Prisma schema
+- Created `GET /api/complaints/my-profile` endpoint:
+  - For customer role: finds Customer record by matching user email/phone, auto-creates if missing
+  - Returns customer profile + distinct buildings (derived from equipment) + equipment list in single optimized query
+  - For non-customer roles: returns empty (they use manual customer picker)
+- Updated `POST /api/complaints`:
+  - Accepts `customerSnapshot` (JSON) and `locationInfo` (JSON) — stored for historical accuracy
+  - Accepts `source` field (defaults to 'admin', mobile sends 'mobile_app')
+  - Added security: customer-role users can only create complaints for their own linked customer record
+- Rebuilt `mobile-new-complaint.tsx` (580+ lines):
+  - **Customer role**: Auto-loads profile via `/api/complaints/my-profile`, shows verified customer card (read-only name, email, phone, company, address, customer number)
+  - **Non-customer roles**: Manual customer dropdown (unchanged workflow)
+  - **Building selector**: Dynamic list derived from customer's equipment (shows equipment count per building)
+  - **Equipment selector**: Filters by selected building, shows category/brand/room in dropdown items
+  - **"Use different location" checkbox**: Toggle to show custom floor/unit/room/address fields (doesn't overwrite profile)
+  - **Review step**: Before submit, shows summary (customer, location, equipment, category, priority, title, description, photo count, estimated response time)
+  - **Success popup**: After submit, shows complaint number with "View Complaint" and "Back to Complaints" buttons
+  - **Customer snapshot**: Name, email, phone, company, customer number, PIC, address, country, district stored with complaint
+  - **Location info**: Building, floor, unit, room, address stored with complaint
+
+Stage Summary:
+- **Schema**: Added `customerSnapshot String?` and `locationInfo String?` to Complaint model
+- **New API**: `/api/complaints/my-profile` (auto-find/create customer + load buildings + equipment)
+- **Updated API**: `POST /api/complaints` (snapshot, locationInfo, source, customer-role security)
+- **Rebuilt**: `mobile-new-complaint.tsx` with 2-step flow (form → review → success popup)
+- **ESLint**: 0 errors, 7 warnings (all pre-existing Prisma generated files)
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix WhatsApp OTP Login - Brunei +673 country code format error
+
+Work Log:
+- Investigated full WhatsApp OTP login flow: frontend (login-view.tsx) → send-otp API → verify-otp API → register API
+- Identified root cause: `validatePhone()` in `countries.ts` required exactly 7 digits for Brunei, but didn't strip leading zeros. Users typing "07137462" (common in Brunei) got rejected.
+- Backend `normalizePhone()` in `phone.ts` already handled leading zeros correctly, but frontend blocked submission before backend was reached
+- Fixed `validatePhone()`: now strips leading zeros and country code prefix before length check
+- Fixed `formatPhone()`: applies same normalization for consistent display
+- Fixed `handlePhoneChange()` in `login-view.tsx`: strips leading zeros as user types for clean UX
+- Improved error message: now shows expected digit count and format example (e.g. "7 digits, e.g. 000 0000")
+
+Stage Summary:
+- **Fixed**: Brunei phone numbers with leading zero (e.g. 07137462) now accepted
+- **Fixed**: Phone numbers with country code typed in field (e.g. 6737137462) now accepted
+- **Improved**: Error messages now show expected format and digit count
+- **Files changed**: `src/lib/countries.ts`, `src/components/app/login-view.tsx`
+- **Committed**: 6384afb
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Enterprise Global Notification & Confirmation Popup System
+
+Work Log:
+- Created `src/components/ui/confirm-provider.tsx` (220+ lines):
+  - Module-level state with listener pattern (no extra dependencies)
+  - `confirm()` imperative function returning Promise<boolean>
+  - `useConfirm()` React hook wrapping the imperative API
+  - 4 variants: danger (red/XCircle), warning (amber/AlertTriangle), info (blue/Info), success (emerald/CheckCircle2)
+  - `requireConfirmationText` option for destructive actions (type-to-confirm pattern)
+  - `asyncConfirm` loading state support
+  - Wired ConfirmProvider into app tree in page.tsx
+- Created `src/hooks/use-notification-polling.ts` (120+ lines):
+  - Polls unread count every 30s (lightweight: pageSize=1)
+  - Fetches full notification list every 60s
+  - Pauses when browser tab is hidden, resumes on visibility change
+  - Cross-tab sync via BroadcastChannel (NOTIFICATION_UPDATE, ALL_READ events)
+  - Stops polling when user logs out
+- Updated `src/store/index.ts`: markAllAsRead() now broadcasts ALL_READ to other tabs
+- Fixed `src/app/api/notifications/log/route.ts`:
+  - Was using non-existent schema fields (description, module, action, result, referenceId)
+  - Rewrote POST to map body to actual Notification model (message, data JSON, relatedEntityType/Id)
+  - Rewrote GET to select valid fields and filter by module via JSON parsing
+- Updated `src/app/page.tsx`: added ConfirmProvider wrapper, NotificationPollingSetup component
+
+Stage Summary:
+- **New**: `useConfirm()` hook + `ConfirmProvider` for imperative confirmation dialogs
+- **New**: `useNotificationPolling()` hook for auto-updating notification badge
+- **Fixed**: `/api/notifications/log` endpoint (was broken due to schema mismatch)
+- **Enhanced**: Cross-tab notification sync via BroadcastChannel
+- **Committed**: 3d909bf
