@@ -1,122 +1,109 @@
 'use client';
 
-import { Suspense, useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowLeft, Check, CheckCircle2, Eye, EyeOff, Loader2, X } from 'lucide-react';
 import { AuthShell } from '@/components/auth/auth-shell';
+import type { PasswordRule } from '@/lib/password-reset';
 
-interface Rule {
-  label: string;
-  test: (p: string) => boolean;
-}
-
-const RULES: Rule[] = [
-  { label: 'At least 8 characters', test: (p) => p.length >= 8 },
+const RULES: PasswordRule[] = [
+  { label: 'At least 12 characters', test: (p) => p.length >= 12 },
   { label: 'One uppercase letter', test: (p) => /[A-Z]/.test(p) },
   { label: 'One lowercase letter', test: (p) => /[a-z]/.test(p) },
   { label: 'One number', test: (p) => /\d/.test(p) },
   { label: 'One special character', test: (p) => /[^A-Za-z0-9]/.test(p) },
 ];
 
-function strengthOf(p: string): { score: number; label: string; barClass: string } {
-  if (!p) return { score: 0, label: '', barClass: 'bg-gray-200 dark:bg-gray-800' };
+function strengthOf(p: string): { score: number; label: string; barColor: string; barBg: string } {
+  if (!p) return { score: 0, label: '', barColor: '', barBg: 'bg-gray-200 dark:bg-gray-800' };
   const passed = RULES.filter((r) => r.test(p)).length;
-  if (passed <= 2) return { score: 1, label: 'Weak', barClass: 'bg-rose-500' };
-  if (passed <= 4) return { score: 2, label: 'Medium', barClass: 'bg-amber-500' };
-  return { score: 3, label: 'Strong', barClass: 'bg-emerald-500' };
+  if (passed <= 1) return { score: 1, label: 'Weak', barColor: 'bg-rose-500', barBg: 'bg-rose-500' };
+  if (passed <= 2) return { score: 2, label: 'Fair', barColor: 'bg-amber-500', barBg: 'bg-amber-500' };
+  if (passed <= 3) return { score: 3, label: 'Medium', barColor: 'bg-yellow-500', barBg: 'bg-yellow-500' };
+  if (passed <= 4) return { score: 4, label: 'Strong', barColor: 'bg-emerald-500', barBg: 'bg-emerald-500' };
+  return { score: 5, label: 'Very Strong', barColor: 'bg-emerald-600', barBg: 'bg-emerald-600' };
 }
 
-type Phase = 'verifying' | 'invalid' | 'expired' | 'ready' | 'submitting' | 'success';
-
-function ResetPasswordInner() {
-  const params = useSearchParams();
-  const token = params.get('token') || '';
-
-  const [phase, setPhase] = useState<Phase>('verifying');
-  const [maskedEmail, setMaskedEmail] = useState<string | null>(null);
+export default function ResetPasswordPage() {
+  const router = useRouter();
+  const [resetToken, setResetToken] = useState<string | null>(null);
+  const [initialized, setInitialized] = useState(false);
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [formError, setFormError] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [expired, setExpired] = useState(false);
 
+  // Load reset token from session storage
   useEffect(() => {
-    let cancelled = false;
-    async function verify() {
-      if (!token) {
-        setPhase('invalid');
-        return;
-      }
-      try {
-        const res = await fetch(`/api/auth/reset-password/verify?token=${encodeURIComponent(token)}`);
-        const data = await res.json().catch(() => ({}));
-        if (cancelled) return;
-        if (res.ok && data?.ok) {
-          setMaskedEmail(data.email ?? null);
-          setPhase('ready');
-        } else if (data?.reason === 'expired') {
-          setPhase('expired');
-        } else {
-          setPhase('invalid');
-        }
-      } catch {
-        if (!cancelled) setPhase('invalid');
-      }
+    const token = sessionStorage.getItem('password_reset_token');
+    if (token) {
+      setResetToken(token);
+    } else {
+      router.replace('/forgot-password');
     }
-    verify();
-    return () => {
-      cancelled = true;
-    };
-  }, [token]);
+    setInitialized(true);
+  }, [router]);
 
   const ruleStates = useMemo(() => RULES.map((r) => ({ label: r.label, ok: r.test(password) })), [password]);
   const allRulesOk = ruleStates.every((r) => r.ok);
   const passwordsMatch = password.length > 0 && password === confirm;
   const strength = strengthOf(password);
 
-  async function onSubmit(e: React.FormEvent) {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     setFormError('');
+
     if (!allRulesOk) {
-      setFormError('Password does not meet requirements.');
+      setFormError('Password does not meet all requirements.');
       return;
     }
     if (!passwordsMatch) {
       setFormError('Passwords do not match.');
       return;
     }
-    setPhase('submitting');
+
+    setSubmitting(true);
     try {
       const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ token, password, confirmPassword: confirm }),
+        body: JSON.stringify({
+          resetToken,
+          password,
+          confirmPassword: confirm,
+        }),
       });
       const data = await res.json().catch(() => ({}));
+
       if (res.ok && data?.ok) {
-        setPhase('success');
+        // Clear session data
+        sessionStorage.removeItem('password_reset_email');
+        sessionStorage.removeItem('password_reset_token');
+        setSuccess(true);
         return;
       }
+
       if (data?.code === 'expired') {
-        setPhase('expired');
+        setExpired(true);
         return;
       }
-      if (data?.code === 'invalid_link') {
-        setPhase('invalid');
-        return;
-      }
-      setFormError(data?.message || 'We couldn\'t reset your password. Please try again.');
-      setPhase('ready');
+
+      setFormError(data?.message || "We couldn't reset your password. Please try again.");
     } catch {
       setFormError('Network error. Please check your connection and try again.');
-      setPhase('ready');
+    } finally {
+      setSubmitting(false);
     }
-  }
+  }, [allRulesOk, passwordsMatch, resetToken, password, confirm]);
 
-  if (phase === 'verifying') {
+  // ——— Loading ———
+  if (!initialized || !resetToken) {
     return (
-      <AuthShell title="Verifying link" subtitle="Just a moment...">
+      <AuthShell title="Loading..." subtitle="">
         <div className="flex flex-col items-center gap-3 py-6">
           <Loader2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 animate-spin" />
         </div>
@@ -124,58 +111,36 @@ function ResetPasswordInner() {
     );
   }
 
-  if (phase === 'invalid') {
+  // ——— Expired ———
+  if (expired) {
     return (
-      <AuthShell title="Invalid reset link" subtitle="This link is not valid or has already been used.">
+      <AuthShell title="Session expired" subtitle="Your verification session has expired.">
         <div className="flex flex-col items-center text-center gap-4">
           <p className="text-sm text-gray-600 dark:text-gray-400 m-0 max-w-[34ch]">
-            For your security, password reset links can only be used once.
-            Please request a new link.
+            For your security, the password reset session has expired. Please request a new verification code.
           </p>
-          <Link
-            href="/forgot-password"
-            className="inline-flex items-center justify-center w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120"
+          <button
+            type="button"
+            onClick={() => router.push('/forgot-password')}
+            className="inline-flex items-center justify-center w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
           >
-            Request a new link
-          </Link>
-          <Link
-            href="/"
-            className="self-center text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline inline-flex items-center gap-1"
+            Request New Code
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push('/')}
+            className="self-center text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline inline-flex items-center gap-1 bg-transparent border-none cursor-pointer font-[inherit] p-1 px-2 rounded-lg transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             Back to Login
-          </Link>
+          </button>
         </div>
       </AuthShell>
     );
   }
 
-  if (phase === 'expired') {
-    return (
-      <AuthShell title="Link expired" subtitle="This password reset link has expired.">
-        <div className="flex flex-col items-center text-center gap-4">
-          <p className="text-sm text-gray-600 dark:text-gray-400 m-0 max-w-[34ch]">
-            For your security, reset links expire after 15 minutes. Please request a new one.
-          </p>
-          <Link
-            href="/forgot-password"
-            className="inline-flex items-center justify-center w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120"
-          >
-            Request a new link
-          </Link>
-          <Link
-            href="/"
-            className="self-center text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline inline-flex items-center gap-1"
-          >
-            <ArrowLeft className="w-3.5 h-3.5" />
-            Back to Login
-          </Link>
-        </div>
-      </AuthShell>
-    );
-  }
-
-  if (phase === 'success') {
+  // ——— Success ———
+  if (success) {
     return (
       <AuthShell title="Password Updated Successfully" subtitle="Your password has been changed.">
         <div className="flex flex-col items-center text-center gap-4 py-2">
@@ -183,26 +148,27 @@ function ResetPasswordInner() {
             <CheckCircle2 className="w-9 h-9 text-emerald-600 dark:text-emerald-400" />
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400 m-0 max-w-[34ch]">
+            Your password has been changed successfully. All other sessions have been signed out for your security.
+          </p>
+          <p className="text-xs text-gray-400 dark:text-gray-500 m-0">
             Please log in using your new password.
           </p>
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120"
+          <button
+            type="button"
+            onClick={() => router.replace('/')}
+            className="inline-flex items-center justify-center w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
           >
             Return to Login
-          </Link>
+          </button>
         </div>
       </AuthShell>
     );
   }
 
-  // Ready / submitting
+  // ——— Form ———
   return (
-    <AuthShell
-      title="Create new password"
-      subtitle={maskedEmail ? `For ${maskedEmail}` : 'Choose a strong password you don’t use elsewhere.'}
-    >
-      <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+    <AuthShell title="Create new password" subtitle="Choose a strong password you don't use elsewhere.">
+      <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4">
         {formError && (
           <div
             role="alert"
@@ -225,7 +191,7 @@ function ResetPasswordInner() {
               autoComplete="new-password"
               placeholder="Enter a new password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => { setPassword(e.target.value); if (formError) setFormError(''); }}
               className="w-full min-h-[48px] px-3 pr-10 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 focus:border-emerald-500 focus:ring-[0_0_0_3px] focus:ring-emerald-500/25 transition-colors duration-120 font-[inherit] outline-none"
             />
             <button
@@ -240,19 +206,25 @@ function ResetPasswordInner() {
 
           {/* Strength bar */}
           <div className="flex items-center gap-2 mt-2">
-            <div className="flex-1 h-1.5 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden">
-              <div
-                className={`h-full ${strength.barClass} transition-all duration-200`}
-                style={{ width: `${(strength.score / 3) * 100}%` }}
-              />
+            <div className="flex-1 flex gap-1">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div
+                  key={i}
+                  className={`h-1.5 flex-1 rounded-full transition-colors duration-200 ${
+                    i <= strength.score ? strength.barColor : 'bg-gray-200 dark:bg-gray-800'
+                  }`}
+                />
+              ))}
             </div>
             {strength.label && (
               <span
-                className={`text-xs font-medium ${
-                  strength.score === 1
+                className={`text-xs font-medium min-w-[80px] text-right ${
+                  strength.score <= 1
                     ? 'text-rose-600 dark:text-rose-400'
-                    : strength.score === 2
+                    : strength.score <= 2
                     ? 'text-amber-600 dark:text-amber-400'
+                    : strength.score <= 3
+                    ? 'text-yellow-600 dark:text-yellow-400'
                     : 'text-emerald-600 dark:text-emerald-400'
                 }`}
               >
@@ -278,7 +250,7 @@ function ResetPasswordInner() {
           </ul>
         </div>
 
-        {/* Confirm */}
+        {/* Confirm password */}
         <div className="flex flex-col gap-1">
           <label htmlFor="confirm-password" className="text-sm font-medium text-gray-900 dark:text-gray-100">
             Confirm Password
@@ -290,7 +262,7 @@ function ResetPasswordInner() {
               autoComplete="new-password"
               placeholder="Re-enter the new password"
               value={confirm}
-              onChange={(e) => setConfirm(e.target.value)}
+              onChange={(e) => { setConfirm(e.target.value); if (formError) setFormError(''); }}
               aria-invalid={confirm.length > 0 && !passwordsMatch ? 'true' : undefined}
               className={`w-full min-h-[48px] px-3 pr-10 rounded-lg bg-white dark:bg-gray-900 text-base text-gray-900 dark:text-gray-100 border transition-colors duration-120 font-[inherit] outline-none ${
                 confirm.length > 0 && !passwordsMatch
@@ -312,43 +284,37 @@ function ResetPasswordInner() {
               Passwords do not match.
             </span>
           )}
+          {confirm.length > 0 && passwordsMatch && (
+            <span className="text-sm text-emerald-600 dark:text-emerald-400">
+              Passwords match.
+            </span>
+          )}
         </div>
 
         <button
           type="submit"
-          disabled={phase === 'submitting' || !allRulesOk || !passwordsMatch}
+          disabled={submitting || !allRulesOk || !passwordsMatch}
           className={`flex items-center justify-center gap-2 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none ${
-            phase === 'submitting' || !allRulesOk || !passwordsMatch ? 'opacity-50 cursor-not-allowed' : ''
+            submitting || !allRulesOk || !passwordsMatch ? 'opacity-50 cursor-not-allowed' : ''
           }`}
         >
-          {phase === 'submitting' && <Loader2 className="w-[18px] h-[18px] animate-spin" />}
-          <span className={phase === 'submitting' ? 'invisible' : ''}>Update Password</span>
+          {submitting && <Loader2 className="w-[18px] h-[18px] animate-spin" />}
+          <span className={submitting ? 'invisible' : ''}>Reset Password</span>
         </button>
 
-        <Link
-          href="/"
+        <button
+          type="button"
+          onClick={() => {
+            sessionStorage.removeItem('password_reset_email');
+            sessionStorage.removeItem('password_reset_token');
+            router.push('/');
+          }}
           className="self-center bg-transparent border-none cursor-pointer font-[inherit] text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 hover:underline p-1 px-2 rounded-lg transition-colors inline-flex items-center gap-1"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Cancel
-        </Link>
+        </button>
       </form>
     </AuthShell>
-  );
-}
-
-export default function ResetPasswordPage() {
-  return (
-    <Suspense
-      fallback={
-        <AuthShell title="Loading..." subtitle="">
-          <div className="flex flex-col items-center gap-3 py-6">
-            <Loader2 className="w-8 h-8 text-emerald-600 dark:text-emerald-400 animate-spin" />
-          </div>
-        </AuthShell>
-      }
-    >
-      <ResetPasswordInner />
-    </Suspense>
   );
 }

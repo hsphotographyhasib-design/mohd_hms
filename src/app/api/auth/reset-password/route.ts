@@ -3,42 +3,55 @@ import { db, withRetry } from '@/lib/db';
 import { hashPassword } from '@/lib/auth';
 import {
   auditAuth,
-  getRequestMeta,
-  hashResetToken,
   validatePassword,
+  getRequestMeta,
+  verifyResetToken,
 } from '@/lib/password-reset';
 import { renderPasswordChangedEmail, sendEmail } from '@/lib/email';
+import { ensureTableSync } from '@/lib/db-sync';
 
 export const dynamic = 'force-dynamic';
 
 /**
  * POST /api/auth/reset-password
- * Body: { token: string, password: string, confirmPassword: string }
+ * Body: { resetToken: string, password: string, confirmPassword: string }
  *
- * Consumes the token (single-use), updates the user's password, invalidates
+ * The resetToken is a base64url-encoded JSON payload from verify-reset-otp
+ * containing { oid: otpRecordId, uid: userId, exp: timestamp }.
+ *
+ * Consumes the OTP record, updates the user's password, invalidates
  * all existing login sessions, sends confirmation email, audits.
  */
 export async function POST(req: NextRequest) {
   const meta = getRequestMeta(req.headers);
 
-  let token = '';
+  let resetToken = '';
   let password = '';
   let confirmPassword = '';
   try {
     const body = await req.json();
-    token = typeof body?.token === 'string' ? body.token : '';
+    resetToken = typeof body?.resetToken === 'string' ? body.resetToken : '';
     password = typeof body?.password === 'string' ? body.password : '';
     confirmPassword = typeof body?.confirmPassword === 'string' ? body.confirmPassword : '';
   } catch {
     return NextResponse.json({ ok: false, message: 'Invalid request.' }, { status: 400 });
   }
 
-  if (!token) {
-    return NextResponse.json({ ok: false, code: 'invalid_link', message: 'Invalid reset link.' }, { status: 400 });
+  if (!resetToken) {
+    return NextResponse.json({ ok: false, message: 'Invalid session. Please start the password reset process again.' }, { status: 400 });
   }
+
+  // Verify HMAC signature and decode payload
+  const payload = verifyResetToken(resetToken);
+  if (!payload) {
+    return NextResponse.json({ ok: false, code: 'expired', message: 'Your session has expired or is invalid. Please request a new verification code.' }, { status: 400 });
+  }
+
+  // Validate passwords
   if (password !== confirmPassword) {
     return NextResponse.json({ ok: false, code: 'mismatch', message: 'Passwords do not match.' }, { status: 400 });
   }
+
   const check = validatePassword(password);
   if (!check.ok) {
     return NextResponse.json(
@@ -47,119 +60,128 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const tokenHash = hashResetToken(token);
-  const record = await withRetry(
+  await ensureTableSync('PasswordResetOtp');
+
+  // Verify the OTP record is in 'verified' status
+  const otpRecord = await withRetry(
     () =>
-      db.passwordResetToken.findUnique({
-        where: { tokenHash },
+      db.passwordResetOtp.findUnique({
+        where: { id: payload.oid },
         select: {
           id: true,
-          expiresAt: true,
-          usedAt: true,
           userId: true,
           tenantId: true,
-          user: { select: { id: true, email: true, name: true, isActive: true } },
+          status: true,
+          email: true,
+          user: {
+            select: { id: true, email: true, name: true, isActive: true },
+          },
         },
       }),
-    { label: 'reset-find' }
+    { label: 'reset-password-findOtp' }
   );
 
-  if (!record || !record.user) {
-    await auditAuth({ event: 'token_invalid', success: false, meta });
-    return NextResponse.json({ ok: false, code: 'invalid_link', message: 'Invalid reset link.' }, { status: 400 });
-  }
-  if (record.usedAt) {
-    await auditAuth({
-      event: 'token_already_used',
-      success: false,
-      tenantId: record.tenantId,
-      userId: record.userId,
-      email: record.user.email,
-      meta,
-    });
-    return NextResponse.json({ ok: false, code: 'invalid_link', message: 'Invalid reset link.' }, { status: 400 });
-  }
-  if (record.expiresAt.getTime() < Date.now()) {
-    await auditAuth({
-      event: 'token_expired',
-      success: false,
-      tenantId: record.tenantId,
-      userId: record.userId,
-      email: record.user.email,
-      meta,
-    });
-    return NextResponse.json({ ok: false, code: 'expired', message: 'Link expired.' }, { status: 400 });
-  }
-  if (record.user.isActive === false) {
-    return NextResponse.json({ ok: false, code: 'invalid_link', message: 'Invalid reset link.' }, { status: 400 });
+  if (!otpRecord || !otpRecord.user) {
+    await auditAuth({ event: 'reset_failed', success: false, meta, details: { reason: 'otp_not_found' } });
+    return NextResponse.json({ ok: false, message: 'Invalid session. Please start the password reset process again.' }, { status: 400 });
   }
 
-  // Hash new password, then in a single transaction:
-  //  - mark token used
-  //  - invalidate other unused tokens for this user
-  //  - update user password
-  //  - revoke all login sessions
+  // Defense in depth: verify userId matches
+  if (payload.uid !== otpRecord.userId) {
+    await auditAuth({ event: 'reset_failed', success: false, meta, details: { reason: 'uid_mismatch' } });
+    return NextResponse.json({ ok: false, message: 'Invalid session. Please start the password reset process again.' }, { status: 400 });
+  }
+
+  if (otpRecord.status !== 'verified') {
+    await auditAuth({
+      event: 'reset_failed',
+      success: false,
+      tenantId: otpRecord.tenantId,
+      userId: otpRecord.userId,
+      email: otpRecord.email,
+      meta,
+      details: { reason: 'otp_not_verified', status: otpRecord.status },
+    });
+    return NextResponse.json({ ok: false, message: 'Invalid session. Please verify your code again.' }, { status: 400 });
+  }
+
+  if (!otpRecord.user.isActive) {
+    return NextResponse.json({ ok: false, message: 'This account has been deactivated.' }, { status: 403 });
+  }
+
+  // Hash new password and commit transaction
   const newHash = await hashPassword(password);
 
   try {
     await withRetry(
       () =>
         db.$transaction([
-          db.passwordResetToken.update({
-            where: { id: record.id },
-            data: { usedAt: new Date() },
+          // Mark OTP as used
+          db.passwordResetOtp.update({
+            where: { id: otpRecord.id },
+            data: { status: 'used', usedAt: new Date() },
           }),
-          db.passwordResetToken.updateMany({
+          // Invalidate all other OTPs for this user
+          db.passwordResetOtp.updateMany({
             where: {
-              userId: record.userId,
-              usedAt: null,
-              id: { not: record.id },
+              userId: otpRecord.userId,
+              status: { in: ['active', 'verified'] },
             },
-            data: { usedAt: new Date() },
+            data: { status: 'expired' },
           }),
+          // Update user password
           db.user.update({
-            where: { id: record.userId },
+            where: { id: otpRecord.userId },
             data: { passwordHash: newHash, updatedAt: new Date() },
           }),
+          // Revoke all active login sessions
           db.loginSession.updateMany({
-            where: { userId: record.userId, isRevoked: false },
+            where: { userId: otpRecord.userId, isRevoked: false },
             data: { isRevoked: true },
           }),
         ]),
-      { label: 'reset-commit' }
+      { label: 'reset-password-commit' }
     );
   } catch (err) {
     console.error('[reset-password] commit error', err);
     await auditAuth({
       event: 'reset_failed',
       success: false,
-      tenantId: record.tenantId,
-      userId: record.userId,
-      email: record.user.email,
+      tenantId: otpRecord.tenantId,
+      userId: otpRecord.userId,
+      email: otpRecord.email,
       meta,
     });
     return NextResponse.json(
-      { ok: false, message: 'We couldn\'t reset your password. Please try again.' },
+      { ok: false, message: "We couldn't reset your password. Please try again." },
       { status: 500 }
     );
   }
 
   await auditAuth({
     event: 'password_changed',
-    tenantId: record.tenantId,
-    userId: record.userId,
-    email: record.user.email,
+    tenantId: otpRecord.tenantId,
+    userId: otpRecord.userId,
+    email: otpRecord.email,
     meta,
   });
 
-  // Send confirmation email (best-effort, non-blocking failure).
+  await auditAuth({
+    event: 'sessions_revoked',
+    tenantId: otpRecord.tenantId,
+    userId: otpRecord.userId,
+    email: otpRecord.email,
+    meta,
+  });
+
+  // Send confirmation email (best-effort)
   try {
     const tpl = renderPasswordChangedEmail({
-      userName: record.user.name,
+      userName: otpRecord.user.name,
       ip: meta.ipAddress,
     });
     await sendEmail({
-      to: record.user.email,
+      to: otpRecord.user.email,
       subject: tpl.subject,
       html: tpl.html,
       text: tpl.text,

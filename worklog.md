@@ -149,3 +149,46 @@ Stage Summary:
 - Modified: 9 API route files + 1 component file
 - The fix is transparent: on first API call, missing columns are added automatically, then all subsequent queries work normally
 - No manual /api/setup/sync-schema POST needed anymore
+
+---
+Task ID: 4
+Agent: main
+Task: Rebuild Enterprise Forgot Password & OTP Password Reset System
+
+Work Log:
+- Explored existing auth system: custom JWT, bcrypt, Prisma/PostgreSQL, existing token-based reset
+- Added `PasswordResetOtp` model to Prisma schema (id, tenantId, userId, email, otpHash, expiresAt, attempts, maxAttempts, resendCount, maxResends, createdAt, usedAt, ipAddress, device, browser, userAgent, status)
+- Added reverse relations to Tenant and User models
+- Generated Prisma client successfully
+- Installed `nodemailer` + `@types/nodemailer` for SMTP support
+- Created `src/lib/email-service/providers/smtp.ts` — full SMTP provider with nodemailer, reads SMTP_HOST/PORT/USERNAME/PASSWORD/FROM/FROM_NAME/SECURE env vars
+- Updated `src/lib/email-service/providers/index.ts` — added SMTP as highest priority provider (SMTP > Brevo > Console)
+- Rewrote `src/lib/password-reset.ts`:
+  - `generateOtp()` — crypto.randomInt for 6-digit OTP
+  - `hashOtp()` / `verifyOtp()` — SHA-256 hash + constant-time comparison
+  - `constantTimeEqual()` — timing-attack safe comparison
+  - `validatePassword()` — 12-char minimum, uppercase, lowercase, number, special char, common password check, sequential/repeated pattern detection, returns score + strength label
+  - `PASSWORD_RULES` — exported for frontend use
+  - `cleanupExpiredOtps()` — marks expired OTPs
+  - `maskEmail()` — display utility
+  - Enhanced `AuthEvent` type with OTP-specific events
+- Added `renderOtpEmail()` to `src/lib/email.ts` — branded HTML with large styled OTP code, security notice, support contact
+- Rewrote `POST /api/auth/forgot-password` — generates 6-digit OTP, stores hash, sends via email service, returns masked email
+- Created `POST /api/auth/verify-reset-otp` — validates OTP against hash, tracks attempts (max 5), returns resetToken on success
+- Created `POST /api/auth/resend-reset-otp` — 60s cooldown, max 5 resends, generates new OTP, rate limited
+- Rewrote `POST /api/auth/reset-password` — accepts resetToken (base64url from verify step), validates password, marks OTP used, updates password, revokes all sessions, sends confirmation email
+- Rebuilt `/forgot-password` page — email input, OAuth detection, stores email in sessionStorage, navigates to OTP page
+- Created `/verify-otp` page — 6 individual digit inputs, auto-focus, auto-advance, paste support, 60s resend countdown, max attempt tracking, locked/expired states
+- Rebuilt `/reset-password` page — 5-level strength meter, 12-char policy with live rules, show/hide password, match indicator, session-based auth flow
+- Enhanced `db-sync.ts` — now auto-creates missing tables (not just columns), needed for PasswordResetOtp
+- All code passes ESLint with 0 errors
+
+Stage Summary:
+- Complete OTP-based password reset flow replacing the old link-based system
+- 4 API endpoints: forgot-password, verify-reset-otp, resend-reset-otp, reset-password
+- 3 frontend pages: forgot-password, verify-otp, reset-password
+- SMTP provider via nodemailer (Bravo Email) with env var configuration
+- Enterprise security: SHA-256 hashed OTPs, constant-time comparison, rate limiting, brute-force protection, session revocation, audit logging
+- Password policy: 12 chars, mixed case, number, special char, common password block, sequential pattern detection
+- Professional OTP email template with security notice
+- Backward compatible: old token-based PasswordResetToken model untouched

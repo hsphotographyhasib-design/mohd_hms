@@ -113,6 +113,7 @@ export const ModelName = {
   LoginSession: 'LoginSession',
   Device: 'Device',
   PasswordResetToken: 'PasswordResetToken',
+  PasswordResetOtp: 'PasswordResetOtp',
   AuthAuditLog: 'AuthAuditLog',
   TermsAcceptance: 'TermsAcceptance',
   EmailLog: 'EmailLog',
@@ -1510,6 +1511,29 @@ export const PasswordResetTokenScalarFieldEnum = {
 } as const
 
 export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
+
+
+export const PasswordResetOtpScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  email: 'email',
+  otpHash: 'otpHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  resendCount: 'resendCount',
+  maxResends: 'maxResends',
+  createdAt: 'createdAt',
+  usedAt: 'usedAt',
+  ipAddress: 'ipAddress',
+  device: 'device',
+  browser: 'browser',
+  userAgent: 'userAgent',
+  status: 'status'
+} as const
+
+export type PasswordResetOtpScalarFieldEnum = (typeof PasswordResetOtpScalarFieldEnum)[keyof typeof PasswordResetOtpScalarFieldEnum]
 
 
 export const AuthAuditLogScalarFieldEnum = {

@@ -311,6 +311,7 @@ export type TenantWhereInput = {
   loginSessions?: Prisma.LoginSessionListRelationFilter
   devices?: Prisma.DeviceListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  passwordResetOtps?: Prisma.PasswordResetOtpListRelationFilter
   authAuditLogs?: Prisma.AuthAuditLogListRelationFilter
   emailLogs?: Prisma.EmailLogListRelationFilter
   emailTemplates?: Prisma.EmailTemplateListRelationFilter
@@ -368,6 +369,7 @@ export type TenantOrderByWithRelationInput = {
   loginSessions?: Prisma.LoginSessionOrderByRelationAggregateInput
   devices?: Prisma.DeviceOrderByRelationAggregateInput
   passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
+  passwordResetOtps?: Prisma.PasswordResetOtpOrderByRelationAggregateInput
   authAuditLogs?: Prisma.AuthAuditLogOrderByRelationAggregateInput
   emailLogs?: Prisma.EmailLogOrderByRelationAggregateInput
   emailTemplates?: Prisma.EmailTemplateOrderByRelationAggregateInput
@@ -428,6 +430,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   loginSessions?: Prisma.LoginSessionListRelationFilter
   devices?: Prisma.DeviceListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
+  passwordResetOtps?: Prisma.PasswordResetOtpListRelationFilter
   authAuditLogs?: Prisma.AuthAuditLogListRelationFilter
   emailLogs?: Prisma.EmailLogListRelationFilter
   emailTemplates?: Prisma.EmailTemplateListRelationFilter
@@ -523,6 +526,7 @@ export type TenantCreateInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -580,6 +584,7 @@ export type TenantUncheckedCreateInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -637,6 +642,7 @@ export type TenantUpdateInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -694,6 +700,7 @@ export type TenantUncheckedUpdateInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -1377,6 +1384,20 @@ export type TenantUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPasswordResetTokensInput, Prisma.TenantUpdateWithoutPasswordResetTokensInput>, Prisma.TenantUncheckedUpdateWithoutPasswordResetTokensInput>
 }
 
+export type TenantCreateNestedOneWithoutPasswordResetOtpsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutPasswordResetOtpsInput, Prisma.TenantUncheckedCreateWithoutPasswordResetOtpsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPasswordResetOtpsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutPasswordResetOtpsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutPasswordResetOtpsInput, Prisma.TenantUncheckedCreateWithoutPasswordResetOtpsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutPasswordResetOtpsInput
+  upsert?: Prisma.TenantUpsertWithoutPasswordResetOtpsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutPasswordResetOtpsInput, Prisma.TenantUpdateWithoutPasswordResetOtpsInput>, Prisma.TenantUncheckedUpdateWithoutPasswordResetOtpsInput>
+}
+
 export type TenantCreateNestedOneWithoutAuthAuditLogsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutAuthAuditLogsInput, Prisma.TenantUncheckedCreateWithoutAuthAuditLogsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutAuthAuditLogsInput
@@ -1472,6 +1493,7 @@ export type TenantCreateWithoutUsersInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -1528,6 +1550,7 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -1600,6 +1623,7 @@ export type TenantUpdateWithoutUsersInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -1656,6 +1680,7 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -1712,6 +1737,7 @@ export type TenantCreateWithoutDepartmentsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -1768,6 +1794,7 @@ export type TenantUncheckedCreateWithoutDepartmentsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -1840,6 +1867,7 @@ export type TenantUpdateWithoutDepartmentsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -1896,6 +1924,7 @@ export type TenantUncheckedUpdateWithoutDepartmentsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -1952,6 +1981,7 @@ export type TenantCreateWithoutCustomersInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -2008,6 +2038,7 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -2080,6 +2111,7 @@ export type TenantUpdateWithoutCustomersInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -2136,6 +2168,7 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -2192,6 +2225,7 @@ export type TenantCreateWithoutEquipmentInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -2248,6 +2282,7 @@ export type TenantUncheckedCreateWithoutEquipmentInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -2320,6 +2355,7 @@ export type TenantUpdateWithoutEquipmentInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -2376,6 +2412,7 @@ export type TenantUncheckedUpdateWithoutEquipmentInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -2432,6 +2469,7 @@ export type TenantCreateWithoutEquipmentQrCodesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -2488,6 +2526,7 @@ export type TenantUncheckedCreateWithoutEquipmentQrCodesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -2560,6 +2599,7 @@ export type TenantUpdateWithoutEquipmentQrCodesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -2616,6 +2656,7 @@ export type TenantUncheckedUpdateWithoutEquipmentQrCodesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -2672,6 +2713,7 @@ export type TenantCreateWithoutScanLogsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -2728,6 +2770,7 @@ export type TenantUncheckedCreateWithoutScanLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -2800,6 +2843,7 @@ export type TenantUpdateWithoutScanLogsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -2856,6 +2900,7 @@ export type TenantUncheckedUpdateWithoutScanLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -2912,6 +2957,7 @@ export type TenantCreateWithoutComplaintsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -2968,6 +3014,7 @@ export type TenantUncheckedCreateWithoutComplaintsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -3040,6 +3087,7 @@ export type TenantUpdateWithoutComplaintsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -3096,6 +3144,7 @@ export type TenantUncheckedUpdateWithoutComplaintsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -3152,6 +3201,7 @@ export type TenantCreateWithoutWorkOrdersInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -3208,6 +3258,7 @@ export type TenantUncheckedCreateWithoutWorkOrdersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -3280,6 +3331,7 @@ export type TenantUpdateWithoutWorkOrdersInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -3336,6 +3388,7 @@ export type TenantUncheckedUpdateWithoutWorkOrdersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -3392,6 +3445,7 @@ export type TenantCreateWithoutChecklistTemplatesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -3448,6 +3502,7 @@ export type TenantUncheckedCreateWithoutChecklistTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -3520,6 +3575,7 @@ export type TenantUpdateWithoutChecklistTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -3576,6 +3632,7 @@ export type TenantUncheckedUpdateWithoutChecklistTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -3632,6 +3689,7 @@ export type TenantCreateWithoutPmSchedulesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -3688,6 +3746,7 @@ export type TenantUncheckedCreateWithoutPmSchedulesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -3760,6 +3819,7 @@ export type TenantUpdateWithoutPmSchedulesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -3816,6 +3876,7 @@ export type TenantUncheckedUpdateWithoutPmSchedulesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -3872,6 +3933,7 @@ export type TenantCreateWithoutQuotationsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -3928,6 +3990,7 @@ export type TenantUncheckedCreateWithoutQuotationsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -4000,6 +4063,7 @@ export type TenantUpdateWithoutQuotationsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -4056,6 +4120,7 @@ export type TenantUncheckedUpdateWithoutQuotationsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -4112,6 +4177,7 @@ export type TenantCreateWithoutInvoicesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -4168,6 +4234,7 @@ export type TenantUncheckedCreateWithoutInvoicesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -4240,6 +4307,7 @@ export type TenantUpdateWithoutInvoicesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -4296,6 +4364,7 @@ export type TenantUncheckedUpdateWithoutInvoicesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -4352,6 +4421,7 @@ export type TenantCreateWithoutInventoryCategoriesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -4408,6 +4478,7 @@ export type TenantUncheckedCreateWithoutInventoryCategoriesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -4480,6 +4551,7 @@ export type TenantUpdateWithoutInventoryCategoriesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -4536,6 +4608,7 @@ export type TenantUncheckedUpdateWithoutInventoryCategoriesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -4592,6 +4665,7 @@ export type TenantCreateWithoutInventorySubcategoriesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -4648,6 +4722,7 @@ export type TenantUncheckedCreateWithoutInventorySubcategoriesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -4720,6 +4795,7 @@ export type TenantUpdateWithoutInventorySubcategoriesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -4776,6 +4852,7 @@ export type TenantUncheckedUpdateWithoutInventorySubcategoriesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -4832,6 +4909,7 @@ export type TenantCreateWithoutInventoryInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -4888,6 +4966,7 @@ export type TenantUncheckedCreateWithoutInventoryInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -4960,6 +5039,7 @@ export type TenantUpdateWithoutInventoryInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -5016,6 +5096,7 @@ export type TenantUncheckedUpdateWithoutInventoryInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -5072,6 +5153,7 @@ export type TenantCreateWithoutInventoryWarehousesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -5128,6 +5210,7 @@ export type TenantUncheckedCreateWithoutInventoryWarehousesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -5200,6 +5283,7 @@ export type TenantUpdateWithoutInventoryWarehousesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -5256,6 +5340,7 @@ export type TenantUncheckedUpdateWithoutInventoryWarehousesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -5312,6 +5397,7 @@ export type TenantCreateWithoutWarehouseStocksInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -5368,6 +5454,7 @@ export type TenantUncheckedCreateWithoutWarehouseStocksInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -5440,6 +5527,7 @@ export type TenantUpdateWithoutWarehouseStocksInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -5496,6 +5584,7 @@ export type TenantUncheckedUpdateWithoutWarehouseStocksInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -5552,6 +5641,7 @@ export type TenantCreateWithoutInventorySuppliersInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -5608,6 +5698,7 @@ export type TenantUncheckedCreateWithoutInventorySuppliersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -5680,6 +5771,7 @@ export type TenantUpdateWithoutInventorySuppliersInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -5736,6 +5828,7 @@ export type TenantUncheckedUpdateWithoutInventorySuppliersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -5792,6 +5885,7 @@ export type TenantCreateWithoutStockMovementsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -5848,6 +5942,7 @@ export type TenantUncheckedCreateWithoutStockMovementsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -5920,6 +6015,7 @@ export type TenantUpdateWithoutStockMovementsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -5976,6 +6072,7 @@ export type TenantUncheckedUpdateWithoutStockMovementsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -6032,6 +6129,7 @@ export type TenantCreateWithoutPriceBooksInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -6088,6 +6186,7 @@ export type TenantUncheckedCreateWithoutPriceBooksInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -6160,6 +6259,7 @@ export type TenantUpdateWithoutPriceBooksInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -6216,6 +6316,7 @@ export type TenantUncheckedUpdateWithoutPriceBooksInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -6272,6 +6373,7 @@ export type TenantCreateWithoutPriceBookEntriesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -6328,6 +6430,7 @@ export type TenantUncheckedCreateWithoutPriceBookEntriesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -6400,6 +6503,7 @@ export type TenantUpdateWithoutPriceBookEntriesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -6456,6 +6560,7 @@ export type TenantUncheckedUpdateWithoutPriceBookEntriesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -6512,6 +6617,7 @@ export type TenantCreateWithoutPurchaseOrdersInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -6568,6 +6674,7 @@ export type TenantUncheckedCreateWithoutPurchaseOrdersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -6640,6 +6747,7 @@ export type TenantUpdateWithoutPurchaseOrdersInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -6696,6 +6804,7 @@ export type TenantUncheckedUpdateWithoutPurchaseOrdersInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -6752,6 +6861,7 @@ export type TenantCreateWithoutVehiclesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -6808,6 +6918,7 @@ export type TenantUncheckedCreateWithoutVehiclesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -6880,6 +6991,7 @@ export type TenantUpdateWithoutVehiclesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -6936,6 +7048,7 @@ export type TenantUncheckedUpdateWithoutVehiclesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -6992,6 +7105,7 @@ export type TenantCreateWithoutComplaintTimelinesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -7048,6 +7162,7 @@ export type TenantUncheckedCreateWithoutComplaintTimelinesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -7120,6 +7235,7 @@ export type TenantUpdateWithoutComplaintTimelinesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -7176,6 +7292,7 @@ export type TenantUncheckedUpdateWithoutComplaintTimelinesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -7232,6 +7349,7 @@ export type TenantCreateWithoutNotificationsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -7288,6 +7406,7 @@ export type TenantUncheckedCreateWithoutNotificationsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -7360,6 +7479,7 @@ export type TenantUpdateWithoutNotificationsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -7416,6 +7536,7 @@ export type TenantUncheckedUpdateWithoutNotificationsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -7472,6 +7593,7 @@ export type TenantCreateWithoutAuditLogsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -7528,6 +7650,7 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -7600,6 +7723,7 @@ export type TenantUpdateWithoutAuditLogsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -7656,6 +7780,7 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -7712,6 +7837,7 @@ export type TenantCreateWithoutWhatsappConfigsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -7768,6 +7894,7 @@ export type TenantUncheckedCreateWithoutWhatsappConfigsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -7840,6 +7967,7 @@ export type TenantUpdateWithoutWhatsappConfigsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -7896,6 +8024,7 @@ export type TenantUncheckedUpdateWithoutWhatsappConfigsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -7952,6 +8081,7 @@ export type TenantCreateWithoutWhatsappSessionsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -8008,6 +8138,7 @@ export type TenantUncheckedCreateWithoutWhatsappSessionsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -8080,6 +8211,7 @@ export type TenantUpdateWithoutWhatsappSessionsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -8136,6 +8268,7 @@ export type TenantUncheckedUpdateWithoutWhatsappSessionsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -8192,6 +8325,7 @@ export type TenantCreateWithoutWhatsappMessagesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -8248,6 +8382,7 @@ export type TenantUncheckedCreateWithoutWhatsappMessagesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -8320,6 +8455,7 @@ export type TenantUpdateWithoutWhatsappMessagesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -8376,6 +8512,7 @@ export type TenantUncheckedUpdateWithoutWhatsappMessagesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -8432,6 +8569,7 @@ export type TenantCreateWithoutConversationThreadsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -8488,6 +8626,7 @@ export type TenantUncheckedCreateWithoutConversationThreadsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -8560,6 +8699,7 @@ export type TenantUpdateWithoutConversationThreadsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -8616,6 +8756,7 @@ export type TenantUncheckedUpdateWithoutConversationThreadsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -8672,6 +8813,7 @@ export type TenantCreateWithoutWhatsappTemplatesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -8728,6 +8870,7 @@ export type TenantUncheckedCreateWithoutWhatsappTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -8800,6 +8943,7 @@ export type TenantUpdateWithoutWhatsappTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -8856,6 +9000,7 @@ export type TenantUncheckedUpdateWithoutWhatsappTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -8912,6 +9057,7 @@ export type TenantCreateWithoutCustomerFeedbacksInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -8968,6 +9114,7 @@ export type TenantUncheckedCreateWithoutCustomerFeedbacksInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -9040,6 +9187,7 @@ export type TenantUpdateWithoutCustomerFeedbacksInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -9096,6 +9244,7 @@ export type TenantUncheckedUpdateWithoutCustomerFeedbacksInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -9152,6 +9301,7 @@ export type TenantCreateWithoutCustomerReportsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -9208,6 +9358,7 @@ export type TenantUncheckedCreateWithoutCustomerReportsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -9280,6 +9431,7 @@ export type TenantUpdateWithoutCustomerReportsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -9336,6 +9488,7 @@ export type TenantUncheckedUpdateWithoutCustomerReportsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -9392,6 +9545,7 @@ export type TenantCreateWithoutBroadcastLogsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -9448,6 +9602,7 @@ export type TenantUncheckedCreateWithoutBroadcastLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -9520,6 +9675,7 @@ export type TenantUpdateWithoutBroadcastLogsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -9576,6 +9732,7 @@ export type TenantUncheckedUpdateWithoutBroadcastLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -9632,6 +9789,7 @@ export type TenantCreateWithoutWhatsappDeliveryLogsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -9688,6 +9846,7 @@ export type TenantUncheckedCreateWithoutWhatsappDeliveryLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -9760,6 +9919,7 @@ export type TenantUpdateWithoutWhatsappDeliveryLogsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -9816,6 +9976,7 @@ export type TenantUncheckedUpdateWithoutWhatsappDeliveryLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -9872,6 +10033,7 @@ export type TenantCreateWithoutOtpCodesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -9928,6 +10090,7 @@ export type TenantUncheckedCreateWithoutOtpCodesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -10000,6 +10163,7 @@ export type TenantUpdateWithoutOtpCodesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -10056,6 +10220,7 @@ export type TenantUncheckedUpdateWithoutOtpCodesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -10112,6 +10277,7 @@ export type TenantCreateWithoutLoginSessionsInput = {
   otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -10168,6 +10334,7 @@ export type TenantUncheckedCreateWithoutLoginSessionsInput = {
   otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -10240,6 +10407,7 @@ export type TenantUpdateWithoutLoginSessionsInput = {
   otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -10296,6 +10464,7 @@ export type TenantUncheckedUpdateWithoutLoginSessionsInput = {
   otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -10352,6 +10521,7 @@ export type TenantCreateWithoutDevicesInput = {
   otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -10408,6 +10578,7 @@ export type TenantUncheckedCreateWithoutDevicesInput = {
   otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -10480,6 +10651,7 @@ export type TenantUpdateWithoutDevicesInput = {
   otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -10536,6 +10708,7 @@ export type TenantUncheckedUpdateWithoutDevicesInput = {
   otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -10592,6 +10765,7 @@ export type TenantCreateWithoutPasswordResetTokensInput = {
   otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
@@ -10648,6 +10822,7 @@ export type TenantUncheckedCreateWithoutPasswordResetTokensInput = {
   otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
@@ -10720,6 +10895,7 @@ export type TenantUpdateWithoutPasswordResetTokensInput = {
   otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
@@ -10776,6 +10952,251 @@ export type TenantUncheckedUpdateWithoutPasswordResetTokensInput = {
   otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutPasswordResetOtpsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutPasswordResetOtpsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutPasswordResetOtpsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutPasswordResetOtpsInput, Prisma.TenantUncheckedCreateWithoutPasswordResetOtpsInput>
+}
+
+export type TenantUpsertWithoutPasswordResetOtpsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutPasswordResetOtpsInput, Prisma.TenantUncheckedUpdateWithoutPasswordResetOtpsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutPasswordResetOtpsInput, Prisma.TenantUncheckedCreateWithoutPasswordResetOtpsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutPasswordResetOtpsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutPasswordResetOtpsInput, Prisma.TenantUncheckedUpdateWithoutPasswordResetOtpsInput>
+}
+
+export type TenantUpdateWithoutPasswordResetOtpsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutPasswordResetOtpsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
@@ -10833,6 +11254,7 @@ export type TenantCreateWithoutAuthAuditLogsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
 }
@@ -10889,6 +11311,7 @@ export type TenantUncheckedCreateWithoutAuthAuditLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -10961,6 +11384,7 @@ export type TenantUpdateWithoutAuthAuditLogsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
 }
@@ -11017,6 +11441,7 @@ export type TenantUncheckedUpdateWithoutAuthAuditLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -11073,6 +11498,7 @@ export type TenantCreateWithoutEmailLogsInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
 }
@@ -11129,6 +11555,7 @@ export type TenantUncheckedCreateWithoutEmailLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -11201,6 +11628,7 @@ export type TenantUpdateWithoutEmailLogsInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
 }
@@ -11257,6 +11685,7 @@ export type TenantUncheckedUpdateWithoutEmailLogsInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -11313,6 +11742,7 @@ export type TenantCreateWithoutEmailTemplatesInput = {
   loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
 }
@@ -11369,6 +11799,7 @@ export type TenantUncheckedCreateWithoutEmailTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
 }
@@ -11441,6 +11872,7 @@ export type TenantUpdateWithoutEmailTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
 }
@@ -11497,6 +11929,7 @@ export type TenantUncheckedUpdateWithoutEmailTemplatesInput = {
   loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
 }
@@ -11546,6 +11979,7 @@ export type TenantCountOutputType = {
   loginSessions: number
   devices: number
   passwordResetTokens: number
+  passwordResetOtps: number
   authAuditLogs: number
   emailLogs: number
   emailTemplates: number
@@ -11591,6 +12025,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   loginSessions?: boolean | TenantCountOutputTypeCountLoginSessionsArgs
   devices?: boolean | TenantCountOutputTypeCountDevicesArgs
   passwordResetTokens?: boolean | TenantCountOutputTypeCountPasswordResetTokensArgs
+  passwordResetOtps?: boolean | TenantCountOutputTypeCountPasswordResetOtpsArgs
   authAuditLogs?: boolean | TenantCountOutputTypeCountAuthAuditLogsArgs
   emailLogs?: boolean | TenantCountOutputTypeCountEmailLogsArgs
   emailTemplates?: boolean | TenantCountOutputTypeCountEmailTemplatesArgs
@@ -11882,6 +12317,13 @@ export type TenantCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends ru
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountPasswordResetOtpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PasswordResetOtpWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountAuthAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuthAuditLogWhereInput
 }
@@ -11953,6 +12395,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   loginSessions?: boolean | Prisma.Tenant$loginSessionsArgs<ExtArgs>
   devices?: boolean | Prisma.Tenant$devicesArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.Tenant$passwordResetTokensArgs<ExtArgs>
+  passwordResetOtps?: boolean | Prisma.Tenant$passwordResetOtpsArgs<ExtArgs>
   authAuditLogs?: boolean | Prisma.Tenant$authAuditLogsArgs<ExtArgs>
   emailLogs?: boolean | Prisma.Tenant$emailLogsArgs<ExtArgs>
   emailTemplates?: boolean | Prisma.Tenant$emailTemplatesArgs<ExtArgs>
@@ -12045,6 +12488,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   loginSessions?: boolean | Prisma.Tenant$loginSessionsArgs<ExtArgs>
   devices?: boolean | Prisma.Tenant$devicesArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.Tenant$passwordResetTokensArgs<ExtArgs>
+  passwordResetOtps?: boolean | Prisma.Tenant$passwordResetOtpsArgs<ExtArgs>
   authAuditLogs?: boolean | Prisma.Tenant$authAuditLogsArgs<ExtArgs>
   emailLogs?: boolean | Prisma.Tenant$emailLogsArgs<ExtArgs>
   emailTemplates?: boolean | Prisma.Tenant$emailTemplatesArgs<ExtArgs>
@@ -12095,6 +12539,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     loginSessions: Prisma.$LoginSessionPayload<ExtArgs>[]
     devices: Prisma.$DevicePayload<ExtArgs>[]
     passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
+    passwordResetOtps: Prisma.$PasswordResetOtpPayload<ExtArgs>[]
     authAuditLogs: Prisma.$AuthAuditLogPayload<ExtArgs>[]
     emailLogs: Prisma.$EmailLogPayload<ExtArgs>[]
     emailTemplates: Prisma.$EmailTemplatePayload<ExtArgs>[]
@@ -12545,6 +12990,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   loginSessions<T extends Prisma.Tenant$loginSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$loginSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   devices<T extends Prisma.Tenant$devicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passwordResetTokens<T extends Prisma.Tenant$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  passwordResetOtps<T extends Prisma.Tenant$passwordResetOtpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$passwordResetOtpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetOtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   authAuditLogs<T extends Prisma.Tenant$authAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$authAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emailLogs<T extends Prisma.Tenant$emailLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$emailLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emailTemplates<T extends Prisma.Tenant$emailTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$emailTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -13915,6 +14361,30 @@ export type Tenant$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
+}
+
+/**
+ * Tenant.passwordResetOtps
+ */
+export type Tenant$passwordResetOtpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordResetOtp
+   */
+  select?: Prisma.PasswordResetOtpSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordResetOtp
+   */
+  omit?: Prisma.PasswordResetOtpOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordResetOtpInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetOtpWhereInput
+  orderBy?: Prisma.PasswordResetOtpOrderByWithRelationInput | Prisma.PasswordResetOtpOrderByWithRelationInput[]
+  cursor?: Prisma.PasswordResetOtpWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PasswordResetOtpScalarFieldEnum | Prisma.PasswordResetOtpScalarFieldEnum[]
 }
 
 /**

@@ -446,6 +446,7 @@ export const ModelName = {
   LoginSession: 'LoginSession',
   Device: 'Device',
   PasswordResetToken: 'PasswordResetToken',
+  PasswordResetOtp: 'PasswordResetOtp',
   AuthAuditLog: 'AuthAuditLog',
   TermsAcceptance: 'TermsAcceptance',
   EmailLog: 'EmailLog',
@@ -465,7 +466,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "tenant" | "user" | "department" | "customer" | "equipment" | "equipmentQrCode" | "scanLog" | "complaint" | "workOrder" | "workOrderMaterial" | "checklistTemplate" | "pmSchedule" | "quotation" | "invoice" | "inventoryCategory" | "inventorySubcategory" | "inventoryItem" | "warehouse" | "warehouseStock" | "itemSupplier" | "stockMovement" | "priceBook" | "priceBookEntry" | "purchaseOrder" | "vehicle" | "vehicleLog" | "complaintTimeline" | "notification" | "auditLog" | "leaveRequest" | "attendance" | "cmsSetting" | "cmsHero" | "cmsService" | "cmsIndustry" | "cmsProject" | "cmsBlogCategory" | "cmsBlog" | "cmsTestimonial" | "cmsCareerJob" | "cmsCareerApplication" | "cmsContactMessage" | "cmsMedia" | "cmsSeo" | "cmsFooter" | "cmsAnnouncement" | "cmsPopup" | "cmsForm" | "cmsActivityLog" | "whatsAppConfig" | "whatsAppSession" | "whatsAppMessage" | "conversationThread" | "whatsAppTemplate" | "customerFeedback" | "customerReport" | "broadcastLog" | "whatsAppDeliveryLog" | "otpCode" | "loginSession" | "device" | "passwordResetToken" | "authAuditLog" | "termsAcceptance" | "emailLog" | "emailTemplate"
+    modelProps: "tenant" | "user" | "department" | "customer" | "equipment" | "equipmentQrCode" | "scanLog" | "complaint" | "workOrder" | "workOrderMaterial" | "checklistTemplate" | "pmSchedule" | "quotation" | "invoice" | "inventoryCategory" | "inventorySubcategory" | "inventoryItem" | "warehouse" | "warehouseStock" | "itemSupplier" | "stockMovement" | "priceBook" | "priceBookEntry" | "purchaseOrder" | "vehicle" | "vehicleLog" | "complaintTimeline" | "notification" | "auditLog" | "leaveRequest" | "attendance" | "cmsSetting" | "cmsHero" | "cmsService" | "cmsIndustry" | "cmsProject" | "cmsBlogCategory" | "cmsBlog" | "cmsTestimonial" | "cmsCareerJob" | "cmsCareerApplication" | "cmsContactMessage" | "cmsMedia" | "cmsSeo" | "cmsFooter" | "cmsAnnouncement" | "cmsPopup" | "cmsForm" | "cmsActivityLog" | "whatsAppConfig" | "whatsAppSession" | "whatsAppMessage" | "conversationThread" | "whatsAppTemplate" | "customerFeedback" | "customerReport" | "broadcastLog" | "whatsAppDeliveryLog" | "otpCode" | "loginSession" | "device" | "passwordResetToken" | "passwordResetOtp" | "authAuditLog" | "termsAcceptance" | "emailLog" | "emailTemplate"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5057,6 +5058,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    PasswordResetOtp: {
+      payload: Prisma.$PasswordResetOtpPayload<ExtArgs>
+      fields: Prisma.PasswordResetOtpFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PasswordResetOtpFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PasswordResetOtpFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>
+        }
+        findFirst: {
+          args: Prisma.PasswordResetOtpFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PasswordResetOtpFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>
+        }
+        findMany: {
+          args: Prisma.PasswordResetOtpFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>[]
+        }
+        create: {
+          args: Prisma.PasswordResetOtpCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>
+        }
+        createMany: {
+          args: Prisma.PasswordResetOtpCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PasswordResetOtpCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>[]
+        }
+        delete: {
+          args: Prisma.PasswordResetOtpDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>
+        }
+        update: {
+          args: Prisma.PasswordResetOtpUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>
+        }
+        deleteMany: {
+          args: Prisma.PasswordResetOtpDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PasswordResetOtpUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PasswordResetOtpUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>[]
+        }
+        upsert: {
+          args: Prisma.PasswordResetOtpUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PasswordResetOtpPayload>
+        }
+        aggregate: {
+          args: Prisma.PasswordResetOtpAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePasswordResetOtp>
+        }
+        groupBy: {
+          args: Prisma.PasswordResetOtpGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PasswordResetOtpGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PasswordResetOtpCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PasswordResetOtpCountAggregateOutputType> | number
+        }
+      }
+    }
     AuthAuditLog: {
       payload: Prisma.$AuthAuditLogPayload<ExtArgs>
       fields: Prisma.AuthAuditLogFieldRefs
@@ -6769,6 +6844,29 @@ export const PasswordResetTokenScalarFieldEnum = {
 export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
+export const PasswordResetOtpScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  email: 'email',
+  otpHash: 'otpHash',
+  expiresAt: 'expiresAt',
+  attempts: 'attempts',
+  maxAttempts: 'maxAttempts',
+  resendCount: 'resendCount',
+  maxResends: 'maxResends',
+  createdAt: 'createdAt',
+  usedAt: 'usedAt',
+  ipAddress: 'ipAddress',
+  device: 'device',
+  browser: 'browser',
+  userAgent: 'userAgent',
+  status: 'status'
+} as const
+
+export type PasswordResetOtpScalarFieldEnum = (typeof PasswordResetOtpScalarFieldEnum)[keyof typeof PasswordResetOtpScalarFieldEnum]
+
+
 export const AuthAuditLogScalarFieldEnum = {
   id: 'id',
   tenantId: 'tenantId',
@@ -7117,6 +7215,7 @@ export type GlobalOmitConfig = {
   loginSession?: Prisma.LoginSessionOmit
   device?: Prisma.DeviceOmit
   passwordResetToken?: Prisma.PasswordResetTokenOmit
+  passwordResetOtp?: Prisma.PasswordResetOtpOmit
   authAuditLog?: Prisma.AuthAuditLogOmit
   termsAcceptance?: Prisma.TermsAcceptanceOmit
   emailLog?: Prisma.EmailLogOmit

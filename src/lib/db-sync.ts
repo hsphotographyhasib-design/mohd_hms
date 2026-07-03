@@ -155,7 +155,8 @@ async function syncTableColumns(
 // ---------- public API ----------
 
 /**
- * Ensure a specific table's columns match the Prisma schema.
+ * Ensure a specific table exists and its columns match the Prisma schema.
+ * If the table doesn't exist, it will be created.
  * Safe to call repeatedly — skips already-synced columns.
  *
  * @param tableName The Prisma model name (e.g. "Complaint")
@@ -170,7 +171,34 @@ export async function ensureTableSync(tableName: string): Promise<void> {
   if (!columns || columns.length === 0) return;
 
   const tables = await getExistingTables();
-  const actualTable = tables.get(tableName.toLowerCase());
+  let actualTable = tables.get(tableName.toLowerCase());
+
+  // If table doesn't exist, try to create it via Prisma Migrate-compatible SQL
+  if (!actualTable) {
+    try {
+      const colDefs = columns
+        .filter((c) => c.name !== 'id') // id is handled by @id @default(cuid())
+        .map((c) => {
+          const def = c.hasDefault || !c.nullable ? ` NOT NULL${SAFE_DEFAULTS[c.pgType] || ''}` : '';
+          return `"${c.name}" ${c.pgType}${def}`;
+        })
+        .join(',\n    ');
+
+      const sql = `CREATE TABLE IF NOT EXISTS "public"."${tableName}" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    ${colDefs}
+  )`;
+      await db.$executeRawUnsafe(sql);
+      console.log(`[db-sync] ${tableName}: table created`);
+      // Refresh tables map
+      const updated = await getExistingTables();
+      actualTable = updated.get(tableName.toLowerCase());
+    } catch (e) {
+      console.error(`[db-sync] ${tableName}: failed to create table — ${(e as Error).message.slice(0, 120)}`);
+      return;
+    }
+  }
+
   if (!actualTable) return;
 
   const result = await syncTableColumns(actualTable, columns);

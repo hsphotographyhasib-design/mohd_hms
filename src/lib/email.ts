@@ -193,3 +193,65 @@ Thank you,
 ${BRAND}`;
   return { subject, html, text };
 }
+
+/* ------------------------------------------------------------------ */
+/*  OTP Email Template (enterprise-grade)                               */
+/* ------------------------------------------------------------------ */
+
+export function renderOtpEmail(opts: {
+  otp: string;
+  userName?: string | null;
+  expiresMinutes?: number;
+  supportEmail?: string;
+}) {
+  const expiresMin = opts.expiresMinutes ?? 10;
+  const support = opts.supportEmail || 'support@mohdhms.com';
+  const subject = `${BRAND} - Password Reset Verification Code`;
+  const greeting = opts.userName ? `Hello ${escapeHtml(opts.userName)},` : 'Hello,';
+
+  const html = shell(
+    subject,
+    `
+    <h1 style="margin:0 0 16px 0;font-size:22px;color:#111827;">Password Reset Verification</h1>
+    <p style="margin:0 0 14px 0;">${greeting}</p>
+    <p style="margin:0 0 14px 0;">We received a request to reset your password. Your One-Time Verification Code is:</p>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:24px 0;">
+      <tr><td align="center">
+        <div style="display:inline-block;background:#f0fdf4;border:2px dashed #059669;border-radius:12px;padding:20px 32px;letter-spacing:8px;font-size:36px;font-weight:700;color:#059669;font-family:'Courier New',Courier,monospace;">
+          ${escapeHtml(opts.otp)}
+        </div>
+      </td></tr>
+    </table>
+    <p style="margin:0 0 6px 0;color:#6b7280;">This code will expire in <strong>${expiresMin} minutes</strong>.</p>
+    <p style="margin:0 0 22px 0;color:#6b7280;">If you did not request this, please ignore this email. Your account remains secure.</p>
+    <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 22px 0;background:#fffbeb;border-radius:8px;border:1px solid #fde68a;">
+      <tr><td style="padding:12px 16px;font-size:13px;color:#92400e;">
+        <strong>Security Notice:</strong> Never share verification codes with anyone. Our team will never ask for your code.
+      </td></tr>
+    </table>
+    <p style="margin:0 0 4px 0;color:#6b7280;font-size:13px;">Need help? Contact us at <a href="mailto:${escapeHtml(support)}" style="color:#059669;">${escapeHtml(support)}</a></p>
+    <p style="margin:24px 0 0 0;">Thank you,<br/>${BRAND} Security Team</p>
+    `
+  );
+
+  const text = `${greeting}
+
+We received a request to reset your password.
+
+Your One-Time Verification Code is:
+
+  ${opts.otp}
+
+This code will expire in ${expiresMin} minutes.
+
+If you did not request this, please ignore this email.
+
+Security Notice: Never share verification codes with anyone.
+
+Need help? Contact us at ${support}
+
+Thank you,
+${BRAND} Security Team`;
+
+  return { subject, html, text };
+}

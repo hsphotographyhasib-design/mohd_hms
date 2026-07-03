@@ -1,17 +1,27 @@
 // ============ Provider Registry ============
 // Centralizes provider selection and exports a single send function.
-// Future providers (SES, SendGrid, Mailgun, Postmark) can be added here.
+// Priority: SMTP > Brevo > Console fallback
 
 import type { SendEmailParams, SendEmailResult, EmailProvider } from '../types';
 import { sendViaBrevo, isBrevoConfigured } from './brevo';
+import { sendViaSmtp, isSmtpConfigured } from './smtp';
 import { sendViaConsole } from './console';
 
 // Determine active provider based on env configuration
-function getActiveProvider(): EmailProvider {
+function resolveActiveProvider(): EmailProvider {
+  if (isSmtpConfigured()) return 'smtp-relay';
   if (isBrevoConfigured()) return 'brevo';
-  if (process.env.RESEND_API_KEY) return 'resend';
-  if (process.env.SMTP_RELAY_URL) return 'smtp-relay';
   return 'console';
+}
+
+let _cachedProvider: EmailProvider | null = null;
+
+export function getActiveProvider(): EmailProvider {
+  if (!_cachedProvider) {
+    _cachedProvider = resolveActiveProvider();
+    console.log(`[EmailService] Active provider: ${_cachedProvider}`);
+  }
+  return _cachedProvider;
 }
 
 export type ProviderName = EmailProvider;
@@ -23,18 +33,15 @@ export async function sendViaProvider(
   const p = provider || getActiveProvider();
 
   switch (p) {
+    case 'smtp-relay':
+      return sendViaSmtp(params);
     case 'brevo':
       return sendViaBrevo(params);
     case 'console':
       return sendViaConsole(params);
-    // Future providers:
-    // case 'ses': return sendViaSES(params);
-    // case 'sendgrid': return sendViaSendGrid(params);
-    // case 'mailgun': return sendViaMailgun(params);
-    // case 'postmark': return sendViaPostmark(params);
     default:
       return sendViaConsole(params);
   }
 }
 
-export { getActiveProvider, isBrevoConfigured };
+export { isBrevoConfigured, isSmtpConfigured };

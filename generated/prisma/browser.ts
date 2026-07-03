@@ -328,6 +328,11 @@ export type Device = Prisma.DeviceModel
  */
 export type PasswordResetToken = Prisma.PasswordResetTokenModel
 /**
+ * Model PasswordResetOtp
+ * 
+ */
+export type PasswordResetOtp = Prisma.PasswordResetOtpModel
+/**
  * Model AuthAuditLog
  * 
  */
