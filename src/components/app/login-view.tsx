@@ -569,41 +569,6 @@ export function LoginView() {
     window.location.href = '/api/auth/google/authorize';
   }, [isGoogleLoading, isLoading, requireTc]);
 
-  // Handle Google OAuth callback fragment (token + user returned from /callback)
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const hash = window.location.hash;
-    if (!hash.includes('google_auth=1')) return;
-
-    const params = new URLSearchParams(hash.replace('#', ''));
-    const errorMsg = params.get('error');
-    const token = params.get('token');
-    const userJson = params.get('user');
-
-    // Clean the URL fragment immediately
-    window.history.replaceState(null, '', window.location.pathname + window.location.search);
-
-    if (errorMsg) {
-      toast.error(errorMsg);
-      return;
-    }
-
-    if (token && userJson) {
-      try {
-        const user = JSON.parse(userJson);
-        localStorage.setItem('cmms_token', token);
-        localStorage.setItem('cmms_user', JSON.stringify(user));
-        useAuthStore.getState().loadFromStorage();
-        window.history.pushState(null, '', '/');
-        window.dispatchEvent(
-          new CustomEvent('cmms:toast', { detail: { type: 'success', message: `Welcome, ${user.name}!` } }),
-        );
-      } catch {
-        toast.error('Google sign-in failed. Invalid response.');
-      }
-    }
-  }, []);
-
   /* ================================================================ */
   /*  RENDER                                                           */
   /* ================================================================ */

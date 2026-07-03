@@ -64,10 +64,44 @@ export default function Home() {
   const hydrated = useHydrated();
   const [showLogin, setShowLogin] = useState(false);
 
+  // Handle Google OAuth callback (runs on every page load, before auth check)
   const initialized = useRef(false);
   useEffect(() => {
     if (!initialized.current) {
       initialized.current = true;
+
+      // --- Google OAuth callback handler ---
+      const hash = window.location.hash;
+      if (hash.includes('google_auth=1')) {
+        const params = new URLSearchParams(hash.replace('#', ''));
+        const errorMsg = params.get('error');
+        const token = params.get('token');
+        const userJson = params.get('user');
+        window.history.replaceState(null, '', window.location.pathname + window.location.search);
+
+        if (errorMsg) {
+          import('sonner').then(({ toast }) => toast.error(errorMsg));
+          return;
+        }
+
+        if (token && userJson) {
+          try {
+            const user = JSON.parse(userJson);
+            localStorage.setItem('cmms_token', token);
+            localStorage.setItem('cmms_user', JSON.stringify(user));
+            useAuthStore.setState({ user, token, isAuthenticated: true });
+            window.dispatchEvent(
+              new CustomEvent('cmms:toast', { detail: { type: 'success', message: `Welcome, ${user.name}!` } }),
+            );
+            return; // Auth state set, component will re-render with app
+          } catch {
+            import('sonner').then(({ toast }) => toast.error('Google sign-in failed.'));
+            return;
+          }
+        }
+      }
+
+      // --- Normal localStorage restore ---
       const token = localStorage.getItem('cmms_token');
       const userStr = localStorage.getItem('cmms_user');
       if (token && userStr) {
