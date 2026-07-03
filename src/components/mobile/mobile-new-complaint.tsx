@@ -224,7 +224,7 @@ export function MobileNewComplaint() {
 
       {/* Form Content */}
       <div className="flex-1 overflow-y-auto">
-        <div className="p-4 space-y-4 pb-32">
+        <div className="p-4 space-y-4 pb-52">
           {/* Customer Selection */}
           <div className="space-y-2">
             <Label className="text-sm font-semibold text-gray-700">
@@ -428,8 +428,8 @@ export function MobileNewComplaint() {
         </div>
       </div>
 
-      {/* Sticky Submit Button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 px-4 py-3" style={{ paddingBottom: 'calc(12px + env(safe-area-inset-bottom, 0px))' }}>
+      {/* Sticky Submit Button — positioned above the floating nav bar */}
+      <div className="fixed left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200 px-4 py-3 z-30" style={{ bottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
         <div className="max-w-lg mx-auto">
           <Button
             onClick={handleSubmit}
