@@ -564,112 +564,156 @@ export function LoginView() {
     '337910166543-9vr0i0bqudf53stnqbcvjr9o6kt6gtei.apps.googleusercontent.com';
   const [gisReady, setGisReady] = useState(false);
   const [gisError, setGisError] = useState(false);
+  const googleTokenClientRef = useRef<ReturnType<typeof Object> | null>(null);
+
+  // Initialize Google OAuth2 Token Client (reliable popup flow)
+  useEffect(() => {
+    if (!GOOGLE_CLIENT_ID) { setGisError(true); return; }
+
+    const onGisLoaded = () => {
+      const google = (window as unknown as Record<string, unknown>).google as Record<string, unknown> | undefined;
+      if (!google?.accounts) { setGisError(true); return; }
+
+      try {
+        const oauth2 = (google.accounts as Record<string, unknown>).oauth2 as Record<string, unknown> | undefined;
+        if (!oauth2?.initTokenClient) {
+          // Fallback: try accounts.id if oauth2 not available
+          setGisReady(true);
+          return;
+        }
+
+        googleTokenClientRef.current = (oauth2 as any).initTokenClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'openid email profile',
+          callback: async (response: { id_token?: string; error?: string; error_description?: string }) => {
+            if (response.error) {
+              toast.error(response.error_description || 'Google sign-in failed.');
+              setIsGoogleLoading(false);
+              return;
+            }
+            if (response.id_token) {
+              try {
+                saveTermsAcceptance();
+                await loginWithGoogle(response.id_token);
+                logTermsAcceptance(useAuthStore.getState().user?.id || '');
+              } catch (err) {
+                if (err instanceof Error) {
+                  toast.error(err.message || 'Google sign-in failed.');
+                }
+              } finally {
+                setIsGoogleLoading(false);
+              }
+            }
+          },
+          error_callback: (error: { type?: string; message?: string }) => {
+            console.error('[Google Auth] Token client error:', error);
+            const msg =
+              error?.type === 'popup_closed' ? 'Google popup was closed.' :
+              error?.type === 'popup_blocked' ? 'Popup was blocked by the browser. Please allow popups.' :
+              'Google sign-in failed. Please try again.';
+            toast.error(msg);
+            setIsGoogleLoading(false);
+          },
+        });
+        setGisReady(true);
+      } catch {
+        setGisError(true);
+      }
+    };
+
+    // Check if GIS script already loaded
+    if (document.querySelector('script[src*="accounts.google.com/gsi"]')) {
+      const check = setInterval(() => {
+        const g = (window as unknown as Record<string, unknown>).google as Record<string, unknown> | undefined;
+        if (g?.accounts) { onGisLoaded(); clearInterval(check); }
+      }, 200);
+      const t = setTimeout(() => { clearInterval(check); setGisReady(true); }, 5000);
+      return () => { clearInterval(check); clearTimeout(t); };
+    }
+
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    script.onload = onGisLoaded;
+    script.onerror = () => setGisError(true);
+    document.head.appendChild(script);
+  }, [GOOGLE_CLIENT_ID, loginWithGoogle]);
 
   const handleGoogleSignIn = useCallback(async () => {
     if (isGoogleLoading || isLoading) return;
     if (!requireTc()) return;
 
-    // Guard: no client ID configured
     if (!GOOGLE_CLIENT_ID) {
       toast.error('Google Sign-In is not configured. Please contact the administrator.');
       return;
     }
 
-    // Guard: GIS script not loaded yet
-    const google = (window as unknown as { google?: { accounts: { id: { initialize: (c: Record<string, unknown>) => void; prompt: (callback?: (notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean; getNotDisplayedReason: () => number; getSkippedReason: () => number }) => void) => void; renderButton: (parent: HTMLElement, options: Record<string, unknown>) => void } } } }).google;
-    if (!google?.accounts?.id) {
-      toast.error('Google Sign-In is loading. Please wait a moment and try again.');
-      return;
-    }
-
     setIsGoogleLoading(true);
-    let settled = false;
+
     try {
-      let resolveToken: ((token: string) => void) | null = null;
-      let rejectToken: ((err: Error) => void) | null = null;
-      const tokenPromise = new Promise<string>((resolve, reject) => {
-        resolveToken = resolve;
-        rejectToken = reject;
-      });
-
-      // Timeout after 90s
-      const timeout = setTimeout(() => {
-        if (!settled) {
-          settled = true;
-          rejectToken?.(new Error('Google sign-in timed out. Please try again.'));
+      const client = googleTokenClientRef.current;
+      if (client) {
+        (client as any).requestAccessToken();
+      } else {
+        // Fallback: try One Tap if token client not available
+        const google = (window as unknown as Record<string, unknown>).google as Record<string, unknown> | undefined;
+        const accounts = google?.accounts as Record<string, unknown> | undefined;
+        const id = accounts?.id as Record<string, unknown> | undefined;
+        if (!id?.initialize || !id?.prompt) {
+          toast.error('Google Sign-In failed to initialize. Please use email login.');
+          setIsGoogleLoading(false);
+          return;
         }
-      }, 90_000);
 
-      google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: (response: { credential: string }) => {
-          clearTimeout(timeout);
-          if (!settled && resolveToken) {
-            settled = true;
-            resolveToken(response.credential);
+        let settled = false;
+        (id as any).initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: (response: { credential: string }) => {
+            if (!settled) {
+              settled = true;
+              saveTermsAcceptance();
+              loginWithGoogle(response.credential)
+                .then(() => logTermsAcceptance(useAuthStore.getState().user?.id || ''))
+                .catch((err: Error) => toast.error(err.message || 'Google sign-in failed.'))
+                .finally(() => setIsGoogleLoading(false));
+            }
+          },
+          auto_select: false,
+          cancel_on_tap_outside: true,
+        });
+
+        (id as any).prompt((notification: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean; getNotDisplayedReason: () => number }) => {
+          if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+            if (!settled) {
+              settled = true;
+              const reason = notification.getNotDisplayedReason?.();
+              const msg =
+                reason === 1 ? 'Browser is in incognito/private mode.' :
+                reason === 2 ? 'Google cookies are blocked. Allow third-party cookies.' :
+                reason === 3 ? 'Google Sign-In was suppressed. Try again.' :
+                reason === 4 ? 'Google Sign-In unavailable in this context.' :
+                'Google sign-in failed. Please try again.';
+              toast.error(msg);
+              setIsGoogleLoading(false);
+            }
           }
-        },
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
+        });
 
-      google.accounts.id.prompt((notification) => {
-        if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-          clearTimeout(timeout);
+        // Timeout fallback
+        setTimeout(() => {
           if (!settled) {
             settled = true;
-            // Provide meaningful error based on reason
-            const reason = notification.getNotDisplayedReason?.();
-            const msg =
-              reason === 1 ? 'Browser is in incognito/private mode. Google Sign-In is unavailable.' :
-              reason === 2 ? 'Google cookies are blocked. Please allow third-party cookies.' :
-              reason === 3 ? 'Google Sign-In was suppressed. Please try again.' :
-              reason === 4 ? 'Google Sign-In is not available in this context.' :
-              'Popup closed by user';
-            rejectToken?.(new Error(msg));
+            setIsGoogleLoading(false);
+            toast.error('Google sign-in timed out. Please try again.');
           }
-        }
-      });
-
-      const credential = await tokenPromise;
-      if (credential) {
-        saveTermsAcceptance();
-        await loginWithGoogle(credential);
-        logTermsAcceptance(useAuthStore.getState().user?.id || '');
+        }, 60_000);
       }
     } catch (err) {
-      if (err instanceof Error && err.message !== 'Popup closed by user') {
-        toast.error(err.message || 'Google sign-in failed. Please try again.');
-      }
-    } finally {
-      if (!settled) settled = true;
+      toast.error(err instanceof Error ? err.message : 'Google sign-in failed.');
       setIsGoogleLoading(false);
     }
   }, [isGoogleLoading, isLoading, loginWithGoogle, GOOGLE_CLIENT_ID]);
-
-  // Load Google Identity Services script with error handling
-  useEffect(() => {
-    if (!GOOGLE_CLIENT_ID) {
-      setGisError(true);
-      return;
-    }
-    if (document.querySelector('script[src*="accounts.google.com/gsi"]')) {
-      // Script tag exists — wait a tick then check if GIS is ready
-      const check = setInterval(() => {
-        const g = (window as unknown as Record<string, unknown>).google as Record<string, unknown> | undefined;
-        if (g?.accounts) { setGisReady(true); clearInterval(check); }
-      }, 200);
-      const t = setTimeout(() => { clearInterval(check); setGisReady(true); }, 5000);
-      return () => { clearInterval(check); clearTimeout(t); };
-    }
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
-    script.async = true;
-    script.defer = true;
-    script.onload = () => setGisReady(true);
-    script.onerror = () => setGisError(true);
-    document.head.appendChild(script);
-  }, [GOOGLE_CLIENT_ID]);
 
   /* ================================================================ */
   /*  RENDER                                                           */
