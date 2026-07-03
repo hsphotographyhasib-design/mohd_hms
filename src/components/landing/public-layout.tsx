@@ -144,7 +144,7 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
         <div className="container nav">
           <a href="#home" className="brand" aria-label="MOHD.HMS Enterprise">
             <span className="bmark">
-              <img src="/logo-512.png" alt="" className="w-full h-full object-contain" aria-hidden="true" />
+              <img src="/logo-512.png" alt="" className="w-full h-full" aria-hidden="true" />
             </span>
             <span><span className="bname">MOHD.HMS</span><br /><span className="bsub">Enterprise</span></span>
           </a>
@@ -212,7 +212,7 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
           <div className="foot-grid">
             <div className="foot-brand">
               <div className="brand">
-                <span className="bmark"><img src="/logo-512.png" alt="" className="w-full h-full object-contain" aria-hidden="true" /></span>
+                <span className="bmark"><img src="/logo-512.png" alt="" className="w-full h-full" aria-hidden="true" /></span>
                 <span><span className="bname">MOHD.HMS</span><br /><span className="bsub" style={{ color: 'rgba(247,248,243,.45)' }}>Enterprise</span></span>
               </div>
               <p>Facility maintenance and engineering services — keeping your assets safe, compliant and running.</p>

@@ -582,10 +582,10 @@ export function LoginView() {
         {/* ---- Brand ---- */}
         <div className="flex flex-col items-center text-center gap-3 mb-6">
           <span
-            className="w-14 h-14 rounded-xl bg-emerald-600 text-white grid place-items-center"
+            className="w-16 h-16"
             aria-hidden="true"
           >
-            <BrandLogo className="w-[30px] h-[30px]" />
+            <BrandLogo className="w-full h-full object-contain" />
           </span>
           <h1
             id="auth-title"
