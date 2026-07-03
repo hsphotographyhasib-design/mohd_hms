@@ -338,3 +338,20 @@ Stage Summary:
 - **Fixed**: `/api/notifications/log` endpoint (was broken due to schema mismatch)
 - **Enhanced**: Cross-tab notification sync via BroadcastChannel
 - **Committed**: 3d909bf
+
+---
+Task ID: 5
+Agent: Main Agent
+Task: Remove duplicate notification bell from mobile header
+
+Work Log:
+- Identified root cause: `NotificationProvider` renders `NotificationHistoryPanel` globally (including its own bell icon with unread badge). On mobile, this duplicated the bell already in `MobileHeader`.
+- Fixed by wrapping `<NotificationHistoryPanel />` in `<div className="hidden md:block">` so it only renders on desktop (≥768px breakpoints).
+- Mobile now shows exactly ONE notification bell (in MobileHeader, top-right).
+- Desktop continues to show the enterprise notification history bell as before.
+- No notification functionality changed — only removed the duplicate visual element.
+
+Stage Summary:
+- **Fixed**: Duplicate notification bell on mobile — only one bell now visible
+- **Changed**: `src/components/notifications/notification-provider.tsx` (1 file, +9/-2 lines)
+- **Committed**: 87a9281, pushed to GitHub
