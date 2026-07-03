@@ -172,7 +172,7 @@ export async function GET(request: NextRequest) {
             }),
           { label: 'google-callback-linkExisting' },
         );
-        user = { ...existingByEmail, googleId, avatar: picture || existingByEmail.avatar };
+        user = { ...existingByEmail, avatar: picture || existingByEmail.avatar };
       }
     }
 
@@ -197,7 +197,6 @@ export async function GET(request: NextRequest) {
                 address: 'Bandar Seri Begawan, Brunei Darussalam',
                 phone: '+673 000 0000',
                 email: 'info@mohdhms.com',
-                country: 'Brunei Darussalam',
               },
               select: { id: true, name: true, domain: true },
             }),

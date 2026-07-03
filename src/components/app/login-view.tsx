@@ -567,7 +567,7 @@ export function LoginView() {
     saveTermsAcceptance();
     // Redirect to server endpoint which handles PKCE + Google redirect
     window.location.href = '/api/auth/google/authorize';
-  }, [isGoogleLoading, isLoading]);
+  }, [isGoogleLoading, isLoading, requireTc]);
 
   // Handle Google OAuth callback fragment (token + user returned from /callback)
   useEffect(() => {
