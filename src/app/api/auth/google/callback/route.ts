@@ -92,17 +92,22 @@ export async function GET(request: NextRequest) {
     const origin = url.origin;
     const redirectUri = `${origin}/api/auth/google/callback`;
 
-    // Exchange code for tokens using PKCE (no client_secret needed)
+    const clientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
+
+    // Exchange code for tokens
+    const tokenBody: Record<string, string> = {
+      code,
+      client_id: clientId,
+      redirect_uri: redirectUri,
+      grant_type: 'authorization_code',
+    };
+    if (clientSecret) tokenBody.client_secret = clientSecret;
+    if (codeVerifier) tokenBody.code_verifier = codeVerifier;
+
     const tokenResponse = await fetch(GOOGLE_TOKEN_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: new URLSearchParams({
-        code,
-        client_id: clientId,
-        redirect_uri: redirectUri,
-        code_verifier: codeVerifier,
-        grant_type: 'authorization_code',
-      }),
+      body: new URLSearchParams(tokenBody),
     });
 
     if (!tokenResponse.ok) {
