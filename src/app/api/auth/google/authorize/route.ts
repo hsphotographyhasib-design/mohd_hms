@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
 export const dynamic = 'force-dynamic';
 
@@ -48,8 +47,9 @@ function base64url(buffer: Uint8Array): string {
 /**
  * GET /api/auth/google/authorize
  *
- * Generates a PKCE code_verifier, stores it in a short-lived cookie,
- * and redirects the user to Google's OAuth consent screen.
+ * Generates a PKCE code_verifier, passes it via the `state` parameter
+ * (which Google echoes back unchanged), and redirects to Google's consent screen.
+ * Using `state` instead of cookies — more reliable through CDNs/proxies.
  */
 export async function GET(request: NextRequest) {
   const clientId = getClientId();
@@ -69,15 +69,9 @@ export async function GET(request: NextRequest) {
   const codeVerifier = generateCodeVerifier();
   const codeChallenge = await generateCodeChallenge(codeVerifier);
 
-  // Store verifier in a short-lived httpOnly cookie (10 minutes)
-  const cookieStore = await cookies();
-  cookieStore.set('google_oauth_verifier', codeVerifier, {
-    httpOnly: true,
-    secure: origin.startsWith('https'),
-    sameSite: 'lax',
-    path: '/api/auth/google/callback',
-    maxAge: 600, // 10 minutes
-  });
+  // Encode verifier into the state parameter (Google echoes it back unchanged)
+  // Format: base64url(verifier) to keep it URL-safe
+  const state = base64url(new TextEncoder().encode(codeVerifier));
 
   // Build Google auth URL
   const params = new URLSearchParams({
@@ -89,6 +83,7 @@ export async function GET(request: NextRequest) {
     prompt: 'select_account',
     code_challenge: codeChallenge,
     code_challenge_method: 'S256',
+    state,
   });
 
   // Redirect to Google

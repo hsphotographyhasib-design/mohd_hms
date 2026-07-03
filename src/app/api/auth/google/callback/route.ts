@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
 import { generateToken } from '@/lib/auth';
 
@@ -21,13 +20,19 @@ function getClientId(): string | null {
   return null;
 }
 
+/** Decode base64url to string */
+function decodeBase64url(str: string): string {
+  const base64 = str.replace(/-/g, '+').replace(/_/g, '/');
+  const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
+  return atob(padded);
+}
+
 /** Decode a JWT payload without verification (Google already verified it during code exchange) */
 function decodeJwtPayload(token: string): Record<string, unknown> | null {
   try {
     const parts = token.split('.');
     if (parts.length !== 3) return null;
     const payload = parts[1];
-    // Handle base64url encoding
     const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
     const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
     const json = atob(padded);
@@ -38,18 +43,19 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
 }
 
 /**
- * GET /api/auth/google/callback?code=...
+ * GET /api/auth/google/callback?code=...&state=...
  *
- * 1. Reads code_verifier from cookie
+ * 1. Reads code_verifier from the `state` parameter (passed through Google)
  * 2. Exchanges authorization code + PKCE verifier for tokens
  * 3. Decodes id_token to get user info
  * 4. Finds or creates user in DB
- * 5. Redirects to / with token in URL fragment
+ * 5. Returns HTML page that sets localStorage and navigates to app
  */
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const code = searchParams.get('code');
+    const state = searchParams.get('state');
     const error = searchParams.get('error');
 
     if (error) {
@@ -67,12 +73,15 @@ export async function GET(request: NextRequest) {
       return redirectToAppWithError(request, 'Google Sign-In is not configured on the server.');
     }
 
-    // Read PKCE verifier from cookie
-    const cookieStore = await cookies();
-    const codeVerifier = cookieStore.get('google_oauth_verifier')?.value;
-
-    // Clear the verifier cookie
-    cookieStore.delete('google_oauth_verifier');
+    // Decode PKCE verifier from state parameter (encoded by /authorize)
+    let codeVerifier: string | null = null;
+    if (state) {
+      try {
+        codeVerifier = decodeBase64url(state);
+      } catch {
+        console.error('[Google OAuth] Failed to decode state parameter');
+      }
+    }
 
     if (!codeVerifier) {
       return redirectToAppWithError(request, 'OAuth session expired. Please try again.');
@@ -99,7 +108,14 @@ export async function GET(request: NextRequest) {
     if (!tokenResponse.ok) {
       const errBody = await tokenResponse.text();
       console.error('[Google OAuth] Token exchange failed:', tokenResponse.status, errBody);
-      return redirectToAppWithError(request, 'Failed to exchange authorization code with Google.');
+      // Include actual error details for debugging
+      let detail = 'Failed to exchange authorization code with Google.';
+      try {
+        const errJson = JSON.parse(errBody);
+        if (errJson.error_description) detail = errJson.error_description;
+        else if (errJson.error) detail = `Google error: ${errJson.error}`;
+      } catch {}
+      return redirectToAppWithError(request, detail);
     }
 
     const tokenData = await tokenResponse.json() as {
