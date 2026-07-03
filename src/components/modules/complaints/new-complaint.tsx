@@ -277,8 +277,11 @@ export function NewComplaint() {
         throw new Error(err.error || 'Failed to create complaint');
       }
 
+      const result = await res.json();
       toast.success('Complaint submitted successfully!', {
-        description: 'Your complaint has been created and will be reviewed by our team.',
+        description: result.complaintNumber
+          ? `Complaint ${result.complaintNumber} created and will be reviewed by our team.`
+          : 'Your complaint has been created and will be reviewed by our team.',
       });
       setView('complaints');
     } catch (err: any) {
@@ -695,16 +698,36 @@ function Step2Equipment({
             <Label className="flex items-center gap-1">
               Customer <span className="text-red-500">*</span>
             </Label>
-            <Select value={form.customerId} onValueChange={(v) => updateField('customerId', v)}>
-              <SelectTrigger className="mt-1.5">
-                <SelectValue placeholder="Select customer" />
-              </SelectTrigger>
-              <SelectContent>
-                {customers.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {customers.length > 0 ? (
+              <Select value={form.customerId} onValueChange={(v) => updateField('customerId', v)}>
+                <SelectTrigger className="mt-1.5">
+                  <SelectValue placeholder="Select customer" />
+                </SelectTrigger>
+                <SelectContent>
+                  {customers.map((c) => (
+                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            ) : (
+              <div className="mt-1.5 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 p-4">
+                <div className="flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
+                  <p className="text-sm text-amber-700 dark:text-amber-400">
+                    No customers found. Please add a customer first before creating a complaint.
+                  </p>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="mt-2"
+                  onClick={() => setView('customers')}
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  Go to Customers
+                </Button>
+              </div>
+            )}
             <p className="text-xs text-muted-foreground mt-1">Select the customer associated with this complaint</p>
           </div>
 

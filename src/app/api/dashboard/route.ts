@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { ensureAllTablesSynced } from '@/lib/db-sync';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
@@ -11,6 +12,9 @@ export async function GET(request: NextRequest) {
   if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const tenantId = payload.tenantId as string;
+
+  // --- Phase 1.5: Auto-sync schema columns ---
+  await ensureAllTablesSynced();
 
   // --- Phase 2: Database queries ---
   try {

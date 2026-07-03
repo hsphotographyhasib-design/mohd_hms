@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { ensureTableSync } from '@/lib/db-sync';
 import { getComplaintTimeline } from '@/lib/workflow/notification-engine';
 
 export const dynamic = 'force-dynamic';
@@ -23,6 +24,9 @@ export async function POST(
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    await ensureTableSync('Complaint');
+    await ensureTableSync('ComplaintTimeline');
 
     const tenantId = payload.tenantId as string;
     const userId = payload.userId as string;

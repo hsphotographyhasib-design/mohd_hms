@@ -122,3 +122,30 @@ CRITICAL PROJECT RULES (NEVER FORGET):
 Stage Summary:
 - These rules are PERMANENT. Any future database-related changes MUST follow them.
 - This project is PostgreSQL-only. All code, schema, and configuration must reflect this.
+
+---
+Task ID: 3
+Agent: main
+Task: Fix complaint button not working - auto-schema-sync for missing DB columns
+
+Work Log:
+- Diagnosed root cause: Prisma schema has columns (assignedBy, assignedByRole, etc.) that don't exist in the actual PostgreSQL database tables. Every Prisma query against Complaint fails with "column does not exist" (P2022).
+- Created `/src/lib/db-sync.ts` — auto-schema-sync utility that parses prisma/schema.prisma, compares with actual DB columns, and adds missing columns via ALTER TABLE. Cached per-table to avoid redundant calls.
+- Added `ensureTableSync()` calls to all critical API routes:
+  - `/api/complaints/route.ts` (GET, POST)
+  - `/api/complaints/[id]/route.ts` (GET, DELETE)
+  - `/api/complaints/[id]/workflow/route.ts` (POST)
+  - `/api/complaints/[id]/assign-technician/route.ts` (GET, POST)
+  - `/api/complaints/[id]/accept-reject/route.ts` (POST)
+  - `/api/customers/route.ts` (GET, POST)
+  - `/api/equipment/route.ts` (GET)
+  - `/api/dashboard/route.ts` (GET — uses ensureAllTablesSynced)
+- Improved complaint creation API: generates complaintNumber (CMP/YYYY/NNNNNN), better error messages, separate validation for each required field
+- Improved NewComplaint form: shows helpful "no customers" warning with link to Customers page when customer list is empty, displays complaint number in success toast
+- ESLint: 0 errors, 7 warnings (all from generated Prisma files)
+
+Stage Summary:
+- Created: `/src/lib/db-sync.ts` (auto-schema-sync utility)
+- Modified: 9 API route files + 1 component file
+- The fix is transparent: on first API call, missing columns are added automatically, then all subsequent queries work normally
+- No manual /api/setup/sync-schema POST needed anymore

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { ensureTableSync } from '@/lib/db-sync';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -10,6 +11,9 @@ export async function GET(request: NextRequest) {
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    // Auto-sync schema columns so Prisma queries don't fail on missing columns
+    await ensureTableSync('Complaint');
 
     const tenantId = payload.tenantId as string;
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
@@ -49,7 +53,7 @@ export async function GET(request: NextRequest) {
       id: c.id,
       tenantId: c.tenantId,
       customerId: c.customerId,
-      customerName: c.customer.name,
+      customerName: c.customer?.name,
       equipmentId: c.equipmentId,
       equipmentName: c.equipment?.name,
       title: c.title,
@@ -80,7 +84,8 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Complaints list error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: 'Failed to load complaints', details: msg }, { status: 500 });
   }
 }
 
@@ -91,23 +96,47 @@ export async function POST(request: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+    // Auto-sync schema columns before creating
+    await ensureTableSync('Complaint');
+
     const tenantId = payload.tenantId as string;
     const body = await request.json();
     const { customerId, equipmentId, title, description, priority, category, photos, gpsLocation, assignedToId, supervisorId } = body;
 
-    if (!customerId || !title || !description) {
-      return NextResponse.json({ error: 'Customer, title, and description are required' }, { status: 400 });
+    if (!title?.trim()) {
+      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
     }
+    if (!description?.trim()) {
+      return NextResponse.json({ error: 'Description is required' }, { status: 400 });
+    }
+    if (!customerId) {
+      return NextResponse.json({ error: 'Customer is required' }, { status: 400 });
+    }
+
+    // Generate complaint number: CMP/YYYY/NNNNNN
+    const now = new Date();
+    const year = now.getFullYear();
+    const yearStart = new Date(year, 0, 1);
+    const yearEnd = new Date(year + 1, 0, 1);
+
+    const countThisYear = await db.complaint.count({
+      where: {
+        tenantId,
+        createdAt: { gte: yearStart, lt: yearEnd },
+      },
+    });
+    const complaintNumber = `CMP/${year}/${String(countThisYear + 1).padStart(6, '0')}`;
 
     const complaint = await db.complaint.create({
       data: {
         tenantId,
         customerId,
         equipmentId: equipmentId || null,
-        title,
-        description,
+        title: title.trim(),
+        description: description.trim(),
         priority: priority || 'medium',
         status: 'NEW',
+        source: 'admin',
         category: category || null,
         photos: photos ? JSON.stringify(photos) : null,
         gpsLocation: gpsLocation ? JSON.stringify(gpsLocation) : null,
@@ -124,9 +153,10 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       id: complaint.id,
+      complaintNumber,
       tenantId: complaint.tenantId,
       customerId: complaint.customerId,
-      customerName: complaint.customer.name,
+      customerName: complaint.customer?.name,
       equipmentId: complaint.equipmentId,
       equipmentName: complaint.equipment?.name,
       title: complaint.title,
@@ -143,6 +173,7 @@ export async function POST(request: NextRequest) {
     }, { status: 201 });
   } catch (error) {
     console.error('Complaint create error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    const msg = error instanceof Error ? error.message : 'Internal server error';
+    return NextResponse.json({ error: 'Failed to create complaint', details: msg }, { status: 500 });
   }
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { ensureTableSync } from '@/lib/db-sync';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
@@ -12,6 +13,8 @@ export async function GET(
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    await ensureTableSync('Complaint');
 
     const tenantId = payload.tenantId as string;
     const { id } = await params;
@@ -175,6 +178,8 @@ export async function DELETE(
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    await ensureTableSync('Complaint');
 
     const tenantId = payload.tenantId as string;
     const { id } = await params;
