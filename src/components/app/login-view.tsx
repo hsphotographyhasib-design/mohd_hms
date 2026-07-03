@@ -105,26 +105,10 @@ const demoAccounts: DemoAccount[] = ENABLE_DEMO ? [
 /*  Sub-components                                                     */
 /* ------------------------------------------------------------------ */
 
-/** Brand gauge monogram matching the uploaded design */
+/** Brand logo using the official MOHD.HMS ENTERPRISE icon */
 function BrandLogo({ className }: { className?: string }) {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      className={className}
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="8.5" stroke="currentColor" strokeWidth="1.6" />
-      <path d="M12 12 15 8.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-      <circle cx="12" cy="12" r="1.4" fill="currentColor" />
-      <path
-        d="M12 3.5v1.6M12 18.9v1.6M3.5 12h1.6M18.9 12h1.6"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-    </svg>
+    <img src="/icon.svg" alt="MOHD.HMS ENTERPRISE" className={className} />
   );
 }
 

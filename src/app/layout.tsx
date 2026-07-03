@@ -25,7 +25,7 @@ const SITE_URL = "https://mohdhms.com";
 const SITE_NAME = "MOHD.HMS ENTERPRISE";
 const SITE_DESCRIPTION =
   "MOHD.HMS ENTERPRISE — Brunei's trusted facility maintenance & engineering partner. HVAC, electrical, plumbing, mechanical and fire protection, delivered by certified teams with 24/7 emergency support and smart CMMS tracking.";
-const OG_IMAGE = `${SITE_URL}/og-image.png`;
+const OG_IMAGE = `${SITE_URL}/logo-1024.png`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -63,8 +63,12 @@ export const metadata: Metadata = {
     telephone: false,
   },
   icons: {
-    icon: "/logo.svg",
-    apple: "/logo.svg",
+    icon: [
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.svg", sizes: "any", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon-180x180.png",
   },
   openGraph: {
     type: "website",
@@ -76,10 +80,9 @@ export const metadata: Metadata = {
     images: [
       {
         url: OG_IMAGE,
-        width: 1344,
-        height: 768,
+        width: 1024,
+        height: 1024,
         alt: `${SITE_NAME} — Facility Maintenance & Engineering Services`,
-        type: "image/png",
       },
     ],
   },
@@ -99,7 +102,7 @@ export const metadata: Metadata = {
     // LinkedIn
     "og:site_name": SITE_NAME,
     // Discord
-    "theme-color": "#059669",
+    "theme-color": "#0B5E3C",
   },
   robots: {
     index: true,
@@ -120,7 +123,7 @@ const jsonLd = {
   "@type": "Organization",
   name: SITE_NAME,
   url: SITE_URL,
-  logo: `${SITE_URL}/logo.svg`,
+  logo: `${SITE_URL}/icon.svg`,
   description: SITE_DESCRIPTION,
   telephone: "+673 999 9999",
   email: "info@mohdhms.com",
@@ -162,7 +165,7 @@ export default function RootLayout({
       <head>
         <link rel="canonical" href={SITE_URL} />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#059669" />
+        <meta name="theme-color" content="#0B5E3C" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

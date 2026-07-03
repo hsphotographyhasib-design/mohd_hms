@@ -138,8 +138,8 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
         'flex items-center h-16 px-4 border-b border-sidebar-border shrink-0',
         collapsed ? 'justify-center' : 'gap-3'
       )}>
-        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-emerald-600 text-white shrink-0">
-          <Building2 className="h-5 w-5" />
+        <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-emerald-600 text-white shrink-0 overflow-hidden">
+          <img src="/icon.svg" alt="" className="w-5 h-5" aria-hidden="true" />
         </div>
         <AnimatePresence>
           {!collapsed && (
@@ -149,7 +149,7 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
               exit={{ opacity: 0, width: 0 }}
               className="font-semibold text-lg whitespace-nowrap overflow-hidden"
             >
-              FacilityPro
+              MOHD.HMS
             </motion.span>
           )}
         </AnimatePresence>

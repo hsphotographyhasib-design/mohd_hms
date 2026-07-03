@@ -2,7 +2,8 @@
 // Provides the branded HTML shell used by all email templates.
 
 const BRAND = 'MOHD.HMS ENTERPRISE';
-const BRAND_GREEN = '#16A34A'; // As specified in requirements
+const BRAND_GREEN = '#0B5E3C';
+const SITE_URL = 'https://mohdhms.com';
 const BRAND_GREEN_LIGHT = '#F0FDF4';
 const BRAND_GREEN_BORDER = '#BBF7D0';
 const TEXT_PRIMARY = '#111827';
@@ -80,7 +81,9 @@ export function renderEmailShell(opts: ShellOptions): string {
             <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">
               <tr>
                 <td>
-                  <div style="display:inline-block;width:44px;height:44px;border-radius:12px;background:${BRAND_GREEN};color:#ffffff;text-align:center;line-height:44px;font-weight:700;font-size:18px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">M</div>
+                  <div style="display:inline-block;width:44px;height:44px;border-radius:12px;overflow:hidden;">
+                    <img src="${SITE_URL}/icon.svg" alt="MOHD.HMS ENTERPRISE" width="44" height="44" style="display:block;width:44px;height:44px;" />
+                  </div>
                 </td>
                 <td style="padding-left:12px;">
                   <div style="font-size:16px;font-weight:700;color:${TEXT_PRIMARY};line-height:1.2;">${BRAND}</div>

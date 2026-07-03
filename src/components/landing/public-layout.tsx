@@ -144,7 +144,7 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
         <div className="container nav">
           <a href="#home" className="brand" aria-label="MOHD.HMS Enterprise">
             <span className="bmark">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9z"/><path d="M12 7v6M9 9l3-2 3 2M9 15l3 2 3-2"/></svg>
+              <img src="/icon.svg" alt="" className="w-full h-full" aria-hidden="true" />
             </span>
             <span><span className="bname">MOHD.HMS</span><br /><span className="bsub">Enterprise</span></span>
           </a>
@@ -212,7 +212,7 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
           <div className="foot-grid">
             <div className="foot-brand">
               <div className="brand">
-                <span className="bmark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l8 4.5v9L12 20l-8-4.5v-9z"/><path d="M12 7v6M9 9l3-2 3 2M9 15l3 2 3-2"/></svg></span>
+                <span className="bmark"><img src="/icon.svg" alt="" className="w-full h-full" aria-hidden="true" /></span>
                 <span><span className="bname">MOHD.HMS</span><br /><span className="bsub" style={{ color: 'rgba(247,248,243,.45)' }}>Enterprise</span></span>
               </div>
               <p>Facility maintenance and engineering services — keeping your assets safe, compliant and running.</p>
