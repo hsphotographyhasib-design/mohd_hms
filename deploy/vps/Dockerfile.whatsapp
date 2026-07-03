@@ -1,0 +1,93 @@
+# =============================================================================
+# Dockerfile for WhatsApp Mini-Service (Standalone)
+# =============================================================================
+# Builds only the WhatsApp service with Chromium + Xvfb support.
+# Usage: docker build -f deploy/Dockerfile.whatsapp -t whatsapp-service:latest .
+# =============================================================================
+
+FROM node:20-slim
+
+# Install Chromium, Xvfb, and all required system libraries
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    chromium \
+    xvfb \
+    libxss1 \
+    libnss3 \
+    libnspr4 \
+    libatk1.0-0 \
+    libatk-bridge2.0-0 \
+    libcups2 \
+    libdrm2 \
+    libxkbcommon0 \
+    libxcomposite1 \
+    libxdamage1 \
+    libxrandr2 \
+    libgbm1 \
+    libpango-1.0-0 \
+    libcairo2 \
+    libasound2 \
+    libatspi2.0-0 \
+    libxshmfence1 \
+    fonts-liberation \
+    fonts-noto-color-emoji \
+    libappindicator3-1 \
+    xdg-utils \
+    procps \
+    curl \
+    openssl \
+    ca-certificates \
+  && rm -rf /var/lib/apt/lists/*
+
+# Environment variables
+ENV NODE_ENV=production
+ENV CHROME_PATH="/usr/bin/chromium"
+ENV DISPLAY=":99"
+ENV PORT=3003
+
+WORKDIR /app
+
+# Create non-root user
+RUN groupadd --gid 1001 appuser && \
+    useradd --uid 1001 --gid appuser --shell /bin/bash --create-home appuser
+
+# Copy WhatsApp service source
+COPY mini-services/whatsapp-service/package.json ./
+COPY mini-services/whatsapp-service/ ./
+
+# Install dependencies
+RUN npm install --omit=dev --ignore-scripts
+
+# Create session storage directory and set ownership
+RUN mkdir -p storage/sessions && \
+    chown -R appuser:appuser /app
+
+USER appuser
+
+# Create startup script that launches Xvfb before the service
+RUN echo '#!/bin/bash\n\
+set -e\n\
+\n\
+# Start Xvfb on display :99\n\
+echo "Starting Xvfb on display :99..."\n\
+Xvfb :99 -screen 0 1280x1024x24 &\n\
+XVFB_PID=$!\n\
+\n\
+# Wait for Xvfb to be ready\n\
+sleep 1\n\
+if ! kill -0 $XVFB_PID 2>/dev/null; then\n\
+  echo "ERROR: Xvfb failed to start"\n\
+  exit 1\n\
+fi\n\
+echo "Xvfb started (PID: $XVFB_PID)"\n\
+\n\
+# Start the WhatsApp service\n\
+echo "Starting WhatsApp service on port 3003..."\n\
+exec node index.js\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
+EXPOSE 3003
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
+  CMD curl -f http://localhost:3003/ || exit 1
+
+CMD ["/app/start.sh"]

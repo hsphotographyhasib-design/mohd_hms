@@ -1,0 +1,61 @@
+# =============================================================================
+# Dockerfile for building the deployment package (cross-platform)
+# =============================================================================
+# Usage: docker build -f deploy/hosting/Dockerfile.build -t facilitypro-build .
+# This creates a Linux-compatible build on any OS (macOS, Windows, Linux).
+# The output is a .tar.gz file extracted from the container.
+# =============================================================================
+
+FROM node:20-slim AS builder
+
+# Build tools needed for native modules (sharp, etc.)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssl ca-certificates python3 make g++ \
+  && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy dependency manifests
+COPY package.json bun.lock ./
+COPY prisma/ prisma/
+
+# Install ALL dependencies including dev (needed for build).
+# Do NOT use --ignore-scripts — sharp needs its postinstall to download
+# the correct Linux native binary.
+RUN npm install
+
+# Copy source code
+COPY . .
+
+# Generate Prisma client
+RUN npx prisma generate
+
+# Build Next.js standalone
+RUN npm run build
+
+# ── Assemble Package ────────────────────────────────────────────────────
+RUN mkdir -p /app/pkg/app/prisma /app/pkg/app/storage/chunks /app/pkg/app/storage/documents /app/pkg/app/db && \
+    cp -r /app/.next/standalone/* /app/pkg/app/ && \
+    \
+    # Overwrite package.json with production deps for cPanel npm install
+    node -e " \
+      const pkg = require('/app/package.json'); \
+      const prod = { \
+        name: pkg.name, \
+        version: pkg.version, \
+        private: true, \
+        scripts: { start: 'node server.js', 'db:push': 'npx prisma db push', 'db:generate': 'npx prisma generate' }, \
+        dependencies: pkg.dependencies \
+      }; \
+      delete prod.dependencies['puppeteer-core']; \
+      require('fs').writeFileSync('/app/pkg/app/package.json', JSON.stringify(prod, null, 2) + '\n'); \
+    " && \
+    \
+    cp /app/prisma/schema.prisma /app/pkg/app/prisma/ && \
+    cp -f /app/deploy/hosting/.env.production /app/pkg/app/.env.example 2>/dev/null || true && \
+    cp -f /app/deploy/hosting/.htaccess /app/pkg/app/.htaccess 2>/dev/null || true && \
+    cd /app/pkg && \
+    tar czf /app/facilitypro-deploy.tar.gz app/
+
+# Default command shows the output file
+CMD ["ls", "-lh", "facilitypro-deploy.tar.gz"]

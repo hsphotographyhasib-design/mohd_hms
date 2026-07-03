@@ -1,0 +1,109 @@
+{
+  "generatedAt": "2025-06-22T12:00:00Z",
+  "description": "High-level AST summary of the codebase structure for quick context loading.",
+  "stats": {
+    "totalSourceFiles": 247,
+    "totalLines": 60862,
+    "totalApiRoutes": 105,
+    "totalComponents": 111,
+    "totalLibraries": 16,
+    "totalHooks": 3,
+    "prismaModels": 54
+  },
+  "directoryStructure": {
+    "src/app/api": {
+      "description": "All backend API routes",
+      "subdirectories": ["auth", "cms", "complaints", "customers", "dashboard", "documents", "employees", "equipment", "finance", "inventory", "invoices", "notifications", "pm", "purchases", "qr", "quotations", "reports", "seed", "vehicles", "whatsapp", "work-orders"],
+      "totalFiles": 105
+    },
+    "src/app/pages": {
+      "description": "Next.js pages (non-API)",
+      "files": ["page.tsx", "layout.tsx", "equipment/[qrId]/page.tsx"],
+      "totalFiles": 3
+    },
+    "src/components": {
+      "description": "All React components",
+      "subdirectories": {
+        "ui": { "description": "shadcn/ui base components", "count": 52 },
+        "app": { "description": "App shell, sidebar, header, login, landing", "count": 5 },
+        "modules": { "description": "Feature module components", "count": 49 },
+        "nav": { "description": "Navigation components", "count": 2 },
+        "session": { "description": "Auth session management", "count": 6 }
+      }
+    },
+    "src/lib": {
+      "description": "Utility libraries and business logic",
+      "files": ["auth.ts", "db.ts", "utils.ts", "qr-utils.ts", "label-templates.ts", "label-pdf.ts", "number-to-words.ts", "quotation-helpers.ts"],
+      "subdirectories": {
+        "workflow": { "files": ["state-machine.ts", "notification-engine.ts", "escalation-rules.ts"] },
+        "whatsapp": { "files": ["provider.ts", "conversation-engine.ts", "workflow-engine.ts"] },
+        "storage": { "files": ["provider.ts"] },
+        "whatsapp-service": { "files": ["manager.ts"] }
+      }
+    },
+    "src/store": { "description": "Zustand stores", "files": ["index.ts"] },
+    "src/types": { "description": "TypeScript type definitions", "files": ["index.ts"] },
+    "src/hooks": { "description": "Custom React hooks", "files": ["use-mobile.ts", "use-secure-fetch.ts", "use-toast.ts"] }
+  },
+  "largestFiles": [
+    { "path": "src/components/modules/quotations/quotation-form.tsx", "lines": 1712 },
+    { "path": "src/app/equipment/[qrId]/page.tsx", "lines": 1129 },
+    { "path": "src/components/modules/equipment/equipment-detail.tsx", "lines": 1118 },
+    { "path": "src/components/modules/complaints/new-complaint.tsx", "lines": 989 },
+    { "path": "src/components/modules/equipment/equipment-list.tsx", "lines": 970 },
+    { "path": "src/components/modules/invoices/invoice-detail.tsx", "lines": 910 },
+    { "path": "src/components/modules/dashboard/dashboard-view.tsx", "lines": 910 },
+    { "path": "src/components/modules/documents/document-list.tsx", "lines": 900 },
+    { "path": "src/types/index.ts", "lines": 876 },
+    { "path": "src/components/modules/documents/document-detail.tsx", "lines": 796 }
+  ],
+  "apiRouteCounts": {
+    "auth": 4,
+    "cms": 38,
+    "complaints": 5,
+    "customers": 2,
+    "dashboard": 1,
+    "documents": 13,
+    "employees": 2,
+    "equipment": 5,
+    "finance": 1,
+    "inventory": 2,
+    "invoices": 2,
+    "notifications": 1,
+    "pm": 2,
+    "purchases": 1,
+    "qr": 3,
+    "quotations": 8,
+    "reports": 1,
+    "seed": 1,
+    "vehicles": 2,
+    "whatsapp": 17,
+    "work-orders": 2
+  },
+  "componentCounts": {
+    "ui": 52,
+    "app": 5,
+    "modules": {
+      "cms": 17,
+      "complaints": 3,
+      "documents": 2,
+      "equipment": 2,
+      "invoices": 2,
+      "quotations": 3,
+      "whatsapp": 5,
+      "work-orders": 2,
+      "other": 12
+    },
+    "nav": 2,
+    "session": 6
+  },
+  "exports": {
+    "src/store/index.ts": ["useAuthStore", "useAppStore", "useNotificationStore", "hasPermission", "hasMinRole", "canAccess"],
+    "src/types/index.ts": ["UserRole", "AppView", "EquipmentCategory", "EquipmentStatus", "ComplaintPriority", "ComplaintStatus", "ComplaintSource", "WorkOrderStatus", "WorkOrderType", "InvoiceStatus", "QuotationStatus", "PmFrequency", "WhatsAppProvider", "WhatsAppConnectionStatus", "SessionState", "WhatsAppMessageDirection", "WhatsAppMessageType", "WhatsAppMessageStatus", "TemplateCategory", "BroadcastStatus", "ThreadStatus", "ReportStatus", "DocumentModule", "DocumentVirusStatus", "UploadSessionStatus", "DocumentAuditAction", "ALLOWED_MIME_TYPES", "BLOCKED_EXTENSIONS", "MAX_FILE_SIZE_DEFAULT", "CHUNK_SIZE", "DOCUMENT_MODULE_FOLDERS", "DOCUMENT_PERMISSIONS"],
+    "src/lib/auth.ts": ["hashPassword", "verifyPassword", "generateToken", "verifyToken", "generateAssetNumber", "generateInvoiceNumber", "generatePONumber", "generateCustomerNumber", "sanitizeInput", "parseJsonSafe"],
+    "src/lib/qr-utils.ts": ["generateQrId", "generateAssetNumber", "buildQrUrl", "isValidQrId", "formatCategory", "getStatusConfig", "getConditionColor", "getWarrantyStatus", "parseDevice"],
+    "src/lib/workflow/state-machine.ts": ["validateTransition", "getAvailableActions", "isTerminalStatus", "getNextStatuses", "getTransitionRule", "validateRequiredFields", "getMainFlowStatuses", "getReworkFlowStatuses", "WORKFLOW_TRANSITIONS", "STATUS_CONFIG"],
+    "src/lib/workflow/notification-engine.ts": ["recordWorkflowTransition", "getComplaintTimeline"],
+    "src/lib/workflow/escalation-rules.ts": ["checkEscalations", "ESCALATION_RULES"]
+  }
+}

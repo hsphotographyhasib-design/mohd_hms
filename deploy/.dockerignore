@@ -1,0 +1,47 @@
+# Dependencies
+node_modules
+
+# Next.js build output
+.next
+
+# SQLite database files (persisted via volume)
+db/*.db
+db/*.db-journal
+db/*.db-wal
+
+# Uploaded files and document storage
+storage/
+
+# WhatsApp session data (persisted via volume)
+mini-services/whatsapp-service/storage/
+
+# Version control
+.git
+.gitignore
+
+# AI / IDE files
+.memory
+.cursor
+
+# Environment files (injected at runtime via env_file)
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Docker files themselves (prevent recursive context)
+deploy/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage
+
+# Misc
+*.tgz
+*.tsbuildinfo
