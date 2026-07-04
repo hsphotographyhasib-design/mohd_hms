@@ -470,3 +470,26 @@ Stage Summary:
 - **SECURITY MODEL**: Database-level filtering (Prisma WHERE clauses), not frontend filters
 - **ROLES ENFORCED**: super_admin (platform), admin (tenant), manager (department), supervisor (team), technician (assigned), finance (invoice-related), customer (own only), hr/vendor/guest (denied)
 - **AUDIT**: All complaint access logged (fire-and-forget) with user, role, complaint, IP, device, result (ALLOWED/DENIED)
+---
+Task ID: 8
+Agent: main
+Task: Fix Technician Complaint Acceptance Workflow — Add mobile workflow action buttons
+
+Work Log:
+- Analyzed the full complaint workflow system: state machine (16 transitions, 13 statuses), notification engine (15 templates), desktop complaint-detail (already has full workflow)
+- Identified root cause: Desktop `complaint-detail.tsx` already had ALL workflow actions (Accept, Reject, Start, Complete, Confirm, Rework, Invoice, Payment, Close) but mobile `mobile-complaint-detail.tsx` was completely read-only — only had "Call Technician", "WhatsApp", "View Work Order", and "Chat" buttons
+- Rewrote `mobile-complaint-detail.tsx` (487 → 650+ lines) with full enterprise workflow support:
+  - Added `fetchWorkflow()` — calls `/api/complaints/{id}/workflow` to get server-driven available actions
+  - Added `executeTransition()` — calls workflow API with proper action mapping
+  - Added `handleSubmitAction()` — maps state-machine action names to API action names (e.g., `accepted` → `accept`, `assignment_rejected` → `reject`)
+  - Added "Available Actions" card with dynamically rendered buttons based on user role and complaint status
+  - Added priority badge next to status badge
+  - Added 10 mobile-optimized dialogs: Accept (with ETA), Reject (with quick-select reasons: Sick Leave, On Another Job, Wrong Assignment, etc.), Start Work (with timer info), Complete Work (with checklist, labor hours, costs, materials), Client Confirm, Rework Request, Rework Start, Approve Invoice, Send Invoice (method picker), Record Payment (method picker + ref), Close Complaint (confirmation warning)
+  - All dialogs use mobile-friendly layouts with proper touch targets
+  - Kept secondary action buttons (Call, WhatsApp, View Work Order) below the workflow actions
+
+Stage Summary:
+- **MODIFIED**: `src/components/mobile/mobile-complaint-detail.tsx` — full rewrite with workflow support
+- **VERIFIED**: 0 TypeScript errors, 0 new lint errors
+- Desktop workflow was already complete — only mobile needed the fix
+- The workflow is server-driven: `getAvailableActions(status, role)` determines which buttons appear, so RBAC is automatically enforced
