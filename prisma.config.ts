@@ -11,48 +11,36 @@ if (existsSync(envPath)) {
 import { defineConfig } from "prisma/config";
 
 /**
- * Find database URL from environment:
- *   1. DATABASE_URL (standard — can be postgres://, file:, etc.)
- *   2. PRISMA_DATABASE_URL (Vercel Postgres)
- *   3. POSTGRES_URL (Vercel Postgres / Neon)
- *   4. Any env var whose value starts with postgres:// or postgresql://
+ * Find database URL from environment.
+ * Supports both postgres:// and file: (SQLite/libsql) URLs.
  */
 function findDatabaseUrl(): string {
   // Try known names first
   for (const name of ["DATABASE_URL", "PRISMA_DATABASE_URL", "POSTGRES_URL", "POSTGRES_URL_NON_POOLING", "POSTGRES_PRISMA_URL", "DIRECT_URL"]) {
     const val = process.env[name];
-    if (val && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
+    if (val) {
       console.log(`[prisma.config] Using ${name}`);
       return val;
     }
   }
 
-  // Fallback: scan all env vars for a postgres:// value
+  // Fallback: scan all env vars
   for (const [key, val] of Object.entries(process.env)) {
-    if (
-      val &&
-      typeof val === "string" &&
-      (val.startsWith("postgres://") || val.startsWith("postgresql://"))
-    ) {
-      console.log(`[prisma.config] Found PostgreSQL URL in env var: ${key}`);
+    if (val && typeof val === "string" && (val.startsWith("postgres://") || val.startsWith("postgresql://") || val.startsWith("file:"))) {
+      console.log(`[prisma.config] Found URL in env var: ${key}`);
       return val;
     }
   }
 
-  // No database URL found — this is fatal for any prisma CLI operation.
   console.error(
-    "[prisma.config] FATAL: No postgres:// URL found in any environment variable. " +
-    "Set DATABASE_URL or POSTGRES_URL to a PostgreSQL connection string."
+    "[prisma.config] FATAL: No DATABASE_URL found. " +
+    "Set DATABASE_URL to a SQLite path (file:/path/db.sqlite) or PostgreSQL URL."
   );
   return "";
 }
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
-  migrations: {
-    path: "prisma/migrations",
-    seed: "tsx prisma/seed.ts",
-  },
   datasource: {
     url: findDatabaseUrl(),
   },

@@ -568,7 +568,6 @@ export type ComplaintTimelineCreateOrConnectWithoutTenantInput = {
 
 export type ComplaintTimelineCreateManyTenantInputEnvelope = {
   data: Prisma.ComplaintTimelineCreateManyTenantInput | Prisma.ComplaintTimelineCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput = {
@@ -637,7 +636,6 @@ export type ComplaintTimelineCreateOrConnectWithoutComplaintInput = {
 
 export type ComplaintTimelineCreateManyComplaintInputEnvelope = {
   data: Prisma.ComplaintTimelineCreateManyComplaintInput | Prisma.ComplaintTimelineCreateManyComplaintInput[]
-  skipDuplicates?: boolean
 }
 
 export type ComplaintTimelineUpsertWithWhereUniqueWithoutComplaintInput = {
@@ -1526,7 +1524,6 @@ export type ComplaintTimelineCreateManyArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many ComplaintTimelines.
    */
   data: Prisma.ComplaintTimelineCreateManyInput | Prisma.ComplaintTimelineCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1545,7 +1542,6 @@ export type ComplaintTimelineCreateManyAndReturnArgs<ExtArgs extends runtime.Typ
    * The data used to create many ComplaintTimelines.
    */
   data: Prisma.ComplaintTimelineCreateManyInput | Prisma.ComplaintTimelineCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

@@ -476,7 +476,6 @@ export type ChecklistTemplateCreateOrConnectWithoutTenantInput = {
 
 export type ChecklistTemplateCreateManyTenantInputEnvelope = {
   data: Prisma.ChecklistTemplateCreateManyTenantInput | Prisma.ChecklistTemplateCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type ChecklistTemplateUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1300,7 +1299,6 @@ export type ChecklistTemplateCreateManyArgs<ExtArgs extends runtime.Types.Extens
    * The data used to create many ChecklistTemplates.
    */
   data: Prisma.ChecklistTemplateCreateManyInput | Prisma.ChecklistTemplateCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1319,7 +1317,6 @@ export type ChecklistTemplateCreateManyAndReturnArgs<ExtArgs extends runtime.Typ
    * The data used to create many ChecklistTemplates.
    */
   data: Prisma.ChecklistTemplateCreateManyInput | Prisma.ChecklistTemplateCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

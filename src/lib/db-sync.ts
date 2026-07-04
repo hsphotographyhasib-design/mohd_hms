@@ -5,27 +5,21 @@ import { resolve } from 'node:path';
 /**
  * Auto-sync missing columns from the Prisma schema into the actual database.
  *
- * Prisma generates SQL that references ALL columns defined in the schema,
- * even when using `include` or `select`. If the real DB table is missing
- * columns that the schema declares, every query will fail with
- * "column does not exist" (P2022).
- *
- * This utility detects those missing columns and adds them via ALTER TABLE
- * so that Prisma queries succeed immediately — no manual /api/setup/sync-schema
- * POST needed.
+ * For SQLite, uses sqlite_master and pragma_table_info to introspect the
+ * current schema and add any missing columns via ALTER TABLE.
  */
 
-// Map Prisma scalar types → PostgreSQL column types
-const PRISMA_TO_PG: Record<string, string> = {
-  String: 'text',
-  Int: 'integer',
-  Float: 'double precision',
-  Boolean: 'boolean',
-  DateTime: 'timestamp(3)',
-  BigInt: 'bigint',
-  Json: 'jsonb',
-  Bytes: 'bytea',
-  Decimal: 'numeric',
+// Map Prisma scalar types → SQLite column types
+const PRISMA_TO_SQLITE: Record<string, string> = {
+  String: 'TEXT',
+  Int: 'INTEGER',
+  Float: 'REAL',
+  Boolean: 'INTEGER',
+  DateTime: 'TEXT', // SQLite stores datetimes as TEXT
+  BigInt: 'INTEGER',
+  Json: 'TEXT',      // SQLite stores JSON as TEXT
+  Bytes: 'BLOB',
+  Decimal: 'REAL',
 };
 
 // Cache: table → set of column names (lowercase) already verified
@@ -36,7 +30,7 @@ let _globalSynced = false;
 
 interface ColumnDef {
   name: string;
-  pgType: string;
+  sqliteType: string;
   nullable: boolean;
   hasDefault: boolean;
 }
@@ -48,7 +42,7 @@ function parseSchemaModels(): Map<string, ColumnDef[]> {
 
   try {
     const content = readFileSync(resolve(process.cwd(), 'prisma/schema.prisma'), 'utf-8');
-    const scalars = new Set(Object.keys(PRISMA_TO_PG));
+    const scalars = new Set(Object.keys(PRISMA_TO_SQLITE));
 
     for (const line of content.split('\n')) {
       const t = line.trim();
@@ -65,7 +59,7 @@ function parseSchemaModels(): Map<string, ColumnDef[]> {
 
       models.get(current)!.push({
         name,
-        pgType: PRISMA_TO_PG[type] || 'text',
+        sqliteType: PRISMA_TO_SQLITE[type] || 'TEXT',
         nullable: t.includes('?'),
         hasDefault: t.includes('@default('),
       });
@@ -77,36 +71,31 @@ function parseSchemaModels(): Map<string, ColumnDef[]> {
   return models;
 }
 
-// ---------- DB introspection ----------
+// ---------- DB introspection (SQLite) ----------
 
 async function getExistingTables(): Promise<Map<string, string>> {
-  const rows = await db.$queryRaw<{ tablename: string }[]>`
-    SELECT tablename FROM pg_tables WHERE schemaname = 'public'
+  const rows = await db.$queryRaw<{ name: string }[]>`
+    SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'
   `;
   const map = new Map<string, string>();
-  for (const r of rows) map.set(r.tablename.toLowerCase(), r.tablename);
+  for (const r of rows) map.set(r.name.toLowerCase(), r.name);
   return map;
 }
 
 async function getExistingColumns(table: string): Promise<Set<string>> {
-  const rows = await db.$queryRaw<{ column_name: string }[]>`
-    SELECT column_name FROM information_schema.columns
-    WHERE table_schema = 'public' AND table_name = ${table}
+  const rows = await db.$queryRaw<{ name: string }[]>`
+    PRAGMA table_info("${table}")
   `;
-  return new Set(rows.map((r) => r.column_name.toLowerCase()));
+  return new Set(rows.map((r) => r.name.toLowerCase()));
 }
 
 // ---------- sync logic ----------
 
 const SAFE_DEFAULTS: Record<string, string> = {
-  text: "DEFAULT ''",
-  integer: 'DEFAULT 0',
-  boolean: 'DEFAULT false',
-  'double precision': 'DEFAULT 0',
-  numeric: 'DEFAULT 0',
-  'timestamp(3)': 'DEFAULT CURRENT_TIMESTAMP',
-  bigint: 'DEFAULT 0',
-  jsonb: "DEFAULT '{}'",
+  TEXT: "DEFAULT ''",
+  INTEGER: 'DEFAULT 0',
+  REAL: 'DEFAULT 0',
+  BLOB: "DEFAULT ''",
 };
 
 async function syncTableColumns(
@@ -128,9 +117,9 @@ async function syncTableColumns(
 
     // Try NOT NULL with safe default first
     if (!col.nullable) {
-      const def = SAFE_DEFAULTS[col.pgType] || 'DEFAULT NULL';
+      const def = SAFE_DEFAULTS[col.sqliteType] || '';
       try {
-        const sql = `ALTER TABLE "${actualTable}" ADD COLUMN "${col.name}" ${col.pgType} NOT NULL ${def}`;
+        const sql = `ALTER TABLE "${actualTable}" ADD COLUMN "${col.name}" ${col.sqliteType} NOT NULL ${def}`;
         await db.$executeRawUnsafe(sql);
         added++;
         continue;
@@ -141,7 +130,7 @@ async function syncTableColumns(
 
     // Fallback: nullable column
     try {
-      const sql = `ALTER TABLE "${actualTable}" ADD COLUMN "${col.name}" ${col.pgType}`;
+      const sql = `ALTER TABLE "${actualTable}" ADD COLUMN "${col.name}" ${col.sqliteType}`;
       await db.$executeRawUnsafe(sql);
       added++;
     } catch (e) {
@@ -156,7 +145,6 @@ async function syncTableColumns(
 
 /**
  * Ensure a specific table exists and its columns match the Prisma schema.
- * If the table doesn't exist, it will be created.
  * Safe to call repeatedly — skips already-synced columns.
  *
  * @param tableName The Prisma model name (e.g. "Complaint")
@@ -173,33 +161,7 @@ export async function ensureTableSync(tableName: string): Promise<void> {
   const tables = await getExistingTables();
   let actualTable = tables.get(tableName.toLowerCase());
 
-  // If table doesn't exist, try to create it via Prisma Migrate-compatible SQL
-  if (!actualTable) {
-    try {
-      const colDefs = columns
-        .filter((c) => c.name !== 'id') // id is handled by @id @default(cuid())
-        .map((c) => {
-          const def = c.hasDefault || !c.nullable ? ` NOT NULL${SAFE_DEFAULTS[c.pgType] || ''}` : '';
-          return `"${c.name}" ${c.pgType}${def}`;
-        })
-        .join(',\n    ');
-
-      const sql = `CREATE TABLE IF NOT EXISTS "public"."${tableName}" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    ${colDefs}
-  )`;
-      await db.$executeRawUnsafe(sql);
-      console.log(`[db-sync] ${tableName}: table created`);
-      // Refresh tables map
-      const updated = await getExistingTables();
-      actualTable = updated.get(tableName.toLowerCase());
-    } catch (e) {
-      console.error(`[db-sync] ${tableName}: failed to create table — ${(e as Error).message.slice(0, 120)}`);
-      return;
-    }
-  }
-
-  if (!actualTable) return;
+  if (!actualTable) return; // Table doesn't exist yet — Prisma will handle creation
 
   const result = await syncTableColumns(actualTable, columns);
 

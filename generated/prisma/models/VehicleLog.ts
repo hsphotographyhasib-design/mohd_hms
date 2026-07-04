@@ -648,7 +648,6 @@ export type VehicleLogCreateOrConnectWithoutUserInput = {
 
 export type VehicleLogCreateManyUserInputEnvelope = {
   data: Prisma.VehicleLogCreateManyUserInput | Prisma.VehicleLogCreateManyUserInput[]
-  skipDuplicates?: boolean
 }
 
 export type VehicleLogUpsertWithWhereUniqueWithoutUserInput = {
@@ -720,7 +719,6 @@ export type VehicleLogCreateOrConnectWithoutVehicleInput = {
 
 export type VehicleLogCreateManyVehicleInputEnvelope = {
   data: Prisma.VehicleLogCreateManyVehicleInput | Prisma.VehicleLogCreateManyVehicleInput[]
-  skipDuplicates?: boolean
 }
 
 export type VehicleLogUpsertWithWhereUniqueWithoutVehicleInput = {
@@ -1623,7 +1621,6 @@ export type VehicleLogCreateManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * The data used to create many VehicleLogs.
    */
   data: Prisma.VehicleLogCreateManyInput | Prisma.VehicleLogCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1642,7 +1639,6 @@ export type VehicleLogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exte
    * The data used to create many VehicleLogs.
    */
   data: Prisma.VehicleLogCreateManyInput | Prisma.VehicleLogCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

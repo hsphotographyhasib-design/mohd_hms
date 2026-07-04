@@ -78,7 +78,7 @@ export async function POST(
     const { id } = await params;
 
     // ─── RBAC: Build auth context and verify access ───
-    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    const ctx = await buildAuthContext(payload as Parameters<typeof buildAuthContext>[0], { resolveCustomer: true });
     if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const hasAccess = await canAccessComplaint(ctx, id);
@@ -146,13 +146,13 @@ export async function POST(
     const validation = validateTransition(
       currentStatus,
       targetStatus,
-      userRole,
+      userRole as 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'finance' | 'customer' | 'vendor' | 'guest',
       isAdminOverride
     );
 
-    if (!validation.valid) {
+    if (!validation.success) {
       return NextResponse.json(
-        { error: validation.message || 'Transition not allowed' },
+        { error: validation.error || 'Transition not allowed' },
         { status: 422 }
       );
     }
@@ -463,7 +463,7 @@ export async function GET(
     const { id } = await params;
 
     // ─── RBAC: Build auth context and verify access ───
-    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    const ctx = await buildAuthContext(payload as Parameters<typeof buildAuthContext>[0], { resolveCustomer: true });
     if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const hasAccess = await canAccessComplaint(ctx, id);
@@ -491,6 +491,7 @@ export async function GET(
         workOrders: {
           orderBy: { createdAt: 'desc' },
           take: 1,
+          include: { assignedTo: { select: { id: true, name: true } } },
         },
       },
     });
@@ -505,8 +506,7 @@ export async function GET(
     const currentStatus = complaint.status as ComplaintStatus;
     const availableActions = getAvailableActions(
       currentStatus,
-      userRole,
-      isAdminOverride
+      userRole
     );
 
     const timeline = await getComplaintTimeline(tenantId, complaint.id);

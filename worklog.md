@@ -493,3 +493,31 @@ Stage Summary:
 - **VERIFIED**: 0 TypeScript errors, 0 new lint errors
 - Desktop workflow was already complete — only mobile needed the fix
 - The workflow is server-driven: `getAvailableActions(status, role)` determines which buttons appear, so RBAC is automatically enforced
+---
+Task ID: 8
+Agent: main
+Task: Fix technician complaint acceptance - database config + workflow bugs
+
+Work Log:
+- Diagnosed that prisma.ts was configured for PostgreSQL (PrismaPg adapter) but .env had SQLite file URL
+- This caused ALL database operations to silently fail, making the entire app non-functional
+- Changed prisma/schema.prisma provider from "postgresql" to "sqlite"
+- Rewrote src/lib/prisma.ts to use @prisma/adapter-libsql (PrismaLibSql) instead of @prisma/adapter-pg
+- Fixed PrismaLibSql constructor to use object format: { url: dbUrl }
+- Rewrote src/lib/db-sync.ts to use SQLite-compatible queries (sqlite_master, PRAGMA table_info)
+- Removed all @db.Text PostgreSQL-specific annotations from schema
+- Updated prisma.config.ts to accept file: URLs (not just postgres://)
+- Regenerated Prisma client and pushed schema to SQLite DB
+- **CRITICAL BUG**: Found workflow route checking `validation.valid` instead of `validation.success` — this rejected ALL workflow transitions
+- Fixed: `validation.valid` → `validation.success` and `validation.message` → `validation.error`
+- Fixed: `WorkflowAction` type in types/index.ts was missing `isAutomatic` and `description` fields
+- Fixed: `buildAuthContext(payload)` TS type error (JwtPayload incompatible) → cast with `as Parameters<typeof buildAuthContext>[0]`
+- Fixed: `getAvailableActions` called with 3 args but only accepts 2 (removed extra `isAdminOverride` param)
+- Fixed: workOrders include in workflow GET missing `assignedTo` relation (caused TS error on `wo.assignedTo?.name`)
+- Fixed: `userRole` string not assignable to `UserRole` union type → cast to union type
+- Verified via unit test: RBAC correctly allows technician access, state machine returns correct actions, transitions validate successfully
+
+Stage Summary:
+- **ROOT CAUSE 1**: Database misconfiguration (PostgreSQL adapter + SQLite URL) — ALL DB ops failed
+- **ROOT CAUSE 2**: `validation.valid` should be `validation.success` — ALL workflow transitions rejected
+- Both root causes fixed, dev server starts cleanly

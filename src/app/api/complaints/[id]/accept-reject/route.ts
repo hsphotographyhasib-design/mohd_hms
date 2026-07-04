@@ -55,7 +55,7 @@ export async function POST(
     }
 
     // ─── RBAC: Verify complaint is in user's accessible scope ───
-    const ctx = await buildAuthContext(payload);
+    const ctx = await buildAuthContext(payload as Parameters<typeof buildAuthContext>[0]);
     if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     // Get the complaint

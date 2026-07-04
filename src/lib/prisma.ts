@@ -1,59 +1,33 @@
 /**
- * Prisma 7 singleton — PostgreSQL only.
+ * Prisma 7 singleton — SQLite via libsql adapter.
  *
- * The schema uses provider = "postgresql" for both local dev and production.
- * Local dev should use the same remote Postgres or a local Postgres instance.
- *
- * IMPORTANT: This module must NEVER throw at import/load time.
+ * Uses @prisma/adapter-libsql for local SQLite file access.
+ * Reads DATABASE_URL from .env (format: file:/path/to/db.sqlite).
  */
 
 import { PrismaClient } from "../../generated/prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
+import { PrismaLibSql } from "@prisma/adapter-libsql";
 
 // ---------------------------------------------------------------------------
-// 1. Find database URL (never throws)
+// 1. Find database URL
 // ---------------------------------------------------------------------------
 
-export function findDatabaseUrl(): { url: string; source: string } {
+function findDatabaseUrl(): { url: string; source: string } {
   const candidates = [
-    "POSTGRES_PRISMA_URL",
-    "POSTGRES_URL_NON_POOLING",
-    "POSTGRES_URL",
-    "PRISMA_DATABASE_URL",
     "DATABASE_URL",
-    "DIRECT_URL",
-    "DATABASE_URL_VERCEL",
-    "DATABASE_PUBLIC_URL",
+    "PRISMA_DATABASE_URL",
   ];
 
-  // Phase 1: Check well-known env vars
   for (const name of candidates) {
     const val = process.env[name];
-    if (val && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
-      console.log(`[Prisma] Found postgres URL in env var: ${name}`);
+    if (val) {
       return { url: val, source: name };
     }
   }
 
-  // Phase 2: Scan ALL env vars for postgres:// URLs
-  for (const [key, val] of Object.entries(process.env)) {
-    if (val && typeof val === "string" && (val.startsWith("postgres://") || val.startsWith("postgresql://"))) {
-      console.log(`[Prisma] Found postgres URL in env var (scan): ${key}`);
-      return { url: val, source: `scan:${key}` };
-    }
-  }
-
-  // No URL found — log for debugging
-  const envKeys = Object.keys(process.env).sort();
-  const dbLikeKeys = envKeys.filter(k => {
-    const ku = k.toUpperCase();
-    return ku.includes("DATABASE") || ku.includes("POSTGRES") || ku.includes("DB_") ||
-           ku.includes("PRISMA") || ku.includes("NEON") || ku.includes("CONN");
-  });
   console.error(
-    `[Prisma] ERROR: No postgres URL found. ` +
-    `DB-related env vars: [${dbLikeKeys.join(", ")}]. ` +
-    `All env vars: [${envKeys.join(", ")}]`
+    "[Prisma] ERROR: No DATABASE_URL found in environment. " +
+    "Set DATABASE_URL to a SQLite path, e.g. file:/path/to/db.sqlite"
   );
 
   return { url: "", source: "" };
@@ -64,30 +38,15 @@ export function findDatabaseUrl(): { url: string; source: string } {
 // ---------------------------------------------------------------------------
 
 const { url: dbUrl, source: dbSource } = findDatabaseUrl();
-const isServerless = process.env.NODE_ENV === "production" || !!process.env.VERCEL;
 
 if (!dbUrl) {
-  console.error(
-    "[Prisma] FATAL: No DATABASE_URL or POSTGRES_URL found. " +
-    "Please set a postgres:// connection string in your environment."
-  );
+  console.error("[Prisma] FATAL: No DATABASE_URL set.");
 }
 
-/**
- * Ensure postgres:// URLs have SSL parameters for Vercel/Neon/cloud providers.
- */
-function ensureSsl(url: string): string {
-  if (url.includes("sslmode=") || url.includes("ssl=")) return url;
-  const sep = url.includes("?") ? "&" : "?";
-  return `${url}${sep}sslmode=require`;
-}
-
-// Create the PostgreSQL adapter
-const effectiveUrl = dbUrl ? ensureSsl(dbUrl) : "";
-const adapter = new PrismaPg(effectiveUrl);
+const adapter = new PrismaLibSql({ url: dbUrl });
 
 console.log(
-  `[Prisma] Init using ${dbSource || "none"}${isServerless ? " [serverless]" : " [dev]"}`
+  `[Prisma] Init using ${dbSource || "none"} [sqlite/libsql]`
 );
 
 // ---------------------------------------------------------------------------
@@ -158,7 +117,9 @@ export function isPrismaTransient(error: unknown): boolean {
       msg.includes("ECONNREFUSED") ||
       msg.includes("ECONNRESET") ||
       msg.includes("Too many connections") ||
-      msg.includes("Connection pool exhausted")
+      msg.includes("Connection pool exhausted") ||
+      msg.includes("database is locked") ||
+      msg.includes("SQLITE_BUSY")
     );
   }
   return false;

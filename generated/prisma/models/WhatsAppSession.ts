@@ -779,7 +779,6 @@ export type WhatsAppSessionCreateOrConnectWithoutTenantInput = {
 
 export type WhatsAppSessionCreateManyTenantInputEnvelope = {
   data: Prisma.WhatsAppSessionCreateManyTenantInput | Prisma.WhatsAppSessionCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type WhatsAppSessionUpsertWithWhereUniqueWithoutTenantInput = {
@@ -861,7 +860,6 @@ export type WhatsAppSessionCreateOrConnectWithoutCustomerInput = {
 
 export type WhatsAppSessionCreateManyCustomerInputEnvelope = {
   data: Prisma.WhatsAppSessionCreateManyCustomerInput | Prisma.WhatsAppSessionCreateManyCustomerInput[]
-  skipDuplicates?: boolean
 }
 
 export type WhatsAppSessionUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -923,7 +921,6 @@ export type WhatsAppSessionCreateOrConnectWithoutConfigInput = {
 
 export type WhatsAppSessionCreateManyConfigInputEnvelope = {
   data: Prisma.WhatsAppSessionCreateManyConfigInput | Prisma.WhatsAppSessionCreateManyConfigInput[]
-  skipDuplicates?: boolean
 }
 
 export type WhatsAppSessionUpsertWithWhereUniqueWithoutConfigInput = {
@@ -2162,7 +2159,6 @@ export type WhatsAppSessionCreateManyArgs<ExtArgs extends runtime.Types.Extensio
    * The data used to create many WhatsAppSessions.
    */
   data: Prisma.WhatsAppSessionCreateManyInput | Prisma.WhatsAppSessionCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -2181,7 +2177,6 @@ export type WhatsAppSessionCreateManyAndReturnArgs<ExtArgs extends runtime.Types
    * The data used to create many WhatsAppSessions.
    */
   data: Prisma.WhatsAppSessionCreateManyInput | Prisma.WhatsAppSessionCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

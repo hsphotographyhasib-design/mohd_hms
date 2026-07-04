@@ -650,7 +650,6 @@ export type VehicleCreateOrConnectWithoutTenantInput = {
 
 export type VehicleCreateManyTenantInputEnvelope = {
   data: Prisma.VehicleCreateManyTenantInput | Prisma.VehicleCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type VehicleUpsertWithWhereUniqueWithoutTenantInput = {
@@ -1635,7 +1634,6 @@ export type VehicleCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many Vehicles.
    */
   data: Prisma.VehicleCreateManyInput | Prisma.VehicleCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1654,7 +1652,6 @@ export type VehicleCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many Vehicles.
    */
   data: Prisma.VehicleCreateManyInput | Prisma.VehicleCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

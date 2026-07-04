@@ -196,6 +196,8 @@ export interface WorkflowAction {
   icon: string;
   color: string;
   requiredFields?: string[];
+  isAutomatic?: boolean;
+  description?: string;
 }
 
 export interface ComplaintItem {

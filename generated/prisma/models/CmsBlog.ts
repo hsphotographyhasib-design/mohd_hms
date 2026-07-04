@@ -766,7 +766,6 @@ export type CmsBlogCreateOrConnectWithoutCategoryInput = {
 
 export type CmsBlogCreateManyCategoryInputEnvelope = {
   data: Prisma.CmsBlogCreateManyCategoryInput | Prisma.CmsBlogCreateManyCategoryInput[]
-  skipDuplicates?: boolean
 }
 
 export type CmsBlogUpsertWithWhereUniqueWithoutCategoryInput = {
@@ -1700,7 +1699,6 @@ export type CmsBlogCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * The data used to create many CmsBlogs.
    */
   data: Prisma.CmsBlogCreateManyInput | Prisma.CmsBlogCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1719,7 +1717,6 @@ export type CmsBlogCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensi
    * The data used to create many CmsBlogs.
    */
   data: Prisma.CmsBlogCreateManyInput | Prisma.CmsBlogCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */

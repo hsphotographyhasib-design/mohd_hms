@@ -1352,7 +1352,6 @@ export type CmsFooterCreateManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * The data used to create many CmsFooters.
    */
   data: Prisma.CmsFooterCreateManyInput | Prisma.CmsFooterCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1371,7 +1370,6 @@ export type CmsFooterCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Exten
    * The data used to create many CmsFooters.
    */
   data: Prisma.CmsFooterCreateManyInput | Prisma.CmsFooterCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**

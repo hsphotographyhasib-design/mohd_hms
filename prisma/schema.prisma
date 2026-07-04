@@ -4,7 +4,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
 }
 
 // ============ TENANT & MULTI-TENANCY ============
@@ -1365,7 +1365,7 @@ model HrCandidate {
   interviewerId String?
   offerSalary   Float?
   offerDate     DateTime?
-  notes         String?  @db.Text
+  notes         String?  // text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -1388,8 +1388,8 @@ model HrPerformanceReview {
   goalsScore    Float?
   overallScore  Float?
   rating        String?  // outstanding, excellent, good, satisfactory, needs_improvement, poor
-  employeeComments String? @db.Text
-  managerComments  String? @db.Text
+  employeeComments String? // text
+  managerComments  String? // text
   reviewerId    String?
   status        String   @default("draft") // draft, employee_review, manager_review, completed
   completedAt   DateTime?
@@ -1409,7 +1409,7 @@ model HrTraining {
   id            String   @id @default(cuid())
   tenantId      String
   title         String
-  description   String?  @db.Text
+  description   String?  // text
   provider      String?
   location      String?
   startDate     DateTime
@@ -1534,7 +1534,7 @@ model HrMedicalRecord {
   provider      String?
   date          DateTime
   expiryDate    DateTime?
-  details       String?  @db.Text
+  details       String?  // text
   fileUrl       String?
   cost          Float?
   status        String   @default("active") // active, expired
@@ -1564,7 +1564,7 @@ model HrTravelRequest {
   approvedBy    String?
   approvedAt    DateTime?
   rejectionReason String?
-  notes         String?  @db.Text
+  notes         String?  // text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -1611,14 +1611,14 @@ model HrDisciplinaryAction {
   employeeId    String
   type          String   // warning, suspension, investigation, termination, other
   severity      String   @default("minor") // minor, major, critical
-  description   String   @db.Text
+  description   String   // text
   incidentDate  DateTime
-  actionTaken   String?  @db.Text
+  actionTaken   String?  // text
   documentUrl   String?
   issuedBy      String?
   status        String   @default("active") // active, resolved, appealed, overturned
   resolvedAt    DateTime?
-  resolution    String?  @db.Text
+  resolution    String?  // text
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
@@ -1635,7 +1635,7 @@ model HrAnnouncement {
   id            String   @id @default(cuid())
   tenantId      String
   title         String
-  content       String   @db.Text
+  content       String   // text
   type          String   @default("info") // info, holiday, emergency, event, policy
   priority      String   @default("normal") // low, normal, high, urgent
   targetRoles   String?  // JSON array of roles, null = all

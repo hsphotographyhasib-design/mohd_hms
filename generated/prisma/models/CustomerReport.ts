@@ -640,7 +640,6 @@ export type CustomerReportCreateOrConnectWithoutTenantInput = {
 
 export type CustomerReportCreateManyTenantInputEnvelope = {
   data: Prisma.CustomerReportCreateManyTenantInput | Prisma.CustomerReportCreateManyTenantInput[]
-  skipDuplicates?: boolean
 }
 
 export type CustomerReportUpsertWithWhereUniqueWithoutTenantInput = {
@@ -718,7 +717,6 @@ export type CustomerReportCreateOrConnectWithoutCustomerInput = {
 
 export type CustomerReportCreateManyCustomerInputEnvelope = {
   data: Prisma.CustomerReportCreateManyCustomerInput | Prisma.CustomerReportCreateManyCustomerInput[]
-  skipDuplicates?: boolean
 }
 
 export type CustomerReportUpsertWithWhereUniqueWithoutCustomerInput = {
@@ -1649,7 +1647,6 @@ export type CustomerReportCreateManyArgs<ExtArgs extends runtime.Types.Extension
    * The data used to create many CustomerReports.
    */
   data: Prisma.CustomerReportCreateManyInput | Prisma.CustomerReportCreateManyInput[]
-  skipDuplicates?: boolean
 }
 
 /**
@@ -1668,7 +1665,6 @@ export type CustomerReportCreateManyAndReturnArgs<ExtArgs extends runtime.Types.
    * The data used to create many CustomerReports.
    */
   data: Prisma.CustomerReportCreateManyInput | Prisma.CustomerReportCreateManyInput[]
-  skipDuplicates?: boolean
   /**
    * Choose, which related nodes to fetch as well
    */
