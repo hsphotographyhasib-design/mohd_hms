@@ -183,7 +183,7 @@ export function TechnicianAssignmentPanel({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col p-0 gap-0">
+      <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col p-0 gap-0 overflow-hidden">
         {/* Header */}
         <div className="px-6 pt-6 pb-4 space-y-3 shrink-0">
           <DialogHeader className="space-y-1 text-left">
@@ -240,7 +240,7 @@ export function TechnicianAssignmentPanel({
         </div>
 
         {/* Technician list */}
-        <div className="flex-1 min-h-0 border-t border-gray-100">
+        <div className="flex-1 min-h-0 overflow-hidden border-t border-gray-100">
           {loading ? (
             <div className="p-4 space-y-3">
               {[...Array(3)].map((_, i) => (
@@ -261,7 +261,7 @@ export function TechnicianAssignmentPanel({
               <p className="text-xs mt-1">Try adjusting your search or filters</p>
             </div>
           ) : (
-            <ScrollArea className="h-[320px]">
+            <ScrollArea className="h-full">
               <div className="p-4 space-y-2">
                 {technicians.map((tech) => {
                   const avail = AVAILABILITY_CONFIG[tech.availabilityStatus] || AVAILABILITY_CONFIG.offline;
