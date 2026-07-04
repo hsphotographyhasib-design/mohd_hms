@@ -11,6 +11,12 @@ import {
   getAvailableActions,
   type ComplaintStatus,
 } from '@/lib/workflow/state-machine';
+import {
+  buildAuthContext,
+  buildComplaintWhereClause,
+  canAccessComplaint,
+  logComplaintAccessDenied,
+} from '@/lib/rbac';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,9 +77,24 @@ export async function POST(
       userRole === 'super_admin' || userRole === 'admin';
     const { id } = await params;
 
-    // 2. Get complaint with tenant isolation
+    // ─── RBAC: Build auth context and verify access ───
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const hasAccess = await canAccessComplaint(ctx, id);
+    if (!hasAccess) {
+      logComplaintAccessDenied({
+        userId: ctx.userId, tenantId: ctx.tenantId, role: ctx.role,
+        complaintId: id, request,
+        reason: 'No RBAC access to this complaint for workflow operation',
+      });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // 2. Get complaint with RBAC-aware where clause
+    const { where: rbacWhere } = await buildComplaintWhereClause(ctx);
     const complaint = await db.complaint.findFirst({
-      where: { id, tenantId },
+      where: { ...rbacWhere, id },
       include: {
         workOrders: {
           orderBy: { createdAt: 'desc' },
@@ -441,9 +462,24 @@ export async function GET(
       userRole === 'super_admin' || userRole === 'admin';
     const { id } = await params;
 
-    // Get complaint with tenant isolation
+    // ─── RBAC: Build auth context and verify access ───
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const hasAccess = await canAccessComplaint(ctx, id);
+    if (!hasAccess) {
+      logComplaintAccessDenied({
+        userId: ctx.userId, tenantId: ctx.tenantId, role: ctx.role,
+        complaintId: id, request,
+        reason: 'No RBAC access to this complaint for workflow view',
+      });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Get complaint with RBAC-aware where clause
+    const { where: getRbacWhere } = await buildComplaintWhereClause(ctx);
     const complaint = await db.complaint.findFirst({
-      where: { id, tenantId },
+      where: { ...getRbacWhere, id },
       include: {
         customer: { select: { id: true, name: true, phone: true } },
         assignedTo: {

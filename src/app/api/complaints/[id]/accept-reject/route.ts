@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { ensureTableSync } from '@/lib/db-sync';
 import { getComplaintTimeline } from '@/lib/workflow/notification-engine';
+import { buildAuthContext, logComplaintAccessDenied } from '@/lib/rbac';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,6 +44,19 @@ export async function POST(
     if (acceptAction !== 'accept' && acceptAction !== 'reject') {
       return NextResponse.json({ error: 'action must be "accept" or "reject"' }, { status: 400 });
     }
+
+    // ─── RBAC: Only technicians can accept/reject assignments ───
+    if (userRole !== 'technician') {
+      logComplaintAccessDenied({
+        userId, tenantId, role: userRole, complaintId: id, request,
+        reason: `Role '${userRole}' cannot accept/reject complaint assignments`,
+      });
+      return NextResponse.json({ error: 'Only technicians can accept or reject assignments' }, { status: 403 });
+    }
+
+    // ─── RBAC: Verify complaint is in user's accessible scope ───
+    const ctx = await buildAuthContext(payload);
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     // Get the complaint
     const complaint = await db.complaint.findFirst({

@@ -431,3 +431,42 @@ Stage Summary:
 - 30+ API routes in src/app/api/hr/
 - 21 dropdown submenus in navigation
 - Build passes: Compiled successfully in 37.3s
+---
+Task ID: 7
+Agent: main
+Task: Build Enterprise Role-Based Complaint Access & Auto Visibility Management System (RBAC)
+
+Work Log:
+- Explored entire codebase: Prisma schema (2475 lines), all 9 complaint API routes, dashboard, reports, notifications, auth system
+- Identified security gap: all complaint queries were tenant-isolated but NOT role-isolated — any authenticated user in the same tenant could see all complaints
+- Found key architecture facts: roles are plain strings (not enum), no Company/Branch models (tenant-only), JWT payload has only userId/tenantId/role/email
+- Created `src/lib/rbac/types.ts` — Type definitions for AuthContext, ComplaintAccessResult, AccessLevel, UserRole, ComplaintAuditEntry
+- Created `src/lib/rbac/complaint-access.ts` — Core RBAC engine with:
+  - `buildComplaintWhereClause()` — builds Prisma WHERE clauses per role (customer→own, technician→assigned, supervisor→supervised, manager→department, finance→invoice-related, admin→tenant, super_admin→platform)
+  - `canAccessComplaint()` — single complaint ownership validation
+  - `canPerformAction()` — role-action permission matrix (delete, assign, override, etc.)
+  - `buildAuthContext()` — enriches JWT payload with DB data (departmentId, phone, customerId)
+  - In-memory caching (60s TTL) for customer links and department technician lists
+  - `isFieldVisibleToRole()` — field-level access (hides internal notes from customers)
+- Created `src/lib/rbac/audit-logger.ts` — Fire-and-forget audit logging using existing AuditLog model
+- Created `src/lib/rbac/index.ts` — Public API barrel export
+- Secured `GET /api/complaints` — RBAC WHERE clause merges with search/status/priority filters, returns accessLevel in response
+- Secured `POST /api/complaints` — Role-based create permission check, customer self-only enforcement, technician assignment restriction
+- Secured `GET /api/complaints/[id]` — Ownership validation via `canAccessComplaint()`, field redaction for customers, 403 for unauthorized
+- Secured `PUT /api/complaints/[id]` — Mutation permission check, customer limited to rating/feedback only, technician cannot reassign
+- Secured `DELETE /api/complaints/[id]` — Only super_admin/admin can delete
+- Secured `POST/GET /api/complaints/[id]/workflow` — Ownership validation before any workflow transition
+- Secured `POST /api/complaints/[id]/accept-reject` — Added technician-only role check
+- Secured `GET /api/complaints/[id]/assignment-history` — Added complaint ownership validation
+- Secured `GET /api/dashboard` — RBAC WHERE on all complaint queries, financial KPIs hidden from non-finance roles, equipment/PM hidden from customers, work orders filtered per role
+- Secured `GET /api/reports` — RBAC on all report types: complaint/work_order filtered, equipment hidden from customers, financial restricted to admin/manager/finance, PM restricted to admin/manager/supervisor
+- Secured `GET /api/work-orders` — Customer denied, technician sees own only, supervisor sees supervised only
+- Secured `GET/PUT/DELETE /api/work-orders/[id]` — Customer denied, technician/supervisor ownership check, delete restricted to admin/super_admin
+- Verified: All lint passes (0 new errors from RBAC changes)
+
+Stage Summary:
+- **NEW FILES**: `src/lib/rbac/types.ts`, `src/lib/rbac/complaint-access.ts`, `src/lib/rbac/audit-logger.ts`, `src/lib/rbac/index.ts`
+- **MODIFIED FILES** (14): complaints/route.ts, complaints/[id]/route.ts, complaints/[id]/workflow/route.ts, complaints/[id]/accept-reject/route.ts, complaints/[id]/assignment-history/route.ts, dashboard/route.ts, reports/route.ts, work-orders/route.ts, work-orders/[id]/route.ts
+- **SECURITY MODEL**: Database-level filtering (Prisma WHERE clauses), not frontend filters
+- **ROLES ENFORCED**: super_admin (platform), admin (tenant), manager (department), supervisor (team), technician (assigned), finance (invoice-related), customer (own only), hr/vendor/guest (denied)
+- **AUDIT**: All complaint access logged (fire-and-forget) with user, role, complaint, IP, device, result (ALLOWED/DENIED)

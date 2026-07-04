@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { ensureAllTablesSynced } from '@/lib/db-sync';
+import { buildAuthContext, buildComplaintWhereClause } from '@/lib/rbac';
+import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
@@ -12,13 +14,35 @@ export async function GET(request: NextRequest) {
   if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const tenantId = payload.tenantId as string;
+  const role = (payload.role as string).toLowerCase();
 
-  // --- Phase 1.5: Auto-sync schema columns ---
+  // --- Phase 1.5: Build RBAC context ---
+  const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+  if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  // --- Phase 1.6: Auto-sync schema columns ---
   await ensureAllTablesSynced();
+
+  // --- Phase 1.7: Build RBAC WHERE clause for complaints ---
+  const { where: complaintRbacWhere, accessLevel } = await buildComplaintWhereClause(ctx);
 
   // --- Phase 2: Database queries ---
   try {
-    // Run all queries in parallel
+    // Build complaint WHERE clauses for different queries
+    const baseComplaintWhere = complaintRbacWhere;
+    const openComplaintWhere = { ...baseComplaintWhere, status: 'NEW' } as Prisma.ComplaintWhereInput;
+    const inProgressComplaintWhere = { ...baseComplaintWhere, status: 'IN_PROGRESS' } as Prisma.ComplaintWhereInput;
+
+    // Work order WHERE: same tenant, but filter by user's accessible complaints
+    // For technicians, show only their work orders
+    let workOrderWhere: Prisma.WorkOrderWhereInput = { tenantId };
+    if (role === 'technician') {
+      workOrderWhere = { tenantId, assignedToId: ctx.userId };
+    } else if (role === 'customer') {
+      // Customers don't see work orders directly
+      workOrderWhere = { tenantId, id: '__NEVER_MATCH__' };
+    }
+
     const [
       totalEquipment,
       activeEquipment,
@@ -37,53 +61,69 @@ export async function GET(request: NextRequest) {
       recentWorkOrders,
       upcomingPm,
     ] = await Promise.all([
-      // Total equipment
+      // Total equipment (all roles see tenant equipment count)
       db.equipment.count({ where: { tenantId } }),
       // Active equipment
       db.equipment.count({ where: { tenantId, status: 'active' } }),
-      // Complaints by status
+      // Complaints by status — RBAC filtered
       db.complaint.groupBy({
         by: ['status'],
-        where: { tenantId },
+        where: baseComplaintWhere,
         _count: { id: true },
       }),
-      // Work orders by status
+      // Work orders by status — RBAC filtered
       db.workOrder.groupBy({
         by: ['status'],
-        where: { tenantId },
+        where: workOrderWhere,
         _count: { id: true },
       }),
-      // Paid invoice revenue
-      db.invoice.aggregate({
-        where: { tenantId, status: 'PAID' },
-        _sum: { total: true },
-      }),
-      // Pending invoices
-      db.invoice.count({ where: { tenantId, status: 'PENDING' } }),
-      // Overdue invoices
-      db.invoice.count({ where: { tenantId, status: 'OVERDUE' } }),
+      // Paid invoice revenue (finance/admin/manager/super_admin only)
+      (['super_admin', 'admin', 'manager', 'finance'].includes(role))
+        ? db.invoice.aggregate({
+            where: { tenantId, status: 'PAID' },
+            _sum: { total: true },
+          })
+        : Promise.resolve({ _sum: { total: 0 } }),
+      // Pending invoices (finance/admin/manager only)
+      (['super_admin', 'admin', 'manager', 'finance'].includes(role))
+        ? db.invoice.count({ where: { tenantId, status: 'PENDING' } })
+        : Promise.resolve(0),
+      // Overdue invoices (finance/admin/manager only)
+      (['super_admin', 'admin', 'manager', 'finance'].includes(role))
+        ? db.invoice.count({ where: { tenantId, status: 'OVERDUE' } })
+        : Promise.resolve(0),
       // Total customers
-      db.customer.count({ where: { tenantId, isActive: true } }),
-      // Total employees
-      db.user.count({ where: { tenantId, isActive: true } }),
-      // Low stock items - fetch and filter in JS (SQLite limitation)
-      db.inventoryItem.findMany({ where: { tenantId, isActive: true }, select: { id: true, quantity: true, minStock: true } }),
-      // PM compliance
-      db.pmSchedule.findMany({ where: { tenantId } }),
-      // Monthly revenue - last 6 months
-      db.invoice.findMany({
-        where: { tenantId, status: 'PAID', paidAt: { not: null } },
-        select: { total: true, paidAt: true },
-      }),
-      // Complaints by category
+      (role === 'customer')
+        ? Promise.resolve(1) // Customer sees "1" (themselves)
+        : db.customer.count({ where: { tenantId, isActive: true } }),
+      // Total employees (not shown to customers)
+      (role === 'customer')
+        ? Promise.resolve(0)
+        : db.user.count({ where: { tenantId, isActive: true } }),
+      // Low stock items (admin/manager/super_admin only)
+      (['super_admin', 'admin', 'manager'].includes(role))
+        ? db.inventoryItem.findMany({ where: { tenantId, isActive: true }, select: { id: true, quantity: true, minStock: true } })
+        : Promise.resolve([]),
+      // PM compliance (admin/manager/supervisor only)
+      (['super_admin', 'admin', 'manager', 'supervisor'].includes(role))
+        ? db.pmSchedule.findMany({ where: { tenantId } })
+        : Promise.resolve([]),
+      // Monthly revenue (finance/admin/manager only)
+      (['super_admin', 'admin', 'manager', 'finance'].includes(role))
+        ? db.invoice.findMany({
+            where: { tenantId, status: 'PAID', paidAt: { not: null } },
+            select: { total: true, paidAt: true },
+          })
+        : Promise.resolve([]),
+      // Complaints by category — RBAC filtered
       db.complaint.groupBy({
         by: ['category'],
-        where: { tenantId, category: { not: null } },
+        where: { ...baseComplaintWhere, category: { not: null } } as Prisma.ComplaintWhereInput,
         _count: { id: true },
       }),
-      // Recent 5 complaints
+      // Recent complaints — RBAC filtered
       db.complaint.findMany({
-        where: { tenantId },
+        where: baseComplaintWhere,
         take: 5,
         orderBy: { createdAt: 'desc' },
         include: {
@@ -93,9 +133,9 @@ export async function GET(request: NextRequest) {
           equipment: { select: { name: true } },
         },
       }),
-      // Recent 5 work orders
+      // Recent work orders — RBAC filtered
       db.workOrder.findMany({
-        where: { tenantId },
+        where: workOrderWhere,
         take: 5,
         orderBy: { createdAt: 'desc' },
         include: {
@@ -103,22 +143,24 @@ export async function GET(request: NextRequest) {
           equipment: { select: { name: true } },
         },
       }),
-      // Upcoming 5 PM schedules
-      db.pmSchedule.findMany({
-        where: { tenantId, status: 'active', nextDueDate: { gte: new Date() } },
-        take: 5,
-        orderBy: { nextDueDate: 'asc' },
-        include: {
-          equipment: { select: { name: true } },
-          assignedTo: { select: { name: true } },
-        },
-      }),
+      // Upcoming PM (admin/manager/supervisor only)
+      (['super_admin', 'admin', 'manager', 'supervisor'].includes(role))
+        ? db.pmSchedule.findMany({
+            where: { tenantId, status: 'active', nextDueDate: { gte: new Date() } },
+            take: 5,
+            orderBy: { nextDueDate: 'asc' },
+            include: {
+              equipment: { select: { name: true } },
+              assignedTo: { select: { name: true } },
+            },
+          })
+        : Promise.resolve([]),
     ]);
 
     // Calculate complaint status counts
     const statusMap: Record<string, number> = {};
     complaintStatusCounts.forEach((c) => { statusMap[c.status] = c._count.id; });
-    const openComplaints = statusMap['OPEN'] || 0;
+    const openComplaints = statusMap['OPEN'] || statusMap['NEW'] || 0;
     const inProgressComplaints = statusMap['IN_PROGRESS'] || 0;
 
     // Calculate work order status counts
@@ -194,21 +236,21 @@ export async function GET(request: NextRequest) {
     }));
 
     // Format upcoming PM
-    const formattedPm = upcomingPm.map((pm) => ({
+    const formattedPm = (upcomingPm as any[]).map((pm) => ({
       id: pm.id,
       tenantId: pm.tenantId,
       equipmentId: pm.equipmentId,
-      equipmentName: pm.equipment.name,
+      equipmentName: pm.equipment?.name,
       title: pm.title,
       description: pm.description,
       frequency: pm.frequency,
       lastExecuted: pm.lastExecuted?.toISOString(),
-      nextDueDate: pm.nextDueDate.toISOString(),
+      nextDueDate: pm.nextDueDate?.toISOString(),
       assignedToId: pm.assignedToId,
       assignedToName: pm.assignedTo?.name,
       status: pm.status,
-      createdAt: pm.createdAt.toISOString(),
-      updatedAt: pm.updatedAt.toISOString(),
+      createdAt: pm.createdAt?.toISOString(),
+      updatedAt: pm.updatedAt?.toISOString(),
     }));
 
     // Format complaints by category
@@ -237,13 +279,14 @@ export async function GET(request: NextRequest) {
       pmCompliance,
       totalCustomers,
       totalEmployees,
-      lowStockItems: lowStockItemsRaw.filter(i => i.quantity <= i.minStock).length,
+      lowStockItems: lowStockItemsRaw.filter((i: any) => i.quantity <= i.minStock).length,
       monthlyRevenue,
       complaintsByCategory,
       complaintsByStatus,
       recentComplaints: formattedComplaints,
       recentWorkOrders: formattedWorkOrders,
       upcomingPm: formattedPm,
+      accessLevel,
     });
   } catch (error) {
     console.error('Dashboard DB error:', error);

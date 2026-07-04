@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { buildAuthContext } from '@/lib/rbac';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -117,6 +118,8 @@ export async function GET(request: NextRequest) {
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = (payload.role as string).toLowerCase();
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const search = request.nextUrl.searchParams.get('search') || '';
@@ -124,7 +127,22 @@ export async function GET(request: NextRequest) {
     const type = request.nextUrl.searchParams.get('type') || '';
     const skip = (page - 1) * pageSize;
 
+    // ─── RBAC: Customers cannot access work orders ───
+    if (role === 'customer') {
+      return NextResponse.json({ data: [], total: 0, page, pageSize, totalPages: 0 });
+    }
+
     const where: Prisma.WorkOrderWhereInput = { tenantId };
+
+    // ─── RBAC: Technicians only see their own work orders ───
+    if (role === 'technician') {
+      where.assignedToId = userId;
+    }
+
+    // ─── RBAC: Supervisors see their supervised work orders ───
+    if (role === 'supervisor') {
+      where.supervisorId = userId;
+    }
     if (search) {
       where.OR = [
         { title: { contains: search } },

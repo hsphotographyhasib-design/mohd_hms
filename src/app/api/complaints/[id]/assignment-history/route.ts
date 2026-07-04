@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { buildAuthContext, canAccessComplaint, logComplaintAccessDenied } from '@/lib/rbac';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,9 +21,23 @@ export async function GET(
     const userRole = payload.role as string;
     const { id } = await params;
 
-    // Any authenticated user can view assignment history
+    // ─── RBAC: Verify role can view assignment history ───
     if (!['super_admin', 'admin', 'supervisor', 'manager', 'technician', 'finance'].includes(userRole)) {
       return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+    }
+
+    // ─── RBAC: Verify complaint access ───
+    const ctx = await buildAuthContext(payload);
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const hasAccess = await canAccessComplaint(ctx, id);
+    if (!hasAccess) {
+      logComplaintAccessDenied({
+        userId: ctx.userId, tenantId: ctx.tenantId, role: ctx.role,
+        complaintId: id, request,
+        reason: 'No RBAC access to view assignment history',
+      });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     const { searchParams } = new URL(request.url);

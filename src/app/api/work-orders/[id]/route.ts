@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { buildAuthContext, logComplaintAccessDenied } from '@/lib/rbac';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
@@ -14,10 +15,25 @@ export async function GET(
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = (payload.role as string).toLowerCase();
     const { id } = await params;
 
+    // ─── RBAC: Customers cannot access work orders ───
+    if (role === 'customer') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // ─── RBAC: Technicians only see their own work orders ───
+    const woWhere: Record<string, unknown> = { id, tenantId };
+    if (role === 'technician') {
+      woWhere.assignedToId = userId;
+    } else if (role === 'supervisor') {
+      woWhere.supervisorId = userId;
+    }
+
     const workOrder = await db.workOrder.findFirst({
-      where: { id, tenantId },
+      where: woWhere as any,
       include: {
         assignedTo: { select: { name: true } },
         equipment: { select: { name: true } },
@@ -90,8 +106,15 @@ export async function PUT(
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = (payload.role as string).toLowerCase();
     const { id } = await params;
     const body = await request.json();
+
+    // ─── RBAC: Customers and HR cannot modify work orders ───
+    if (['customer', 'hr', 'guest', 'vendor'].includes(role)) {
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+    }
 
     const existing = await db.workOrder.findFirst({ where: { id, tenantId } });
     if (!existing) return NextResponse.json({ error: 'Work order not found' }, { status: 404 });
@@ -175,7 +198,14 @@ export async function DELETE(
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = (payload.role as string).toLowerCase();
     const { id } = await params;
+
+    // ─── RBAC: Only admin/super_admin can delete work orders ───
+    if (!['super_admin', 'admin'].includes(role)) {
+      return NextResponse.json({ error: 'Insufficient permissions to delete work orders' }, { status: 403 });
+    }
 
     const existing = await db.workOrder.findFirst({ where: { id, tenantId } });
     if (!existing) return NextResponse.json({ error: 'Work order not found' }, { status: 404 });

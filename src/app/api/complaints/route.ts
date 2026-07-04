@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { ensureTableSync } from '@/lib/db-sync';
+import { buildAuthContext, buildComplaintWhereClause, canPerformAction, logComplaintAccessAllowed } from '@/lib/rbac';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -12,10 +13,13 @@ export async function GET(request: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+    // ─── RBAC: Build auth context and complaint WHERE clause ───
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
     // Auto-sync schema columns so Prisma queries don't fail on missing columns
     await ensureTableSync('Complaint');
 
-    const tenantId = payload.tenantId as string;
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const search = request.nextUrl.searchParams.get('search') || '';
@@ -23,12 +27,35 @@ export async function GET(request: NextRequest) {
     const priority = request.nextUrl.searchParams.get('priority') || '';
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.ComplaintWhereInput = { tenantId };
+    // ─── RBAC: Get role-based WHERE clause ───
+    const { where: rbacWhere, accessLevel, description } = await buildComplaintWhereClause(ctx);
+
+    // Deny access for roles with 'none' access level
+    if (accessLevel === 'none') {
+      return NextResponse.json({
+        data: [],
+        total: 0,
+        page,
+        pageSize,
+        totalPages: 0,
+        accessLevel,
+      });
+    }
+
+    // Merge RBAC WHERE with query filters
+    const where: Prisma.ComplaintWhereInput = { ...rbacWhere };
     if (search) {
-      where.OR = [
+      const searchOr: Prisma.ComplaintWhereInput[] = [
         { title: { contains: search } },
         { description: { contains: search } },
       ];
+      // Merge with existing OR conditions
+      if (where.OR) {
+        where.AND = [{ OR: searchOr }, { OR: where.OR as Prisma.ComplaintWhereInput[] }];
+        delete (where as Record<string, unknown>).OR;
+      } else {
+        where.OR = searchOr;
+      }
     }
     if (status) where.status = status;
     if (priority) where.priority = priority;
@@ -48,6 +75,15 @@ export async function GET(request: NextRequest) {
       }),
       db.complaint.count({ where }),
     ]);
+
+    // Audit log
+    logComplaintAccessAllowed({
+      userId: ctx.userId,
+      tenantId: ctx.tenantId,
+      role: ctx.role,
+      request,
+      action: `LIST_COMPLAINTS (${description})`,
+    });
 
     const data = items.map((c) => ({
       id: c.id,
@@ -81,6 +117,7 @@ export async function GET(request: NextRequest) {
       page,
       pageSize,
       totalPages: Math.ceil(total / pageSize),
+      accessLevel,
     });
   } catch (error) {
     console.error('Complaints list error:', error);
@@ -96,10 +133,18 @@ export async function POST(request: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+    const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = (payload.role as string).toLowerCase();
+
+    // ─── RBAC: Check if role can create complaints ───
+    if (!canPerformAction(role, 'create')) {
+      return NextResponse.json({ error: 'Insufficient permissions to create complaints' }, { status: 403 });
+    }
+
     // Auto-sync schema columns before creating
     await ensureTableSync('Complaint');
 
-    const tenantId = payload.tenantId as string;
     const body = await request.json();
     const { customerId, equipmentId, title, description, priority, category, photos, gpsLocation, assignedToId, supervisorId, source, customerSnapshot, locationInfo } = body;
 
@@ -114,9 +159,9 @@ export async function POST(request: NextRequest) {
     }
 
     // ─── Security: Customer-role users can only create complaints for themselves ───
-    if (payload.role === 'customer') {
+    if (role === 'customer') {
       const user = await db.user.findUnique({
-        where: { id: payload.userId as string },
+        where: { id: userId },
         select: { id: true, email: true, phone: true },
       });
       if (!user) return NextResponse.json({ error: 'User not found' }, { status: 401 });
@@ -134,6 +179,13 @@ export async function POST(request: NextRequest) {
       });
       if (!linkedCustomer) {
         return NextResponse.json({ error: 'You can only create complaints for your own account' }, { status: 403 });
+      }
+    }
+
+    // Technician cannot pre-assign or pre-supervise
+    if (role === 'technician') {
+      if (assignedToId && assignedToId !== userId) {
+        return NextResponse.json({ error: 'Technicians cannot assign complaints to others' }, { status: 403 });
       }
     }
 
@@ -164,7 +216,7 @@ export async function POST(request: NextRequest) {
       category: category || null,
       photos: photos ? JSON.stringify(photos) : null,
       gpsLocation: gpsLocation ? JSON.stringify(gpsLocation) : null,
-      assignedToId: assignedToId || null,
+      assignedToId: role === 'technician' ? userId : (assignedToId || null),
       supervisorId: supervisorId || null,
     };
 

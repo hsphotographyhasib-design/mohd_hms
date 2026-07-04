@@ -2,7 +2,30 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { ensureTableSync } from '@/lib/db-sync';
+import {
+  buildAuthContext,
+  buildComplaintWhereClause,
+  canAccessComplaint,
+  canPerformAction,
+  isFieldVisibleToRole,
+  logComplaintAccessDenied,
+  logComplaintAccessAllowed,
+} from '@/lib/rbac';
+import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
+
+// ── Helper: redact sensitive fields for customer role ────────────────────────
+
+function redactCustomerFields(complaint: Record<string, unknown>, role: string): Record<string, unknown> {
+  if (role !== 'customer') return complaint;
+  const redacted = { ...complaint };
+  for (const field of ['rejectionReason', 'reworkReason', 'assignmentReason', 'reassignmentCount', 'slaResponseDeadline']) {
+    if (field in redacted) {
+      delete redacted[field];
+    }
+  }
+  return redacted;
+}
 
 export async function GET(
   request: NextRequest,
@@ -16,11 +39,31 @@ export async function GET(
 
     await ensureTableSync('Complaint');
 
-    const tenantId = payload.tenantId as string;
     const { id } = await params;
 
+    // ─── RBAC: Build auth context ───
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    // ─── RBAC: Check access to this specific complaint ───
+    const hasAccess = await canAccessComplaint(ctx, id);
+    if (!hasAccess) {
+      logComplaintAccessDenied({
+        userId: ctx.userId,
+        tenantId: ctx.tenantId,
+        role: ctx.role,
+        complaintId: id,
+        request,
+        reason: 'User does not have access to this complaint',
+      });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Build the RBAC-aware WHERE clause for the query
+    const { where: rbacWhere } = await buildComplaintWhereClause(ctx);
+
     const complaint = await db.complaint.findFirst({
-      where: { id, tenantId },
+      where: { ...rbacWhere, id },
       include: {
         customer: { select: { name: true } },
         equipment: { select: { name: true } },
@@ -40,7 +83,17 @@ export async function GET(
       return NextResponse.json({ error: 'Complaint not found' }, { status: 404 });
     }
 
-    return NextResponse.json({
+    logComplaintAccessAllowed({
+      userId: ctx.userId,
+      tenantId: ctx.tenantId,
+      role: ctx.role,
+      complaintId: id,
+      request,
+      action: 'VIEW_DETAIL',
+    });
+
+    // Redact sensitive fields for customer role
+    const responseData = redactCustomerFields({
       id: complaint.id,
       tenantId: complaint.tenantId,
       customerId: complaint.customerId,
@@ -80,7 +133,9 @@ export async function GET(
         createdAt: wo.createdAt.toISOString(),
         updatedAt: wo.updatedAt.toISOString(),
       })),
-    });
+    }, ctx.role);
+
+    return NextResponse.json(responseData);
   } catch (error) {
     console.error('Complaint get error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
@@ -98,10 +153,67 @@ export async function PUT(
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = (payload.role as string).toLowerCase();
     const { id } = await params;
     const body = await request.json();
 
-    const existing = await db.complaint.findFirst({ where: { id, tenantId } });
+    // ─── RBAC: Check mutation permission ───
+    if (!canPerformAction(role, 'update_fields')) {
+      logComplaintAccessDenied({
+        userId,
+        tenantId,
+        role,
+        complaintId: id,
+        request,
+        reason: `Role '${role}' cannot update complaints`,
+      });
+      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
+    }
+
+    // ─── RBAC: Verify ownership before update ───
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const hasAccess = await canAccessComplaint(ctx, id);
+    if (!hasAccess) {
+      logComplaintAccessDenied({
+        userId: ctx.userId,
+        tenantId: ctx.tenantId,
+        role: ctx.role,
+        complaintId: id,
+        request,
+        reason: 'Cannot update a complaint you do not have access to',
+      });
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
+    // Customer can only update: customerRating, customerFeedback
+    if (role === 'customer') {
+      const allowedCustomerFields = ['customerRating', 'customerFeedback'];
+      const requestedFields = Object.keys(body);
+      const disallowedFields = requestedFields.filter(f => !allowedCustomerFields.includes(f));
+      if (disallowedFields.length > 0) {
+        return NextResponse.json({
+          error: 'Customers can only update rating and feedback',
+          disallowedFields,
+        }, { status: 403 });
+      }
+    }
+
+    // Technician cannot reassign or change supervisor
+    if (role === 'technician') {
+      if (body.assignedToId !== undefined && body.assignedToId !== userId) {
+        return NextResponse.json({ error: 'Technicians cannot reassign complaints' }, { status: 403 });
+      }
+      if (body.supervisorId !== undefined) {
+        return NextResponse.json({ error: 'Technicians cannot change supervisors' }, { status: 403 });
+      }
+    }
+
+    const { where: rbacWhere } = await buildComplaintWhereClause(ctx);
+
+    const existing = await db.complaint.findFirst({ where: { ...rbacWhere, id } });
     if (!existing) return NextResponse.json({ error: 'Complaint not found' }, { status: 404 });
 
     // Build update data with timestamp logic
@@ -138,6 +250,15 @@ export async function PUT(
         assignedTo: { select: { name: true } },
         supervisor: { select: { name: true } },
       },
+    });
+
+    logComplaintAccessAllowed({
+      userId: ctx.userId,
+      tenantId: ctx.tenantId,
+      role: ctx.role,
+      complaintId: id,
+      request,
+      action: 'UPDATE',
     });
 
     return NextResponse.json({
@@ -179,15 +300,46 @@ export async function DELETE(
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    await ensureTableSync('Complaint');
-
     const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = (payload.role as string).toLowerCase();
     const { id } = await params;
 
-    const existing = await db.complaint.findFirst({ where: { id, tenantId } });
+    // ─── RBAC: Only super_admin and admin can delete ───
+    if (!canPerformAction(role, 'delete')) {
+      logComplaintAccessDenied({
+        userId,
+        tenantId,
+        role,
+        complaintId: id,
+        request,
+        reason: `Role '${role}' cannot delete complaints`,
+      });
+      return NextResponse.json({ error: 'Insufficient permissions to delete complaints' }, { status: 403 });
+    }
+
+    await ensureTableSync('Complaint');
+
+    // ─── RBAC: Verify tenant access ───
+    const ctx = await buildAuthContext(payload);
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { where: rbacWhere } = await buildComplaintWhereClause(ctx);
+
+    const existing = await db.complaint.findFirst({ where: { ...rbacWhere, id } });
     if (!existing) return NextResponse.json({ error: 'Complaint not found' }, { status: 404 });
 
     await db.complaint.delete({ where: { id } });
+
+    logComplaintAccessAllowed({
+      userId: ctx.userId,
+      tenantId: ctx.tenantId,
+      role: ctx.role,
+      complaintId: id,
+      request,
+      action: 'DELETE',
+    });
+
     return NextResponse.json({ message: 'Complaint deleted successfully' });
   } catch (error) {
     console.error('Complaint delete error:', error);

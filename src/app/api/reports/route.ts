@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { buildAuthContext, buildComplaintWhereClause } from '@/lib/rbac';
+import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
@@ -11,10 +13,23 @@ export async function GET(request: NextRequest) {
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
+    const role = (payload.role as string).toLowerCase();
     const type = request.nextUrl.searchParams.get('type') || 'complaint';
+
+    // ─── RBAC: Build auth context and complaint WHERE clause ───
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { where: complaintRbacWhere, accessLevel } = await buildComplaintWhereClause(ctx);
+
+    // Deny access for roles with no complaint visibility
+    if (accessLevel === 'none') {
+      return NextResponse.json({ error: 'Insufficient permissions for reports' }, { status: 403 });
+    }
 
     switch (type) {
       case 'complaint': {
+        // ─── RBAC: All complaint queries filtered ───
         const [
           statusCounts,
           priorityCounts,
@@ -24,27 +39,27 @@ export async function GET(request: NextRequest) {
         ] = await Promise.all([
           db.complaint.groupBy({
             by: ['status'],
-            where: { tenantId },
+            where: complaintRbacWhere,
             _count: { id: true },
           }),
           db.complaint.groupBy({
             by: ['priority'],
-            where: { tenantId },
+            where: complaintRbacWhere,
             _count: { id: true },
           }),
           db.complaint.groupBy({
             by: ['category'],
-            where: { tenantId, category: { not: null } },
+            where: { ...complaintRbacWhere, category: { not: null } } as Prisma.ComplaintWhereInput,
             _count: { id: true },
           }),
           // Average resolution time
           db.complaint.findMany({
-            where: { tenantId, resolvedAt: { not: null }, createdAt: { not: null } },
+            where: { ...complaintRbacWhere, resolvedAt: { not: null }, createdAt: { not: null } } as Prisma.ComplaintWhereInput,
             select: { createdAt: true, resolvedAt: true },
           }),
           // Monthly complaint counts for last 6 months
           db.complaint.findMany({
-            where: { tenantId },
+            where: complaintRbacWhere,
             select: { createdAt: true },
           }),
         ]);
@@ -82,28 +97,37 @@ export async function GET(request: NextRequest) {
           byCategory: categoryCounts.map((c) => ({ category: c.category || 'Unknown', count: c._count.id })),
           avgResolutionDays: avgDays,
           monthlyTrend: monthlyData,
+          accessLevel,
         });
       }
 
       case 'work_order': {
+        // Work order RBAC: technicians only see their own
+        let woWhere: Prisma.WorkOrderWhereInput = { tenantId };
+        if (role === 'technician') {
+          woWhere = { tenantId, assignedToId: ctx.userId };
+        } else if (role === 'customer') {
+          return NextResponse.json({ type: 'work_order', total: 0, byStatus: [], byType: [], monthlyTrend: [], technicianWorkload: [], accessLevel });
+        }
+
         const [statusCounts, typeCounts, monthlyCounts, technicianWorkload] = await Promise.all([
           db.workOrder.groupBy({
             by: ['status'],
-            where: { tenantId },
+            where: woWhere,
             _count: { id: true },
           }),
           db.workOrder.groupBy({
             by: ['type'],
-            where: { tenantId },
+            where: woWhere,
             _count: { id: true },
           }),
           db.workOrder.findMany({
-            where: { tenantId },
+            where: woWhere,
             select: { createdAt: true, status: true },
           }),
           db.workOrder.groupBy({
             by: ['assignedToId'],
-            where: { tenantId, assignedToId: { not: null } },
+            where: { ...woWhere, assignedToId: { not: null } } as Prisma.WorkOrderWhereInput,
             _count: { id: true },
             orderBy: { _count: { id: 'desc' } },
             take: 10,
@@ -147,10 +171,16 @@ export async function GET(request: NextRequest) {
             technicianName: techMap[t.assignedToId!],
             workOrders: t._count.id,
           })),
+          accessLevel,
         });
       }
 
       case 'equipment': {
+        // Equipment reports: hide from customers
+        if (role === 'customer') {
+          return NextResponse.json({ type: 'equipment', total: 0, byStatus: [], byCategory: [], warrantyExpiringSoon: [], accessLevel });
+        }
+
         const [statusCounts, categoryCounts, maintenanceAlerts] = await Promise.all([
           db.equipment.groupBy({
             by: ['status'],
@@ -182,10 +212,16 @@ export async function GET(request: NextRequest) {
             name: e.name,
             warrantyExpiry: e.warrantyExpiry?.toISOString(),
           })),
+          accessLevel,
         });
       }
 
       case 'financial': {
+        // Financial reports: admin/manager/finance/super_admin only
+        if (!['super_admin', 'admin', 'manager', 'finance'].includes(role)) {
+          return NextResponse.json({ error: 'Insufficient permissions for financial reports' }, { status: 403 });
+        }
+
         const [
           revenueByMonth,
           expensesByMonth,
@@ -232,10 +268,16 @@ export async function GET(request: NextRequest) {
             total: c._sum.total || 0,
           })),
           monthlyTrend: monthlyData,
+          accessLevel,
         });
       }
 
       case 'pm': {
+        // PM reports: admin/manager/supervisor only
+        if (!['super_admin', 'admin', 'manager', 'supervisor'].includes(role)) {
+          return NextResponse.json({ error: 'Insufficient permissions for PM reports' }, { status: 403 });
+        }
+
         const [statusCounts, frequencyCounts, overduePm] = await Promise.all([
           db.pmSchedule.groupBy({
             by: ['status'],
@@ -271,10 +313,16 @@ export async function GET(request: NextRequest) {
             nextDueDate: pm.nextDueDate.toISOString(),
             assignedToName: pm.assignedTo?.name,
           })),
+          accessLevel,
         });
       }
 
       case 'technician': {
+        // Technician reports: admin/manager/supervisor/super_admin only
+        if (!['super_admin', 'admin', 'manager', 'supervisor'].includes(role)) {
+          return NextResponse.json({ error: 'Insufficient permissions for technician reports' }, { status: 403 });
+        }
+
         const technicians = await db.user.findMany({
           where: { tenantId, role: 'technician', isActive: true },
           include: {
@@ -303,6 +351,7 @@ export async function GET(request: NextRequest) {
             complaints: t._count.assignedComplaints,
             workOrders: t._count.assignedWorkOrders,
           })),
+          accessLevel,
         });
       }
 
