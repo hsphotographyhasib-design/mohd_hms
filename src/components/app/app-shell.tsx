@@ -127,9 +127,53 @@ function MobileViewRouter() {
       {currentView === 'whatsapp-settings' && <WhatsAppSettings />}
       {currentView === 'cms-dashboard' && <CmsDashboard />}
       {currentView === 'new-work-order' && <NewWorkOrder />}
+      {currentView === 'hr-dashboard' && <HrDashboard />}
+      {currentView === 'hr-employees' && <HrEmployees />}
+      {currentView === 'hr-departments' && <HrDepartments />}
+      {currentView === 'hr-attendance' && <HrAttendance />}
+      {currentView === 'hr-leave' && <HrLeave />}
+      {currentView === 'hr-shifts' && <HrShifts />}
+      {currentView === 'hr-payroll' && <HrPayroll />}
+      {currentView === 'hr-overtime' && <HrOvertime />}
+      {currentView === 'hr-recruitment' && <HrRecruitment />}
+      {currentView === 'hr-performance' && <HrPerformance />}
+      {currentView === 'hr-training' && <HrTraining />}
+      {currentView === 'hr-assets' && <HrAssets />}
+      {currentView === 'hr-documents' && <HrDocuments />}
+      {currentView === 'hr-visitors' && <HrVisitors />}
+      {currentView === 'hr-medical' && <HrMedical />}
+      {currentView === 'hr-travel' && <HrTravel />}
+      {currentView === 'hr-expenses' && <HrExpenses />}
+      {currentView === 'hr-disciplinary' && <HrDisciplinary />}
+      {currentView === 'hr-announcements' && <HrAnnouncements />}
+      {currentView === 'hr-reports' && <HrReportsView />}
+      {currentView === 'hr-settings' && <HrSettingsView />}
     </Suspense>
   );
 }
+
+// HR views
+const HrDashboard = lazy(() => import('@/components/modules/hr/hr-dashboard').then(m => ({ default: m.HrDashboard })));
+const HrEmployees = lazy(() => import('@/components/modules/hr/hr-employees').then(m => ({ default: m.HrEmployees })));
+const HrDepartments = lazy(() => import('@/components/modules/hr/hr-departments').then(m => ({ default: m.HrDepartments })));
+const HrAttendance = lazy(() => import('@/components/modules/hr/hr-attendance').then(m => ({ default: m.HrAttendance })));
+const HrLeave = lazy(() => import('@/components/modules/hr/hr-leave').then(m => ({ default: m.HrLeave })));
+const HrShifts = lazy(() => import('@/components/modules/hr/hr-shifts').then(m => ({ default: m.HrShifts })));
+const HrPayroll = lazy(() => import('@/components/modules/hr/hr-payroll').then(m => ({ default: m.HrPayroll })));
+const HrOvertime = lazy(() => import('@/components/modules/hr/hr-overtime').then(m => ({ default: m.HrOvertime })));
+const HrRecruitment = lazy(() => import('@/components/modules/hr/hr-recruitment').then(m => ({ default: m.HrRecruitment })));
+const HrPerformance = lazy(() => import('@/components/modules/hr/hr-performance').then(m => ({ default: m.HrPerformance })));
+const HrTraining = lazy(() => import('@/components/modules/hr/hr-training').then(m => ({ default: m.HrTraining })));
+const HrAssets = lazy(() => import('@/components/modules/hr/hr-assets').then(m => ({ default: m.HrAssets })));
+const HrDocuments = lazy(() => import('@/components/modules/hr/hr-documents').then(m => ({ default: m.HrDocuments })));
+const HrVisitors = lazy(() => import('@/components/modules/hr/hr-visitors').then(m => ({ default: m.HrVisitors })));
+const HrMedical = lazy(() => import('@/components/modules/hr/hr-medical').then(m => ({ default: m.HrMedical })));
+const HrTravel = lazy(() => import('@/components/modules/hr/hr-travel').then(m => ({ default: m.HrTravel })));
+const HrExpenses = lazy(() => import('@/components/modules/hr/hr-expenses').then(m => ({ default: m.HrExpenses })));
+const HrDisciplinary = lazy(() => import('@/components/modules/hr/hr-disciplinary').then(m => ({ default: m.HrDisciplinary })));
+const HrAnnouncements = lazy(() => import('@/components/modules/hr/hr-announcements').then(m => ({ default: m.HrAnnouncements })));
+const HrReportsView = lazy(() => import('@/components/modules/hr/hr-reports').then(m => ({ default: m.HrReports })));
+const HrSettingsView = lazy(() => import('@/components/modules/hr/hr-settings').then(m => ({ default: m.HrSettings })));
 
 const EmailManagement = lazy(() => import('@/components/modules/email/email-dashboard').then(m => ({ default: m.EmailManagement })));
 
@@ -213,6 +257,27 @@ function ViewRouter() {
       {currentView === 'email-management' && <EmailManagement />}
       {currentView === 'complaint-assignment' && <TechnicianAssignmentScreen complaintId={useAppStore.getState().viewParams?.id} />}
       {currentView === 'customer-portal' && <CustomerPortal />}
+      {currentView === 'hr-dashboard' && <HrDashboard />}
+      {currentView === 'hr-employees' && <HrEmployees />}
+      {currentView === 'hr-departments' && <HrDepartments />}
+      {currentView === 'hr-attendance' && <HrAttendance />}
+      {currentView === 'hr-leave' && <HrLeave />}
+      {currentView === 'hr-shifts' && <HrShifts />}
+      {currentView === 'hr-payroll' && <HrPayroll />}
+      {currentView === 'hr-overtime' && <HrOvertime />}
+      {currentView === 'hr-recruitment' && <HrRecruitment />}
+      {currentView === 'hr-performance' && <HrPerformance />}
+      {currentView === 'hr-training' && <HrTraining />}
+      {currentView === 'hr-assets' && <HrAssets />}
+      {currentView === 'hr-documents' && <HrDocuments />}
+      {currentView === 'hr-visitors' && <HrVisitors />}
+      {currentView === 'hr-medical' && <HrMedical />}
+      {currentView === 'hr-travel' && <HrTravel />}
+      {currentView === 'hr-expenses' && <HrExpenses />}
+      {currentView === 'hr-disciplinary' && <HrDisciplinary />}
+      {currentView === 'hr-announcements' && <HrAnnouncements />}
+      {currentView === 'hr-reports' && <HrReportsView />}
+      {currentView === 'hr-settings' && <HrSettingsView />}
     </Suspense>
   );
 }

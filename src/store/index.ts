@@ -273,6 +273,7 @@ export function canAccess(userRole: UserRole, feature: string): boolean {
     cms: ['super_admin', 'admin'],
     whatsapp: ['super_admin', 'admin', 'manager', 'supervisor'],
     email: ['super_admin', 'admin'],
+    hr: ['super_admin', 'admin', 'manager', 'supervisor'],
   };
   return (permissions[feature] || []).includes(userRole);
 }

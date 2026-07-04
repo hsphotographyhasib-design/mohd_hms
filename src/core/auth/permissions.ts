@@ -23,4 +23,5 @@ export const PERMISSIONS: Record<string, UserRole[]> = {
   settings: ['super_admin', 'admin'],
   cms: ['super_admin', 'admin'],
   whatsapp: ['super_admin', 'admin', 'manager', 'supervisor'],
+  hr: ['super_admin', 'admin', 'manager', 'supervisor'],
 };

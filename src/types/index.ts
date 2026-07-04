@@ -107,7 +107,29 @@ export type AppView =
   // Mobile-specific views
   | 'rate-feedback'
   | 'help'
-  | 'documents';
+  | 'documents'
+  // HR views
+  | 'hr-dashboard'
+  | 'hr-employees'
+  | 'hr-departments'
+  | 'hr-attendance'
+  | 'hr-leave'
+  | 'hr-shifts'
+  | 'hr-payroll'
+  | 'hr-overtime'
+  | 'hr-recruitment'
+  | 'hr-performance'
+  | 'hr-training'
+  | 'hr-assets'
+  | 'hr-documents'
+  | 'hr-visitors'
+  | 'hr-medical'
+  | 'hr-travel'
+  | 'hr-expenses'
+  | 'hr-disciplinary'
+  | 'hr-announcements'
+  | 'hr-reports'
+  | 'hr-settings';
 
 // ============ EQUIPMENT ============
 

@@ -66,6 +66,29 @@ model Tenant {
   authAuditLogs        AuthAuditLog[]
   emailLogs            EmailLog[]
   emailTemplates       EmailTemplate[]
+  // HR Relations
+  hrShifts            HrShift[]
+  hrShiftSchedules    HrShiftSchedule[]
+  hrHolidays          HrHoliday[]
+  hrEmployees         HrEmployee[]
+  hrLeaveTypes        HrLeaveType[]
+  hrLeaveBalances     HrLeaveBalance[]
+  hrLeaveRequests     HrLeaveRequest[]
+  hrPayrolls          HrPayroll[]
+  hrOvertimeRequests  HrOvertimeRequest[]
+  hrJobPositions      HrJobPosition[]
+  hrCandidates        HrCandidate[]
+  hrPerformanceReviews HrPerformanceReview[]
+  hrTrainings         HrTraining[]
+  hrTrainingRecords   HrTrainingRecord[]
+  hrAssetAssignments  HrAssetAssignment[]
+  hrEmployeeDocuments HrEmployeeDocument[]
+  hrVisitors          HrVisitor[]
+  hrMedicalRecords    HrMedicalRecord[]
+  hrTravelRequests    HrTravelRequest[]
+  hrExpenseClaims     HrExpenseClaim[]
+  hrDisciplinaryActions HrDisciplinaryAction[]
+  hrAnnouncements     HrAnnouncement[]
 }
 
 // ============ USERS & AUTH ============
@@ -136,6 +159,7 @@ model Department {
 
   tenant      Tenant   @relation(fields: [tenantId], references: [id])
   users       User[]
+  hrEmployees HrEmployee[]
 
   @@index([tenantId])
 }
@@ -1049,6 +1073,585 @@ model Attendance {
   @@unique([tenantId, userId, date])
   @@index([tenantId])
   @@index([tenantId, userId])
+}
+
+// ============ HUMAN RESOURCES MANAGEMENT SYSTEM ============
+
+// --- HR: Shift & Schedule ---
+
+model HrShift {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  startTime   String   // "08:00"
+  endTime     String   // "17:00"
+  breakMinutes Int     @default(60)
+  color       String   @default("#3b82f6")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  schedules   HrShiftSchedule[]
+  employees   HrEmployee[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+}
+
+model HrShiftSchedule {
+  id          String   @id @default(cuid())
+  tenantId    String
+  employeeId  String
+  shiftId     String
+  effectiveFrom DateTime
+  effectiveTo   DateTime?
+  weeklyOffDays String   // JSON array: ["saturday","sunday"]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+  shift       HrShift   @relation(fields: [shiftId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, shiftId])
+}
+
+model HrHoliday {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  date        DateTime
+  type        String   @default("public") // public, company, optional
+  recurring   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, date])
+  @@index([tenantId])
+}
+
+// --- HR: Employee Extended Profile ---
+
+model HrEmployee {
+  id              String   @id @default(cuid())
+  tenantId        String
+  userId          String   @unique
+  employeeId      String   // e.g. EMP-001
+  departmentId    String?
+  designation     String?
+  employmentType  String   @default("full_time") // full_time, part_time, contract, intern, temporary
+  reportingToId   String?  // employee ID of manager
+  basicSalary     Float?
+  nationality      String?
+  passportNumber  String?
+  passportExpiry  DateTime?
+  visaNumber      String?
+  visaExpiry      DateTime?
+  drivingLicense  String?
+  drivingLicenseExpiry DateTime?
+  joiningDate     DateTime?
+  probationEnds   DateTime?
+  contractEnd     DateTime?
+  bankName        String?
+  bankAccount     String?
+  bankBranch      String?
+  emergencyName   String?
+  emergencyPhone  String?
+  emergencyRelation String?
+  dateOfBirth     DateTime?
+  gender          String?  // male, female, other
+  maritalStatus   String?  // single, married, divorced, widowed
+  bloodGroup      String?
+  photo           String?
+  status          String   @default("active") // active, inactive, terminated, resigned, on_probation
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  shift           HrShift?  @relation(fields: [shiftId], references: [id])
+  shiftId         String?
+  department      Department? @relation(fields: [departmentId], references: [id])
+  leaves          HrLeaveRequest[]
+  overtimeRequests HrOvertimeRequest[]
+  performanceReviews HrPerformanceReview[]
+  trainingRecords HrTrainingRecord[]
+  assetAssignments HrAssetAssignment[]
+  documents       HrEmployeeDocument[]
+  medicalRecords  HrMedicalRecord[]
+  travelRequests  HrTravelRequest[]
+  expenseClaims   HrExpenseClaim[]
+  disciplinaryActions HrDisciplinaryAction[]
+  payrollRecords  HrPayroll[]
+
+  @@unique([tenantId, employeeId])
+  @@index([tenantId])
+  @@index([tenantId, departmentId])
+  @@index([tenantId, status])
+}
+
+// --- HR: Leave Management ---
+
+model HrLeaveType {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String   // Annual, Medical, Emergency, Unpaid, Maternity, Compassionate
+  code          String   @unique // ANNUAL, MEDICAL, etc.
+  daysAllowed   Float
+  isPaid        Boolean  @default(true)
+  carryForward  Boolean  @default(false)
+  maxCarryDays  Float?
+  requiresDoc   Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  balances      HrLeaveBalance[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+}
+
+model HrLeaveBalance {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  leaveTypeId   String
+  totalDays     Float
+  usedDays      Float    @default(0)
+  carriedDays   Float    @default(0)
+  year          Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  leaveType     HrLeaveType @relation(fields: [leaveTypeId], references: [id])
+
+  @@unique([tenantId, employeeId, leaveTypeId, year])
+  @@index([tenantId, employeeId])
+}
+
+model HrLeaveRequest {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  leaveTypeId   String
+  startDate     DateTime
+  endDate       DateTime
+  days          Float
+  reason        String?
+  status        String   @default("PENDING") // PENDING, SUPERVISOR_APPROVED, HR_APPROVED, REJECTED, CANCELLED
+  supervisorId  String?
+  supervisorApprovedAt DateTime?
+  hrOfficerId   String?
+  hrApprovedAt  DateTime?
+  rejectedBy    String?
+  rejectedAt    DateTime?
+  rejectionReason String?
+  attachmentUrl  String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, status])
+  @@index([tenantId, leaveTypeId])
+}
+
+// --- HR: Payroll ---
+
+model HrPayroll {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  month         Int      // 1-12
+  year          Int
+  basicSalary   Float
+  allowances    Float    @default(0)
+  deductions    Float    @default(0)
+  overtimePay   Float    @default(0)
+  bonus         Float    @default(0)
+  loanDeduction Float    @default(0)
+  tax           Float    @default(0)
+  netPay        Float
+  status        String   @default("DRAFT") // DRAFT, PROCESSED, PAID
+  payslipUrl    String?
+  processedBy   String?
+  processedAt   DateTime?
+  paidAt        DateTime?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@unique([tenantId, employeeId, month, year])
+  @@index([tenantId, month, year])
+  @@index([tenantId, status])
+}
+
+// --- HR: Overtime ---
+
+model HrOvertimeRequest {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  date          DateTime
+  hours         Float
+  reason        String?
+  status        String   @default("PENDING") // PENDING, SUPERVISOR_APPROVED, HR_APPROVED, REJECTED, PAID
+  supervisorId  String?
+  supervisorApprovedAt DateTime?
+  hrOfficerId   String?
+  hrApprovedAt  DateTime?
+  rate          Float?
+  totalPay      Float?
+  payrollId     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, status])
+}
+
+// --- HR: Recruitment ---
+
+model HrJobPosition {
+  id            String   @id @default(cuid())
+  tenantId      String
+  title         String
+  departmentId  String?
+  type          String   @default("full_time") // full_time, part_time, contract, intern
+  vacancies     Int      @default(1)
+  location      String?
+  salaryMin     Float?
+  salaryMax     Float?
+  description   String?
+  requirements  String?  // JSON
+  status        String   @default("open") // open, closed, on_hold, filled
+  postedDate    DateTime @default(now())
+  closingDate   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  applications  HrCandidate[]
+
+  @@index([tenantId, status])
+}
+
+model HrCandidate {
+  id            String   @id @default(cuid())
+  tenantId      String
+  jobId         String
+  name          String
+  email         String
+  phone         String?
+  resumeUrl     String?
+  coverLetterUrl String?
+  source        String?  // referral, linkedin, website, walk_in
+  status        String   @default("applied") // applied, screening, interview, offer, hired, rejected
+  appliedAt     DateTime @default(now())
+  interviewDate DateTime?
+  interviewerId String?
+  offerSalary   Float?
+  offerDate     DateTime?
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  job           HrJobPosition @relation(fields: [jobId], references: [id])
+
+  @@index([tenantId, jobId])
+  @@index([tenantId, status])
+}
+
+// --- HR: Performance ---
+
+model HrPerformanceReview {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  period        String   // "Q1 2025", "Annual 2025"
+  type          String   @default("quarterly") // monthly, quarterly, semi_annual, annual
+  kpiScore      Float?
+  goalsScore    Float?
+  overallScore  Float?
+  rating        String?  // outstanding, excellent, good, satisfactory, needs_improvement, poor
+  employeeComments String? @db.Text
+  managerComments  String? @db.Text
+  reviewerId    String?
+  status        String   @default("draft") // draft, employee_review, manager_review, completed
+  completedAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, period])
+}
+
+// --- HR: Training ---
+
+model HrTraining {
+  id            String   @id @default(cuid())
+  tenantId      String
+  title         String
+  description   String?  @db.Text
+  provider      String?
+  location      String?
+  startDate     DateTime
+  endDate       DateTime
+  cost          Float?
+  maxParticipants Int?
+  status        String   @default("planned") // planned, ongoing, completed, cancelled
+  certificateTemplate String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  records       HrTrainingRecord[]
+
+  @@index([tenantId, status])
+}
+
+model HrTrainingRecord {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  trainingId    String
+  status        String   @default("enrolled") // enrolled, in_progress, completed, failed, cancelled
+  score         Float?
+  certificateUrl String?
+  certificateExpiry DateTime?
+  completedAt   DateTime?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+  training      HrTraining @relation(fields: [trainingId], references: [id])
+
+  @@unique([tenantId, employeeId, trainingId])
+  @@index([tenantId, employeeId])
+}
+
+// --- HR: Asset Assignment ---
+
+model HrAssetAssignment {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  assetType     String   // vehicle, laptop, mobile, tools, uniform, ppe, equipment
+  assetName     String
+  assetId       String?  // reference to equipment ID if applicable
+  serialNumber  String?
+  assignedDate  DateTime @default(now())
+  returnDate    DateTime?
+  status        String   @default("assigned") // assigned, returned, damaged, lost
+  condition     String?  // new, good, fair, poor
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, assetType])
+}
+
+// --- HR: Employee Documents ---
+
+model HrEmployeeDocument {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  documentType  String   // passport, visa, driving_license, certificate, contract, insurance, other
+  title         String
+  fileUrl       String
+  expiryDate    DateTime?
+  reminderDays  Int      @default(30)
+  status        String   @default("active") // active, expired, revoked
+  uploadedAt    DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, documentType])
+  @@index([tenantId, expiryDate])
+}
+
+// --- HR: Visitor Management ---
+
+model HrVisitor {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  email         String?
+  phone         String?
+  company       String?
+  purpose       String?
+  hostEmployeeId String?
+  checkIn       DateTime?
+  checkOut      DateTime?
+  photoUrl      String?
+  idNumber      String?
+  badgeNumber   String?
+  status        String   @default("expected") // expected, checked_in, checked_out
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([tenantId, checkIn])
+}
+
+// --- HR: Medical Records ---
+
+model HrMedicalRecord {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  recordType    String   // insurance, medical_certificate, vaccination, checkup
+  provider      String?
+  date          DateTime
+  expiryDate    DateTime?
+  details       String?  @db.Text
+  fileUrl       String?
+  cost          Float?
+  status        String   @default("active") // active, expired
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, expiryDate])
+}
+
+// --- HR: Travel Requests ---
+
+model HrTravelRequest {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  destination   String
+  purpose       String
+  startDate     DateTime
+  endDate       DateTime
+  budget        Float?
+  actualCost    Float?
+  status        String   @default("PENDING") // PENDING, MANAGER_APPROVED, HR_APPROVED, REJECTED, COMPLETED, CANCELLED
+  approvedBy    String?
+  approvedAt    DateTime?
+  rejectionReason String?
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, status])
+}
+
+// --- HR: Expense Claims ---
+
+model HrExpenseClaim {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  category      String   // fuel, travel, meals, accommodation, other
+  amount        Float
+  description   String
+  receiptUrl    String?
+  expenseDate   DateTime
+  status        String   @default("PENDING") // PENDING, MANAGER_APPROVED, HR_APPROVED, REJECTED, PAID, REJECTED
+  approvedBy    String?
+  approvedAt    DateTime?
+  paidAt        DateTime?
+  rejectionReason String?
+  payrollId     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, status])
+  @@index([tenantId, category])
+}
+
+// --- HR: Disciplinary Actions ---
+
+model HrDisciplinaryAction {
+  id            String   @id @default(cuid())
+  tenantId      String
+  employeeId    String
+  type          String   // warning, suspension, investigation, termination, other
+  severity      String   @default("minor") // minor, major, critical
+  description   String   @db.Text
+  incidentDate  DateTime
+  actionTaken   String?  @db.Text
+  documentUrl   String?
+  issuedBy      String?
+  status        String   @default("active") // active, resolved, appealed, overturned
+  resolvedAt    DateTime?
+  resolution    String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  employee      HrEmployee @relation(fields: [employeeId], references: [id])
+
+  @@index([tenantId, employeeId])
+  @@index([tenantId, type])
+}
+
+// --- HR: Announcements ---
+
+model HrAnnouncement {
+  id            String   @id @default(cuid())
+  tenantId      String
+  title         String
+  content       String   @db.Text
+  type          String   @default("info") // info, holiday, emergency, event, policy
+  priority      String   @default("normal") // low, normal, high, urgent
+  targetRoles   String?  // JSON array of roles, null = all
+  targetDepartments String? // JSON array of dept IDs, null = all
+  isPopup       Boolean  @default(false)
+  popupExpiry   DateTime?
+  status        String   @default("published") // draft, published, archived
+  publishedBy   String?
+  publishedAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, type])
+  @@index([tenantId, status])
 }
 
 // ============ CMS - CONTENT MANAGEMENT SYSTEM ============

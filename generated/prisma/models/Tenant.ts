@@ -315,6 +315,28 @@ export type TenantWhereInput = {
   authAuditLogs?: Prisma.AuthAuditLogListRelationFilter
   emailLogs?: Prisma.EmailLogListRelationFilter
   emailTemplates?: Prisma.EmailTemplateListRelationFilter
+  hrShifts?: Prisma.HrShiftListRelationFilter
+  hrShiftSchedules?: Prisma.HrShiftScheduleListRelationFilter
+  hrHolidays?: Prisma.HrHolidayListRelationFilter
+  hrEmployees?: Prisma.HrEmployeeListRelationFilter
+  hrLeaveTypes?: Prisma.HrLeaveTypeListRelationFilter
+  hrLeaveBalances?: Prisma.HrLeaveBalanceListRelationFilter
+  hrLeaveRequests?: Prisma.HrLeaveRequestListRelationFilter
+  hrPayrolls?: Prisma.HrPayrollListRelationFilter
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestListRelationFilter
+  hrJobPositions?: Prisma.HrJobPositionListRelationFilter
+  hrCandidates?: Prisma.HrCandidateListRelationFilter
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewListRelationFilter
+  hrTrainings?: Prisma.HrTrainingListRelationFilter
+  hrTrainingRecords?: Prisma.HrTrainingRecordListRelationFilter
+  hrAssetAssignments?: Prisma.HrAssetAssignmentListRelationFilter
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentListRelationFilter
+  hrVisitors?: Prisma.HrVisitorListRelationFilter
+  hrMedicalRecords?: Prisma.HrMedicalRecordListRelationFilter
+  hrTravelRequests?: Prisma.HrTravelRequestListRelationFilter
+  hrExpenseClaims?: Prisma.HrExpenseClaimListRelationFilter
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionListRelationFilter
+  hrAnnouncements?: Prisma.HrAnnouncementListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -373,6 +395,28 @@ export type TenantOrderByWithRelationInput = {
   authAuditLogs?: Prisma.AuthAuditLogOrderByRelationAggregateInput
   emailLogs?: Prisma.EmailLogOrderByRelationAggregateInput
   emailTemplates?: Prisma.EmailTemplateOrderByRelationAggregateInput
+  hrShifts?: Prisma.HrShiftOrderByRelationAggregateInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleOrderByRelationAggregateInput
+  hrHolidays?: Prisma.HrHolidayOrderByRelationAggregateInput
+  hrEmployees?: Prisma.HrEmployeeOrderByRelationAggregateInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeOrderByRelationAggregateInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceOrderByRelationAggregateInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestOrderByRelationAggregateInput
+  hrPayrolls?: Prisma.HrPayrollOrderByRelationAggregateInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestOrderByRelationAggregateInput
+  hrJobPositions?: Prisma.HrJobPositionOrderByRelationAggregateInput
+  hrCandidates?: Prisma.HrCandidateOrderByRelationAggregateInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewOrderByRelationAggregateInput
+  hrTrainings?: Prisma.HrTrainingOrderByRelationAggregateInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordOrderByRelationAggregateInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentOrderByRelationAggregateInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentOrderByRelationAggregateInput
+  hrVisitors?: Prisma.HrVisitorOrderByRelationAggregateInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordOrderByRelationAggregateInput
+  hrTravelRequests?: Prisma.HrTravelRequestOrderByRelationAggregateInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimOrderByRelationAggregateInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionOrderByRelationAggregateInput
+  hrAnnouncements?: Prisma.HrAnnouncementOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -434,6 +478,28 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   authAuditLogs?: Prisma.AuthAuditLogListRelationFilter
   emailLogs?: Prisma.EmailLogListRelationFilter
   emailTemplates?: Prisma.EmailTemplateListRelationFilter
+  hrShifts?: Prisma.HrShiftListRelationFilter
+  hrShiftSchedules?: Prisma.HrShiftScheduleListRelationFilter
+  hrHolidays?: Prisma.HrHolidayListRelationFilter
+  hrEmployees?: Prisma.HrEmployeeListRelationFilter
+  hrLeaveTypes?: Prisma.HrLeaveTypeListRelationFilter
+  hrLeaveBalances?: Prisma.HrLeaveBalanceListRelationFilter
+  hrLeaveRequests?: Prisma.HrLeaveRequestListRelationFilter
+  hrPayrolls?: Prisma.HrPayrollListRelationFilter
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestListRelationFilter
+  hrJobPositions?: Prisma.HrJobPositionListRelationFilter
+  hrCandidates?: Prisma.HrCandidateListRelationFilter
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewListRelationFilter
+  hrTrainings?: Prisma.HrTrainingListRelationFilter
+  hrTrainingRecords?: Prisma.HrTrainingRecordListRelationFilter
+  hrAssetAssignments?: Prisma.HrAssetAssignmentListRelationFilter
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentListRelationFilter
+  hrVisitors?: Prisma.HrVisitorListRelationFilter
+  hrMedicalRecords?: Prisma.HrMedicalRecordListRelationFilter
+  hrTravelRequests?: Prisma.HrTravelRequestListRelationFilter
+  hrExpenseClaims?: Prisma.HrExpenseClaimListRelationFilter
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionListRelationFilter
+  hrAnnouncements?: Prisma.HrAnnouncementListRelationFilter
 }, "id" | "domain">
 
 export type TenantOrderByWithAggregationInput = {
@@ -530,6 +596,28 @@ export type TenantCreateInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -588,6 +676,28 @@ export type TenantUncheckedCreateInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -646,6 +756,28 @@ export type TenantUpdateInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -704,6 +836,28 @@ export type TenantUncheckedUpdateInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -1202,6 +1356,314 @@ export type TenantUpdateOneRequiredWithoutAuditLogsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.TenantUpdateWithoutAuditLogsInput>, Prisma.TenantUncheckedUpdateWithoutAuditLogsInput>
 }
 
+export type TenantCreateNestedOneWithoutHrShiftsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrShiftsInput, Prisma.TenantUncheckedCreateWithoutHrShiftsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrShiftsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrShiftsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrShiftsInput, Prisma.TenantUncheckedCreateWithoutHrShiftsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrShiftsInput
+  upsert?: Prisma.TenantUpsertWithoutHrShiftsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrShiftsInput, Prisma.TenantUpdateWithoutHrShiftsInput>, Prisma.TenantUncheckedUpdateWithoutHrShiftsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrShiftSchedulesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrShiftSchedulesInput, Prisma.TenantUncheckedCreateWithoutHrShiftSchedulesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrShiftSchedulesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrShiftSchedulesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrShiftSchedulesInput, Prisma.TenantUncheckedCreateWithoutHrShiftSchedulesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrShiftSchedulesInput
+  upsert?: Prisma.TenantUpsertWithoutHrShiftSchedulesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrShiftSchedulesInput, Prisma.TenantUpdateWithoutHrShiftSchedulesInput>, Prisma.TenantUncheckedUpdateWithoutHrShiftSchedulesInput>
+}
+
+export type TenantCreateNestedOneWithoutHrHolidaysInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrHolidaysInput, Prisma.TenantUncheckedCreateWithoutHrHolidaysInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrHolidaysInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrHolidaysNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrHolidaysInput, Prisma.TenantUncheckedCreateWithoutHrHolidaysInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrHolidaysInput
+  upsert?: Prisma.TenantUpsertWithoutHrHolidaysInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrHolidaysInput, Prisma.TenantUpdateWithoutHrHolidaysInput>, Prisma.TenantUncheckedUpdateWithoutHrHolidaysInput>
+}
+
+export type TenantCreateNestedOneWithoutHrEmployeesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrEmployeesInput, Prisma.TenantUncheckedCreateWithoutHrEmployeesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrEmployeesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrEmployeesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrEmployeesInput, Prisma.TenantUncheckedCreateWithoutHrEmployeesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrEmployeesInput
+  upsert?: Prisma.TenantUpsertWithoutHrEmployeesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrEmployeesInput, Prisma.TenantUpdateWithoutHrEmployeesInput>, Prisma.TenantUncheckedUpdateWithoutHrEmployeesInput>
+}
+
+export type TenantCreateNestedOneWithoutHrLeaveTypesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveTypesInput, Prisma.TenantUncheckedCreateWithoutHrLeaveTypesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrLeaveTypesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrLeaveTypesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveTypesInput, Prisma.TenantUncheckedCreateWithoutHrLeaveTypesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrLeaveTypesInput
+  upsert?: Prisma.TenantUpsertWithoutHrLeaveTypesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrLeaveTypesInput, Prisma.TenantUpdateWithoutHrLeaveTypesInput>, Prisma.TenantUncheckedUpdateWithoutHrLeaveTypesInput>
+}
+
+export type TenantCreateNestedOneWithoutHrLeaveBalancesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveBalancesInput, Prisma.TenantUncheckedCreateWithoutHrLeaveBalancesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrLeaveBalancesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrLeaveBalancesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveBalancesInput, Prisma.TenantUncheckedCreateWithoutHrLeaveBalancesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrLeaveBalancesInput
+  upsert?: Prisma.TenantUpsertWithoutHrLeaveBalancesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrLeaveBalancesInput, Prisma.TenantUpdateWithoutHrLeaveBalancesInput>, Prisma.TenantUncheckedUpdateWithoutHrLeaveBalancesInput>
+}
+
+export type TenantCreateNestedOneWithoutHrLeaveRequestsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveRequestsInput, Prisma.TenantUncheckedCreateWithoutHrLeaveRequestsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrLeaveRequestsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrLeaveRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveRequestsInput, Prisma.TenantUncheckedCreateWithoutHrLeaveRequestsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrLeaveRequestsInput
+  upsert?: Prisma.TenantUpsertWithoutHrLeaveRequestsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrLeaveRequestsInput, Prisma.TenantUpdateWithoutHrLeaveRequestsInput>, Prisma.TenantUncheckedUpdateWithoutHrLeaveRequestsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrPayrollsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrPayrollsInput, Prisma.TenantUncheckedCreateWithoutHrPayrollsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrPayrollsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrPayrollsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrPayrollsInput, Prisma.TenantUncheckedCreateWithoutHrPayrollsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrPayrollsInput
+  upsert?: Prisma.TenantUpsertWithoutHrPayrollsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrPayrollsInput, Prisma.TenantUpdateWithoutHrPayrollsInput>, Prisma.TenantUncheckedUpdateWithoutHrPayrollsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrOvertimeRequestsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrOvertimeRequestsInput, Prisma.TenantUncheckedCreateWithoutHrOvertimeRequestsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrOvertimeRequestsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrOvertimeRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrOvertimeRequestsInput, Prisma.TenantUncheckedCreateWithoutHrOvertimeRequestsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrOvertimeRequestsInput
+  upsert?: Prisma.TenantUpsertWithoutHrOvertimeRequestsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrOvertimeRequestsInput, Prisma.TenantUpdateWithoutHrOvertimeRequestsInput>, Prisma.TenantUncheckedUpdateWithoutHrOvertimeRequestsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrJobPositionsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrJobPositionsInput, Prisma.TenantUncheckedCreateWithoutHrJobPositionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrJobPositionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrJobPositionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrJobPositionsInput, Prisma.TenantUncheckedCreateWithoutHrJobPositionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrJobPositionsInput
+  upsert?: Prisma.TenantUpsertWithoutHrJobPositionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrJobPositionsInput, Prisma.TenantUpdateWithoutHrJobPositionsInput>, Prisma.TenantUncheckedUpdateWithoutHrJobPositionsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrCandidatesInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrCandidatesInput, Prisma.TenantUncheckedCreateWithoutHrCandidatesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrCandidatesInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrCandidatesNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrCandidatesInput, Prisma.TenantUncheckedCreateWithoutHrCandidatesInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrCandidatesInput
+  upsert?: Prisma.TenantUpsertWithoutHrCandidatesInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrCandidatesInput, Prisma.TenantUpdateWithoutHrCandidatesInput>, Prisma.TenantUncheckedUpdateWithoutHrCandidatesInput>
+}
+
+export type TenantCreateNestedOneWithoutHrPerformanceReviewsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrPerformanceReviewsInput, Prisma.TenantUncheckedCreateWithoutHrPerformanceReviewsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrPerformanceReviewsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrPerformanceReviewsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrPerformanceReviewsInput, Prisma.TenantUncheckedCreateWithoutHrPerformanceReviewsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrPerformanceReviewsInput
+  upsert?: Prisma.TenantUpsertWithoutHrPerformanceReviewsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrPerformanceReviewsInput, Prisma.TenantUpdateWithoutHrPerformanceReviewsInput>, Prisma.TenantUncheckedUpdateWithoutHrPerformanceReviewsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrTrainingsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrTrainingsInput, Prisma.TenantUncheckedCreateWithoutHrTrainingsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrTrainingsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrTrainingsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrTrainingsInput, Prisma.TenantUncheckedCreateWithoutHrTrainingsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrTrainingsInput
+  upsert?: Prisma.TenantUpsertWithoutHrTrainingsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrTrainingsInput, Prisma.TenantUpdateWithoutHrTrainingsInput>, Prisma.TenantUncheckedUpdateWithoutHrTrainingsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrTrainingRecordsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrTrainingRecordsInput, Prisma.TenantUncheckedCreateWithoutHrTrainingRecordsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrTrainingRecordsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrTrainingRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrTrainingRecordsInput, Prisma.TenantUncheckedCreateWithoutHrTrainingRecordsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrTrainingRecordsInput
+  upsert?: Prisma.TenantUpsertWithoutHrTrainingRecordsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrTrainingRecordsInput, Prisma.TenantUpdateWithoutHrTrainingRecordsInput>, Prisma.TenantUncheckedUpdateWithoutHrTrainingRecordsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrAssetAssignmentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrAssetAssignmentsInput, Prisma.TenantUncheckedCreateWithoutHrAssetAssignmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrAssetAssignmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrAssetAssignmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrAssetAssignmentsInput, Prisma.TenantUncheckedCreateWithoutHrAssetAssignmentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrAssetAssignmentsInput
+  upsert?: Prisma.TenantUpsertWithoutHrAssetAssignmentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrAssetAssignmentsInput, Prisma.TenantUpdateWithoutHrAssetAssignmentsInput>, Prisma.TenantUncheckedUpdateWithoutHrAssetAssignmentsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrEmployeeDocumentsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrEmployeeDocumentsInput, Prisma.TenantUncheckedCreateWithoutHrEmployeeDocumentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrEmployeeDocumentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrEmployeeDocumentsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrEmployeeDocumentsInput, Prisma.TenantUncheckedCreateWithoutHrEmployeeDocumentsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrEmployeeDocumentsInput
+  upsert?: Prisma.TenantUpsertWithoutHrEmployeeDocumentsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrEmployeeDocumentsInput, Prisma.TenantUpdateWithoutHrEmployeeDocumentsInput>, Prisma.TenantUncheckedUpdateWithoutHrEmployeeDocumentsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrVisitorsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrVisitorsInput, Prisma.TenantUncheckedCreateWithoutHrVisitorsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrVisitorsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrVisitorsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrVisitorsInput, Prisma.TenantUncheckedCreateWithoutHrVisitorsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrVisitorsInput
+  upsert?: Prisma.TenantUpsertWithoutHrVisitorsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrVisitorsInput, Prisma.TenantUpdateWithoutHrVisitorsInput>, Prisma.TenantUncheckedUpdateWithoutHrVisitorsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrMedicalRecordsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrMedicalRecordsInput, Prisma.TenantUncheckedCreateWithoutHrMedicalRecordsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrMedicalRecordsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrMedicalRecordsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrMedicalRecordsInput, Prisma.TenantUncheckedCreateWithoutHrMedicalRecordsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrMedicalRecordsInput
+  upsert?: Prisma.TenantUpsertWithoutHrMedicalRecordsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrMedicalRecordsInput, Prisma.TenantUpdateWithoutHrMedicalRecordsInput>, Prisma.TenantUncheckedUpdateWithoutHrMedicalRecordsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrTravelRequestsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrTravelRequestsInput, Prisma.TenantUncheckedCreateWithoutHrTravelRequestsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrTravelRequestsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrTravelRequestsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrTravelRequestsInput, Prisma.TenantUncheckedCreateWithoutHrTravelRequestsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrTravelRequestsInput
+  upsert?: Prisma.TenantUpsertWithoutHrTravelRequestsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrTravelRequestsInput, Prisma.TenantUpdateWithoutHrTravelRequestsInput>, Prisma.TenantUncheckedUpdateWithoutHrTravelRequestsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrExpenseClaimsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrExpenseClaimsInput, Prisma.TenantUncheckedCreateWithoutHrExpenseClaimsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrExpenseClaimsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrExpenseClaimsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrExpenseClaimsInput, Prisma.TenantUncheckedCreateWithoutHrExpenseClaimsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrExpenseClaimsInput
+  upsert?: Prisma.TenantUpsertWithoutHrExpenseClaimsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrExpenseClaimsInput, Prisma.TenantUpdateWithoutHrExpenseClaimsInput>, Prisma.TenantUncheckedUpdateWithoutHrExpenseClaimsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrDisciplinaryActionsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrDisciplinaryActionsInput, Prisma.TenantUncheckedCreateWithoutHrDisciplinaryActionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrDisciplinaryActionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrDisciplinaryActionsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrDisciplinaryActionsInput, Prisma.TenantUncheckedCreateWithoutHrDisciplinaryActionsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrDisciplinaryActionsInput
+  upsert?: Prisma.TenantUpsertWithoutHrDisciplinaryActionsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrDisciplinaryActionsInput, Prisma.TenantUpdateWithoutHrDisciplinaryActionsInput>, Prisma.TenantUncheckedUpdateWithoutHrDisciplinaryActionsInput>
+}
+
+export type TenantCreateNestedOneWithoutHrAnnouncementsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrAnnouncementsInput, Prisma.TenantUncheckedCreateWithoutHrAnnouncementsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrAnnouncementsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutHrAnnouncementsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutHrAnnouncementsInput, Prisma.TenantUncheckedCreateWithoutHrAnnouncementsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutHrAnnouncementsInput
+  upsert?: Prisma.TenantUpsertWithoutHrAnnouncementsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutHrAnnouncementsInput, Prisma.TenantUpdateWithoutHrAnnouncementsInput>, Prisma.TenantUncheckedUpdateWithoutHrAnnouncementsInput>
+}
+
 export type TenantCreateNestedOneWithoutWhatsappConfigsInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutWhatsappConfigsInput, Prisma.TenantUncheckedCreateWithoutWhatsappConfigsInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutWhatsappConfigsInput
@@ -1497,6 +1959,28 @@ export type TenantCreateWithoutUsersInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUsersInput = {
@@ -1554,6 +2038,28 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUsersInput = {
@@ -1627,6 +2133,28 @@ export type TenantUpdateWithoutUsersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUsersInput = {
@@ -1684,6 +2212,28 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDepartmentsInput = {
@@ -1741,6 +2291,28 @@ export type TenantCreateWithoutDepartmentsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDepartmentsInput = {
@@ -1798,6 +2370,28 @@ export type TenantUncheckedCreateWithoutDepartmentsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDepartmentsInput = {
@@ -1871,6 +2465,28 @@ export type TenantUpdateWithoutDepartmentsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDepartmentsInput = {
@@ -1928,6 +2544,28 @@ export type TenantUncheckedUpdateWithoutDepartmentsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomersInput = {
@@ -1985,6 +2623,28 @@ export type TenantCreateWithoutCustomersInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomersInput = {
@@ -2042,6 +2702,28 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomersInput = {
@@ -2115,6 +2797,28 @@ export type TenantUpdateWithoutCustomersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomersInput = {
@@ -2172,6 +2876,28 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEquipmentInput = {
@@ -2229,6 +2955,28 @@ export type TenantCreateWithoutEquipmentInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEquipmentInput = {
@@ -2286,6 +3034,28 @@ export type TenantUncheckedCreateWithoutEquipmentInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEquipmentInput = {
@@ -2359,6 +3129,28 @@ export type TenantUpdateWithoutEquipmentInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEquipmentInput = {
@@ -2416,6 +3208,28 @@ export type TenantUncheckedUpdateWithoutEquipmentInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEquipmentQrCodesInput = {
@@ -2473,6 +3287,28 @@ export type TenantCreateWithoutEquipmentQrCodesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEquipmentQrCodesInput = {
@@ -2530,6 +3366,28 @@ export type TenantUncheckedCreateWithoutEquipmentQrCodesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEquipmentQrCodesInput = {
@@ -2603,6 +3461,28 @@ export type TenantUpdateWithoutEquipmentQrCodesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEquipmentQrCodesInput = {
@@ -2660,6 +3540,28 @@ export type TenantUncheckedUpdateWithoutEquipmentQrCodesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutScanLogsInput = {
@@ -2717,6 +3619,28 @@ export type TenantCreateWithoutScanLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutScanLogsInput = {
@@ -2774,6 +3698,28 @@ export type TenantUncheckedCreateWithoutScanLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutScanLogsInput = {
@@ -2847,6 +3793,28 @@ export type TenantUpdateWithoutScanLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutScanLogsInput = {
@@ -2904,6 +3872,28 @@ export type TenantUncheckedUpdateWithoutScanLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutComplaintsInput = {
@@ -2961,6 +3951,28 @@ export type TenantCreateWithoutComplaintsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutComplaintsInput = {
@@ -3018,6 +4030,28 @@ export type TenantUncheckedCreateWithoutComplaintsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutComplaintsInput = {
@@ -3091,6 +4125,28 @@ export type TenantUpdateWithoutComplaintsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutComplaintsInput = {
@@ -3148,6 +4204,28 @@ export type TenantUncheckedUpdateWithoutComplaintsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWorkOrdersInput = {
@@ -3205,6 +4283,28 @@ export type TenantCreateWithoutWorkOrdersInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWorkOrdersInput = {
@@ -3262,6 +4362,28 @@ export type TenantUncheckedCreateWithoutWorkOrdersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWorkOrdersInput = {
@@ -3335,6 +4457,28 @@ export type TenantUpdateWithoutWorkOrdersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWorkOrdersInput = {
@@ -3392,6 +4536,28 @@ export type TenantUncheckedUpdateWithoutWorkOrdersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutChecklistTemplatesInput = {
@@ -3449,6 +4615,28 @@ export type TenantCreateWithoutChecklistTemplatesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutChecklistTemplatesInput = {
@@ -3506,6 +4694,28 @@ export type TenantUncheckedCreateWithoutChecklistTemplatesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutChecklistTemplatesInput = {
@@ -3579,6 +4789,28 @@ export type TenantUpdateWithoutChecklistTemplatesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutChecklistTemplatesInput = {
@@ -3636,6 +4868,28 @@ export type TenantUncheckedUpdateWithoutChecklistTemplatesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPmSchedulesInput = {
@@ -3693,6 +4947,28 @@ export type TenantCreateWithoutPmSchedulesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPmSchedulesInput = {
@@ -3750,6 +5026,28 @@ export type TenantUncheckedCreateWithoutPmSchedulesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPmSchedulesInput = {
@@ -3823,6 +5121,28 @@ export type TenantUpdateWithoutPmSchedulesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPmSchedulesInput = {
@@ -3880,6 +5200,28 @@ export type TenantUncheckedUpdateWithoutPmSchedulesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutQuotationsInput = {
@@ -3937,6 +5279,28 @@ export type TenantCreateWithoutQuotationsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutQuotationsInput = {
@@ -3994,6 +5358,28 @@ export type TenantUncheckedCreateWithoutQuotationsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutQuotationsInput = {
@@ -4067,6 +5453,28 @@ export type TenantUpdateWithoutQuotationsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutQuotationsInput = {
@@ -4124,6 +5532,28 @@ export type TenantUncheckedUpdateWithoutQuotationsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInvoicesInput = {
@@ -4181,6 +5611,28 @@ export type TenantCreateWithoutInvoicesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInvoicesInput = {
@@ -4238,6 +5690,28 @@ export type TenantUncheckedCreateWithoutInvoicesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInvoicesInput = {
@@ -4311,6 +5785,28 @@ export type TenantUpdateWithoutInvoicesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInvoicesInput = {
@@ -4368,6 +5864,28 @@ export type TenantUncheckedUpdateWithoutInvoicesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventoryCategoriesInput = {
@@ -4425,6 +5943,28 @@ export type TenantCreateWithoutInventoryCategoriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventoryCategoriesInput = {
@@ -4482,6 +6022,28 @@ export type TenantUncheckedCreateWithoutInventoryCategoriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventoryCategoriesInput = {
@@ -4555,6 +6117,28 @@ export type TenantUpdateWithoutInventoryCategoriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventoryCategoriesInput = {
@@ -4612,6 +6196,28 @@ export type TenantUncheckedUpdateWithoutInventoryCategoriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventorySubcategoriesInput = {
@@ -4669,6 +6275,28 @@ export type TenantCreateWithoutInventorySubcategoriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventorySubcategoriesInput = {
@@ -4726,6 +6354,28 @@ export type TenantUncheckedCreateWithoutInventorySubcategoriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventorySubcategoriesInput = {
@@ -4799,6 +6449,28 @@ export type TenantUpdateWithoutInventorySubcategoriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventorySubcategoriesInput = {
@@ -4856,6 +6528,28 @@ export type TenantUncheckedUpdateWithoutInventorySubcategoriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventoryInput = {
@@ -4913,6 +6607,28 @@ export type TenantCreateWithoutInventoryInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventoryInput = {
@@ -4970,6 +6686,28 @@ export type TenantUncheckedCreateWithoutInventoryInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventoryInput = {
@@ -5043,6 +6781,28 @@ export type TenantUpdateWithoutInventoryInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventoryInput = {
@@ -5100,6 +6860,28 @@ export type TenantUncheckedUpdateWithoutInventoryInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventoryWarehousesInput = {
@@ -5157,6 +6939,28 @@ export type TenantCreateWithoutInventoryWarehousesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventoryWarehousesInput = {
@@ -5214,6 +7018,28 @@ export type TenantUncheckedCreateWithoutInventoryWarehousesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventoryWarehousesInput = {
@@ -5287,6 +7113,28 @@ export type TenantUpdateWithoutInventoryWarehousesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventoryWarehousesInput = {
@@ -5344,6 +7192,28 @@ export type TenantUncheckedUpdateWithoutInventoryWarehousesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWarehouseStocksInput = {
@@ -5401,6 +7271,28 @@ export type TenantCreateWithoutWarehouseStocksInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWarehouseStocksInput = {
@@ -5458,6 +7350,28 @@ export type TenantUncheckedCreateWithoutWarehouseStocksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWarehouseStocksInput = {
@@ -5531,6 +7445,28 @@ export type TenantUpdateWithoutWarehouseStocksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWarehouseStocksInput = {
@@ -5588,6 +7524,28 @@ export type TenantUncheckedUpdateWithoutWarehouseStocksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventorySuppliersInput = {
@@ -5645,6 +7603,28 @@ export type TenantCreateWithoutInventorySuppliersInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventorySuppliersInput = {
@@ -5702,6 +7682,28 @@ export type TenantUncheckedCreateWithoutInventorySuppliersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventorySuppliersInput = {
@@ -5775,6 +7777,28 @@ export type TenantUpdateWithoutInventorySuppliersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventorySuppliersInput = {
@@ -5832,6 +7856,28 @@ export type TenantUncheckedUpdateWithoutInventorySuppliersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStockMovementsInput = {
@@ -5889,6 +7935,28 @@ export type TenantCreateWithoutStockMovementsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStockMovementsInput = {
@@ -5946,6 +8014,28 @@ export type TenantUncheckedCreateWithoutStockMovementsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStockMovementsInput = {
@@ -6019,6 +8109,28 @@ export type TenantUpdateWithoutStockMovementsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStockMovementsInput = {
@@ -6076,6 +8188,28 @@ export type TenantUncheckedUpdateWithoutStockMovementsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPriceBooksInput = {
@@ -6133,6 +8267,28 @@ export type TenantCreateWithoutPriceBooksInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPriceBooksInput = {
@@ -6190,6 +8346,28 @@ export type TenantUncheckedCreateWithoutPriceBooksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPriceBooksInput = {
@@ -6263,6 +8441,28 @@ export type TenantUpdateWithoutPriceBooksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPriceBooksInput = {
@@ -6320,6 +8520,28 @@ export type TenantUncheckedUpdateWithoutPriceBooksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPriceBookEntriesInput = {
@@ -6377,6 +8599,28 @@ export type TenantCreateWithoutPriceBookEntriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPriceBookEntriesInput = {
@@ -6434,6 +8678,28 @@ export type TenantUncheckedCreateWithoutPriceBookEntriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPriceBookEntriesInput = {
@@ -6507,6 +8773,28 @@ export type TenantUpdateWithoutPriceBookEntriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPriceBookEntriesInput = {
@@ -6564,6 +8852,28 @@ export type TenantUncheckedUpdateWithoutPriceBookEntriesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPurchaseOrdersInput = {
@@ -6621,6 +8931,28 @@ export type TenantCreateWithoutPurchaseOrdersInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPurchaseOrdersInput = {
@@ -6678,6 +9010,28 @@ export type TenantUncheckedCreateWithoutPurchaseOrdersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPurchaseOrdersInput = {
@@ -6751,6 +9105,28 @@ export type TenantUpdateWithoutPurchaseOrdersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPurchaseOrdersInput = {
@@ -6808,6 +9184,28 @@ export type TenantUncheckedUpdateWithoutPurchaseOrdersInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVehiclesInput = {
@@ -6865,6 +9263,28 @@ export type TenantCreateWithoutVehiclesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVehiclesInput = {
@@ -6922,6 +9342,28 @@ export type TenantUncheckedCreateWithoutVehiclesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVehiclesInput = {
@@ -6995,6 +9437,28 @@ export type TenantUpdateWithoutVehiclesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVehiclesInput = {
@@ -7052,6 +9516,28 @@ export type TenantUncheckedUpdateWithoutVehiclesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutComplaintTimelinesInput = {
@@ -7109,6 +9595,28 @@ export type TenantCreateWithoutComplaintTimelinesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutComplaintTimelinesInput = {
@@ -7166,6 +9674,28 @@ export type TenantUncheckedCreateWithoutComplaintTimelinesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutComplaintTimelinesInput = {
@@ -7239,6 +9769,28 @@ export type TenantUpdateWithoutComplaintTimelinesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutComplaintTimelinesInput = {
@@ -7296,6 +9848,28 @@ export type TenantUncheckedUpdateWithoutComplaintTimelinesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutNotificationsInput = {
@@ -7353,6 +9927,28 @@ export type TenantCreateWithoutNotificationsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutNotificationsInput = {
@@ -7410,6 +10006,28 @@ export type TenantUncheckedCreateWithoutNotificationsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutNotificationsInput = {
@@ -7483,6 +10101,28 @@ export type TenantUpdateWithoutNotificationsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutNotificationsInput = {
@@ -7540,6 +10180,28 @@ export type TenantUncheckedUpdateWithoutNotificationsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAuditLogsInput = {
@@ -7597,6 +10259,28 @@ export type TenantCreateWithoutAuditLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuditLogsInput = {
@@ -7654,6 +10338,28 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuditLogsInput = {
@@ -7727,6 +10433,28 @@ export type TenantUpdateWithoutAuditLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuditLogsInput = {
@@ -7784,6 +10512,7332 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrShiftsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrShiftsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrShiftsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrShiftsInput, Prisma.TenantUncheckedCreateWithoutHrShiftsInput>
+}
+
+export type TenantUpsertWithoutHrShiftsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrShiftsInput, Prisma.TenantUncheckedUpdateWithoutHrShiftsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrShiftsInput, Prisma.TenantUncheckedCreateWithoutHrShiftsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrShiftsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrShiftsInput, Prisma.TenantUncheckedUpdateWithoutHrShiftsInput>
+}
+
+export type TenantUpdateWithoutHrShiftsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrShiftsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrShiftSchedulesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrShiftSchedulesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrShiftSchedulesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrShiftSchedulesInput, Prisma.TenantUncheckedCreateWithoutHrShiftSchedulesInput>
+}
+
+export type TenantUpsertWithoutHrShiftSchedulesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrShiftSchedulesInput, Prisma.TenantUncheckedUpdateWithoutHrShiftSchedulesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrShiftSchedulesInput, Prisma.TenantUncheckedCreateWithoutHrShiftSchedulesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrShiftSchedulesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrShiftSchedulesInput, Prisma.TenantUncheckedUpdateWithoutHrShiftSchedulesInput>
+}
+
+export type TenantUpdateWithoutHrShiftSchedulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrShiftSchedulesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrHolidaysInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrHolidaysInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrHolidaysInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrHolidaysInput, Prisma.TenantUncheckedCreateWithoutHrHolidaysInput>
+}
+
+export type TenantUpsertWithoutHrHolidaysInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrHolidaysInput, Prisma.TenantUncheckedUpdateWithoutHrHolidaysInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrHolidaysInput, Prisma.TenantUncheckedCreateWithoutHrHolidaysInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrHolidaysInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrHolidaysInput, Prisma.TenantUncheckedUpdateWithoutHrHolidaysInput>
+}
+
+export type TenantUpdateWithoutHrHolidaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrHolidaysInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrEmployeesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrEmployeesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrEmployeesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrEmployeesInput, Prisma.TenantUncheckedCreateWithoutHrEmployeesInput>
+}
+
+export type TenantUpsertWithoutHrEmployeesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrEmployeesInput, Prisma.TenantUncheckedUpdateWithoutHrEmployeesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrEmployeesInput, Prisma.TenantUncheckedCreateWithoutHrEmployeesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrEmployeesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrEmployeesInput, Prisma.TenantUncheckedUpdateWithoutHrEmployeesInput>
+}
+
+export type TenantUpdateWithoutHrEmployeesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrEmployeesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrLeaveTypesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrLeaveTypesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrLeaveTypesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveTypesInput, Prisma.TenantUncheckedCreateWithoutHrLeaveTypesInput>
+}
+
+export type TenantUpsertWithoutHrLeaveTypesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrLeaveTypesInput, Prisma.TenantUncheckedUpdateWithoutHrLeaveTypesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveTypesInput, Prisma.TenantUncheckedCreateWithoutHrLeaveTypesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrLeaveTypesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrLeaveTypesInput, Prisma.TenantUncheckedUpdateWithoutHrLeaveTypesInput>
+}
+
+export type TenantUpdateWithoutHrLeaveTypesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrLeaveTypesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrLeaveBalancesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrLeaveBalancesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrLeaveBalancesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveBalancesInput, Prisma.TenantUncheckedCreateWithoutHrLeaveBalancesInput>
+}
+
+export type TenantUpsertWithoutHrLeaveBalancesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrLeaveBalancesInput, Prisma.TenantUncheckedUpdateWithoutHrLeaveBalancesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveBalancesInput, Prisma.TenantUncheckedCreateWithoutHrLeaveBalancesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrLeaveBalancesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrLeaveBalancesInput, Prisma.TenantUncheckedUpdateWithoutHrLeaveBalancesInput>
+}
+
+export type TenantUpdateWithoutHrLeaveBalancesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrLeaveBalancesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrLeaveRequestsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrLeaveRequestsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrLeaveRequestsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveRequestsInput, Prisma.TenantUncheckedCreateWithoutHrLeaveRequestsInput>
+}
+
+export type TenantUpsertWithoutHrLeaveRequestsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrLeaveRequestsInput, Prisma.TenantUncheckedUpdateWithoutHrLeaveRequestsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrLeaveRequestsInput, Prisma.TenantUncheckedCreateWithoutHrLeaveRequestsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrLeaveRequestsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrLeaveRequestsInput, Prisma.TenantUncheckedUpdateWithoutHrLeaveRequestsInput>
+}
+
+export type TenantUpdateWithoutHrLeaveRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrLeaveRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrPayrollsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrPayrollsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrPayrollsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrPayrollsInput, Prisma.TenantUncheckedCreateWithoutHrPayrollsInput>
+}
+
+export type TenantUpsertWithoutHrPayrollsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrPayrollsInput, Prisma.TenantUncheckedUpdateWithoutHrPayrollsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrPayrollsInput, Prisma.TenantUncheckedCreateWithoutHrPayrollsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrPayrollsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrPayrollsInput, Prisma.TenantUncheckedUpdateWithoutHrPayrollsInput>
+}
+
+export type TenantUpdateWithoutHrPayrollsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrPayrollsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrOvertimeRequestsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrOvertimeRequestsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrOvertimeRequestsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrOvertimeRequestsInput, Prisma.TenantUncheckedCreateWithoutHrOvertimeRequestsInput>
+}
+
+export type TenantUpsertWithoutHrOvertimeRequestsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrOvertimeRequestsInput, Prisma.TenantUncheckedUpdateWithoutHrOvertimeRequestsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrOvertimeRequestsInput, Prisma.TenantUncheckedCreateWithoutHrOvertimeRequestsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrOvertimeRequestsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrOvertimeRequestsInput, Prisma.TenantUncheckedUpdateWithoutHrOvertimeRequestsInput>
+}
+
+export type TenantUpdateWithoutHrOvertimeRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrOvertimeRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrJobPositionsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrJobPositionsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrJobPositionsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrJobPositionsInput, Prisma.TenantUncheckedCreateWithoutHrJobPositionsInput>
+}
+
+export type TenantUpsertWithoutHrJobPositionsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrJobPositionsInput, Prisma.TenantUncheckedUpdateWithoutHrJobPositionsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrJobPositionsInput, Prisma.TenantUncheckedCreateWithoutHrJobPositionsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrJobPositionsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrJobPositionsInput, Prisma.TenantUncheckedUpdateWithoutHrJobPositionsInput>
+}
+
+export type TenantUpdateWithoutHrJobPositionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrJobPositionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrCandidatesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrCandidatesInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrCandidatesInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrCandidatesInput, Prisma.TenantUncheckedCreateWithoutHrCandidatesInput>
+}
+
+export type TenantUpsertWithoutHrCandidatesInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrCandidatesInput, Prisma.TenantUncheckedUpdateWithoutHrCandidatesInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrCandidatesInput, Prisma.TenantUncheckedCreateWithoutHrCandidatesInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrCandidatesInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrCandidatesInput, Prisma.TenantUncheckedUpdateWithoutHrCandidatesInput>
+}
+
+export type TenantUpdateWithoutHrCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrCandidatesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrPerformanceReviewsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrPerformanceReviewsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrPerformanceReviewsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrPerformanceReviewsInput, Prisma.TenantUncheckedCreateWithoutHrPerformanceReviewsInput>
+}
+
+export type TenantUpsertWithoutHrPerformanceReviewsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrPerformanceReviewsInput, Prisma.TenantUncheckedUpdateWithoutHrPerformanceReviewsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrPerformanceReviewsInput, Prisma.TenantUncheckedCreateWithoutHrPerformanceReviewsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrPerformanceReviewsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrPerformanceReviewsInput, Prisma.TenantUncheckedUpdateWithoutHrPerformanceReviewsInput>
+}
+
+export type TenantUpdateWithoutHrPerformanceReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrPerformanceReviewsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrTrainingsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrTrainingsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrTrainingsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrTrainingsInput, Prisma.TenantUncheckedCreateWithoutHrTrainingsInput>
+}
+
+export type TenantUpsertWithoutHrTrainingsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrTrainingsInput, Prisma.TenantUncheckedUpdateWithoutHrTrainingsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrTrainingsInput, Prisma.TenantUncheckedCreateWithoutHrTrainingsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrTrainingsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrTrainingsInput, Prisma.TenantUncheckedUpdateWithoutHrTrainingsInput>
+}
+
+export type TenantUpdateWithoutHrTrainingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrTrainingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrTrainingRecordsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrTrainingRecordsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrTrainingRecordsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrTrainingRecordsInput, Prisma.TenantUncheckedCreateWithoutHrTrainingRecordsInput>
+}
+
+export type TenantUpsertWithoutHrTrainingRecordsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrTrainingRecordsInput, Prisma.TenantUncheckedUpdateWithoutHrTrainingRecordsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrTrainingRecordsInput, Prisma.TenantUncheckedCreateWithoutHrTrainingRecordsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrTrainingRecordsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrTrainingRecordsInput, Prisma.TenantUncheckedUpdateWithoutHrTrainingRecordsInput>
+}
+
+export type TenantUpdateWithoutHrTrainingRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrTrainingRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrAssetAssignmentsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrAssetAssignmentsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrAssetAssignmentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrAssetAssignmentsInput, Prisma.TenantUncheckedCreateWithoutHrAssetAssignmentsInput>
+}
+
+export type TenantUpsertWithoutHrAssetAssignmentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrAssetAssignmentsInput, Prisma.TenantUncheckedUpdateWithoutHrAssetAssignmentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrAssetAssignmentsInput, Prisma.TenantUncheckedCreateWithoutHrAssetAssignmentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrAssetAssignmentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrAssetAssignmentsInput, Prisma.TenantUncheckedUpdateWithoutHrAssetAssignmentsInput>
+}
+
+export type TenantUpdateWithoutHrAssetAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrAssetAssignmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrEmployeeDocumentsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrEmployeeDocumentsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrEmployeeDocumentsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrEmployeeDocumentsInput, Prisma.TenantUncheckedCreateWithoutHrEmployeeDocumentsInput>
+}
+
+export type TenantUpsertWithoutHrEmployeeDocumentsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrEmployeeDocumentsInput, Prisma.TenantUncheckedUpdateWithoutHrEmployeeDocumentsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrEmployeeDocumentsInput, Prisma.TenantUncheckedCreateWithoutHrEmployeeDocumentsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrEmployeeDocumentsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrEmployeeDocumentsInput, Prisma.TenantUncheckedUpdateWithoutHrEmployeeDocumentsInput>
+}
+
+export type TenantUpdateWithoutHrEmployeeDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrVisitorsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrVisitorsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrVisitorsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrVisitorsInput, Prisma.TenantUncheckedCreateWithoutHrVisitorsInput>
+}
+
+export type TenantUpsertWithoutHrVisitorsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrVisitorsInput, Prisma.TenantUncheckedUpdateWithoutHrVisitorsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrVisitorsInput, Prisma.TenantUncheckedCreateWithoutHrVisitorsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrVisitorsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrVisitorsInput, Prisma.TenantUncheckedUpdateWithoutHrVisitorsInput>
+}
+
+export type TenantUpdateWithoutHrVisitorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrVisitorsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrMedicalRecordsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrMedicalRecordsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrMedicalRecordsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrMedicalRecordsInput, Prisma.TenantUncheckedCreateWithoutHrMedicalRecordsInput>
+}
+
+export type TenantUpsertWithoutHrMedicalRecordsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrMedicalRecordsInput, Prisma.TenantUncheckedUpdateWithoutHrMedicalRecordsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrMedicalRecordsInput, Prisma.TenantUncheckedCreateWithoutHrMedicalRecordsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrMedicalRecordsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrMedicalRecordsInput, Prisma.TenantUncheckedUpdateWithoutHrMedicalRecordsInput>
+}
+
+export type TenantUpdateWithoutHrMedicalRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrMedicalRecordsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrTravelRequestsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrTravelRequestsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrTravelRequestsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrTravelRequestsInput, Prisma.TenantUncheckedCreateWithoutHrTravelRequestsInput>
+}
+
+export type TenantUpsertWithoutHrTravelRequestsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrTravelRequestsInput, Prisma.TenantUncheckedUpdateWithoutHrTravelRequestsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrTravelRequestsInput, Prisma.TenantUncheckedCreateWithoutHrTravelRequestsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrTravelRequestsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrTravelRequestsInput, Prisma.TenantUncheckedUpdateWithoutHrTravelRequestsInput>
+}
+
+export type TenantUpdateWithoutHrTravelRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrTravelRequestsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrExpenseClaimsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrExpenseClaimsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrExpenseClaimsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrExpenseClaimsInput, Prisma.TenantUncheckedCreateWithoutHrExpenseClaimsInput>
+}
+
+export type TenantUpsertWithoutHrExpenseClaimsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrExpenseClaimsInput, Prisma.TenantUncheckedUpdateWithoutHrExpenseClaimsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrExpenseClaimsInput, Prisma.TenantUncheckedCreateWithoutHrExpenseClaimsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrExpenseClaimsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrExpenseClaimsInput, Prisma.TenantUncheckedUpdateWithoutHrExpenseClaimsInput>
+}
+
+export type TenantUpdateWithoutHrExpenseClaimsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrExpenseClaimsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrDisciplinaryActionsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrDisciplinaryActionsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrDisciplinaryActionsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrDisciplinaryActionsInput, Prisma.TenantUncheckedCreateWithoutHrDisciplinaryActionsInput>
+}
+
+export type TenantUpsertWithoutHrDisciplinaryActionsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrDisciplinaryActionsInput, Prisma.TenantUncheckedUpdateWithoutHrDisciplinaryActionsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrDisciplinaryActionsInput, Prisma.TenantUncheckedCreateWithoutHrDisciplinaryActionsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrDisciplinaryActionsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrDisciplinaryActionsInput, Prisma.TenantUncheckedUpdateWithoutHrDisciplinaryActionsInput>
+}
+
+export type TenantUpdateWithoutHrDisciplinaryActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrDisciplinaryActionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutHrAnnouncementsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutHrAnnouncementsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutHrAnnouncementsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrAnnouncementsInput, Prisma.TenantUncheckedCreateWithoutHrAnnouncementsInput>
+}
+
+export type TenantUpsertWithoutHrAnnouncementsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutHrAnnouncementsInput, Prisma.TenantUncheckedUpdateWithoutHrAnnouncementsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutHrAnnouncementsInput, Prisma.TenantUncheckedCreateWithoutHrAnnouncementsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutHrAnnouncementsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutHrAnnouncementsInput, Prisma.TenantUncheckedUpdateWithoutHrAnnouncementsInput>
+}
+
+export type TenantUpdateWithoutHrAnnouncementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutHrAnnouncementsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappConfigsInput = {
@@ -7841,6 +17895,28 @@ export type TenantCreateWithoutWhatsappConfigsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappConfigsInput = {
@@ -7898,6 +17974,28 @@ export type TenantUncheckedCreateWithoutWhatsappConfigsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappConfigsInput = {
@@ -7971,6 +18069,28 @@ export type TenantUpdateWithoutWhatsappConfigsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappConfigsInput = {
@@ -8028,6 +18148,28 @@ export type TenantUncheckedUpdateWithoutWhatsappConfigsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappSessionsInput = {
@@ -8085,6 +18227,28 @@ export type TenantCreateWithoutWhatsappSessionsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappSessionsInput = {
@@ -8142,6 +18306,28 @@ export type TenantUncheckedCreateWithoutWhatsappSessionsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappSessionsInput = {
@@ -8215,6 +18401,28 @@ export type TenantUpdateWithoutWhatsappSessionsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappSessionsInput = {
@@ -8272,6 +18480,28 @@ export type TenantUncheckedUpdateWithoutWhatsappSessionsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappMessagesInput = {
@@ -8329,6 +18559,28 @@ export type TenantCreateWithoutWhatsappMessagesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappMessagesInput = {
@@ -8386,6 +18638,28 @@ export type TenantUncheckedCreateWithoutWhatsappMessagesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappMessagesInput = {
@@ -8459,6 +18733,28 @@ export type TenantUpdateWithoutWhatsappMessagesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappMessagesInput = {
@@ -8516,6 +18812,28 @@ export type TenantUncheckedUpdateWithoutWhatsappMessagesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutConversationThreadsInput = {
@@ -8573,6 +18891,28 @@ export type TenantCreateWithoutConversationThreadsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutConversationThreadsInput = {
@@ -8630,6 +18970,28 @@ export type TenantUncheckedCreateWithoutConversationThreadsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutConversationThreadsInput = {
@@ -8703,6 +19065,28 @@ export type TenantUpdateWithoutConversationThreadsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutConversationThreadsInput = {
@@ -8760,6 +19144,28 @@ export type TenantUncheckedUpdateWithoutConversationThreadsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappTemplatesInput = {
@@ -8817,6 +19223,28 @@ export type TenantCreateWithoutWhatsappTemplatesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappTemplatesInput = {
@@ -8874,6 +19302,28 @@ export type TenantUncheckedCreateWithoutWhatsappTemplatesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappTemplatesInput = {
@@ -8947,6 +19397,28 @@ export type TenantUpdateWithoutWhatsappTemplatesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappTemplatesInput = {
@@ -9004,6 +19476,28 @@ export type TenantUncheckedUpdateWithoutWhatsappTemplatesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerFeedbacksInput = {
@@ -9061,6 +19555,28 @@ export type TenantCreateWithoutCustomerFeedbacksInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerFeedbacksInput = {
@@ -9118,6 +19634,28 @@ export type TenantUncheckedCreateWithoutCustomerFeedbacksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerFeedbacksInput = {
@@ -9191,6 +19729,28 @@ export type TenantUpdateWithoutCustomerFeedbacksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerFeedbacksInput = {
@@ -9248,6 +19808,28 @@ export type TenantUncheckedUpdateWithoutCustomerFeedbacksInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerReportsInput = {
@@ -9305,6 +19887,28 @@ export type TenantCreateWithoutCustomerReportsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerReportsInput = {
@@ -9362,6 +19966,28 @@ export type TenantUncheckedCreateWithoutCustomerReportsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerReportsInput = {
@@ -9435,6 +20061,28 @@ export type TenantUpdateWithoutCustomerReportsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerReportsInput = {
@@ -9492,6 +20140,28 @@ export type TenantUncheckedUpdateWithoutCustomerReportsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutBroadcastLogsInput = {
@@ -9549,6 +20219,28 @@ export type TenantCreateWithoutBroadcastLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBroadcastLogsInput = {
@@ -9606,6 +20298,28 @@ export type TenantUncheckedCreateWithoutBroadcastLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBroadcastLogsInput = {
@@ -9679,6 +20393,28 @@ export type TenantUpdateWithoutBroadcastLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBroadcastLogsInput = {
@@ -9736,6 +20472,28 @@ export type TenantUncheckedUpdateWithoutBroadcastLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsappDeliveryLogsInput = {
@@ -9793,6 +20551,28 @@ export type TenantCreateWithoutWhatsappDeliveryLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsappDeliveryLogsInput = {
@@ -9850,6 +20630,28 @@ export type TenantUncheckedCreateWithoutWhatsappDeliveryLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsappDeliveryLogsInput = {
@@ -9923,6 +20725,28 @@ export type TenantUpdateWithoutWhatsappDeliveryLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsappDeliveryLogsInput = {
@@ -9980,6 +20804,28 @@ export type TenantUncheckedUpdateWithoutWhatsappDeliveryLogsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutOtpCodesInput = {
@@ -10037,6 +20883,28 @@ export type TenantCreateWithoutOtpCodesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutOtpCodesInput = {
@@ -10094,6 +20962,28 @@ export type TenantUncheckedCreateWithoutOtpCodesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutOtpCodesInput = {
@@ -10167,6 +21057,28 @@ export type TenantUpdateWithoutOtpCodesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutOtpCodesInput = {
@@ -10224,6 +21136,28 @@ export type TenantUncheckedUpdateWithoutOtpCodesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutLoginSessionsInput = {
@@ -10281,6 +21215,28 @@ export type TenantCreateWithoutLoginSessionsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutLoginSessionsInput = {
@@ -10338,6 +21294,28 @@ export type TenantUncheckedCreateWithoutLoginSessionsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutLoginSessionsInput = {
@@ -10411,6 +21389,28 @@ export type TenantUpdateWithoutLoginSessionsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutLoginSessionsInput = {
@@ -10468,6 +21468,28 @@ export type TenantUncheckedUpdateWithoutLoginSessionsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDevicesInput = {
@@ -10525,6 +21547,28 @@ export type TenantCreateWithoutDevicesInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDevicesInput = {
@@ -10582,6 +21626,28 @@ export type TenantUncheckedCreateWithoutDevicesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDevicesInput = {
@@ -10655,6 +21721,28 @@ export type TenantUpdateWithoutDevicesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDevicesInput = {
@@ -10712,6 +21800,28 @@ export type TenantUncheckedUpdateWithoutDevicesInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPasswordResetTokensInput = {
@@ -10769,6 +21879,28 @@ export type TenantCreateWithoutPasswordResetTokensInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -10826,6 +21958,28 @@ export type TenantUncheckedCreateWithoutPasswordResetTokensInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -10899,6 +22053,28 @@ export type TenantUpdateWithoutPasswordResetTokensInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -10956,6 +22132,28 @@ export type TenantUncheckedUpdateWithoutPasswordResetTokensInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPasswordResetOtpsInput = {
@@ -11013,6 +22211,28 @@ export type TenantCreateWithoutPasswordResetOtpsInput = {
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPasswordResetOtpsInput = {
@@ -11070,6 +22290,28 @@ export type TenantUncheckedCreateWithoutPasswordResetOtpsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPasswordResetOtpsInput = {
@@ -11143,6 +22385,28 @@ export type TenantUpdateWithoutPasswordResetOtpsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPasswordResetOtpsInput = {
@@ -11200,6 +22464,28 @@ export type TenantUncheckedUpdateWithoutPasswordResetOtpsInput = {
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAuthAuditLogsInput = {
@@ -11257,6 +22543,28 @@ export type TenantCreateWithoutAuthAuditLogsInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuthAuditLogsInput = {
@@ -11314,6 +22622,28 @@ export type TenantUncheckedCreateWithoutAuthAuditLogsInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuthAuditLogsInput = {
@@ -11387,6 +22717,28 @@ export type TenantUpdateWithoutAuthAuditLogsInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuthAuditLogsInput = {
@@ -11444,6 +22796,28 @@ export type TenantUncheckedUpdateWithoutAuthAuditLogsInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEmailLogsInput = {
@@ -11501,6 +22875,28 @@ export type TenantCreateWithoutEmailLogsInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEmailLogsInput = {
@@ -11558,6 +22954,28 @@ export type TenantUncheckedCreateWithoutEmailLogsInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEmailLogsInput = {
@@ -11631,6 +23049,28 @@ export type TenantUpdateWithoutEmailLogsInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEmailLogsInput = {
@@ -11688,6 +23128,28 @@ export type TenantUncheckedUpdateWithoutEmailLogsInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEmailTemplatesInput = {
@@ -11745,6 +23207,28 @@ export type TenantCreateWithoutEmailTemplatesInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEmailTemplatesInput = {
@@ -11802,6 +23286,28 @@ export type TenantUncheckedCreateWithoutEmailTemplatesInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
   emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEmailTemplatesInput = {
@@ -11875,6 +23381,28 @@ export type TenantUpdateWithoutEmailTemplatesInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEmailTemplatesInput = {
@@ -11932,6 +23460,28 @@ export type TenantUncheckedUpdateWithoutEmailTemplatesInput = {
   passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
   authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
   emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -11983,6 +23533,28 @@ export type TenantCountOutputType = {
   authAuditLogs: number
   emailLogs: number
   emailTemplates: number
+  hrShifts: number
+  hrShiftSchedules: number
+  hrHolidays: number
+  hrEmployees: number
+  hrLeaveTypes: number
+  hrLeaveBalances: number
+  hrLeaveRequests: number
+  hrPayrolls: number
+  hrOvertimeRequests: number
+  hrJobPositions: number
+  hrCandidates: number
+  hrPerformanceReviews: number
+  hrTrainings: number
+  hrTrainingRecords: number
+  hrAssetAssignments: number
+  hrEmployeeDocuments: number
+  hrVisitors: number
+  hrMedicalRecords: number
+  hrTravelRequests: number
+  hrExpenseClaims: number
+  hrDisciplinaryActions: number
+  hrAnnouncements: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -12029,6 +23601,28 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   authAuditLogs?: boolean | TenantCountOutputTypeCountAuthAuditLogsArgs
   emailLogs?: boolean | TenantCountOutputTypeCountEmailLogsArgs
   emailTemplates?: boolean | TenantCountOutputTypeCountEmailTemplatesArgs
+  hrShifts?: boolean | TenantCountOutputTypeCountHrShiftsArgs
+  hrShiftSchedules?: boolean | TenantCountOutputTypeCountHrShiftSchedulesArgs
+  hrHolidays?: boolean | TenantCountOutputTypeCountHrHolidaysArgs
+  hrEmployees?: boolean | TenantCountOutputTypeCountHrEmployeesArgs
+  hrLeaveTypes?: boolean | TenantCountOutputTypeCountHrLeaveTypesArgs
+  hrLeaveBalances?: boolean | TenantCountOutputTypeCountHrLeaveBalancesArgs
+  hrLeaveRequests?: boolean | TenantCountOutputTypeCountHrLeaveRequestsArgs
+  hrPayrolls?: boolean | TenantCountOutputTypeCountHrPayrollsArgs
+  hrOvertimeRequests?: boolean | TenantCountOutputTypeCountHrOvertimeRequestsArgs
+  hrJobPositions?: boolean | TenantCountOutputTypeCountHrJobPositionsArgs
+  hrCandidates?: boolean | TenantCountOutputTypeCountHrCandidatesArgs
+  hrPerformanceReviews?: boolean | TenantCountOutputTypeCountHrPerformanceReviewsArgs
+  hrTrainings?: boolean | TenantCountOutputTypeCountHrTrainingsArgs
+  hrTrainingRecords?: boolean | TenantCountOutputTypeCountHrTrainingRecordsArgs
+  hrAssetAssignments?: boolean | TenantCountOutputTypeCountHrAssetAssignmentsArgs
+  hrEmployeeDocuments?: boolean | TenantCountOutputTypeCountHrEmployeeDocumentsArgs
+  hrVisitors?: boolean | TenantCountOutputTypeCountHrVisitorsArgs
+  hrMedicalRecords?: boolean | TenantCountOutputTypeCountHrMedicalRecordsArgs
+  hrTravelRequests?: boolean | TenantCountOutputTypeCountHrTravelRequestsArgs
+  hrExpenseClaims?: boolean | TenantCountOutputTypeCountHrExpenseClaimsArgs
+  hrDisciplinaryActions?: boolean | TenantCountOutputTypeCountHrDisciplinaryActionsArgs
+  hrAnnouncements?: boolean | TenantCountOutputTypeCountHrAnnouncementsArgs
 }
 
 /**
@@ -12342,6 +23936,160 @@ export type TenantCountOutputTypeCountEmailTemplatesArgs<ExtArgs extends runtime
   where?: Prisma.EmailTemplateWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrShiftsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrShiftWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrShiftSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrShiftScheduleWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrHolidaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrHolidayWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrEmployeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrLeaveTypesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrLeaveTypeWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrLeaveBalancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrLeaveBalanceWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrLeaveRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrLeaveRequestWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrPayrollsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrPayrollWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrOvertimeRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrOvertimeRequestWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrJobPositionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrJobPositionWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrCandidateWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrPerformanceReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrPerformanceReviewWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrTrainingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrTrainingWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrTrainingRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrTrainingRecordWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrAssetAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrAssetAssignmentWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrEmployeeDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrEmployeeDocumentWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrVisitorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrVisitorWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrMedicalRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrMedicalRecordWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrTravelRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrTravelRequestWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrExpenseClaimsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrExpenseClaimWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrDisciplinaryActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrDisciplinaryActionWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountHrAnnouncementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.HrAnnouncementWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -12399,6 +24147,28 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   authAuditLogs?: boolean | Prisma.Tenant$authAuditLogsArgs<ExtArgs>
   emailLogs?: boolean | Prisma.Tenant$emailLogsArgs<ExtArgs>
   emailTemplates?: boolean | Prisma.Tenant$emailTemplatesArgs<ExtArgs>
+  hrShifts?: boolean | Prisma.Tenant$hrShiftsArgs<ExtArgs>
+  hrShiftSchedules?: boolean | Prisma.Tenant$hrShiftSchedulesArgs<ExtArgs>
+  hrHolidays?: boolean | Prisma.Tenant$hrHolidaysArgs<ExtArgs>
+  hrEmployees?: boolean | Prisma.Tenant$hrEmployeesArgs<ExtArgs>
+  hrLeaveTypes?: boolean | Prisma.Tenant$hrLeaveTypesArgs<ExtArgs>
+  hrLeaveBalances?: boolean | Prisma.Tenant$hrLeaveBalancesArgs<ExtArgs>
+  hrLeaveRequests?: boolean | Prisma.Tenant$hrLeaveRequestsArgs<ExtArgs>
+  hrPayrolls?: boolean | Prisma.Tenant$hrPayrollsArgs<ExtArgs>
+  hrOvertimeRequests?: boolean | Prisma.Tenant$hrOvertimeRequestsArgs<ExtArgs>
+  hrJobPositions?: boolean | Prisma.Tenant$hrJobPositionsArgs<ExtArgs>
+  hrCandidates?: boolean | Prisma.Tenant$hrCandidatesArgs<ExtArgs>
+  hrPerformanceReviews?: boolean | Prisma.Tenant$hrPerformanceReviewsArgs<ExtArgs>
+  hrTrainings?: boolean | Prisma.Tenant$hrTrainingsArgs<ExtArgs>
+  hrTrainingRecords?: boolean | Prisma.Tenant$hrTrainingRecordsArgs<ExtArgs>
+  hrAssetAssignments?: boolean | Prisma.Tenant$hrAssetAssignmentsArgs<ExtArgs>
+  hrEmployeeDocuments?: boolean | Prisma.Tenant$hrEmployeeDocumentsArgs<ExtArgs>
+  hrVisitors?: boolean | Prisma.Tenant$hrVisitorsArgs<ExtArgs>
+  hrMedicalRecords?: boolean | Prisma.Tenant$hrMedicalRecordsArgs<ExtArgs>
+  hrTravelRequests?: boolean | Prisma.Tenant$hrTravelRequestsArgs<ExtArgs>
+  hrExpenseClaims?: boolean | Prisma.Tenant$hrExpenseClaimsArgs<ExtArgs>
+  hrDisciplinaryActions?: boolean | Prisma.Tenant$hrDisciplinaryActionsArgs<ExtArgs>
+  hrAnnouncements?: boolean | Prisma.Tenant$hrAnnouncementsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -12492,6 +24262,28 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   authAuditLogs?: boolean | Prisma.Tenant$authAuditLogsArgs<ExtArgs>
   emailLogs?: boolean | Prisma.Tenant$emailLogsArgs<ExtArgs>
   emailTemplates?: boolean | Prisma.Tenant$emailTemplatesArgs<ExtArgs>
+  hrShifts?: boolean | Prisma.Tenant$hrShiftsArgs<ExtArgs>
+  hrShiftSchedules?: boolean | Prisma.Tenant$hrShiftSchedulesArgs<ExtArgs>
+  hrHolidays?: boolean | Prisma.Tenant$hrHolidaysArgs<ExtArgs>
+  hrEmployees?: boolean | Prisma.Tenant$hrEmployeesArgs<ExtArgs>
+  hrLeaveTypes?: boolean | Prisma.Tenant$hrLeaveTypesArgs<ExtArgs>
+  hrLeaveBalances?: boolean | Prisma.Tenant$hrLeaveBalancesArgs<ExtArgs>
+  hrLeaveRequests?: boolean | Prisma.Tenant$hrLeaveRequestsArgs<ExtArgs>
+  hrPayrolls?: boolean | Prisma.Tenant$hrPayrollsArgs<ExtArgs>
+  hrOvertimeRequests?: boolean | Prisma.Tenant$hrOvertimeRequestsArgs<ExtArgs>
+  hrJobPositions?: boolean | Prisma.Tenant$hrJobPositionsArgs<ExtArgs>
+  hrCandidates?: boolean | Prisma.Tenant$hrCandidatesArgs<ExtArgs>
+  hrPerformanceReviews?: boolean | Prisma.Tenant$hrPerformanceReviewsArgs<ExtArgs>
+  hrTrainings?: boolean | Prisma.Tenant$hrTrainingsArgs<ExtArgs>
+  hrTrainingRecords?: boolean | Prisma.Tenant$hrTrainingRecordsArgs<ExtArgs>
+  hrAssetAssignments?: boolean | Prisma.Tenant$hrAssetAssignmentsArgs<ExtArgs>
+  hrEmployeeDocuments?: boolean | Prisma.Tenant$hrEmployeeDocumentsArgs<ExtArgs>
+  hrVisitors?: boolean | Prisma.Tenant$hrVisitorsArgs<ExtArgs>
+  hrMedicalRecords?: boolean | Prisma.Tenant$hrMedicalRecordsArgs<ExtArgs>
+  hrTravelRequests?: boolean | Prisma.Tenant$hrTravelRequestsArgs<ExtArgs>
+  hrExpenseClaims?: boolean | Prisma.Tenant$hrExpenseClaimsArgs<ExtArgs>
+  hrDisciplinaryActions?: boolean | Prisma.Tenant$hrDisciplinaryActionsArgs<ExtArgs>
+  hrAnnouncements?: boolean | Prisma.Tenant$hrAnnouncementsArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -12543,6 +24335,28 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     authAuditLogs: Prisma.$AuthAuditLogPayload<ExtArgs>[]
     emailLogs: Prisma.$EmailLogPayload<ExtArgs>[]
     emailTemplates: Prisma.$EmailTemplatePayload<ExtArgs>[]
+    hrShifts: Prisma.$HrShiftPayload<ExtArgs>[]
+    hrShiftSchedules: Prisma.$HrShiftSchedulePayload<ExtArgs>[]
+    hrHolidays: Prisma.$HrHolidayPayload<ExtArgs>[]
+    hrEmployees: Prisma.$HrEmployeePayload<ExtArgs>[]
+    hrLeaveTypes: Prisma.$HrLeaveTypePayload<ExtArgs>[]
+    hrLeaveBalances: Prisma.$HrLeaveBalancePayload<ExtArgs>[]
+    hrLeaveRequests: Prisma.$HrLeaveRequestPayload<ExtArgs>[]
+    hrPayrolls: Prisma.$HrPayrollPayload<ExtArgs>[]
+    hrOvertimeRequests: Prisma.$HrOvertimeRequestPayload<ExtArgs>[]
+    hrJobPositions: Prisma.$HrJobPositionPayload<ExtArgs>[]
+    hrCandidates: Prisma.$HrCandidatePayload<ExtArgs>[]
+    hrPerformanceReviews: Prisma.$HrPerformanceReviewPayload<ExtArgs>[]
+    hrTrainings: Prisma.$HrTrainingPayload<ExtArgs>[]
+    hrTrainingRecords: Prisma.$HrTrainingRecordPayload<ExtArgs>[]
+    hrAssetAssignments: Prisma.$HrAssetAssignmentPayload<ExtArgs>[]
+    hrEmployeeDocuments: Prisma.$HrEmployeeDocumentPayload<ExtArgs>[]
+    hrVisitors: Prisma.$HrVisitorPayload<ExtArgs>[]
+    hrMedicalRecords: Prisma.$HrMedicalRecordPayload<ExtArgs>[]
+    hrTravelRequests: Prisma.$HrTravelRequestPayload<ExtArgs>[]
+    hrExpenseClaims: Prisma.$HrExpenseClaimPayload<ExtArgs>[]
+    hrDisciplinaryActions: Prisma.$HrDisciplinaryActionPayload<ExtArgs>[]
+    hrAnnouncements: Prisma.$HrAnnouncementPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -12994,6 +24808,28 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   authAuditLogs<T extends Prisma.Tenant$authAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$authAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emailLogs<T extends Prisma.Tenant$emailLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$emailLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   emailTemplates<T extends Prisma.Tenant$emailTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$emailTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmailTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrShifts<T extends Prisma.Tenant$hrShiftsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrShiftsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrShiftPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrShiftSchedules<T extends Prisma.Tenant$hrShiftSchedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrShiftSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrShiftSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrHolidays<T extends Prisma.Tenant$hrHolidaysArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrHolidaysArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrHolidayPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployees<T extends Prisma.Tenant$hrEmployeesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrEmployeesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrLeaveTypes<T extends Prisma.Tenant$hrLeaveTypesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrLeaveTypesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrLeaveTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrLeaveBalances<T extends Prisma.Tenant$hrLeaveBalancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrLeaveBalancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrLeaveBalancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrLeaveRequests<T extends Prisma.Tenant$hrLeaveRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrLeaveRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrLeaveRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrPayrolls<T extends Prisma.Tenant$hrPayrollsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrPayrollsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrPayrollPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrOvertimeRequests<T extends Prisma.Tenant$hrOvertimeRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrOvertimeRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrOvertimeRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrJobPositions<T extends Prisma.Tenant$hrJobPositionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrJobPositionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrJobPositionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrCandidates<T extends Prisma.Tenant$hrCandidatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrCandidatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrCandidatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrPerformanceReviews<T extends Prisma.Tenant$hrPerformanceReviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrPerformanceReviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrPerformanceReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrTrainings<T extends Prisma.Tenant$hrTrainingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrTrainingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrTrainingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrTrainingRecords<T extends Prisma.Tenant$hrTrainingRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrTrainingRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrTrainingRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrAssetAssignments<T extends Prisma.Tenant$hrAssetAssignmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrAssetAssignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrAssetAssignmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrEmployeeDocuments<T extends Prisma.Tenant$hrEmployeeDocumentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrEmployeeDocumentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrEmployeeDocumentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrVisitors<T extends Prisma.Tenant$hrVisitorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrVisitorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrVisitorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrMedicalRecords<T extends Prisma.Tenant$hrMedicalRecordsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrMedicalRecordsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrMedicalRecordPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrTravelRequests<T extends Prisma.Tenant$hrTravelRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrTravelRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrTravelRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrExpenseClaims<T extends Prisma.Tenant$hrExpenseClaimsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrExpenseClaimsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrExpenseClaimPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrDisciplinaryActions<T extends Prisma.Tenant$hrDisciplinaryActionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrDisciplinaryActionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrDisciplinaryActionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  hrAnnouncements<T extends Prisma.Tenant$hrAnnouncementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$hrAnnouncementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$HrAnnouncementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -14457,6 +26293,534 @@ export type Tenant$emailTemplatesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.EmailTemplateScalarFieldEnum | Prisma.EmailTemplateScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrShifts
+ */
+export type Tenant$hrShiftsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrShift
+   */
+  select?: Prisma.HrShiftSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrShift
+   */
+  omit?: Prisma.HrShiftOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrShiftInclude<ExtArgs> | null
+  where?: Prisma.HrShiftWhereInput
+  orderBy?: Prisma.HrShiftOrderByWithRelationInput | Prisma.HrShiftOrderByWithRelationInput[]
+  cursor?: Prisma.HrShiftWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrShiftScalarFieldEnum | Prisma.HrShiftScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrShiftSchedules
+ */
+export type Tenant$hrShiftSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrShiftSchedule
+   */
+  select?: Prisma.HrShiftScheduleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrShiftSchedule
+   */
+  omit?: Prisma.HrShiftScheduleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrShiftScheduleInclude<ExtArgs> | null
+  where?: Prisma.HrShiftScheduleWhereInput
+  orderBy?: Prisma.HrShiftScheduleOrderByWithRelationInput | Prisma.HrShiftScheduleOrderByWithRelationInput[]
+  cursor?: Prisma.HrShiftScheduleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrShiftScheduleScalarFieldEnum | Prisma.HrShiftScheduleScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrHolidays
+ */
+export type Tenant$hrHolidaysArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrHoliday
+   */
+  select?: Prisma.HrHolidaySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrHoliday
+   */
+  omit?: Prisma.HrHolidayOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrHolidayInclude<ExtArgs> | null
+  where?: Prisma.HrHolidayWhereInput
+  orderBy?: Prisma.HrHolidayOrderByWithRelationInput | Prisma.HrHolidayOrderByWithRelationInput[]
+  cursor?: Prisma.HrHolidayWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrHolidayScalarFieldEnum | Prisma.HrHolidayScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrEmployees
+ */
+export type Tenant$hrEmployeesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployee
+   */
+  select?: Prisma.HrEmployeeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployee
+   */
+  omit?: Prisma.HrEmployeeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeWhereInput
+  orderBy?: Prisma.HrEmployeeOrderByWithRelationInput | Prisma.HrEmployeeOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeScalarFieldEnum | Prisma.HrEmployeeScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrLeaveTypes
+ */
+export type Tenant$hrLeaveTypesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrLeaveType
+   */
+  select?: Prisma.HrLeaveTypeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrLeaveType
+   */
+  omit?: Prisma.HrLeaveTypeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrLeaveTypeInclude<ExtArgs> | null
+  where?: Prisma.HrLeaveTypeWhereInput
+  orderBy?: Prisma.HrLeaveTypeOrderByWithRelationInput | Prisma.HrLeaveTypeOrderByWithRelationInput[]
+  cursor?: Prisma.HrLeaveTypeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrLeaveTypeScalarFieldEnum | Prisma.HrLeaveTypeScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrLeaveBalances
+ */
+export type Tenant$hrLeaveBalancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrLeaveBalance
+   */
+  select?: Prisma.HrLeaveBalanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrLeaveBalance
+   */
+  omit?: Prisma.HrLeaveBalanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrLeaveBalanceInclude<ExtArgs> | null
+  where?: Prisma.HrLeaveBalanceWhereInput
+  orderBy?: Prisma.HrLeaveBalanceOrderByWithRelationInput | Prisma.HrLeaveBalanceOrderByWithRelationInput[]
+  cursor?: Prisma.HrLeaveBalanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrLeaveBalanceScalarFieldEnum | Prisma.HrLeaveBalanceScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrLeaveRequests
+ */
+export type Tenant$hrLeaveRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrLeaveRequest
+   */
+  select?: Prisma.HrLeaveRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrLeaveRequest
+   */
+  omit?: Prisma.HrLeaveRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrLeaveRequestInclude<ExtArgs> | null
+  where?: Prisma.HrLeaveRequestWhereInput
+  orderBy?: Prisma.HrLeaveRequestOrderByWithRelationInput | Prisma.HrLeaveRequestOrderByWithRelationInput[]
+  cursor?: Prisma.HrLeaveRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrLeaveRequestScalarFieldEnum | Prisma.HrLeaveRequestScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrPayrolls
+ */
+export type Tenant$hrPayrollsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrPayroll
+   */
+  select?: Prisma.HrPayrollSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrPayroll
+   */
+  omit?: Prisma.HrPayrollOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrPayrollInclude<ExtArgs> | null
+  where?: Prisma.HrPayrollWhereInput
+  orderBy?: Prisma.HrPayrollOrderByWithRelationInput | Prisma.HrPayrollOrderByWithRelationInput[]
+  cursor?: Prisma.HrPayrollWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrPayrollScalarFieldEnum | Prisma.HrPayrollScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrOvertimeRequests
+ */
+export type Tenant$hrOvertimeRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrOvertimeRequest
+   */
+  select?: Prisma.HrOvertimeRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrOvertimeRequest
+   */
+  omit?: Prisma.HrOvertimeRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrOvertimeRequestInclude<ExtArgs> | null
+  where?: Prisma.HrOvertimeRequestWhereInput
+  orderBy?: Prisma.HrOvertimeRequestOrderByWithRelationInput | Prisma.HrOvertimeRequestOrderByWithRelationInput[]
+  cursor?: Prisma.HrOvertimeRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrOvertimeRequestScalarFieldEnum | Prisma.HrOvertimeRequestScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrJobPositions
+ */
+export type Tenant$hrJobPositionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrJobPosition
+   */
+  select?: Prisma.HrJobPositionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrJobPosition
+   */
+  omit?: Prisma.HrJobPositionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrJobPositionInclude<ExtArgs> | null
+  where?: Prisma.HrJobPositionWhereInput
+  orderBy?: Prisma.HrJobPositionOrderByWithRelationInput | Prisma.HrJobPositionOrderByWithRelationInput[]
+  cursor?: Prisma.HrJobPositionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrJobPositionScalarFieldEnum | Prisma.HrJobPositionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrCandidates
+ */
+export type Tenant$hrCandidatesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrCandidate
+   */
+  select?: Prisma.HrCandidateSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrCandidate
+   */
+  omit?: Prisma.HrCandidateOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrCandidateInclude<ExtArgs> | null
+  where?: Prisma.HrCandidateWhereInput
+  orderBy?: Prisma.HrCandidateOrderByWithRelationInput | Prisma.HrCandidateOrderByWithRelationInput[]
+  cursor?: Prisma.HrCandidateWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrCandidateScalarFieldEnum | Prisma.HrCandidateScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrPerformanceReviews
+ */
+export type Tenant$hrPerformanceReviewsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrPerformanceReview
+   */
+  select?: Prisma.HrPerformanceReviewSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrPerformanceReview
+   */
+  omit?: Prisma.HrPerformanceReviewOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrPerformanceReviewInclude<ExtArgs> | null
+  where?: Prisma.HrPerformanceReviewWhereInput
+  orderBy?: Prisma.HrPerformanceReviewOrderByWithRelationInput | Prisma.HrPerformanceReviewOrderByWithRelationInput[]
+  cursor?: Prisma.HrPerformanceReviewWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrPerformanceReviewScalarFieldEnum | Prisma.HrPerformanceReviewScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrTrainings
+ */
+export type Tenant$hrTrainingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrTraining
+   */
+  select?: Prisma.HrTrainingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrTraining
+   */
+  omit?: Prisma.HrTrainingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrTrainingInclude<ExtArgs> | null
+  where?: Prisma.HrTrainingWhereInput
+  orderBy?: Prisma.HrTrainingOrderByWithRelationInput | Prisma.HrTrainingOrderByWithRelationInput[]
+  cursor?: Prisma.HrTrainingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrTrainingScalarFieldEnum | Prisma.HrTrainingScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrTrainingRecords
+ */
+export type Tenant$hrTrainingRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrTrainingRecord
+   */
+  select?: Prisma.HrTrainingRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrTrainingRecord
+   */
+  omit?: Prisma.HrTrainingRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrTrainingRecordInclude<ExtArgs> | null
+  where?: Prisma.HrTrainingRecordWhereInput
+  orderBy?: Prisma.HrTrainingRecordOrderByWithRelationInput | Prisma.HrTrainingRecordOrderByWithRelationInput[]
+  cursor?: Prisma.HrTrainingRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrTrainingRecordScalarFieldEnum | Prisma.HrTrainingRecordScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrAssetAssignments
+ */
+export type Tenant$hrAssetAssignmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrAssetAssignment
+   */
+  select?: Prisma.HrAssetAssignmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrAssetAssignment
+   */
+  omit?: Prisma.HrAssetAssignmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrAssetAssignmentInclude<ExtArgs> | null
+  where?: Prisma.HrAssetAssignmentWhereInput
+  orderBy?: Prisma.HrAssetAssignmentOrderByWithRelationInput | Prisma.HrAssetAssignmentOrderByWithRelationInput[]
+  cursor?: Prisma.HrAssetAssignmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrAssetAssignmentScalarFieldEnum | Prisma.HrAssetAssignmentScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrEmployeeDocuments
+ */
+export type Tenant$hrEmployeeDocumentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrEmployeeDocument
+   */
+  select?: Prisma.HrEmployeeDocumentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrEmployeeDocument
+   */
+  omit?: Prisma.HrEmployeeDocumentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrEmployeeDocumentInclude<ExtArgs> | null
+  where?: Prisma.HrEmployeeDocumentWhereInput
+  orderBy?: Prisma.HrEmployeeDocumentOrderByWithRelationInput | Prisma.HrEmployeeDocumentOrderByWithRelationInput[]
+  cursor?: Prisma.HrEmployeeDocumentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrEmployeeDocumentScalarFieldEnum | Prisma.HrEmployeeDocumentScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrVisitors
+ */
+export type Tenant$hrVisitorsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrVisitor
+   */
+  select?: Prisma.HrVisitorSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrVisitor
+   */
+  omit?: Prisma.HrVisitorOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrVisitorInclude<ExtArgs> | null
+  where?: Prisma.HrVisitorWhereInput
+  orderBy?: Prisma.HrVisitorOrderByWithRelationInput | Prisma.HrVisitorOrderByWithRelationInput[]
+  cursor?: Prisma.HrVisitorWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrVisitorScalarFieldEnum | Prisma.HrVisitorScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrMedicalRecords
+ */
+export type Tenant$hrMedicalRecordsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrMedicalRecord
+   */
+  select?: Prisma.HrMedicalRecordSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrMedicalRecord
+   */
+  omit?: Prisma.HrMedicalRecordOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrMedicalRecordInclude<ExtArgs> | null
+  where?: Prisma.HrMedicalRecordWhereInput
+  orderBy?: Prisma.HrMedicalRecordOrderByWithRelationInput | Prisma.HrMedicalRecordOrderByWithRelationInput[]
+  cursor?: Prisma.HrMedicalRecordWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrMedicalRecordScalarFieldEnum | Prisma.HrMedicalRecordScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrTravelRequests
+ */
+export type Tenant$hrTravelRequestsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrTravelRequest
+   */
+  select?: Prisma.HrTravelRequestSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrTravelRequest
+   */
+  omit?: Prisma.HrTravelRequestOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrTravelRequestInclude<ExtArgs> | null
+  where?: Prisma.HrTravelRequestWhereInput
+  orderBy?: Prisma.HrTravelRequestOrderByWithRelationInput | Prisma.HrTravelRequestOrderByWithRelationInput[]
+  cursor?: Prisma.HrTravelRequestWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrTravelRequestScalarFieldEnum | Prisma.HrTravelRequestScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrExpenseClaims
+ */
+export type Tenant$hrExpenseClaimsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrExpenseClaim
+   */
+  select?: Prisma.HrExpenseClaimSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrExpenseClaim
+   */
+  omit?: Prisma.HrExpenseClaimOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrExpenseClaimInclude<ExtArgs> | null
+  where?: Prisma.HrExpenseClaimWhereInput
+  orderBy?: Prisma.HrExpenseClaimOrderByWithRelationInput | Prisma.HrExpenseClaimOrderByWithRelationInput[]
+  cursor?: Prisma.HrExpenseClaimWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrExpenseClaimScalarFieldEnum | Prisma.HrExpenseClaimScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrDisciplinaryActions
+ */
+export type Tenant$hrDisciplinaryActionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrDisciplinaryAction
+   */
+  select?: Prisma.HrDisciplinaryActionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrDisciplinaryAction
+   */
+  omit?: Prisma.HrDisciplinaryActionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrDisciplinaryActionInclude<ExtArgs> | null
+  where?: Prisma.HrDisciplinaryActionWhereInput
+  orderBy?: Prisma.HrDisciplinaryActionOrderByWithRelationInput | Prisma.HrDisciplinaryActionOrderByWithRelationInput[]
+  cursor?: Prisma.HrDisciplinaryActionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrDisciplinaryActionScalarFieldEnum | Prisma.HrDisciplinaryActionScalarFieldEnum[]
+}
+
+/**
+ * Tenant.hrAnnouncements
+ */
+export type Tenant$hrAnnouncementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the HrAnnouncement
+   */
+  select?: Prisma.HrAnnouncementSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the HrAnnouncement
+   */
+  omit?: Prisma.HrAnnouncementOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.HrAnnouncementInclude<ExtArgs> | null
+  where?: Prisma.HrAnnouncementWhereInput
+  orderBy?: Prisma.HrAnnouncementOrderByWithRelationInput | Prisma.HrAnnouncementOrderByWithRelationInput[]
+  cursor?: Prisma.HrAnnouncementWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.HrAnnouncementScalarFieldEnum | Prisma.HrAnnouncementScalarFieldEnum[]
 }
 
 /**

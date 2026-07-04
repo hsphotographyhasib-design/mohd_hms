@@ -173,6 +173,116 @@ export type LeaveRequest = Prisma.LeaveRequestModel
  */
 export type Attendance = Prisma.AttendanceModel
 /**
+ * Model HrShift
+ * 
+ */
+export type HrShift = Prisma.HrShiftModel
+/**
+ * Model HrShiftSchedule
+ * 
+ */
+export type HrShiftSchedule = Prisma.HrShiftScheduleModel
+/**
+ * Model HrHoliday
+ * 
+ */
+export type HrHoliday = Prisma.HrHolidayModel
+/**
+ * Model HrEmployee
+ * 
+ */
+export type HrEmployee = Prisma.HrEmployeeModel
+/**
+ * Model HrLeaveType
+ * 
+ */
+export type HrLeaveType = Prisma.HrLeaveTypeModel
+/**
+ * Model HrLeaveBalance
+ * 
+ */
+export type HrLeaveBalance = Prisma.HrLeaveBalanceModel
+/**
+ * Model HrLeaveRequest
+ * 
+ */
+export type HrLeaveRequest = Prisma.HrLeaveRequestModel
+/**
+ * Model HrPayroll
+ * 
+ */
+export type HrPayroll = Prisma.HrPayrollModel
+/**
+ * Model HrOvertimeRequest
+ * 
+ */
+export type HrOvertimeRequest = Prisma.HrOvertimeRequestModel
+/**
+ * Model HrJobPosition
+ * 
+ */
+export type HrJobPosition = Prisma.HrJobPositionModel
+/**
+ * Model HrCandidate
+ * 
+ */
+export type HrCandidate = Prisma.HrCandidateModel
+/**
+ * Model HrPerformanceReview
+ * 
+ */
+export type HrPerformanceReview = Prisma.HrPerformanceReviewModel
+/**
+ * Model HrTraining
+ * 
+ */
+export type HrTraining = Prisma.HrTrainingModel
+/**
+ * Model HrTrainingRecord
+ * 
+ */
+export type HrTrainingRecord = Prisma.HrTrainingRecordModel
+/**
+ * Model HrAssetAssignment
+ * 
+ */
+export type HrAssetAssignment = Prisma.HrAssetAssignmentModel
+/**
+ * Model HrEmployeeDocument
+ * 
+ */
+export type HrEmployeeDocument = Prisma.HrEmployeeDocumentModel
+/**
+ * Model HrVisitor
+ * 
+ */
+export type HrVisitor = Prisma.HrVisitorModel
+/**
+ * Model HrMedicalRecord
+ * 
+ */
+export type HrMedicalRecord = Prisma.HrMedicalRecordModel
+/**
+ * Model HrTravelRequest
+ * 
+ */
+export type HrTravelRequest = Prisma.HrTravelRequestModel
+/**
+ * Model HrExpenseClaim
+ * 
+ */
+export type HrExpenseClaim = Prisma.HrExpenseClaimModel
+/**
+ * Model HrDisciplinaryAction
+ * 
+ */
+export type HrDisciplinaryAction = Prisma.HrDisciplinaryActionModel
+/**
+ * Model HrAnnouncement
+ * 
+ */
+export type HrAnnouncement = Prisma.HrAnnouncementModel
+/**
  * Model CmsSetting
  * 
  */

@@ -383,3 +383,23 @@ Stage Summary:
 - **Key fix**: Added missing `verifyAuth` export to `@/lib/auth.ts`
 - **Key fix**: All `import from 'path'` → `import from 'node:path'` (6 files)
 - **Key fix**: Simplified `instrumentation.ts` to avoid Edge Runtime + Prisma incompatibility
+
+---
+Task ID: hr-foundation
+Agent: Main Agent
+Task: HR Module Foundation — Schema, Types, Permissions, Navigation
+
+Work Log:
+- Added 20 HR Prisma models to schema.prisma: HrShift, HrShiftSchedule, HrHoliday, HrEmployee, HrLeaveType, HrLeaveBalance, HrLeaveRequest, HrPayroll, HrOvertimeRequest, HrJobPosition, HrCandidate, HrPerformanceReview, HrTraining, HrTrainingRecord, HrAssetAssignment, HrEmployeeDocument, HrVisitor, HrMedicalRecord, HrTravelRequest, HrExpenseClaim, HrDisciplinaryAction, HrAnnouncement
+- Added HR relations to Tenant model (22 new relation fields)
+- Added opposite relations to Department and HrShiftSchedule models
+- Generated Prisma client successfully
+- Added 22 HR AppView types to src/types/index.ts
+- Added hr permission to src/core/auth/permissions.ts and src/store/index.ts
+- Added HR dropdown menu with 21 sub-items to floating-nav-bar.tsx with HeartHandshake icon
+
+Stage Summary:
+- Database schema: 20 new HR tables with full indexes and relations
+- Navigation: HR menu with 21 submenus in top floating nav bar
+- Permissions: hr feature accessible by super_admin, admin, manager, supervisor
+- Types: All 22 hr-* AppViews registered
