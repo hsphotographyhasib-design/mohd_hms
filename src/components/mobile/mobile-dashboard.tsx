@@ -26,7 +26,6 @@ import {
   Package,
   ShoppingCart,
   Shield,
-  Eye,
 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -143,18 +142,28 @@ interface StatCardProps {
   bgColor: string;
   iconColor: string;
   index: number;
+  onClick?: () => void;
 }
 
-function StatCard({ label, value, icon: Icon, bgColor, iconColor, index }: StatCardProps) {
+function StatCard({ label, value, icon: Icon, bgColor, iconColor, index, onClick }: StatCardProps) {
   return (
     <motion.div variants={itemVariants} custom={index}>
-      <Card className="rounded-2xl border-0 p-0 shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden">
+      <Card
+        className={cn(
+          'rounded-2xl border-0 p-0 shadow-[0_2px_12px_rgba(0,0,0,0.06)] overflow-hidden transition-all active:scale-[0.96]',
+          onClick && 'cursor-pointer hover:shadow-[0_4px_16px_rgba(0,0,0,0.12)] hover:-translate-y-0.5'
+        )}
+        onClick={onClick}
+      >
         <CardContent className="p-4 flex flex-col items-center gap-2">
           <div className={cn('flex size-12 items-center justify-center rounded-full', bgColor)}>
             <Icon className={cn('size-5', iconColor)} strokeWidth={2} />
           </div>
           <span className="text-2xl font-bold leading-none text-gray-900">{value}</span>
-          <span className="text-[10px] font-medium text-gray-500 leading-tight text-center">{label}</span>
+          <div className="flex items-center gap-1">
+            <span className="text-[10px] font-medium text-gray-500 leading-tight text-center">{label}</span>
+            {onClick && <ChevronRight className="size-3 text-gray-300" />}
+          </div>
         </CardContent>
       </Card>
     </motion.div>
@@ -458,6 +467,35 @@ export function MobileDashboard() {
     setView(view);
   };
 
+  // ─── KPI card → view navigation mapping ──────────────────
+  const STAT_CARD_NAV: Record<string, AppView> = {
+    tasks: 'work-orders',
+    pending: 'complaints',
+    awaiting: 'complaints',
+    total: 'complaints',
+    inprogress: 'complaints',
+    completed: 'complaints',
+    completedwo: 'work-orders',
+    pendingwo: 'work-orders',
+    pendinginv: 'invoices',
+    overdue: 'invoices',
+    revenue: 'invoices',
+    customers: 'customers',
+    employees: 'employees',
+    equipment: 'equipment',
+    pm: 'pm',
+    lowstock: 'inventory',
+    invoices: 'invoices',
+    open: 'complaints',
+  };
+
+  const handleStatCardClick = useCallback((key: string) => {
+    const targetView = STAT_CARD_NAV[key];
+    if (targetView) {
+      setView(targetView);
+    }
+  }, [setView]);
+
   return (
     <motion.div className="min-h-screen bg-white" variants={containerVariants} initial="hidden" animate="visible">
       {/* ── Welcome Card ──────────────────────────────────── */}
@@ -505,7 +543,7 @@ export function MobileDashboard() {
       ) : (
         <motion.div variants={containerVariants} className={cn('grid gap-3 px-4', statCards.length > 4 ? 'grid-cols-3' : 'grid-cols-2')}>
           {statCards.map(({ key, props }) => (
-            <StatCard key={key} {...props} />
+            <StatCard key={key} {...props} onClick={() => handleStatCardClick(key)} />
           ))}
         </motion.div>
       )}
