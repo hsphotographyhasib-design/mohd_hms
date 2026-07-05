@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useMemo } from 'react';
 import {
-  Bell, X, CheckCheck, Trash2, Search, Filter,
+  Bell, X, Trash2, Search,
   CheckCircle2, XCircle, AlertTriangle, Info, Clock,
 } from 'lucide-react';
 import { useNotificationStore } from '@/lib/notifications/store';
@@ -14,8 +13,8 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { useAppStore } from '@/store';
 
 const TYPE_ICON: Record<NotificationType, React.ComponentType<{ className?: string }>> = {
   success: CheckCircle2,
@@ -27,34 +26,28 @@ const TYPE_ICON: Record<NotificationType, React.ComponentType<{ className?: stri
 };
 
 export function NotificationHistoryPanel() {
-  const { history, markRead, markAllRead, clearHistory, settings } = useNotificationStore();
+  const { dbNotifications, markAllAsRead, settings } = useNotificationStore();
+  const setView = useAppStore((s) => s.setView);
   const [search, setSearch] = useState('');
-  const [filterType, setFilterType] = useState<NotificationType | 'all'>('all');
+  const [filterType, setFilterType] = useState<string>('all');
   const [open, setOpen] = useState(false);
 
-  const unreadCount = history.filter((n) => !n.read).length;
+  const unreadCount = dbNotifications.filter((n) => !n.isRead).length;
 
   const filtered = useMemo(() => {
-    let items = [...history].reverse(); // newest first
+    let items = [...dbNotifications].reverse(); // newest first
     if (filterType !== 'all') items = items.filter((n) => n.type === filterType);
     if (search) {
       const q = search.toLowerCase();
       items = items.filter(
-        (n) => n.title.toLowerCase().includes(q) || n.description?.toLowerCase().includes(q)
+        (n) => n.title.toLowerCase().includes(q) || n.message.toLowerCase().includes(q)
       );
     }
     return items.slice(0, 50); // limit display
-  }, [history, filterType, search]);
+  }, [dbNotifications, filterType, search]);
 
-  // Mark as read when panel opens
-  useEffect(() => {
-    if (open && unreadCount > 0) {
-      markAllRead();
-    }
-  }, [open, unreadCount, markAllRead]);
-
-  const formatTime = (ts: number) => {
-    const d = new Date(ts);
+  const formatTime = (dateStr: string) => {
+    const d = new Date(dateStr);
     const now = new Date();
     const diffMs = now.getTime() - d.getTime();
     const diffMin = Math.floor(diffMs / 60000);
@@ -63,6 +56,24 @@ export function NotificationHistoryPanel() {
     const diffHr = Math.floor(diffMin / 60);
     if (diffHr < 24) return `${diffHr}h ago`;
     return d.toLocaleDateString();
+  };
+
+  const handleClick = (n: typeof dbNotifications[0]) => {
+    if (n.actionUrl) {
+      setView(n.actionUrl as Parameters<typeof setView>[0], n.relatedEntityId ? { id: n.relatedEntityId } : {});
+      setOpen(false);
+    } else if (n.relatedEntityType && n.relatedEntityId) {
+      const viewMap: Record<string, string> = {
+        complaint: 'complaint-detail',
+        work_order: 'work-order-detail',
+        invoice: 'invoice-detail',
+      };
+      const view = viewMap[n.relatedEntityType];
+      if (view) {
+        setView(view as Parameters<typeof setView>[0], { id: n.relatedEntityId });
+        setOpen(false);
+      }
+    }
   };
 
   return (
@@ -97,22 +108,21 @@ export function NotificationHistoryPanel() {
             )}
           </div>
           <div className="flex items-center gap-1">
-            {history.length > 0 && (
+            {unreadCount > 0 && (
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-7 text-xs text-muted-foreground hover:text-destructive"
-                onClick={clearHistory}
+                className="h-7 text-xs text-emerald-600 hover:text-emerald-700"
+                onClick={() => markAllAsRead()}
               >
-                <Trash2 className="h-3 w-3 mr-1" />
-                Clear
+                Mark all read
               </Button>
             )}
           </div>
         </div>
 
         {/* Search & Filter */}
-        {history.length > 5 && (
+        {dbNotifications.length > 5 && (
           <div className="px-3 py-2 border-b space-y-2">
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -152,14 +162,17 @@ export function NotificationHistoryPanel() {
           ) : (
             <div className="divide-y">
               {filtered.map((n) => {
-                const cfg = NOTIFICATION_CONFIG[n.type];
-                const Icon = TYPE_ICON[n.type] || Info;
+                // Map DB notification type to display config
+                const mappedType = n.type === 'error' ? 'error' : n.type === 'warning' ? 'warning' : n.type === 'success' ? 'success' : 'info';
+                const cfg = NOTIFICATION_CONFIG[mappedType as NotificationType] || NOTIFICATION_CONFIG.info;
+                const Icon = TYPE_ICON[mappedType as NotificationType] || Info;
                 return (
                   <div
                     key={n.id}
+                    onClick={() => handleClick(n)}
                     className={cn(
-                      'flex items-start gap-2.5 px-3 py-2.5 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.02]',
-                      !n.read && 'bg-emerald-50/30 dark:bg-emerald-900/10'
+                      'flex items-start gap-2.5 px-3 py-2.5 transition-colors hover:bg-black/[0.02] dark:hover:bg-white/[0.02] cursor-pointer',
+                      !n.isRead && 'bg-emerald-50/30 dark:bg-emerald-900/10'
                     )}
                   >
                     <div className={cn('rounded-md p-1 flex-shrink-0 mt-0.5', cfg.iconBgClass)}>
@@ -167,15 +180,12 @@ export function NotificationHistoryPanel() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium leading-tight truncate">{n.title}</p>
-                      {n.description && (
-                        <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{n.description}</p>
-                      )}
+                      <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{n.message}</p>
                       <p className="text-[10px] text-muted-foreground/60 mt-1">
                         {formatTime(n.createdAt)}
-                        {n.module && ` · ${n.module}`}
                       </p>
                     </div>
-                    {!n.read && (
+                    {!n.isRead && (
                       <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0 mt-2" />
                     )}
                   </div>
@@ -185,10 +195,10 @@ export function NotificationHistoryPanel() {
           )}
         </ScrollArea>
 
-        {history.length > 50 && (
+        {dbNotifications.length > 50 && (
           <div className="px-3 py-2 border-t text-center">
             <p className="text-[10px] text-muted-foreground">
-              Showing 50 of {history.length} notifications
+              Showing 50 of {dbNotifications.length} notifications
             </p>
           </div>
         )}

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { buildAuthContext } from '@/lib/rbac';
+import { notifyWorkOrderCreated, createNotification } from '@/lib/notifications/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -29,56 +30,6 @@ async function generateWorkOrderNumber(tenantId: string): Promise<string> {
   }
 
   return `${prefix}${String(nextNum).padStart(6, '0')}`;
-}
-
-// ─── Create Notifications ─────────────────────────────────────────────
-async function createWoNotifications(
-  tenantId: string,
-  workOrderId: string,
-  workOrderNumber: string,
-  title: string,
-  assignedToId: string | null,
-  supervisorId: string | null,
-  creatorId: string,
-  priority: string,
-  scheduledDate: Date | null,
-) {
-  const notifications: Prisma.NotificationCreateManyInput[] = [];
-  const scheduledStr = scheduledDate
-    ? scheduledDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
-    : 'TBD';
-
-  // Notify assigned technician
-  if (assignedToId) {
-    notifications.push({
-      tenantId,
-      userId: assignedToId,
-      type: 'work_order_assigned',
-      title: 'New Work Order Assigned',
-      message: `You have been assigned ${workOrderNumber}: "${title}" (${priority} priority, scheduled: ${scheduledStr})`,
-      data: JSON.stringify({ workOrderId, workOrderNumber }),
-      relatedEntityType: 'work_order',
-      relatedEntityId: workOrderId,
-    });
-  }
-
-  // Notify supervisor
-  if (supervisorId && supervisorId !== assignedToId && supervisorId !== creatorId) {
-    notifications.push({
-      tenantId,
-      userId: supervisorId,
-      type: 'work_order_supervised',
-      title: 'Work Order to Supervise',
-      message: `Work order ${workOrderNumber} has been created: "${title}" with ${priority} priority`,
-      data: JSON.stringify({ workOrderId, workOrderNumber }),
-      relatedEntityType: 'work_order',
-      relatedEntityId: workOrderId,
-    });
-  }
-
-  if (notifications.length > 0) {
-    await db.notification.createMany({ data: notifications });
-  }
 }
 
 // ─── Create Audit Log ─────────────────────────────────────────────────
@@ -404,19 +355,35 @@ export async function POST(request: NextRequest) {
 
     // Fire and forget: notifications + audit log
     if (!isDraft) {
-      // These are non-blocking — don't await them
-      createWoNotifications(
-        tenantId,
-        workOrder.id,
-        workOrderNumber,
-        title,
-        assignedToId || null,
-        supervisorId || null,
-        userId,
-        mappedPriority,
-        scheduledDate ? new Date(scheduledDate) : null,
-      ).catch(() => {});
+      // Notify assigned technician via centralized service
+      if (assignedToId) {
+        notifyWorkOrderCreated(
+          workOrder.id,
+          tenantId,
+          assignedToId,
+          workOrder.title,
+          userId,
+        ).catch(() => {});
+      }
 
+      // Notify supervisor via centralized service
+      if (supervisorId && supervisorId !== assignedToId && supervisorId !== userId) {
+        createNotification({
+          tenantId,
+          userId: supervisorId,
+          type: 'work_order_supervised',
+          title: 'Work Order to Supervise',
+          message: `Work order ${workOrderNumber} has been created: "${title}" with ${mappedPriority} priority`,
+          priority: 'normal',
+          relatedEntityType: 'work_order',
+          relatedEntityId: workOrder.id,
+          actionLabel: 'View Work Order',
+          createdBy: userId,
+          data: { workOrderId: workOrder.id, workOrderNumber },
+        }).catch(() => {});
+      }
+
+      // Audit log (non-blocking)
       createAuditLog(tenantId, userId, workOrder.id, 'work_order_created', {
         workOrderNumber,
         title,

@@ -14,11 +14,13 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useAppStore, useAuthStore, useNotificationStore } from '@/store';
+import { useAppStore, useAuthStore } from '@/store';
+import { useNotificationStore } from '@/lib/notifications/store';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Separator } from '@/components/ui/separator';
-import type { NotificationItem, AppView } from '@/types';
+import type { AppView } from '@/types';
+import type { NotificationItem } from '@/lib/notifications/store';
 
 // ─── Constants ──────────────────────────────────────────────
 
@@ -88,12 +90,14 @@ function NotificationSkeleton() {
 export function MobileNotifications() {
   const { setView } = useAppStore();
   const { token } = useAuthStore();
-  const { setNotifications, setUnreadCount, markAllAsRead, markAsRead } = useNotificationStore();
+  const { dbNotifications, fetchNotifications: storeFetchNotifications, markAllAsRead, markAsRead } = useNotificationStore();
 
-  const [notifications, setLocalNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [markingAll, setMarkingAll] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Use dbNotifications from store
+  const notifications = dbNotifications;
 
   // Fetch notifications
   const fetchNotifications = useCallback(async () => {
@@ -101,23 +105,13 @@ export function MobileNotifications() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch('/api/notifications?page=1&pageSize=50', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) throw new Error('Failed to load notifications');
-      const json = await res.json();
-      const items: NotificationItem[] = json.data || [];
-      setLocalNotifications(items);
-      setNotifications(items);
-      if (typeof json.unreadCount === 'number') {
-        setUnreadCount(json.unreadCount);
-      }
+      await storeFetchNotifications();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {
       setLoading(false);
     }
-  }, [token, setNotifications, setUnreadCount]);
+  }, [token, storeFetchNotifications]);
 
   useEffect(() => {
     fetchNotifications();
@@ -127,15 +121,7 @@ export function MobileNotifications() {
   const handleMarkRead = useCallback(async (notif: NotificationItem) => {
     if (notif.isRead || !token) return;
     try {
-      await fetch('/api/notifications', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ id: notif.id }),
-      });
-      setLocalNotifications((prev) =>
-        prev.map((n) => (n.id === notif.id ? { ...n, isRead: true } : n)),
-      );
-      markAsRead(notif.id);
+      await markAsRead(notif.id);
     } catch {
       // Silent fail — user can still read
     }
@@ -146,13 +132,7 @@ export function MobileNotifications() {
     if (!token || markingAll) return;
     setMarkingAll(true);
     try {
-      await fetch('/api/notifications', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ markAllRead: true }),
-      });
-      setLocalNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
-      markAllAsRead();
+      await markAllAsRead();
     } catch {
       // Silent fail
     } finally {

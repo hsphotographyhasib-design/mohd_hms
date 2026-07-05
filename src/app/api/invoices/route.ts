@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken, generateInvoiceNumber } from '@/lib/auth';
+import { notifyInvoiceCreated } from '@/lib/notifications/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -160,6 +161,20 @@ export async function POST(request: NextRequest) {
         customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
       },
     });
+
+    // Notify customer about the new invoice (fire-and-forget)
+    try {
+      await notifyInvoiceCreated(
+        invoice.id,
+        tenantId,
+        customerId,
+        title,
+        total || 0,
+        userId,
+      );
+    } catch (notifErr) {
+      console.error('Failed to send invoice creation notification:', notifErr);
+    }
 
     return NextResponse.json({
       id: invoice.id,

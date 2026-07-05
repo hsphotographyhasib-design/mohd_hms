@@ -5,11 +5,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Bell, Info, CalendarClock, DollarSign, MapPin, CheckCheck, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { useAppStore, useNotificationStore } from '@/store';
-import type { NotificationItem } from '@/types';
-
-const token = () => localStorage.getItem('cmms_token') || '';
+import { useNotificationStore } from '@/lib/notifications/store';
+import { useAppStore } from '@/store';
+import type { NotificationItem } from '@/lib/notifications/store';
 
 function relativeTime(dateStr: string): string {
   const now = Date.now();
@@ -42,41 +40,16 @@ function NotificationIcon({ type }: { type: string }) {
 
 export function NotificationList() {
   const setView = useAppStore((s) => s.setView);
-  const { notifications, setNotifications, markAsRead, markAllAsRead } = useNotificationStore();
-  const [loading, setLoading] = useState(true);
+  const { dbNotifications, fetchNotifications, markAsRead, markAllAsRead, deleteNotification, isLoading } = useNotificationStore();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [markingAll, setMarkingAll] = useState(false);
-
-  const fetchNotifications = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await fetch('/api/notifications', {
-        headers: { Authorization: `Bearer ${token()}` },
-      });
-      const json = await res.json();
-      const list = json.data || json.notifications || json || [];
-      setNotifications(list);
-    } catch {
-      toast.error('Failed to load notifications');
-    } finally {
-      setLoading(false);
-    }
-  }, [setNotifications]);
 
   useEffect(() => { fetchNotifications(); }, [fetchNotifications]);
 
   const handleMarkAllRead = async () => {
     setMarkingAll(true);
     try {
-      await fetch('/api/notifications', {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
-        body: JSON.stringify({ markAllRead: true }),
-      });
-      markAllAsRead();
-      toast.success('All notifications marked as read');
-    } catch {
-      toast.error('Failed to mark all as read');
+      await markAllAsRead();
     } finally {
       setMarkingAll(false);
     }
@@ -84,7 +57,9 @@ export function NotificationList() {
 
   const handleClick = (n: NotificationItem) => {
     if (!n.isRead) markAsRead(n.id);
-    if (n.relatedEntityType && n.relatedEntityId) {
+    if (n.actionUrl) {
+      setView(n.actionUrl as Parameters<typeof setView>[0], n.relatedEntityId ? { id: n.relatedEntityId } : {});
+    } else if (n.relatedEntityType && n.relatedEntityId) {
       const viewMap: Record<string, string> = {
         complaint: 'complaint-detail',
         work_order: 'work-order-detail',
@@ -98,8 +73,10 @@ export function NotificationList() {
   };
 
   const filtered = filter === 'unread'
-    ? notifications.filter((n) => !n.isRead)
-    : notifications;
+    ? dbNotifications.filter((n) => !n.isRead)
+    : dbNotifications;
+
+  const unreadLocalCount = dbNotifications.filter((n) => !n.isRead).length;
 
   return (
     <div className="p-4 md:p-6 space-y-4">
@@ -110,16 +87,16 @@ export function NotificationList() {
             <Bell className="h-5 w-5 text-emerald-600" />
           </div>
           <h1 className="text-2xl font-bold">Notifications</h1>
-          {notifications.filter((n) => !n.isRead).length > 0 && (
+          {unreadLocalCount > 0 && (
             <span className="bg-rose-500 text-white text-xs font-bold rounded-full px-2 py-0.5">
-              {notifications.filter((n) => !n.isRead).length}
+              {unreadLocalCount}
             </span>
           )}
         </div>
         <Button
           variant="outline"
           onClick={handleMarkAllRead}
-          disabled={markingAll || notifications.filter((n) => !n.isRead).length === 0}
+          disabled={markingAll || unreadLocalCount === 0}
         >
           {markingAll ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <CheckCheck className="h-4 w-4 mr-2" />}
           Mark All Read
@@ -134,7 +111,7 @@ export function NotificationList() {
           onClick={() => setFilter('all')}
           className={filter === 'all' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : ''}
         >
-          All ({notifications.length})
+          All ({dbNotifications.length})
         </Button>
         <Button
           variant={filter === 'unread' ? 'default' : 'outline'}
@@ -142,13 +119,13 @@ export function NotificationList() {
           onClick={() => setFilter('unread')}
           className={filter === 'unread' ? 'bg-emerald-600 hover:bg-emerald-700 text-white' : ''}
         >
-          Unread ({notifications.filter((n) => !n.isRead).length})
+          Unread ({unreadLocalCount})
         </Button>
       </div>
 
       {/* Notification List */}
       <div className="space-y-2 max-h-[calc(100vh-280px)] overflow-y-auto custom-scrollbar">
-        {loading ? (
+        {isLoading ? (
           Array.from({ length: 5 }).map((_, i) => (
             <Card key={i}>
               <CardContent className="p-4 flex gap-3">

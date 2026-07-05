@@ -345,7 +345,6 @@ model Complaint {
   assignedTo    User?    @relation("TechnicianComplaints", fields: [assignedToId], references: [id])
   supervisor    User?    @relation("SupervisorComplaints", fields: [supervisorId], references: [id])
   workOrders    WorkOrder[]
-  notifications Notification[]
   timeline      ComplaintTimeline[]
 
   @@index([tenantId, status])
@@ -1001,26 +1000,34 @@ model ComplaintTimeline {
 // ============ NOTIFICATIONS ============
 
 model Notification {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String?
-  type          String   // complaint_assigned, status_update, pm_reminder, invoice_reminder, eta_update, workflow_transition, escalation
-  title         String
-  message       String
-  data          String?  // JSON: related entity IDs
-  isRead        Boolean  @default(false)
-  relatedEntityType String? // complaint, work_order, invoice, pm_schedule
+  id               String   @id @default(cuid())
+  tenantId         String
+  userId           String?
+  type             String   // success, error, warning, info, approval, reminder, system_alert, loading, progress
+  title            String
+  message          String
+  data             String?  // JSON: extra metadata, action buttons, etc.
+  priority         String   @default("normal") // low, normal, high, urgent
+  isRead           Boolean  @default(false)
+  readAt           DateTime?
+  archivedAt       DateTime?
+  relatedEntityType String? // complaint, work_order, invoice, pm_schedule, quotation, equipment, user, inventory
   relatedEntityId   String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  actionUrl        String? // client-side navigation target (e.g., "complaint-detail?id=xxx")
+  actionLabel      String? // button label (e.g., "View Complaint")
+  createdBy         String? // userId who triggered the notification
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
 
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  complaint     Complaint? @relation(fields: [relatedEntityId], references: [id])
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
 
   @@index([tenantId])
   @@index([userId])
   @@index([tenantId, userId])
   @@index([tenantId, isRead])
+  @@index([tenantId, userId, isRead])
+  @@index([tenantId, userId, createdAt])
+  @@index([relatedEntityType, relatedEntityId])
 }
 
 // ============ AUDIT LOGS ============

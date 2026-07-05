@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import dynamic from 'next/dynamic';
 import { Building2 } from 'lucide-react';
 import { useAuthStore } from '@/store';
+import { useNotificationStore } from '@/lib/notifications/store';
 import { LoginView } from '@/components/app/login-view';
 import { AppShell } from '@/components/app/app-shell';
 import { AuthGuard } from '@/components/session/auth-guard';
@@ -35,14 +36,10 @@ function ToastListener() {
   useEffect(() => {
     const handleToast = (e: Event) => {
       const { type = 'info', message = '' } = (e as CustomEvent).detail || {};
-      // Bridge to existing sonner toast
-      import('@/hooks/use-toast').then(({ toast }) => {
-        toast({ title: type === 'error' ? 'Error' : type === 'success' ? 'Success' : 'Info', description: message, variant: type === 'error' ? 'destructive' : 'default' });
-      });
-      // Bridge to new enterprise notification system
-      import('@/lib/notifications/store').then(({ useNotificationStore }) => {
-        const nType = type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info';
-        useNotificationStore.getState().add({ type: nType, title: message || (type === 'error' ? 'Error' : 'Info') });
+      const store = useNotificationStore.getState();
+      store.addToast({
+        type: type === 'error' ? 'error' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info',
+        title: message || (type === 'error' ? 'Error' : 'Info'),
       });
     };
     window.addEventListener('cmms:toast', handleToast);

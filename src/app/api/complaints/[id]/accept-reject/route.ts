@@ -4,6 +4,7 @@ import { verifyToken } from '@/lib/auth';
 import { ensureTableSync } from '@/lib/db-sync';
 import { getComplaintTimeline } from '@/lib/workflow/notification-engine';
 import { buildAuthContext, logComplaintAccessDenied } from '@/lib/rbac';
+import { createNotification } from '@/lib/notifications/notification-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -131,31 +132,7 @@ export async function POST(
           },
         });
 
-        // Notify supervisor/admin
-        const targets = await tx.user.findMany({
-          where: {
-            tenantId,
-            isActive: true,
-            id: { not: userId },
-            role: { in: ['admin', 'super_admin', 'supervisor', 'manager'] },
-          },
-          select: { id: true },
-        });
-
-        if (targets.length > 0) {
-          await tx.notification.createMany({
-            data: targets.map(t => ({
-              tenantId,
-              userId: t.id,
-              type: 'complaint_accepted',
-              title: 'Technician Accepted Assignment',
-              message: `${complaint.assignedTo?.name || 'Technician'} accepted complaint: ${complaint.title}${eta ? `. ETA: ${eta}` : ''}`,
-              data: JSON.stringify({ complaintId: complaint.id, technicianName: complaint.assignedTo?.name, eta: eta || null }),
-              relatedEntityType: 'complaint',
-              relatedEntityId: complaint.id,
-            })),
-          });
-        }
+        // (Notification for accept handled after transaction via centralized service)
 
         // Audit log
         await tx.auditLog.create({
@@ -262,32 +239,7 @@ export async function POST(
           },
         });
 
-        // Notify admins/supervisors that assignment was rejected — needs reassignment
-        const targets = await tx.user.findMany({
-          where: {
-            tenantId,
-            isActive: true,
-            id: { not: userId },
-            role: { in: ['admin', 'super_admin', 'supervisor', 'manager'] },
-          },
-          select: { id: true },
-        });
-
-        if (targets.length > 0) {
-          await tx.notification.createMany({
-            data: targets.map(t => ({
-              tenantId,
-              userId: t.id,
-              type: 'complaint_rejected',
-              title: 'Technician Rejected Assignment',
-              message: `${complaint.assignedTo?.name || 'Technician'} rejected complaint "${complaint.title}". Needs reassignment. Reason: ${rejectionReason}`,
-              data: JSON.stringify({ complaintId: complaint.id, technicianName: complaint.assignedTo?.name, rejectionReason }),
-              relatedEntityType: 'complaint',
-              relatedEntityId: complaint.id,
-              priority: complaint.priority === 'critical' ? 'high' : 'medium',
-            })),
-          });
-        }
+        // (Notification for reject handled after transaction via centralized service)
 
         // Audit log
         await tx.auditLog.create({
@@ -312,6 +264,43 @@ export async function POST(
 
     // Get updated timeline
     const timeline = await getComplaintTimeline(tenantId, complaint.id);
+
+    // Send notifications via centralized service (non-blocking)
+    try {
+      if (acceptAction === 'accept') {
+        await createNotification({
+          tenantId,
+          type: 'complaint_accepted',
+          title: 'Technician Accepted Assignment',
+          message: `${complaint.assignedTo?.name || 'Technician'} accepted complaint: ${complaint.title}${eta ? `. ETA: ${eta}` : ''}`,
+          priority: 'normal',
+          relatedEntityType: 'complaint',
+          relatedEntityId: complaint.id,
+          actionLabel: 'View Complaint',
+          createdBy: userId,
+          roles: ['admin', 'super_admin', 'supervisor', 'manager'],
+          excludeUserIds: [userId],
+          data: { complaintId: complaint.id, technicianName: complaint.assignedTo?.name, eta: eta || null },
+        });
+      } else {
+        await createNotification({
+          tenantId,
+          type: 'complaint_rejected',
+          title: 'Technician Rejected Assignment',
+          message: `${complaint.assignedTo?.name || 'Technician'} rejected complaint "${complaint.title}". Needs reassignment. Reason: ${rejectionReason}`,
+          priority: complaint.priority === 'critical' ? 'high' : 'normal',
+          relatedEntityType: 'complaint',
+          relatedEntityId: complaint.id,
+          actionLabel: 'View Complaint',
+          createdBy: userId,
+          roles: ['admin', 'super_admin', 'supervisor', 'manager'],
+          excludeUserIds: [userId],
+          data: { complaintId: complaint.id, technicianName: complaint.assignedTo?.name, rejectionReason },
+        });
+      }
+    } catch (notifErr) {
+      console.error('Failed to send accept/reject notification:', notifErr);
+    }
 
     const isAccept = acceptAction === 'accept';
 

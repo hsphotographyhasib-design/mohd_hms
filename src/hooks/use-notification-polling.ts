@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useCallback } from 'react';
-import { useNotificationStore } from '@/store';
+import { useNotificationStore } from '@/lib/notifications/store';
 import { useAuthStore } from '@/store';
 
 /**
@@ -14,7 +14,6 @@ import { useAuthStore } from '@/store';
  */
 export function useNotificationPolling() {
   const { token, isAuthenticated } = useAuthStore();
-  const { setUnreadCount, setNotifications } = useNotificationStore();
   const countIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const listIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isHiddenRef = useRef(false);
@@ -23,15 +22,7 @@ export function useNotificationPolling() {
   const fetchUnreadCount = useCallback(async () => {
     if (!token || isHiddenRef.current) return;
     try {
-      const res = await fetch('/api/notifications?pageSize=1', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (typeof data.unreadCount === 'number') {
-          useNotificationStore.getState().setUnreadCount(data.unreadCount);
-        }
-      }
+      await useNotificationStore.getState().fetchUnreadCount();
     } catch {
       // Silent fail — notification polling should never crash the app
     }
@@ -41,15 +32,7 @@ export function useNotificationPolling() {
   const fetchNotifications = useCallback(async () => {
     if (!token || isHiddenRef.current) return;
     try {
-      const res = await fetch('/api/notifications?pageSize=20', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.data) {
-          useNotificationStore.getState().setNotifications(data.data);
-        }
-      }
+      await useNotificationStore.getState().fetchNotifications();
     } catch {
       // Silent fail
     }
@@ -104,7 +87,7 @@ export function useNotificationPolling() {
         if (event.data?.type === 'NOTIFICATION_UPDATE') {
           fetchUnreadCount();
         } else if (event.data?.type === 'ALL_READ') {
-          useNotificationStore.getState().setUnreadCount(0);
+          useNotificationStore.getState()._updateUnreadCount(0);
         }
       };
     } catch {

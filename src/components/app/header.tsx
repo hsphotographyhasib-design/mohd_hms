@@ -1,6 +1,7 @@
 'use client';
 
-import { useAppStore, useAuthStore, useNotificationStore } from '@/store';
+import { useAppStore, useAuthStore } from '@/store';
+import { useNotificationStore } from '@/lib/notifications/store';
 import type { AppView } from '@/types';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
@@ -71,7 +72,7 @@ function getBreadcrumbPath(view: AppView): { label: string; view?: AppView }[] {
 export function Header() {
   const { currentView, setView, toggleSidebar, sidebarOpen } = useAppStore();
   const { user, logout } = useAuthStore();
-  const { unreadCount, setView: setNotifView } = useNotificationStore();
+  const { unreadCount } = useNotificationStore();
 
   const breadcrumbs = getBreadcrumbPath(currentView);
 

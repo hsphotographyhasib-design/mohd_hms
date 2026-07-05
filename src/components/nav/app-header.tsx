@@ -2,7 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAppStore, useAuthStore, useNotificationStore } from '@/store';
+import { useAppStore, useAuthStore } from '@/store';
+import { useNotificationStore } from '@/lib/notifications/store';
 import type { AppView } from '@/types';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
@@ -123,7 +124,7 @@ export function AppHeader() {
   // ---- State & Stores ----
   const { setView } = useAppStore();
   const { user, secureLogout } = useAuthStore();
-  const { unreadCount, notifications, markAllAsRead } = useNotificationStore();
+  const { unreadCount, dbNotifications, markAllAsRead } = useNotificationStore();
   const { theme, setTheme } = useTheme();
 
   const [searchOpen, setSearchOpen] = useState(false);
@@ -412,20 +413,40 @@ export function AppHeader() {
 
                     {/* Content */}
                     <div className="max-h-80 overflow-y-auto">
-                      {notifications.length === 0 ? (
+                      {dbNotifications.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-10 px-4">
                           <Bell className="h-8 w-8 text-muted-foreground/30 mb-3" />
                           <p className="text-sm text-muted-foreground/60">No new notifications</p>
                         </div>
                       ) : (
                         <div className="divide-y divide-border/20">
-                          {notifications.slice(0, 10).map((notif) => (
+                          {dbNotifications.slice(0, 10).map((notif) => (
                             <div
                               key={notif.id}
                               className={cn(
                                 'px-4 py-3 hover:bg-muted/30 transition-colors cursor-pointer',
                                 !notif.isRead && 'bg-emerald-50/30 dark:bg-emerald-950/10'
                               )}
+                              onClick={() => {
+                                if (notif.actionUrl) {
+                                  setView(notif.actionUrl as AppView, notif.relatedEntityId ? { id: notif.relatedEntityId } : {});
+                                  setNotifPanelOpen(false);
+                                } else if (notif.relatedEntityType && notif.relatedEntityId) {
+                                  const viewMap: Record<string, string> = {
+                                    complaint: 'complaint-detail',
+                                    work_order: 'work-order-detail',
+                                    invoice: 'invoice-detail',
+                                  };
+                                  const view = viewMap[notif.relatedEntityType];
+                                  if (view) {
+                                    setView(view as AppView, { id: notif.relatedEntityId });
+                                    setNotifPanelOpen(false);
+                                  }
+                                }
+                                if (!notif.isRead) {
+                                  useNotificationStore.getState().markAsRead(notif.id);
+                                }
+                              }}
                             >
                               <div className="flex items-start gap-2">
                                 {!notif.isRead && (

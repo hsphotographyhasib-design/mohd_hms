@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import {
+  createNotification,
+  type CreateNotificationInput,
+} from '@/lib/notifications/notification-service';
 import type { Prisma } from '@prisma/client';
+
 export const dynamic = 'force-dynamic';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GET — Enhanced notification listing
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,27 +22,69 @@ export async function GET(request: NextRequest) {
 
     const tenantId = payload.tenantId as string;
     const userId = payload.userId as string;
-    const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
-    const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
-    const filterUserId = request.nextUrl.searchParams.get('userId') || '';
-    const isRead = request.nextUrl.searchParams.get('isRead') || '';
+    const role = payload.role as string;
+    const isAdmin = role === 'admin' || role === 'super_admin';
+
+    // Parse query params
+    const { searchParams } = new URL(request.url);
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
+    const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '20', 10)));
+    const type = searchParams.get('type') || '';
+    const isRead = searchParams.get('isRead') || '';
+    const search = searchParams.get('search') || '';
     const skip = (page - 1) * pageSize;
 
+    // Build where clause
     const where: Prisma.NotificationWhereInput = { tenantId };
 
-    // If not admin/super_admin, only show notifications for this user
-    if (payload.role !== 'admin' && payload.role !== 'super_admin' && payload.role !== 'manager') {
+    // Non-admin users only see their own notifications
+    if (!isAdmin) {
       where.userId = userId;
-    } else if (filterUserId) {
-      where.userId = filterUserId;
     }
 
-    if (isRead === 'true') where.isRead = true;
-    else if (isRead === 'false') where.isRead = false;
+    // Not archived (show active + read, but not archived)
+    where.archivedAt = null;
 
+    if (type) {
+      where.type = type;
+    }
+
+    if (isRead === 'true') {
+      where.isRead = true;
+    } else if (isRead === 'false') {
+      where.isRead = false;
+    }
+
+    if (search) {
+      where.OR = [
+        { title: { contains: search } },
+        { message: { contains: search } },
+      ];
+    }
+
+    // Fetch data, total, and unread count in parallel
     const [items, total, unreadCount] = await Promise.all([
       db.notification.findMany({
         where,
+        select: {
+          id: true,
+          userId: true,
+          type: true,
+          title: true,
+          message: true,
+          data: true,
+          priority: true,
+          isRead: true,
+          readAt: true,
+          archivedAt: true,
+          relatedEntityType: true,
+          relatedEntityId: true,
+          actionUrl: true,
+          actionLabel: true,
+          createdBy: true,
+          createdAt: true,
+          updatedAt: true,
+        },
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
@@ -42,23 +93,29 @@ export async function GET(request: NextRequest) {
       db.notification.count({
         where: {
           tenantId,
-          userId: (payload.role !== 'admin' && payload.role !== 'super_admin' && payload.role !== 'manager') ? userId : undefined,
+          ...(isAdmin ? {} : { userId }),
           isRead: false,
+          archivedAt: null,
         },
       }),
     ]);
 
     const data = items.map((n) => ({
       id: n.id,
-      tenantId: n.tenantId,
       userId: n.userId,
       type: n.type,
       title: n.title,
       message: n.message,
       data: n.data,
+      priority: n.priority,
       isRead: n.isRead,
+      readAt: n.readAt?.toISOString() ?? null,
+      archivedAt: n.archivedAt?.toISOString() ?? null,
       relatedEntityType: n.relatedEntityType,
       relatedEntityId: n.relatedEntityId,
+      actionUrl: n.actionUrl,
+      actionLabel: n.actionLabel,
+      createdBy: n.createdBy,
       createdAt: n.createdAt.toISOString(),
       updatedAt: n.updatedAt.toISOString(),
     }));
@@ -77,41 +134,9 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function PUT(request: NextRequest) {
-  try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
-    const body = await request.json();
-
-    if (body.markAllRead) {
-      // Mark all as read for this user
-      await db.notification.updateMany({
-        where: { tenantId, userId, isRead: false },
-        data: { isRead: true },
-      });
-      return NextResponse.json({ message: 'All notifications marked as read' });
-    }
-
-    if (body.id) {
-      // Mark a single notification as read
-      await db.notification.updateMany({
-        where: { id: body.id, tenantId },
-        data: { isRead: true },
-      });
-      return NextResponse.json({ message: 'Notification marked as read' });
-    }
-
-    return NextResponse.json({ error: 'Provide markAllRead or id' }, { status: 400 });
-  } catch (error) {
-    console.error('Notification update error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// POST — Create notification (delegates to NotificationService)
+// ─────────────────────────────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest) {
   try {
@@ -121,40 +146,209 @@ export async function POST(request: NextRequest) {
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
-    const body = await request.json();
-    const { userId, type, title, message, data: notifData, relatedEntityType, relatedEntityId } = body;
+    const userId = payload.userId as string;
+    const role = payload.role as string;
 
-    if (!title || !message) {
-      return NextResponse.json({ error: 'Title and message are required' }, { status: 400 });
+    const body = await request.json();
+    const {
+      targetUserId,
+      type,
+      title,
+      message,
+      priority,
+      data: notifData,
+      relatedEntityType,
+      relatedEntityId,
+      actionUrl,
+      actionLabel,
+      roles,
+      excludeUserIds,
+    } = body;
+
+    // Validate required fields
+    if (!title?.trim()) {
+      return NextResponse.json({ error: 'Title is required' }, { status: 400 });
+    }
+    if (!message?.trim()) {
+      return NextResponse.json({ error: 'Message is required' }, { status: 400 });
+    }
+    if (!type) {
+      return NextResponse.json({ error: 'Type is required' }, { status: 400 });
     }
 
-    const notification = await db.notification.create({
-      data: {
-        tenantId,
-        userId: userId || null,
-        type: type || 'general',
-        title,
-        message,
-        data: notifData ? JSON.stringify(notifData) : null,
-        relatedEntityType: relatedEntityType || null,
-        relatedEntityId: relatedEntityId || null,
-      },
-    });
+    // Only admin/super_admin can send notifications to arbitrary users
+    if (targetUserId && role !== 'admin' && role !== 'super_admin') {
+      return NextResponse.json(
+        { error: 'Only admins can send notifications to other users' },
+        { status: 403 },
+      );
+    }
+
+    const input: CreateNotificationInput = {
+      tenantId,
+      type,
+      title: title.trim(),
+      message: message.trim(),
+      priority: priority || 'normal',
+      data: notifData || undefined,
+      relatedEntityType: relatedEntityType || undefined,
+      relatedEntityId: relatedEntityId || undefined,
+      actionUrl: actionUrl || undefined,
+      actionLabel: actionLabel || undefined,
+      createdBy: userId,
+      // If targetUserId provided (admin), send to that user; otherwise send to self
+      userId: targetUserId || userId,
+      roles: roles || undefined,
+      excludeUserIds: excludeUserIds || undefined,
+    };
+
+    const id = await createNotification(input);
+
+    if (!id) {
+      return NextResponse.json({ message: 'Notification was deduplicated or no targets found' });
+    }
 
     return NextResponse.json({
-      id: notification.id,
-      tenantId: notification.tenantId,
-      userId: notification.userId,
-      type: notification.type,
-      title: notification.title,
-      message: notification.message,
-      isRead: notification.isRead,
-      relatedEntityType: notification.relatedEntityType,
-      relatedEntityId: notification.relatedEntityId,
-      createdAt: notification.createdAt.toISOString(),
+      id,
+      message: 'Notification created',
     }, { status: 201 });
   } catch (error) {
     console.error('Notification create error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PUT — Mark as read, archive operations
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function PUT(request: NextRequest) {
+  try {
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = payload.role as string;
+    const isAdmin = role === 'admin' || role === 'super_admin';
+
+    const body = await request.json();
+    const now = new Date();
+
+    // ── Mark all unread as read ──
+    if (body.markAllRead === true) {
+      const where: Prisma.NotificationWhereInput = {
+        tenantId,
+        userId,
+        isRead: false,
+      };
+
+      await db.notification.updateMany({
+        where,
+        data: { isRead: true, readAt: now },
+      });
+
+      return NextResponse.json({ message: 'All notifications marked as read' });
+    }
+
+    // ── Mark specific notifications as read ──
+    if (body.ids && Array.isArray(body.ids) && body.ids.length > 0) {
+      // If archive flag is also set, archive instead
+      if (body.archive === true) {
+        const where: Prisma.NotificationWhereInput = {
+          id: { in: body.ids },
+          // Non-admin users can only archive their own
+          ...(isAdmin ? { tenantId } : { tenantId, userId }),
+        };
+
+        await db.notification.updateMany({
+          where,
+          data: { archivedAt: now },
+        });
+
+        return NextResponse.json({ message: 'Notifications archived' });
+      }
+
+      // Otherwise, mark as read
+      const where: Prisma.NotificationWhereInput = {
+        id: { in: body.ids },
+        // Non-admin users can only update their own
+        ...(isAdmin ? { tenantId } : { tenantId, userId }),
+      };
+
+      await db.notification.updateMany({
+        where,
+        data: { isRead: true, readAt: now },
+      });
+
+      return NextResponse.json({ message: 'Notifications marked as read' });
+    }
+
+    // ── Archive all read notifications ──
+    if (body.archiveAll === true) {
+      const where: Prisma.NotificationWhereInput = {
+        tenantId,
+        userId,
+        isRead: true,
+        archivedAt: null,
+      };
+
+      await db.notification.updateMany({
+        where,
+        data: { archivedAt: now },
+      });
+
+      return NextResponse.json({ message: 'All read notifications archived' });
+    }
+
+    return NextResponse.json(
+      { error: 'Provide markAllRead, ids, or archiveAll' },
+      { status: 400 },
+    );
+  } catch (error) {
+    console.error('Notification update error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DELETE — Delete notification(s)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export async function DELETE(request: NextRequest) {
+  try {
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const tenantId = payload.tenantId as string;
+    const userId = payload.userId as string;
+    const role = payload.role as string;
+    const isAdmin = role === 'admin' || role === 'super_admin';
+
+    const body = await request.json();
+
+    if (!body.ids || !Array.isArray(body.ids) || body.ids.length === 0) {
+      return NextResponse.json({ error: 'ids array is required' }, { status: 400 });
+    }
+
+    const where: Prisma.NotificationWhereInput = {
+      id: { in: body.ids },
+      // Non-admin users can only delete their own
+      ...(isAdmin ? { tenantId } : { tenantId, userId }),
+    };
+
+    const result = await db.notification.deleteMany({ where });
+
+    return NextResponse.json({
+      message: `${result.count} notification(s) deleted`,
+      deletedCount: result.count,
+    });
+  } catch (error) {
+    console.error('Notification delete error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

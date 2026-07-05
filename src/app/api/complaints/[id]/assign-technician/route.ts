@@ -3,9 +3,9 @@ import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { ensureTableSync } from '@/lib/db-sync';
 import {
-  recordWorkflowTransition,
   getComplaintTimeline,
 } from '@/lib/workflow/notification-engine';
+import { createNotification, notifyComplaintAssigned } from '@/lib/notifications/notification-service';
 
 export const dynamic = 'force-dynamic';
 
@@ -464,76 +464,7 @@ export async function POST(
         },
       });
 
-      // Notify the assigned technician
-      await tx.notification.create({
-        data: {
-          tenantId,
-          userId: technicianId,
-          type: 'complaint_assigned',
-          title: isReassignment ? 'Complaint Reassigned' : 'New Complaint Assigned',
-          message: isReassignment
-            ? `You have been reassigned to complaint: ${complaint.title}. Previous: ${previousTechnicianName || 'N/A'}. Please respond within ${SLA_RESPONSE_MINUTES} minutes.`
-            : `You have been assigned a new complaint: ${complaint.title}. Please respond within ${SLA_RESPONSE_MINUTES} minutes.`,
-          data: JSON.stringify({ complaintId: complaint.id, action, priority: complaint.priority, slaMinutes: SLA_RESPONSE_MINUTES }),
-          relatedEntityType: 'complaint',
-          relatedEntityId: complaint.id,
-        },
-      });
-
-      // Notify customer
-      await tx.notification.create({
-        data: {
-          tenantId,
-          userId: complaint.customerId,
-          type: 'workflow_transition',
-          title: 'Technician Assigned',
-          message: `${tech.name} has been assigned to your complaint: ${complaint.title}.`,
-          data: JSON.stringify({ complaintId: complaint.id, action, technicianName: tech.name }),
-          relatedEntityType: 'complaint',
-          relatedEntityId: complaint.id,
-        },
-      });
-
-      // Notify admins and supervisors
-      const notifTargets = await tx.user.findMany({
-        where: {
-          tenantId,
-          isActive: true,
-          role: { in: ['admin', 'super_admin'] },
-          id: { not: userId },
-        },
-        select: { id: true },
-      });
-      if (notifTargets.length > 0) {
-        await tx.notification.createMany({
-          data: notifTargets.map(a => ({
-            tenantId,
-            userId: a.id,
-            type: 'workflow_transition',
-            title: isReassignment ? 'Complaint Reassigned' : 'Complaint Assigned',
-            message: `${userRole} assigned ${tech.name} to complaint: ${complaint.title}${isReassignment ? ` (replacing ${previousTechnicianName || 'N/A'})` : ''}`,
-            data: JSON.stringify({ complaintId: complaint.id, action, isReassignment }),
-            relatedEntityType: 'complaint',
-            relatedEntityId: complaint.id,
-          })),
-        });
-      }
-
-      // Notify previous technician if reassigning
-      if (isReassignment && previousTechnicianId) {
-        await tx.notification.create({
-          data: {
-            tenantId,
-            userId: previousTechnicianId,
-            type: 'complaint_reassigned_away',
-            title: 'Complaint Reassigned',
-            message: `Complaint "${complaint.title}" has been reassigned to ${tech.name}. Reason: ${reason || 'N/A'}.`,
-            data: JSON.stringify({ complaintId: complaint.id, newTechnicianName: tech.name, reason: reason || null }),
-            relatedEntityType: 'complaint',
-            relatedEntityId: complaint.id,
-          },
-        });
-      }
+      // (Notifications handled after transaction via centralized service)
 
       // Audit log
       await tx.auditLog.create({
@@ -577,6 +508,54 @@ export async function POST(
 
     // Get updated timeline
     const timeline = await getComplaintTimeline(tenantId, complaint.id);
+
+    // Send notifications via centralized service (non-blocking)
+    try {
+      // Notify assigned technician and customer via convenience helper
+      await notifyComplaintAssigned(
+        complaint.id,
+        tenantId,
+        technicianId,
+        complaint.customerId,
+        complaint.title,
+        userId,
+      );
+
+      // Notify admins/super_admins about the assignment
+      await createNotification({
+        tenantId,
+        type: 'workflow_transition',
+        title: isReassignment ? 'Complaint Reassigned' : 'Complaint Assigned',
+        message: `${userRole} assigned ${tech.name} to complaint: ${complaint.title}${isReassignment ? ` (replacing ${previousTechnicianName || 'N/A'})` : ''}`,
+        priority: 'normal',
+        relatedEntityType: 'complaint',
+        relatedEntityId: complaint.id,
+        actionLabel: 'View Complaint',
+        createdBy: userId,
+        roles: ['admin', 'super_admin'],
+        excludeUserIds: [userId],
+        data: { complaintId: complaint.id, action, isReassignment },
+      });
+
+      // Notify previous technician if reassigning
+      if (isReassignment && previousTechnicianId) {
+        await createNotification({
+          tenantId,
+          userId: previousTechnicianId,
+          type: 'complaint_reassigned_away',
+          title: 'Complaint Reassigned',
+          message: `Complaint "${complaint.title}" has been reassigned to ${tech.name}. Reason: ${reason || 'N/A'}.`,
+          priority: 'normal',
+          relatedEntityType: 'complaint',
+          relatedEntityId: complaint.id,
+          actionLabel: 'View Complaint',
+          createdBy: userId,
+          data: { complaintId: complaint.id, newTechnicianName: tech.name, reason: reason || null },
+        });
+      }
+    } catch (notifErr) {
+      console.error('Failed to send assignment notification:', notifErr);
+    }
 
     return NextResponse.json({
       success: true,

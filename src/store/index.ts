@@ -188,45 +188,6 @@ export const useAppStore = create<AppState>((set) => ({
   setNotificationPanelOpen: (open) => set({ notificationPanelOpen: open }),
 }));
 
-// ============ NOTIFICATION STATE ============
-
-interface NotificationState {
-  unreadCount: number;
-  notifications: import('@/types').NotificationItem[];
-  setNotifications: (notifications: import('@/types').NotificationItem[]) => void;
-  setUnreadCount: (count: number) => void;
-  markAsRead: (id: string) => void;
-  markAllAsRead: () => void;
-}
-
-export const useNotificationStore = create<NotificationState>((set, get) => ({
-  unreadCount: 0,
-  notifications: [],
-  setNotifications: (notifications) => {
-    set({ notifications, unreadCount: notifications.filter((n) => !n.isRead).length });
-  },
-  setUnreadCount: (count) => set({ unreadCount: count }),
-  markAsRead: (id) => {
-    const notifications = get().notifications.map((n) =>
-      n.id === id ? { ...n, isRead: true } : n
-    );
-    set({
-      notifications,
-      unreadCount: notifications.filter((n) => !n.isRead).length,
-    });
-  },
-  markAllAsRead: () => {
-    const notifications = get().notifications.map((n) => ({ ...n, isRead: true }));
-    set({ notifications, unreadCount: 0 });
-    // Cross-tab sync
-    try {
-      const channel = new BroadcastChannel('cmms-notifications');
-      channel.postMessage({ type: 'ALL_READ' });
-      channel.close();
-    } catch { /* BroadcastChannel not supported */ }
-  },
-}));
-
 // ============ PERMISSIONS HELPER ============
 
 const ROLE_HIERARCHY: Record<UserRole, number> = {

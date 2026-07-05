@@ -3,6 +3,7 @@ import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
 import { ensureTableSync } from '@/lib/db-sync';
 import { buildAuthContext, buildComplaintWhereClause, canPerformAction, logComplaintAccessAllowed } from '@/lib/rbac';
+import { createNotification } from '@/lib/notifications/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -238,6 +239,26 @@ export async function POST(request: NextRequest) {
         supervisor: { select: { name: true } },
       },
     });
+
+    // Notify admins/managers/supervisors about the new complaint (fire-and-forget)
+    try {
+      await createNotification({
+        tenantId,
+        type: 'info',
+        title: 'New Complaint Created',
+        message: `A new complaint "${complaint.title}" has been created.`,
+        priority: 'normal',
+        relatedEntityType: 'complaint',
+        relatedEntityId: complaint.id,
+        actionLabel: 'View Complaint',
+        createdBy: userId,
+        roles: ['super_admin', 'admin', 'manager', 'supervisor'],
+        excludeUserIds: [userId],
+        data: { complaintId: complaint.id },
+      });
+    } catch (notifErr) {
+      console.error('Failed to send complaint creation notification:', notifErr);
+    }
 
     return NextResponse.json({
       id: complaint.id,

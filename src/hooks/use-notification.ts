@@ -1,12 +1,12 @@
 'use client';
 
 /**
- * Enterprise Notification Hook — Developer API
+ * Notification Hook — Developer API
  *
  * Usage:
  *   const notify = useNotification();
- *   notify.success('Complaint Created', 'CMP-2026-00125 has been created.');
- *   notify.error('Failed', 'Unable to save quotation.');
+ *   notify.success('Complaint Created', { description: 'CMP-2026-00125 has been created.' });
+ *   notify.error('Failed', { description: 'Unable to save quotation.' });
  *   const id = notify.loading('Saving...');
  *   // later:
  *   notify.success({ id, title: 'Saved Successfully' });
@@ -14,153 +14,105 @@
 
 import { useCallback } from 'react';
 import { useNotificationStore } from '@/lib/notifications/store';
-import type {
-  NotificationType, NotificationModule, Notification,
-  NotificationAction,
-} from '@/lib/notifications/types';
 
-type QuickOptions = {
+type ToastOptions = {
   description?: string;
-  module?: NotificationModule;
-  actions?: NotificationAction[];
   duration?: number;
   persistent?: boolean;
-  undoable?: boolean;
-  onUndo?: () => void;
-  referenceId?: string;
-  referenceUrl?: string;
+  actionLabel?: string;
+  actionUrl?: string;
 };
 
 type UpdateOptions = {
-  title?: string;
+  id: string;
+  title: string;
   description?: string;
-  type?: NotificationType;
-  progress?: number;
+  type?: 'success' | 'error' | 'warning' | 'info';
 };
 
 export function useNotification() {
-  const store = useNotificationStore();
+  const store = useNotificationStore;
 
   /** Low-level add */
   const add = useCallback(
-    (type: NotificationType, title: string, options?: QuickOptions) => {
-      return store.add({
+    (type: 'success' | 'error' | 'warning' | 'info', title: string, options?: ToastOptions) => {
+      return store.getState().addToast({
         type,
         title,
         description: options?.description,
-        module: options?.module,
-        actions: options?.actions,
         duration: options?.duration,
         persistent: options?.persistent,
-        undoable: options?.undoable,
-        onUndo: options?.onUndo,
-        referenceId: options?.referenceId,
-        referenceUrl: options?.referenceUrl,
+        actionLabel: options?.actionLabel,
+        actionUrl: options?.actionUrl,
       });
     },
-    [store]
+    []
   );
 
   const success = useCallback(
-    (titleOrOptions: string | { id: string; title: string } & QuickOptions, desc?: string, options?: QuickOptions) => {
+    (titleOrOptions: string | UpdateOptions, options?: ToastOptions) => {
       if (typeof titleOrOptions === 'string') {
-        return add('success', titleOrOptions, { ...options, description: desc });
+        return add('success', titleOrOptions, options);
       }
       const { id, title, ...rest } = titleOrOptions;
-      if (id) {
-        store.update(id, { type: 'success', title, description: rest.description });
-        return id;
-      }
-      return add('success', title, rest);
+      store.getState().updateToast(id, { type: 'success', title, description: rest.description });
+      return id;
     },
     [add, store]
   );
 
   const error = useCallback(
-    (titleOrOptions: string | { id: string; title: string } & QuickOptions, desc?: string, options?: QuickOptions) => {
+    (titleOrOptions: string | UpdateOptions, options?: ToastOptions) => {
       if (typeof titleOrOptions === 'string') {
-        return add('error', titleOrOptions, { ...options, description: desc, persistent: true });
+        return add('error', titleOrOptions, { ...options, persistent: options?.persistent ?? true });
       }
       const { id, title, ...rest } = titleOrOptions;
-      if (id) {
-        store.update(id, { type: 'error', title, description: rest.description });
-        return id;
-      }
-      return add('error', title, { ...rest, persistent: true });
+      store.getState().updateToast(id, { type: 'error', title, description: rest.description });
+      return id;
     },
     [add, store]
   );
 
   const warning = useCallback(
-    (title: string, desc?: string, options?: QuickOptions) => {
-      return add('warning', title, { ...options, description: desc });
+    (title: string, options?: ToastOptions) => {
+      return add('warning', title, options);
     },
     [add]
   );
 
   const info = useCallback(
-    (title: string, desc?: string, options?: QuickOptions) => {
-      return add('info', title, { ...options, description: desc });
+    (title: string, options?: ToastOptions) => {
+      return add('info', title, options);
     },
     [add]
   );
 
   const loading = useCallback(
-    (title: string, desc?: string) => {
-      return add('loading', title, { description: desc });
+    (title: string, options?: ToastOptions) => {
+      return add('info', title, { ...options, persistent: true, description: options?.description });
     },
     [add]
   );
 
-  const progress = useCallback(
-    (title: string, currentProgress: number, options?: QuickOptions) => {
-      return add('progress', title, { ...options, progress: currentProgress });
-    },
-    [add]
-  );
-
-  /** Update an existing notification (e.g., loading → success) */
-  const update = useCallback(
-    (id: string, updates: UpdateOptions) => {
-      store.update(id, updates);
-    },
-    [store]
-  );
-
-  /** Dismiss a specific notification */
+  /** Dismiss a specific toast */
   const dismiss = useCallback(
-    (id: string) => store.dismiss(id),
+    (id: string) => store.getState().dismissToast(id),
     [store]
   );
 
-  /** Dismiss all visible notifications */
+  /** Dismiss all visible toasts */
   const dismissAll = useCallback(
-    () => store.dismissAll(),
-    [store]
-  );
-
-  /** Clear the queue (pending notifications) */
-  const clearQueue = useCallback(
-    () => store.clearQueue(),
+    () => store.getState().dismissAllToasts(),
     [store]
   );
 
   return {
-    add,
     success,
     error,
     warning,
     info,
     loading,
-    progress,
-    update,
     dismiss,
     dismissAll,
-    clearQueue,
-    /** Toggle notification sound */
-    toggleSound: () => store.updateSettings({ soundEnabled: !store.settings.soundEnabled }),
-    /** Update notification position */
-    setPosition: (position: 'top-right' | 'top-center' | 'bottom-right' | 'bottom-center') =>
-      store.updateSettings({ position }),
   };
 }

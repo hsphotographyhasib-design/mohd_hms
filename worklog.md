@@ -560,3 +560,33 @@ Stage Summary:
 - Database indexes added for all dashboard query patterns
 - Files created: query-provider.tsx, use-dashboard-queries.ts, kpi/route.ts, charts/route.ts, recent/route.ts
 - Files modified: page.tsx, dashboard-view.tsx, mobile-dashboard.tsx, schema.prisma
+
+---
+Task ID: 9
+Agent: main
+Task: Rebuild Enterprise Notification System
+
+Work Log:
+- Audited entire notification system — found dual-store architecture (legacy + enterprise sharing same export name), dual-toast on cmms:toast, AppHeader not calling API on markAsRead, no centralized notification creation
+- Enhanced Prisma Notification model: added priority, readAt, archivedAt, actionUrl, actionLabel, createdBy fields; removed broken Complaint relation; added 5 new indexes
+- Created centralized NotificationService (/src/lib/notifications/notification-service.ts) — single point for all notification creation with dedup, role-based targeting, WebSocket fire-and-forget push, 5 convenience helpers
+- Rebuilt /api/notifications/route.ts — enhanced GET (pagination, search, type/isRead filters), POST (centralized), PUT (mark read, archive, batch), DELETE (batch with ownership)
+- Created /api/notifications/[id]/route.ts — single notification CRUD with ownership checks
+- Created WebSocket mini-service (mini-services/notification-service/) — Socket.IO on port 3010, rooms per tenant+user, HTTP POST /send endpoint
+- Created /src/lib/notifications/realtime.ts — useNotificationRealtime() hook with auto-reconnect, exponential backoff, cross-tab sync
+- Unified notification store (/src/lib/notifications/store.ts) — replaces BOTH legacy and enterprise stores with single store handling both DB notifications and client toasts
+- Fixed toast bridge in page.tsx — now only fires addToast() (removed duplicate sonner toast)
+- Fixed AppHeader bell — uses unified store, calls API on markAllAsRead, supports actionUrl navigation
+- Updated notification-provider, notification-toast, notification-history, notification-list, use-notification, use-notification-polling
+- Added notification triggers to: complaints (create, assign, accept/reject), work-orders (create), invoices (create)
+- All notification calls are non-blocking (try/catch) and use centralized service
+- WebSocket service verified running on port 3010
+
+Stage Summary:
+- Centralized NotificationService eliminates scattered notification creation
+- Unified store eliminates dual-store name collision bug
+- Toast bridge fixed — no more duplicate toasts
+- Badge counter now calls API on markAllAsRead
+- WebSocket service enables real-time notification delivery
+- API endpoints have search, filter, archive, pagination
+- Note: Full dashboard/browser verification limited by sandbox memory constraints (OOM kill on module compilation)

@@ -506,7 +506,6 @@ export type ComplaintWhereInput = {
   assignedTo?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   supervisor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   workOrders?: Prisma.WorkOrderListRelationFilter
-  notifications?: Prisma.NotificationListRelationFilter
   timeline?: Prisma.ComplaintTimelineListRelationFilter
 }
 
@@ -557,7 +556,6 @@ export type ComplaintOrderByWithRelationInput = {
   assignedTo?: Prisma.UserOrderByWithRelationInput
   supervisor?: Prisma.UserOrderByWithRelationInput
   workOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
-  notifications?: Prisma.NotificationOrderByRelationAggregateInput
   timeline?: Prisma.ComplaintTimelineOrderByRelationAggregateInput
 }
 
@@ -611,7 +609,6 @@ export type ComplaintWhereUniqueInput = Prisma.AtLeast<{
   assignedTo?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   supervisor?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   workOrders?: Prisma.WorkOrderListRelationFilter
-  notifications?: Prisma.NotificationListRelationFilter
   timeline?: Prisma.ComplaintTimelineListRelationFilter
 }, "id">
 
@@ -751,7 +748,6 @@ export type ComplaintCreateInput = {
   assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedComplaintsInput
   supervisor?: Prisma.UserCreateNestedOneWithoutSupervisorComplaintsInput
   workOrders?: Prisma.WorkOrderCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutComplaintInput
 }
 
@@ -797,7 +793,6 @@ export type ComplaintUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutComplaintInput
 }
 
@@ -843,7 +838,6 @@ export type ComplaintUpdateInput = {
   assignedTo?: Prisma.UserUpdateOneWithoutAssignedComplaintsNestedInput
   supervisor?: Prisma.UserUpdateOneWithoutSupervisorComplaintsNestedInput
   workOrders?: Prisma.WorkOrderUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUpdateManyWithoutComplaintNestedInput
 }
 
@@ -889,7 +883,6 @@ export type ComplaintUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput
 }
 
@@ -1424,22 +1417,6 @@ export type ComplaintUpdateOneRequiredWithoutTimelineNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ComplaintUpdateToOneWithWhereWithoutTimelineInput, Prisma.ComplaintUpdateWithoutTimelineInput>, Prisma.ComplaintUncheckedUpdateWithoutTimelineInput>
 }
 
-export type ComplaintCreateNestedOneWithoutNotificationsInput = {
-  create?: Prisma.XOR<Prisma.ComplaintCreateWithoutNotificationsInput, Prisma.ComplaintUncheckedCreateWithoutNotificationsInput>
-  connectOrCreate?: Prisma.ComplaintCreateOrConnectWithoutNotificationsInput
-  connect?: Prisma.ComplaintWhereUniqueInput
-}
-
-export type ComplaintUpdateOneWithoutNotificationsNestedInput = {
-  create?: Prisma.XOR<Prisma.ComplaintCreateWithoutNotificationsInput, Prisma.ComplaintUncheckedCreateWithoutNotificationsInput>
-  connectOrCreate?: Prisma.ComplaintCreateOrConnectWithoutNotificationsInput
-  upsert?: Prisma.ComplaintUpsertWithoutNotificationsInput
-  disconnect?: Prisma.ComplaintWhereInput | boolean
-  delete?: Prisma.ComplaintWhereInput | boolean
-  connect?: Prisma.ComplaintWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ComplaintUpdateToOneWithWhereWithoutNotificationsInput, Prisma.ComplaintUpdateWithoutNotificationsInput>, Prisma.ComplaintUncheckedUpdateWithoutNotificationsInput>
-}
-
 export type ComplaintCreateWithoutTenantInput = {
   id?: string
   title: string
@@ -1481,7 +1458,6 @@ export type ComplaintCreateWithoutTenantInput = {
   assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedComplaintsInput
   supervisor?: Prisma.UserCreateNestedOneWithoutSupervisorComplaintsInput
   workOrders?: Prisma.WorkOrderCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutComplaintInput
 }
 
@@ -1526,7 +1502,6 @@ export type ComplaintUncheckedCreateWithoutTenantInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutComplaintInput
 }
 
@@ -1642,7 +1617,6 @@ export type ComplaintCreateWithoutAssignedToInput = {
   equipment?: Prisma.EquipmentCreateNestedOneWithoutComplaintsInput
   supervisor?: Prisma.UserCreateNestedOneWithoutSupervisorComplaintsInput
   workOrders?: Prisma.WorkOrderCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutComplaintInput
 }
 
@@ -1687,7 +1661,6 @@ export type ComplaintUncheckedCreateWithoutAssignedToInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutComplaintInput
 }
 
@@ -1741,7 +1714,6 @@ export type ComplaintCreateWithoutSupervisorInput = {
   equipment?: Prisma.EquipmentCreateNestedOneWithoutComplaintsInput
   assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedComplaintsInput
   workOrders?: Prisma.WorkOrderCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutComplaintInput
 }
 
@@ -1786,7 +1758,6 @@ export type ComplaintUncheckedCreateWithoutSupervisorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutComplaintInput
 }
 
@@ -1872,7 +1843,6 @@ export type ComplaintCreateWithoutCustomerInput = {
   assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedComplaintsInput
   supervisor?: Prisma.UserCreateNestedOneWithoutSupervisorComplaintsInput
   workOrders?: Prisma.WorkOrderCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutComplaintInput
 }
 
@@ -1917,7 +1887,6 @@ export type ComplaintUncheckedCreateWithoutCustomerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutComplaintInput
 }
 
@@ -1987,7 +1956,6 @@ export type ComplaintCreateWithoutEquipmentInput = {
   assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedComplaintsInput
   supervisor?: Prisma.UserCreateNestedOneWithoutSupervisorComplaintsInput
   workOrders?: Prisma.WorkOrderCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutComplaintInput
 }
 
@@ -2032,7 +2000,6 @@ export type ComplaintUncheckedCreateWithoutEquipmentInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutComplaintInput
 }
 
@@ -2102,7 +2069,6 @@ export type ComplaintCreateWithoutWorkOrdersInput = {
   equipment?: Prisma.EquipmentCreateNestedOneWithoutComplaintsInput
   assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedComplaintsInput
   supervisor?: Prisma.UserCreateNestedOneWithoutSupervisorComplaintsInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutComplaintInput
 }
 
@@ -2147,7 +2113,6 @@ export type ComplaintUncheckedCreateWithoutWorkOrdersInput = {
   closedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutComplaintInput
   timeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutComplaintInput
 }
 
@@ -2208,7 +2173,6 @@ export type ComplaintUpdateWithoutWorkOrdersInput = {
   equipment?: Prisma.EquipmentUpdateOneWithoutComplaintsNestedInput
   assignedTo?: Prisma.UserUpdateOneWithoutAssignedComplaintsNestedInput
   supervisor?: Prisma.UserUpdateOneWithoutSupervisorComplaintsNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUpdateManyWithoutComplaintNestedInput
 }
 
@@ -2253,7 +2217,6 @@ export type ComplaintUncheckedUpdateWithoutWorkOrdersInput = {
   closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput
 }
 
@@ -2299,7 +2262,6 @@ export type ComplaintCreateWithoutTimelineInput = {
   assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedComplaintsInput
   supervisor?: Prisma.UserCreateNestedOneWithoutSupervisorComplaintsInput
   workOrders?: Prisma.WorkOrderCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationCreateNestedManyWithoutComplaintInput
 }
 
 export type ComplaintUncheckedCreateWithoutTimelineInput = {
@@ -2344,7 +2306,6 @@ export type ComplaintUncheckedCreateWithoutTimelineInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutComplaintInput
-  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutComplaintInput
 }
 
 export type ComplaintCreateOrConnectWithoutTimelineInput = {
@@ -2405,7 +2366,6 @@ export type ComplaintUpdateWithoutTimelineInput = {
   assignedTo?: Prisma.UserUpdateOneWithoutAssignedComplaintsNestedInput
   supervisor?: Prisma.UserUpdateOneWithoutSupervisorComplaintsNestedInput
   workOrders?: Prisma.WorkOrderUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutComplaintNestedInput
 }
 
 export type ComplaintUncheckedUpdateWithoutTimelineInput = {
@@ -2450,203 +2410,6 @@ export type ComplaintUncheckedUpdateWithoutTimelineInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutComplaintNestedInput
-}
-
-export type ComplaintCreateWithoutNotificationsInput = {
-  id?: string
-  title: string
-  description: string
-  priority?: string
-  status?: string
-  source?: string
-  category?: string | null
-  photos?: string | null
-  gpsLocation?: string | null
-  assignedBy?: string | null
-  assignedByRole?: string | null
-  assignedAt?: Date | string | null
-  lastReassignedAt?: Date | string | null
-  assignmentReason?: string | null
-  assignmentStatus?: string
-  reassignmentCount?: number
-  slaResponseDeadline?: Date | string | null
-  workOrderId?: string | null
-  invoiceId?: string | null
-  eta?: string | null
-  rejectionReason?: string | null
-  reworkReason?: string | null
-  customerSnapshot?: string | null
-  locationInfo?: string | null
-  resolutionNotes?: string | null
-  customerRating?: number | null
-  customerFeedback?: string | null
-  acceptedAt?: Date | string | null
-  startedAt?: Date | string | null
-  completedAt?: Date | string | null
-  clientConfirmedAt?: Date | string | null
-  resolvedAt?: Date | string | null
-  closedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutComplaintsInput
-  customer: Prisma.CustomerCreateNestedOneWithoutComplaintsInput
-  equipment?: Prisma.EquipmentCreateNestedOneWithoutComplaintsInput
-  assignedTo?: Prisma.UserCreateNestedOneWithoutAssignedComplaintsInput
-  supervisor?: Prisma.UserCreateNestedOneWithoutSupervisorComplaintsInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutComplaintInput
-  timeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutComplaintInput
-}
-
-export type ComplaintUncheckedCreateWithoutNotificationsInput = {
-  id?: string
-  tenantId: string
-  customerId: string
-  equipmentId?: string | null
-  title: string
-  description: string
-  priority?: string
-  status?: string
-  source?: string
-  category?: string | null
-  photos?: string | null
-  gpsLocation?: string | null
-  assignedToId?: string | null
-  supervisorId?: string | null
-  assignedBy?: string | null
-  assignedByRole?: string | null
-  assignedAt?: Date | string | null
-  lastReassignedAt?: Date | string | null
-  assignmentReason?: string | null
-  assignmentStatus?: string
-  reassignmentCount?: number
-  slaResponseDeadline?: Date | string | null
-  workOrderId?: string | null
-  invoiceId?: string | null
-  eta?: string | null
-  rejectionReason?: string | null
-  reworkReason?: string | null
-  customerSnapshot?: string | null
-  locationInfo?: string | null
-  resolutionNotes?: string | null
-  customerRating?: number | null
-  customerFeedback?: string | null
-  acceptedAt?: Date | string | null
-  startedAt?: Date | string | null
-  completedAt?: Date | string | null
-  clientConfirmedAt?: Date | string | null
-  resolvedAt?: Date | string | null
-  closedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutComplaintInput
-  timeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutComplaintInput
-}
-
-export type ComplaintCreateOrConnectWithoutNotificationsInput = {
-  where: Prisma.ComplaintWhereUniqueInput
-  create: Prisma.XOR<Prisma.ComplaintCreateWithoutNotificationsInput, Prisma.ComplaintUncheckedCreateWithoutNotificationsInput>
-}
-
-export type ComplaintUpsertWithoutNotificationsInput = {
-  update: Prisma.XOR<Prisma.ComplaintUpdateWithoutNotificationsInput, Prisma.ComplaintUncheckedUpdateWithoutNotificationsInput>
-  create: Prisma.XOR<Prisma.ComplaintCreateWithoutNotificationsInput, Prisma.ComplaintUncheckedCreateWithoutNotificationsInput>
-  where?: Prisma.ComplaintWhereInput
-}
-
-export type ComplaintUpdateToOneWithWhereWithoutNotificationsInput = {
-  where?: Prisma.ComplaintWhereInput
-  data: Prisma.XOR<Prisma.ComplaintUpdateWithoutNotificationsInput, Prisma.ComplaintUncheckedUpdateWithoutNotificationsInput>
-}
-
-export type ComplaintUpdateWithoutNotificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  priority?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
-  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  clientConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutComplaintsNestedInput
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutComplaintsNestedInput
-  equipment?: Prisma.EquipmentUpdateOneWithoutComplaintsNestedInput
-  assignedTo?: Prisma.UserUpdateOneWithoutAssignedComplaintsNestedInput
-  supervisor?: Prisma.UserUpdateOneWithoutSupervisorComplaintsNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutComplaintNestedInput
-  timeline?: Prisma.ComplaintTimelineUpdateManyWithoutComplaintNestedInput
-}
-
-export type ComplaintUncheckedUpdateWithoutNotificationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  equipmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  priority?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  source?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  supervisorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  lastReassignedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  assignmentReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  assignmentStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  reassignmentCount?: Prisma.IntFieldUpdateOperationsInput | number
-  slaResponseDeadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  invoiceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  eta?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rejectionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  reworkReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerSnapshot?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  locationInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerRating?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  customerFeedback?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  startedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  completedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  clientConfirmedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  closedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutComplaintNestedInput
-  timeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput
 }
 
 export type ComplaintCreateManyTenantInput = {
@@ -2732,7 +2495,6 @@ export type ComplaintUpdateWithoutTenantInput = {
   assignedTo?: Prisma.UserUpdateOneWithoutAssignedComplaintsNestedInput
   supervisor?: Prisma.UserUpdateOneWithoutSupervisorComplaintsNestedInput
   workOrders?: Prisma.WorkOrderUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUpdateManyWithoutComplaintNestedInput
 }
 
@@ -2777,7 +2539,6 @@ export type ComplaintUncheckedUpdateWithoutTenantInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput
 }
 
@@ -2948,7 +2709,6 @@ export type ComplaintUpdateWithoutAssignedToInput = {
   equipment?: Prisma.EquipmentUpdateOneWithoutComplaintsNestedInput
   supervisor?: Prisma.UserUpdateOneWithoutSupervisorComplaintsNestedInput
   workOrders?: Prisma.WorkOrderUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUpdateManyWithoutComplaintNestedInput
 }
 
@@ -2993,7 +2753,6 @@ export type ComplaintUncheckedUpdateWithoutAssignedToInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput
 }
 
@@ -3080,7 +2839,6 @@ export type ComplaintUpdateWithoutSupervisorInput = {
   equipment?: Prisma.EquipmentUpdateOneWithoutComplaintsNestedInput
   assignedTo?: Prisma.UserUpdateOneWithoutAssignedComplaintsNestedInput
   workOrders?: Prisma.WorkOrderUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUpdateManyWithoutComplaintNestedInput
 }
 
@@ -3125,7 +2883,6 @@ export type ComplaintUncheckedUpdateWithoutSupervisorInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput
 }
 
@@ -3254,7 +3011,6 @@ export type ComplaintUpdateWithoutCustomerInput = {
   assignedTo?: Prisma.UserUpdateOneWithoutAssignedComplaintsNestedInput
   supervisor?: Prisma.UserUpdateOneWithoutSupervisorComplaintsNestedInput
   workOrders?: Prisma.WorkOrderUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUpdateManyWithoutComplaintNestedInput
 }
 
@@ -3299,7 +3055,6 @@ export type ComplaintUncheckedUpdateWithoutCustomerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput
 }
 
@@ -3428,7 +3183,6 @@ export type ComplaintUpdateWithoutEquipmentInput = {
   assignedTo?: Prisma.UserUpdateOneWithoutAssignedComplaintsNestedInput
   supervisor?: Prisma.UserUpdateOneWithoutSupervisorComplaintsNestedInput
   workOrders?: Prisma.WorkOrderUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUpdateManyWithoutComplaintNestedInput
 }
 
@@ -3473,7 +3227,6 @@ export type ComplaintUncheckedUpdateWithoutEquipmentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutComplaintNestedInput
-  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutComplaintNestedInput
   timeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput
 }
 
@@ -3526,13 +3279,11 @@ export type ComplaintUncheckedUpdateManyWithoutEquipmentInput = {
 
 export type ComplaintCountOutputType = {
   workOrders: number
-  notifications: number
   timeline: number
 }
 
 export type ComplaintCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   workOrders?: boolean | ComplaintCountOutputTypeCountWorkOrdersArgs
-  notifications?: boolean | ComplaintCountOutputTypeCountNotificationsArgs
   timeline?: boolean | ComplaintCountOutputTypeCountTimelineArgs
 }
 
@@ -3551,13 +3302,6 @@ export type ComplaintCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
  */
 export type ComplaintCountOutputTypeCountWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WorkOrderWhereInput
-}
-
-/**
- * ComplaintCountOutputType without action
- */
-export type ComplaintCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.NotificationWhereInput
 }
 
 /**
@@ -3615,7 +3359,6 @@ export type ComplaintSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   assignedTo?: boolean | Prisma.Complaint$assignedToArgs<ExtArgs>
   supervisor?: boolean | Prisma.Complaint$supervisorArgs<ExtArgs>
   workOrders?: boolean | Prisma.Complaint$workOrdersArgs<ExtArgs>
-  notifications?: boolean | Prisma.Complaint$notificationsArgs<ExtArgs>
   timeline?: boolean | Prisma.Complaint$timelineArgs<ExtArgs>
   _count?: boolean | Prisma.ComplaintCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["complaint"]>
@@ -3767,7 +3510,6 @@ export type ComplaintInclude<ExtArgs extends runtime.Types.Extensions.InternalAr
   assignedTo?: boolean | Prisma.Complaint$assignedToArgs<ExtArgs>
   supervisor?: boolean | Prisma.Complaint$supervisorArgs<ExtArgs>
   workOrders?: boolean | Prisma.Complaint$workOrdersArgs<ExtArgs>
-  notifications?: boolean | Prisma.Complaint$notificationsArgs<ExtArgs>
   timeline?: boolean | Prisma.Complaint$timelineArgs<ExtArgs>
   _count?: boolean | Prisma.ComplaintCountOutputTypeDefaultArgs<ExtArgs>
 }
@@ -3795,7 +3537,6 @@ export type $ComplaintPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     assignedTo: Prisma.$UserPayload<ExtArgs> | null
     supervisor: Prisma.$UserPayload<ExtArgs> | null
     workOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
-    notifications: Prisma.$NotificationPayload<ExtArgs>[]
     timeline: Prisma.$ComplaintTimelinePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -4239,7 +3980,6 @@ export interface Prisma__ComplaintClient<T, Null = never, ExtArgs extends runtim
   assignedTo<T extends Prisma.Complaint$assignedToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Complaint$assignedToArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   supervisor<T extends Prisma.Complaint$supervisorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Complaint$supervisorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   workOrders<T extends Prisma.Complaint$workOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Complaint$workOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  notifications<T extends Prisma.Complaint$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Complaint$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   timeline<T extends Prisma.Complaint$timelineArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Complaint$timelineArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintTimelinePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -4787,30 +4527,6 @@ export type Complaint$workOrdersArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
-}
-
-/**
- * Complaint.notifications
- */
-export type Complaint$notificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Notification
-   */
-  select?: Prisma.NotificationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Notification
-   */
-  omit?: Prisma.NotificationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.NotificationInclude<ExtArgs> | null
-  where?: Prisma.NotificationWhereInput
-  orderBy?: Prisma.NotificationOrderByWithRelationInput | Prisma.NotificationOrderByWithRelationInput[]
-  cursor?: Prisma.NotificationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
 }
 
 /**

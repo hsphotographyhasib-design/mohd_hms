@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 
-import { useAuthStore, useAppStore, useNotificationStore, canAccess } from '@/store';
+import { useAuthStore, useAppStore, canAccess } from '@/store';
+import { useNotificationStore } from '@/lib/notifications/store';
 import type { AppView, UserRole, NavItem } from '@/types';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';

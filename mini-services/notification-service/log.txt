@@ -1,0 +1,2 @@
+[WS] Notification WebSocket service running on http://127.0.0.1:3010
+[WS] HTTP POST /send endpoint available for server-to-server push
