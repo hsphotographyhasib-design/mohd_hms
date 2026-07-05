@@ -12,7 +12,7 @@ import { PrismaLibSql } from "@prisma/adapter-libsql";
 // 1. Find database URL
 // ---------------------------------------------------------------------------
 
-function findDatabaseUrl(): { url: string; source: string } {
+export function findDatabaseUrl(): { url: string; source: string } {
   const candidates = [
     "DATABASE_URL",
     "PRISMA_DATABASE_URL",
