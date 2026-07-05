@@ -11,6 +11,7 @@ import { IdleTimerProvider } from '@/components/session/idle-timer';
 import { SessionProvider } from '@/components/session/session-provider';
 import { NotificationProvider } from '@/components/notifications/notification-provider';
 import { ConfirmProvider } from '@/components/ui/confirm-provider';
+import { QueryProvider } from '@/components/providers/query-provider';
 import { setupFetchInterceptor } from '@/hooks/use-secure-fetch';
 import { useNotificationPolling } from '@/hooks/use-notification-polling';
 
@@ -53,9 +54,11 @@ function ToastListener() {
 function ProtectedApp() {
   return (
     <AuthGuard>
-      <IdleTimerProvider>
-        <AppShell />
-      </IdleTimerProvider>
+      <QueryProvider>
+        <IdleTimerProvider>
+          <AppShell />
+        </IdleTimerProvider>
+      </QueryProvider>
     </AuthGuard>
   );
 }

@@ -521,3 +521,42 @@ Stage Summary:
 - **ROOT CAUSE 1**: Database misconfiguration (PostgreSQL adapter + SQLite URL) — ALL DB ops failed
 - **ROOT CAUSE 2**: `validation.valid` should be `validation.success` — ALL workflow transitions rejected
 - Both root causes fixed, dev server starts cleanly
+
+---
+Task ID: 8
+Agent: main
+Task: Optimize Dashboard & KPI Loading for Enterprise-Grade Performance
+
+Work Log:
+- Read and analyzed current dashboard architecture: single monolithic fetch, no caching, full-page loading state
+- Created QueryClientProvider at src/components/providers/query-provider.tsx with 30s default staleTime, 5min gcTime
+- Created dashboard query hooks at src/hooks/use-dashboard-queries.ts with 3 independent hooks:
+  - useDashboardKpi() — 30s stale, 60s background refresh
+  - useDashboardCharts() — 2min stale, 2min background refresh
+  - useDashboardRecent() — 1min stale, 60s background refresh
+- Split backend /api/dashboard into 3 optimized endpoints:
+  - GET /api/dashboard/kpi — aggregate-only, single groupBy per entity type, select-only for inventory
+  - GET /api/dashboard/charts — chart data with minimal field selection
+  - GET /api/dashboard/recent — recent activity using select instead of include
+- Refactored desktop dashboard-view.tsx (1258 lines):
+  - 8 memoized sub-components (KpiCardsSection, RevenueChart, ComplaintsStatusChart, ComplaintsCategoryChart, PmComplianceGauge, RecentComplaintsTable, RecentWorkOrdersTable, UpcomingPmSchedule)
+  - Each widget loads independently with its own skeleton
+  - Welcome header renders instantly (not blocked by any data fetch)
+  - No full-page loading state — progressive rendering
+  - One widget failure never blocks others
+- Optimized mobile-dashboard.tsx: replaced useState/useEffect/fetch with TanStack Query hooks
+  - Welcome card now always visible (not blocked by loading)
+  - Stats show cached data instantly via stale-while-revalidate
+- Added 8 database indexes to Prisma schema:
+  - Complaint: tenantId+customerId, tenantId+category, tenantId+createdAt
+  - PmSchedule: tenantId, tenantId+status, tenantId+nextDueDate
+- Added QueryProvider wrapper in page.tsx around ProtectedApp
+- Verified: all API endpoints compile and respond (401 for unauthorized = working), no browser console errors, HMR working
+
+Stage Summary:
+- Dashboard now uses stale-while-revalidate pattern: cached data appears instantly, fresh data loads in background
+- KPI cards, charts, and tables are fully independent — no widget blocks another
+- Backend optimized with select-only queries and single groupBy aggregations
+- Database indexes added for all dashboard query patterns
+- Files created: query-provider.tsx, use-dashboard-queries.ts, kpi/route.ts, charts/route.ts, recent/route.ts
+- Files modified: page.tsx, dashboard-view.tsx, mobile-dashboard.tsx, schema.prisma

@@ -244,6 +244,10 @@ model Equipment {
   pmSchedules     PmSchedule[]
   scanLogs        ScanLog[]
   qrCodeRecord    EquipmentQrCode?
+
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([tenantId, customerId])
 }
 
 // ============ EQUIPMENT QR CODES ============
@@ -347,6 +351,9 @@ model Complaint {
   @@index([tenantId, status])
   @@index([tenantId, assignedToId])
   @@index([tenantId, assignedBy])
+  @@index([tenantId, customerId])
+  @@index([tenantId, category])
+  @@index([tenantId, createdAt])
 }
 
 // ============ WORK ORDERS ============
@@ -479,6 +486,10 @@ model PmSchedule {
   tenant        Tenant   @relation(fields: [tenantId], references: [id])
   equipment     Equipment @relation(fields: [equipmentId], references: [id])
   assignedTo    User?    @relation("PmScheduleAssignee", fields: [assignedToId], references: [id])
+
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([tenantId, nextDueDate])
 }
 
 // ============ QUOTATIONS ============

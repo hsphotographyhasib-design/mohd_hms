@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, memo } from 'react';
 import { motion } from 'framer-motion';
 import {
   Sun,
@@ -34,7 +34,8 @@ import { Badge } from '@/components/ui/badge';
 import { useAuthStore, useAppStore } from '@/store';
 import { canAccess } from '@/store';
 import { cn } from '@/lib/utils';
-import type { ComplaintItem, ComplaintStatus, DashboardStats, UserRole, AppView } from '@/types';
+import type { ComplaintItem, ComplaintStatus, UserRole, AppView } from '@/types';
+import { useDashboardKpi, useDashboardRecent } from '@/hooks/use-dashboard-queries';
 
 // ─── Animation Variants ─────────────────────────────────────────
 
@@ -304,11 +305,13 @@ const BASE_QUICK_ACTIONS: QuickAction[] = [
 export function MobileDashboard() {
   const { user } = useAuthStore();
   const { setView } = useAppStore();
-  const [complaints, setComplaints] = useState<ComplaintItem[]>([]);
-  const [dashboardStats, setDashboardStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [statsLoading, setStatsLoading] = useState(true);
+  const kpi = useDashboardKpi();
+  const recent = useDashboardRecent();
 
+  const kpiData = kpi.data;
+  const complaints = recent.data?.recentComplaints || [];
+  const loading = recent.isLoading;
+  const statsLoading = kpi.isLoading;
   const role = user?.role || 'customer';
 
   // Greeting
@@ -322,52 +325,12 @@ export function MobileDashboard() {
     year: 'numeric',
   });
 
-  // Fetch complaints list (recent 5)
-  const fetchComplaints = useCallback(async () => {
-    const token = localStorage.getItem('cmms_token');
-    if (!token) return;
-    try {
-      setLoading(true);
-      const res = await fetch('/api/complaints?page=1&pageSize=5', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return;
-      const json = await res.json();
-      setComplaints(json.data || []);
-    } catch {
-      // Silently handle
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  // Fetch dashboard stats (full API)
-  const fetchStats = useCallback(async () => {
-    const token = localStorage.getItem('cmms_token');
-    if (!token) return;
-    try {
-      setStatsLoading(true);
-      const res = await fetch('/api/dashboard', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) return;
-      const json = await res.json();
-      setDashboardStats(json);
-    } catch {
-      // Silently handle
-    } finally {
-      setStatsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchComplaints();
-    fetchStats();
-  }, [fetchComplaints, fetchStats]);
+  // Data fetched via TanStack Query hooks (useDashboardKpi, useDashboardRecent)
+  // with automatic caching (30s KPI, 1min recent) and background refresh
 
   // ─── Role-based stat cards ──────────────────────────────────
   const getStatCards = useCallback((): { props: StatCardProps; key: string }[] => {
-    const s = dashboardStats;
+    const s = kpiData;
     if (!s) {
       // Fallback: compute from complaints
       const inProgress = complaints.filter((c) => ['ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS'].includes(c.status)).length;
@@ -392,7 +355,7 @@ export function MobileDashboard() {
       ];
     }
 
-    // With dashboard stats
+    // With KPI data
     if (role === 'technician') {
       return [
         { key: 'tasks', props: { label: 'My Tasks', value: s.pendingWorkOrders + s.inProgressComplaints, icon: ClipboardList, bgColor: 'bg-blue-50', iconColor: 'text-blue-600', index: 0 } },
@@ -438,7 +401,7 @@ export function MobileDashboard() {
       { key: 'completed', props: { label: 'Completed', value: s.completedWorkOrders, icon: CheckCircle2, bgColor: 'bg-green-50', iconColor: 'text-green-600', index: 2 } },
       { key: 'invoices', props: { label: 'Invoices', value: s.pendingInvoices, icon: FileText, bgColor: 'bg-amber-50', iconColor: 'text-amber-600', index: 3 } },
     ];
-  }, [dashboardStats, complaints, role]);
+  }, [kpiData, complaints, role]);
 
   const statCards = getStatCards();
   const GreetingIcon = greetingIcon;
@@ -498,10 +461,8 @@ export function MobileDashboard() {
 
   return (
     <motion.div className="min-h-screen bg-white" variants={containerVariants} initial="hidden" animate="visible">
-      {/* ── Welcome Card ──────────────────────────────────── */}
-      {loading && statsLoading ? (
-        <WelcomeSkeleton />
-      ) : (
+      {/* ── Welcome Card — always visible ────────────── */}
+      {(
         <motion.div variants={itemVariants} className="mx-4 mt-4">
           <div className="relative overflow-hidden rounded-2xl p-5 shadow-lg" style={{ background: 'linear-gradient(135deg, #059669 0%, #0B5E3C 100%)' }}>
             <div className="pointer-events-none absolute -top-6 -right-6 size-28 rounded-full bg-white/10" />
@@ -538,7 +499,7 @@ export function MobileDashboard() {
       <motion.div variants={itemVariants} className="px-4 mt-5">
         <h2 className="text-sm font-semibold text-gray-900 mb-3">Statistics</h2>
       </motion.div>
-      {statsLoading ? (
+      {statsLoading && !kpiData ? (
         <StatsSkeleton count={statCards.length} />
       ) : (
         <motion.div variants={containerVariants} className={cn('grid gap-3 px-4', statCards.length > 4 ? 'grid-cols-3' : 'grid-cols-2')}>
