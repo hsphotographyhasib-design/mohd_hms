@@ -590,3 +590,23 @@ Stage Summary:
 - WebSocket service enables real-time notification delivery
 - API endpoints have search, filter, archive, pagination
 - Note: Full dashboard/browser verification limited by sandbox memory constraints (OOM kill on module compilation)
+
+---
+Task ID: supabase-push-1
+Agent: main
+Task: Push Prisma schema to Supabase (89 tables, 174 indexes)
+
+Work Log:
+- Generated PostgreSQL DDL from prisma/schema.prisma (89 models)
+- Created supabase-schema.sql and supabase-seed.sql
+- Fixed multiple issues: table dependency ordering, relation fields parsed as columns, ON DELETE casing, duplicate indexes
+- Used Supabase Management API with access token to push schema
+- Pushed seed data: 1 tenant, 5 departments, 6 inventory categories, 1 warehouse
+
+Stage Summary:
+- 89 tables successfully created in Supabase project sbcqgsbdaerdoladmbcc (mohd_hms)
+- 180 indexes (174 explicit + 6 from UNIQUE/PK constraints)
+- 83 foreign key constraints added via ALTER TABLE
+- 21 unique constraints
+- Seed data: 1 tenant (MOHD HMS Enterprise), 5 departments, 6 inventory categories, 1 warehouse
+- Supabase region: ap-southeast-2, status: ACTIVE_HEALTHY
