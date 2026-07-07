@@ -1,13 +1,64 @@
-import { prisma, isPrismaTransient } from "./prisma";
-
 /**
- * Re-export the singleton Prisma client for backward compatibility
- * (99 files import { db } from '@/lib/db').
+ * Database client — auto-switches between Supabase REST API and local Prisma/SQLite.
+ *
+ * When USE_SUPABASE=true, uses the Supabase REST adapter (works from any network).
+ * Otherwise, falls back to local Prisma/SQLite.
+ *
+ * All 100+ API routes import { db } from '@/lib/db' — no changes needed.
  */
-export const db = prisma;
 
-// Re-export types for convenience
+let _supabaseDb: any = null;
+let _prismaDb: any = null;
+
+function getSupabaseDb() {
+  if (!_supabaseDb) {
+    const mod = require('./supabase-db');
+    _supabaseDb = mod.supabaseDb;
+  }
+  return _supabaseDb;
+}
+
+function getPrismaDb() {
+  if (!_prismaDb) {
+    const mod = require('./prisma');
+    _prismaDb = mod.prisma;
+  }
+  return _prismaDb;
+}
+
+export const db: any =
+  process.env.USE_SUPABASE === 'true'
+    ? new Proxy({} as any, {
+        get(_target, prop: string) {
+          return getSupabaseDb()[prop];
+        },
+      })
+    : new Proxy({} as any, {
+        get(_target, prop: string) {
+          return getPrismaDb()[prop];
+        },
+      });
+
+// Lazy type re-export (never evaluated at runtime)
 export type { PrismaClient } from "../../generated/prisma/client";
+
+/** Check if an error is transient (retry-worthy) — works without Prisma import */
+function isTransientError(error: unknown): boolean {
+  if (error && typeof error === 'object') {
+    const msg = (error as Error).message ?? '';
+    const code = (error as { code?: string })?.code ?? '';
+    return (
+      msg.includes('timed out') || msg.includes('timeout') || msg.includes('ETIMEDOUT') ||
+      msg.includes('Connection terminated') || msg.includes('connect timeout') ||
+      code === 'P2024' || code === 'P1001' || code === 'P1008' ||
+      msg.includes('Connection refused') || msg.includes('ECONNREFUSED') ||
+      msg.includes('ECONNRESET') || msg.includes('Too many connections') ||
+      msg.includes('Connection pool exhausted') || msg.includes('database is locked') ||
+      msg.includes('SQLITE_BUSY') || msg.includes('fetch failed')
+    );
+  }
+  return false;
+}
 
 /**
  * Retry wrapper for transient database failures.
@@ -38,7 +89,7 @@ export async function withRetry<T>(
       lastError = error;
 
       // Only retry transient / connection errors
-      if (!isPrismaTransient(error) || attempt >= max) {
+      if (!isTransientError(error) || attempt >= max) {
         throw error;
       }
 
@@ -346,7 +397,7 @@ export function getDbFriendlyMessage(error: unknown): string {
   );
 
   // ---- 1. Transient / connection errors (retry-worthy) ----
-  if (isPrismaTransient(error)) {
+  if (isTransientError(error)) {
     return "We're reconnecting to the database. Please wait a moment and try again.";
   }
 
