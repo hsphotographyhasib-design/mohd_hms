@@ -21,19 +21,30 @@ import {
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
+  Building2,
   CheckCircle2,
   ClipboardList,
   FileText,
   ImagePlus,
+  Info,
   Loader2,
+  Mail,
   MapPin,
+  Monitor,
+  Navigation,
   Phone,
   Plus,
   Send,
   Shield,
+  Tag,
   Upload,
+  User,
   X,
 } from 'lucide-react';
+import { SmartCustomerSearch } from './smart-customer-search';
+import { QuickCustomerCreate } from './quick-customer-create';
+import { EquipmentAutofill } from './equipment-autofill';
+import { GoogleMapsPicker } from './google-maps-picker';
 
 // ============ TYPES ============
 
@@ -58,9 +69,17 @@ interface FormData {
   files: File[];
 }
 
-interface CustomerOption {
+interface CustomerDetails {
   id: string;
   name: string;
+  companyName?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  building?: string;
+  floor?: string;
+  unit?: string;
+  customerNumber?: string;
 }
 
 interface EquipmentOption {
@@ -129,53 +148,55 @@ function getToken(): string {
 export function NewComplaint() {
   const { setView } = useAppStore();
   const { user } = useAuthStore();
+  const isCustomer = user?.role === 'customer';
+
   const [step, setStep] = useState(1);
   const [form, setForm] = useState<FormData>(emptyForm);
   const [submitting, setSubmitting] = useState(false);
-  const [customers, setCustomers] = useState<CustomerOption[]>([]);
-  const [equipment, setEquipment] = useState<EquipmentOption[]>([]);
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
-
-  // Fetch customers on mount
-  useEffect(() => {
-    async function fetchCustomers() {
-      try {
-        const res = await fetch('/api/customers?pageSize=200', {
-          headers: { Authorization: `Bearer ${getToken()}` },
-        });
-        if (res.ok) {
-          const json = await res.json();
-          setCustomers((json.data ?? []).map((c: any) => ({ id: c.id, name: c.name || c.companyName })));
-        }
-      } catch { /* ignore */ }
-    }
-    fetchCustomers();
-  }, []);
-
-  // Fetch equipment when customer changes
-  useEffect(() => {
-    if (!form.customerId) {
-      setEquipment([]);
-      setForm((f) => ({ ...f, equipmentId: '' }));
-      return;
-    }
-    async function fetchEquipment() {
-      try {
-        const res = await fetch(`/api/equipment?customerId=${form.customerId}&pageSize=200`, {
-          headers: { Authorization: `Bearer ${getToken()}` },
-        });
-        if (res.ok) {
-          const json = await res.json();
-          setEquipment((json.data ?? []).map((e: any) => ({ id: e.id, name: e.name || e.assetTag || e.serialNumber, category: e.category })));
-        }
-      } catch { /* ignore */ }
-    }
-    fetchEquipment();
-  }, [form.customerId]);
+  const [selectedCustomer, setSelectedCustomer] = useState<CustomerDetails | null>(null);
+  const [showCreateCustomer, setShowCreateCustomer] = useState(false);
+  const [selectedEquipment, setSelectedEquipment] = useState<any>(null);
+  const [gpsCoords, setGpsCoords] = useState<{ lat: number; lng: number } | null>(null);
+  const [linkingCustomer, setLinkingCustomer] = useState(false);
 
   const updateField = useCallback(<K extends keyof FormData>(key: K, value: FormData[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   }, []);
+
+  // Auto-link customer for customer role on mount
+  useEffect(() => {
+    if (!isCustomer || !user) return;
+
+    const findLinkedCustomer = async () => {
+      setLinkingCustomer(true);
+      try {
+        const queries = [];
+        if (user.email) queries.push(`email=${encodeURIComponent(user.email)}`);
+        if (user.phone) queries.push(`phone=${encodeURIComponent(user.phone)}`);
+        const res = await fetch(`/api/customers?${queries.join('&')}&pageSize=1`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        });
+        if (res.ok) {
+          const json = await res.json();
+          const data = json.data ?? json.items ?? json;
+          const customers = Array.isArray(data) ? data : [];
+          if (customers.length > 0) {
+            const c = customers[0];
+            setSelectedCustomer(c);
+            updateField('customerId', c.id);
+            // Auto-fill location from customer
+            if (c.address) updateField('location', c.address);
+            if (c.building) updateField('building', c.building);
+            if (c.floor) updateField('floor', c.floor);
+            if (c.unit) updateField('room', c.unit);
+          }
+        }
+      } catch { /* ignore */ }
+      finally { setLinkingCustomer(false); }
+    };
+    findLinkedCustomer();
+  }, [isCustomer, user?.id, updateField]);
 
   const subcategories = useMemo(() => {
     const cat = CATEGORIES.find((c) => c.value === form.category);
@@ -185,6 +206,50 @@ export function NewComplaint() {
   const selectedPriority = useMemo(() => {
     return PRIORITIES.find((p) => p.value === form.priority);
   }, [form.priority]);
+
+  // Handle customer selection (staff mode)
+  const handleCustomerSelect = useCallback((customerId: string, customerData: any) => {
+    if (!customerId) {
+      setSelectedCustomer(null);
+      updateField('customerId', '');
+      return;
+    }
+    const c: CustomerDetails = customerData;
+    setSelectedCustomer(c);
+    updateField('customerId', customerId);
+    // Auto-fill location from customer
+    if (c.address) updateField('location', c.address);
+    if (c.building) updateField('building', c.building);
+    if (c.floor) updateField('floor', c.floor);
+    if (c.unit) updateField('room', c.unit);
+  }, [updateField]);
+
+  // Handle customer created from QuickCustomerCreate
+  const handleCustomerCreated = useCallback((customer: any) => {
+    const c: CustomerDetails = customer;
+    setSelectedCustomer(c);
+    updateField('customerId', c.id);
+    if (c.address) updateField('location', c.address);
+    if (c.building) updateField('building', c.building);
+    if (c.floor) updateField('floor', c.floor);
+    if (c.unit) updateField('room', c.unit);
+  }, [updateField]);
+
+  // Handle equipment selection
+  const handleEquipmentChange = useCallback((equipmentId: string, equipmentData: any) => {
+    setSelectedEquipment(equipmentData);
+    updateField('equipmentId', equipmentId);
+  }, [updateField]);
+
+  // Handle GPS coords change
+  const handleGpsChange = useCallback((coords: { lat: number; lng: number } | null, _address?: string) => {
+    setGpsCoords(coords);
+    if (coords) {
+      updateField('gpsLocation', `${coords.lat},${coords.lng}`);
+    } else {
+      updateField('gpsLocation', '');
+    }
+  }, [updateField]);
 
   // File handling
   const handleFileAdd = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -218,6 +283,11 @@ export function NewComplaint() {
       case 1:
         return !!form.title.trim() && !!form.description.trim() && !!form.category;
       case 2:
+        if (isCustomer) {
+          // Customer mode: pass if customer is linked (or still linking)
+          return !!form.customerId || linkingCustomer;
+        }
+        // Staff mode: must select a customer
         return !!form.customerId;
       case 3:
         return true;
@@ -226,7 +296,7 @@ export function NewComplaint() {
       default:
         return false;
     }
-  }, [step, form]);
+  }, [step, form, isCustomer, linkingCustomer]);
 
   // Submit
   const handleSubmit = useCallback(async () => {
@@ -246,7 +316,16 @@ export function NewComplaint() {
       };
 
       if (form.equipmentId) body.equipmentId = form.equipmentId;
-      if (form.gpsLocation) body.gpsLocation = form.gpsLocation;
+
+      // Build locationInfo
+      const locationInfo = {
+        location: form.location,
+        building: form.building,
+        floor: form.floor,
+        room: form.room,
+        gpsLocation: gpsCoords ? `${gpsCoords.lat},${gpsCoords.lng}` : form.gpsLocation,
+      };
+      body.locationInfo = locationInfo;
 
       // Append extra metadata to description
       const extras: string[] = [];
@@ -291,7 +370,7 @@ export function NewComplaint() {
     } finally {
       setSubmitting(false);
     }
-  }, [form, setView]);
+  }, [form, gpsCoords, setView]);
 
   // Breadcrumb items
   const breadcrumbs = [
@@ -435,9 +514,36 @@ export function NewComplaint() {
 
           {/* Step Content */}
           {step === 1 && <Step1Details form={form} updateField={updateField} subcategories={subcategories} selectedPriority={selectedPriority} />}
-          {step === 2 && <Step2Equipment form={form} updateField={updateField} customers={customers} equipment={equipment} />}
+          {step === 2 && (
+            <Step2Equipment
+              form={form}
+              updateField={updateField}
+              isCustomer={isCustomer}
+              user={user}
+              selectedCustomer={selectedCustomer}
+              linkingCustomer={linkingCustomer}
+              onCustomerSelect={handleCustomerSelect}
+              onCustomerCreated={handleCustomerCreated}
+              showCreateCustomer={showCreateCustomer}
+              onShowCreateCustomer={setShowCreateCustomer}
+              selectedEquipment={selectedEquipment}
+              onEquipmentChange={handleEquipmentChange}
+              gpsCoords={gpsCoords}
+              onGpsChange={handleGpsChange}
+            />
+          )}
           {step === 3 && <Step3Attachments form={form} handleFileAdd={handleFileAdd} handleFileRemove={handleFileRemove} previewUrls={previewUrls} />}
-          {step === 4 && <Step4Review form={form} customers={customers} equipment={equipment} selectedPriority={selectedPriority} />}
+          {step === 4 && (
+            <Step4Review
+              form={form}
+              selectedPriority={selectedPriority}
+              isCustomer={isCustomer}
+              user={user}
+              selectedCustomer={selectedCustomer}
+              selectedEquipment={selectedEquipment}
+              gpsCoords={gpsCoords}
+            />
+          )}
 
           {/* Navigation Buttons */}
           <div className="flex items-center justify-between mt-6 pt-4 border-t">
@@ -486,6 +592,16 @@ export function NewComplaint() {
               )}
             </div>
           </div>
+
+          {/* Quick Customer Create Dialog */}
+          {!isCustomer && (
+            <QuickCustomerCreate
+              open={showCreateCustomer}
+              onOpenChange={setShowCreateCustomer}
+              onCustomerCreated={handleCustomerCreated}
+              tenantId={user?.tenantId || ''}
+            />
+          )}
         </main>
       </div>
     </div>
@@ -671,18 +787,38 @@ function Step1Details({
   );
 }
 
-// ============ STEP 2: EQUIPMENT & LOCATION ============
+// ============ STEP 2: EQUIPMENT & LOCATION (REWRITTEN — DUAL MODE) ============
 
 function Step2Equipment({
   form,
   updateField,
-  customers,
-  equipment,
+  isCustomer,
+  user,
+  selectedCustomer,
+  linkingCustomer,
+  onCustomerSelect,
+  onCustomerCreated,
+  showCreateCustomer,
+  onShowCreateCustomer,
+  selectedEquipment,
+  onEquipmentChange,
+  gpsCoords,
+  onGpsChange,
 }: {
   form: FormData;
   updateField: <K extends keyof FormData>(key: K, value: FormData[K]) => void;
-  customers: CustomerOption[];
-  equipment: EquipmentOption[];
+  isCustomer: boolean;
+  user: any;
+  selectedCustomer: CustomerDetails | null;
+  linkingCustomer: boolean;
+  onCustomerSelect: (customerId: string, customerData: any) => void;
+  onCustomerCreated: (customer: any) => void;
+  showCreateCustomer: boolean;
+  onShowCreateCustomer: (open: boolean) => void;
+  selectedEquipment: any;
+  onEquipmentChange: (equipmentId: string, equipmentData: any) => void;
+  gpsCoords: { lat: number; lng: number } | null;
+  onGpsChange: (coords: { lat: number; lng: number } | null, address?: string) => void;
 }) {
   return (
     <Card>
@@ -692,123 +828,198 @@ function Step2Equipment({
           <p className="text-sm text-muted-foreground">Specify where the issue is located</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
-          {/* Customer */}
-          <div className="md:col-span-2">
-            <Label className="flex items-center gap-1">
-              Customer <span className="text-red-500">*</span>
-            </Label>
-            {customers.length > 0 ? (
-              <Select value={form.customerId} onValueChange={(v) => updateField('customerId', v)}>
-                <SelectTrigger className="mt-1.5">
-                  <SelectValue placeholder="Select customer" />
-                </SelectTrigger>
-                <SelectContent>
-                  {customers.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            ) : (
-              <div className="mt-1.5 rounded-lg border border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30 p-4">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
-                  <p className="text-sm text-amber-700 dark:text-amber-400">
-                    No customers found. Please add a customer first before creating a complaint.
-                  </p>
+        <div className="space-y-6">
+          {/* ── CUSTOMER MODE ── */}
+          {isCustomer && (
+            <>
+              {/* Green info card: submitting as */}
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                    <User className="h-4 w-4 text-emerald-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-emerald-800">Submitting as: {user?.name || 'Customer'}</p>
+                    <p className="text-xs text-emerald-600">{user?.email || ''}</p>
+                  </div>
                 </div>
+
+                {linkingCustomer && (
+                  <div className="flex items-center gap-2 text-sm text-emerald-600">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Linking your customer profile...</span>
+                  </div>
+                )}
+
+                {!linkingCustomer && selectedCustomer && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Name</p>
+                      <p className="text-sm font-medium">{selectedCustomer.name}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Email</p>
+                      <p className="text-sm font-medium">{selectedCustomer.email || '—'}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Phone</p>
+                      <p className="text-sm font-medium">{selectedCustomer.phone || '—'}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Address</p>
+                      <p className="text-sm font-medium">{selectedCustomer.address || '—'}</p>
+                    </div>
+                  </div>
+                )}
+
+                {!linkingCustomer && !selectedCustomer && (
+                  <div className="mt-3 flex items-center gap-2 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+                    <AlertTriangle className="h-4 w-4 shrink-0" />
+                    <span>Could not link your customer profile. Please contact support.</span>
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+
+          {/* ── STAFF MODE ── */}
+          {!isCustomer && (
+            <>
+              {/* Smart Customer Search */}
+              <div className="space-y-2">
+                <Label className="flex items-center gap-1">
+                  Customer <span className="text-red-500">*</span>
+                </Label>
+                <SmartCustomerSearch
+                  value={form.customerId}
+                  onChange={onCustomerSelect}
+                  tenantId={user?.tenantId || ''}
+                  placeholder="Search customer by name, email, phone…"
+                  onCreateNew={() => onShowCreateCustomer(true)}
+                />
+                <p className="text-xs text-muted-foreground">Search and select the customer for this complaint</p>
+
+                {/* Create New Customer button */}
                 <Button
+                  type="button"
                   variant="outline"
                   size="sm"
-                  className="mt-2"
-                  onClick={() => setView('customers')}
+                  className="gap-1.5 text-emerald-600 border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 hover:border-emerald-300"
+                  onClick={() => onShowCreateCustomer(true)}
                 >
-                  <Plus className="h-3.5 w-3.5" />
-                  Go to Customers
+                  <Plus className="size-4" />
+                  Create New Customer
                 </Button>
               </div>
-            )}
-            <p className="text-xs text-muted-foreground mt-1">Select the customer associated with this complaint</p>
-          </div>
 
-          {/* Equipment */}
-          <div className="md:col-span-2">
-            <Label>Equipment (Optional)</Label>
-            <Select value={form.equipmentId} onValueChange={(v) => updateField('equipmentId', v)} disabled={!form.customerId}>
-              <SelectTrigger className="mt-1.5">
-                <SelectValue placeholder={form.customerId ? 'Select equipment' : 'Select a customer first'} />
-              </SelectTrigger>
-              <SelectContent>
-                {equipment.map((e) => (
-                  <SelectItem key={e.id} value={e.id}>
-                    {e.name} {e.category ? `(${e.category})` : ''}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-xs text-muted-foreground mt-1">Select the specific equipment if applicable</p>
-          </div>
+              {/* Selected Customer Summary Card */}
+              {selectedCustomer && (
+                <div className="rounded-lg border border-emerald-200 bg-gradient-to-br from-emerald-50/80 to-white p-4">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                      <Building2 className="h-4 w-4 text-emerald-600" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-emerald-800">{selectedCustomer.name}</p>
+                      {selectedCustomer.companyName && selectedCustomer.companyName !== selectedCustomer.name && (
+                        <p className="text-xs text-emerald-600">{selectedCustomer.companyName}</p>
+                      )}
+                    </div>
+                    {selectedCustomer.customerNumber && (
+                      <span className="ml-auto text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-mono border border-emerald-200">
+                        {selectedCustomer.customerNumber}
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {selectedCustomer.email && (
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Mail className="size-3.5 shrink-0" />
+                        <span>{selectedCustomer.email}</span>
+                      </div>
+                    )}
+                    {selectedCustomer.phone && (
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <Phone className="size-3.5 shrink-0" />
+                        <span>{selectedCustomer.phone}</span>
+                      </div>
+                    )}
+                    {selectedCustomer.address && (
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground sm:col-span-2">
+                        <MapPin className="size-3.5 shrink-0" />
+                        <span>{selectedCustomer.address}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
 
-          <Separator className="md:col-span-2 my-2" />
+          {/* ── EQUIPMENT (Both modes) ── */}
+          <EquipmentAutofill
+            customerId={form.customerId}
+            value={form.equipmentId}
+            onChange={onEquipmentChange}
+          />
 
-          {/* Location Details */}
-          <div className="md:col-span-2">
+          <Separator />
+
+          {/* ── LOCATION DETAILS (Both modes) ── */}
+          <div>
             <div className="flex items-center gap-2 mb-3">
               <MapPin className="h-4 w-4 text-emerald-600" />
               <span className="font-medium text-sm">Location Details</span>
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-5">
+              <div>
+                <Label>Location / Area</Label>
+                <Input
+                  placeholder="e.g., Main Building, Block A"
+                  value={form.location}
+                  onChange={(e) => updateField('location', e.target.value)}
+                  className="mt-1.5"
+                />
+              </div>
+
+              <div>
+                <Label>Building</Label>
+                <Input
+                  placeholder="e.g., Tower 1, Building C"
+                  value={form.building}
+                  onChange={(e) => updateField('building', e.target.value)}
+                  className="mt-1.5"
+                />
+              </div>
+
+              <div>
+                <Label>Floor</Label>
+                <Input
+                  placeholder="e.g., 3rd Floor, Ground Floor"
+                  value={form.floor}
+                  onChange={(e) => updateField('floor', e.target.value)}
+                  className="mt-1.5"
+                />
+              </div>
+
+              <div>
+                <Label>Room / Unit</Label>
+                <Input
+                  placeholder="e.g., Room 301, Unit A-12"
+                  value={form.room}
+                  onChange={(e) => updateField('room', e.target.value)}
+                  className="mt-1.5"
+                />
+              </div>
+            </div>
           </div>
 
-          <div>
-            <Label>Location / Area</Label>
-            <Input
-              placeholder="e.g., Main Building, Block A"
-              value={form.location}
-              onChange={(e) => updateField('location', e.target.value)}
-              className="mt-1.5"
-            />
-          </div>
-
-          <div>
-            <Label>Building</Label>
-            <Input
-              placeholder="e.g., Tower 1, Building C"
-              value={form.building}
-              onChange={(e) => updateField('building', e.target.value)}
-              className="mt-1.5"
-            />
-          </div>
-
-          <div>
-            <Label>Floor</Label>
-            <Input
-              placeholder="e.g., 3rd Floor, Ground Floor"
-              value={form.floor}
-              onChange={(e) => updateField('floor', e.target.value)}
-              className="mt-1.5"
-            />
-          </div>
-
-          <div>
-            <Label>Room / Unit</Label>
-            <Input
-              placeholder="e.g., Room 301, Unit A-12"
-              value={form.room}
-              onChange={(e) => updateField('room', e.target.value)}
-              className="mt-1.5"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <Label>GPS Location (Optional)</Label>
-            <Input
-              placeholder="latitude, longitude (e.g., 4.8903, 114.9426)"
-              value={form.gpsLocation}
-              onChange={(e) => updateField('gpsLocation', e.target.value)}
-              className="mt-1.5"
-            />
-            <p className="text-xs text-muted-foreground mt-1">Auto-detect or manually enter GPS coordinates</p>
-          </div>
+          {/* ── GPS LOCATION (Both modes) ── */}
+          <GoogleMapsPicker
+            value={gpsCoords}
+            onChange={onGpsChange}
+          />
         </div>
       </CardContent>
     </Card>
@@ -907,30 +1118,35 @@ function Step3Attachments({
   );
 }
 
-// ============ STEP 4: REVIEW & SUBMIT ============
+// ============ STEP 4: REVIEW & SUBMIT (ENHANCED) ============
 
 function Step4Review({
   form,
-  customers,
-  equipment,
   selectedPriority,
+  isCustomer,
+  user,
+  selectedCustomer,
+  selectedEquipment,
+  gpsCoords,
 }: {
   form: FormData;
-  customers: CustomerOption[];
-  equipment: EquipmentOption[];
   selectedPriority: { value: string; label: string; color: string } | undefined;
+  isCustomer: boolean;
+  user: any;
+  selectedCustomer: CustomerDetails | null;
+  selectedEquipment: any;
+  gpsCoords: { lat: number; lng: number } | null;
 }) {
-  const customerName = customers.find((c) => c.id === form.customerId)?.name ?? '—';
-  const equipmentName = equipment.find((e) => e.id === form.equipmentId)?.name ?? '—';
   const categoryLabel = CATEGORIES.find((c) => c.value === form.category)?.label ?? '—';
   const requestTypeLabel = REQUEST_TYPES.find((r) => r.value === form.requestType)?.label ?? 'Complaint';
+  const locationString = [form.location, form.building, form.floor, form.room].filter(Boolean).join(', ') || '—';
 
-  const sections = [
+  const sections: { title: string; items: { label: string; value: string | React.ReactNode }[] }[] = [
     {
       title: 'Complaint Details',
       items: [
         { label: 'Title', value: form.title },
-        { label: 'Description', value: form.description },
+        { label: 'Description', value: form.description.length > 200 ? form.description.slice(0, 200) + '…' : form.description },
         { label: 'Priority', value: (
           <div className="flex items-center gap-2">
             {selectedPriority && <div className={`w-2.5 h-2.5 rounded-full ${selectedPriority.color}`} />}
@@ -940,19 +1156,93 @@ function Step4Review({
         { label: 'Category', value: categoryLabel },
         { label: 'Subcategory', value: form.subcategory || '—' },
         { label: 'Request Type', value: requestTypeLabel },
-      ],
-    },
-    {
-      title: 'Contact & Location',
-      items: [
-        { label: 'Customer', value: customerName },
-        { label: 'Equipment', value: equipmentName },
-        { label: 'Location', value: [form.location, form.building, form.floor, form.room].filter(Boolean).join(', ') || '—' },
         { label: 'Contact Method', value: form.contactMethod ? form.contactMethod.charAt(0).toUpperCase() + form.contactMethod.slice(1) : '—' },
         { label: 'Response Time', value: form.responseTime ? form.responseTime.replace('_', ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : '—' },
       ],
     },
   ];
+
+  // Customer section
+  if (isCustomer) {
+    sections.push({
+      title: 'Customer Information',
+      items: [
+        {
+          label: 'Submitting on behalf of',
+          value: (
+            <div className="flex items-center gap-2">
+              <User className="h-4 w-4 text-emerald-600" />
+              <span className="font-medium text-emerald-700">Yourself</span>
+            </div>
+          ),
+        },
+        { label: 'Name', value: selectedCustomer?.name || user?.name || '—' },
+        { label: 'Email', value: selectedCustomer?.email || user?.email || '—' },
+        { label: 'Phone', value: selectedCustomer?.phone || user?.phone || '—' },
+        { label: 'Address', value: selectedCustomer?.address || '—' },
+      ],
+    });
+  } else {
+    const customerItems: { label: string; value: string | React.ReactNode }[] = [];
+    if (selectedCustomer) {
+      customerItems.push({ label: 'Customer Name', value: selectedCustomer.name });
+      if (selectedCustomer.companyName && selectedCustomer.companyName !== selectedCustomer.name) {
+        customerItems.push({ label: 'Company', value: selectedCustomer.companyName });
+      }
+      customerItems.push({ label: 'Email', value: selectedCustomer.email || '—' });
+      customerItems.push({ label: 'Phone', value: selectedCustomer.phone || '—' });
+      customerItems.push({ label: 'Address', value: selectedCustomer.address || '—' });
+      if (selectedCustomer.customerNumber) {
+        customerItems.push({ label: 'Customer No.', value: selectedCustomer.customerNumber });
+      }
+    } else {
+      customerItems.push({ label: 'Customer', value: '—' });
+    }
+    sections.push({
+      title: 'Customer Information',
+      items: customerItems,
+    });
+  }
+
+  // Equipment section
+  if (selectedEquipment) {
+    const equipItems: { label: string; value: string | React.ReactNode }[] = [
+      { label: 'Equipment', value: selectedEquipment.name || '—' },
+    ];
+    if (selectedEquipment.category) {
+      equipItems.push({ label: 'Category', value: selectedEquipment.category });
+    }
+    if (selectedEquipment.assetTag) {
+      equipItems.push({ label: 'Asset Tag', value: selectedEquipment.assetTag });
+    }
+    if (selectedEquipment.serialNumber) {
+      equipItems.push({ label: 'Serial Number', value: selectedEquipment.serialNumber });
+    }
+    sections.push({ title: 'Equipment', items: equipItems });
+  }
+
+  // Location section
+  const locationItems: { label: string; value: string | React.ReactNode }[] = [];
+  if (form.location) locationItems.push({ label: 'Location / Area', value: form.location });
+  if (form.building) locationItems.push({ label: 'Building', value: form.building });
+  if (form.floor) locationItems.push({ label: 'Floor', value: form.floor });
+  if (form.room) locationItems.push({ label: 'Room / Unit', value: form.room });
+  if (gpsCoords) {
+    locationItems.push({
+      label: 'GPS Coordinates',
+      value: (
+        <div className="flex items-center gap-1.5">
+          <Navigation className="h-3.5 w-3.5 text-emerald-600" />
+          <span className="font-mono text-xs">{gpsCoords.lat.toFixed(4)}, {gpsCoords.lng.toFixed(4)}</span>
+        </div>
+      ),
+    });
+  } else if (form.gpsLocation) {
+    locationItems.push({ label: 'GPS Coordinates', value: form.gpsLocation });
+  }
+  if (locationItems.length > 0) {
+    sections.push({ title: 'Location', items: locationItems });
+  }
 
   return (
     <div className="space-y-4">
@@ -978,7 +1268,7 @@ function Step4Review({
                   <p className="text-xs text-muted-foreground mb-0.5">{item.label}</p>
                   <p className="text-sm font-medium capitalize">
                     {typeof item.value === 'string' ? (
-                      item.value.length > 100 ? item.value.slice(0, 100) + '...' : item.value
+                      item.value.length > 100 ? item.value.slice(0, 100) + '…' : item.value
                     ) : (
                       item.value
                     )}

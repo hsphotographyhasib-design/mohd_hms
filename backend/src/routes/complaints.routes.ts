@@ -60,12 +60,6 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        include: {
-          customer: { select: { name: true } },
-          equipment: { select: { name: true } },
-          assignedTo: { select: { name: true } },
-          supervisor: { select: { name: true } },
-        },
       }),
       db.complaint.count({ where }),
     ]);
@@ -105,7 +99,7 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Complaints list error:', error);
-    res.status(500).json({ error: 'Failed to load complaints' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -203,12 +197,6 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
 
     const complaint = await db.complaint.create({
       data: createData,
-      include: {
-        customer: { select: { name: true } },
-        equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
-      },
     } as any);
 
     // Notify admins (best-effort)
@@ -255,7 +243,7 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Complaint create error:', error);
-    res.status(500).json({ error: 'Failed to create complaint' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -268,19 +256,6 @@ router.route('/:id').get(requireAuth, async (req: Request, res: Response) => {
 
     const complaint = await db.complaint.findFirst({
       where: { tenantId, id },
-      include: {
-        customer: { select: { name: true } },
-        equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
-        workOrders: {
-          include: {
-            assignedTo: { select: { name: true } },
-            equipment: { select: { name: true } },
-          },
-          orderBy: { createdAt: 'desc' },
-        },
-      },
     });
 
     if (!complaint) {
@@ -332,7 +307,7 @@ router.route('/:id').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Complaint get error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -403,12 +378,6 @@ router.route('/:id').patch(requireAuth, async (req: Request, res: Response) => {
     const updated = await db.complaint.update({
       where: { id },
       data: updateData,
-      include: {
-        customer: { select: { name: true } },
-        equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
-      },
     });
 
     const u = updated as any;
@@ -437,7 +406,7 @@ router.route('/:id').patch(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Complaint update error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 

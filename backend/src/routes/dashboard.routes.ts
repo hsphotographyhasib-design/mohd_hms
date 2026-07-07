@@ -85,31 +85,17 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
         where: complaintWhere,
         take: 5,
         orderBy: { createdAt: 'desc' },
-        include: {
-          customer: { select: { name: true } },
-          assignedTo: { select: { name: true } },
-          supervisor: { select: { name: true } },
-          equipment: { select: { name: true } },
-        },
       }),
       db.workOrder.findMany({
         where: workOrderWhere,
         take: 5,
         orderBy: { createdAt: 'desc' },
-        include: {
-          assignedTo: { select: { name: true } },
-          equipment: { select: { name: true } },
-        },
       }),
       isPm
         ? db.pmSchedule.findMany({
             where: { tenantId, status: 'active', nextDueDate: { gte: new Date() } },
             take: 5,
             orderBy: { nextDueDate: 'asc' },
-            include: {
-              equipment: { select: { name: true } },
-              assignedTo: { select: { name: true } },
-            },
           })
         : Promise.resolve([]),
     ]);
@@ -209,7 +195,7 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Dashboard DB error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -311,7 +297,7 @@ router.route('/kpi').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Dashboard KPI error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -362,10 +348,6 @@ router.route('/recent').get(requireAuth, async (req: Request, res: Response) => 
           title: true, description: true, priority: true, status: true,
           category: true, assignedToId: true, supervisorId: true,
           createdAt: true, updatedAt: true, resolvedAt: true, closedAt: true,
-          customer: { select: { name: true } },
-          assignedTo: { select: { name: true } },
-          supervisor: { select: { name: true } },
-          equipment: { select: { name: true } },
         },
       }),
       db.workOrder.findMany({
@@ -377,8 +359,6 @@ router.route('/recent').get(requireAuth, async (req: Request, res: Response) => 
           title: true, description: true, status: true, priority: true,
           type: true, assignedToId: true, scheduledDate: true,
           completedAt: true, totalCost: true, createdAt: true, updatedAt: true,
-          assignedTo: { select: { name: true } },
-          equipment: { select: { name: true } },
         },
       }),
       isPm
@@ -391,8 +371,6 @@ router.route('/recent').get(requireAuth, async (req: Request, res: Response) => 
               description: true, frequency: true, lastExecuted: true,
               nextDueDate: true, assignedToId: true, status: true,
               createdAt: true, updatedAt: true,
-              equipment: { select: { name: true } },
-              assignedTo: { select: { name: true } },
             },
           })
         : Promise.resolve([]),
@@ -438,7 +416,7 @@ router.route('/recent').get(requireAuth, async (req: Request, res: Response) => 
     });
   } catch (error) {
     console.error('Dashboard recent error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 

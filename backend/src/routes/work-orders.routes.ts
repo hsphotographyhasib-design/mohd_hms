@@ -51,16 +51,6 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        include: {
-          assignedTo: { select: { name: true, avatar: true } },
-          supervisor: { select: { name: true } },
-          equipment: { select: { name: true, assetNumber: true, category: true } },
-          creator: { select: { name: true } },
-          customer: { select: { name: true, companyName: true } },
-          materials: {
-            include: { inventoryItem: { select: { name: true } } },
-          },
-        },
       }),
       db.workOrder.count({ where }),
     ]);
@@ -140,7 +130,7 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Work orders list error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -252,13 +242,6 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
         safetyNotes: safetyNotes || null,
         attachments: attachmentsJson,
       },
-      include: {
-        assignedTo: { select: { name: true, avatar: true } },
-        supervisor: { select: { name: true } },
-        equipment: { select: { name: true, assetNumber: true, category: true } },
-        creator: { select: { name: true } },
-        customer: { select: { name: true, companyName: true, phone: true, address: true } },
-      },
     } as any);
 
     const wo = workOrder as any;
@@ -300,7 +283,7 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Work order create error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 

@@ -37,10 +37,6 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        include: {
-          customer: { select: { name: true } },
-          _count: { select: { complaints: true, workOrders: true } },
-        },
       }),
       db.equipment.count({ where }),
     ]);
@@ -84,7 +80,7 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Equipment list error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -133,9 +129,6 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
         specifications: specifications ? JSON.stringify(specifications) : null,
         notes: notes || null,
       },
-      include: {
-        customer: { select: { name: true } },
-      },
     } as any);
 
     // Create QR code record (best-effort)
@@ -174,7 +167,7 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Equipment create error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 

@@ -33,9 +33,6 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        include: {
-          department: { select: { id: true, name: true } },
-        },
       }),
       db.user.count({ where }),
     ]);
@@ -68,7 +65,7 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Employees list error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -105,9 +102,6 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
         departmentId: departmentId || null,
         profileCompleted: true,
       },
-      include: {
-        department: { select: { id: true, name: true } },
-      },
     } as any);
 
     const e = employee as any;
@@ -130,7 +124,7 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Employee create error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
