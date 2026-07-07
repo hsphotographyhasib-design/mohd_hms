@@ -709,3 +709,25 @@ Stage Summary:
 - Frontend: use-secure-fetch.ts auto-routes /api/* to NEXT_PUBLIC_API_URL when set
 - Deployment: vercel.json + render.yaml + Dockerfile + .env.example + .env.production.example
 - All data flows through Supabase (no local DB needed in production)
+
+---
+Task ID: complaint-smart-autofill
+Agent: Main
+Task: Implement Smart Customer Auto-Fill & Smart Customer Selection for Complaint Creation
+
+Work Log:
+- Explored existing complaint form (4-step wizard) and all related code
+- Created SmartCustomerSearch component (debounced type-ahead, CRM-style results, keyboard nav, cache)
+- Created QuickCustomerCreate modal (inline customer creation without leaving form)
+- Created EquipmentAutofill component (auto-loads equipment, detail card with status badge)
+- Created GoogleMapsPicker component (geolocation, manual coords, OpenStreetMap embed)
+- Rewrote new-complaint.tsx with dual-mode workflow (Customer auto-fill vs Staff smart search)
+- Fixed all backend routes removing Prisma include (incompatible with Supabase REST adapter)
+- Added building/floor/unit/city/postalCode to customer create endpoint
+- Added debug field to all backend 500 error responses
+
+Stage Summary:
+- 4 new components created in src/components/modules/complaints/
+- new-complaint.tsx rewritten with dual-mode (1302 lines)
+- 7 backend route files fixed (removed include, added debug errors)
+- Pushed to GitHub: commit b6a6bcb
