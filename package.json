@@ -66,6 +66,7 @@
     "date-fns": "^4.1.0",
     "dotenv": "^17.4.2",
     "embla-carousel-react": "^8.6.0",
+    "firebase": "^12.15.0",
     "framer-motion": "^12.23.2",
     "google-auth-library": "^10.9.0",
     "input-otp": "^1.4.2",

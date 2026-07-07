@@ -158,6 +158,16 @@ export type ComplaintTimeline = Prisma.ComplaintTimelineModel
  */
 export type Notification = Prisma.NotificationModel
 /**
+ * Model DeviceToken
+ * 
+ */
+export type DeviceToken = Prisma.DeviceTokenModel
+/**
+ * Model NotificationLog
+ * 
+ */
+export type NotificationLog = Prisma.NotificationLogModel
+/**
  * Model AuditLog
  * 
  */

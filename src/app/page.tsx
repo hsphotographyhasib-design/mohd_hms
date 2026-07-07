@@ -15,6 +15,8 @@ import { ConfirmProvider } from '@/components/ui/confirm-provider';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { setupFetchInterceptor } from '@/hooks/use-secure-fetch';
 import { useNotificationPolling } from '@/hooks/use-notification-polling';
+import { useFcm } from '@/hooks/use-fcm';
+import { NotificationPermissionBanner } from '@/components/notifications/notification-permission';
 
 const emptySubscribe = () => () => {};
 
@@ -48,11 +50,18 @@ function ToastListener() {
   return null;
 }
 
+function FcmSetup() {
+  useFcm();
+  return null;
+}
+
 function ProtectedApp() {
   return (
     <AuthGuard>
       <QueryProvider>
         <IdleTimerProvider>
+          <FcmSetup />
+          <NotificationPermissionBanner />
           <AppShell />
         </IdleTimerProvider>
       </QueryProvider>

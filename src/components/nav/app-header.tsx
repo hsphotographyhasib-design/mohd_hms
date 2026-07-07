@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from '
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore, useAuthStore } from '@/store';
 import { useNotificationStore } from '@/lib/notifications/store';
+import { EnablePushButton, TestNotificationButton } from '@/components/notifications/notification-permission';
 import type { AppView } from '@/types';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
@@ -409,6 +410,11 @@ export function AppHeader() {
                           Mark all read
                         </button>
                       )}
+                    </div>
+
+                    {/* Push Notification Actions */}
+                    <div className="border-b border-border/20">
+                      <EnablePushButton />
                     </div>
 
                     {/* Content */}

@@ -293,6 +293,8 @@ export type TenantWhereInput = {
   vehicles?: Prisma.VehicleListRelationFilter
   departments?: Prisma.DepartmentListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  deviceTokens?: Prisma.DeviceTokenListRelationFilter
+  notificationLogs?: Prisma.NotificationLogListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   checklistTemplates?: Prisma.ChecklistTemplateListRelationFilter
   whatsappConfigs?: Prisma.WhatsAppConfigListRelationFilter
@@ -373,6 +375,8 @@ export type TenantOrderByWithRelationInput = {
   vehicles?: Prisma.VehicleOrderByRelationAggregateInput
   departments?: Prisma.DepartmentOrderByRelationAggregateInput
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
+  deviceTokens?: Prisma.DeviceTokenOrderByRelationAggregateInput
+  notificationLogs?: Prisma.NotificationLogOrderByRelationAggregateInput
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   checklistTemplates?: Prisma.ChecklistTemplateOrderByRelationAggregateInput
   whatsappConfigs?: Prisma.WhatsAppConfigOrderByRelationAggregateInput
@@ -456,6 +460,8 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   vehicles?: Prisma.VehicleListRelationFilter
   departments?: Prisma.DepartmentListRelationFilter
   notifications?: Prisma.NotificationListRelationFilter
+  deviceTokens?: Prisma.DeviceTokenListRelationFilter
+  notificationLogs?: Prisma.NotificationLogListRelationFilter
   auditLogs?: Prisma.AuditLogListRelationFilter
   checklistTemplates?: Prisma.ChecklistTemplateListRelationFilter
   whatsappConfigs?: Prisma.WhatsAppConfigListRelationFilter
@@ -574,6 +580,8 @@ export type TenantCreateInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -654,6 +662,8 @@ export type TenantUncheckedCreateInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -734,6 +744,8 @@ export type TenantUpdateInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -814,6 +826,8 @@ export type TenantUncheckedUpdateInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -1340,6 +1354,34 @@ export type TenantUpdateOneRequiredWithoutNotificationsNestedInput = {
   upsert?: Prisma.TenantUpsertWithoutNotificationsInput
   connect?: Prisma.TenantWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutNotificationsInput, Prisma.TenantUpdateWithoutNotificationsInput>, Prisma.TenantUncheckedUpdateWithoutNotificationsInput>
+}
+
+export type TenantCreateNestedOneWithoutDeviceTokensInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutDeviceTokensInput, Prisma.TenantUncheckedCreateWithoutDeviceTokensInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDeviceTokensInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutDeviceTokensNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutDeviceTokensInput, Prisma.TenantUncheckedCreateWithoutDeviceTokensInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutDeviceTokensInput
+  upsert?: Prisma.TenantUpsertWithoutDeviceTokensInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutDeviceTokensInput, Prisma.TenantUpdateWithoutDeviceTokensInput>, Prisma.TenantUncheckedUpdateWithoutDeviceTokensInput>
+}
+
+export type TenantCreateNestedOneWithoutNotificationLogsInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutNotificationLogsInput, Prisma.TenantUncheckedCreateWithoutNotificationLogsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutNotificationLogsInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutNotificationLogsNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutNotificationLogsInput, Prisma.TenantUncheckedCreateWithoutNotificationLogsInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutNotificationLogsInput
+  upsert?: Prisma.TenantUpsertWithoutNotificationLogsInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutNotificationLogsInput, Prisma.TenantUpdateWithoutNotificationLogsInput>, Prisma.TenantUncheckedUpdateWithoutNotificationLogsInput>
 }
 
 export type TenantCreateNestedOneWithoutAuditLogsInput = {
@@ -1937,6 +1979,8 @@ export type TenantCreateWithoutUsersInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -2016,6 +2060,8 @@ export type TenantUncheckedCreateWithoutUsersInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -2111,6 +2157,8 @@ export type TenantUpdateWithoutUsersInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -2190,6 +2238,8 @@ export type TenantUncheckedUpdateWithoutUsersInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -2269,6 +2319,8 @@ export type TenantCreateWithoutDepartmentsInput = {
   purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -2348,6 +2400,8 @@ export type TenantUncheckedCreateWithoutDepartmentsInput = {
   purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -2443,6 +2497,8 @@ export type TenantUpdateWithoutDepartmentsInput = {
   purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -2522,6 +2578,8 @@ export type TenantUncheckedUpdateWithoutDepartmentsInput = {
   purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -2601,6 +2659,8 @@ export type TenantCreateWithoutCustomersInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -2680,6 +2740,8 @@ export type TenantUncheckedCreateWithoutCustomersInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -2775,6 +2837,8 @@ export type TenantUpdateWithoutCustomersInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -2854,6 +2918,8 @@ export type TenantUncheckedUpdateWithoutCustomersInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -2933,6 +2999,8 @@ export type TenantCreateWithoutEquipmentInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -3012,6 +3080,8 @@ export type TenantUncheckedCreateWithoutEquipmentInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -3107,6 +3177,8 @@ export type TenantUpdateWithoutEquipmentInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -3186,6 +3258,8 @@ export type TenantUncheckedUpdateWithoutEquipmentInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -3266,6 +3340,8 @@ export type TenantCreateWithoutEquipmentQrCodesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -3345,6 +3421,8 @@ export type TenantUncheckedCreateWithoutEquipmentQrCodesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -3440,6 +3518,8 @@ export type TenantUpdateWithoutEquipmentQrCodesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -3519,6 +3599,8 @@ export type TenantUncheckedUpdateWithoutEquipmentQrCodesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -3598,6 +3680,8 @@ export type TenantCreateWithoutScanLogsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -3677,6 +3761,8 @@ export type TenantUncheckedCreateWithoutScanLogsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -3772,6 +3858,8 @@ export type TenantUpdateWithoutScanLogsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -3851,6 +3939,8 @@ export type TenantUncheckedUpdateWithoutScanLogsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -3929,6 +4019,8 @@ export type TenantCreateWithoutComplaintsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -4008,6 +4100,8 @@ export type TenantUncheckedCreateWithoutComplaintsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -4103,6 +4197,8 @@ export type TenantUpdateWithoutComplaintsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -4182,6 +4278,8 @@ export type TenantUncheckedUpdateWithoutComplaintsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -4261,6 +4359,8 @@ export type TenantCreateWithoutWorkOrdersInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -4340,6 +4440,8 @@ export type TenantUncheckedCreateWithoutWorkOrdersInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -4435,6 +4537,8 @@ export type TenantUpdateWithoutWorkOrdersInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -4514,6 +4618,8 @@ export type TenantUncheckedUpdateWithoutWorkOrdersInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -4594,6 +4700,8 @@ export type TenantCreateWithoutChecklistTemplatesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
   whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
@@ -4673,6 +4781,8 @@ export type TenantUncheckedCreateWithoutChecklistTemplatesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
   whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
@@ -4768,6 +4878,8 @@ export type TenantUpdateWithoutChecklistTemplatesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
   whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
@@ -4847,6 +4959,8 @@ export type TenantUncheckedUpdateWithoutChecklistTemplatesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
   whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
@@ -4925,6 +5039,8 @@ export type TenantCreateWithoutPmSchedulesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -5004,6 +5120,8 @@ export type TenantUncheckedCreateWithoutPmSchedulesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -5099,6 +5217,8 @@ export type TenantUpdateWithoutPmSchedulesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -5178,6 +5298,8 @@ export type TenantUncheckedUpdateWithoutPmSchedulesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -5257,6 +5379,8 @@ export type TenantCreateWithoutQuotationsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -5336,6 +5460,8 @@ export type TenantUncheckedCreateWithoutQuotationsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -5431,6 +5557,8 @@ export type TenantUpdateWithoutQuotationsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -5510,6 +5638,8 @@ export type TenantUncheckedUpdateWithoutQuotationsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -5589,6 +5719,8 @@ export type TenantCreateWithoutInvoicesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -5668,6 +5800,8 @@ export type TenantUncheckedCreateWithoutInvoicesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -5763,6 +5897,8 @@ export type TenantUpdateWithoutInvoicesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -5842,6 +5978,8 @@ export type TenantUncheckedUpdateWithoutInvoicesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -5921,6 +6059,8 @@ export type TenantCreateWithoutInventoryCategoriesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -6000,6 +6140,8 @@ export type TenantUncheckedCreateWithoutInventoryCategoriesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -6095,6 +6237,8 @@ export type TenantUpdateWithoutInventoryCategoriesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -6174,6 +6318,8 @@ export type TenantUncheckedUpdateWithoutInventoryCategoriesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -6253,6 +6399,8 @@ export type TenantCreateWithoutInventorySubcategoriesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -6332,6 +6480,8 @@ export type TenantUncheckedCreateWithoutInventorySubcategoriesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -6427,6 +6577,8 @@ export type TenantUpdateWithoutInventorySubcategoriesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -6506,6 +6658,8 @@ export type TenantUncheckedUpdateWithoutInventorySubcategoriesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -6585,6 +6739,8 @@ export type TenantCreateWithoutInventoryInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -6664,6 +6820,8 @@ export type TenantUncheckedCreateWithoutInventoryInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -6759,6 +6917,8 @@ export type TenantUpdateWithoutInventoryInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -6838,6 +6998,8 @@ export type TenantUncheckedUpdateWithoutInventoryInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -6917,6 +7079,8 @@ export type TenantCreateWithoutInventoryWarehousesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -6996,6 +7160,8 @@ export type TenantUncheckedCreateWithoutInventoryWarehousesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -7091,6 +7257,8 @@ export type TenantUpdateWithoutInventoryWarehousesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -7170,6 +7338,8 @@ export type TenantUncheckedUpdateWithoutInventoryWarehousesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -7249,6 +7419,8 @@ export type TenantCreateWithoutWarehouseStocksInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -7328,6 +7500,8 @@ export type TenantUncheckedCreateWithoutWarehouseStocksInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -7423,6 +7597,8 @@ export type TenantUpdateWithoutWarehouseStocksInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -7502,6 +7678,8 @@ export type TenantUncheckedUpdateWithoutWarehouseStocksInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -7581,6 +7759,8 @@ export type TenantCreateWithoutInventorySuppliersInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -7660,6 +7840,8 @@ export type TenantUncheckedCreateWithoutInventorySuppliersInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -7755,6 +7937,8 @@ export type TenantUpdateWithoutInventorySuppliersInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -7834,6 +8018,8 @@ export type TenantUncheckedUpdateWithoutInventorySuppliersInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -7913,6 +8099,8 @@ export type TenantCreateWithoutStockMovementsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -7992,6 +8180,8 @@ export type TenantUncheckedCreateWithoutStockMovementsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -8087,6 +8277,8 @@ export type TenantUpdateWithoutStockMovementsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -8166,6 +8358,8 @@ export type TenantUncheckedUpdateWithoutStockMovementsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -8245,6 +8439,8 @@ export type TenantCreateWithoutPriceBooksInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -8324,6 +8520,8 @@ export type TenantUncheckedCreateWithoutPriceBooksInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -8419,6 +8617,8 @@ export type TenantUpdateWithoutPriceBooksInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -8498,6 +8698,8 @@ export type TenantUncheckedUpdateWithoutPriceBooksInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -8577,6 +8779,8 @@ export type TenantCreateWithoutPriceBookEntriesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -8656,6 +8860,8 @@ export type TenantUncheckedCreateWithoutPriceBookEntriesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -8751,6 +8957,8 @@ export type TenantUpdateWithoutPriceBookEntriesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -8830,6 +9038,8 @@ export type TenantUncheckedUpdateWithoutPriceBookEntriesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -8909,6 +9119,8 @@ export type TenantCreateWithoutPurchaseOrdersInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -8988,6 +9200,8 @@ export type TenantUncheckedCreateWithoutPurchaseOrdersInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -9083,6 +9297,8 @@ export type TenantUpdateWithoutPurchaseOrdersInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -9162,6 +9378,8 @@ export type TenantUncheckedUpdateWithoutPurchaseOrdersInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -9241,6 +9459,8 @@ export type TenantCreateWithoutVehiclesInput = {
   purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -9320,6 +9540,8 @@ export type TenantUncheckedCreateWithoutVehiclesInput = {
   purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -9415,6 +9637,8 @@ export type TenantUpdateWithoutVehiclesInput = {
   purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -9494,6 +9718,8 @@ export type TenantUncheckedUpdateWithoutVehiclesInput = {
   purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -9574,6 +9800,8 @@ export type TenantCreateWithoutComplaintTimelinesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -9653,6 +9881,8 @@ export type TenantUncheckedCreateWithoutComplaintTimelinesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -9748,6 +9978,8 @@ export type TenantUpdateWithoutComplaintTimelinesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -9827,6 +10059,8 @@ export type TenantUncheckedUpdateWithoutComplaintTimelinesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -9905,6 +10139,8 @@ export type TenantCreateWithoutNotificationsInput = {
   purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -9984,6 +10220,8 @@ export type TenantUncheckedCreateWithoutNotificationsInput = {
   purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -10079,6 +10317,8 @@ export type TenantUpdateWithoutNotificationsInput = {
   purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -10158,6 +10398,688 @@ export type TenantUncheckedUpdateWithoutNotificationsInput = {
   purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutDeviceTokensInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutDeviceTokensInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutDeviceTokensInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutDeviceTokensInput, Prisma.TenantUncheckedCreateWithoutDeviceTokensInput>
+}
+
+export type TenantUpsertWithoutDeviceTokensInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutDeviceTokensInput, Prisma.TenantUncheckedUpdateWithoutDeviceTokensInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutDeviceTokensInput, Prisma.TenantUncheckedCreateWithoutDeviceTokensInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutDeviceTokensInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutDeviceTokensInput, Prisma.TenantUncheckedUpdateWithoutDeviceTokensInput>
+}
+
+export type TenantUpdateWithoutDeviceTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutDeviceTokensInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutNotificationLogsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutNotificationLogsInput = {
+  id?: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  users?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  customers?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  inventory?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  priceBooks?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
+  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  whatsappMessages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  broadcastLogs?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  complaintTimelines?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  otpCodes?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  emailLogs?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  emailTemplates?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  hrShifts?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  hrHolidays?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployees?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrPayrolls?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrJobPositions?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  hrCandidates?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainings?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  hrVisitors?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  hrTravelRequests?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  hrAnnouncements?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutNotificationLogsInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutNotificationLogsInput, Prisma.TenantUncheckedCreateWithoutNotificationLogsInput>
+}
+
+export type TenantUpsertWithoutNotificationLogsInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutNotificationLogsInput, Prisma.TenantUncheckedUpdateWithoutNotificationLogsInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutNotificationLogsInput, Prisma.TenantUncheckedCreateWithoutNotificationLogsInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutNotificationLogsInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutNotificationLogsInput, Prisma.TenantUncheckedUpdateWithoutNotificationLogsInput>
+}
+
+export type TenantUpdateWithoutNotificationLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
+  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  whatsappMessages?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  whatsappTemplates?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  broadcastLogs?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  whatsappDeliveryLogs?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  customerReports?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  complaintTimelines?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  equipmentQrCodes?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  scanLogs?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  otpCodes?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  loginSessions?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  devices?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  emailLogs?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  emailTemplates?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  hrShifts?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  hrShiftSchedules?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  hrHolidays?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  hrEmployees?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  hrLeaveTypes?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  hrLeaveBalances?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  hrLeaveRequests?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  hrPayrolls?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  hrOvertimeRequests?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  hrJobPositions?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  hrCandidates?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  hrPerformanceReviews?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  hrTrainings?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  hrTrainingRecords?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  hrAssetAssignments?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  hrEmployeeDocuments?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  hrVisitors?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  hrMedicalRecords?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  hrTravelRequests?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  hrExpenseClaims?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  hrDisciplinaryActions?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  hrAnnouncements?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutNotificationLogsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  users?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  customers?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  inventory?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryCategories?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySubcategories?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  inventoryWarehouses?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  inventorySuppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  warehouseStocks?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  priceBooks?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  purchaseOrders?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -10238,6 +11160,8 @@ export type TenantCreateWithoutAuditLogsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
   whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
@@ -10317,6 +11241,8 @@ export type TenantUncheckedCreateWithoutAuditLogsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
   whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
@@ -10412,6 +11338,8 @@ export type TenantUpdateWithoutAuditLogsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
   whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
@@ -10491,6 +11419,8 @@ export type TenantUncheckedUpdateWithoutAuditLogsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
   whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
@@ -10570,6 +11500,8 @@ export type TenantCreateWithoutHrShiftsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -10649,6 +11581,8 @@ export type TenantUncheckedCreateWithoutHrShiftsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -10744,6 +11678,8 @@ export type TenantUpdateWithoutHrShiftsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -10823,6 +11759,8 @@ export type TenantUncheckedUpdateWithoutHrShiftsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -10902,6 +11840,8 @@ export type TenantCreateWithoutHrShiftSchedulesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -10981,6 +11921,8 @@ export type TenantUncheckedCreateWithoutHrShiftSchedulesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -11076,6 +12018,8 @@ export type TenantUpdateWithoutHrShiftSchedulesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -11155,6 +12099,8 @@ export type TenantUncheckedUpdateWithoutHrShiftSchedulesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -11234,6 +12180,8 @@ export type TenantCreateWithoutHrHolidaysInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -11313,6 +12261,8 @@ export type TenantUncheckedCreateWithoutHrHolidaysInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -11408,6 +12358,8 @@ export type TenantUpdateWithoutHrHolidaysInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -11487,6 +12439,8 @@ export type TenantUncheckedUpdateWithoutHrHolidaysInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -11566,6 +12520,8 @@ export type TenantCreateWithoutHrEmployeesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -11645,6 +12601,8 @@ export type TenantUncheckedCreateWithoutHrEmployeesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -11740,6 +12698,8 @@ export type TenantUpdateWithoutHrEmployeesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -11819,6 +12779,8 @@ export type TenantUncheckedUpdateWithoutHrEmployeesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -11898,6 +12860,8 @@ export type TenantCreateWithoutHrLeaveTypesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -11977,6 +12941,8 @@ export type TenantUncheckedCreateWithoutHrLeaveTypesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -12072,6 +13038,8 @@ export type TenantUpdateWithoutHrLeaveTypesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -12151,6 +13119,8 @@ export type TenantUncheckedUpdateWithoutHrLeaveTypesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -12230,6 +13200,8 @@ export type TenantCreateWithoutHrLeaveBalancesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -12309,6 +13281,8 @@ export type TenantUncheckedCreateWithoutHrLeaveBalancesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -12404,6 +13378,8 @@ export type TenantUpdateWithoutHrLeaveBalancesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -12483,6 +13459,8 @@ export type TenantUncheckedUpdateWithoutHrLeaveBalancesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -12562,6 +13540,8 @@ export type TenantCreateWithoutHrLeaveRequestsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -12641,6 +13621,8 @@ export type TenantUncheckedCreateWithoutHrLeaveRequestsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -12736,6 +13718,8 @@ export type TenantUpdateWithoutHrLeaveRequestsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -12815,6 +13799,8 @@ export type TenantUncheckedUpdateWithoutHrLeaveRequestsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -12894,6 +13880,8 @@ export type TenantCreateWithoutHrPayrollsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -12973,6 +13961,8 @@ export type TenantUncheckedCreateWithoutHrPayrollsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -13068,6 +14058,8 @@ export type TenantUpdateWithoutHrPayrollsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -13147,6 +14139,8 @@ export type TenantUncheckedUpdateWithoutHrPayrollsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -13226,6 +14220,8 @@ export type TenantCreateWithoutHrOvertimeRequestsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -13305,6 +14301,8 @@ export type TenantUncheckedCreateWithoutHrOvertimeRequestsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -13400,6 +14398,8 @@ export type TenantUpdateWithoutHrOvertimeRequestsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -13479,6 +14479,8 @@ export type TenantUncheckedUpdateWithoutHrOvertimeRequestsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -13558,6 +14560,8 @@ export type TenantCreateWithoutHrJobPositionsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -13637,6 +14641,8 @@ export type TenantUncheckedCreateWithoutHrJobPositionsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -13732,6 +14738,8 @@ export type TenantUpdateWithoutHrJobPositionsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -13811,6 +14819,8 @@ export type TenantUncheckedUpdateWithoutHrJobPositionsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -13890,6 +14900,8 @@ export type TenantCreateWithoutHrCandidatesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -13969,6 +14981,8 @@ export type TenantUncheckedCreateWithoutHrCandidatesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -14064,6 +15078,8 @@ export type TenantUpdateWithoutHrCandidatesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -14143,6 +15159,8 @@ export type TenantUncheckedUpdateWithoutHrCandidatesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -14222,6 +15240,8 @@ export type TenantCreateWithoutHrPerformanceReviewsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -14301,6 +15321,8 @@ export type TenantUncheckedCreateWithoutHrPerformanceReviewsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -14396,6 +15418,8 @@ export type TenantUpdateWithoutHrPerformanceReviewsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -14475,6 +15499,8 @@ export type TenantUncheckedUpdateWithoutHrPerformanceReviewsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -14554,6 +15580,8 @@ export type TenantCreateWithoutHrTrainingsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -14633,6 +15661,8 @@ export type TenantUncheckedCreateWithoutHrTrainingsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -14728,6 +15758,8 @@ export type TenantUpdateWithoutHrTrainingsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -14807,6 +15839,8 @@ export type TenantUncheckedUpdateWithoutHrTrainingsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -14886,6 +15920,8 @@ export type TenantCreateWithoutHrTrainingRecordsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -14965,6 +16001,8 @@ export type TenantUncheckedCreateWithoutHrTrainingRecordsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -15060,6 +16098,8 @@ export type TenantUpdateWithoutHrTrainingRecordsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -15139,6 +16179,8 @@ export type TenantUncheckedUpdateWithoutHrTrainingRecordsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -15218,6 +16260,8 @@ export type TenantCreateWithoutHrAssetAssignmentsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -15297,6 +16341,8 @@ export type TenantUncheckedCreateWithoutHrAssetAssignmentsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -15392,6 +16438,8 @@ export type TenantUpdateWithoutHrAssetAssignmentsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -15471,6 +16519,8 @@ export type TenantUncheckedUpdateWithoutHrAssetAssignmentsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -15550,6 +16600,8 @@ export type TenantCreateWithoutHrEmployeeDocumentsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -15629,6 +16681,8 @@ export type TenantUncheckedCreateWithoutHrEmployeeDocumentsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -15724,6 +16778,8 @@ export type TenantUpdateWithoutHrEmployeeDocumentsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -15803,6 +16859,8 @@ export type TenantUncheckedUpdateWithoutHrEmployeeDocumentsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -15882,6 +16940,8 @@ export type TenantCreateWithoutHrVisitorsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -15961,6 +17021,8 @@ export type TenantUncheckedCreateWithoutHrVisitorsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -16056,6 +17118,8 @@ export type TenantUpdateWithoutHrVisitorsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -16135,6 +17199,8 @@ export type TenantUncheckedUpdateWithoutHrVisitorsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -16214,6 +17280,8 @@ export type TenantCreateWithoutHrMedicalRecordsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -16293,6 +17361,8 @@ export type TenantUncheckedCreateWithoutHrMedicalRecordsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -16388,6 +17458,8 @@ export type TenantUpdateWithoutHrMedicalRecordsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -16467,6 +17539,8 @@ export type TenantUncheckedUpdateWithoutHrMedicalRecordsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -16546,6 +17620,8 @@ export type TenantCreateWithoutHrTravelRequestsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -16625,6 +17701,8 @@ export type TenantUncheckedCreateWithoutHrTravelRequestsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -16720,6 +17798,8 @@ export type TenantUpdateWithoutHrTravelRequestsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -16799,6 +17879,8 @@ export type TenantUncheckedUpdateWithoutHrTravelRequestsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -16878,6 +17960,8 @@ export type TenantCreateWithoutHrExpenseClaimsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -16957,6 +18041,8 @@ export type TenantUncheckedCreateWithoutHrExpenseClaimsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -17052,6 +18138,8 @@ export type TenantUpdateWithoutHrExpenseClaimsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -17131,6 +18219,8 @@ export type TenantUncheckedUpdateWithoutHrExpenseClaimsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -17210,6 +18300,8 @@ export type TenantCreateWithoutHrDisciplinaryActionsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -17289,6 +18381,8 @@ export type TenantUncheckedCreateWithoutHrDisciplinaryActionsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -17384,6 +18478,8 @@ export type TenantUpdateWithoutHrDisciplinaryActionsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -17463,6 +18559,8 @@ export type TenantUncheckedUpdateWithoutHrDisciplinaryActionsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -17542,6 +18640,8 @@ export type TenantCreateWithoutHrAnnouncementsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -17621,6 +18721,8 @@ export type TenantUncheckedCreateWithoutHrAnnouncementsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -17716,6 +18818,8 @@ export type TenantUpdateWithoutHrAnnouncementsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -17795,6 +18899,8 @@ export type TenantUncheckedUpdateWithoutHrAnnouncementsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -17874,6 +18980,8 @@ export type TenantCreateWithoutWhatsappConfigsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
@@ -17953,6 +19061,8 @@ export type TenantUncheckedCreateWithoutWhatsappConfigsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
@@ -18048,6 +19158,8 @@ export type TenantUpdateWithoutWhatsappConfigsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
@@ -18127,6 +19239,8 @@ export type TenantUncheckedUpdateWithoutWhatsappConfigsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
@@ -18206,6 +19320,8 @@ export type TenantCreateWithoutWhatsappSessionsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -18285,6 +19401,8 @@ export type TenantUncheckedCreateWithoutWhatsappSessionsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -18380,6 +19498,8 @@ export type TenantUpdateWithoutWhatsappSessionsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -18459,6 +19579,8 @@ export type TenantUncheckedUpdateWithoutWhatsappSessionsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -18538,6 +19660,8 @@ export type TenantCreateWithoutWhatsappMessagesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -18617,6 +19741,8 @@ export type TenantUncheckedCreateWithoutWhatsappMessagesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -18712,6 +19838,8 @@ export type TenantUpdateWithoutWhatsappMessagesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -18791,6 +19919,8 @@ export type TenantUncheckedUpdateWithoutWhatsappMessagesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -18870,6 +20000,8 @@ export type TenantCreateWithoutConversationThreadsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -18949,6 +20081,8 @@ export type TenantUncheckedCreateWithoutConversationThreadsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -19044,6 +20178,8 @@ export type TenantUpdateWithoutConversationThreadsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -19123,6 +20259,8 @@ export type TenantUncheckedUpdateWithoutConversationThreadsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -19202,6 +20340,8 @@ export type TenantCreateWithoutWhatsappTemplatesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -19281,6 +20421,8 @@ export type TenantUncheckedCreateWithoutWhatsappTemplatesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -19376,6 +20518,8 @@ export type TenantUpdateWithoutWhatsappTemplatesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -19455,6 +20599,8 @@ export type TenantUncheckedUpdateWithoutWhatsappTemplatesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -19534,6 +20680,8 @@ export type TenantCreateWithoutCustomerFeedbacksInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -19613,6 +20761,8 @@ export type TenantUncheckedCreateWithoutCustomerFeedbacksInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -19708,6 +20858,8 @@ export type TenantUpdateWithoutCustomerFeedbacksInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -19787,6 +20939,8 @@ export type TenantUncheckedUpdateWithoutCustomerFeedbacksInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -19866,6 +21020,8 @@ export type TenantCreateWithoutCustomerReportsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -19945,6 +21101,8 @@ export type TenantUncheckedCreateWithoutCustomerReportsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -20040,6 +21198,8 @@ export type TenantUpdateWithoutCustomerReportsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -20119,6 +21279,8 @@ export type TenantUncheckedUpdateWithoutCustomerReportsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -20198,6 +21360,8 @@ export type TenantCreateWithoutBroadcastLogsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -20277,6 +21441,8 @@ export type TenantUncheckedCreateWithoutBroadcastLogsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -20372,6 +21538,8 @@ export type TenantUpdateWithoutBroadcastLogsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -20451,6 +21619,8 @@ export type TenantUncheckedUpdateWithoutBroadcastLogsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -20530,6 +21700,8 @@ export type TenantCreateWithoutWhatsappDeliveryLogsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -20609,6 +21781,8 @@ export type TenantUncheckedCreateWithoutWhatsappDeliveryLogsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -20704,6 +21878,8 @@ export type TenantUpdateWithoutWhatsappDeliveryLogsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -20783,6 +21959,8 @@ export type TenantUncheckedUpdateWithoutWhatsappDeliveryLogsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -20862,6 +22040,8 @@ export type TenantCreateWithoutOtpCodesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -20941,6 +22121,8 @@ export type TenantUncheckedCreateWithoutOtpCodesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -21036,6 +22218,8 @@ export type TenantUpdateWithoutOtpCodesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -21115,6 +22299,8 @@ export type TenantUncheckedUpdateWithoutOtpCodesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -21194,6 +22380,8 @@ export type TenantCreateWithoutLoginSessionsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -21273,6 +22461,8 @@ export type TenantUncheckedCreateWithoutLoginSessionsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -21368,6 +22558,8 @@ export type TenantUpdateWithoutLoginSessionsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -21447,6 +22639,8 @@ export type TenantUncheckedUpdateWithoutLoginSessionsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -21526,6 +22720,8 @@ export type TenantCreateWithoutDevicesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -21605,6 +22801,8 @@ export type TenantUncheckedCreateWithoutDevicesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -21700,6 +22898,8 @@ export type TenantUpdateWithoutDevicesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -21779,6 +22979,8 @@ export type TenantUncheckedUpdateWithoutDevicesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -21858,6 +23060,8 @@ export type TenantCreateWithoutPasswordResetTokensInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -21937,6 +23141,8 @@ export type TenantUncheckedCreateWithoutPasswordResetTokensInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -22032,6 +23238,8 @@ export type TenantUpdateWithoutPasswordResetTokensInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -22111,6 +23319,8 @@ export type TenantUncheckedUpdateWithoutPasswordResetTokensInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -22190,6 +23400,8 @@ export type TenantCreateWithoutPasswordResetOtpsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -22269,6 +23481,8 @@ export type TenantUncheckedCreateWithoutPasswordResetOtpsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -22364,6 +23578,8 @@ export type TenantUpdateWithoutPasswordResetOtpsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -22443,6 +23659,8 @@ export type TenantUncheckedUpdateWithoutPasswordResetOtpsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -22522,6 +23740,8 @@ export type TenantCreateWithoutAuthAuditLogsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -22601,6 +23821,8 @@ export type TenantUncheckedCreateWithoutAuthAuditLogsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -22696,6 +23918,8 @@ export type TenantUpdateWithoutAuthAuditLogsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -22775,6 +23999,8 @@ export type TenantUncheckedUpdateWithoutAuthAuditLogsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -22854,6 +24080,8 @@ export type TenantCreateWithoutEmailLogsInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -22933,6 +24161,8 @@ export type TenantUncheckedCreateWithoutEmailLogsInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -23028,6 +24258,8 @@ export type TenantUpdateWithoutEmailLogsInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -23107,6 +24339,8 @@ export type TenantUncheckedUpdateWithoutEmailLogsInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -23186,6 +24420,8 @@ export type TenantCreateWithoutEmailTemplatesInput = {
   vehicles?: Prisma.VehicleCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigCreateNestedManyWithoutTenantInput
@@ -23265,6 +24501,8 @@ export type TenantUncheckedCreateWithoutEmailTemplatesInput = {
   vehicles?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
   departments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedCreateNestedManyWithoutTenantInput
@@ -23360,6 +24598,8 @@ export type TenantUpdateWithoutEmailTemplatesInput = {
   vehicles?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUpdateManyWithoutTenantNestedInput
@@ -23439,6 +24679,8 @@ export type TenantUncheckedUpdateWithoutEmailTemplatesInput = {
   vehicles?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
   departments?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
   checklistTemplates?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
   whatsappConfigs?: Prisma.WhatsAppConfigUncheckedUpdateManyWithoutTenantNestedInput
@@ -23511,6 +24753,8 @@ export type TenantCountOutputType = {
   vehicles: number
   departments: number
   notifications: number
+  deviceTokens: number
+  notificationLogs: number
   auditLogs: number
   checklistTemplates: number
   whatsappConfigs: number
@@ -23579,6 +24823,8 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   vehicles?: boolean | TenantCountOutputTypeCountVehiclesArgs
   departments?: boolean | TenantCountOutputTypeCountDepartmentsArgs
   notifications?: boolean | TenantCountOutputTypeCountNotificationsArgs
+  deviceTokens?: boolean | TenantCountOutputTypeCountDeviceTokensArgs
+  notificationLogs?: boolean | TenantCountOutputTypeCountNotificationLogsArgs
   auditLogs?: boolean | TenantCountOutputTypeCountAuditLogsArgs
   checklistTemplates?: boolean | TenantCountOutputTypeCountChecklistTemplatesArgs
   whatsappConfigs?: boolean | TenantCountOutputTypeCountWhatsappConfigsArgs
@@ -23780,6 +25026,20 @@ export type TenantCountOutputTypeCountDepartmentsArgs<ExtArgs extends runtime.Ty
  */
 export type TenantCountOutputTypeCountNotificationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.NotificationWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountDeviceTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeviceTokenWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountNotificationLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.NotificationLogWhereInput
 }
 
 /**
@@ -24125,6 +25385,8 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   vehicles?: boolean | Prisma.Tenant$vehiclesArgs<ExtArgs>
   departments?: boolean | Prisma.Tenant$departmentsArgs<ExtArgs>
   notifications?: boolean | Prisma.Tenant$notificationsArgs<ExtArgs>
+  deviceTokens?: boolean | Prisma.Tenant$deviceTokensArgs<ExtArgs>
+  notificationLogs?: boolean | Prisma.Tenant$notificationLogsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Tenant$auditLogsArgs<ExtArgs>
   checklistTemplates?: boolean | Prisma.Tenant$checklistTemplatesArgs<ExtArgs>
   whatsappConfigs?: boolean | Prisma.Tenant$whatsappConfigsArgs<ExtArgs>
@@ -24240,6 +25502,8 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   vehicles?: boolean | Prisma.Tenant$vehiclesArgs<ExtArgs>
   departments?: boolean | Prisma.Tenant$departmentsArgs<ExtArgs>
   notifications?: boolean | Prisma.Tenant$notificationsArgs<ExtArgs>
+  deviceTokens?: boolean | Prisma.Tenant$deviceTokensArgs<ExtArgs>
+  notificationLogs?: boolean | Prisma.Tenant$notificationLogsArgs<ExtArgs>
   auditLogs?: boolean | Prisma.Tenant$auditLogsArgs<ExtArgs>
   checklistTemplates?: boolean | Prisma.Tenant$checklistTemplatesArgs<ExtArgs>
   whatsappConfigs?: boolean | Prisma.Tenant$whatsappConfigsArgs<ExtArgs>
@@ -24313,6 +25577,8 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     vehicles: Prisma.$VehiclePayload<ExtArgs>[]
     departments: Prisma.$DepartmentPayload<ExtArgs>[]
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
+    deviceTokens: Prisma.$DeviceTokenPayload<ExtArgs>[]
+    notificationLogs: Prisma.$NotificationLogPayload<ExtArgs>[]
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     checklistTemplates: Prisma.$ChecklistTemplatePayload<ExtArgs>[]
     whatsappConfigs: Prisma.$WhatsAppConfigPayload<ExtArgs>[]
@@ -24786,6 +26052,8 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   vehicles<T extends Prisma.Tenant$vehiclesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$vehiclesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehiclePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   departments<T extends Prisma.Tenant$departmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$departmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   notifications<T extends Prisma.Tenant$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  deviceTokens<T extends Prisma.Tenant$deviceTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$deviceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  notificationLogs<T extends Prisma.Tenant$notificationLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$notificationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   auditLogs<T extends Prisma.Tenant$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   checklistTemplates<T extends Prisma.Tenant$checklistTemplatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$checklistTemplatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ChecklistTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   whatsappConfigs<T extends Prisma.Tenant$whatsappConfigsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$whatsappConfigsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppConfigPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -25763,6 +27031,54 @@ export type Tenant$notificationsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.NotificationScalarFieldEnum | Prisma.NotificationScalarFieldEnum[]
+}
+
+/**
+ * Tenant.deviceTokens
+ */
+export type Tenant$deviceTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DeviceToken
+   */
+  select?: Prisma.DeviceTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DeviceToken
+   */
+  omit?: Prisma.DeviceTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceTokenInclude<ExtArgs> | null
+  where?: Prisma.DeviceTokenWhereInput
+  orderBy?: Prisma.DeviceTokenOrderByWithRelationInput | Prisma.DeviceTokenOrderByWithRelationInput[]
+  cursor?: Prisma.DeviceTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeviceTokenScalarFieldEnum | Prisma.DeviceTokenScalarFieldEnum[]
+}
+
+/**
+ * Tenant.notificationLogs
+ */
+export type Tenant$notificationLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the NotificationLog
+   */
+  select?: Prisma.NotificationLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the NotificationLog
+   */
+  omit?: Prisma.NotificationLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.NotificationLogInclude<ExtArgs> | null
+  where?: Prisma.NotificationLogWhereInput
+  orderBy?: Prisma.NotificationLogOrderByWithRelationInput | Prisma.NotificationLogOrderByWithRelationInput[]
+  cursor?: Prisma.NotificationLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.NotificationLogScalarFieldEnum | Prisma.NotificationLogScalarFieldEnum[]
 }
 
 /**

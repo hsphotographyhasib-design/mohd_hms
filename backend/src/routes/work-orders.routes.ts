@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
+import { sendNotification } from '../lib/notification.service.js';
 
 const router = Router();
 
@@ -245,6 +246,28 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     } as any);
 
     const wo = workOrder as any;
+
+    // Notify assigned technician + supervisors via centralized notification service
+    if (!isDraft) {
+      sendNotification({
+        tenantId,
+        userId: assignedToId || undefined,
+        roles: assignedToId ? undefined : ['technician', 'supervisor'],
+        excludeUserIds: [userId],
+        type: 'assignment',
+        title: 'Work Order Created',
+        message: `Work order "${title.trim()}" (${workOrderNumber}) has been created.`,
+        priority: mappedPriority === 'emergency' ? 'urgent' : mappedPriority === 'high' ? 'high' : 'normal',
+        category: 'work_order',
+        relatedEntityType: 'work_order',
+        relatedEntityId: wo.id,
+        actionUrl: `work-order-detail?id=${wo.id}`,
+        actionLabel: 'View Work Order',
+        createdBy: userId,
+        sendPush: true,
+      }).catch(() => {});
+    }
+
     res.status(201).json({
       id: wo.id,
       tenantId: wo.tenantId,

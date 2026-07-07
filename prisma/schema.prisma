@@ -44,6 +44,8 @@ model Tenant {
   vehicles    Vehicle[]
   departments Department[]
   notifications Notification[]
+  deviceTokens       DeviceToken[]
+  notificationLogs    NotificationLog[]
   auditLogs   AuditLog[]
   checklistTemplates ChecklistTemplate[]
   whatsappConfigs      WhatsAppConfig[]
@@ -133,6 +135,8 @@ model User {
   authAuditLogs AuthAuditLog[]
   termsAcceptances TermsAcceptance[]
   preparedQuotations Quotation[] @relation("QuotationPreparedBy")
+  deviceTokens       DeviceToken[]
+  notificationLogs    NotificationLog[]
 
   @@unique([tenantId, email])
   @@unique([googleId])
@@ -1028,6 +1032,59 @@ model Notification {
   @@index([tenantId, userId, isRead])
   @@index([tenantId, userId, createdAt])
   @@index([relatedEntityType, relatedEntityId])
+}
+
+// ============ FCM DEVICE TOKENS ============
+
+model DeviceToken {
+  id            String   @id @default(cuid())
+  tenantId      String
+  userId        String
+  token         String   // Firebase FCM device registration token
+  platform      String   // web, android, ios
+  browser       String?  // Chrome, Firefox, Safari, etc.
+  os            String?  // Windows, macOS, Linux, Android, iOS
+  deviceName    String?  // e.g., "John's MacBook Pro"
+  userAgent     String?
+  ipAddress     String?
+  isActive      Boolean  @default(true)
+  lastUsedAt    DateTime @default(now())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant        Tenant   @relation(fields: [tenantId], references: [id])
+  user          User     @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, userId])
+  @@index([tenantId, isActive])
+  @@index([token])
+  @@unique([token]) // FCM tokens are globally unique
+}
+
+// ============ NOTIFICATION DELIVERY LOGS ============
+
+model NotificationLog {
+  id                String   @id @default(cuid())
+  tenantId          String
+  notificationId    String?  // link to Notification record (null for system/push-only)
+  userId            String
+  deviceTokenId     String?
+  fcmMessageId      String?  // Firebase message ID for tracking
+  fcmToken          String?  // the token used for delivery
+  deliveryStatus    String   @default("pending") // pending, sent, delivered, failed, opened, clicked
+  errorMessage      String?
+  openedAt          DateTime?
+  clickedAt         DateTime?
+  createdAt         DateTime @default(now())
+
+  tenant            Tenant   @relation(fields: [tenantId], references: [id])
+  user              User     @relation(fields: [userId], references: [id])
+
+  @@index([tenantId, userId])
+  @@index([tenantId, deliveryStatus])
+  @@index([tenantId, createdAt])
+  @@index([notificationId])
+  @@index([fcmMessageId])
 }
 
 // ============ AUDIT LOGS ============
