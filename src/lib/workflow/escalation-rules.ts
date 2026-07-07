@@ -1,5 +1,6 @@
 import { db, withRetry } from '@/lib/db';
 import type { ComplaintStatus } from './state-machine';
+import { sendFcmToUsers, isFcmAdminConfigured } from '@/lib/fcm-admin';
 
 // ============================================================================
 // TYPES
@@ -291,6 +292,29 @@ async function processRule(
         elapsed,
         notifiedUsers: notificationTargets.length,
       });
+
+      // ── FCM Push for Escalation (fire-and-forget) ──
+      if (notificationTargets.length > 0 && isFcmAdminConfigured()) {
+        const targetUserIds = notificationTargets
+          .map((t) => t.userId)
+          .filter((id): id is string => id !== null);
+        if (targetUserIds.length > 0) {
+          const priority = rule.severity === 'critical' || rule.severity === 'overdue' ? 'high' : 'normal';
+          sendFcmToUsers(targetUserIds, tenantId, {
+            title: `⚠️ ${rule.label}`,
+            body: rule.staffMessage(complaint.title, elapsed),
+            icon: '/logo-512.png',
+            data: {
+              type: 'escalation',
+              priority,
+              relatedEntityType: 'complaint',
+              relatedEntityId: complaint.id,
+              actionUrl: 'complaint-detail?id=' + complaint.id,
+              actionLabel: 'View Complaint',
+            },
+          }).catch(() => {}); // Fire-and-forget
+        }
+      }
     } catch (error) {
       console.error(
         `[EscalationRules] Error firing escalation for complaint ${complaint.id}, rule "${rule.label}":`,

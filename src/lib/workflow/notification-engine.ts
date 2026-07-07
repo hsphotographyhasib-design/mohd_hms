@@ -1,5 +1,6 @@
 import { db } from '@/lib/db';
 import type { ComplaintStatus } from './state-machine';
+import { sendFcmToUsers, isFcmAdminConfigured } from '@/lib/fcm-admin';
 
 // ============ TYPES ============
 
@@ -123,6 +124,39 @@ export async function recordWorkflowTransition(ctx: WorkflowContext): Promise<vo
       action: ctx.action,
       error: error instanceof Error ? error.message : String(error),
     });
+    return; // Don't attempt FCM if DB write failed
+  }
+
+  // ── FCM Push Notification (fire-and-forget, after transaction) ──
+  if (notificationTargets.length > 0 && isFcmAdminConfigured()) {
+    const targetUserIds = notificationTargets
+      .map((t) => t.userId)
+      .filter((id): id is string => id !== null);
+
+    if (targetUserIds.length > 0) {
+      // Use the first target's title/message as the push payload
+      const firstTarget = notificationTargets[0];
+      sendFcmToUsers(targetUserIds, ctx.tenantId, {
+        title: firstTarget.title,
+        body: firstTarget.message,
+        icon: '/logo-512.png',
+        data: {
+          type: firstTarget.type,
+          priority: 'normal',
+          relatedEntityType: 'complaint',
+          relatedEntityId: ctx.complaintId,
+          actionUrl: 'complaint-detail?id=' + ctx.complaintId,
+          actionLabel: 'View Complaint',
+        },
+      }).then((result) => {
+        if (result.sent > 0) {
+          console.log(`[NotificationEngine] FCM push: ${result.sent} device(s), ${result.usersReached} user(s) for complaint ${ctx.complaintId}`);
+        }
+      }).catch((err) => {
+        // FCM failure must never break anything
+        console.error('[NotificationEngine] FCM push error:', err);
+      });
+    }
   }
 }
 
