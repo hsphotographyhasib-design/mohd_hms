@@ -69,7 +69,7 @@ router.route('/login').post(async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -173,7 +173,7 @@ router.route('/register').post(async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Register DB error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -245,7 +245,7 @@ router.route('/forgot-password').post(async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Forgot password error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -287,7 +287,7 @@ router.route('/me').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Auth me DB error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -327,7 +327,7 @@ router.route('/profile').put(requireAuth, async (req: Request, res: Response) =>
     });
   } catch (error) {
     console.error('Profile update error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
