@@ -20,6 +20,7 @@ import customersRoutes from './routes/customers.routes.js';
 import equipmentRoutes from './routes/equipment.routes.js';
 import employeesRoutes from './routes/employees.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
+import googleAuthRoutes from './routes/google-auth.routes.js';
 
 // ─── App Setup ───────────────────────────────────────────────────────────
 const app = express();
@@ -71,6 +72,7 @@ app.use('/api/customers', customersRoutes);
 app.use('/api/equipment', equipmentRoutes);
 app.use('/api/employees', employeesRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/auth/google', googleAuthRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────
 app.use((_req, res) => {

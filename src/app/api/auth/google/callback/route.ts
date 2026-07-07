@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
-import { generateToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
+
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const GOOGLE_TOKEN_URL = 'https://oauth2.googleapis.com/token';
 
@@ -27,74 +27,100 @@ function decodeBase64url(str: string): string {
   return atob(padded);
 }
 
-/** Decode a JWT payload without verification (Google already verified it during code exchange) */
-function decodeJwtPayload(token: string): Record<string, unknown> | null {
-  try {
-    const parts = token.split('.');
-    if (parts.length !== 3) return null;
-    const payload = parts[1];
-    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-    const padded = base64 + '='.repeat((4 - (base64.length % 4)) % 4);
-    const json = atob(padded);
-    return JSON.parse(json);
-  } catch {
-    return null;
-  }
-}
-
 /**
  * GET /api/auth/google/callback?code=...&state=...
  *
- * 1. Reads code_verifier from the `state` parameter (passed through Google)
- * 2. Exchanges authorization code + PKCE verifier for tokens
- * 3. Decodes id_token to get user info
- * 4. Finds or creates user in DB
- * 5. Returns HTML page that sets localStorage and navigates to app
+ * Flow:
+ * 1. On Vercel (BACKEND_URL set): proxy the code+state to the Render backend
+ *    which handles token exchange + user creation, then render HTML with localStorage.
+ * 2. On local dev: handle everything locally with Prisma/SQLite.
  */
 export async function GET(request: NextRequest) {
-  try {
-    const { searchParams } = new URL(request.url);
-    const code = searchParams.get('code');
-    const state = searchParams.get('state');
-    const error = searchParams.get('error');
+  const { searchParams } = new URL(request.url);
+  const code = searchParams.get('code');
+  const state = searchParams.get('state');
+  const error = searchParams.get('error');
+  const url = new URL(request.url);
+  const origin = url.origin;
+  const redirectUri = `${origin}/api/auth/google/callback`;
 
-    if (error) {
-      const desc = searchParams.get('error_description') || error;
-      console.error('[Google OAuth Callback] Error:', error, desc);
-      return redirectToAppWithError(request, desc);
+  if (error) {
+    const desc = searchParams.get('error_description') || error;
+    return redirectToAppWithError(origin, desc);
+  }
+
+  if (!code) {
+    return redirectToAppWithError(origin, 'No authorization code received from Google.');
+  }
+
+  const clientId = getClientId();
+  if (!clientId) {
+    return redirectToAppWithError(origin, 'Google Sign-In is not configured. Please contact the administrator.');
+  }
+
+  // Decode PKCE verifier from state
+  let codeVerifier: string | null = null;
+  if (state) {
+    try {
+      codeVerifier = decodeBase64url(state);
+    } catch {
+      // ignore
     }
+  }
 
-    if (!code) {
-      return redirectToAppWithError(request, 'No authorization code received from Google.');
-    }
+  if (!codeVerifier) {
+    return redirectToAppWithError(origin, 'OAuth session expired. Please try again.');
+  }
 
-    const clientId = getClientId();
-    if (!clientId) {
-      return redirectToAppWithError(request, 'Google Sign-In is not configured on the server.');
-    }
+  // ── Production: proxy to Render backend ────────────────────────────────
+  if (BACKEND_URL) {
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/auth/google/callback`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code, state, redirectUri }),
+      });
 
-    // Decode PKCE verifier from state parameter (encoded by /authorize)
-    let codeVerifier: string | null = null;
-    if (state) {
-      try {
-        codeVerifier = decodeBase64url(state);
-      } catch {
-        console.error('[Google OAuth] Failed to decode state parameter');
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        return redirectToAppWithError(origin, data.error || 'Google sign-in failed.');
       }
-    }
 
-    if (!codeVerifier) {
-      return redirectToAppWithError(request, 'OAuth session expired. Please try again.');
-    }
+      // Backend returned { token, user } — render HTML to set localStorage
+      const token = data.token;
+      const userData = JSON.stringify(data.user);
 
-    // Build redirect_uri (must match exactly what was used in /authorize)
-    const url = new URL(request.url);
-    const origin = url.origin;
-    const redirectUri = `${origin}/api/auth/google/callback`;
+      const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Signing in...</title></head><body>
+<script>
+  try {
+    localStorage.setItem('cmms_token', ${JSON.stringify(token)});
+    localStorage.setItem('cmms_user', ${userData});
+    window.location.replace('${origin}/');
+  } catch(e) {
+    document.body.innerHTML = '<p style="color:red;padding:40px;font-family:sans-serif">Sign-in failed. Please try again.</p>';
+  }
+</script>
+<noscript><p style="padding:40px">JavaScript is required to sign in. Please enable JavaScript and try again.</p></noscript>
+</body></html>`;
+      return new NextResponse(html, {
+        status: 200,
+        headers: { 'Content-Type': 'text/html; charset=utf-8' },
+      });
+    } catch (err) {
+      console.error('[Google OAuth] Backend proxy error:', err);
+      return redirectToAppWithError(origin, 'Backend service unavailable. Please try again.');
+    }
+  }
+
+  // ── Local dev: handle token exchange locally ───────────────────────────
+  try {
+    const { db, withRetry, getDbFriendlyMessage } = await import('@/lib/db');
+    const { generateToken } = await import('@/lib/auth');
 
     const clientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
 
-    // Exchange code for tokens
     const tokenBody: Record<string, string> = {
       code,
       client_id: clientId,
@@ -113,14 +139,13 @@ export async function GET(request: NextRequest) {
     if (!tokenResponse.ok) {
       const errBody = await tokenResponse.text();
       console.error('[Google OAuth] Token exchange failed:', tokenResponse.status, errBody);
-      // Include actual error details for debugging
       let detail = 'Failed to exchange authorization code with Google.';
       try {
         const errJson = JSON.parse(errBody);
         if (errJson.error_description) detail = errJson.error_description;
         else if (errJson.error) detail = `Google error: ${errJson.error}`;
       } catch {}
-      return redirectToAppWithError(request, detail);
+      return redirectToAppWithError(origin, detail);
     }
 
     const tokenData = await tokenResponse.json() as {
@@ -130,13 +155,15 @@ export async function GET(request: NextRequest) {
     };
 
     if (!tokenData.id_token) {
-      return redirectToAppWithError(request, 'No ID token received from Google.');
+      return redirectToAppWithError(origin, 'No ID token received from Google.');
     }
 
-    // Decode the ID token to get user info
-    const payload = decodeJwtPayload(tokenData.id_token);
-    if (!payload || !payload.sub || !payload.email) {
-      return redirectToAppWithError(request, 'Invalid ID token from Google.');
+    // Decode the ID token
+    const parts = tokenData.id_token.split('.');
+    const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+
+    if (!payload?.sub || !payload?.email) {
+      return redirectToAppWithError(origin, 'Invalid ID token from Google.');
     }
 
     const googleId = payload.sub as string;
@@ -144,7 +171,7 @@ export async function GET(request: NextRequest) {
     const name = (payload.name as string) || email.split('@')[0];
     const picture = (payload.picture as string) || null;
 
-    // ── Find or create user ──
+    // Find or create user
     const existingByGoogle = await withRetry(
       () =>
         db.user.findUnique({
@@ -162,7 +189,6 @@ export async function GET(request: NextRequest) {
     let user = existingByGoogle;
 
     if (!user) {
-      // Check if user exists with same email (link accounts)
       const existingByEmail = await withRetry(
         () =>
           db.user.findFirst({
@@ -178,7 +204,6 @@ export async function GET(request: NextRequest) {
       );
 
       if (existingByEmail) {
-        // Link Google account
         await withRetry(
           () =>
             db.user.update({
@@ -198,11 +223,10 @@ export async function GET(request: NextRequest) {
     }
 
     if (user && !user.isActive) {
-      return redirectToAppWithError(request, 'Account is deactivated. Please contact the administrator.');
+      return redirectToAppWithError(origin, 'Account is deactivated. Please contact the administrator.');
     }
 
     if (!user) {
-      // Auto-create new user
       let tenant = await withRetry(
         () => db.tenant.findFirst({ select: { id: true, name: true, domain: true } }),
         { label: 'google-callback-findTenant' },
@@ -250,30 +274,7 @@ export async function GET(request: NextRequest) {
           }),
         { label: 'google-callback-createUser' },
       );
-
-      // Notify admins about new Google registration (best-effort)
-      (async () => {
-        try {
-          const admins = await db.user.findMany({
-            where: { tenantId: tenant.id, role: { in: ['super_admin', 'admin'] }, isActive: true },
-            select: { id: true },
-          });
-          if (admins.length > 0) {
-            await db.notification.createMany({
-              data: admins.map((admin) => ({
-                tenantId: tenant.id,
-                userId: admin.id,
-                title: 'New User Registered',
-                message: `${name} has registered via Google as a customer.`,
-                type: 'info',
-                isRead: false,
-              })),
-            });
-          }
-        } catch {}
-      })();
     } else {
-      // Update last login
       withRetry(
         () =>
           db.user.update({
@@ -284,7 +285,6 @@ export async function GET(request: NextRequest) {
       ).catch(() => {});
     }
 
-    // Generate our JWT
     const normalizedRole = (user.role as string).toLowerCase() as typeof user.role;
     const token = generateToken({
       userId: user.id,
@@ -308,14 +308,12 @@ export async function GET(request: NextRequest) {
       profileCompleted: user.profileCompleted,
     });
 
-    // Return an HTML page that sets localStorage and navigates to app
-    // (hash fragments in server redirects can be stripped by CDNs/proxies)
     const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>Signing in...</title></head><body>
 <script>
   try {
     localStorage.setItem('cmms_token', ${JSON.stringify(token)});
-    localStorage.setItem('cmms_user', ${JSON.stringify(userData)});
+    localStorage.setItem('cmms_user', ${userData});
     window.location.replace('${origin}/');
   } catch(e) {
     document.body.innerHTML = '<p style="color:red;padding:40px;font-family:sans-serif">Sign-in failed. Please try again.</p>';
@@ -329,12 +327,12 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('[Google OAuth Callback] Unexpected error:', error);
-    return redirectToAppWithError(request, getDbFriendlyMessage(error));
+    const { getDbFriendlyMessage: gfm } = await import('@/lib/db');
+    return redirectToAppWithError(origin, gfm(error));
   }
 }
 
-function redirectToAppWithError(request: NextRequest, message: string) {
-  const origin = new URL(request.url).origin;
+function redirectToAppWithError(origin: string, message: string) {
   const safeMsg = message.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/</g, '\\x3c').replace(/\n/g, ' ');
   const html = `<!DOCTYPE html>
 <html><head><meta charset="utf-8"><title>Sign-in error</title></head><body>
