@@ -27,8 +27,10 @@ const app = express();
 const PORT = parseInt(process.env.PORT || '4000', 10);
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
-// Security headers
-app.use(helmet());
+// Security headers — allow cross-origin API access from Vercel frontend
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
+}));
 
 // CORS — allow any origin (Render backend is API-only, no cookies sent cross-origin)
 app.use(cors({

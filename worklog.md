@@ -751,3 +751,28 @@ Stage Summary:
 - All routes now check `NEXT_PUBLIC_API_URL` env var: if set (Vercel prod), proxy to Render backend; if not set (local dev), use local Prisma
 - Backend now has /api/dashboard/charts endpoint with RBAC-aware complaint WHERE clauses
 - Notification routes still use local Prisma but fail silently (non-blocking)
+
+---
+Task ID: fix-google-auto-logout
+Agent: main
+Task: Fix "after log in with Google then auto log out" issue
+
+Work Log:
+- Diagnosed root cause: `setupFetchInterceptor` in `src/hooks/use-secure-fetch.ts` was rewriting all `/api/...` URLs to go directly to `https://mohd-hms.onrender.com` (cross-origin) when `NEXT_PUBLIC_API_URL` was set
+- This caused CORS/CORP issues: helmet.js sets `Cross-Origin-Resource-Policy: same-origin` which blocks cross-origin responses even with CORS configured
+- The fetch interceptor, AuthGuard, and SessionHeartbeat all had aggressive 401/403 handling that would clear localStorage and force logout
+- SessionHeartbeat was logging out on ANY non-ok response (including 500), not just auth errors
+
+Fixes applied:
+1. **`src/hooks/use-secure-fetch.ts`**: Removed `resolveApiUrl()` URL rewriting. All `/api/...` requests now stay same-origin (go through Vercel server-side proxy → Render backend). Only auth header injection and 401/403 handling remain.
+2. **`src/shared/hooks/use-secure-fetch.ts`**: Updated to match (was already correct, aligned for consistency).
+3. **`src/components/session/session-heartbeat.tsx`**: Changed to only logout on 401/403 (not 500). Added `MAX_CONSECUTIVE_FAILURES=3` threshold — requires 3 consecutive auth failures before logout. Increased initial delay from 5s to 10s to avoid racing with AuthGuard. Now updates user data from server on successful heartbeat.
+4. **`src/components/session/auth-guard.tsx`**: On 401/403, now only removes `cmms_token` and `cmms_user` from localStorage (not `localStorage.clear()` which wipes all app data). No longer triggers full logout — lets the fetch interceptor handle it.
+5. **`backend/src/index.ts`**: Configured helmet with `crossOriginResourcePolicy: { policy: 'cross-origin' }` to allow cross-origin API access as a safety net.
+
+Stage Summary:
+- **Fixed**: fetch interceptor no longer rewrites URLs to direct cross-origin Render calls
+- **Fixed**: SessionHeartbeat only logs out on confirmed auth failures (3 consecutive 401/403)
+- **Fixed**: AuthGuard no longer nukes all localStorage on 401
+- **Fixed**: Backend CORP header allows cross-origin access
+- All API calls now go through Vercel's server-side proxy (same-origin, no CORS issues)
