@@ -731,3 +731,23 @@ Stage Summary:
 - new-complaint.tsx rewritten with dual-mode (1302 lines)
 - 7 backend route files fixed (removed include, added debug errors)
 - Pushed to GitHub: commit b6a6bcb
+
+---
+Task ID: 2
+Agent: main
+Task: Fix "Failed to Load Dashboard" and "Failed to load KPI data" on Vercel
+
+Work Log:
+- Diagnosed root cause: All dashboard API routes (kpi, charts, recent, main) and auth/me route used local `@/lib/db` (Prisma/SQLite) which doesn't exist on Vercel
+- On Vercel, `USE_SUPABASE` is not set, so `@/lib/db` falls back to Prisma/SQLite → 500 error
+- Auth routes (login, register) were already fixed with proxy pattern in previous session
+- Applied same proxy pattern to 6 more routes: dashboard/kpi, dashboard/charts, dashboard/recent, dashboard (main), auth/me, auth/profile
+- Added missing `/charts` endpoint to backend `dashboard.routes.ts` (frontend expected it but backend didn't have it)
+- Backend dashboard routes also fixed to fetch related names separately instead of using Prisma `include` (Supabase REST incompatible)
+- Committed and pushed to GitHub for auto-deploy on Vercel + Render
+
+Stage Summary:
+- 7 files changed: backend/src/routes/dashboard.routes.ts, src/app/api/dashboard/{kpi,charts,recent,route}.ts, src/app/api/auth/{me,profile}/route.ts
+- All routes now check `NEXT_PUBLIC_API_URL` env var: if set (Vercel prod), proxy to Render backend; if not set (local dev), use local Prisma
+- Backend now has /api/dashboard/charts endpoint with RBAC-aware complaint WHERE clauses
+- Notification routes still use local Prisma but fail silently (non-blocking)
