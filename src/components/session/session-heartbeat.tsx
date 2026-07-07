@@ -5,15 +5,20 @@ import { useAuthStore, useAppStore } from '@/store';
 import { broadcastLogoutEvent } from './broadcast-logout';
 
 const HEARTBEAT_INTERVAL = 60 * 1000; // 60 seconds
+const INITIAL_DELAY = 10 * 1000; // 10 seconds after login (let auth guard finish first)
+const MAX_CONSECUTIVE_FAILURES = 3; // Only logout after 3 consecutive auth failures
 
 /**
  * Periodically validates the session by calling /api/auth/me.
- * If the token is expired or invalid, performs full logout.
+ * Only triggers logout on 401/403 (auth errors), NOT on 500 or network errors.
+ * Requires MAX_CONSECUTIVE_FAILURES consecutive auth failures before logging out
+ * to prevent false positives during brief server issues.
  */
 export function SessionHeartbeat() {
   const { isAuthenticated, token, logout } = useAuthStore();
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const mountedRef = useRef(true);
+  const consecutiveFailures = useRef(0);
 
   const validateSession = useCallback(async () => {
     const state = useAuthStore.getState();
@@ -28,13 +33,32 @@ export function SessionHeartbeat() {
         },
       });
 
-      if (!res.ok) {
-        // Session invalid — force logout
-        if (!mountedRef.current) return;
+      if (res.status === 401 || res.status === 403) {
+        // Auth error — increment failure count
+        consecutiveFailures.current += 1;
 
-        broadcastLogoutEvent('Session expired. Please sign in again.');
-        performSecureLogout();
+        if (consecutiveFailures.current >= MAX_CONSECUTIVE_FAILURES) {
+          // Confirmed auth failure — logout
+          if (!mountedRef.current) return;
+          consecutiveFailures.current = 0;
+          broadcastLogoutEvent('Session expired. Please sign in again.');
+          performSecureLogout();
+        }
+        return;
       }
+
+      if (res.ok) {
+        // Session is valid — reset failure count
+        consecutiveFailures.current = 0;
+        // Update user data from server
+        try {
+          const userData = await res.json();
+          useAuthStore.setState({ user: userData });
+        } catch {
+          // Ignore parse errors
+        }
+      }
+      // For 500 and other errors, do nothing — don't logout
     } catch {
       // Network error — don't logout, just skip this check
       // The user might just have a brief connectivity issue
@@ -52,10 +76,10 @@ export function SessionHeartbeat() {
       return;
     }
 
-    // Initial validation after 5s delay (let the app settle)
+    // Initial validation after delay (let AuthGuard finish first)
     const initialTimeout = setTimeout(() => {
       validateSession();
-    }, 5000);
+    }, INITIAL_DELAY);
 
     // Then validate every 60 seconds
     intervalRef.current = setInterval(validateSession, HEARTBEAT_INTERVAL);

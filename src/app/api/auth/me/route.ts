@@ -1,24 +1,42 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
+
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest) {
-  // --- Phase 1: Token verification (auth errors) ---
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.replace('Bearer ', '');
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
-  if (!token) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+export async function GET(request: NextRequest) {
+  // ── Production: proxy to Render backend ────────────────────────────────
+  if (BACKEND_URL) {
+    try {
+      const authHeader = request.headers.get('authorization') || '';
+      const res = await fetch(`${BACKEND_URL}/api/auth/me`, {
+        headers: { Authorization: authHeader, 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+      return NextResponse.json(data, { status: res.status });
+    } catch (error) {
+      console.error('Auth me proxy error:', error);
+      return NextResponse.json({ error: 'Backend service unavailable' }, { status: 502 });
+    }
   }
 
-  const payload = verifyToken(token);
-  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-  const userId = payload.userId as string;
-
-  // --- Phase 2: Database lookup (DB errors) ---
+  // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
   try {
+    const { db, withRetry, getDbFriendlyMessage, getErrorHeaders } = await import('@/lib/db');
+    const { verifyToken } = await import('@/lib/auth');
+
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+
+    if (!token) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const payload = verifyToken(token);
+    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const userId = payload.userId as string;
+
     const user = await withRetry(
       () =>
         db.user.findUnique({
@@ -55,6 +73,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Auth me DB error:', error);
-    return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500, headers: getErrorHeaders(error) });
+    const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/lib/db');
+    return NextResponse.json({ error: gfm(error) }, { status: 500, headers: geh(error) });
   }
 }

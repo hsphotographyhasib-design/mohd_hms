@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from '
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore, useAuthStore } from '@/store';
 import { useNotificationStore } from '@/lib/notifications/store';
+import { EnablePushButton, TestNotificationButton } from '@/components/notifications/notification-permission';
+import { useFcm } from '@/hooks/use-fcm';
 import type { AppView } from '@/types';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
@@ -126,6 +128,7 @@ export function AppHeader() {
   const { user, secureLogout } = useAuthStore();
   const { unreadCount, dbNotifications, markAllAsRead } = useNotificationStore();
   const { theme, setTheme } = useTheme();
+  const fcm = useFcm();
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -381,6 +384,10 @@ export function AppHeader() {
                     {unreadCount > 99 ? '99+' : unreadCount}
                   </span>
                 )}
+                {/* FCM status indicator */}
+                {fcm.isRegistered && (
+                  <span className="absolute bottom-0.5 right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-background" title="Push notifications active" />
+                )}
               </Button>
 
               {/* ---- NOTIFICATION PANEL ---- */}
@@ -409,6 +416,11 @@ export function AppHeader() {
                           Mark all read
                         </button>
                       )}
+                    </div>
+
+                    {/* Push Notification Actions */}
+                    <div className="border-b border-border/20">
+                      <EnablePushButton />
                     </div>
 
                     {/* Content */}
@@ -461,6 +473,22 @@ export function AppHeader() {
                           ))}
                         </div>
                       )}
+                    </div>
+
+                    {/* FCM Status Footer */}
+                    <div className="border-t border-border/20 px-3 py-2">
+                      <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                        <span className={cn(
+                          'w-1.5 h-1.5 rounded-full shrink-0',
+                          fcm.isRegistered ? 'bg-emerald-500' : fcm.isSupported ? 'bg-amber-400' : 'bg-gray-300'
+                        )} />
+                        <span className="flex-1">
+                          {fcm.isRegistered ? 'Push active' : fcm.isSupported ? 'Push not enabled' : 'Push unavailable'}
+                        </span>
+                        {(user?.role === 'admin' || user?.role === 'super_admin') && (
+                          <TestNotificationButton />
+                        )}
+                      </div>
                     </div>
                   </motion.div>
                 )}

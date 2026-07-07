@@ -709,3 +709,134 @@ Stage Summary:
 - Frontend: use-secure-fetch.ts auto-routes /api/* to NEXT_PUBLIC_API_URL when set
 - Deployment: vercel.json + render.yaml + Dockerfile + .env.example + .env.production.example
 - All data flows through Supabase (no local DB needed in production)
+
+---
+Task ID: complaint-smart-autofill
+Agent: Main
+Task: Implement Smart Customer Auto-Fill & Smart Customer Selection for Complaint Creation
+
+Work Log:
+- Explored existing complaint form (4-step wizard) and all related code
+- Created SmartCustomerSearch component (debounced type-ahead, CRM-style results, keyboard nav, cache)
+- Created QuickCustomerCreate modal (inline customer creation without leaving form)
+- Created EquipmentAutofill component (auto-loads equipment, detail card with status badge)
+- Created GoogleMapsPicker component (geolocation, manual coords, OpenStreetMap embed)
+- Rewrote new-complaint.tsx with dual-mode workflow (Customer auto-fill vs Staff smart search)
+- Fixed all backend routes removing Prisma include (incompatible with Supabase REST adapter)
+- Added building/floor/unit/city/postalCode to customer create endpoint
+- Added debug field to all backend 500 error responses
+
+Stage Summary:
+- 4 new components created in src/components/modules/complaints/
+- new-complaint.tsx rewritten with dual-mode (1302 lines)
+- 7 backend route files fixed (removed include, added debug errors)
+- Pushed to GitHub: commit b6a6bcb
+
+---
+Task ID: 2
+Agent: main
+Task: Fix "Failed to Load Dashboard" and "Failed to load KPI data" on Vercel
+
+Work Log:
+- Diagnosed root cause: All dashboard API routes (kpi, charts, recent, main) and auth/me route used local `@/lib/db` (Prisma/SQLite) which doesn't exist on Vercel
+- On Vercel, `USE_SUPABASE` is not set, so `@/lib/db` falls back to Prisma/SQLite → 500 error
+- Auth routes (login, register) were already fixed with proxy pattern in previous session
+- Applied same proxy pattern to 6 more routes: dashboard/kpi, dashboard/charts, dashboard/recent, dashboard (main), auth/me, auth/profile
+- Added missing `/charts` endpoint to backend `dashboard.routes.ts` (frontend expected it but backend didn't have it)
+- Backend dashboard routes also fixed to fetch related names separately instead of using Prisma `include` (Supabase REST incompatible)
+- Committed and pushed to GitHub for auto-deploy on Vercel + Render
+
+Stage Summary:
+- 7 files changed: backend/src/routes/dashboard.routes.ts, src/app/api/dashboard/{kpi,charts,recent,route}.ts, src/app/api/auth/{me,profile}/route.ts
+- All routes now check `NEXT_PUBLIC_API_URL` env var: if set (Vercel prod), proxy to Render backend; if not set (local dev), use local Prisma
+- Backend now has /api/dashboard/charts endpoint with RBAC-aware complaint WHERE clauses
+- Notification routes still use local Prisma but fail silently (non-blocking)
+
+---
+Task ID: fix-google-auto-logout
+Agent: main
+Task: Fix "after log in with Google then auto log out" issue
+
+Work Log:
+- Diagnosed root cause: `setupFetchInterceptor` in `src/hooks/use-secure-fetch.ts` was rewriting all `/api/...` URLs to go directly to `https://mohd-hms.onrender.com` (cross-origin) when `NEXT_PUBLIC_API_URL` was set
+- This caused CORS/CORP issues: helmet.js sets `Cross-Origin-Resource-Policy: same-origin` which blocks cross-origin responses even with CORS configured
+- The fetch interceptor, AuthGuard, and SessionHeartbeat all had aggressive 401/403 handling that would clear localStorage and force logout
+- SessionHeartbeat was logging out on ANY non-ok response (including 500), not just auth errors
+
+Fixes applied:
+1. **`src/hooks/use-secure-fetch.ts`**: Removed `resolveApiUrl()` URL rewriting. All `/api/...` requests now stay same-origin (go through Vercel server-side proxy → Render backend). Only auth header injection and 401/403 handling remain.
+2. **`src/shared/hooks/use-secure-fetch.ts`**: Updated to match (was already correct, aligned for consistency).
+3. **`src/components/session/session-heartbeat.tsx`**: Changed to only logout on 401/403 (not 500). Added `MAX_CONSECUTIVE_FAILURES=3` threshold — requires 3 consecutive auth failures before logout. Increased initial delay from 5s to 10s to avoid racing with AuthGuard. Now updates user data from server on successful heartbeat.
+4. **`src/components/session/auth-guard.tsx`**: On 401/403, now only removes `cmms_token` and `cmms_user` from localStorage (not `localStorage.clear()` which wipes all app data). No longer triggers full logout — lets the fetch interceptor handle it.
+5. **`backend/src/index.ts`**: Configured helmet with `crossOriginResourcePolicy: { policy: 'cross-origin' }` to allow cross-origin API access as a safety net.
+
+Stage Summary:
+- **Fixed**: fetch interceptor no longer rewrites URLs to direct cross-origin Render calls
+- **Fixed**: SessionHeartbeat only logs out on confirmed auth failures (3 consecutive 401/403)
+- **Fixed**: AuthGuard no longer nukes all localStorage on 401
+- **Fixed**: Backend CORP header allows cross-origin access
+- All API calls now go through Vercel's server-side proxy (same-origin, no CORS issues)
+
+---
+Task ID: fcm-notification-system
+Agent: main
+Task: Build enterprise real-time notification system with Firebase Cloud Messaging
+
+Work Log:
+- Added DeviceToken and NotificationLog models to Prisma schema
+- Installed firebase-admin (backend) and firebase (frontend)
+- Created backend/src/lib/firebase.ts — Firebase Admin SDK lazy singleton
+- Created backend/src/lib/notification.service.ts — Centralized notification service with RBAC, batch FCM multicast, auto token cleanup, priority routing
+- Created backend/src/routes/notifications.routes.ts — 9 endpoints (list, unread-count, mark-read, mark-all-read, delete, test, device register/unregister/list)
+- Wired notification triggers into complaints.routes.ts (create + assignment) and work-orders.routes.ts (create)
+- Created public/firebase-messaging-sw.js — Service worker for background push + notification click deep linking
+- Created src/lib/firebase.ts — Firebase client SDK initialization
+- Created src/lib/fcm.ts — FCM client module (permission, token registration, foreground messages, device detection)
+- Created src/hooks/use-fcm.ts — React hook for FCM lifecycle management
+- Created 7 Vercel proxy routes (unread-count, read-all, test, devices/register, devices/unregister, devices, firebase-config)
+- Created src/components/notifications/notification-permission.tsx — Permission banner + Enable Push button + Test Notification button
+- Added NotificationPermissionBanner to ProtectedApp in page.tsx
+- Added EnablePushButton to notification bell dropdown in app-header.tsx
+- Updated .env.example with Firebase configuration documentation
+
+Stage Summary:
+- Full FCM notification system deployed (backend + frontend)
+- Architecture: Module → NotificationService → DB + FCM → Service Worker → UI
+- 9 backend API endpoints, 7 Vercel proxy routes
+- Role-based notification delivery (RBAC)
+- Browser permission management with friendly UI
+- Device token auto-registration on login, auto-cleanup on logout
+- Push notification support for background and foreground
+- Deep linking from notification clicks to relevant pages
+- Delivery logging and invalid token auto-cleanup
+
+---
+Task ID: 7
+Agent: main
+Task: Implement Firebase Cloud Messaging (FCM) push notification system
+
+Work Log:
+- Analyzed existing notification infrastructure (client-side FCM, WebSocket realtime, notification store, UI components)
+- Identified critical gap: no server-side FCM sending capability
+- Set Firebase environment variables in .env from user-provided config
+- Installed firebase-admin@14.1.0 package
+- Created src/lib/fcm-admin.ts — server-side FCM service with lazy initialization, single token sending, user-based sending, batch multicast, invalid token cleanup, delivery logging
+- Added firebase-admin to next.config.ts serverExternalPackages (prevents Turbopack from bundling the massive SDK)
+- Integrated FCM push into src/lib/notifications/notification-service.ts — every createNotification() now also sends FCM push to all target users' devices (fire-and-forget)
+- Rewrote src/app/api/notifications/devices/register/route.ts — now stores device tokens in local Prisma DB when backend URL is not configured
+- Rewrote src/app/api/notifications/devices/unregister/route.ts — deactivates tokens in local Prisma
+- Rewrote src/app/api/notifications/devices/route.ts — lists devices from local Prisma
+- Rewrote src/app/api/notifications/test/route.ts — creates test notification + direct FCM push for admin testing
+- Updated public/firebase-messaging-sw.js — hardcoded Firebase config for reliability, falls back to API fetch
+- Enhanced src/components/notifications/notification-history.tsx — FCM push status indicator, search/filter, admin test button, "View all" and "Settings" footer links
+- Updated src/components/app/header.tsx — replaced simple bell with full NotificationHistoryPanel popover
+- Updated src/components/notifications/notification-provider.tsx — removed duplicate desktop panel (now in header)
+
+Stage Summary:
+- Full end-to-end FCM pipeline: Client SDK → Token Registration → DB Storage → Notification Creation → FCM Push → Service Worker → Browser Notification
+- Server-side gracefully degrades if Firebase Admin SDK credentials not configured
+- Device tokens are properly stored with upsert logic (reactivates existing, deactivates old)
+- Invalid/expired FCM tokens are automatically detected and deactivated
+- All FCM-related files pass TypeScript compilation
+- Dev server OOM in sandbox prevents browser verification (pre-existing issue)
+- User needs: (1) VAPID key from Firebase Console → NEXT_PUBLIC_FIREBASE_VAPID_KEY, (2) Service Account private key → FIREBASE_CLIENT_EMAIL + FIREBASE_PRIVATE_KEY

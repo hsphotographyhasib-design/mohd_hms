@@ -6,7 +6,7 @@ import { Building2 } from 'lucide-react';
 
 /**
  * AuthGuard validates the session on mount by calling /api/auth/me.
- * If the token is invalid or missing, forces logout to landing page.
+ * If the token is invalid or missing, shows the landing page (no force-logout).
  * Also handles browser back button protection and tab switch validation.
  */
 export function AuthGuard({ children }: { children: React.ReactNode }) {
@@ -51,11 +51,21 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         });
         validatedRef.current = true;
         setIsValid(true);
-      } else {
-        localStorage.clear();
-        sessionStorage.clear();
-        useAuthStore.setState({ user: null, token: null, isAuthenticated: false });
+      } else if (res.status === 401 || res.status === 403) {
+        // Auth error — mark session as invalid but DON'T clear localStorage.
+        // The fetch interceptor or heartbeat will handle the actual cleanup
+        // if this is a genuine session expiry (not a transient issue).
+        // This prevents false logouts when the backend is briefly unavailable.
+        validatedRef.current = true;
         setIsValid(false);
+        // Clear auth keys only (not all localStorage — preserve non-auth data)
+        localStorage.removeItem('cmms_token');
+        localStorage.removeItem('cmms_user');
+        useAuthStore.setState({ user: null, token: null, isAuthenticated: false });
+      } else {
+        // Server error (500, 502, etc.) — allow session, heartbeat will retry
+        validatedRef.current = true;
+        setIsValid(true);
       }
     } catch {
       // Network error — allow with stored token (heartbeat will catch later)

@@ -79,6 +79,8 @@ export const ModelName = {
   VehicleLog: 'VehicleLog',
   ComplaintTimeline: 'ComplaintTimeline',
   Notification: 'Notification',
+  DeviceToken: 'DeviceToken',
+  NotificationLog: 'NotificationLog',
   AuditLog: 'AuditLog',
   LeaveRequest: 'LeaveRequest',
   Attendance: 'Attendance',
@@ -881,6 +883,44 @@ export const NotificationScalarFieldEnum = {
 } as const
 
 export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
+export const DeviceTokenScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  userId: 'userId',
+  token: 'token',
+  platform: 'platform',
+  browser: 'browser',
+  os: 'os',
+  deviceName: 'deviceName',
+  userAgent: 'userAgent',
+  ipAddress: 'ipAddress',
+  isActive: 'isActive',
+  lastUsedAt: 'lastUsedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type DeviceTokenScalarFieldEnum = (typeof DeviceTokenScalarFieldEnum)[keyof typeof DeviceTokenScalarFieldEnum]
+
+
+export const NotificationLogScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  notificationId: 'notificationId',
+  userId: 'userId',
+  deviceTokenId: 'deviceTokenId',
+  fcmMessageId: 'fcmMessageId',
+  fcmToken: 'fcmToken',
+  deliveryStatus: 'deliveryStatus',
+  errorMessage: 'errorMessage',
+  openedAt: 'openedAt',
+  clickedAt: 'clickedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationLogScalarFieldEnum = (typeof NotificationLogScalarFieldEnum)[keyof typeof NotificationLogScalarFieldEnum]
 
 
 export const AuditLogScalarFieldEnum = {

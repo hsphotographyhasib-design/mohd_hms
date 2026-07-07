@@ -31,9 +31,6 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        include: {
-          _count: { select: { equipment: true, complaints: true, invoices: true } },
-        },
       }),
       db.customer.count({ where }),
     ]);
@@ -47,6 +44,9 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
       address: c.address,
       companyName: c.companyName,
       customerNumber: c.customerNumber,
+      building: c.building,
+      floor: c.floor,
+      unit: c.unit,
       photo: c.photo,
       paymentTerms: c.paymentTerms,
       pic: c.pic,
@@ -56,7 +56,6 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
       isActive: c.isActive,
       createdAt: c.createdAt?.toISOString?.() || c.createdAt,
       updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
-      _count: c._count,
     }));
 
     res.json({
@@ -76,7 +75,7 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
 router.route('/').post(requireAuth, async (req: Request, res: Response) => {
   try {
     const tenantId = req.tenantId!;
-    const { name, email, phone, address, companyName, photo, gpsLocation } = req.body;
+    const { name, email, phone, address, building, floor, unit, city, postalCode, companyName, photo, gpsLocation } = req.body;
 
     if (!name || !phone) {
       res.status(400).json({ error: 'Name and phone are required' });
@@ -92,10 +91,16 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
         email: email || null,
         phone,
         address: address || null,
+        building: building || null,
+        floor: floor || null,
+        unit: unit || null,
+        city: city || null,
+        postalCode: postalCode || null,
         companyName: companyName || null,
         customerNumber,
         photo: photo || null,
         gpsLocation: gpsLocation || null,
+        isActive: true,
       },
     });
 
@@ -107,6 +112,11 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
       email: c.email,
       phone: c.phone,
       address: c.address,
+      building: c.building,
+      floor: c.floor,
+      unit: c.unit,
+      city: c.city,
+      postalCode: c.postalCode,
       companyName: c.companyName,
       customerNumber: c.customerNumber,
       isActive: c.isActive,
@@ -115,7 +125,7 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Customer create error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 

@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
+import { sendNotification } from '../lib/notification.service.js';
 
 const router = Router();
 
@@ -51,16 +52,6 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        include: {
-          assignedTo: { select: { name: true, avatar: true } },
-          supervisor: { select: { name: true } },
-          equipment: { select: { name: true, assetNumber: true, category: true } },
-          creator: { select: { name: true } },
-          customer: { select: { name: true, companyName: true } },
-          materials: {
-            include: { inventoryItem: { select: { name: true } } },
-          },
-        },
       }),
       db.workOrder.count({ where }),
     ]);
@@ -140,7 +131,7 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Work orders list error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -252,16 +243,31 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
         safetyNotes: safetyNotes || null,
         attachments: attachmentsJson,
       },
-      include: {
-        assignedTo: { select: { name: true, avatar: true } },
-        supervisor: { select: { name: true } },
-        equipment: { select: { name: true, assetNumber: true, category: true } },
-        creator: { select: { name: true } },
-        customer: { select: { name: true, companyName: true, phone: true, address: true } },
-      },
     } as any);
 
     const wo = workOrder as any;
+
+    // Notify assigned technician + supervisors via centralized notification service
+    if (!isDraft) {
+      sendNotification({
+        tenantId,
+        userId: assignedToId || undefined,
+        roles: assignedToId ? undefined : ['technician', 'supervisor'],
+        excludeUserIds: [userId],
+        type: 'assignment',
+        title: 'Work Order Created',
+        message: `Work order "${title.trim()}" (${workOrderNumber}) has been created.`,
+        priority: mappedPriority === 'emergency' ? 'urgent' : mappedPriority === 'high' ? 'high' : 'normal',
+        category: 'work_order',
+        relatedEntityType: 'work_order',
+        relatedEntityId: wo.id,
+        actionUrl: `work-order-detail?id=${wo.id}`,
+        actionLabel: 'View Work Order',
+        createdBy: userId,
+        sendPush: true,
+      }).catch(() => {});
+    }
+
     res.status(201).json({
       id: wo.id,
       tenantId: wo.tenantId,
@@ -300,7 +306,7 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Work order create error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 

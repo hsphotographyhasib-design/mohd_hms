@@ -12,9 +12,11 @@
  * - Batch creation
  * - Convenience helpers for common enterprise patterns
  * - Pushes to WebSocket service for real-time delivery
+ * - Sends push notifications via FCM (Firebase Cloud Messaging)
  */
 
 import { db } from '@/lib/db';
+import { sendFcmToUsers, logFcmDelivery, isFcmAdminConfigured } from '@/lib/fcm-admin';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
@@ -234,6 +236,35 @@ export async function createNotification(
       relatedEntityId: notification.relatedEntityId,
       actionUrl: notification.actionUrl,
       actionLabel: notification.actionLabel,
+    });
+  }
+
+  // ── FCM Push Notification (fire-and-forget) ──
+  // Send push notifications to all target users' devices
+  if (firstId && isFcmAdminConfigured()) {
+    sendFcmToUsers(targetUserIds, input.tenantId, {
+      title: input.title,
+      body: input.message,
+      icon: '/logo-512.png',
+      data: {
+        notificationId: firstId,
+        type: input.type,
+        priority: input.priority || 'normal',
+        actionUrl: input.actionUrl,
+        actionLabel: input.actionLabel,
+        relatedEntityType: input.relatedEntityType,
+        relatedEntityId: input.relatedEntityId,
+      },
+    }).then((result) => {
+      if (result.sent > 0) {
+        console.log(`[NotificationService] FCM push sent: ${result.sent} device(s), ${result.usersReached} user(s) reached`);
+      }
+      if (result.failed > 0) {
+        console.warn(`[NotificationService] FCM push failed: ${result.failed} device(s)`);
+      }
+    }).catch((err) => {
+      // FCM failure should never crash the notification flow
+      console.error('[NotificationService] FCM push error:', err);
     });
   }
 

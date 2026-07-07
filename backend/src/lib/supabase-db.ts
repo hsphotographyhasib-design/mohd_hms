@@ -312,6 +312,15 @@ function createTableProxy(tableName: string) {
       return { count: Array.isArray(r.data) ? r.data.length : 0 };
     },
 
+    async createMany(args: { data: Record<string, unknown>[]; skipDuplicates?: boolean }) {
+      if (!args.data || args.data.length === 0) return { count: 0 };
+      const r = await supabaseRequest(tableName, 'POST', {
+        body: args.data,
+      });
+      if (r.error) throw new Error(`[Supabase] ${tableName}.createMany: ${r.error.message}`);
+      return { count: Array.isArray(r.data) ? r.data.length : args.data.length };
+    },
+
     async aggregate(args: { where?: Record<string, unknown>; _count?: Record<string, unknown> }) {
       const r = await supabaseRequest(tableName, 'GET', {
         head: true,
@@ -346,6 +355,7 @@ const MODEL_MAP: Record<string, string> = {
   warehouseStock: 'WarehouseStock', priceBook: 'PriceBook',
   priceBookEntry: 'PriceBookEntry', purchaseOrder: 'PurchaseOrder',
   vehicle: 'Vehicle', vehicleLog: 'VehicleLog', notification: 'Notification',
+  deviceToken: 'DeviceToken', notificationLog: 'NotificationLog',
   auditLog: 'AuditLog', checklistTemplate: 'ChecklistTemplate',
   equipmentQrCode: 'EquipmentQrCode', scanLog: 'ScanLog',
   complaintTimeline: 'ComplaintTimeline', workOrderMaterial: 'WorkOrderMaterial',

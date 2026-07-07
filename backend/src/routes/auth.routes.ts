@@ -69,7 +69,7 @@ router.route('/login').post(async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -101,7 +101,9 @@ router.route('/register').post(async (req: Request, res: Response) => {
     let tenantId = body.tenantId;
 
     if (!tenantId) {
-      const tenant = await db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } });
+      const tenant = await db.tenant.findFirst({ where: { domain: 'mohd-hms.supabase.co' } })
+        || await db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } })
+        || await db.tenant.findFirst({});
       tenantId = tenant?.id;
     }
 
@@ -173,7 +175,7 @@ router.route('/register').post(async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Register DB error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -245,7 +247,7 @@ router.route('/forgot-password').post(async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Forgot password error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -256,16 +258,23 @@ router.route('/me').get(requireAuth, async (req: Request, res: Response) => {
 
     const user = await db.user.findUnique({
       where: { id: userId },
-      include: {
-        tenant: { select: { id: true, name: true, domain: true } },
-        department: { select: { id: true, name: true } },
-      },
     });
 
     if (!user) {
       res.status(404).json({ error: 'User not found' });
       return;
     }
+
+    // Fetch tenant name separately (Supabase REST doesn't support Prisma include)
+    let tenantName: string | null = null;
+    let tenantDomain: string | null = null;
+    try {
+      if (user.tenantId) {
+        const tenant = await db.tenant.findUnique({ where: { id: user.tenantId } });
+        tenantName = (tenant as any)?.name || null;
+        tenantDomain = (tenant as any)?.domain || null;
+      }
+    } catch { /* ignore */ }
 
     res.json({
       id: user.id,
@@ -275,11 +284,11 @@ router.route('/me').get(requireAuth, async (req: Request, res: Response) => {
       avatar: user.avatar,
       role: user.role,
       tenantId: user.tenantId,
-      tenantName: (user as any).tenant?.name,
-      tenantDomain: (user as any).tenant?.domain,
+      tenantName,
+      tenantDomain,
       employeeNumber: user.employeeNumber,
       departmentId: user.departmentId,
-      departmentName: (user as any).department?.name,
+      departmentName: null,
       isActive: user.isActive,
       isOnline: user.isOnline,
       profileCompleted: user.profileCompleted,
@@ -287,7 +296,7 @@ router.route('/me').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Auth me DB error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -304,11 +313,18 @@ router.route('/profile').put(requireAuth, async (req: Request, res: Response) =>
         ...(phone !== undefined && { phone }),
         profileCompleted: true,
       },
-      include: {
-        tenant: { select: { id: true, name: true, domain: true } },
-        department: { select: { id: true, name: true } },
-      },
     });
+
+    // Fetch tenant separately (Supabase REST doesn't support Prisma include)
+    let tenantName: string | null = null;
+    let tenantDomain: string | null = null;
+    try {
+      if (user.tenantId) {
+        const tenant = await db.tenant.findUnique({ where: { id: user.tenantId } });
+        tenantName = (tenant as any)?.name || null;
+        tenantDomain = (tenant as any)?.domain || null;
+      }
+    } catch { /* ignore */ }
 
     res.json({
       id: user.id,
@@ -318,16 +334,16 @@ router.route('/profile').put(requireAuth, async (req: Request, res: Response) =>
       avatar: user.avatar,
       role: user.role,
       tenantId: user.tenantId,
-      tenantName: (user as any).tenant?.name,
-      tenantDomain: (user as any).tenant?.domain,
+      tenantName,
+      tenantDomain,
       employeeNumber: user.employeeNumber,
       departmentId: user.departmentId,
-      departmentName: (user as any).department?.name,
+      departmentName: null,
       profileCompleted: user.profileCompleted,
     });
   } catch (error) {
     console.error('Profile update error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 

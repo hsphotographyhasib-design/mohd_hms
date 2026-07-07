@@ -24,12 +24,12 @@ import {
 import {
   Menu,
   Search,
-  Bell,
   User,
   Settings,
   LogOut,
   ChevronRight,
 } from 'lucide-react';
+import { NotificationHistoryPanel } from '@/components/notifications/notification-history';
 
 const viewLabels: Record<AppView, string> = {
   login: 'Login',
@@ -136,28 +136,8 @@ export function Header() {
             </div>
           </div>
 
-          {/* Notification Bell */}
-          <TooltipProvider delayDuration={0}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative h-9 w-9"
-                  onClick={() => setView('notifications')}
-                >
-                  <Bell className="h-5 w-5" />
-                  {unreadCount > 0 && (
-                    <Badge className="absolute -top-0.5 -right-0.5 bg-rose-500 text-white text-[10px] min-w-[18px] h-[18px] px-1 flex items-center justify-center">
-                      {unreadCount > 99 ? '99+' : unreadCount}
-                    </Badge>
-                  )}
-                  <span className="sr-only">Notifications</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Notifications {unreadCount > 0 && `(${unreadCount})`}</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          {/* Notification Bell — full dropdown with recent notifications + FCM status */}
+          <NotificationHistoryPanel />
 
           {/* User Dropdown */}
           <DropdownMenu>

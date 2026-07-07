@@ -8,7 +8,8 @@ import { broadcastLogoutEvent } from '@/components/session/broadcast-logout';
  * A secure fetch wrapper that:
  * - Automatically adds Authorization header
  * - Handles 401/403 responses with full session cleanup
- * - Redirects to landing page on auth failure
+ * - Does NOT rewrite URLs — all /api/... requests go through the
+ *   Vercel server-side proxy (which forwards to the Render backend).
  */
 export function useSecureFetch() {
   const secureFetch = useCallback(async (url: string, options: RequestInit = {}): Promise<Response> => {
@@ -66,6 +67,7 @@ export function useSecureFetch() {
 /**
  * Global fetch interceptor — patches global fetch to handle 401/403.
  * Call once at app initialization.
+ * Does NOT rewrite URLs.
  */
 export function setupFetchInterceptor() {
   const originalFetch = window.fetch;

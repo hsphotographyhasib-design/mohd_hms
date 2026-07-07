@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
+import { sendNotification } from '../lib/notification.service.js';
 
 const router = Router();
 
@@ -60,12 +61,6 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        include: {
-          customer: { select: { name: true } },
-          equipment: { select: { name: true } },
-          assignedTo: { select: { name: true } },
-          supervisor: { select: { name: true } },
-        },
       }),
       db.complaint.count({ where }),
     ]);
@@ -105,7 +100,7 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Complaints list error:', error);
-    res.status(500).json({ error: 'Failed to load complaints' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -203,34 +198,48 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
 
     const complaint = await db.complaint.create({
       data: createData,
-      include: {
-        customer: { select: { name: true } },
-        equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
-      },
     } as any);
 
-    // Notify admins (best-effort)
-    try {
-      const admins = await db.user.findMany({
-        where: { tenantId, role: { in: ['super_admin', 'admin', 'manager', 'supervisor'] }, isActive: true },
-        select: { id: true },
-      });
-      if (admins.length > 0) {
-        await db.notification.createMany({
-          data: (admins as any[]).filter((a) => a.id !== userId).map((admin: any) => ({
-            tenantId,
-            userId: admin.id,
-            title: 'New Complaint Created',
-            message: `A new complaint "${(complaint as any).title}" has been created.`,
-            type: 'info',
-            isRead: false,
-          })),
-        });
-      }
-    } catch (notifErr) {
-      console.error('Failed to send complaint creation notification:', notifErr);
+    // Notify admins + supervisor + technician via centralized notification service
+    const complaintId = (complaint as any).id;
+    const complaintTitle = (complaint as any).title as string;
+    const assignedTo = (complaint as any).assignedToId as string | null;
+    const supervisor = (complaint as any).supervisorId as string | null;
+
+    sendNotification({
+      tenantId,
+      roles: ['super_admin', 'admin', 'manager', 'supervisor'],
+      excludeUserIds: [userId],
+      type: 'info',
+      title: 'New Complaint Created',
+      message: `A new complaint "${complaintTitle}" has been created.`,
+      priority: 'normal',
+      category: 'complaint',
+      relatedEntityType: 'complaint',
+      relatedEntityId: complaintId,
+      actionUrl: `complaint-detail?id=${complaintId}`,
+      actionLabel: 'View Complaint',
+      createdBy: userId,
+      sendPush: true,
+    }).catch(() => {});
+
+    // Notify assigned technician
+    if (assignedTo && assignedTo !== userId) {
+      sendNotification({
+        tenantId,
+        userId: assignedTo,
+        type: 'assignment',
+        title: 'Complaint Assigned to You',
+        message: `You have been assigned complaint "${complaintTitle}".`,
+        priority: 'high',
+        category: 'complaint',
+        relatedEntityType: 'complaint',
+        relatedEntityId: complaintId,
+        actionUrl: `complaint-detail?id=${complaintId}`,
+        actionLabel: 'View Complaint',
+        createdBy: userId,
+        sendPush: true,
+      }).catch(() => {});
     }
 
     res.status(201).json({
@@ -255,7 +264,7 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Complaint create error:', error);
-    res.status(500).json({ error: 'Failed to create complaint' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -268,19 +277,6 @@ router.route('/:id').get(requireAuth, async (req: Request, res: Response) => {
 
     const complaint = await db.complaint.findFirst({
       where: { tenantId, id },
-      include: {
-        customer: { select: { name: true } },
-        equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
-        workOrders: {
-          include: {
-            assignedTo: { select: { name: true } },
-            equipment: { select: { name: true } },
-          },
-          orderBy: { createdAt: 'desc' },
-        },
-      },
     });
 
     if (!complaint) {
@@ -332,7 +328,7 @@ router.route('/:id').get(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Complaint get error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
@@ -403,12 +399,6 @@ router.route('/:id').patch(requireAuth, async (req: Request, res: Response) => {
     const updated = await db.complaint.update({
       where: { id },
       data: updateData,
-      include: {
-        customer: { select: { name: true } },
-        equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
-      },
     });
 
     const u = updated as any;
@@ -437,7 +427,7 @@ router.route('/:id').patch(requireAuth, async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Complaint update error:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
   }
 });
 
