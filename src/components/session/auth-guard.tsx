@@ -51,11 +51,16 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
         });
         validatedRef.current = true;
         setIsValid(true);
-      } else {
+      } else if (res.status === 401 || res.status === 403) {
+        // Only logout on auth errors, not server errors
         localStorage.clear();
         sessionStorage.clear();
         useAuthStore.setState({ user: null, token: null, isAuthenticated: false });
         setIsValid(false);
+      } else {
+        // Server error (500, etc.) — allow session, heartbeat will retry
+        validatedRef.current = true;
+        setIsValid(true);
       }
     } catch {
       // Network error — allow with stored token (heartbeat will catch later)
