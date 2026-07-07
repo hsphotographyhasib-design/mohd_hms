@@ -11,26 +11,40 @@
  * Service workers run in an isolated context.
  */
 
-let firebaseApp = null;
-let messaging = null;
+// ─── Firebase Config (hardcoded for reliability) ──────────────────
 
-// ─── Initialize Firebase from config endpoint ──────────────────────────
+var FIREBASE_CONFIG = {
+  apiKey: "AIzaSyBall9UEdFqCudYlOWHbTAEOIZHasqMVjE",
+  authDomain: "mohd-hms-enterprise.firebaseapp.com",
+  projectId: "mohd-hms-enterprise",
+  storageBucket: "mohd-hms-enterprise.firebasestorage.app",
+  messagingSenderId: "49370297010",
+  appId: "1:49370297010:web:d2e892fa18a30c724d0fab",
+};
+
+var firebaseApp = null;
+var messaging = null;
+
+// ─── Initialize Firebase ──────────────────────────────────────────
 
 async function initFirebase() {
   try {
-    // Fetch public Firebase config from our API
-    const res = await fetch('/api/notifications/firebase-config');
-    if (!res.ok) return;
-    const config = await res.json();
-
-    if (!config.apiKey || !config.projectId) {
-      console.log('[FCM SW] Firebase not configured');
-      return;
+    // Also try to fetch from API in case config changes
+    try {
+      var res = await fetch('/api/notifications/firebase-config');
+      if (res.ok) {
+        var apiConfig = await res.json();
+        if (apiConfig.apiKey && apiConfig.projectId) {
+          FIREBASE_CONFIG = apiConfig;
+          console.log('[FCM SW] Using config from API');
+        }
+      }
+    } catch (e) {
+      // Use hardcoded config
     }
 
-    // Check if already initialized
-    if (!firebase.apps.length) {
-      firebaseApp = firebase.initializeApp(config);
+    if (!firebase.apps || !firebase.apps.length) {
+      firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
     } else {
       firebaseApp = firebase.apps[0];
     }
@@ -39,19 +53,19 @@ async function initFirebase() {
 
     // Handle background messages
     messaging.onBackgroundMessage(function(payload) {
-      const notification = payload.notification || {};
-      const data = payload.data || {};
+      var notification = payload.notification || {};
+      var data = payload.data || {};
 
-      const title = notification.title || 'MOHD.HMS';
-      const body = notification.body || '';
-      const icon = notification.icon || '/logo-192.png';
-      const actionUrl = data.actionUrl || '/';
-      const notificationId = data.notificationId || '';
+      var title = notification.title || 'MOHD.HMS';
+      var body = notification.body || '';
+      var icon = notification.icon || '/logo-512.png';
+      var actionUrl = data.actionUrl || '/';
+      var notificationId = data.notificationId || '';
 
       self.registration.showNotification(title, {
         body: body,
         icon: icon,
-        badge: '/logo-192.png',
+        badge: '/logo-512.png',
         tag: notificationId || 'mohd-hms-' + Date.now(),
         data: {
           actionUrl: actionUrl,
@@ -74,18 +88,18 @@ async function initFirebase() {
   }
 }
 
-// ─── Notification Click Handler ────────────────────────────────────────
+// ─── Notification Click Handler ────────────────────────────────────
 
 self.addEventListener('notificationclick', function(event) {
   event.notification.close();
 
-  const url = event.notification.data?.actionUrl || '/';
-  const notificationId = event.notification.data?.notificationId || '';
-  const relatedEntityType = event.notification.data?.relatedEntityType || '';
-  const relatedEntityId = event.notification.data?.relatedEntityId || '';
+  var url = event.notification.data?.actionUrl || '/';
+  var notificationId = event.notification.data?.notificationId || '';
+  var relatedEntityType = event.notification.data?.relatedEntityType || '';
+  var relatedEntityId = event.notification.data?.relatedEntityId || '';
 
   // Build proper internal navigation path
-  let targetUrl = '/';
+  var targetUrl = '/';
   if (relatedEntityType && relatedEntityId) {
     targetUrl = '/' + relatedEntityType.replace('_', '-') + '-detail?id=' + relatedEntityId;
   } else if (url && url.startsWith('/')) {
@@ -95,8 +109,8 @@ self.addEventListener('notificationclick', function(event) {
   event.waitUntil(
     self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(clients) {
       // Try to focus an existing tab
-      for (let i = 0; i < clients.length; i++) {
-        const client = clients[i];
+      for (var i = 0; i < clients.length; i++) {
+        var client = clients[i];
         if (client.url.includes(self.location.origin) && 'focus' in client) {
           // Send message to the focused tab to handle navigation
           client.postMessage({
@@ -113,24 +127,24 @@ self.addEventListener('notificationclick', function(event) {
   );
 });
 
-// ─── Push Event Handler ────────────────────────────────────────────────
+// ─── Push Event Handler ────────────────────────────────────────────
 
 self.addEventListener('push', function(event) {
   if (!event.data) return;
 
   try {
-    const payload = event.data.json();
-    const notification = payload.notification || {};
-    const data = payload.data || {};
+    var payload = event.data.json();
+    var notification = payload.notification || {};
+    var data = payload.data || {};
 
-    const title = notification.title || 'MOHD.HMS';
-    const body = notification.body || '';
+    var title = notification.title || 'MOHD.HMS';
+    var body = notification.body || '';
 
     event.waitUntil(
       self.registration.showNotification(title, {
         body: body,
-        icon: notification.icon || '/logo-192.png',
-        badge: '/logo-192.png',
+        icon: notification.icon || '/logo-512.png',
+        badge: '/logo-512.png',
         tag: data.notificationId || 'mohd-hms-' + Date.now(),
         data: {
           actionUrl: data.actionUrl || '',
@@ -149,7 +163,7 @@ self.addEventListener('push', function(event) {
   }
 });
 
-// ─── Message Handler (from main app) ───────────────────────────────────
+// ─── Message Handler (from main app) ───────────────────────────────
 
 self.addEventListener('message', function(event) {
   if (event.data && event.data.type === 'SKIP_WAITING') {
@@ -157,7 +171,7 @@ self.addEventListener('message', function(event) {
   }
 });
 
-// ─── Install & Activate ───────────────────────────────────────────────
+// ─── Install & Activate ────────────────────────────────────────────
 
 self.addEventListener('install', function(event) {
   console.log('[FCM SW] Installing...');

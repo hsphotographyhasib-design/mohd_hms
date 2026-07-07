@@ -2,17 +2,21 @@
 
 import React, { useState, useMemo } from 'react';
 import {
-  Bell, X, Trash2, Search,
+  Bell, Trash2, Search,
   CheckCircle2, XCircle, AlertTriangle, Info, Clock,
+  Wifi, WifiOff, Zap, Settings, Loader2,
 } from 'lucide-react';
 import { useNotificationStore } from '@/lib/notifications/store';
 import { NOTIFICATION_CONFIG } from '@/lib/notifications/types';
 import type { NotificationType } from '@/lib/notifications/types';
+import { useFcm } from '@/hooks/use-fcm';
+import { useAuthStore } from '@/store';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useAppStore } from '@/store';
 
@@ -26,13 +30,25 @@ const TYPE_ICON: Record<NotificationType, React.ComponentType<{ className?: stri
 };
 
 export function NotificationHistoryPanel() {
-  const { dbNotifications, markAllAsRead, settings } = useNotificationStore();
+  const { dbNotifications, unreadCount, markAllAsRead, settings, fetchNotifications } = useNotificationStore();
   const setView = useAppStore((s) => s.setView);
+  const { user } = useAuthStore();
+  const { isSupported, isRegistered, permissionStatus } = useFcm();
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<string>('all');
   const [open, setOpen] = useState(false);
+  const [sendingTest, setSendingTest] = useState(false);
+  const [testResult, setTestResult] = useState<'idle' | 'success' | 'error'>('idle');
 
-  const unreadCount = dbNotifications.filter((n) => !n.isRead).length;
+  const isAdmin = user?.role === 'super_admin' || user?.role === 'admin';
+
+  // Fetch notifications when popover opens
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (nextOpen && dbNotifications.length === 0) {
+      fetchNotifications();
+    }
+  };
 
   const filtered = useMemo(() => {
     let items = [...dbNotifications].reverse(); // newest first
@@ -43,7 +59,7 @@ export function NotificationHistoryPanel() {
         (n) => n.title.toLowerCase().includes(q) || n.message.toLowerCase().includes(q)
       );
     }
-    return items.slice(0, 50); // limit display
+    return items.slice(0, 50);
   }, [dbNotifications, filterType, search]);
 
   const formatTime = (dateStr: string) => {
@@ -67,6 +83,8 @@ export function NotificationHistoryPanel() {
         complaint: 'complaint-detail',
         work_order: 'work-order-detail',
         invoice: 'invoice-detail',
+        equipment: 'equipment-detail',
+        quotation: 'quotation-detail',
       };
       const view = viewMap[n.relatedEntityType];
       if (view) {
@@ -76,8 +94,30 @@ export function NotificationHistoryPanel() {
     }
   };
 
+  const handleTestNotification = async () => {
+    setSendingTest(true);
+    setTestResult('idle');
+    try {
+      const token = localStorage.getItem('cmms_token');
+      const res = await fetch('/api/notifications/test', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+      const data = await res.json();
+      setTestResult(data.success ? 'success' : 'error');
+    } catch {
+      setTestResult('error');
+    } finally {
+      setSendingTest(false);
+      setTimeout(() => setTestResult('idle'), 3000);
+    }
+  };
+
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <button
           className="relative p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
@@ -85,7 +125,10 @@ export function NotificationHistoryPanel() {
         >
           <Bell className="h-5 w-5 text-foreground" />
           {unreadCount > 0 && (
-            <span className="absolute -top-0.5 -right-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-emerald-600 px-1 text-[10px] font-bold text-white">
+            <span className={cn(
+              'absolute -top-0.5 -right-0.5 flex h-4.5 min-w-4.5 items-center justify-center rounded-full px-1 text-[10px] font-bold text-white',
+              'bg-rose-500 animate-in zoom-in-50 duration-200'
+            )}>
               {unreadCount > 99 ? '99+' : unreadCount}
             </span>
           )}
@@ -121,6 +164,29 @@ export function NotificationHistoryPanel() {
           </div>
         </div>
 
+        {/* FCM Push Status */}
+        {isSupported && (
+          <div className="px-3 py-2 border-b bg-muted/30">
+            <div className="flex items-center gap-2">
+              {permissionStatus === 'granted' ? (
+                <Wifi className="h-3.5 w-3.5 text-emerald-600" />
+              ) : (
+                <WifiOff className="h-3.5 w-3.5 text-muted-foreground" />
+              )}
+              <span className="text-[11px] text-muted-foreground">
+                {permissionStatus === 'granted'
+                  ? isRegistered
+                    ? 'Push notifications active'
+                    : 'Registering push device...'
+                  : permissionStatus === 'denied'
+                    ? 'Push notifications blocked by browser'
+                    : 'Push notifications not enabled'
+                }
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* Search & Filter */}
         {dbNotifications.length > 5 && (
           <div className="px-3 py-2 border-b space-y-2">
@@ -153,16 +219,16 @@ export function NotificationHistoryPanel() {
         )}
 
         {/* List */}
-        <ScrollArea className="h-80">
+        <ScrollArea className="h-72">
           {filtered.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
               <Bell className="h-8 w-8 mb-2 opacity-30" />
-              <p className="text-xs">No notifications yet</p>
+              <p className="text-xs font-medium">No notifications</p>
+              <p className="text-[11px] mt-0.5 opacity-60">You're all caught up!</p>
             </div>
           ) : (
             <div className="divide-y">
               {filtered.map((n) => {
-                // Map DB notification type to display config
                 const mappedType = n.type === 'error' ? 'error' : n.type === 'warning' ? 'warning' : n.type === 'success' ? 'success' : 'info';
                 const cfg = NOTIFICATION_CONFIG[mappedType as NotificationType] || NOTIFICATION_CONFIG.info;
                 const Icon = TYPE_ICON[mappedType as NotificationType] || Info;
@@ -195,13 +261,59 @@ export function NotificationHistoryPanel() {
           )}
         </ScrollArea>
 
-        {dbNotifications.length > 50 && (
-          <div className="px-3 py-2 border-t text-center">
-            <p className="text-[10px] text-muted-foreground">
-              Showing 50 of {dbNotifications.length} notifications
-            </p>
+        {/* Footer */}
+        <div className="border-t">
+          {/* Admin test notification */}
+          {isAdmin && (
+            <div className="px-3 py-2">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleTestNotification}
+                disabled={sendingTest}
+                className="w-full justify-start gap-2 h-8 text-xs text-muted-foreground hover:text-foreground"
+              >
+                {sendingTest ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : testResult === 'success' ? (
+                  <span className="text-emerald-500">✓</span>
+                ) : testResult === 'error' ? (
+                  <span className="text-rose-500">✗</span>
+                ) : (
+                  <Zap className="h-3.5 w-3.5" />
+                )}
+                {testResult === 'success'
+                  ? 'Test notification sent!'
+                  : testResult === 'error'
+                    ? 'Failed to send test'
+                    : 'Send Test Notification'
+                }
+              </Button>
+            </div>
+          )}
+
+          <Separator />
+
+          <div className="px-3 py-2 flex items-center justify-between">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs text-muted-foreground"
+              onClick={() => { setView('notifications'); setOpen(false); }}
+            >
+              View all notifications
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 text-xs text-muted-foreground"
+              onClick={() => { setView('settings'); setOpen(false); }}
+            >
+              <Settings className="h-3.5 w-3.5 mr-1" />
+              Settings
+            </Button>
           </div>
-        )}
+        </div>
       </PopoverContent>
     </Popover>
   );

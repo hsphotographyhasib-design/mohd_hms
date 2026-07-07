@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/lib/db';
+import { verifyToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -6,9 +8,13 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
 /**
  * POST /api/notifications/devices/unregister
- * Proxy to Render backend.
+ *
+ * Unregisters an FCM device token (on logout).
+ * - Production: proxies to Render backend
+ * - Local dev: deactivates directly in local Prisma DB
  */
 export async function POST(request: NextRequest) {
+  // If backend URL is configured, proxy to it
   if (BACKEND_URL) {
     try {
       const authHeader = request.headers.get('authorization') || '';
@@ -21,9 +27,31 @@ export async function POST(request: NextRequest) {
       const data = await res.json();
       return NextResponse.json(data, { status: res.status });
     } catch {
-      // Silently succeed
+      return NextResponse.json({ success: true });
     }
   }
 
-  return NextResponse.json({ success: true });
+  // ── Local dev: deactivate directly in Prisma ──
+  try {
+    const authHeader = request.headers.get('authorization');
+    const token = authHeader?.replace('Bearer ', '');
+    const payload = verifyToken(token || '');
+    if (!payload) {
+      return NextResponse.json({ success: true }); // Don't fail logout
+    }
+
+    const body = await request.json();
+    const { token: fcmToken } = body;
+
+    if (fcmToken) {
+      await db.deviceToken.updateMany({
+        where: { token: fcmToken },
+        data: { isActive: false },
+      });
+    }
+
+    return NextResponse.json({ success: true });
+  } catch {
+    return NextResponse.json({ success: true });
+  }
 }

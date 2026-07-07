@@ -24,6 +24,11 @@ const nextConfig: NextConfig = {
     '@prisma/client',
     
     'google-auth-library',
+    // Firebase Admin SDK — very large, must not be bundled by Turbopack
+    'firebase-admin',
+    'firebase-admin/app',
+    'firebase-admin/messaging',
+    
     // Prisma 7 generated client uses node:path — mark as external
     // so Turbopack doesn't try to bundle Node.js built-ins
     'generated/prisma',

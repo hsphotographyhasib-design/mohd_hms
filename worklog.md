@@ -809,3 +809,34 @@ Stage Summary:
 - Push notification support for background and foreground
 - Deep linking from notification clicks to relevant pages
 - Delivery logging and invalid token auto-cleanup
+
+---
+Task ID: 7
+Agent: main
+Task: Implement Firebase Cloud Messaging (FCM) push notification system
+
+Work Log:
+- Analyzed existing notification infrastructure (client-side FCM, WebSocket realtime, notification store, UI components)
+- Identified critical gap: no server-side FCM sending capability
+- Set Firebase environment variables in .env from user-provided config
+- Installed firebase-admin@14.1.0 package
+- Created src/lib/fcm-admin.ts — server-side FCM service with lazy initialization, single token sending, user-based sending, batch multicast, invalid token cleanup, delivery logging
+- Added firebase-admin to next.config.ts serverExternalPackages (prevents Turbopack from bundling the massive SDK)
+- Integrated FCM push into src/lib/notifications/notification-service.ts — every createNotification() now also sends FCM push to all target users' devices (fire-and-forget)
+- Rewrote src/app/api/notifications/devices/register/route.ts — now stores device tokens in local Prisma DB when backend URL is not configured
+- Rewrote src/app/api/notifications/devices/unregister/route.ts — deactivates tokens in local Prisma
+- Rewrote src/app/api/notifications/devices/route.ts — lists devices from local Prisma
+- Rewrote src/app/api/notifications/test/route.ts — creates test notification + direct FCM push for admin testing
+- Updated public/firebase-messaging-sw.js — hardcoded Firebase config for reliability, falls back to API fetch
+- Enhanced src/components/notifications/notification-history.tsx — FCM push status indicator, search/filter, admin test button, "View all" and "Settings" footer links
+- Updated src/components/app/header.tsx — replaced simple bell with full NotificationHistoryPanel popover
+- Updated src/components/notifications/notification-provider.tsx — removed duplicate desktop panel (now in header)
+
+Stage Summary:
+- Full end-to-end FCM pipeline: Client SDK → Token Registration → DB Storage → Notification Creation → FCM Push → Service Worker → Browser Notification
+- Server-side gracefully degrades if Firebase Admin SDK credentials not configured
+- Device tokens are properly stored with upsert logic (reactivates existing, deactivates old)
+- Invalid/expired FCM tokens are automatically detected and deactivated
+- All FCM-related files pass TypeScript compilation
+- Dev server OOM in sandbox prevents browser verification (pre-existing issue)
+- User needs: (1) VAPID key from Firebase Console → NEXT_PUBLIC_FIREBASE_VAPID_KEY, (2) Service Account private key → FIREBASE_CLIENT_EMAIL + FIREBASE_PRIVATE_KEY
