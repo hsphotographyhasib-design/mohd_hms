@@ -12,14 +12,14 @@ import helmet from 'helmet';
 import compression from 'compression';
 
 // ─── Route imports ────────────────────────────────────────────────────────
-import authRoutes from '@/routes/auth.routes.js';
-import departmentsRoutes from '@/routes/departments.routes.js';
-import complaintsRoutes from '@/routes/complaints.routes.js';
-import workOrdersRoutes from '@/routes/work-orders.routes.js';
-import customersRoutes from '@/routes/customers.routes.js';
-import equipmentRoutes from '@/routes/equipment.routes.js';
-import employeesRoutes from '@/routes/employees.routes.js';
-import dashboardRoutes from '@/routes/dashboard.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import departmentsRoutes from './routes/departments.routes.js';
+import complaintsRoutes from './routes/complaints.routes.js';
+import workOrdersRoutes from './routes/work-orders.routes.js';
+import customersRoutes from './routes/customers.routes.js';
+import equipmentRoutes from './routes/equipment.routes.js';
+import employeesRoutes from './routes/employees.routes.js';
+import dashboardRoutes from './routes/dashboard.routes.js';
 
 // ─── App Setup ───────────────────────────────────────────────────────────
 const app = express();

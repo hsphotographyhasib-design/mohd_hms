@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { verifyToken } from '@/lib/auth.js';
+import { verifyToken } from '../lib/auth.js';
 
 /** Extend Express Request to carry authenticated user info */
 declare global {

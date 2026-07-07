@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
-import { db } from '@/lib/db.js';
-import { requireAuth } from '@/middleware/auth.js';
-import { hashPassword } from '@/lib/auth.js';
+import { db } from '../lib/db.js';
+import { requireAuth } from '../middleware/auth.js';
+import { hashPassword } from '../lib/auth.js';
 
 const router = Router();
 
