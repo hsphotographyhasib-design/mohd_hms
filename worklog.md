@@ -632,3 +632,80 @@ Stage Summary:
 - Sandbox OOM on complex routes is a memory limitation, not a Supabase issue
 - Files: src/lib/supabase-db.ts (rewritten with native fetch), src/lib/db.ts (lazy proxy)
 - Env vars: NEXT_PUBLIC_SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ANON_KEY, USE_SUPABASE=true
+
+---
+Task ID: frontend-vercel-1  
+Agent: fullstack-developer
+Task: Configure Next.js frontend for Vercel deployment with remote backend
+
+Work Log:
+- Read existing use-secure-fetch.ts, env.ts, auth.ts, store/index.ts, package.json, next.config.ts, .env.example, .gitignore
+- Created vercel.json with framework=nextjs, buildCommand, installCommand, outputDirectory, and env vars (NEXT_PUBLIC_API_URL, USE_SUPABASE=false)
+- Updated src/hooks/use-secure-fetch.ts: added API_BASE constant from NEXT_PUBLIC_API_URL, added resolveApiUrl() helper that prepends API_BASE to /api/... paths, applied resolution in both secureFetch() and the global fetch interceptor (setupFetchInterceptor)
+- Created .env.production.example with NEXT_PUBLIC_API_URL, NEXT_PUBLIC_APP_URL, NEXT_PUBLIC_COMPANY_NAME and comment about backend-only vars
+- Updated .env.example: added NEXT_PUBLIC_API_URL with comments explaining local dev (empty) vs Vercel deployment (Render URL)
+- Updated .gitignore: added backend/node_modules/, backend/dist/, backend/.env entries
+- Created deploy/README.md: comprehensive deployment guide covering architecture, Supabase setup, Render backend, Vercel frontend, CORS config, environment variables table, and project structure
+
+Stage Summary:
+- Frontend now routes all /api/... fetch calls to NEXT_PUBLIC_API_URL when set (remote backend on Render)
+- Local dev continues to work with same-origin /api/... when NEXT_PUBLIC_API_URL is empty
+- All 6 files created/updated: vercel.json, use-secure-fetch.ts, .env.production.example, .env.example, .gitignore, deploy/README.md
+---
+Task ID: backend-service-1
+Agent: fullstack-developer
+Task: Create Express backend service for Render deployment
+
+Work Log:
+- Read 18+ source files from the Next.js frontend to understand the full API surface, auth flow, RBAC patterns, and Supabase REST adapter
+- Created `/backend/` directory structure: `src/lib/`, `src/middleware/`, `src/routes/`
+- Created config files: `package.json` (ESM, Express 4.21, bcryptjs, jsonwebtoken, qrcode), `tsconfig.json` (ES2022, NodeNext, path alias `@/`), `.env.example`, `Dockerfile` (node:20-alpine), `render.yaml` (Docker runtime, starter plan)
+- Copied `supabase-db.ts` — exact native-fetch Supabase REST adapter with Prisma-like interface, fixed 3 TypeScript strict-mode errors (`unknown` type annotations on `res.json()`)
+- Created `db.ts` — thin wrapper re-exporting `supabaseDb as db` for drop-in compatibility
+- Adapted `auth.ts` — removed NextRequest import, kept JWT signing/verification, password hashing, all number generators (asset, invoice, PO, customer), OTP helpers
+- Created `middleware/auth.ts` — `requireAuth` Express middleware that extracts JWT from Authorization header, attaches `req.user` and `req.tenantId`, returns 401 on failure
+- Created `company.ts` and `phone.ts` — copied with no Next.js dependencies
+- Converted 8 route groups from Next.js Route Handlers to Express Router:
+  - `auth.routes.ts` — POST /login, POST /register, POST /forgot-password, GET /me, PUT /profile
+  - `departments.routes.ts` — GET / (list)
+  - `complaints.routes.ts` — GET / (list), POST / (create), GET /:id (detail), PATCH /:id (update)
+  - `work-orders.routes.ts` — GET / (list), POST / (create), GET /next-number
+  - `customers.routes.ts` — GET / (list), POST / (create)
+  - `equipment.routes.ts` — GET / (list), POST / (create)
+  - `employees.routes.ts` — GET / (list), POST / (create)
+  - `dashboard.routes.ts` — GET / (main), GET /kpi, GET /recent
+- Created `index.ts` — Express server with helmet, CORS (Vercel origin), compression, 10mb JSON limit, health check at GET /, all route groups mounted, 404 handler, global error handler
+- Key adaptations: `NextResponse.json()` → `res.json()`, `request.headers.get()` → `req.headers.authorization`, `new URL().searchParams` → `req.query`, `withRetry()` removed (simplify), RBAC context inlined, `ensureTableSync()` removed
+- Installed all dependencies via npm (141 packages, 0 vulnerabilities)
+- TypeScript compilation passes with zero errors (`npx tsc --noEmit`)
+
+Stage Summary:
+- Complete Express.js backend service at `/home/z/my-project/backend/` ready for Render deployment
+- 15 source files, 5 config/deployment files, all TypeScript strict-mode clean
+- All 18 API endpoints converted from Next.js to Express with identical response shapes
+- Docker-based deployment with `render.yaml` configuration
+- Dependencies: express, cors, helmet, compression, bcryptjs, jsonwebtoken, qrcode
+
+---
+Task ID: repo-split-vercel-render
+Agent: main
+Task: Prepare repo for Vercel frontend + Render backend + Supabase DB
+
+Work Log:
+- Created backend/ Express service with 15 source files, 8 route modules, 18 endpoints
+- Backend uses native-fetch Supabase REST adapter (zero external DB deps)
+- Created vercel.json for Vercel frontend deployment
+- Updated use-secure-fetch.ts to route API calls to NEXT_PUBLIC_API_URL when set
+- Created render.yaml and Dockerfile for Render backend deployment
+- Created deploy/README.md with full deployment guide
+- Fixed missing columns (profileCompleted, createdAt, updatedAt) across 25+ tables
+- Added DEFAULT now() to all updatedAt columns in Supabase
+- Fixed auth routes: removed tenant auto-creation, fixed PostgREST relationship casing
+- Verified full flow: Register → Login (JWT) → Authenticated API call → Data from Supabase
+
+Stage Summary:
+- Backend: 18 API endpoints across 8 route modules (auth, departments, complaints, work-orders, customers, equipment, employees, dashboard)
+- TypeScript compiles with zero errors (strict mode)
+- Frontend: use-secure-fetch.ts auto-routes /api/* to NEXT_PUBLIC_API_URL when set
+- Deployment: vercel.json + render.yaml + Dockerfile + .env.example + .env.production.example
+- All data flows through Supabase (no local DB needed in production)

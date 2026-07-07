@@ -3,9 +3,24 @@
 import { useAuthStore, useAppStore } from '@/store';
 import { broadcastLogoutEvent } from '@/components/session/broadcast-logout';
 
+/** Base URL for API requests — empty string means same-origin (local dev) */
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+
+/**
+ * Resolves a potentially relative `/api/...` URL to an absolute URL
+ * by prepending the backend base when `NEXT_PUBLIC_API_URL` is set.
+ */
+function resolveApiUrl(url: string): string {
+  if (API_BASE && url.startsWith('/api/')) {
+    return `${API_BASE}${url}`;
+  }
+  return url;
+}
+
 /**
  * A secure fetch wrapper that:
  * - Automatically adds Authorization header
+ * - Prepends API_BASE for remote backend (Vercel → Render)
  * - Handles 401/403 responses with full session cleanup
  * - Retries on network errors (server might be restarting)
  */
@@ -22,7 +37,8 @@ export function useSecureFetch() {
       headers.set('Content-Type', 'application/json');
     }
 
-    const res = await fetch(url, { ...options, headers });
+    const resolvedUrl = resolveApiUrl(url);
+    const res = await fetch(resolvedUrl, { ...options, headers });
 
     if (res.status === 401 || res.status === 403) {
       if (url.includes('/api/auth/login') || url.includes('/api/auth/register')) {
@@ -81,13 +97,17 @@ export function setupFetchInterceptor() {
   window.fetch = async function (url: string | URL | Request, options?: RequestInit): Promise<Response> {
     const urlStr = typeof url === 'string' ? url : url instanceof URL ? url.href : (url as Request).url;
 
+    // Resolve relative /api/... URLs to the remote backend when API_BASE is set
+    const resolvedUrl = resolveApiUrl(urlStr);
+    const fetchUrl = resolvedUrl !== urlStr ? resolvedUrl : url;
+
     const { token } = useAuthStore.getState();
     const headers = new Headers(options?.headers);
     if (token && urlStr.includes('/api/') && !urlStr.includes('/api/auth/login') && !urlStr.includes('/api/auth/register')) {
       headers.set('Authorization', `Bearer ${token}`);
     }
 
-    const res = await fetchWithRetry(url, { ...options, headers });
+    const res = await fetchWithRetry(fetchUrl, { ...options, headers });
 
     if ((res.status === 401 || res.status === 403) && urlStr.includes('/api/') && !urlStr.includes('/api/auth/login') && !urlStr.includes('/api/auth/register')) {
       setTimeout(() => {

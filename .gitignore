@@ -36,6 +36,11 @@ yarn-error.log*
 .env.production
 .env.production.local
 
+# Backend
+backend/node_modules/
+backend/dist/
+backend/.env
+
 # vercel
 .vercel
 
