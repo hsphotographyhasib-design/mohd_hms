@@ -1,36 +1,49 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
-import { verifyPassword, generateToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export async function POST(request: NextRequest) {
+  // ── Production: proxy to Render backend ────────────────────────────────
+  if (BACKEND_URL) {
+    try {
+      const body = await request.json();
+      const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+      return NextResponse.json(data, { status: res.status });
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Backend service unavailable. Please try again.' },
+        { status: 502 }
+      );
+    }
+  }
+
+  // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
   try {
+    const { db, withRetry, getDbFriendlyMessage, getErrorHeaders } = await import('@/lib/db');
+    const { verifyPassword, generateToken } = await import('@/lib/auth');
+
     const { email, password } = await request.json();
 
     if (!email || !password) {
       return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    // Use findFirst with retry — email is unique per tenant but we
-    // don't know the tenantId here, so findFirst is appropriate.
     const user = await withRetry(
       () =>
         db.user.findFirst({
           where: { email },
           select: {
-            id: true,
-            email: true,
-            name: true,
-            phone: true,
-            avatar: true,
-            role: true,
-            tenantId: true,
-            employeeNumber: true,
-            departmentId: true,
-            profileCompleted: true,
-            isActive: true,
-            passwordHash: true,
+            id: true, email: true, name: true, phone: true, avatar: true,
+            role: true, tenantId: true, employeeNumber: true, departmentId: true,
+            profileCompleted: true, isActive: true, passwordHash: true,
             tenant: { select: { id: true, name: true, domain: true } },
           },
         }),
@@ -50,49 +63,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid email or password' }, { status: 401 });
     }
 
-    // Update last login and auth provider (best-effort, non-blocking)
     withRetry(
-      () =>
-        db.user.update({
-          where: { id: user.id },
-          data: { lastLogin: new Date(), isOnline: true, authProvider: 'email' },
-        }),
+      () => db.user.update({ where: { id: user.id }, data: { lastLogin: new Date(), isOnline: true, authProvider: 'email' } }),
       { label: 'login-updateLastLogin' }
     ).catch(() => {});
 
-    // Normalize role to lowercase for consistent RBAC checks
     const normalizedRole = (user.role as string).toLowerCase() as typeof user.role;
 
-    const token = generateToken({
-      userId: user.id,
-      tenantId: user.tenantId,
-      role: normalizedRole,
-      email: user.email,
-    });
+    const token = generateToken({ userId: user.id, tenantId: user.tenantId, role: normalizedRole, email: user.email });
 
     return NextResponse.json({
       token,
       user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        phone: user.phone,
-        avatar: user.avatar,
-        role: normalizedRole,
-        tenantId: user.tenantId,
-        tenantName: user.tenant?.name,
-        tenantDomain: user.tenant?.domain,
-        employeeNumber: user.employeeNumber,
-        departmentId: user.departmentId,
-        profileCompleted: user.profileCompleted,
+        id: user.id, email: user.email, name: user.name, phone: user.phone, avatar: user.avatar,
+        role: normalizedRole, tenantId: user.tenantId, tenantName: user.tenant?.name,
+        tenantDomain: user.tenant?.domain, employeeNumber: user.employeeNumber,
+        departmentId: user.departmentId, profileCompleted: user.profileCompleted,
       },
     });
   } catch (error) {
-    // The enhanced getDbFriendlyMessage now handles ALL error types:
-    // Prisma, PostgreSQL native, network, JSON parse, JWT, bcrypt, timeout, etc.
-    return NextResponse.json(
-      { error: getDbFriendlyMessage(error) },
-      { status: 500, headers: getErrorHeaders(error) }
-    );
+    const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/lib/db');
+    return NextResponse.json({ error: gfm(error) }, { status: 500, headers: geh(error) });
   }
 }

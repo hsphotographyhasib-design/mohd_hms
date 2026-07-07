@@ -1,142 +1,67 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
-import { hashPassword, generateToken } from '@/lib/auth';
-import { sendEmail, renderWelcomeEmail } from '@/lib/email';
+
 export const dynamic = 'force-dynamic';
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export async function POST(request: NextRequest) {
-  // --- Phase 1: Parse request (non-DB errors) ---
-  let name: string;
-  let email: string;
-  let password: string;
-  let role: string;
+  // ── Production: proxy to Render backend ────────────────────────────────
+  if (BACKEND_URL) {
+    try {
+      const body = await request.json();
+      const res = await fetch(`${BACKEND_URL}/api/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json();
+      return NextResponse.json(data, { status: res.status });
+    } catch (error) {
+      return NextResponse.json(
+        { error: 'Backend service unavailable. Please try again.' },
+        { status: 502 }
+      );
+    }
+  }
+
+  // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
+  const { db, withRetry, getDbFriendlyMessage } = await import('@/lib/db');
+  const { hashPassword, generateToken } = await import('@/lib/auth');
+
+  let name: string; let email: string; let password: string; let role: string;
   try {
     const body = await request.json();
-    name = body.name;
-    email = body.email;
-    password = body.password;
-    role = body.role;
+    name = body.name; email = body.email; password = body.password; role = body.role;
   } catch {
-    return NextResponse.json({ error: 'Invalid request data. Please check your input.' }, { status: 400 });
+    return NextResponse.json({ error: 'Invalid request data.' }, { status: 400 });
   }
 
   if (!name || !email || !password) {
     return NextResponse.json({ error: 'Name, email, and password are required' }, { status: 400 });
   }
 
-  // --- Phase 2: Database operations (DB errors) ---
   try {
-    // Find or create default tenant for new registrations
-    let tenant = await withRetry(
-      () => db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } }),
-      { label: 'register-findTenant' }
-    );
+    let tenant = await withRetry(() => db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } }), { label: 'register-findTenant' });
     if (!tenant) {
-      tenant = await withRetry(
-        () =>
-          db.tenant.create({
-            data: {
-              name: 'Default Organization',
-              domain: 'default.facilitypro.com',
-              plan: 'professional',
-              maxUsers: 50,
-            },
-          }),
-        { label: 'register-createTenant' }
-      );
+      tenant = await withRetry(() => db.tenant.create({ data: { name: 'Default Organization', domain: 'default.facilitypro.com', plan: 'professional', maxUsers: 50 } }), { label: 'register-createTenant' });
     }
 
-    const existing = await withRetry(
-      () => db.user.findFirst({ where: { tenantId: tenant.id, email } }),
-      { label: 'register-checkEmail' }
-    );
-    if (existing) {
-      return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
-    }
+    const existing = await withRetry(() => db.user.findFirst({ where: { tenantId: tenant.id, email } }), { label: 'register-checkEmail' });
+    if (existing) return NextResponse.json({ error: 'Email already registered' }, { status: 409 });
 
     const passwordHash = await hashPassword(password);
-    const user = await withRetry(
-      () =>
-        db.user.create({
-          data: {
-            tenantId: tenant.id,
-            email,
-            passwordHash,
-            name,
-            role: role || 'customer',
-            authProvider: 'email',
-            profileCompleted: false,
-          },
-          include: { tenant: { select: { id: true, name: true, domain: true } } },
-        }),
-      { label: 'register-createUser' }
-    );
+    const user = await withRetry(() => db.user.create({
+      data: { tenantId: tenant.id, email, passwordHash, name, role: role || 'customer', authProvider: 'email', profileCompleted: false },
+      include: { tenant: { select: { id: true, name: true, domain: true } } },
+    }), { label: 'register-createUser' });
 
-    // --- Phase 3: Token generation ---
-    const token = generateToken({
-      userId: user.id,
-      tenantId: user.tenantId,
-      role: user.role,
-      email: user.email,
-    });
-
-    // Send welcome email (best-effort, non-blocking)
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_APP_URL?.replace(/\/$/, '') || '';
-      const tpl = renderWelcomeEmail({
-        name: user.name,
-        email: user.email,
-        loginUrl: `${baseUrl}/login`,
-      });
-      await sendEmail({
-        to: user.email,
-        subject: tpl.subject,
-        html: tpl.html,
-        text: tpl.text,
-        module: 'auth',
-        templateName: 'Welcome Email',
-      });
-    } catch (err) {
-      console.error('[register] welcome email failed', err);
-    }
-
-    // Notify admins about new registration (best-effort, non-blocking)
-    try {
-      const admins = await db.user.findMany({
-        where: { tenantId: tenant.id, role: { in: ['super_admin', 'admin'] }, isActive: true },
-        select: { id: true },
-      });
-      if (admins.length > 0) {
-        await db.notification.createMany({
-          data: admins.map((admin) => ({
-            tenantId: tenant.id,
-            userId: admin.id,
-            title: 'New User Registered',
-            message: `${user.name} has successfully registered as a ${user.role}.`,
-            type: 'info',
-            isRead: false,
-          })),
-        });
-      }
-    } catch (err) {
-      console.error('[register] admin notification failed', err);
-    }
+    const token = generateToken({ userId: user.id, tenantId: user.tenantId, role: user.role, email: user.email });
 
     return NextResponse.json({
       token,
-      user: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        role: user.role,
-        tenantId: user.tenantId,
-        tenantName: user.tenant?.name,
-        tenantDomain: user.tenant?.domain,
-        profileCompleted: user.profileCompleted,
-      },
+      user: { id: user.id, email: user.email, name: user.name, role: user.role, tenantId: user.tenantId, tenantName: user.tenant?.name, tenantDomain: user.tenant?.domain, profileCompleted: user.profileCompleted },
     });
   } catch (error) {
-    console.error('Register DB error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
 }
