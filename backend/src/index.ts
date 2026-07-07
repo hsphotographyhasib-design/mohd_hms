@@ -29,9 +29,9 @@ const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 // Security headers
 app.use(helmet());
 
-// CORS — allow Vercel frontend origin
+// CORS — allow any origin (Render backend is API-only, no cookies sent cross-origin)
 app.use(cors({
-  origin: [FRONTEND_URL, 'http://localhost:3000'],
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
