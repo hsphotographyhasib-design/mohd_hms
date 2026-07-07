@@ -776,3 +776,36 @@ Stage Summary:
 - **Fixed**: AuthGuard no longer nukes all localStorage on 401
 - **Fixed**: Backend CORP header allows cross-origin access
 - All API calls now go through Vercel's server-side proxy (same-origin, no CORS issues)
+
+---
+Task ID: fcm-notification-system
+Agent: main
+Task: Build enterprise real-time notification system with Firebase Cloud Messaging
+
+Work Log:
+- Added DeviceToken and NotificationLog models to Prisma schema
+- Installed firebase-admin (backend) and firebase (frontend)
+- Created backend/src/lib/firebase.ts — Firebase Admin SDK lazy singleton
+- Created backend/src/lib/notification.service.ts — Centralized notification service with RBAC, batch FCM multicast, auto token cleanup, priority routing
+- Created backend/src/routes/notifications.routes.ts — 9 endpoints (list, unread-count, mark-read, mark-all-read, delete, test, device register/unregister/list)
+- Wired notification triggers into complaints.routes.ts (create + assignment) and work-orders.routes.ts (create)
+- Created public/firebase-messaging-sw.js — Service worker for background push + notification click deep linking
+- Created src/lib/firebase.ts — Firebase client SDK initialization
+- Created src/lib/fcm.ts — FCM client module (permission, token registration, foreground messages, device detection)
+- Created src/hooks/use-fcm.ts — React hook for FCM lifecycle management
+- Created 7 Vercel proxy routes (unread-count, read-all, test, devices/register, devices/unregister, devices, firebase-config)
+- Created src/components/notifications/notification-permission.tsx — Permission banner + Enable Push button + Test Notification button
+- Added NotificationPermissionBanner to ProtectedApp in page.tsx
+- Added EnablePushButton to notification bell dropdown in app-header.tsx
+- Updated .env.example with Firebase configuration documentation
+
+Stage Summary:
+- Full FCM notification system deployed (backend + frontend)
+- Architecture: Module → NotificationService → DB + FCM → Service Worker → UI
+- 9 backend API endpoints, 7 Vercel proxy routes
+- Role-based notification delivery (RBAC)
+- Browser permission management with friendly UI
+- Device token auto-registration on login, auto-cleanup on logout
+- Push notification support for background and foreground
+- Deep linking from notification clicks to relevant pages
+- Delivery logging and invalid token auto-cleanup
