@@ -44,4 +44,9 @@ export async function sendViaProvider(
   }
 }
 
+/** Reset cached provider so next send() call re-resolves. */
+export function refreshProviderCache(): void {
+  _cachedProvider = null;
+}
+
 export { isBrevoConfigured, isSmtpConfigured };

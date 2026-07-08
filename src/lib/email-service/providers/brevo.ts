@@ -5,8 +5,26 @@ import type { SendEmailParams, SendEmailResult, EmailProvider, EmailAttachment }
 
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 
+/** Runtime override — allows setting the API key without env var. */
+let _runtimeApiKey: string | null = null;
+
 function getApiKey(): string | null {
-  return process.env.BREVO_API_KEY || null;
+  return _runtimeApiKey || process.env.BREVO_API_KEY || null;
+}
+
+/** Set (or clear) the Brevo API key at runtime. */
+export function setRuntimeApiKey(key: string | null): void {
+  _runtimeApiKey = key;
+}
+
+/** Get the current (possibly runtime-set) API key. */
+export function getBrevoApiKey(): string | null {
+  return getApiKey();
+}
+
+/** Check if a runtime key is configured (vs env var only). */
+export function isRuntimeKeyConfigured(): boolean {
+  return !!_runtimeApiKey;
 }
 
 function getSenderName(): string {
