@@ -287,6 +287,14 @@ function CircularProgress({ value, size = 140 }: { value: number; size?: number 
 
 // ============ MEMOIZED SUB-COMPONENTS ============
 
+const DEFAULT_KPI: DashboardKpiData = {
+  totalEquipment: 0, activeEquipment: 0, openComplaints: 0,
+  inProgressComplaints: 0, totalWorkOrders: 0, pendingWorkOrders: 0,
+  completedWorkOrders: 0, totalRevenue: 0, pendingInvoices: 0,
+  overdueInvoices: 0, pmCompliance: 0, totalCustomers: 0,
+  totalEmployees: 0, lowStockItems: 0, accessLevel: '',
+};
+
 const KpiCardsSection = memo(function KpiCardsSection({
   data,
   isLoading,
@@ -302,22 +310,11 @@ const KpiCardsSection = memo(function KpiCardsSection({
   upcomingPmLength: number;
   role: UserRole;
 }) {
-  if (error) {
-    return (
-      <div className="flex items-center gap-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-sm">
-        <AlertTriangle className="h-4 w-4 shrink-0" />
-        <span className="flex-1">{error.message}</span>
-        <button
-          onClick={() => refetch()}
-          className="text-xs font-medium underline hover:no-underline shrink-0"
-        >
-          Retry
-        </button>
-      </div>
-    );
-  }
+  // On error, show cards with default 0 values instead of an error banner
+  const effectiveData = data ?? DEFAULT_KPI;
+  const hasError = !!error && !data;
 
-  if (isLoading) {
+  if (isLoading && !hasError) {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
@@ -336,11 +333,22 @@ const KpiCardsSection = memo(function KpiCardsSection({
     );
   }
 
-  if (!data) return null;
-
-  const kpiCards = getKpiCardsForRole(role, data, upcomingPmLength);
+  const kpiCards = getKpiCardsForRole(role, effectiveData, upcomingPmLength);
 
   return (
+    <>
+      {hasError && (
+        <div className="flex items-center gap-2 p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs mb-2">
+          <RefreshCw className="h-3.5 w-3.5 shrink-0" />
+          <span className="flex-1">Unable to load live data — showing offline values</span>
+          <button
+            onClick={() => refetch()}
+            className="text-xs font-medium underline hover:no-underline shrink-0"
+          >
+            Retry
+          </button>
+        </div>
+      )}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {kpiCards.map((kpi, i) => (
         <Card key={i} className="py-0 gap-0">
@@ -373,6 +381,7 @@ const KpiCardsSection = memo(function KpiCardsSection({
         </Card>
       ))}
     </div>
+    </>
   );
 });
 
@@ -1153,6 +1162,9 @@ const UpcomingPmSchedule = memo(function UpcomingPmSchedule({
 
 export function DashboardView() {
   const { user } = useAuthStore();
+  const role = user?.role || 'admin';
+  const isCustomer = role === 'customer';
+  const isFinance = role === 'finance';
 
   const kpi = useDashboardKpi();
   const charts = useDashboardCharts();
@@ -1161,14 +1173,32 @@ export function DashboardView() {
   const today = format(new Date(), 'EEEE, MMMM d, yyyy');
 
   const kpiData = kpi.data;
-  const quickBadges = [
-    { label: `${kpiData?.totalEquipment ?? 0} Equipment`, color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-    { label: `${kpiData?.totalCustomers ?? 0} Customers`, color: 'bg-teal-50 text-teal-700 border-teal-200' },
-    { label: `${kpiData?.totalEmployees ?? 0} Employees`, color: 'bg-purple-50 text-purple-700 border-purple-200' },
-    (kpiData?.lowStockItems ?? 0) > 0
-      ? { label: `${kpiData?.lowStockItems} Low Stock`, color: 'bg-rose-50 text-rose-700 border-rose-200' }
-      : { label: 'Stock OK', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
-  ];
+
+  // Role-appropriate quick badges
+  const quickBadges = (() => {
+    if (isCustomer) {
+      return [
+        { label: `${kpiData?.openComplaints ?? 0} Open`, color: 'bg-amber-50 text-amber-700 border-amber-200' },
+        { label: `${kpiData?.inProgressComplaints ?? 0} In Progress`, color: 'bg-purple-50 text-purple-700 border-purple-200' },
+        { label: `${kpiData?.pendingInvoices ?? 0} Pending`, color: 'bg-teal-50 text-teal-700 border-teal-200' },
+      ];
+    }
+    if (isFinance) {
+      return [
+        { label: `${formatCurrency(kpiData?.totalRevenue ?? 0)} Revenue`, color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+        { label: `${kpiData?.pendingInvoices ?? 0} Pending`, color: 'bg-amber-50 text-amber-700 border-amber-200' },
+        { label: `${kpiData?.overdueInvoices ?? 0} Overdue`, color: 'bg-rose-50 text-rose-700 border-rose-200' },
+      ];
+    }
+    return [
+      { label: `${kpiData?.totalEquipment ?? 0} Equipment`, color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+      { label: `${kpiData?.totalCustomers ?? 0} Customers`, color: 'bg-teal-50 text-teal-700 border-teal-200' },
+      { label: `${kpiData?.totalEmployees ?? 0} Employees`, color: 'bg-purple-50 text-purple-700 border-purple-200' },
+      (kpiData?.lowStockItems ?? 0) > 0
+        ? { label: `${kpiData?.lowStockItems} Low Stock`, color: 'bg-rose-50 text-rose-700 border-rose-200' }
+        : { label: 'Stock OK', color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+    ];
+  })();
 
   return (
     <div className="p-4 md:p-6 space-y-6">
@@ -1196,58 +1226,93 @@ export function DashboardView() {
         error={kpi.error}
         refetch={kpi.refetch}
         upcomingPmLength={recent.data?.upcomingPm?.length ?? 0}
-        role={user?.role || 'admin'}
+        role={role}
       />
 
-      {/* ============ 3. CHARTS ROW: Revenue Trend + Complaints by Status ============ */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <RevenueChart
-          data={charts.data?.monthlyRevenue}
-          isLoading={charts.isLoading}
-          error={charts.error}
-        />
-        <ComplaintsStatusChart
-          data={charts.data?.complaintsByStatus}
-          isLoading={charts.isLoading}
-          error={charts.error}
-        />
-      </div>
+      {/* ============ 3. CHARTS ROW: Role-appropriate ============ */}
+      {isCustomer ? (
+        // Customer: show only complaints charts
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <ComplaintsStatusChart
+            data={charts.data?.complaintsByStatus}
+            isLoading={charts.isLoading}
+            error={charts.error}
+          />
+          <ComplaintsCategoryChart
+            data={charts.data?.complaintsByCategory}
+            isLoading={charts.isLoading}
+            error={charts.error}
+          />
+        </div>
+      ) : isFinance ? (
+        // Finance: show revenue + complaints by status
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <RevenueChart
+            data={charts.data?.monthlyRevenue}
+            isLoading={charts.isLoading}
+            error={charts.error}
+          />
+          <ComplaintsStatusChart
+            data={charts.data?.complaintsByStatus}
+            isLoading={charts.isLoading}
+            error={charts.error}
+          />
+        </div>
+      ) : (
+        // Admin/Manager/Supervisor/Technician: full charts
+        <>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <RevenueChart
+              data={charts.data?.monthlyRevenue}
+              isLoading={charts.isLoading}
+              error={charts.error}
+            />
+            <ComplaintsStatusChart
+              data={charts.data?.complaintsByStatus}
+              isLoading={charts.isLoading}
+              error={charts.error}
+            />
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <ComplaintsCategoryChart
+              data={charts.data?.complaintsByCategory}
+              isLoading={charts.isLoading}
+              error={charts.error}
+            />
+            <PmComplianceGauge
+              pmCompliance={charts.data?.pmCompliance}
+              upcomingPmCounts={charts.data?.upcomingPmCounts}
+              isLoading={charts.isLoading}
+              error={charts.error}
+            />
+          </div>
+        </>
+      )}
 
-      {/* ============ 4. SECOND CHARTS ROW: Category Pie + PM Compliance ============ */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ComplaintsCategoryChart
-          data={charts.data?.complaintsByCategory}
-          isLoading={charts.isLoading}
-          error={charts.error}
-        />
-        <PmComplianceGauge
-          pmCompliance={charts.data?.pmCompliance}
-          upcomingPmCounts={charts.data?.upcomingPmCounts}
-          isLoading={charts.isLoading}
-          error={charts.error}
-        />
-      </div>
-
-      {/* ============ 5. RECENT ACTIVITY TABLES ============ */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      {/* ============ 4. RECENT ACTIVITY TABLES ============ */}
+      <div className={isCustomer ? '' : 'grid grid-cols-1 lg:grid-cols-2 gap-4'}>
         <RecentComplaintsTable
           data={recent.data?.recentComplaints}
           isLoading={recent.isLoading}
           error={recent.error}
         />
-        <RecentWorkOrdersTable
-          data={recent.data?.recentWorkOrders}
+        {!isCustomer && (
+          <RecentWorkOrdersTable
+            data={recent.data?.recentWorkOrders}
+            isLoading={recent.isLoading}
+            error={recent.error}
+          />
+        )}
+      </div>
+
+      {/* ============ 5. UPCOMING PM SCHEDULE (non-customer) ============ */}
+      {!isCustomer && !isFinance && (
+        <UpcomingPmSchedule
+          data={recent.data?.upcomingPm}
           isLoading={recent.isLoading}
           error={recent.error}
         />
-      </div>
-
-      {/* ============ 6. UPCOMING PM SCHEDULE ============ */}
-      <UpcomingPmSchedule
-        data={recent.data?.upcomingPm}
-        isLoading={recent.isLoading}
-        error={recent.error}
-      />
+      )}
     </div>
   );
 }

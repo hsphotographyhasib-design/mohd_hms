@@ -321,7 +321,29 @@ function createTableProxy(tableName: string) {
       return { count: Array.isArray(r.data) ? r.data.length : args.data.length };
     },
 
-    async aggregate(args: { where?: Record<string, unknown>; _count?: Record<string, unknown> }) {
+    async aggregate(args: { where?: Record<string, unknown>; _count?: Record<string, unknown>; _sum?: Record<string, boolean> }) {
+      // Handle _sum by fetching rows
+      if (args._sum) {
+        const sumFields = Object.entries(args._sum).filter(([, v]) => v).map(([k]) => k);
+        if (sumFields.length > 0) {
+          const select = sumFields.join(',');
+          const r = await supabaseRequest(tableName, 'GET', {
+            select,
+            filters: args?.where ? whereToFilters(args.where as any) : undefined,
+          });
+          if (r.error) throw new Error(`[Supabase] ${tableName}.aggregate: ${r.error.message}`);
+
+          const rows = (r.data ?? []) as Record<string, unknown>[];
+          const sums: Record<string, number> = {};
+          for (const field of sumFields) {
+            sums[field] = rows.reduce((acc, row) => acc + (Number(row[field]) || 0), 0);
+          }
+
+          return { _sum: sums };
+        }
+      }
+
+      // Fallback: count only
       const r = await supabaseRequest(tableName, 'GET', {
         head: true,
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
@@ -336,7 +358,22 @@ function createTableProxy(tableName: string) {
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
       });
       if (r.error) throw new Error(`[Supabase] ${tableName}.groupBy: ${r.error.message}`);
-      return r.data ?? [];
+
+      const rows = (r.data ?? []) as Record<string, unknown>[];
+      const groups = new Map<string, Record<string, unknown>>();
+
+      for (const row of rows) {
+        const key = args.by.map(b => String(row[b] ?? '')).join('|||');
+        const existing = groups.get(key);
+        if (existing) {
+          (existing._count as any).id = ((existing._count as any).id || 0) + 1;
+        } else {
+          const group: Record<string, unknown> = { ...row, _count: { id: 1 } };
+          groups.set(key, group);
+        }
+      }
+
+      return Array.from(groups.values());
     },
   };
 }
