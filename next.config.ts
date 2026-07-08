@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
 
   // Allow preview iframe origins in dev
   allowedDevOrigins: [
+    'https://space-z.ai',
     'https://*.space-z.ai',
     'http://127.0.0.1:3000',
     'http://localhost:3000',

@@ -80,6 +80,7 @@ export default function Home() {
   const { isAuthenticated } = useAuthStore();
   const hydrated = useHydrated();
   const [showLogin, setShowLogin] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
   const initialized = useRef(false);
   useEffect(() => {
@@ -97,10 +98,15 @@ export default function Home() {
           localStorage.clear();
         }
       }
+      // Mark auth check complete — prevents LandingHome flash for authed users
+      requestAnimationFrame(() => setAuthChecked(true));
     }
   }, []);
 
-  if (!hydrated) {
+  // Show loading until both hydration AND auth restoration are complete.
+  // This prevents LandingHome from mounting (and calling CMS API) during
+  // the brief flash before localStorage auth is restored.
+  if (!hydrated || !authChecked) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
