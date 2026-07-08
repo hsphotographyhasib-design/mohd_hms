@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useState, useCallback } from 'react';
 import { format } from 'date-fns';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
@@ -10,7 +10,7 @@ import {
   Wrench, AlertTriangle, ClipboardList, DollarSign,
   TrendingUp, TrendingDown, Clock, Users, Package,
   Activity, CheckCircle2, Star, Calendar, ArrowRight,
-  RefreshCw, ShieldCheck,
+  RefreshCw, ShieldCheck, Filter, X,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +25,7 @@ import type { ComplaintItem, WorkOrderItem, PmScheduleItem, UserRole } from '@/t
 import {
   useDashboardKpi, useDashboardCharts, useDashboardRecent,
 } from '@/hooks/use-dashboard-queries';
-import type { DashboardKpiData, DashboardChartsData } from '@/hooks/use-dashboard-queries';
+import type { DashboardKpiData, DashboardChartsData, DashboardFilters } from '@/hooks/use-dashboard-queries';
 
 // ============ HELPERS ============
 
@@ -1158,6 +1158,151 @@ const UpcomingPmSchedule = memo(function UpcomingPmSchedule({
   );
 });
 
+// ============ DASHBOARD FILTER HOOK ============
+
+function useDashboardFilters() {
+  const [filters, setFilters] = useState<DashboardFilters>({});
+  const clearFilters = useCallback(() => setFilters({}), []);
+  return [filters, setFilters, clearFilters] as const;
+}
+
+// ============ DASHBOARD FILTER BAR ============
+
+const DashboardFilterBar = memo(function DashboardFilterBar({
+  filters,
+  onChange,
+}: {
+  filters: DashboardFilters;
+  onChange: (f: DashboardFilters) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const hasFilters = Object.keys(filters).length > 0;
+
+  const update = useCallback((key: keyof DashboardFilters, value: string) => {
+    onChange({ ...filters, [key]: value || undefined });
+  }, [filters, onChange]);
+
+  return (
+    <Card className="py-0 gap-0">
+      <CardContent className="p-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Button
+              variant={open ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setOpen(!open)}
+              className="h-8"
+            >
+              <Filter className="h-3.5 w-3.5 mr-1.5" />
+              Filters
+            </Button>
+            {hasFilters && (
+              <Badge variant="secondary" className="text-xs">
+                {Object.keys(filters).length} active
+              </Badge>
+            )}
+          </div>
+          {hasFilters && (
+            <Button variant="ghost" size="sm" onClick={() => onChange({})} className="h-8 text-xs text-muted-foreground">
+              <X className="h-3 w-3 mr-1" /> Clear
+            </Button>
+          )}
+        </div>
+        {open && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 mt-3 pt-3 border-t">
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">Status</label>
+              <select
+                className="w-full h-8 rounded-md border border-input bg-background px-2 text-sm"
+                value={filters.status || ''}
+                onChange={(e) => update('status', e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="OPEN">Open</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="RESOLVED">Resolved</option>
+                <option value="CLOSED">Closed</option>
+              </select>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">Priority</label>
+              <select
+                className="w-full h-8 rounded-md border border-input bg-background px-2 text-sm"
+                value={filters.priority || ''}
+                onChange={(e) => update('priority', e.target.value)}
+              >
+                <option value="">All</option>
+                <option value="critical">Critical</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+                <option value="low">Low</option>
+              </select>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">From Date</label>
+              <input
+                type="date"
+                className="w-full h-8 rounded-md border border-input bg-background px-2 text-sm"
+                value={filters.dateFrom || ''}
+                onChange={(e) => update('dateFrom', e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">To Date</label>
+              <input
+                type="date"
+                className="w-full h-8 rounded-md border border-input bg-background px-2 text-sm"
+                value={filters.dateTo || ''}
+                onChange={(e) => update('dateTo', e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">Department</label>
+              <input
+                type="text"
+                placeholder="Filter by dept..."
+                className="w-full h-8 rounded-md border border-input bg-background px-2 text-sm"
+                value={filters.department || ''}
+                onChange={(e) => update('department', e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">Technician</label>
+              <input
+                type="text"
+                placeholder="Filter by tech..."
+                className="w-full h-8 rounded-md border border-input bg-background px-2 text-sm"
+                value={filters.technician || ''}
+                onChange={(e) => update('technician', e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">Customer</label>
+              <input
+                type="text"
+                placeholder="Filter by customer..."
+                className="w-full h-8 rounded-md border border-input bg-background px-2 text-sm"
+                value={filters.customer || ''}
+                onChange={(e) => update('customer', e.target.value)}
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-medium text-muted-foreground">Category</label>
+              <input
+                type="text"
+                placeholder="Filter by category..."
+                className="w-full h-8 rounded-md border border-input bg-background px-2 text-sm"
+                value={filters.category || ''}
+                onChange={(e) => update('category', e.target.value)}
+              />
+            </div>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+});
+
 // ============ MAIN DASHBOARD VIEW ============
 
 export function DashboardView() {
@@ -1165,10 +1310,16 @@ export function DashboardView() {
   const role = user?.role || 'admin';
   const isCustomer = role === 'customer';
   const isFinance = role === 'finance';
+  const isHr = role === 'hr';
+  const isTechnician = role === 'technician';
+  const isSupervisor = role === 'supervisor';
+  const canFilter = FILTER_ROLES.has(role);
 
-  const kpi = useDashboardKpi();
-  const charts = useDashboardCharts();
-  const recent = useDashboardRecent();
+  const [filters, setFilters] = useDashboardFilters();
+
+  const kpi = useDashboardKpi(role, canFilter ? filters : undefined);
+  const charts = useDashboardCharts(role, canFilter ? filters : undefined);
+  const recent = useDashboardRecent(role, canFilter ? filters : undefined);
 
   const today = format(new Date(), 'EEEE, MMMM d, yyyy');
 
@@ -1188,6 +1339,26 @@ export function DashboardView() {
         { label: `${formatCurrency(kpiData?.totalRevenue ?? 0)} Revenue`, color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
         { label: `${kpiData?.pendingInvoices ?? 0} Pending`, color: 'bg-amber-50 text-amber-700 border-amber-200' },
         { label: `${kpiData?.overdueInvoices ?? 0} Overdue`, color: 'bg-rose-50 text-rose-700 border-rose-200' },
+      ];
+    }
+    if (isHr) {
+      return [
+        { label: `${kpiData?.totalEmployees ?? 0} Employees`, color: 'bg-purple-50 text-purple-700 border-purple-200' },
+      ];
+    }
+    if (isTechnician) {
+      return [
+        { label: `${kpiData?.pendingWorkOrders ?? 0} Pending`, color: 'bg-amber-50 text-amber-700 border-amber-200' },
+        { label: `${kpiData?.completedWorkOrders ?? 0} Done`, color: 'bg-emerald-50 text-emerald-700 border-emerald-200' },
+        { label: `${kpiData?.openComplaints ?? 0} Open`, color: 'bg-orange-50 text-orange-700 border-orange-200' },
+      ];
+    }
+    if (isSupervisor) {
+      return [
+        { label: `${kpiData?.openComplaints ?? 0} Open`, color: 'bg-amber-50 text-amber-700 border-amber-200' },
+        { label: `${kpiData?.inProgressComplaints ?? 0} In Progress`, color: 'bg-purple-50 text-purple-700 border-purple-200' },
+        { label: `${kpiData?.totalCustomers ?? 0} Customers`, color: 'bg-teal-50 text-teal-700 border-teal-200' },
+        { label: `${kpiData?.totalEmployees ?? 0} Team`, color: 'bg-purple-50 text-purple-700 border-purple-200' },
       ];
     }
     return [
@@ -1219,7 +1390,10 @@ export function DashboardView() {
         </div>
       </div>
 
-      {/* ============ 2. KPI CARDS ROW ============ */}
+      {/* ============ 2. GLOBAL FILTERS (admin/manager/supervisor) ============ */}
+      {canFilter && <DashboardFilterBar filters={filters} onChange={setFilters} />}
+
+      {/* ============ 3. KPI CARDS ROW ============ */}
       <KpiCardsSection
         data={kpi.data}
         isLoading={kpi.isLoading}
@@ -1229,84 +1403,51 @@ export function DashboardView() {
         role={role}
       />
 
-      {/* ============ 3. CHARTS ROW: Role-appropriate ============ */}
+      {/* ============ 4. CHARTS ROW: Role-appropriate ============ */}
       {isCustomer ? (
-        // Customer: show only complaints charts
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <ComplaintsStatusChart
-            data={charts.data?.complaintsByStatus}
-            isLoading={charts.isLoading}
-            error={charts.error}
-          />
-          <ComplaintsCategoryChart
-            data={charts.data?.complaintsByCategory}
-            isLoading={charts.isLoading}
-            error={charts.error}
-          />
+          <ComplaintsStatusChart data={charts.data?.complaintsByStatus} isLoading={charts.isLoading} error={charts.error} />
+          <ComplaintsCategoryChart data={charts.data?.complaintsByCategory} isLoading={charts.isLoading} error={charts.error} />
         </div>
       ) : isFinance ? (
-        // Finance: show revenue + complaints by status
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <RevenueChart
-            data={charts.data?.monthlyRevenue}
-            isLoading={charts.isLoading}
-            error={charts.error}
-          />
-          <ComplaintsStatusChart
-            data={charts.data?.complaintsByStatus}
-            isLoading={charts.isLoading}
-            error={charts.error}
-          />
+          <RevenueChart data={charts.data?.monthlyRevenue} isLoading={charts.isLoading} error={charts.error} />
+          <ComplaintsStatusChart data={charts.data?.complaintsByStatus} isLoading={charts.isLoading} error={charts.error} />
         </div>
+      ) : isTechnician || isSupervisor ? (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <ComplaintsStatusChart data={charts.data?.complaintsByStatus} isLoading={charts.isLoading} error={charts.error} />
+          <ComplaintsCategoryChart data={charts.data?.complaintsByCategory} isLoading={charts.isLoading} error={charts.error} />
+        </div>
+      ) : isHr ? (
+        null
       ) : (
-        // Admin/Manager/Supervisor/Technician: full charts
         <>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <RevenueChart
-              data={charts.data?.monthlyRevenue}
-              isLoading={charts.isLoading}
-              error={charts.error}
-            />
-            <ComplaintsStatusChart
-              data={charts.data?.complaintsByStatus}
-              isLoading={charts.isLoading}
-              error={charts.error}
-            />
+            <RevenueChart data={charts.data?.monthlyRevenue} isLoading={charts.isLoading} error={charts.error} />
+            <ComplaintsStatusChart data={charts.data?.complaintsByStatus} isLoading={charts.isLoading} error={charts.error} />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <ComplaintsCategoryChart
-              data={charts.data?.complaintsByCategory}
-              isLoading={charts.isLoading}
-              error={charts.error}
-            />
-            <PmComplianceGauge
-              pmCompliance={charts.data?.pmCompliance}
-              upcomingPmCounts={charts.data?.upcomingPmCounts}
-              isLoading={charts.isLoading}
-              error={charts.error}
-            />
+            <ComplaintsCategoryChart data={charts.data?.complaintsByCategory} isLoading={charts.isLoading} error={charts.error} />
+            <PmComplianceGauge pmCompliance={charts.data?.pmCompliance} upcomingPmCounts={charts.data?.upcomingPmCounts} isLoading={charts.isLoading} error={charts.error} />
           </div>
         </>
       )}
 
-      {/* ============ 4. RECENT ACTIVITY TABLES ============ */}
-      <div className={isCustomer ? '' : 'grid grid-cols-1 lg:grid-cols-2 gap-4'}>
-        <RecentComplaintsTable
-          data={recent.data?.recentComplaints}
-          isLoading={recent.isLoading}
-          error={recent.error}
-        />
-        {!isCustomer && (
-          <RecentWorkOrdersTable
-            data={recent.data?.recentWorkOrders}
-            isLoading={recent.isLoading}
-            error={recent.error}
-          />
-        )}
-      </div>
+      {/* ============ 5. RECENT ACTIVITY TABLES ============ */}
+      {(isCustomer || isTechnician || isSupervisor) ? (
+        <RecentComplaintsTable data={recent.data?.recentComplaints} isLoading={recent.isLoading} error={recent.error} />
+      ) : isHr || isFinance ? (
+        null
+      ) : (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <RecentComplaintsTable data={recent.data?.recentComplaints} isLoading={recent.isLoading} error={recent.error} />
+          <RecentWorkOrdersTable data={recent.data?.recentWorkOrders} isLoading={recent.isLoading} error={recent.error} />
+        </div>
+      )}
 
-      {/* ============ 5. UPCOMING PM SCHEDULE (non-customer) ============ */}
-      {!isCustomer && !isFinance && (
+      {/* ============ 6. UPCOMING PM SCHEDULE ============ */}
+      {!isCustomer && !isFinance && !isTechnician && !isHr && (
         <UpcomingPmSchedule
           data={recent.data?.upcomingPm}
           isLoading={recent.isLoading}

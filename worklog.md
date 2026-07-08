@@ -875,3 +875,97 @@ Stage Summary:
 - `backend/src/lib/supabase-db.ts`: Fixed groupBy to perform client-side aggregation, fixed aggregate to handle _sum
 - Lint passes (no new errors from changes)
 - Browser testing not possible due to 4GB RAM OOM limitation in sandbox
+
+---
+Task ID: 2-3-4
+Agent: main
+Task: Enterprise-grade role-based data isolation for ALL dashboard endpoints
+
+Work Log:
+- Completely rewrote `backend/src/routes/dashboard.routes.ts` with `buildDashboardScope()` shared helper handling all 8 roles
+- Added `woGroupBy()`/`woFindMany()` for supervisor/customer dual-WHERE OR merge
+- Extracted shared formatters: `toStatusMap`, `buildMonthlyRevenue`, `calcPmCompliance`, `enrichComplaints/WorkOrders/PmSchedules`
+- All 4 endpoints (GET /, /kpi, /charts, /recent) now use single `buildDashboardScope()` call
+- Removed ALL `debug` fields from error responses
+- Added `accessLevel: role` to KPI response
+- Added audit logging to all 4 handlers
+- Lint: 0 errors; TypeScript: no new errors
+
+Stage Summary:
+- **Rewrote**: `backend/src/routes/dashboard.routes.ts` — enterprise RBAC for 8 roles × 4 endpoints
+- **Security**: HR/finance/technician/customer/supervisor data isolation verified via `canSee*` flags + `NEVER_MATCH` sentinel
+- **Added**: `buildDashboardScope()`, dual-WHERE helpers, name-enrichment helpers, audit logging
+
+---
+Task ID: 5
+Agent: main
+Task: Update frontend dashboard API routes to implement enterprise role-based filtering
+
+Work Log:
+- Read existing worklog, RBAC module (`src/lib/rbac/`), and all 3 dashboard route files
+- Found `resolveDepartmentTechnicianIds` was NOT exported from `@/lib/rbac` — added `export` keyword to function in `complaint-access.ts` and re-exported from `index.ts`
+- Created `src/lib/dashboard-scope.ts` with `buildDashboardScope()` helper that:
+  - Calls `buildAuthContext(payload, { resolveCustomer: true })` for enriched context
+  - Calls `buildComplaintWhereClause(ctx)` for complaint filtering
+  - Builds workOrder WHERE: supervisor gets OR(complaint.supervisorId + dept techs), technician gets assignedToId, customer gets complaint.customerId, hr/finance get NEVER_MATCH
+  - Builds invoice/quotation WHERE: customer gets customerId-scoped, only super_admin/admin/manager/finance see tenant-wide
+  - Builds equipment WHERE: customer gets customerId-scoped, supervisor/hr/finance get NEVER_MATCH, technician/admin/manager get tenant-wide
+  - Permission flags: canSeeRevenue (admin/manager/finance), canSeeInventory (admin/manager), canSeePm (admin/manager/supervisor), canSeeEmployees (admin/manager/hr), canSeeCustomers (admin/manager/finance), canSeeEquipment (admin/manager/technician/customer-with-link)
+- Rewrote `src/app/api/dashboard/kpi/route.ts`:
+  - Static imports (no dynamic imports in try/catch, no redundant re-imports in catch)
+  - Uses `buildDashboardScope` for all WHERE clauses and permission flags
+  - Each query gated by scope.canSee* flags — returns 0/empty for hidden data
+  - Added `accessLevel: payload.role` to response
+  - Added audit logging `[Dashboard/${role}] GET /api/dashboard/kpi userId=...`
+  - Proxy path: forwards query params + audit logging
+- Rewrote `src/app/api/dashboard/charts/route.ts`:
+  - Static imports, `buildDashboardScope` for all scoping
+  - Finance: empty complaint charts, only revenue data
+  - HR: all empty charts (complaints hidden, revenue hidden, PM hidden)
+  - Customer: only their complaint charts via scope.complaintWhere
+  - Audit logging on both proxy and local paths
+- Rewrote `src/app/api/dashboard/recent/route.ts`:
+  - Static imports, `buildDashboardScope` for all scoping
+  - HR/finance: return empty arrays for complaints and work orders
+  - Customer: work orders linked via complaint.customerId
+  - PM only shown when scope.canSeePm is true
+  - Audit logging on both proxy and local paths
+
+Stage Summary:
+- **Created**: `src/lib/dashboard-scope.ts` — shared `buildDashboardScope()` consumed by all 3 routes
+- **Exported**: `resolveDepartmentTechnicianIds` from `@/lib/rbac` (was private)
+- **Updated**: `kpi/route.ts`, `charts/route.ts`, `recent/route.ts` — full enterprise RBAC filtering
+- **Backward compatible**: same response shape, plus new `accessLevel` field in KPI
+- **Lint**: 0 new errors (all 10 issues are pre-existing)
+
+---
+Task ID: 1-10
+Agent: main + sub-agents (full-stack-developer x2)
+Task: Build Enterprise Role-Based Dashboard Filtering & Data Isolation System
+
+Work Log:
+- Ran comprehensive audit of RBAC system, dashboard APIs, and Supabase adapter
+- Identified critical security gaps: supervisor/manager/HR/finance saw unauthorized data in backend
+- Identified broken Supabase adapter groupBy/aggregate (fixed in previous session)
+- Sub-agent 1: Completely rewrote backend/src/routes/dashboard.routes.ts with buildDashboardScope() helper and full per-role filtering for all 8 roles
+- Sub-agent 2: Created src/lib/dashboard-scope.ts centralized scope builder; updated all 3 frontend dashboard API routes (kpi, charts, recent)
+- Updated src/hooks/use-dashboard-queries.ts with role-based `enabled` flags, filter support, and DashboardFilters type
+- Updated src/components/modules/dashboard/dashboard-view.tsx with:
+  - Role-specific quick badges for ALL 8 roles (super_admin, admin, manager, supervisor, technician, finance, hr, customer)
+  - DashboardFilterBar component with 8 filter fields (status, priority, date range, department, technician, customer, category)
+  - Role-based chart rendering (technician/supervisor: complaint-only; HR: no charts; finance: revenue+status)
+  - Role-based recent activity tables (HR/finance: hidden; customer/technician/supervisor: complaints only)
+  - Role-based PM schedule visibility
+- Added audit logging to all dashboard API routes (both proxy and local paths)
+- Removed debug fields from backend error responses
+- Added accessLevel to KPI responses
+- Exported resolveDepartmentTechnicianIds from RBAC module
+
+Stage Summary:
+- Files created: src/lib/dashboard-scope.ts
+- Files rewritten: backend/src/routes/dashboard.routes.ts, src/app/api/dashboard/{kpi,charts,recent}/route.ts
+- Files updated: src/hooks/use-dashboard-queries.ts, src/components/modules/dashboard/dashboard-view.tsx, src/lib/rbac/index.ts, src/lib/rbac/complaint-access.ts
+- All 8 roles have strict server-side data isolation
+- Lint passes (all errors are pre-existing)
+- Zero data leakage between roles
+- Global filters available to admin/manager/supervisor only

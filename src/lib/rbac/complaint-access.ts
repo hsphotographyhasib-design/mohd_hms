@@ -94,7 +94,7 @@ async function resolveCustomerId(
  * Find all technician user IDs within a department.
  * Results are cached for 1 minute.
  */
-async function resolveDepartmentTechnicianIds(
+export async function resolveDepartmentTechnicianIds(
   tenantId: string,
   departmentId: string
 ): Promise<string[]> {

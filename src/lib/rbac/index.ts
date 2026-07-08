@@ -6,5 +6,5 @@
  */
 
 export type { AuthContext, ComplaintAccessResult, AccessLevel, UserRole, ComplaintAuditEntry } from './types';
-export { buildComplaintWhereClause, canAccessComplaint, canPerformAction, buildAuthContext, buildAuthContextFromRequest, isFieldVisibleToRole, CUSTOMER_HIDDEN_FIELDS, ROLE_REQUIRED_ACTIONS } from './complaint-access';
+export { buildComplaintWhereClause, canAccessComplaint, canPerformAction, buildAuthContext, buildAuthContextFromRequest, isFieldVisibleToRole, CUSTOMER_HIDDEN_FIELDS, ROLE_REQUIRED_ACTIONS, resolveDepartmentTechnicianIds } from './complaint-access';
 export { logComplaintAccess, logComplaintAccessDenied, logComplaintAccessAllowed, extractIpAddress, extractUserAgent, extractDeviceType } from './audit-logger';

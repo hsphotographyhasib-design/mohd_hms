@@ -4,195 +4,665 @@ import { requireAuth } from '../middleware/auth.js';
 
 const router = Router();
 
-// ─── GET / — Main dashboard ────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// Types
+// ═══════════════════════════════════════════════════════════════════════════════
+
+interface DashboardScope {
+  complaintWhere: Record<string, unknown>;
+  workOrderWhere: Record<string, unknown>;
+  /** Supervisor & customer may need a second WHERE merged via OR (dual-query) */
+  workOrderSecondaryWhere?: Record<string, unknown>;
+  invoiceWhere: Record<string, unknown>;
+  quotationWhere: Record<string, unknown>;
+  equipmentWhere: Record<string, unknown>;
+  pmWhere: Record<string, unknown>;
+  canSeeRevenue: boolean;
+  canSeeInventory: boolean;
+  canSeePm: boolean;
+  canSeeEmployees: boolean;
+  canSeeCustomers: boolean;
+  canSeeEquipment: boolean;
+  canSeeComplaints: boolean;
+  canSeeWorkOrders: boolean;
+  /** Customer role returns 1 for totalCustomers */
+  customerCountOverride?: number;
+}
+
+// Sentinel that never matches any real row — used to hide data for restricted roles.
+const NEVER: Record<string, unknown> = { id: '__NEVER__' };
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Shared scope builder — resolves all WHERE clauses + visibility flags
+// for a given (tenantId, userId, role) triple.
+//
+// Called once per request; each endpoint reuses the returned scope.
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function buildDashboardScope(
+  tenantId: string,
+  userId: string,
+  role: string,
+): Promise<DashboardScope> {
+  const base: Record<string, unknown> = { tenantId };
+  const hidden: Record<string, unknown> = { ...base, ...NEVER };
+
+  // ── Full-access roles ──────────────────────────────────────────────────
+  if (['super_admin', 'admin', 'manager'].includes(role)) {
+    return {
+      complaintWhere: base,
+      workOrderWhere: base,
+      invoiceWhere: base,
+      quotationWhere: base,
+      equipmentWhere: base,
+      pmWhere: base,
+      canSeeRevenue: true,
+      canSeeInventory: true,
+      canSeePm: true,
+      canSeeEmployees: true,
+      canSeeCustomers: true,
+      canSeeEquipment: true,
+      canSeeComplaints: true,
+      canSeeWorkOrders: true,
+    };
+  }
+
+  // ── Supervisor ─────────────────────────────────────────────────────────
+  if (role === 'supervisor') {
+    // 1. Look up user to get departmentId
+    const user = (await db.user.findUnique({
+      where: { id: userId },
+      select: { departmentId: true },
+    })) as { departmentId?: string } | null;
+    const deptId = user?.departmentId;
+
+    // 2. Find all technician IDs in their department
+    const techs = deptId
+      ? ((await db.user.findMany({
+          where: { tenantId, departmentId: deptId, role: 'technician', isActive: true },
+          select: { id: true },
+        })) as { id: string }[])
+      : [];
+    const techIds = techs.map((t) => t.id);
+
+    // 3. Find complaint IDs supervised by this user (for work-order linking)
+    const myComplaints = ((await db.complaint.findMany({
+      where: { ...base, supervisorId: userId },
+      select: { id: true },
+    })) as { id: string }[]);
+    const myComplaintIds = myComplaints.map((c) => c.id);
+
+    return {
+      complaintWhere: { ...base, supervisorId: userId },
+      // Work orders: complaints I supervise OR dept techs are assigned
+      workOrderWhere: myComplaintIds.length > 0
+        ? { ...base, complaintId: { in: myComplaintIds } }
+        : hidden,
+      workOrderSecondaryWhere: techIds.length > 0
+        ? { ...base, assignedToId: { in: techIds } }
+        : hidden,
+      invoiceWhere: hidden,
+      quotationWhere: hidden,
+      equipmentWhere: hidden,
+      pmWhere: hidden,
+      canSeeRevenue: false,
+      canSeeInventory: false,
+      canSeePm: false,
+      canSeeEmployees: true,
+      canSeeCustomers: true,
+      canSeeEquipment: false,
+      canSeeComplaints: true,
+      canSeeWorkOrders: true,
+    };
+  }
+
+  // ── Technician ────────────────────────────────────────────────────────
+  if (role === 'technician') {
+    return {
+      complaintWhere: { ...base, assignedToId: userId },
+      workOrderWhere: { ...base, assignedToId: userId },
+      invoiceWhere: hidden,
+      quotationWhere: hidden,
+      equipmentWhere: base, // tenant-wide count
+      pmWhere: hidden,
+      canSeeRevenue: false,
+      canSeeInventory: false,
+      canSeePm: false,
+      canSeeEmployees: false,
+      canSeeCustomers: false,
+      canSeeEquipment: true,
+      canSeeComplaints: true,
+      canSeeWorkOrders: true,
+    };
+  }
+
+  // ── Finance ───────────────────────────────────────────────────────────
+  if (role === 'finance') {
+    return {
+      complaintWhere: hidden,
+      workOrderWhere: hidden,
+      invoiceWhere: base,
+      quotationWhere: base,
+      equipmentWhere: hidden,
+      pmWhere: hidden,
+      canSeeRevenue: true,
+      canSeeInventory: false,
+      canSeePm: false,
+      canSeeEmployees: false,
+      canSeeCustomers: true,
+      canSeeEquipment: false,
+      canSeeComplaints: false,
+      canSeeWorkOrders: false,
+    };
+  }
+
+  // ── HR ────────────────────────────────────────────────────────────────
+  if (role === 'hr') {
+    return {
+      complaintWhere: hidden,
+      workOrderWhere: hidden,
+      invoiceWhere: hidden,
+      quotationWhere: hidden,
+      equipmentWhere: hidden,
+      pmWhere: hidden,
+      canSeeRevenue: false,
+      canSeeInventory: false,
+      canSeePm: false,
+      canSeeEmployees: true,
+      canSeeCustomers: false,
+      canSeeEquipment: false,
+      canSeeComplaints: false,
+      canSeeWorkOrders: false,
+    };
+  }
+
+  // ── Customer ──────────────────────────────────────────────────────────
+  if (role === 'customer') {
+    // 1. Look up user to get email / phone
+    const user = (await db.user.findUnique({
+      where: { id: userId },
+      select: { email: true, phone: true },
+    })) as { email?: string | null; phone?: string | null } | null;
+
+    // 2. Find linked Customer record via email/phone match
+    const orConds: Record<string, unknown>[] = [];
+    if (user?.email) orConds.push({ email: user.email });
+    if (user?.phone) orConds.push({ phone: user.phone });
+
+    const linked = orConds.length > 0
+      ? ((await db.customer.findFirst({
+          where: { tenantId, OR: orConds },
+          select: { id: true },
+        })) as { id: string } | null)
+      : null;
+    const custId = linked?.id;
+
+    // 3. Find complaint IDs linked to this customer (for work-order linking)
+    let complaintIds: string[] = [];
+    if (custId) {
+      const cc = ((await db.complaint.findMany({
+        where: { tenantId, customerId: custId },
+        select: { id: true },
+      })) as { id: string }[]);
+      complaintIds = cc.map((c) => c.id);
+    }
+
+    return {
+      complaintWhere: custId ? { ...base, customerId: custId } : hidden,
+      workOrderWhere: complaintIds.length > 0
+        ? { ...base, complaintId: { in: complaintIds } }
+        : hidden,
+      invoiceWhere: custId ? { ...base, customerId: custId } : hidden,
+      quotationWhere: custId ? { ...base, customerId: custId } : hidden,
+      equipmentWhere: custId ? { ...base, customerId: custId } : hidden,
+      pmWhere: hidden,
+      canSeeRevenue: false,
+      canSeeInventory: false,
+      canSeePm: false,
+      canSeeEmployees: false,
+      canSeeCustomers: true,
+      canSeeEquipment: true,
+      canSeeComplaints: true,
+      canSeeWorkOrders: true,
+      customerCountOverride: 1,
+    };
+  }
+
+  // ── Unknown role: deny everything ──────────────────────────────────────
+  return {
+    complaintWhere: hidden,
+    workOrderWhere: hidden,
+    invoiceWhere: hidden,
+    quotationWhere: hidden,
+    equipmentWhere: hidden,
+    pmWhere: hidden,
+    canSeeRevenue: false,
+    canSeeInventory: false,
+    canSeePm: false,
+    canSeeEmployees: false,
+    canSeeCustomers: false,
+    canSeeEquipment: false,
+    canSeeComplaints: false,
+    canSeeWorkOrders: false,
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Helpers — work-order dual-WHERE queries (supervisor & customer)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/**
+ * groupBy on work orders, merging results when a secondary WHERE exists
+ * (supervisor needs complaint-linked + dept-tech-assigned WOs ORed together).
+ */
+async function woGroupBy(
+  scope: DashboardScope,
+  by: string[],
+): Promise<Record<string, unknown>[]> {
+  if (!scope.canSeeWorkOrders) return [];
+
+  if (!scope.workOrderSecondaryWhere) {
+    return db.workOrder.groupBy({
+      by,
+      where: scope.workOrderWhere,
+      _count: { id: true },
+    }) as Promise<Record<string, unknown>[]>;
+  }
+
+  const [g1, g2] = await Promise.all([
+    db.workOrder.groupBy({ by, where: scope.workOrderWhere, _count: { id: true } }),
+    db.workOrder.groupBy({ by, where: scope.workOrderSecondaryWhere, _count: { id: true } }),
+  ]);
+
+  const merged = new Map<string, Record<string, unknown>>();
+  for (const item of [...(g1 as Record<string, unknown>[]), ...(g2 as Record<string, unknown>[])]) {
+    const key = String((item as any)[by[0]] ?? '');
+    const ex = merged.get(key);
+    if (ex) {
+      ((ex as any)._count as any).id += ((item as any)._count as any).id;
+    } else {
+      merged.set(key, { ...item, _count: { id: ((item as any)._count as any).id } });
+    }
+  }
+  return Array.from(merged.values());
+}
+
+/**
+ * findMany on work orders, deduplicating when a secondary WHERE exists.
+ */
+async function woFindMany(
+  scope: DashboardScope,
+  opts?: { take?: number; orderBy?: Record<string, string>; select?: Record<string, unknown> },
+): Promise<Record<string, unknown>[]> {
+  if (!scope.canSeeWorkOrders) return [];
+
+  if (!scope.workOrderSecondaryWhere) {
+    return db.workOrder.findMany({
+      where: scope.workOrderWhere,
+      ...opts,
+    }) as Promise<Record<string, unknown>[]>;
+  }
+
+  const [r1, r2] = await Promise.all([
+    db.workOrder.findMany({ where: scope.workOrderWhere, ...opts }),
+    db.workOrder.findMany({ where: scope.workOrderSecondaryWhere, ...opts }),
+  ]);
+
+  const seen = new Set<string>();
+  const merged: Record<string, unknown>[] = [];
+  for (const wo of [...(r1 as Record<string, unknown>[]), ...(r2 as Record<string, unknown>[])]) {
+    const id = String((wo as any).id);
+    if (!seen.has(id)) {
+      seen.add(id);
+      merged.push(wo);
+    }
+  }
+
+  // Re-apply sort & take
+  if (opts?.orderBy) {
+    const [key, dir] = Object.entries(opts.orderBy)[0];
+    merged.sort((a, b) => {
+      const va = (a as any)[key] as string;
+      const vb = (b as any)[key] as string;
+      if (!va && !vb) return 0;
+      if (!va) return 1;
+      if (!vb) return -1;
+      const cmp = va < vb ? -1 : va > vb ? 1 : 0;
+      return dir === 'desc' ? -cmp : cmp;
+    });
+  }
+  return merged.slice(0, opts?.take ?? merged.length);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Shared formatters
+// ═══════════════════════════════════════════════════════════════════════════════
+
+function toStatusMap(rows: Record<string, unknown>[]): Record<string, number> {
+  const map: Record<string, number> = {};
+  for (const row of rows) {
+    map[(row as any).status as string] = ((row as any)._count as any)?.id ?? 0;
+  }
+  return map;
+}
+
+function buildMonthlyRevenue(invoices: Record<string, unknown>[]): { month: string; revenue: number }[] {
+  const now = new Date();
+  const result: { month: string; revenue: number }[] = [];
+  for (let i = 5; i >= 0; i--) {
+    const start = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999);
+    const label = start.toLocaleString('default', { month: 'short', year: '2-digit' });
+    const rev = invoices
+      .filter((inv) => {
+        const d = new Date((inv as any).paidAt as string);
+        return d >= start && d <= end;
+      })
+      .reduce((s, inv) => s + Number((inv as any).total || 0), 0);
+    result.push({ month: label, revenue: Math.round(rev * 100) / 100 });
+  }
+  return result;
+}
+
+function calcPmCompliance(pmList: Record<string, unknown>[]): number {
+  if (!pmList.length) return 0;
+  const completed = pmList.filter((pm) => (pm as any).status === 'completed').length;
+  return Math.round((completed / pmList.length) * 100);
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// Name-enrichment helpers (resolve foreign keys → display names)
+// ═══════════════════════════════════════════════════════════════════════════════
+
+async function enrichComplaints(complaints: Record<string, unknown>[]) {
+  if (!complaints.length) return [];
+  const customerIds = [...new Set(complaints.map((c) => (c as any).customerId).filter(Boolean))] as string[];
+  const assigneeIds = [...new Set(complaints.map((c) => (c as any).assignedToId).filter(Boolean))] as string[];
+  const supervisorIds = [...new Set(complaints.map((c) => (c as any).supervisorId).filter(Boolean))] as string[];
+  const equipmentIds = [...new Set(complaints.map((c) => (c as any).equipmentId).filter(Boolean))] as string[];
+
+  const [customers, assignees, supervisors, equipment] = await Promise.all([
+    customerIds.length
+      ? db.customer.findMany({ where: { id: { in: customerIds } }, select: { id: true, name: true } })
+      : Promise.resolve([]),
+    assigneeIds.length
+      ? db.user.findMany({ where: { id: { in: assigneeIds } }, select: { id: true, name: true } })
+      : Promise.resolve([]),
+    supervisorIds.length
+      ? db.user.findMany({ where: { id: { in: supervisorIds } }, select: { id: true, name: true } })
+      : Promise.resolve([]),
+    equipmentIds.length
+      ? db.equipment.findMany({ where: { id: { in: equipmentIds } }, select: { id: true, name: true } })
+      : Promise.resolve([]),
+  ]);
+
+  const cMap = new Map((customers as any[]).map((c) => [c.id, c.name]));
+  const aMap = new Map((assignees as any[]).map((u) => [u.id, u.name]));
+  const sMap = new Map((supervisors as any[]).map((u) => [u.id, u.name]));
+  const eMap = new Map((equipment as any[]).map((e) => [e.id, e.name]));
+
+  return complaints.map((c: any) => ({
+    id: c.id,
+    tenantId: c.tenantId,
+    customerId: c.customerId,
+    customerName: cMap.get(c.customerId) || null,
+    equipmentId: c.equipmentId,
+    equipmentName: eMap.get(c.equipmentId) || null,
+    title: c.title,
+    description: c.description,
+    priority: c.priority,
+    status: c.status,
+    category: c.category,
+    assignedToId: c.assignedToId,
+    assignedToName: aMap.get(c.assignedToId) || null,
+    supervisorId: c.supervisorId,
+    supervisorName: sMap.get(c.supervisorId) || null,
+    resolvedAt: c.resolvedAt?.toISOString?.() ?? c.resolvedAt ?? null,
+    closedAt: c.closedAt?.toISOString?.() ?? c.closedAt ?? null,
+    createdAt: c.createdAt?.toISOString?.() ?? c.createdAt ?? null,
+    updatedAt: c.updatedAt?.toISOString?.() ?? c.updatedAt ?? null,
+  }));
+}
+
+async function enrichWorkOrders(workOrders: Record<string, unknown>[], extraUserIds: string[] = []) {
+  if (!workOrders.length) return [];
+  const assigneeIds = [
+    ...new Set([
+      ...workOrders.map((wo) => (wo as any).assignedToId).filter(Boolean) as string[],
+      ...extraUserIds,
+    ]),
+  ] as string[];
+  const equipmentIds = [...new Set(workOrders.map((wo) => (wo as any).equipmentId).filter(Boolean))] as string[];
+
+  const [assignees, equipment] = await Promise.all([
+    assigneeIds.length
+      ? db.user.findMany({ where: { id: { in: assigneeIds } }, select: { id: true, name: true } })
+      : Promise.resolve([]),
+    equipmentIds.length
+      ? db.equipment.findMany({ where: { id: { in: equipmentIds } }, select: { id: true, name: true } })
+      : Promise.resolve([]),
+  ]);
+
+  const aMap = new Map((assignees as any[]).map((u) => [u.id, u.name]));
+  const eMap = new Map((equipment as any[]).map((e) => [e.id, e.name]));
+
+  return workOrders.map((wo: any) => ({
+    id: wo.id,
+    tenantId: wo.tenantId,
+    complaintId: wo.complaintId,
+    equipmentId: wo.equipmentId,
+    equipmentName: eMap.get(wo.equipmentId) || null,
+    title: wo.title,
+    description: wo.description,
+    status: wo.status,
+    priority: wo.priority,
+    type: wo.type,
+    assignedToId: wo.assignedToId,
+    assignedToName: aMap.get(wo.assignedToId) || null,
+    scheduledDate: wo.scheduledDate?.toISOString?.() ?? wo.scheduledDate ?? null,
+    completedAt: wo.completedAt?.toISOString?.() ?? wo.completedAt ?? null,
+    totalCost: wo.totalCost,
+    createdAt: wo.createdAt?.toISOString?.() ?? wo.createdAt ?? null,
+    updatedAt: wo.updatedAt?.toISOString?.() ?? wo.updatedAt ?? null,
+  }));
+}
+
+async function enrichPmSchedules(pmList: Record<string, unknown>[]) {
+  if (!pmList.length) return [];
+  const equipmentIds = [...new Set(pmList.map((pm) => (pm as any).equipmentId).filter(Boolean))] as string[];
+  const assigneeIds = [...new Set(pmList.map((pm) => (pm as any).assignedToId).filter(Boolean))] as string[];
+
+  const [equipment, assignees] = await Promise.all([
+    equipmentIds.length
+      ? db.equipment.findMany({ where: { id: { in: equipmentIds } }, select: { id: true, name: true } })
+      : Promise.resolve([]),
+    assigneeIds.length
+      ? db.user.findMany({ where: { id: { in: assigneeIds } }, select: { id: true, name: true } })
+      : Promise.resolve([]),
+  ]);
+
+  const eMap = new Map((equipment as any[]).map((e) => [e.id, e.name]));
+  const aMap = new Map((assignees as any[]).map((u) => [u.id, u.name]));
+
+  return pmList.map((pm: any) => ({
+    id: pm.id,
+    tenantId: pm.tenantId,
+    equipmentId: pm.equipmentId,
+    equipmentName: eMap.get(pm.equipmentId) || null,
+    title: pm.title,
+    description: pm.description,
+    frequency: pm.frequency,
+    lastExecuted: pm.lastExecuted?.toISOString?.() ?? pm.lastExecuted ?? null,
+    nextDueDate: pm.nextDueDate?.toISOString?.() ?? pm.nextDueDate ?? null,
+    assignedToId: pm.assignedToId,
+    assignedToName: aMap.get(pm.assignedToId) || null,
+    status: pm.status,
+    createdAt: pm.createdAt?.toISOString?.() ?? null,
+    updatedAt: pm.updatedAt?.toISOString?.() ?? null,
+  }));
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// GET / — Full combined dashboard
+// ═══════════════════════════════════════════════════════════════════════════════
+
 router.route('/').get(requireAuth, async (req: Request, res: Response) => {
   try {
     const tenantId = req.tenantId!;
+    const userId = req.user!.userId as string;
     const role = (req.user!.role as string).toLowerCase();
 
-    // Build RBAC-aware WHERE clauses
-    const complaintWhere: Record<string, unknown> = { tenantId };
-    let workOrderWhere: Record<string, unknown> = { tenantId };
+    console.log(`[Dashboard/${role}] ${req.method} /api/dashboard${req.path} userId=${userId}`);
 
-    if (role === 'technician') {
-      complaintWhere.assignedToId = req.user!.userId;
-      workOrderWhere.assignedToId = req.user!.userId;
-    } else if (role === 'customer') {
-      // Find linked customer
-      const user = await db.user.findUnique({
-        where: { id: req.user!.userId as string },
-        select: { id: true, email: true, phone: true },
-      });
-      if (user) {
-        const linkedCustomer = await db.customer.findFirst({
-          where: {
-            tenantId,
-            OR: [
-              ...(user.email ? [{ email: user.email }] : []),
-              ...(user.phone ? [{ phone: user.phone }] : []),
-            ],
-          },
-          select: { id: true },
-        });
-        if (linkedCustomer) {
-          (complaintWhere as any).customerId = linkedCustomer.id;
-        }
-      }
-      workOrderWhere = { tenantId, id: '__NEVER_MATCH__' };
-    }
+    const scope = await buildDashboardScope(tenantId, userId, role);
 
-    const isFinance = ['super_admin', 'admin', 'manager', 'finance'].includes(role);
-    const isInventory = ['super_admin', 'admin', 'manager'].includes(role);
-    const isPm = ['super_admin', 'admin', 'manager', 'supervisor'].includes(role);
-
+    // ── Parallel data fetch ───────────────────────────────────────────
     const [
-      totalEquipment, activeEquipment, complaintStatusCounts,
-      workOrderStatusCounts, paidInvoiceRevenue, pendingInvoicesCount,
-      overdueInvoicesCount, totalCustomers, totalEmployees, lowStockItemsRaw,
-      pmAll, monthlyRevenueRaw, complaintsByCategoryRaw, recentComplaints,
-      recentWorkOrders, upcomingPm,
+      complaintStatusGroups,
+      woStatusGroups,
+      totalEquipment,
+      activeEquipment,
+      paidRevenue,
+      pendingInvoiceCount,
+      overdueInvoiceCount,
+      totalCustomers,
+      totalEmployees,
+      lowStockRaw,
+      pmAll,
+      monthlyRevenueInvoices,
+      complaintsByCategoryRaw,
+      recentComplaintsRaw,
+      recentWorkOrdersRaw,
+      upcomingPmRaw,
     ] = await Promise.all([
-      db.equipment.count({ where: { tenantId } }),
-      db.equipment.count({ where: { tenantId, status: 'active' } }),
-      db.complaint.groupBy({ by: ['status'], where: complaintWhere, _count: { id: true } }),
-      db.workOrder.groupBy({ by: ['status'], where: workOrderWhere, _count: { id: true } }),
-      isFinance
-        ? db.invoice.aggregate({ where: { tenantId, status: 'PAID' }, _sum: { total: true } })
+      // Complaint status distribution
+      scope.canSeeComplaints
+        ? db.complaint.groupBy({ by: ['status'], where: scope.complaintWhere, _count: { id: true } })
+        : Promise.resolve([]),
+
+      // Work-order status distribution (may be dual-query for supervisor)
+      woGroupBy(scope, ['status']),
+
+      // Equipment
+      scope.canSeeEquipment
+        ? db.equipment.count({ where: scope.equipmentWhere })
+        : Promise.resolve(0),
+
+      scope.canSeeEquipment
+        ? db.equipment.count({ where: { ...scope.equipmentWhere, status: 'active' } })
+        : Promise.resolve(0),
+
+      // Revenue
+      scope.canSeeRevenue
+        ? db.invoice.aggregate({ where: { ...scope.invoiceWhere, status: 'PAID' }, _sum: { total: true } })
         : Promise.resolve({ _sum: { total: 0 } }),
-      isFinance
-        ? db.invoice.count({ where: { tenantId, status: 'PENDING' } })
+
+      scope.canSeeRevenue
+        ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'PENDING' } })
         : Promise.resolve(0),
-      isFinance
-        ? db.invoice.count({ where: { tenantId, status: 'OVERDUE' } })
+
+      scope.canSeeRevenue
+        ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'OVERDUE' } })
         : Promise.resolve(0),
-      role === 'customer'
-        ? Promise.resolve(1)
-        : db.customer.count({ where: { tenantId, isActive: true } }),
-      role === 'customer'
-        ? Promise.resolve(0)
-        : db.user.count({ where: { tenantId, isActive: true } }),
-      isInventory
-        ? db.inventoryItem.findMany({ where: { tenantId, isActive: true }, select: { id: true, quantity: true, minStock: true } })
+
+      // Customers
+      scope.canSeeCustomers
+        ? (scope.customerCountOverride != null
+            ? Promise.resolve(scope.customerCountOverride)
+            : db.customer.count({ where: { tenantId, isActive: true } }))
+        : Promise.resolve(0),
+
+      // Employees
+      scope.canSeeEmployees
+        ? db.user.count({ where: { tenantId, isActive: true } })
+        : Promise.resolve(0),
+
+      // Inventory
+      scope.canSeeInventory
+        ? db.inventoryItem.findMany({
+            where: { tenantId, isActive: true },
+            select: { id: true, quantity: true, minStock: true },
+          })
         : Promise.resolve([]),
-      isPm
-        ? db.pmSchedule.findMany({ where: { tenantId } })
+
+      // PM
+      scope.canSeePm
+        ? db.pmSchedule.findMany({ where: scope.pmWhere })
         : Promise.resolve([]),
-      isFinance
-        ? db.invoice.findMany({ where: { tenantId, status: 'PAID', paidAt: { not: null } }, select: { total: true, paidAt: true } })
+
+      // Monthly revenue (last 6 months)
+      scope.canSeeRevenue
+        ? db.invoice.findMany({
+            where: { ...scope.invoiceWhere, status: 'PAID', paidAt: { not: null } },
+            select: { total: true, paidAt: true },
+          })
         : Promise.resolve([]),
-      db.complaint.groupBy({ by: ['category'], where: { ...complaintWhere, category: { not: null } }, _count: { id: true } }),
-      db.complaint.findMany({
-        where: complaintWhere,
+
+      // Complaint category distribution
+      scope.canSeeComplaints
+        ? db.complaint.groupBy({
+            by: ['category'],
+            where: { ...scope.complaintWhere, category: { not: null } },
+            _count: { id: true },
+          })
+        : Promise.resolve([]),
+
+      // Recent complaints
+      scope.canSeeComplaints
+        ? db.complaint.findMany({
+            where: scope.complaintWhere,
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+          })
+        : Promise.resolve([]),
+
+      // Recent work orders
+      woFindMany(scope, {
         take: 5,
         orderBy: { createdAt: 'desc' },
       }),
-      db.workOrder.findMany({
-        where: workOrderWhere,
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-      }),
-      isPm
+
+      // Upcoming PM
+      scope.canSeePm
         ? db.pmSchedule.findMany({
-            where: { tenantId, status: 'active', nextDueDate: { gte: new Date() } },
+            where: { ...scope.pmWhere, status: 'active', nextDueDate: { gte: new Date() } },
             take: 5,
             orderBy: { nextDueDate: 'asc' },
           })
         : Promise.resolve([]),
     ]);
 
-    // Process complaint status counts
-    const statusMap: Record<string, number> = {};
-    (complaintStatusCounts as any[]).forEach((c: any) => { statusMap[c.status] = c._count.id; });
-    const openComplaints = statusMap['OPEN'] || statusMap['NEW'] || 0;
-    const inProgressComplaints = statusMap['IN_PROGRESS'] || 0;
+    // ── Process results ───────────────────────────────────────────────
+    const cStatusMap = toStatusMap(complaintStatusGroups as Record<string, unknown>[]);
+    const openComplaints = cStatusMap['OPEN'] ?? cStatusMap['NEW'] ?? 0;
+    const inProgressComplaints = cStatusMap['IN_PROGRESS'] ?? 0;
 
-    // Process work order status counts
-    const woStatusMap: Record<string, number> = {};
-    (workOrderStatusCounts as any[]).forEach((c: any) => { woStatusMap[c.status] = c._count.id; });
-    const totalWorkOrders = (workOrderStatusCounts as any[]).reduce((sum: number, c: any) => sum + c._count.id, 0);
-    const pendingWorkOrders = woStatusMap['PENDING'] || 0;
-    const completedWorkOrders = woStatusMap['COMPLETED'] || 0;
+    const woMap = toStatusMap(woStatusGroups as Record<string, unknown>[]);
+    const totalWorkOrders = Object.values(woMap).reduce((s, v) => s + v, 0);
+    const pendingWorkOrders = woMap['PENDING'] ?? 0;
+    const completedWorkOrders = woMap['COMPLETED'] ?? 0;
 
-    // PM compliance
-    const pmTotal = (pmAll as any[]).length;
-    const pmCompleted = (pmAll as any[]).filter((pm: any) => pm.status === 'completed').length;
-    const pmCompliance = pmTotal > 0 ? Math.round((pmCompleted / pmTotal) * 100) : 0;
+    const pmCompliance = calcPmCompliance(pmAll as Record<string, unknown>[]);
+    const monthlyRevenue = buildMonthlyRevenue(monthlyRevenueInvoices as Record<string, unknown>[]);
+    const complaintsByCategory = (complaintsByCategoryRaw as Record<string, unknown>[]).map((c: any) => ({
+      category: c.category || 'Unknown',
+      count: c._count.id,
+    }));
+    const complaintsByStatus = (complaintStatusGroups as Record<string, unknown>[]).map((c: any) => ({
+      status: c.status,
+      count: c._count.id,
+    }));
 
-    // Monthly revenue for last 6 months
-    const now = new Date();
-    const monthlyRevenue: { month: string; revenue: number }[] = [];
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999);
-      const monthName = d.toLocaleString('default', { month: 'short', year: '2-digit' });
-      const rev = (monthlyRevenueRaw as any[])
-        .filter((inv: any) => {
-          const paid = new Date(inv.paidAt!);
-          return paid >= d && paid <= end;
-        })
-        .reduce((sum: number, inv: any) => sum + inv.total, 0);
-      monthlyRevenue.push({ month: monthName, revenue: Math.round(rev * 100) / 100 });
-    }
-
-    // Format recent complaints — fetch related names separately
-    const complaintIds = (recentComplaints as any[]).map((c: any) => c.id);
-    const [customers, assignees, supervisors, eqList] = await Promise.all([
-      complaintIds.length > 0
-        ? db.customer.findMany({ where: { id: { in: (recentComplaints as any[]).map((c: any) => c.customerId).filter(Boolean) } }, select: { id: true, name: true } })
-        : Promise.resolve([]),
-      db.user.findMany({ where: { id: { in: (recentComplaints as any[]).map((c: any) => c.assignedToId).filter(Boolean) } }, select: { id: true, name: true } }),
-      db.user.findMany({ where: { id: { in: (recentComplaints as any[]).map((c: any) => c.supervisorId).filter(Boolean) } }, select: { id: true, name: true } }),
-      db.equipment.findMany({ where: { id: { in: (recentComplaints as any[]).map((c: any) => c.equipmentId).filter(Boolean) } }, select: { id: true, name: true } }),
+    // Enrich with names
+    const [formattedComplaints, formattedWorkOrders, formattedPm] = await Promise.all([
+      enrichComplaints(recentComplaintsRaw as Record<string, unknown>[]),
+      enrichWorkOrders(recentWorkOrdersRaw as Record<string, unknown>[]),
+      enrichPmSchedules(upcomingPmRaw as Record<string, unknown>[]),
     ]);
-    const custMap = new Map((customers as any[]).map((c: any) => [c.id, c.name]));
-    const assignMap = new Map((assignees as any[]).map((u: any) => [u.id, u.name]));
-    const supMap = new Map((supervisors as any[]).map((u: any) => [u.id, u.name]));
-    const eqMap = new Map((eqList as any[]).map((e: any) => [e.id, e.name]));
 
-    const formattedComplaints = (recentComplaints as any[]).map((c: any) => ({
-      id: c.id, tenantId: c.tenantId, customerId: c.customerId, customerName: custMap.get(c.customerId) || null,
-      equipmentId: c.equipmentId, equipmentName: eqMap.get(c.equipmentId) || null,
-      title: c.title, description: c.description, priority: c.priority, status: c.status, category: c.category,
-      assignedToId: c.assignedToId, assignedToName: assignMap.get(c.assignedToId) || null,
-      supervisorId: c.supervisorId, supervisorName: supMap.get(c.supervisorId) || null,
-      resolvedAt: c.resolvedAt?.toISOString?.() || null, closedAt: c.closedAt?.toISOString?.() || null,
-      createdAt: c.createdAt?.toISOString?.() || c.createdAt, updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
-    }));
-
-    // Format work orders — fetch related names separately
-    const woIds = (recentWorkOrders as any[]).map((wo: any) => wo.id);
-    const [woAssignees, woEquip] = await Promise.all([
-      db.user.findMany({ where: { id: { in: (recentWorkOrders as any[]).map((wo: any) => wo.assignedToId).filter(Boolean) } }, select: { id: true, name: true } }),
-      db.equipment.findMany({ where: { id: { in: (recentWorkOrders as any[]).map((wo: any) => wo.equipmentId).filter(Boolean) } }, select: { id: true, name: true } }),
-    ]);
-    const woAssignMap = new Map((woAssignees as any[]).map((u: any) => [u.id, u.name]));
-    const woEqMap = new Map((woEquip as any[]).map((e: any) => [e.id, e.name]));
-
-    const formattedWorkOrders = (recentWorkOrders as any[]).map((wo: any) => ({
-      id: wo.id, tenantId: wo.tenantId, complaintId: wo.complaintId,
-      equipmentId: wo.equipmentId, equipmentName: woEqMap.get(wo.equipmentId) || null,
-      title: wo.title, description: wo.description, status: wo.status, priority: wo.priority,
-      type: wo.type, assignedToId: wo.assignedToId, assignedToName: woAssignMap.get(wo.assignedToId) || null,
-      scheduledDate: wo.scheduledDate?.toISOString?.() || null, completedAt: wo.completedAt?.toISOString?.() || null,
-      totalCost: wo.totalCost,
-      createdAt: wo.createdAt?.toISOString?.() || wo.createdAt, updatedAt: wo.updatedAt?.toISOString?.() || wo.updatedAt,
-    }));
-
-    const formattedPm = (upcomingPm as any[]).map((pm: any) => ({
-      id: pm.id, tenantId: pm.tenantId, equipmentId: pm.equipmentId, equipmentName: pm.equipment?.name,
-      title: pm.title, description: pm.description, frequency: pm.frequency,
-      lastExecuted: pm.lastExecuted?.toISOString?.() || null, nextDueDate: pm.nextDueDate?.toISOString?.() || null,
-      assignedToId: pm.assignedToId, assignedToName: pm.assignedTo?.name, status: pm.status,
-      createdAt: pm.createdAt?.toISOString?.() || null, updatedAt: pm.updatedAt?.toISOString?.() || null,
-    }));
-
-    const complaintsByCategory = (complaintsByCategoryRaw as any[]).map((c: any) => ({
-      category: c.category || 'Unknown', count: c._count.id,
-    }));
-
-    const complaintsByStatus = (complaintStatusCounts as any[]).map((c: any) => ({
-      status: c.status, count: c._count.id,
-    }));
+    const lowStockItems = scope.canSeeInventory
+      ? (lowStockRaw as any[]).filter((i: any) => i.quantity <= i.minStock).length
+      : 0;
 
     res.json({
       totalEquipment: totalEquipment as number,
@@ -202,13 +672,13 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
       totalWorkOrders,
       pendingWorkOrders,
       completedWorkOrders,
-      totalRevenue: ((paidInvoiceRevenue as any)?._sum?.total) || 0,
-      pendingInvoices: pendingInvoicesCount as number,
-      overdueInvoices: overdueInvoicesCount as number,
+      totalRevenue: ((paidRevenue as any)?._sum?.total) || 0,
+      pendingInvoices: pendingInvoiceCount as number,
+      overdueInvoices: overdueInvoiceCount as number,
       pmCompliance,
       totalCustomers: totalCustomers as number,
       totalEmployees: totalEmployees as number,
-      lowStockItems: (lowStockItemsRaw as any[]).filter((i: any) => i.quantity <= i.minStock).length,
+      lowStockItems,
       monthlyRevenue,
       complaintsByCategory,
       complaintsByStatus,
@@ -217,90 +687,101 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
       upcomingPm: formattedPm,
     });
   } catch (error) {
-    console.error('Dashboard DB error:', error);
-    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
+    console.error('Dashboard error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// ─── GET /kpi — Fast KPI endpoint ────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// GET /kpi — Fast KPI numbers
+// ═══════════════════════════════════════════════════════════════════════════════
+
 router.route('/kpi').get(requireAuth, async (req: Request, res: Response) => {
   try {
     const tenantId = req.tenantId!;
+    const userId = req.user!.userId as string;
     const role = (req.user!.role as string).toLowerCase();
 
-    const complaintWhere: Record<string, unknown> = { tenantId };
-    let workOrderWhere: Record<string, unknown> = { tenantId };
+    console.log(`[Dashboard/${role}] ${req.method} /api/dashboard${req.path} userId=${userId}`);
 
-    if (role === 'technician') {
-      complaintWhere.assignedToId = req.user!.userId;
-      workOrderWhere.assignedToId = req.user!.userId;
-    } else if (role === 'customer') {
-      const user = await db.user.findUnique({
-        where: { id: req.user!.userId as string },
-        select: { id: true, email: true, phone: true },
-      });
-      if (user) {
-        const linkedCustomer = await db.customer.findFirst({
-          where: {
-            tenantId,
-            OR: [
-              ...(user.email ? [{ email: user.email }] : []),
-              ...(user.phone ? [{ phone: user.phone }] : []),
-            ],
-          },
-          select: { id: true },
-        });
-        if (linkedCustomer) {
-          (complaintWhere as any).customerId = linkedCustomer.id;
-        }
-      }
-      workOrderWhere = { tenantId, id: '__NEVER_MATCH__' };
-    }
-
-    const isFinance = ['super_admin', 'admin', 'manager', 'finance'].includes(role);
-    const isInventory = ['super_admin', 'admin', 'manager'].includes(role);
-    const isPm = ['super_admin', 'admin', 'manager', 'supervisor'].includes(role);
+    const scope = await buildDashboardScope(tenantId, userId, role);
 
     const [
-      complaintStatusCounts, workOrderStatusCounts, paidInvoiceRevenue,
-      pendingInvoicesCount, overdueInvoicesCount, totalCustomers, totalEmployees,
-      totalEquipment, activeEquipment, lowStockItemsRaw, pmAll,
+      complaintStatusGroups,
+      woStatusGroups,
+      paidRevenue,
+      pendingInvoiceCount,
+      overdueInvoiceCount,
+      totalCustomers,
+      totalEmployees,
+      totalEquipment,
+      activeEquipment,
+      lowStockRaw,
+      pmAll,
     ] = await Promise.all([
-      db.complaint.groupBy({ by: ['status'], where: complaintWhere, _count: { id: true } }),
-      db.workOrder.groupBy({ by: ['status'], where: workOrderWhere, _count: { id: true } }),
-      isFinance
-        ? db.invoice.aggregate({ where: { tenantId, status: 'PAID' }, _sum: { total: true } })
-        : Promise.resolve({ _sum: { total: 0 } }),
-      isFinance ? db.invoice.count({ where: { tenantId, status: 'PENDING' } }) : Promise.resolve(0),
-      isFinance ? db.invoice.count({ where: { tenantId, status: 'OVERDUE' } }) : Promise.resolve(0),
-      role === 'customer' ? Promise.resolve(1) : db.customer.count({ where: { tenantId, isActive: true } }),
-      role === 'customer' ? Promise.resolve(0) : db.user.count({ where: { tenantId, isActive: true } }),
-      db.equipment.count({ where: { tenantId } }),
-      db.equipment.count({ where: { tenantId, status: 'active' } }),
-      isInventory
-        ? db.inventoryItem.findMany({ where: { tenantId, isActive: true }, select: { quantity: true, minStock: true } })
+      scope.canSeeComplaints
+        ? db.complaint.groupBy({ by: ['status'], where: scope.complaintWhere, _count: { id: true } })
         : Promise.resolve([]),
-      isPm
-        ? db.pmSchedule.findMany({ where: { tenantId }, select: { status: true } })
+
+      woGroupBy(scope, ['status']),
+
+      scope.canSeeRevenue
+        ? db.invoice.aggregate({ where: { ...scope.invoiceWhere, status: 'PAID' }, _sum: { total: true } })
+        : Promise.resolve({ _sum: { total: 0 } }),
+
+      scope.canSeeRevenue
+        ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'PENDING' } })
+        : Promise.resolve(0),
+
+      scope.canSeeRevenue
+        ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'OVERDUE' } })
+        : Promise.resolve(0),
+
+      scope.canSeeCustomers
+        ? (scope.customerCountOverride != null
+            ? Promise.resolve(scope.customerCountOverride)
+            : db.customer.count({ where: { tenantId, isActive: true } }))
+        : Promise.resolve(0),
+
+      scope.canSeeEmployees
+        ? db.user.count({ where: { tenantId, isActive: true } })
+        : Promise.resolve(0),
+
+      scope.canSeeEquipment
+        ? db.equipment.count({ where: scope.equipmentWhere })
+        : Promise.resolve(0),
+
+      scope.canSeeEquipment
+        ? db.equipment.count({ where: { ...scope.equipmentWhere, status: 'active' } })
+        : Promise.resolve(0),
+
+      scope.canSeeInventory
+        ? db.inventoryItem.findMany({
+            where: { tenantId, isActive: true },
+            select: { quantity: true, minStock: true },
+          })
+        : Promise.resolve([]),
+
+      scope.canSeePm
+        ? db.pmSchedule.findMany({ where: scope.pmWhere, select: { status: true } })
         : Promise.resolve([]),
     ]);
 
-    const statusMap: Record<string, number> = {};
-    (complaintStatusCounts as any[]).forEach((c: any) => { statusMap[c.status] = c._count.id; });
-    const openComplaints = statusMap['OPEN'] || statusMap['NEW'] || 0;
-    const inProgressComplaints = statusMap['IN_PROGRESS'] || statusMap['ACCEPTED'] || 0;
+    // ── Process ───────────────────────────────────────────────────────
+    const cStatusMap = toStatusMap(complaintStatusGroups as Record<string, unknown>[]);
+    const openComplaints = cStatusMap['OPEN'] ?? cStatusMap['NEW'] ?? 0;
+    const inProgressComplaints = cStatusMap['IN_PROGRESS'] ?? cStatusMap['ACCEPTED'] ?? 0;
 
-    const woStatusMap: Record<string, number> = {};
-    (workOrderStatusCounts as any[]).forEach((c: any) => { woStatusMap[c.status] = c._count.id; });
-    const totalWorkOrders = (workOrderStatusCounts as any[]).reduce((sum: number, c: any) => sum + c._count.id, 0);
-    const pendingWorkOrders = woStatusMap['PENDING'] || 0;
-    const completedWorkOrders = woStatusMap['COMPLETED'] || 0;
+    const woMap = toStatusMap(woStatusGroups as Record<string, unknown>[]);
+    const totalWorkOrders = Object.values(woMap).reduce((s, v) => s + v, 0);
+    const pendingWorkOrders = woMap['PENDING'] ?? 0;
+    const completedWorkOrders = woMap['COMPLETED'] ?? 0;
 
-    const lowStockItems = (lowStockItemsRaw as any[]).filter((i: any) => i.quantity <= i.minStock).length;
+    const lowStockItems = scope.canSeeInventory
+      ? (lowStockRaw as any[]).filter((i: any) => i.quantity <= i.minStock).length
+      : 0;
 
-    const pmTotal = (pmAll as any[]).length;
-    const pmCompleted = (pmAll as any[]).filter((pm: any) => pm.status === 'completed').length;
-    const pmCompliance = pmTotal > 0 ? Math.round((pmCompleted / pmTotal) * 100) : 0;
+    const pmCompliance = calcPmCompliance(pmAll as Record<string, unknown>[]);
 
     res.json({
       totalEquipment: totalEquipment as number,
@@ -310,183 +791,135 @@ router.route('/kpi').get(requireAuth, async (req: Request, res: Response) => {
       totalWorkOrders,
       pendingWorkOrders,
       completedWorkOrders,
-      totalRevenue: ((paidInvoiceRevenue as any)?._sum?.total) || 0,
-      pendingInvoices: pendingInvoicesCount as number,
-      overdueInvoices: overdueInvoicesCount as number,
+      totalRevenue: ((paidRevenue as any)?._sum?.total) || 0,
+      pendingInvoices: pendingInvoiceCount as number,
+      overdueInvoices: overdueInvoiceCount as number,
       pmCompliance,
       totalCustomers: totalCustomers as number,
       totalEmployees: totalEmployees as number,
       lowStockItems,
+      accessLevel: role,
     });
   } catch (error) {
     console.error('Dashboard KPI error:', error);
-    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// ─── GET /charts — Chart data endpoint ──────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// GET /charts — Chart data
+// ═══════════════════════════════════════════════════════════════════════════════
+
 router.route('/charts').get(requireAuth, async (req: Request, res: Response) => {
   try {
     const tenantId = req.tenantId!;
+    const userId = req.user!.userId as string;
     const role = (req.user!.role as string).toLowerCase();
 
-    // Build RBAC-aware WHERE clause for complaints
-    const complaintWhere: Record<string, unknown> = { tenantId };
+    console.log(`[Dashboard/${role}] ${req.method} /api/dashboard${req.path} userId=${userId}`);
 
-    if (role === 'technician') {
-      complaintWhere.assignedToId = req.user!.userId;
-    } else if (role === 'customer') {
-      const user = await db.user.findUnique({
-        where: { id: req.user!.userId as string },
-        select: { id: true, email: true, phone: true },
-      });
-      if (user) {
-        const linkedCustomer = await db.customer.findFirst({
-          where: {
-            tenantId,
-            OR: [
-              ...(user.email ? [{ email: user.email }] : []),
-              ...(user.phone ? [{ phone: user.phone }] : []),
-            ],
-          },
-          select: { id: true },
-        });
-        if (linkedCustomer) {
-          (complaintWhere as any).customerId = linkedCustomer.id;
-        }
-      }
-    }
-
-    const isFinance = ['super_admin', 'admin', 'manager', 'finance'].includes(role);
-    const isPm = ['super_admin', 'admin', 'manager', 'supervisor'].includes(role);
+    const scope = await buildDashboardScope(tenantId, userId, role);
 
     const [
       complaintsByCategoryRaw,
       complaintsByStatusRaw,
-      monthlyRevenueRaw,
+      monthlyRevenueInvoices,
       pmAll,
     ] = await Promise.all([
-      // Category distribution
-      db.complaint.groupBy({
-        by: ['category'],
-        where: { ...complaintWhere, category: { not: null } },
-        _count: { id: true },
-      }),
-      // Status distribution
-      db.complaint.groupBy({
-        by: ['status'],
-        where: complaintWhere,
-        _count: { id: true },
-      }),
-      // Monthly revenue (finance/admin only)
-      isFinance
+      scope.canSeeComplaints
+        ? db.complaint.groupBy({
+            by: ['category'],
+            where: { ...scope.complaintWhere, category: { not: null } },
+            _count: { id: true },
+          })
+        : Promise.resolve([]),
+
+      scope.canSeeComplaints
+        ? db.complaint.groupBy({
+            by: ['status'],
+            where: scope.complaintWhere,
+            _count: { id: true },
+          })
+        : Promise.resolve([]),
+
+      scope.canSeeRevenue
         ? db.invoice.findMany({
-            where: { tenantId, status: 'PAID', paidAt: { not: null } },
+            where: { ...scope.invoiceWhere, status: 'PAID', paidAt: { not: null } },
             select: { total: true, paidAt: true },
           })
         : Promise.resolve([]),
-      // PM compliance breakdown
-      isPm
-        ? db.pmSchedule.findMany({ where: { tenantId }, select: { status: true } })
+
+      scope.canSeePm
+        ? db.pmSchedule.findMany({ where: scope.pmWhere, select: { status: true } })
         : Promise.resolve([]),
     ]);
 
-    // Monthly revenue for last 6 months
-    const now = new Date();
-    const monthlyRevenue: { month: string; revenue: number }[] = [];
-    for (let i = 5; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999);
-      const monthName = d.toLocaleString('default', { month: 'short', year: '2-digit' });
-      const rev = (monthlyRevenueRaw as any[])
-        .filter((inv: any) => {
-          const paid = new Date(inv.paidAt!);
-          return paid >= d && paid <= end;
-        })
-        .reduce((sum: number, inv: any) => sum + inv.total, 0);
-      monthlyRevenue.push({ month: monthName, revenue: Math.round(rev * 100) / 100 });
-    }
+    // ── Process ───────────────────────────────────────────────────────
+    const monthlyRevenue = buildMonthlyRevenue(monthlyRevenueInvoices as Record<string, unknown>[]);
 
-    // PM compliance counts
+    const complaintsByCategory = (complaintsByCategoryRaw as Record<string, unknown>[]).map((c: any) => ({
+      category: c.category || 'Unknown',
+      count: c._count.id,
+    }));
+
+    const complaintsByStatus = (complaintsByStatusRaw as Record<string, unknown>[]).map((c: any) => ({
+      status: c.status,
+      count: c._count.id,
+    }));
+
+    const pmCompliance = calcPmCompliance(pmAll as Record<string, unknown>[]);
+
     const upcomingPmCounts = {
       completed: (pmAll as any[]).filter((pm: any) => pm.status === 'completed').length,
       overdue: (pmAll as any[]).filter((pm: any) => pm.status === 'overdue').length,
-      scheduled: (pmAll as any[]).filter((pm: any) => pm.status === 'scheduled' || pm.status === 'active').length,
+      scheduled: (pmAll as any[]).filter(
+        (pm: any) => pm.status === 'scheduled' || pm.status === 'active',
+      ).length,
     };
-    const pmTotal = (pmAll as any[]).length;
-    const pmCompleted = upcomingPmCounts.completed;
-    const pmCompliance = pmTotal > 0 ? Math.round((pmCompleted / pmTotal) * 100) : 0;
 
     res.json({
       monthlyRevenue,
-      complaintsByCategory: (complaintsByCategoryRaw as any[]).map((c: any) => ({
-        category: c.category || 'Unknown',
-        count: c._count.id,
-      })),
-      complaintsByStatus: (complaintsByStatusRaw as any[]).map((c: any) => ({
-        status: c.status,
-        count: c._count.id,
-      })),
+      complaintsByCategory,
+      complaintsByStatus,
       pmCompliance,
       upcomingPmCounts,
     });
   } catch (error) {
     console.error('Dashboard charts error:', error);
-    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-// ─── GET /recent — Recent activity ──────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+// GET /recent — Recent activity
+// ═══════════════════════════════════════════════════════════════════════════════
+
 router.route('/recent').get(requireAuth, async (req: Request, res: Response) => {
   try {
     const tenantId = req.tenantId!;
+    const userId = req.user!.userId as string;
     const role = (req.user!.role as string).toLowerCase();
 
-    const complaintWhere: Record<string, unknown> = { tenantId };
-    let workOrderWhere: Record<string, unknown> = { tenantId };
+    console.log(`[Dashboard/${role}] ${req.method} /api/dashboard${req.path} userId=${userId}`);
 
-    if (role === 'technician') {
-      complaintWhere.assignedToId = req.user!.userId;
-      workOrderWhere.assignedToId = req.user!.userId;
-    } else if (role === 'customer') {
-      const user = await db.user.findUnique({
-        where: { id: req.user!.userId as string },
-        select: { id: true, email: true, phone: true },
-      });
-      if (user) {
-        const linkedCustomer = await db.customer.findFirst({
-          where: {
-            tenantId,
-            OR: [
-              ...(user.email ? [{ email: user.email }] : []),
-              ...(user.phone ? [{ phone: user.phone }] : []),
-            ],
-          },
-          select: { id: true },
-        });
-        if (linkedCustomer) {
-          (complaintWhere as any).customerId = linkedCustomer.id;
-        }
-      }
-      workOrderWhere = { tenantId, id: '__NEVER_MATCH__' };
-    }
+    const scope = await buildDashboardScope(tenantId, userId, role);
 
-    const isPm = ['super_admin', 'admin', 'manager', 'supervisor'].includes(role);
+    const [recentComplaintsRaw, recentWorkOrdersRaw, upcomingPmRaw] = await Promise.all([
+      scope.canSeeComplaints
+        ? db.complaint.findMany({
+            where: scope.complaintWhere,
+            take: 5,
+            orderBy: { createdAt: 'desc' },
+            select: {
+              id: true, tenantId: true, customerId: true, equipmentId: true,
+              title: true, description: true, priority: true, status: true,
+              category: true, assignedToId: true, supervisorId: true,
+              createdAt: true, updatedAt: true, resolvedAt: true, closedAt: true,
+            },
+          })
+        : Promise.resolve([]),
 
-    const [recentComplaints, recentWorkOrders, upcomingPm] = await Promise.all([
-      db.complaint.findMany({
-        where: complaintWhere,
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true, tenantId: true, customerId: true, equipmentId: true,
-          title: true, description: true, priority: true, status: true,
-          category: true, assignedToId: true, supervisorId: true,
-          createdAt: true, updatedAt: true, resolvedAt: true, closedAt: true,
-        },
-      }),
-      db.workOrder.findMany({
-        where: workOrderWhere,
+      woFindMany(scope, {
         take: 5,
         orderBy: { createdAt: 'desc' },
         select: {
@@ -496,9 +929,10 @@ router.route('/recent').get(requireAuth, async (req: Request, res: Response) => 
           completedAt: true, totalCost: true, createdAt: true, updatedAt: true,
         },
       }),
-      isPm
+
+      scope.canSeePm
         ? db.pmSchedule.findMany({
-            where: { tenantId, status: 'active', nextDueDate: { gte: new Date() } },
+            where: { ...scope.pmWhere, status: 'active', nextDueDate: { gte: new Date() } },
             take: 6,
             orderBy: { nextDueDate: 'asc' },
             select: {
@@ -511,77 +945,20 @@ router.route('/recent').get(requireAuth, async (req: Request, res: Response) => 
         : Promise.resolve([]),
     ]);
 
-    // Fetch related names separately (Supabase REST doesn't support Prisma include)
-    const complaintIds = (recentComplaints as any[]).map((c: any) => c.id);
-    const [customers, assignees, supervisors, eqList, pmEquip, pmAssign] = await Promise.all([
-      complaintIds.length > 0
-        ? db.customer.findMany({ where: { id: { in: (recentComplaints as any[]).map((c: any) => c.customerId).filter(Boolean) } }, select: { id: true, name: true } })
-        : Promise.resolve([]),
-      db.user.findMany({ where: { id: { in: [
-        ...(recentComplaints as any[]).map((c: any) => c.assignedToId).filter(Boolean),
-        ...(recentWorkOrders as any[]).map((wo: any) => wo.assignedToId).filter(Boolean),
-      ] } }, select: { id: true, name: true } }),
-      db.user.findMany({ where: { id: { in: (recentComplaints as any[]).map((c: any) => c.supervisorId).filter(Boolean) } }, select: { id: true, name: true } }),
-      db.equipment.findMany({ where: { id: { in: [
-        ...(recentComplaints as any[]).map((c: any) => c.equipmentId).filter(Boolean),
-        ...(recentWorkOrders as any[]).map((wo: any) => wo.equipmentId).filter(Boolean),
-      ] } }, select: { id: true, name: true } }),
-      (upcomingPm as any[]).length > 0
-        ? db.equipment.findMany({ where: { id: { in: (upcomingPm as any[]).map((pm: any) => pm.equipmentId).filter(Boolean) } }, select: { id: true, name: true } })
-        : Promise.resolve([]),
-      (upcomingPm as any[]).length > 0
-        ? db.user.findMany({ where: { id: { in: (upcomingPm as any[]).map((pm: any) => pm.assignedToId).filter(Boolean) } }, select: { id: true, name: true } })
-        : Promise.resolve([]),
+    const [formattedComplaints, formattedWorkOrders, formattedPm] = await Promise.all([
+      enrichComplaints(recentComplaintsRaw as Record<string, unknown>[]),
+      enrichWorkOrders(recentWorkOrdersRaw as Record<string, unknown>[]),
+      enrichPmSchedules(upcomingPmRaw as Record<string, unknown>[]),
     ]);
 
-    const custMap = new Map((customers as any[]).map((c: any) => [c.id, c.name]));
-    const assignMap = new Map((assignees as any[]).map((u: any) => [u.id, u.name]));
-    const supMap = new Map((supervisors as any[]).map((u: any) => [u.id, u.name]));
-    const eqMap = new Map((eqList as any[]).map((e: any) => [e.id, e.name]));
-    const pmEqMap = new Map((pmEquip as any[]).map((e: any) => [e.id, e.name]));
-    const pmAssignMap = new Map((pmAssign as any[]).map((u: any) => [u.id, u.name]));
-
     res.json({
-      recentComplaints: (recentComplaints as any[]).map((c: any) => ({
-        id: c.id, tenantId: c.tenantId, customerId: c.customerId,
-        customerName: custMap.get(c.customerId) || null,
-        equipmentId: c.equipmentId, equipmentName: eqMap.get(c.equipmentId) || null,
-        title: c.title, description: c.description, priority: c.priority,
-        status: c.status, category: c.category,
-        assignedToId: c.assignedToId, assignedToName: assignMap.get(c.assignedToId) || null,
-        supervisorId: c.supervisorId, supervisorName: supMap.get(c.supervisorId) || null,
-        resolvedAt: c.resolvedAt?.toISOString?.() || null,
-        closedAt: c.closedAt?.toISOString?.() || null,
-        createdAt: c.createdAt?.toISOString?.() || c.createdAt,
-        updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
-      })),
-      recentWorkOrders: (recentWorkOrders as any[]).map((wo: any) => ({
-        id: wo.id, tenantId: wo.tenantId, complaintId: wo.complaintId,
-        equipmentId: wo.equipmentId, equipmentName: eqMap.get(wo.equipmentId) || null,
-        title: wo.title, description: wo.description, status: wo.status,
-        priority: wo.priority, type: wo.type,
-        assignedToId: wo.assignedToId, assignedToName: assignMap.get(wo.assignedToId) || null,
-        scheduledDate: wo.scheduledDate?.toISOString?.() || null,
-        completedAt: wo.completedAt?.toISOString?.() || null,
-        totalCost: wo.totalCost,
-        createdAt: wo.createdAt?.toISOString?.() || wo.createdAt,
-        updatedAt: wo.updatedAt?.toISOString?.() || wo.updatedAt,
-      })),
-      upcomingPm: (upcomingPm as any[]).map((pm: any) => ({
-        id: pm.id, tenantId: pm.tenantId, equipmentId: pm.equipmentId,
-        equipmentName: pmEqMap.get(pm.equipmentId) || null,
-        title: pm.title, description: pm.description, frequency: pm.frequency,
-        lastExecuted: pm.lastExecuted?.toISOString?.() || null,
-        nextDueDate: pm.nextDueDate?.toISOString?.() || null,
-        assignedToId: pm.assignedToId, assignedToName: pmAssignMap.get(pm.assignedToId) || null,
-        status: pm.status,
-        createdAt: pm.createdAt?.toISOString?.() || null,
-        updatedAt: pm.updatedAt?.toISOString?.() || null,
-      })),
+      recentComplaints: formattedComplaints,
+      recentWorkOrders: formattedWorkOrders,
+      upcomingPm: formattedPm,
     });
   } catch (error) {
     console.error('Dashboard recent error:', error);
-    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 

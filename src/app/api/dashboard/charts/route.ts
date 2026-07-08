@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { db, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
+import { verifyToken } from '@/lib/auth';
+import { buildDashboardScope } from '@/lib/dashboard-scope';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,7 +12,18 @@ export async function GET(request: NextRequest) {
   if (BACKEND_URL) {
     try {
       const authHeader = request.headers.get('authorization') || '';
-      const res = await fetch(`${BACKEND_URL}/api/dashboard/charts`, {
+      const searchParams = request.nextUrl.searchParams.toString();
+      const url = searchParams
+        ? `${BACKEND_URL}/api/dashboard/charts?${searchParams}`
+        : `${BACKEND_URL}/api/dashboard/charts`;
+
+      const token = authHeader.replace('Bearer ', '');
+      const payload = verifyToken(token);
+      if (payload) {
+        console.log(`[Dashboard/${payload.role}] GET /api/dashboard/charts userId=${payload.userId}`);
+      }
+
+      const res = await fetch(url, {
         headers: { Authorization: authHeader, 'Content-Type': 'application/json' },
       });
       const data = await res.json();
@@ -22,10 +36,6 @@ export async function GET(request: NextRequest) {
 
   // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
   try {
-    const { db, getDbFriendlyMessage, getErrorHeaders } = await import('@/lib/db');
-    const { verifyToken } = await import('@/lib/auth');
-    const { buildAuthContext, buildComplaintWhereClause } = await import('@/lib/rbac');
-
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
@@ -34,31 +44,53 @@ export async function GET(request: NextRequest) {
     const tenantId = payload.tenantId as string;
     const role = (payload.role as string).toLowerCase();
 
-    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
-    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const scope = await buildDashboardScope({
+      userId: payload.userId as string,
+      tenantId,
+      role,
+      email: payload.email as string | undefined,
+    });
+    if (!scope) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { where: complaintRbacWhere } = await buildComplaintWhereClause(ctx);
+    console.log(`[Dashboard/${role}] GET /api/dashboard/charts userId=${payload.userId}`);
+
+    // ── Determine which data sets to fetch ───────────────────────────────
+    const fetchComplaints = role !== 'finance' && role !== 'hr';
+    const fetchRevenue = scope.canSeeRevenue;
+    const fetchPm = scope.canSeePm;
 
     const [
-      complaintsByCategoryRaw, complaintsByStatusRaw, monthlyRevenueRaw, pmAll,
+      complaintsByCategoryRaw,
+      complaintsByStatusRaw,
+      monthlyRevenueRaw,
+      pmAll,
     ] = await Promise.all([
-      db.complaint.groupBy({
-        by: ['category'],
-        where: { ...complaintRbacWhere, category: { not: null } },
-        _count: { id: true },
-      }),
-      db.complaint.groupBy({ by: ['status'], where: complaintRbacWhere, _count: { id: true } }),
-      (['super_admin', 'admin', 'manager', 'finance'].includes(role))
+      fetchComplaints
+        ? db.complaint.groupBy({
+            by: ['category'],
+            where: { ...scope.complaintWhere, category: { not: null } },
+            _count: { id: true },
+          })
+        : Promise.resolve([]),
+      fetchComplaints
+        ? db.complaint.groupBy({
+            by: ['status'],
+            where: scope.complaintWhere,
+            _count: { id: true },
+          })
+        : Promise.resolve([]),
+      fetchRevenue
         ? db.invoice.findMany({
-            where: { tenantId, status: 'PAID', paidAt: { not: null } },
+            where: { ...scope.invoiceWhere, status: 'PAID', paidAt: { not: null } },
             select: { total: true, paidAt: true },
           })
         : Promise.resolve([]),
-      (['super_admin', 'admin', 'manager', 'supervisor'].includes(role))
+      fetchPm
         ? db.pmSchedule.findMany({ where: { tenantId }, select: { status: true } })
         : Promise.resolve([]),
     ]);
 
+    // ── Monthly revenue (last 6 months) ──────────────────────────────────
     const now = new Date();
     const monthlyRevenue: { month: string; revenue: number }[] = [];
     for (let i = 5; i >= 0; i--) {
@@ -74,10 +106,14 @@ export async function GET(request: NextRequest) {
       monthlyRevenue.push({ month: monthName, revenue: Math.round(rev * 100) / 100 });
     }
 
+    // ── PM compliance ────────────────────────────────────────────────────
     const upcomingPmCounts = {
       completed: pmAll.filter((pm: any) => pm.status === 'completed').length,
       overdue: pmAll.filter((pm: any) => pm.status === 'overdue').length,
-      scheduled: pmAll.filter((pm: any) => pm.status === 'scheduled' || pm.status === 'active').length,
+      scheduled:
+        pmAll.filter(
+          (pm: any) => pm.status === 'scheduled' || pm.status === 'active',
+        ).length,
     };
     const pmTotal = pmAll.length;
     const pmCompleted = upcomingPmCounts.completed;
@@ -85,11 +121,11 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       monthlyRevenue,
-      complaintsByCategory: complaintsByCategoryRaw.map((c: any) => ({
+      complaintsByCategory: (complaintsByCategoryRaw as any[]).map((c: any) => ({
         category: c.category || 'Unknown',
         count: c._count.id,
       })),
-      complaintsByStatus: complaintsByStatusRaw.map((c: any) => ({
+      complaintsByStatus: (complaintsByStatusRaw as any[]).map((c: any) => ({
         status: c.status,
         count: c._count.id,
       })),
@@ -98,7 +134,9 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Dashboard charts error:', error);
-    const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/lib/db');
-    return NextResponse.json({ error: gfm(error) }, { status: 500, headers: geh(error) });
+    return NextResponse.json(
+      { error: getDbFriendlyMessage(error) },
+      { status: 500, headers: getErrorHeaders(error) },
+    );
   }
 }

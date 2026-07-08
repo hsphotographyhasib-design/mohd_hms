@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { db, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
+import { verifyToken } from '@/lib/auth';
+import { buildDashboardScope } from '@/lib/dashboard-scope';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,7 +12,19 @@ export async function GET(request: NextRequest) {
   if (BACKEND_URL) {
     try {
       const authHeader = request.headers.get('authorization') || '';
-      const res = await fetch(`${BACKEND_URL}/api/dashboard/kpi`, {
+      const searchParams = request.nextUrl.searchParams.toString();
+      const url = searchParams
+        ? `${BACKEND_URL}/api/dashboard/kpi?${searchParams}`
+        : `${BACKEND_URL}/api/dashboard/kpi`;
+
+      // Extract userId for audit logging (best-effort from token)
+      const token = authHeader.replace('Bearer ', '');
+      const payload = verifyToken(token);
+      if (payload) {
+        console.log(`[Dashboard/${payload.role}] GET /api/dashboard/kpi userId=${payload.userId}`);
+      }
+
+      const res = await fetch(url, {
         headers: { Authorization: authHeader, 'Content-Type': 'application/json' },
       });
       const data = await res.json();
@@ -22,71 +37,109 @@ export async function GET(request: NextRequest) {
 
   // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
   try {
-    const { db, getDbFriendlyMessage, getErrorHeaders } = await import('@/lib/db');
-    const { verifyToken } = await import('@/lib/auth');
-    const { buildAuthContext, buildComplaintWhereClause } = await import('@/lib/rbac');
-
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
     const tenantId = payload.tenantId as string;
-    const role = (payload.role as string).toLowerCase();
 
-    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
-    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const scope = await buildDashboardScope({
+      userId: payload.userId as string,
+      tenantId,
+      role: (payload.role as string).toLowerCase(),
+      email: payload.email as string | undefined,
+    });
+    if (!scope) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { where: complaintRbacWhere } = await buildComplaintWhereClause(ctx);
-
-    let workOrderWhere: Record<string, unknown> = { tenantId };
-    if (role === 'technician') {
-      workOrderWhere = { tenantId, assignedToId: ctx.userId };
-    } else if (role === 'customer') {
-      workOrderWhere = { tenantId, id: '__NEVER_MATCH__' };
-    }
-
-    const isFinance = ['super_admin', 'admin', 'manager', 'finance'].includes(role);
-    const isInventory = ['super_admin', 'admin', 'manager'].includes(role);
-    const isPm = ['super_admin', 'admin', 'manager', 'supervisor'].includes(role);
+    console.log(`[Dashboard/${payload.role}] GET /api/dashboard/kpi userId=${payload.userId}`);
 
     const [
-      complaintStatusCounts, workOrderStatusCounts, paidInvoiceRevenue,
-      pendingInvoicesCount, overdueInvoicesCount, totalCustomers, totalEmployees,
-      totalEquipment, activeEquipment, lowStockItemsRaw, pmAll,
+      complaintStatusCounts,
+      workOrderStatusCounts,
+      paidInvoiceRevenue,
+      pendingInvoicesCount,
+      overdueInvoicesCount,
+      totalCustomers,
+      totalEmployees,
+      totalEquipment,
+      activeEquipment,
+      lowStockItemsRaw,
+      pmAll,
     ] = await Promise.all([
-      db.complaint.groupBy({ by: ['status'], where: complaintRbacWhere, _count: { id: true } }),
-      db.workOrder.groupBy({ by: ['status'], where: workOrderWhere, _count: { id: true } }),
-      isFinance
-        ? db.invoice.aggregate({ where: { tenantId, status: 'PAID' }, _sum: { total: true } })
+      db.complaint.groupBy({
+        by: ['status'],
+        where: scope.complaintWhere,
+        _count: { id: true },
+      }),
+      db.workOrder.groupBy({
+        by: ['status'],
+        where: scope.workOrderWhere,
+        _count: { id: true },
+      }),
+      scope.canSeeRevenue
+        ? db.invoice.aggregate({
+            where: { ...scope.invoiceWhere, status: 'PAID' },
+            _sum: { total: true },
+          })
         : Promise.resolve({ _sum: { total: 0 } }),
-      isFinance ? db.invoice.count({ where: { tenantId, status: 'PENDING' } }) : Promise.resolve(0),
-      isFinance ? db.invoice.count({ where: { tenantId, status: 'OVERDUE' } }) : Promise.resolve(0),
-      role === 'customer' ? Promise.resolve(1) : db.customer.count({ where: { tenantId, isActive: true } }),
-      role === 'customer' ? Promise.resolve(0) : db.user.count({ where: { tenantId, isActive: true } }),
-      db.equipment.count({ where: { tenantId } }),
-      db.equipment.count({ where: { tenantId, status: 'active' } }),
-      isInventory
-        ? db.inventoryItem.findMany({ where: { tenantId, isActive: true }, select: { quantity: true, minStock: true } })
+      scope.canSeeRevenue
+        ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'PENDING' } })
+        : Promise.resolve(0),
+      scope.canSeeRevenue
+        ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'OVERDUE' } })
+        : Promise.resolve(0),
+      scope.canSeeCustomers
+        ? (payload.role === 'customer'
+            ? Promise.resolve(1)
+            : db.customer.count({ where: { tenantId, isActive: true } }))
+        : Promise.resolve(0),
+      scope.canSeeEmployees
+        ? db.user.count({ where: { tenantId, isActive: true } })
+        : Promise.resolve(0),
+      scope.canSeeEquipment
+        ? db.equipment.count({ where: scope.equipmentWhere })
+        : Promise.resolve(0),
+      scope.canSeeEquipment
+        ? db.equipment.count({ where: { ...scope.equipmentWhere, status: 'active' } })
+        : Promise.resolve(0),
+      scope.canSeeInventory
+        ? db.inventoryItem.findMany({
+            where: { tenantId, isActive: true },
+            select: { quantity: true, minStock: true },
+          })
         : Promise.resolve([]),
-      isPm
+      scope.canSeePm
         ? db.pmSchedule.findMany({ where: { tenantId }, select: { status: true } })
         : Promise.resolve([]),
     ]);
 
+    // ── Complaint status breakdown ───────────────────────────────────────
     const statusMap: Record<string, number> = {};
-    complaintStatusCounts.forEach((c: any) => { statusMap[c.status] = c._count.id; });
+    complaintStatusCounts.forEach((c: any) => {
+      statusMap[c.status] = c._count.id;
+    });
     const openComplaints = statusMap['OPEN'] || statusMap['NEW'] || 0;
     const inProgressComplaints = statusMap['IN_PROGRESS'] || statusMap['ACCEPTED'] || 0;
 
+    // ── Work-order status breakdown ──────────────────────────────────────
     const woStatusMap: Record<string, number> = {};
-    workOrderStatusCounts.forEach((c: any) => { woStatusMap[c.status] = c._count.id; });
-    const totalWorkOrders = workOrderStatusCounts.reduce((sum, c) => sum + c._count.id, 0);
+    workOrderStatusCounts.forEach((c: any) => {
+      woStatusMap[c.status] = c._count.id;
+    });
+    const totalWorkOrders = workOrderStatusCounts.reduce(
+      (sum: number, c: any) => sum + c._count.id,
+      0,
+    );
     const pendingWorkOrders = woStatusMap['PENDING'] || 0;
     const completedWorkOrders = woStatusMap['COMPLETED'] || 0;
 
-    const lowStockItems = (lowStockItemsRaw as any[]).filter((i: any) => i.quantity <= i.minStock).length;
+    // ── Low stock ────────────────────────────────────────────────────────
+    const lowStockItems = (lowStockItemsRaw as any[]).filter(
+      (i: any) => i.quantity <= i.minStock,
+    ).length;
 
+    // ── PM compliance ────────────────────────────────────────────────────
     const pmTotal = pmAll.length;
     const pmCompleted = pmAll.filter((pm: any) => pm.status === 'completed').length;
     const pmCompliance = pmTotal > 0 ? Math.round((pmCompleted / pmTotal) * 100) : 0;
@@ -106,10 +159,13 @@ export async function GET(request: NextRequest) {
       totalCustomers: totalCustomers as number,
       totalEmployees: totalEmployees as number,
       lowStockItems,
+      accessLevel: payload.role,
     });
   } catch (error) {
     console.error('Dashboard KPI error:', error);
-    const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/lib/db');
-    return NextResponse.json({ error: gfm(error) }, { status: 500, headers: geh(error) });
+    return NextResponse.json(
+      { error: getDbFriendlyMessage(error) },
+      { status: 500, headers: getErrorHeaders(error) },
+    );
   }
 }
