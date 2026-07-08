@@ -129,3 +129,38 @@ Stage Summary:
 - FIX: Set `ssoProtection` to `null` via Vercel API
 - The db.ts ESM/CJS fix, Next.js rewrites to Render, and all previous fixes were already deployed
 - Production site now fully accessible at https://mohd-hms-md-sajib-s-projects.vercel.app
+---
+Task ID: 6
+Agent: Main
+Task: Build Enterprise Upstash Redis Caching & Background Queue System
+
+Work Log:
+- Installed @upstash/redis@1.38.0 in backend
+- Created cache/redis.client.ts: Upstash REST client with auto-reconnect, graceful fallback, connection health monitoring, metric counters
+- Created cache/cache.constants.ts: TTL values (15s-30min), key prefixes, queue config, job types, logging categories
+- Created cache/cache.service.ts: Full cache API (get/set/delete/exists/expire/increment/decrement/clearByPattern), stale-while-revalidate, cachedFetch wrapper
+- Created cache/cache.utils.ts: Role-based cache key builders for all modules, invalidation helpers (invalidateDashboard, invalidateComplaints, invalidateWorkOrders, etc.)
+- Created cache/cache.middleware.ts: Express middleware for transparent GET caching and post-write invalidation
+- Created queue/queue.service.ts: Redis-backed job queue with LPUSH/RPOP, scheduled jobs (sorted set), retry with exponential backoff, dead-letter queue, worker manager
+- Created queue/queue.workers.ts: Handlers for EMAIL_SEND, FIREBASE_NOTIFY, WHATSAPP_NOTIFY, PDF_GENERATE, SCHEDULED_REPORT, REMINDER_EMAIL, REMINDER_NOTIFY, SCHEDULED_MAINTENANCE
+- Created routes/cache.routes.ts: GET /monitor (admin), GET /health, POST /invalidate (admin)
+- Integrated caching into dashboard.routes.ts: KPI (30s), Charts (60s), Recent (30s) with cachedFetch pattern
+- Integrated caching into notifications.routes.ts: List (30s), Unread (15s) with invalidation on mark-read/delete
+- Integrated caching into complaints.routes.ts: List (45s), Detail (60s) with invalidation on create/update
+- Integrated caching into work-orders.routes.ts: List (45s), Next-number (120s) with invalidation on create
+- Integrated caching into customers.routes.ts: List (2min) with invalidation on create
+- Integrated caching into equipment.routes.ts: List (5min) with invalidation on create
+- Integrated caching into employees.routes.ts: List (2min) with invalidation on create
+- Integrated caching into departments.routes.ts: List (10min)
+- Updated index.ts: Redis init, queue workers startup, graceful shutdown, cache route mount
+- Created frontend CacheMonitor admin component (604 lines) with health, metrics, queue status, manual invalidation
+- Fixed all TypeScript errors — backend compiles cleanly
+- Committed and pushed to GitHub
+
+Stage Summary:
+- 20 files changed, 3165 insertions, 575 deletions
+- All GET endpoints now use Redis caching with role-based key isolation
+- All write endpoints trigger automatic cache invalidation
+- System works without Redis (graceful fallback to direct DB queries)
+- Zero-breaking-change: if UPSTASH_REDIS_REST_URL/TOKEN not set, caching is silently disabled
+- User needs to: 1) Create Upstash Redis database, 2) Add UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN to Render env vars
