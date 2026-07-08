@@ -8,8 +8,9 @@
  *   Module → sendNotification() → DB Notification records → FCM push → UI
  */
 
+import type { BatchResponse, SendResponse, MulticastMessage } from 'firebase-admin/messaging';
 import { db } from './db.js';
-import { getMessaging, isFirebaseConfigured } from './firebase.js';
+import { getMessagingInstance, isFirebaseConfigured } from './firebase.js';
 
 // ─── Types ───────────────────────────────────────────────────────────────
 
@@ -98,7 +99,7 @@ export async function sendNotification(input: NotificationInput): Promise<string
     }));
 
     const result = await db.notification.createMany({ data: notifications });
-    notificationIds.push(...(result as any)?.ids || notifications.map((n) => n.id));
+    notificationIds.push(...(result as { ids: string[] })?.ids || notifications.map((n) => n.id));
   } catch (err) {
     console.error('[NotificationService] Failed to create DB records:', err);
   }
@@ -141,7 +142,7 @@ export async function sendTestNotification(userId: string, tenantId: string): Pr
     message: 'Real-time notification is working correctly.',
     priority: 'high',
     category: 'system',
-    actionUrl: null,
+    actionUrl: undefined,
     notificationId: `test-${Date.now()}`,
     tenantId,
   }).then(() => true).catch(() => false);
@@ -203,7 +204,7 @@ export async function registerDeviceToken(input: DeviceRegisterInput): Promise<v
     if (userTokens.length > 5) {
       const toDeactivate = userTokens.slice(5);
       await db.deviceToken.updateMany({
-        where: { id: { in: toDeactivate.map((t) => t.id) } },
+        where: { id: { in: toDeactivate.map((t: { id: string }) => t.id) } },
         data: { isActive: false },
       });
     }
@@ -261,7 +262,7 @@ async function resolveTargetUserIds(input: NotificationInput): Promise<string[]>
         },
         select: { id: true },
       });
-      users.forEach((u) => ids.add(u.id));
+      users.forEach((u: { id: string }) => ids.add(u.id));
     } catch (err) {
       console.error('[NotificationService] Failed to resolve role-based users:', err);
     }
@@ -292,11 +293,11 @@ interface FcmPayload {
 }
 
 async function sendFcmPush(targetUserIds: string[], payload: FcmPayload): Promise<void> {
-  const messaging = getMessaging();
+  const messaging = getMessagingInstance();
   if (!messaging) return;
 
   // Get active device tokens for target users
-  const tokens = await db.deviceToken.findMany({
+  const tokens: Array<{ id: string; token: string; userId: string }> = await db.deviceToken.findMany({
     where: {
       userId: { in: targetUserIds },
       isActive: true,
@@ -307,15 +308,13 @@ async function sendFcmPush(targetUserIds: string[], payload: FcmPayload): Promis
   if (tokens.length === 0) return;
 
   const frontendUrl = process.env.FRONTEND_URL || process.env.NEXT_PUBLIC_API_URL || '';
-  const icon = TYPE_ICONS[payload.type] || '🔔';
 
-  // Build FCM messages
-  const messages: admin.messaging.Message[] = tokens.map((t) => ({
-    token: t.token,
+  // Build the common FCM message template (same content for all tokens)
+  const multicastMessage: MulticastMessage = {
+    tokens: tokens.map((t) => t.token),
     notification: {
       title: payload.title,
       body: payload.message,
-      icon: '/logo-192.png',
     },
     data: {
       notificationId: payload.notificationId || '',
@@ -354,49 +353,40 @@ async function sendFcmPush(targetUserIds: string[], payload: FcmPayload): Promis
         },
       },
     },
-  }));
+  };
 
   // Batch send (max 500 per batch)
   const BATCH_SIZE = 500;
   const invalidTokens: string[] = [];
 
-  for (let i = 0; i < messages.length; i += BATCH_SIZE) {
-    const batch = messages.slice(i, i + BATCH_SIZE);
+  for (let i = 0; i < tokens.length; i += BATCH_SIZE) {
+    const batchTokens = tokens.slice(i, i + BATCH_SIZE);
     try {
-      const response = await messaging.sendEachForMulticast({
-        message: batch[0], // Template message
-        tokens: batch.map((m) => m.token),
+      const response: BatchResponse = await messaging.sendEachForMulticast({
+        ...multicastMessage,
+        tokens: batchTokens.map((t) => t.token),
       });
 
       // Log delivery results
       if (response.failureCount > 0) {
-        response.responses.forEach((resp, idx) => {
+        response.responses.forEach((resp: SendResponse, idx: number) => {
           if (!resp.success) {
-            const token = batch[idx].token;
+            const token = batchTokens[idx].token;
             const errInfo = resp.error;
             invalidTokens.push(token);
 
             console.warn(`[FCM] Token delivery failed: ${errInfo?.code} — ${errInfo?.message}`);
-
-            // Check if the error indicates an invalid/expired token
-            if (
-              errInfo?.code === 'messaging/invalid-registration-token' ||
-              errInfo?.code === 'messaging/registration-token-not-registered' ||
-              errInfo?.code === 'messaging/unregistered'
-            ) {
-              // Will be cleaned up below
-            }
           }
         });
       }
 
       // Create notification logs
-      const logEntries = response.responses.map((resp, idx) => ({
+      const logEntries = response.responses.map((resp: SendResponse, idx: number) => ({
         id: generateId(),
         tenantId: payload.tenantId,
         notificationId: payload.notificationId || null,
-        userId: tokens[i + idx]?.userId || '',
-        fcmToken: batch[idx].token,
+        userId: batchTokens[idx]?.userId || '',
+        fcmToken: batchTokens[idx].token,
         fcmMessageId: resp.messageId || null,
         deliveryStatus: resp.success ? 'sent' : 'failed',
         errorMessage: resp.error?.message || null,

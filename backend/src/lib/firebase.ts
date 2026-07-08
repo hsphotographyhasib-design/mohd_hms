@@ -3,11 +3,14 @@
  *
  * All config comes from environment variables — never hard-coded.
  * If config is missing, the app still works; FCM features are disabled.
+ *
+ * firebase-admin v14 uses modular imports.
  */
 
-import admin from 'firebase-admin';
+import { initializeApp, getApps, cert, type App } from 'firebase-admin/app';
+import { getMessaging, type Messaging } from 'firebase-admin/messaging';
 
-let _app: admin.app.App | null = null;
+let _app: App | null = null;
 
 export interface FirebaseConfig {
   projectId: string;
@@ -36,7 +39,7 @@ function loadConfig(): FirebaseConfig | null {
  * Get or create the Firebase Admin app singleton.
  * Returns null if Firebase is not configured.
  */
-export function getFirebaseApp(): admin.app.App | null {
+export function getFirebaseApp(): App | null {
   if (_app) return _app;
 
   const config = loadConfig();
@@ -46,18 +49,22 @@ export function getFirebaseApp(): admin.app.App | null {
   }
 
   try {
-    const cred = admin.credential.cert({
-      projectId: config.projectId,
-      clientEmail: config.clientEmail,
-      privateKey: config.privateKey,
-    });
+    if (getApps().length === 0) {
+      _app = initializeApp({
+        credential: cert({
+          projectId: config.projectId,
+          clientEmail: config.clientEmail,
+          privateKey: config.privateKey,
+        }),
+        ...(config.databaseURL && { databaseURL: config.databaseURL }),
+      }, 'mohd-hms-admin');
+    } else {
+      _app = getApps().find(a => a.name === 'mohd-hms-admin') || null;
+    }
 
-    _app = admin.initializeApp({
-      credential: cred,
-      ...(config.databaseURL && { databaseURL: config.databaseURL }),
-    }, 'mohd-hms-admin');
-
-    console.log(`[Firebase] Admin SDK initialized for project: ${config.projectId}`);
+    if (_app) {
+      console.log(`[Firebase] Admin SDK initialized for project: ${config.projectId}`);
+    }
     return _app;
   } catch (err) {
     console.error('[Firebase] Failed to initialize Admin SDK:', err);
@@ -69,11 +76,11 @@ export function getFirebaseApp(): admin.app.App | null {
  * Get the Firebase Cloud Messaging instance.
  * Returns null if Firebase is not configured.
  */
-export function getMessaging(): admin.messaging.Messaging | null {
+export function getMessagingInstance(): Messaging | null {
   const app = getFirebaseApp();
   if (!app) return null;
   try {
-    return admin.messaging(app);
+    return getMessaging(app);
   } catch (err) {
     console.error('[Firebase] Failed to get Messaging instance:', err);
     return null;
