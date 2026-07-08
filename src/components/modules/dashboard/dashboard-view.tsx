@@ -304,21 +304,16 @@ const KpiCardsSection = memo(function KpiCardsSection({
 }) {
   if (error) {
     return (
-      <Card className="max-w-md mx-auto">
-        <CardContent className="flex flex-col items-center py-12 gap-4">
-          <div className="w-16 h-16 rounded-full bg-rose-100 flex items-center justify-center">
-            <AlertTriangle className="h-8 w-8 text-rose-500" />
-          </div>
-          <div className="text-center space-y-1">
-            <h3 className="text-lg font-semibold">Failed to Load Dashboard</h3>
-            <p className="text-sm text-muted-foreground">{error.message}</p>
-          </div>
-          <Button onClick={() => refetch()} variant="outline">
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Retry
-          </Button>
-        </CardContent>
-      </Card>
+      <div className="flex items-center gap-2 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-sm">
+        <AlertTriangle className="h-4 w-4 shrink-0" />
+        <span className="flex-1">{error.message}</span>
+        <button
+          onClick={() => refetch()}
+          className="text-xs font-medium underline hover:no-underline shrink-0"
+        >
+          Retry
+        </button>
+      </div>
     );
   }
 

@@ -51,7 +51,14 @@ export function useDashboardKpi() {
     queryKey: ['dashboard', 'kpi'],
     queryFn: async () => {
       const res = await fetch('/api/dashboard/kpi', { headers: getAuthHeaders() });
-      if (!res.ok) throw new Error('Failed to load KPI data');
+      if (!res.ok) {
+        let detail = 'Failed to load KPI data';
+        try {
+          const body = await res.json();
+          if (body.error) detail = body.error;
+        } catch {}
+        throw new Error(detail);
+      }
       return res.json();
     },
     staleTime: 30_000,
