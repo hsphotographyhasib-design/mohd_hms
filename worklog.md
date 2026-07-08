@@ -35,3 +35,25 @@ Stage Summary:
 - Fixed ESM/CJS interop issue in `src/lib/db.ts` with `resolveExport()` helper
 - Both `getPrismaDb()` and `getSupabaseDb()` now use `resolveExport()` for robust module resolution
 - Clear diagnostic errors replace cryptic TypeErrors when client initialization fails
+---
+Task ID: 3
+Agent: Main
+Task: Update Firebase environment variables on Render via API
+
+Work Log:
+- Used Render API key to list services: found mohd_hms (srv-d968og9kh4rs73de2cr0)
+- Retrieved existing 10 env vars (Google, Supabase, PORT, FRONTEND_URL)
+- Added 6 new Firebase client config env vars via PUT /v1/services/{id}/env-vars:
+  - NEXT_PUBLIC_FIREBASE_API_KEY
+  - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN
+  - NEXT_PUBLIC_FIREBASE_PROJECT_ID
+  - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET
+  - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID
+  - NEXT_PUBLIC_FIREBASE_APP_ID
+- Verified total: 16 env vars (10 existing + 6 new)
+- Triggered manual deploy (dep-d974jb6puehc73felndg) — status: build_in_progress
+
+Stage Summary:
+- Render env vars updated successfully via API
+- Deploy triggered to pick up new Firebase config
+- Still missing: NEXT_PUBLIC_FIREBASE_VAPID_KEY (need from Firebase Console) and FIREBASE_PRIVATE_KEY/FIREBASE_CLIENT_EMAIL (need Service Account key)
