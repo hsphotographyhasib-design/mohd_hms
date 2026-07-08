@@ -1,8 +1,22 @@
 import { NextResponse } from 'next/server';
+import { verifyToken } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
+  // Debug endpoints require super_admin authentication
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: 'Not available in production' }, { status: 404 });
+  }
+  const token = request.headers.get('authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+  }
+  const payload = verifyToken(token);
+  if (!payload || (payload as any).role !== 'super_admin') {
+    return NextResponse.json({ error: 'Super admin access required' }, { status: 403 });
+  }
+
   const envInfo = {
     DATABASE_URL_set: !!process.env.DATABASE_URL,
     DATABASE_URL_prefix: process.env.DATABASE_URL?.substring(0, 20) || 'NOT_SET',

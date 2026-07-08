@@ -199,7 +199,7 @@ export function HrLeave() {
     { label: 'Pending', value: pendingCount, icon: <Clock className="h-4 w-4 text-amber-600" />, color: 'border-amber-200 bg-amber-50/50 text-amber-700' },
     { label: 'Approved', value: approvedCount, icon: <CheckCircle2 className="h-4 w-4 text-emerald-600" />, color: 'border-emerald-200 bg-emerald-50/50 text-emerald-700' },
     { label: 'Rejected', value: rejectedCount, icon: <XCircle className="h-4 w-4 text-rose-600" />, color: 'border-rose-200 bg-rose-50/50 text-rose-700' },
-    { label: 'Balance', value: totalBalance, icon: <BalanceScale className="h-4 w-4 text-sky-600" />, color: 'border-sky-200 bg-sky-50/50 text-sky-700' },
+    { label: 'Balance', value: totalBalance, icon: <Scale className="h-4 w-4 text-sky-600" />, color: 'border-sky-200 bg-sky-50/50 text-sky-700' },
   ];
 
   return (
@@ -237,7 +237,7 @@ export function HrLeave() {
         <Card>
           <CardContent className="p-4">
             <p className="text-sm font-medium mb-3 flex items-center gap-2">
-              <BalanceScale className="h-4 w-4" /> Leave Balance Summary
+              <Scale className="h-4 w-4" /> Leave Balance Summary
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {balances.map((b) => (

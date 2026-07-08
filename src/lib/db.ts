@@ -12,6 +12,7 @@ let _prismaDb: any = null;
 
 function getSupabaseDb() {
   if (!_supabaseDb) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('./supabase-db');
     _supabaseDb = mod.supabaseDb;
   }
@@ -20,6 +21,7 @@ function getSupabaseDb() {
 
 function getPrismaDb() {
   if (!_prismaDb) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('./prisma');
     _prismaDb = mod.prisma;
   }

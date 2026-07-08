@@ -9,6 +9,12 @@ export async function GET(req: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+    // Only admin/super_admin can view WhatsApp config (contains secrets)
+    const role = (payload as any).role;
+    if (!['admin', 'super_admin'].includes(role)) {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+    }
+
     const tenantId = payload.tenantId as string;
 
     let config = await db.whatsAppConfig.findUnique({ where: { tenantId } });
@@ -28,6 +34,9 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    // Redact sensitive fields — never return API keys or secrets to the client
+    const redact = (val: string | null) => val ? '***configured***' : null;
+
     return NextResponse.json({
       id: config.id,
       tenantId: config.tenantId,
@@ -37,16 +46,16 @@ export async function GET(req: NextRequest) {
       businessName: config.businessName,
       openwaBaseUrl: config.openwaBaseUrl,
       openwaSession: config.openwaSession,
-      openwaApiKey: config.openwaApiKey,
+      openwaApiKey: redact(config.openwaApiKey as string | null),
       openwaQrCode: config.openwaQrCode,
       openwaStatus: config.openwaStatus,
-      metaAccessToken: config.metaAccessToken,
+      metaAccessToken: redact(config.metaAccessToken as string | null),
       metaPhoneNumberId: config.metaPhoneNumberId,
-      metaVerifyToken: config.metaVerifyToken,
-      metaWebhookSecret: config.metaWebhookSecret,
+      metaVerifyToken: redact(config.metaVerifyToken as string | null),
+      metaWebhookSecret: redact(config.metaWebhookSecret as string | null),
       metaBusinessAccountId: config.metaBusinessAccountId,
-      twilioAccountSid: config.twilioAccountSid,
-      twilioAuthToken: config.twilioAuthToken,
+      twilioAccountSid: redact(config.twilioAccountSid as string | null),
+      twilioAuthToken: redact(config.twilioAuthToken as string | null),
       twilioPhoneNumber: config.twilioPhoneNumber,
       autoReplyEnabled: config.autoReplyEnabled,
       welcomeMessage: config.welcomeMessage,
@@ -66,6 +75,12 @@ export async function PUT(req: NextRequest) {
     const token = req.headers.get('authorization')?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    // Only admin/super_admin can modify WhatsApp config
+    const role = (payload as any).role;
+    if (!['admin', 'super_admin'].includes(role)) {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+    }
 
     const tenantId = payload.tenantId as string;
     const body = await req.json();
@@ -111,6 +126,8 @@ export async function PUT(req: NextRequest) {
       data,
     });
 
+    const redact = (val: string | null) => val ? '***configured***' : null;
+
     return NextResponse.json({
       id: config.id,
       tenantId: config.tenantId,
@@ -120,16 +137,16 @@ export async function PUT(req: NextRequest) {
       businessName: config.businessName,
       openwaBaseUrl: config.openwaBaseUrl,
       openwaSession: config.openwaSession,
-      openwaApiKey: config.openwaApiKey,
+      openwaApiKey: redact(config.openwaApiKey as string | null),
       openwaQrCode: config.openwaQrCode,
       openwaStatus: config.openwaStatus,
-      metaAccessToken: config.metaAccessToken,
+      metaAccessToken: redact(config.metaAccessToken as string | null),
       metaPhoneNumberId: config.metaPhoneNumberId,
-      metaVerifyToken: config.metaVerifyToken,
-      metaWebhookSecret: config.metaWebhookSecret,
+      metaVerifyToken: redact(config.metaVerifyToken as string | null),
+      metaWebhookSecret: redact(config.metaWebhookSecret as string | null),
       metaBusinessAccountId: config.metaBusinessAccountId,
-      twilioAccountSid: config.twilioAccountSid,
-      twilioAuthToken: config.twilioAuthToken,
+      twilioAccountSid: redact(config.twilioAccountSid as string | null),
+      twilioAuthToken: redact(config.twilioAuthToken as string | null),
       twilioPhoneNumber: config.twilioPhoneNumber,
       autoReplyEnabled: config.autoReplyEnabled,
       welcomeMessage: config.welcomeMessage,
