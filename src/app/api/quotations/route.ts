@@ -1,26 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { computeTotals, type LineItem as QuotationItem } from '@/lib/quotation-helpers';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
-
-interface QuotationItem {
-  title?: string;
-  unit?: string;
-  quantity?: number;
-  rate?: number;
-  amount?: number;
-  description?: string;
-  unitPrice?: number;
-  [key: string]: unknown;
-}
-
-function computeTotals(items: QuotationItem[], taxRate = 0, discount = 0, shipping = 0) {
-  const subtotal = items.reduce((sum, item) => sum + (item.amount || 0), 0);
-  const tax = subtotal * (taxRate / 100);
-  const total = subtotal + tax - discount + shipping;
-  return { subtotal, tax, discount, shipping, total };
-}
 
 export async function GET(request: NextRequest) {
   try {
@@ -201,7 +184,6 @@ export async function POST(request: NextRequest) {
     console.log('[QUOTATION]: Creating', quotationNo, 'for', customerId);
     const q = await db.quotation.create({
       data: {
-        id: qId,
         tenantId,
         customerId,
         complaintId: complaintId || null,

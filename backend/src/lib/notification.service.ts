@@ -213,9 +213,9 @@ export async function registerDeviceToken(input: DeviceRegisterInput): Promise<v
   }
 }
 
-export async function unregisterDeviceToken(token: string): Promise<void> {
+export async function unregisterDeviceToken(token: string, userId: string): Promise<void> {
   try {
-    await db.deviceToken.deleteMany({ where: { token } });
+    await db.deviceToken.deleteMany({ where: { token, userId } });
   } catch (err) {
     console.error('[NotificationService] Failed to unregister device token:', err);
   }

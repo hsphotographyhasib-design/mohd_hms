@@ -1,13 +1,84 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import type { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
+
+type Tx = Prisma.TransactionClient;
 
 function logAudit(tenantId: string, userId: string, action: string, entityId: string, details: string) {
   db.auditLog.create({
     data: { tenantId, userId, action, entity: 'StockMovement', entityId, details },
   }).catch(() => {});
+}
+
+// Atomically increments the item's total quantity and returns the new value.
+async function incrementItemQuantity(tx: Tx, itemId: string, delta: number): Promise<number> {
+  const updated = await tx.inventoryItem.update({
+    where: { id: itemId },
+    data: { quantity: { increment: delta } },
+  });
+  return updated.quantity;
+}
+
+// Atomically decrements the item's total quantity, flooring at zero, and returns the new value.
+async function decrementItemQuantityFloored(tx: Tx, itemId: string, tenantId: string, delta: number): Promise<number> {
+  const decremented = await tx.inventoryItem.updateMany({
+    where: { id: itemId, tenantId, quantity: { gte: delta } },
+    data: { quantity: { decrement: delta } },
+  });
+  if (decremented.count > 0) {
+    const updated = await tx.inventoryItem.findFirstOrThrow({ where: { id: itemId, tenantId } });
+    return updated.quantity;
+  }
+  await tx.inventoryItem.update({ where: { id: itemId }, data: { quantity: 0 } });
+  return 0;
+}
+
+// Atomically increments a warehouse's stock for an item (creating the row if needed).
+async function incrementWarehouseStock(
+  tx: Tx,
+  tenantId: string,
+  warehouseId: string,
+  itemId: string,
+  delta: number,
+  createExtra: Partial<Prisma.WarehouseStockCreateInput> = {}
+): Promise<void> {
+  await tx.warehouseStock.upsert({
+    where: { warehouseId_itemId: { warehouseId, itemId } },
+    update: { quantity: { increment: delta } },
+    create: { tenantId, warehouseId, itemId, quantity: delta, ...createExtra },
+  });
+}
+
+// Atomically decrements a warehouse's stock for an item, flooring at zero.
+async function decrementWarehouseStockFloored(
+  tx: Tx,
+  tenantId: string,
+  warehouseId: string,
+  itemId: string,
+  delta: number,
+  damagedDelta = 0
+): Promise<void> {
+  const decremented = await tx.warehouseStock.updateMany({
+    where: { warehouseId, itemId, quantity: { gte: delta } },
+    data: { quantity: { decrement: delta } },
+  });
+  if (decremented.count === 0) {
+    const existing = await tx.warehouseStock.findUnique({ where: { warehouseId_itemId: { warehouseId, itemId } } });
+    if (existing) {
+      await tx.warehouseStock.update({ where: { id: existing.id }, data: { quantity: 0 } });
+    } else {
+      await tx.warehouseStock.create({ data: { tenantId, warehouseId, itemId, quantity: 0 } });
+    }
+  }
+  if (damagedDelta > 0) {
+    await tx.warehouseStock.update({
+      where: { warehouseId_itemId: { warehouseId, itemId } },
+      data: { damaged: { increment: damagedDelta } },
+    });
+  }
 }
 
 // ─── POST: Record stock movement ───────────────────────────────────────────────
@@ -54,137 +125,60 @@ export async function POST(request: NextRequest) {
     }
 
     const previousQty = item.quantity;
-    let newQty = previousQty;
 
-    // Calculate new item quantity based on movement type
-    switch (type) {
-      case 'stock_in':
-      case 'return':
-        newQty = previousQty + quantity;
-        break;
-      case 'stock_out':
-      case 'damage':
-        newQty = Math.max(0, previousQty - quantity);
-        break;
-      case 'adjustment':
-        // For adjustment, quantity is the new total
-        newQty = quantity;
-        break;
-      case 'transfer':
-        // Transfer doesn't change total item qty, only warehouse stock
-        break;
-    }
-
-    // Atomic: all stock writes in a single transaction
+    // Atomic: all stock writes in a single transaction. Item/warehouse quantities are
+    // updated via atomic increment/decrement (a single `SET qty = qty +/- N` statement)
+    // rather than read-then-write-absolute-value, so concurrent movements on the same
+    // item/warehouse can't silently clobber each other.
     const parsedExpiryDate = expiryDate ? new Date(expiryDate) : undefined;
     const movement = await db.$transaction(async (tx) => {
-      // Update item quantity (except for transfer which only moves between warehouses)
-      if (type !== 'transfer') {
-        await tx.inventoryItem.update({
-          where: { id: itemId },
-          data: { quantity: newQty },
-        });
+      let newQty = previousQty;
+
+      switch (type) {
+        case 'stock_in':
+        case 'return':
+          newQty = await incrementItemQuantity(tx, itemId, quantity);
+          break;
+        case 'stock_out':
+        case 'damage':
+          newQty = await decrementItemQuantityFloored(tx, itemId, tenantId, quantity);
+          break;
+        case 'adjustment':
+          // For adjustment, quantity is the new total (absolute set — inherent to the operation).
+          newQty = quantity;
+          await tx.inventoryItem.update({ where: { id: itemId }, data: { quantity: newQty } });
+          break;
+        case 'transfer':
+          // Transfer doesn't change total item qty, only warehouse stock.
+          break;
       }
 
       // Update warehouse stock
       if (warehouseId) {
-        const parsedExpiry = parsedExpiryDate;
-
-        const existingStock = await tx.warehouseStock.findUnique({
-          where: { warehouseId_itemId: { warehouseId, itemId } },
-        });
+        const createExtra = {
+          batchNo: batchNo || null,
+          lotNumber: lotNumber || null,
+          expiryDate: parsedExpiryDate,
+          ...(type === 'stock_in' || type === 'return' ? { costMethod: 'fifo' } : {}),
+        };
 
         if (type === 'stock_in' || type === 'return') {
-          if (existingStock) {
-            await tx.warehouseStock.update({
-              where: { id: existingStock.id },
-              data: { quantity: existingStock.quantity + quantity },
-            });
-          } else {
-            await tx.warehouseStock.create({
-              data: {
-                tenantId,
-                warehouseId,
-                itemId,
-                quantity,
-                batchNo: batchNo || null,
-                lotNumber: lotNumber || null,
-                expiryDate: parsedExpiry,
-                costMethod: 'fifo',
-              },
-            });
-          }
+          await incrementWarehouseStock(tx, tenantId, warehouseId, itemId, quantity, createExtra);
         } else if (type === 'stock_out' || type === 'damage') {
-          if (existingStock) {
-            await tx.warehouseStock.update({
-              where: { id: existingStock.id },
-              data: {
-                quantity: Math.max(0, existingStock.quantity - quantity),
-                ...(type === 'damage' ? { damaged: existingStock.damaged + quantity } : {}),
-              },
-            });
-          } else {
-            await tx.warehouseStock.create({
-              data: {
-                tenantId,
-                warehouseId,
-                itemId,
-                quantity: 0,
-                damaged: type === 'damage' ? quantity : 0,
-                batchNo: batchNo || null,
-                lotNumber: lotNumber || null,
-                expiryDate: parsedExpiry,
-              },
-            });
-          }
-        } else if (type === 'adjustment' && warehouseId) {
-          if (existingStock) {
-            await tx.warehouseStock.update({
-              where: { id: existingStock.id },
-              data: { quantity: Math.max(0, newQty) },
-            });
-          } else {
-            await tx.warehouseStock.create({
-              data: {
-                tenantId,
-                warehouseId,
-                itemId,
-                quantity: Math.max(0, newQty),
-                batchNo: batchNo || null,
-                lotNumber: lotNumber || null,
-                expiryDate: parsedExpiry,
-              },
-            });
-          }
+          await decrementWarehouseStockFloored(tx, tenantId, warehouseId, itemId, quantity, type === 'damage' ? quantity : 0);
+        } else if (type === 'adjustment') {
+          await tx.warehouseStock.upsert({
+            where: { warehouseId_itemId: { warehouseId, itemId } },
+            update: { quantity: Math.max(0, newQty) },
+            create: { tenantId, warehouseId, itemId, quantity: Math.max(0, newQty), ...createExtra },
+          });
         }
       }
 
       // Handle transfer: decrement from source, increment at destination
       if (type === 'transfer' && fromWarehouseId && warehouseId) {
-        const fromStock = await tx.warehouseStock.findUnique({
-          where: { warehouseId_itemId: { warehouseId: fromWarehouseId, itemId } },
-        });
-        const toStock = await tx.warehouseStock.findUnique({
-          where: { warehouseId_itemId: { warehouseId, itemId } },
-        });
-
-        if (fromStock) {
-          await tx.warehouseStock.update({
-            where: { id: fromStock.id },
-            data: { quantity: Math.max(0, fromStock.quantity - quantity) },
-          });
-        }
-
-        if (toStock) {
-          await tx.warehouseStock.update({
-            where: { id: toStock.id },
-            data: { quantity: toStock.quantity + quantity },
-          });
-        } else {
-          await tx.warehouseStock.create({
-            data: { tenantId, warehouseId, itemId, quantity },
-          });
-        }
+        await decrementWarehouseStockFloored(tx, tenantId, fromWarehouseId, itemId, quantity);
+        await incrementWarehouseStock(tx, tenantId, warehouseId, itemId, quantity);
       }
 
       // Create stock movement record
@@ -196,7 +190,7 @@ export async function POST(request: NextRequest) {
           type,
           quantity,
           previousQty,
-          newQty: type === 'adjustment' ? newQty : newQty,
+          newQty,
           reason: reason || null,
           referenceNo: referenceNo || null,
           referenceType: referenceType || null,

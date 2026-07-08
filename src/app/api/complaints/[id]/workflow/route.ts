@@ -203,6 +203,9 @@ export async function POST(
         });
 
         updateData.workOrderId = workOrder.id;
+        // Automatic ACCEPTED → WORK_ORDER_CREATED transition once the WorkOrder exists,
+        // matching state-machine.ts and the accept-reject route.
+        updateData.status = 'WORK_ORDER_CREATED';
       }
 
       if (action === 'reject') {
@@ -387,7 +390,7 @@ export async function POST(
           complaintId: complaint.id,
           tenantId,
           fromStatus: currentStatus,
-          toStatus: targetStatus,
+          toStatus: updateData.status as ComplaintStatus,
           action,
           performedBy: userId,
           performedByRole: userRole,

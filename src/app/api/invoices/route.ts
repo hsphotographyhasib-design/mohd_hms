@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { verifyToken, generateInvoiceNumber } from '@/lib/auth';
+import { verifyToken, createWithUniqueInvoiceNumber } from '@/lib/auth';
+import { computeTotals } from '@/lib/quotation-helpers';
 import { notifyInvoiceCreated } from '@/lib/notifications/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
@@ -110,7 +111,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const {
       customerId, workOrderId, quotationId, title, description, items,
-      subtotal, taxRate, tax, discount, shipping, total, status, dueDate, sentVia,
+      taxRate, discount, shipping, status, dueDate, sentVia,
       currency, referenceNo, poReference, paymentTerms, notes, terms,
       shipToName, shipToAddress, shipToPhone, shipToContact, preparedBy,
       bankName, bankAccountName, bankAccountNo,
@@ -120,9 +121,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Customer and title are required' }, { status: 400 });
     }
 
-    const invoiceNumber = generateInvoiceNumber();
+    // Totals are always derived from items server-side — never trust a client-supplied total.
+    const { subtotal, tax, total } = computeTotals(items || [], taxRate || 0, discount || 0, shipping || 0);
 
-    const invoice = await db.invoice.create({
+    const invoice = await createWithUniqueInvoiceNumber((invoiceNumber) => db.invoice.create({
       data: {
         tenantId,
         customerId,
@@ -132,12 +134,12 @@ export async function POST(request: NextRequest) {
         title,
         description: description || null,
         items: items ? JSON.stringify(items) : null,
-        subtotal: subtotal || 0,
+        subtotal,
         taxRate: taxRate || 0,
-        tax: tax || 0,
+        tax,
         discount: discount || 0,
         shipping: shipping || 0,
-        total: total || 0,
+        total,
         status: status || 'DRAFT',
         currency: currency || 'BND',
         referenceNo: referenceNo || null,
@@ -160,7 +162,7 @@ export async function POST(request: NextRequest) {
       include: {
         customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
       },
-    });
+    }));
 
     // Notify customer about the new invoice (fire-and-forget)
     try {

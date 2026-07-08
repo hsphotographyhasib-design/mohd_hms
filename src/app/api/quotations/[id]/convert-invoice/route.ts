@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
-import { verifyToken, generateInvoiceNumber } from '@/lib/auth';
+import { verifyToken, createWithUniqueInvoiceNumber } from '@/lib/auth';
 
 export async function POST(
   request: NextRequest,
@@ -56,12 +56,12 @@ export async function POST(
     dueDate.setDate(dueDate.getDate() + 30);
 
     // Create invoice
-    const invoice = await db.invoice.create({
+    const invoice = await createWithUniqueInvoiceNumber((invoiceNumber) => db.invoice.create({
       data: {
         tenantId,
         customerId: quotation.customerId,
         quotationId: id,
-        invoiceNumber: generateInvoiceNumber(),
+        invoiceNumber,
         title: `Invoice for ${quotation.title || quotation.projectName || 'Services'}`,
         description: quotation.description,
         items: JSON.stringify(invoiceItems),
@@ -87,7 +87,7 @@ export async function POST(
       include: {
         customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
       },
-    });
+    }));
 
     // Update quotation status
     await db.quotation.update({

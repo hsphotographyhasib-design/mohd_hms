@@ -113,13 +113,14 @@ router.route('/unread-count').get(requireAuth, async (req: Request, res: Respons
 router.route('/:id/read').patch(requireAuth, async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId as string;
+    const tenantId = req.tenantId!;
     const userRole = (req.user!.role as string).toLowerCase();
     const isAdmin = userRole === 'super_admin' || userRole === 'admin';
     const { id } = req.params;
 
-    // Find notification
-    const notification = await db.notification.findUnique({
-      where: { id },
+    // Find notification — always scoped to the caller's tenant
+    const notification = await db.notification.findFirst({
+      where: { id, tenantId },
       select: { id: true, tenantId: true, userId: true, isRead: true },
     });
 
@@ -135,7 +136,7 @@ router.route('/:id/read').patch(requireAuth, async (req: Request, res: Response)
     }
 
     const updated = await db.notification.update({
-      where: { id },
+      where: { id: notification.id },
       data: { isRead: true, readAt: new Date() },
       select: { id: true, isRead: true, readAt: true },
     });
@@ -169,12 +170,13 @@ router.route('/read-all').patch(requireAuth, async (req: Request, res: Response)
 router.route('/:id').delete(requireAuth, async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId as string;
+    const tenantId = req.tenantId!;
     const userRole = (req.user!.role as string).toLowerCase();
     const isAdmin = userRole === 'super_admin' || userRole === 'admin';
     const { id } = req.params;
 
-    const notification = await db.notification.findUnique({
-      where: { id },
+    const notification = await db.notification.findFirst({
+      where: { id, tenantId },
       select: { id: true, tenantId: true, userId: true },
     });
 
@@ -188,7 +190,7 @@ router.route('/:id').delete(requireAuth, async (req: Request, res: Response) => 
       return;
     }
 
-    await db.notification.delete({ where: { id } });
+    await db.notification.delete({ where: { id: notification.id } });
     res.json({ deleted: true });
   } catch (error) {
     console.error('[Notifications] Delete error:', error);
@@ -277,13 +279,14 @@ router.route('/devices/register').post(requireAuth, async (req: Request, res: Re
 router.route('/devices/unregister').post(requireAuth, async (req: Request, res: Response) => {
   try {
     const { token } = req.body as { token: string };
+    const userId = req.user!.userId as string;
 
     if (!token) {
       res.status(400).json({ error: 'Token is required' });
       return;
     }
 
-    await unregisterToken(token);
+    await unregisterToken(token, userId);
     res.json({ success: true });
   } catch (error) {
     console.error('[Notifications] Device unregister error:', error);

@@ -78,13 +78,11 @@ router.route('/register').post(async (req: Request, res: Response) => {
   let name: string;
   let email: string;
   let password: string;
-  let role: string;
   try {
     const body = req.body;
     name = body.name;
     email = body.email;
     password = body.password;
-    role = body.role;
   } catch {
     res.status(400).json({ error: 'Invalid request data. Please check your input.' });
     return;
@@ -125,7 +123,7 @@ router.route('/register').post(async (req: Request, res: Response) => {
         email,
         passwordHash,
         name,
-        role: role || 'customer',
+        role: 'customer',
         authProvider: 'email',
         profileCompleted: false,
       },

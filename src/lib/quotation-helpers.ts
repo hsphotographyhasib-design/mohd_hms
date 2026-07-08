@@ -18,7 +18,14 @@ export function computeTotals(
   discount = 0,
   shipping = 0,
 ) {
-  const subtotal = items.reduce((sum, item) => sum + (item.amount || 0), 0);
+  // Recompute each line's amount from quantity * rate rather than trusting the
+  // client-supplied amount, so a mismatched/tampered amount can't diverge from
+  // the quantity and rate the line item actually shows.
+  const subtotal = items.reduce((sum, item) => {
+    const rate = item.rate ?? item.unitPrice ?? 0;
+    const quantity = item.quantity ?? 0;
+    return sum + quantity * rate;
+  }, 0);
   const tax = subtotal * (taxRate / 100);
   const total = subtotal + tax - discount + shipping;
   return { subtotal, tax, discount, shipping, total };

@@ -33,10 +33,23 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
-// CORS — allow any origin (Render backend is API-only, no cookies sent cross-origin)
+// CORS — explicit allowlist (API is bearer-token only, no cookies are ever sent cross-origin)
+const staticAllowedOrigins = new Set(
+  [FRONTEND_URL, 'https://mohdhms.com', 'https://www.mohdhms.com', 'http://localhost:3000']
+    .concat((process.env.ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()))
+    .filter(Boolean)
+);
+const vercelPreviewOriginPattern = /^https:\/\/[a-z0-9-]+\.vercel\.app$/;
+
 app.use(cors({
-  origin: true,
-  credentials: true,
+  origin(origin, callback) {
+    if (!origin || staticAllowedOrigins.has(origin) || vercelPreviewOriginPattern.test(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    }
+  },
+  credentials: false,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));

@@ -28,10 +28,10 @@ export async function POST(request: NextRequest) {
   const { db, withRetry, getDbFriendlyMessage } = await import('@/lib/db');
   const { hashPassword, generateToken } = await import('@/lib/auth');
 
-  let name: string; let email: string; let password: string; let role: string;
+  let name: string; let email: string; let password: string;
   try {
     const body = await request.json();
-    name = body.name; email = body.email; password = body.password; role = body.role;
+    name = body.name; email = body.email; password = body.password;
   } catch {
     return NextResponse.json({ error: 'Invalid request data.' }, { status: 400 });
   }
@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     const passwordHash = await hashPassword(password);
     const user = await withRetry(() => db.user.create({
-      data: { tenantId: tenant.id, email, passwordHash, name, role: role || 'customer', authProvider: 'email', profileCompleted: false },
+      data: { tenantId: tenant.id, email, passwordHash, name, role: 'customer', authProvider: 'email', profileCompleted: false },
       include: { tenant: { select: { id: true, name: true, domain: true } } },
     }), { label: 'register-createUser' });
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { verifyToken } from '@/lib/auth';
+import { computeTotals } from '@/lib/quotation-helpers';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
@@ -110,12 +111,29 @@ export async function PUT(
     if (body.title !== undefined) updateData.title = body.title;
     if (body.description !== undefined) updateData.description = body.description || null;
     if (body.items !== undefined) updateData.items = body.items ? JSON.stringify(body.items) : null;
-    if (body.subtotal !== undefined) updateData.subtotal = body.subtotal;
     if (body.taxRate !== undefined) updateData.taxRate = body.taxRate;
-    if (body.tax !== undefined) updateData.tax = body.tax;
     if (body.discount !== undefined) updateData.discount = body.discount;
     if (body.shipping !== undefined) updateData.shipping = body.shipping;
-    if (body.total !== undefined) updateData.total = body.total;
+
+    // Totals are always derived from items — never trust a client-supplied subtotal/tax/total.
+    if (body.items !== undefined || body.taxRate !== undefined || body.discount !== undefined || body.shipping !== undefined) {
+      let effectiveItems: unknown[] = [];
+      if (body.items !== undefined) {
+        effectiveItems = body.items || [];
+      } else if (existing.items) {
+        try { effectiveItems = JSON.parse(existing.items); } catch { effectiveItems = []; }
+      }
+      const effectiveTaxRate = body.taxRate !== undefined ? body.taxRate : (existing.taxRate ?? 0);
+      const effectiveDiscount = body.discount !== undefined ? body.discount : (existing.discount ?? 0);
+      const effectiveShipping = body.shipping !== undefined ? body.shipping : (existing.shipping ?? 0);
+      const { subtotal, tax, total } = computeTotals(
+        effectiveItems as Parameters<typeof computeTotals>[0],
+        effectiveTaxRate, effectiveDiscount, effectiveShipping
+      );
+      updateData.subtotal = subtotal;
+      updateData.tax = tax;
+      updateData.total = total;
+    }
     if (body.currency !== undefined) updateData.currency = body.currency;
     if (body.referenceNo !== undefined) updateData.referenceNo = body.referenceNo || null;
     if (body.poReference !== undefined) updateData.poReference = body.poReference || null;

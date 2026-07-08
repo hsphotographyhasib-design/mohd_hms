@@ -111,8 +111,27 @@ export function generateAssetNumber(category: string): string {
 export function generateInvoiceNumber(): string {
   const now = new Date();
   const y = now.getFullYear();
-  const seq = Math.floor(Math.random() * 9000) + 1000;
+  const seq = Math.floor(Math.random() * 900000) + 100000;
   return `INV/SMSB/01/${y}/${seq}`;
+}
+
+// invoiceNumber is @unique in the schema; a random suffix can still collide under load.
+// Retry with a freshly generated number on a unique-constraint violation (Prisma P2002).
+export async function createWithUniqueInvoiceNumber<T>(
+  create: (invoiceNumber: string) => Promise<T>,
+  attempts = 5
+): Promise<T> {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      return await create(generateInvoiceNumber());
+    } catch (error) {
+      const isConflict = !!error && typeof error === 'object' && 'code' in error
+        && (error as { code: string }).code === 'P2002';
+      if (!isConflict || attempt === attempts) throw error;
+    }
+  }
+  // Unreachable, but keeps TypeScript happy about the return type.
+  throw new Error('Failed to generate a unique invoice number');
 }
 
 export function generatePONumber(): string {

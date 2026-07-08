@@ -32,37 +32,66 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Inventory item not found' }, { status: 404 });
     }
 
-    const previousQuantity = item.quantity;
-    let newQuantity: number;
+    const abs = Math.abs(quantity);
 
-    switch (type) {
-      case 'stock_in':
-      case 'reserved_released':
-        newQuantity = previousQuantity + Math.abs(quantity);
-        break;
-      case 'stock_out':
-      case 'work_order_used':
-        newQuantity = Math.max(0, previousQuantity - Math.abs(quantity));
-        break;
-      case 'adjustment':
-        newQuantity = quantity; // absolute value for adjustments
-        break;
-      case 'reserved':
-        // Reserved doesn't change actual qty, just logs intent
-        newQuantity = previousQuantity;
-        break;
-      default:
-        newQuantity = previousQuantity;
-    }
+    // Update the item quantity atomically (increment/decrement translate to a single
+    // `SET quantity = quantity +/- N` statement, so concurrent movements can't clobber
+    // each other the way a read-then-write-absolute-value would) and log the movement
+    // in the same transaction.
+    const movement = await db.$transaction(async (tx) => {
+      let previousQuantity: number;
+      let newQuantity: number;
 
-    // Create movement record and update item in transaction
-    const [movement] = await db.$transaction([
-      db.inventoryMovement.create({
+      switch (type) {
+        case 'stock_in':
+        case 'reserved_released': {
+          const updated = await tx.inventoryItem.update({
+            where: { id: itemId },
+            data: { quantity: { increment: abs } },
+          });
+          newQuantity = updated.quantity;
+          previousQuantity = newQuantity - abs;
+          break;
+        }
+        case 'stock_out':
+        case 'work_order_used': {
+          const decremented = await tx.inventoryItem.updateMany({
+            where: { id: itemId, tenantId, quantity: { gte: abs } },
+            data: { quantity: { decrement: abs } },
+          });
+          if (decremented.count > 0) {
+            const updated = await tx.inventoryItem.findFirstOrThrow({ where: { id: itemId, tenantId } });
+            newQuantity = updated.quantity;
+            previousQuantity = newQuantity + abs;
+          } else {
+            // Not enough stock left to cover the full amount — clamp to zero.
+            const current = await tx.inventoryItem.findFirstOrThrow({ where: { id: itemId, tenantId } });
+            previousQuantity = current.quantity;
+            newQuantity = 0;
+            await tx.inventoryItem.update({ where: { id: itemId }, data: { quantity: 0 } });
+          }
+          break;
+        }
+        case 'adjustment': {
+          previousQuantity = item.quantity;
+          newQuantity = quantity; // absolute value for adjustments
+          await tx.inventoryItem.update({ where: { id: itemId }, data: { quantity: newQuantity } });
+          break;
+        }
+        default: {
+          // 'reserved' — doesn't change actual qty, just logs intent
+          previousQuantity = item.quantity;
+          newQuantity = item.quantity;
+          break;
+        }
+      }
+
+      return tx.inventoryMovement.create({
         data: {
           tenantId,
           inventoryItemId: itemId,
           type,
-          quantity: Math.abs(quantity),
+          quantity: abs,
           previousQuantity,
           newQuantity,
           reason: reason || null,
@@ -73,12 +102,8 @@ export async function POST(request: NextRequest) {
         include: {
           performedBy: { select: { name: true } },
         },
-      }),
-      db.inventoryItem.update({
-        where: { id: itemId },
-        data: { quantity: newQuantity },
-      }),
-    ]);
+      });
+    });
 
     return NextResponse.json({
       id: movement.id,
