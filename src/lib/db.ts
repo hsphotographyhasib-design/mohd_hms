@@ -10,11 +10,24 @@
 let _supabaseDb: any = null;
 let _prismaDb: any = null;
 
+/**
+ * ESM/CJS interop helper — Turbopack may wrap ESM modules under `.default`.
+ * Tries `mod.<name>` first, then `mod.default?.<name>`.
+ */
+function resolveExport(mod: any, name: string): any {
+  if (mod?.[name] !== undefined) return mod[name];
+  if (mod?.default?.[name] !== undefined) return mod.default[name];
+  return undefined;
+}
+
 function getSupabaseDb() {
   if (!_supabaseDb) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('./supabase-db');
-    _supabaseDb = mod.supabaseDb;
+    _supabaseDb = resolveExport(mod, 'supabaseDb');
+    if (!_supabaseDb) {
+      console.error('[DB] Failed to resolve supabaseDb from supabase-db module. Module keys:', Object.keys(mod || {}));
+    }
   }
   return _supabaseDb;
 }
@@ -23,7 +36,10 @@ function getPrismaDb() {
   if (!_prismaDb) {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const mod = require('./prisma');
-    _prismaDb = mod.prisma;
+    _prismaDb = resolveExport(mod, 'prisma');
+    if (!_prismaDb) {
+      console.error('[DB] Failed to resolve prisma from prisma module. Module keys:', Object.keys(mod || {}));
+    }
   }
   return _prismaDb;
 }
@@ -32,12 +48,16 @@ export const db: any =
   process.env.USE_SUPABASE === 'true'
     ? new Proxy({} as any, {
         get(_target, prop: string) {
-          return getSupabaseDb()[prop];
+          const client = getSupabaseDb();
+          if (!client) throw new Error(`[DB] Supabase DB client not initialized. Cannot access '${prop}'.`);
+          return client[prop];
         },
       })
     : new Proxy({} as any, {
         get(_target, prop: string) {
-          return getPrismaDb()[prop];
+          const client = getPrismaDb();
+          if (!client) throw new Error(`[DB] Prisma client not initialized. Cannot access '${prop}'.`);
+          return client[prop];
         },
       });
 

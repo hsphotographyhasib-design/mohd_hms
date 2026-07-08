@@ -17,3 +17,21 @@ Stage Summary:
 - Server confirmed working: compiles, serves HTTP 200, stable for 30+ seconds after compilation
 - `.next` cache reduces recompilation from 28s to 14s
 ---
+---
+Task ID: 2
+Agent: Main
+Task: Fix Notifications TypeError: Cannot read properties of undefined (reading 'notification')
+
+Work Log:
+- Analyzed error: `TypeError: Cannot read properties of undefined (reading 'notification')` at `Object.get` in server chunk `src_lib_0d0dmhz._.js`
+- Error originates from `src/app/api/notifications/route.ts` line 132 catch block (logs "Notifications list error:")
+- Root cause: `db.ts` Proxy's `get` trap calls `getPrismaDb()[prop]`, but `getPrismaDb()` uses `require('./prisma')` which returns an ESM module. Turbopack's `require()` of ESM modules may wrap exports under `.default`, making `mod.prisma` undefined
+- Added `resolveExport()` helper that checks both `mod.<name>` and `mod.default?.<name>`
+- Added diagnostic logging when resolution fails (prints module keys for debugging)
+- Added null-safety guard in Proxy `get` trap — throws clear error `[DB] Prisma client not initialized. Cannot access '<prop>'` instead of cryptic TypeError
+- Verified: Server started, compiled, served `/api/notifications` with 401 (auth check passed before db access), no `[DB]` errors in log
+
+Stage Summary:
+- Fixed ESM/CJS interop issue in `src/lib/db.ts` with `resolveExport()` helper
+- Both `getPrismaDb()` and `getSupabaseDb()` now use `resolveExport()` for robust module resolution
+- Clear diagnostic errors replace cryptic TypeErrors when client initialization fails
