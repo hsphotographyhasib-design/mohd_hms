@@ -29,6 +29,9 @@ import type { DashboardKpiData, DashboardChartsData, DashboardFilters } from '@/
 
 // ============ HELPERS ============
 
+/** Roles that can use dashboard filters (admin-level roles) */
+const FILTER_ROLES = new Set<UserRole>(['super_admin', 'admin', 'manager', 'supervisor']);
+
 function StatusBadge({ status }: { status: string }) {
   const variants: Record<string, string> = {
     OPEN: 'bg-amber-100 text-amber-800 border-amber-200',

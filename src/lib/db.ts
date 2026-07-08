@@ -7,41 +7,26 @@
  * All 100+ API routes import { db } from '@/lib/db' — no changes needed.
  */
 
-let _supabaseDb: any = null;
-let _prismaDb: any = null;
+import { prisma as prismaInstance } from './prisma';
 
-/**
- * ESM/CJS interop helper — Turbopack may wrap ESM modules under `.default`.
- * Tries `mod.<name>` first, then `mod.default?.<name>`.
- */
-function resolveExport(mod: any, name: string): any {
-  if (mod?.[name] !== undefined) return mod[name];
-  if (mod?.default?.[name] !== undefined) return mod.default[name];
-  return undefined;
-}
+// Lazy-loaded Supabase DB (only initialized if USE_SUPABASE=true)
+let _supabaseDb: any = null;
 
 function getSupabaseDb() {
   if (!_supabaseDb) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const mod = require('./supabase-db');
-    _supabaseDb = resolveExport(mod, 'supabaseDb');
-    if (!_supabaseDb) {
-      console.error('[DB] Failed to resolve supabaseDb from supabase-db module. Module keys:', Object.keys(mod || {}));
+    try {
+      // Dynamic import cached — only called when USE_SUPABASE=true
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
+      const mod = require('./supabase-db');
+      _supabaseDb = mod?.supabaseDb ?? mod?.default?.supabaseDb ?? null;
+      if (!_supabaseDb) {
+        console.error('[DB] Failed to resolve supabaseDb from supabase-db module.');
+      }
+    } catch {
+      console.error('[DB] Failed to load supabase-db module.');
     }
   }
   return _supabaseDb;
-}
-
-function getPrismaDb() {
-  if (!_prismaDb) {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const mod = require('./prisma');
-    _prismaDb = resolveExport(mod, 'prisma');
-    if (!_prismaDb) {
-      console.error('[DB] Failed to resolve prisma from prisma module. Module keys:', Object.keys(mod || {}));
-    }
-  }
-  return _prismaDb;
 }
 
 export const db: any =
@@ -53,13 +38,7 @@ export const db: any =
           return client[prop];
         },
       })
-    : new Proxy({} as any, {
-        get(_target, prop: string) {
-          const client = getPrismaDb();
-          if (!client) throw new Error(`[DB] Prisma client not initialized. Cannot access '${prop}'.`);
-          return client[prop];
-        },
-      });
+    : prismaInstance;
 
 // Lazy type re-export (never evaluated at runtime)
 export type { PrismaClient } from "../../generated/prisma/client";

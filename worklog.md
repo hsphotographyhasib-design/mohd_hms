@@ -164,3 +164,26 @@ Stage Summary:
 - System works without Redis (graceful fallback to direct DB queries)
 - Zero-breaking-change: if UPSTASH_REDIS_REST_URL/TOKEN not set, caching is silently disabled
 - User needs to: 1) Create Upstash Redis database, 2) Add UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN to Render env vars
+
+---
+Task ID: 7
+Agent: Main
+Task: Fix auto-logout immediately after login
+
+Work Log:
+- User reported: "when i log in after that auto log out same time"
+- Checked dev.log: found `[AUTH] WARNING: No JWT secret found and no database URL. Using random secret. Tokens will invalidate on server restart.`
+- Root cause 1: `src/lib/auth.ts` `findDatabaseUrl()` only matched `postgres://`/`postgresql://` URLs, but local dev uses SQLite (`file:/path/to/db.sqlite`). This caused JWT secret to fall through to **random bytes** fallback
+- Root cause 2: In Turbopack dev mode, different API route compilations get different random secrets → login signs token with secret A, but /api/auth/me verifies with secret B → 401 → instant logout
+- Root cause 3: `src/lib/db.ts` used `require('./prisma')` which returns empty object `{}` in Turbopack (ESM-only runtime) → Prisma client not initialized → 500 errors on login
+- Fix 1: Updated `findDatabaseUrl()` in `auth.ts` to also recognize `file:` URLs (SQLite)
+- Fix 2: Added `JWT_SECRET=mohd-hms-local-dev-jwt-secret-2024` to `.env` file (belt-and-suspenders)
+- Fix 3: Replaced `require('./prisma')` in `db.ts` with proper ESM `import { prisma as prismaInstance } from './prisma'`
+- Fix 4: Added missing `FILTER_ROLES` constant in `dashboard-view.tsx`
+- Verified via agent-browser: login → dashboard loads → stays logged in after 15+ seconds → all API calls return 200
+
+Stage Summary:
+- JWT secret now deterministic (from .env or derived from DB URL) — no more random secrets
+- Prisma client resolves correctly via ESM import instead of broken require()
+- Login → AuthGuard → SessionHeartbeat flow all work correctly
+- Dashboard renders with KPI data, complaints table, and charts
