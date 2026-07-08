@@ -12,7 +12,7 @@ import { NotificationProvider } from '@/components/notifications/notification-pr
 import { ConfirmProvider } from '@/components/ui/confirm-provider';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { MapsProvider } from '@/lib/maps/maps-context';
-import { setupFetchInterceptor } from '@/hooks/use-secure-fetch';
+import { setupFetchInterceptor, markLoginTime } from '@/hooks/use-secure-fetch';
 import { useNotificationPolling } from '@/hooks/use-notification-polling';
 import { useNotificationStore } from '@/lib/notifications/store';
 
@@ -79,6 +79,7 @@ export default function AppEntry() {
         try {
           const user = JSON.parse(userStr);
           useAuthStore.setState({ user, token, isAuthenticated: true });
+          markLoginTime(); // Grace period for page refresh
         } catch {
           localStorage.clear();
         }

@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import type { AuthUser, UserRole, AppView } from '@/types';
+import { markLoginTime } from '@/hooks/use-secure-fetch';
 
 const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || 'cmms-secret-key';
 
@@ -42,6 +43,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.setItem('cmms_token', data.token);
       localStorage.setItem('cmms_user', JSON.stringify(data.user));
       set({ user: normalizeUser(data.user), token: data.token, isAuthenticated: true, isLoading: false });
+      markLoginTime(); // Start grace period — ignore 401s for 5s
       // Push history state for back button protection
       window.history.pushState(null, '', '/');
     } catch (error) {
@@ -63,6 +65,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.setItem('cmms_token', result.token);
       localStorage.setItem('cmms_user', JSON.stringify(result.user));
       set({ user: normalizeUser(result.user), token: result.token, isAuthenticated: true, isLoading: false });
+      markLoginTime();
     } catch (error) {
       set({ isLoading: false });
       throw error;
@@ -82,6 +85,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.setItem('cmms_token', data.token);
       localStorage.setItem('cmms_user', JSON.stringify(data.user));
       set({ user: normalizeUser(data.user), token: data.token, isAuthenticated: true, isLoading: false });
+      markLoginTime();
       window.history.pushState(null, '', '/');
       window.dispatchEvent(
         new CustomEvent('cmms:toast', { detail: { type: 'success', message: `Welcome, ${data.user.name}!` } }),
@@ -141,6 +145,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     localStorage.setItem('cmms_refresh_token', refreshToken);
     localStorage.setItem('cmms_user', JSON.stringify(user));
     set({ user: normalizeUser(user), token: accessToken, isAuthenticated: true, isLoading: false });
+    markLoginTime();
     window.history.pushState(null, '', '/');
     window.dispatchEvent(
       new CustomEvent('cmms:toast', { detail: { type: 'success', message: 'Welcome back!' } }),
