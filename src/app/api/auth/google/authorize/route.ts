@@ -52,17 +52,26 @@ function base64url(buffer: Uint8Array): string {
  * Using `state` instead of cookies — more reliable through CDNs/proxies.
  */
 export async function GET(request: NextRequest) {
+  const url = new URL(request.url);
+  const origin = url.origin;
+
   const clientId = getClientId();
   if (!clientId) {
-    return NextResponse.json(
-      { error: 'Google Sign-In is not configured. Please contact the administrator.' },
-      { status: 503 },
-    );
+    const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Google Sign-In Not Configured</title></head><body>
+<script>
+  alert('Google Sign-In is not configured. Please contact the administrator to set up GOOGLE_CLIENT_ID.');
+  window.location.replace('${origin}/');
+</script>
+<noscript><p style="padding:40px;color:red;font-family:sans-serif">Google Sign-In is not configured. Please contact the administrator.</p></noscript>
+</body></html>`;
+    return new NextResponse(html, {
+      status: 200,
+      headers: { 'Content-Type': 'text/html; charset=utf-8' },
+    });
   }
 
   // Build redirect_uri from the request
-  const url = new URL(request.url);
-  const origin = url.origin;
   const redirectUri = `${origin}/api/auth/google/callback`;
 
   // Generate PKCE

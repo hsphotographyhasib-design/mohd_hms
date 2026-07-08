@@ -96,7 +96,7 @@ export async function GET(request: NextRequest) {
 <script>
   try {
     localStorage.setItem('cmms_token', ${JSON.stringify(token)});
-    localStorage.setItem('cmms_user', ${userData});
+    localStorage.setItem('cmms_user', ${JSON.stringify(userData)});
     window.location.replace('${origin}/');
   } catch(e) {
     document.body.innerHTML = '<p style="color:red;padding:40px;font-family:sans-serif">Sign-in failed. Please try again.</p>';
@@ -313,7 +313,7 @@ export async function GET(request: NextRequest) {
 <script>
   try {
     localStorage.setItem('cmms_token', ${JSON.stringify(token)});
-    localStorage.setItem('cmms_user', ${userData});
+    localStorage.setItem('cmms_user', ${JSON.stringify(userData)});
     window.location.replace('${origin}/');
   } catch(e) {
     document.body.innerHTML = '<p style="color:red;padding:40px;font-family:sans-serif">Sign-in failed. Please try again.</p>';

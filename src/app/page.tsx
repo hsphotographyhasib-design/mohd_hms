@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import dynamic from 'next/dynamic';
 import { Building2 } from 'lucide-react';
 import { useAuthStore } from '@/store';
+import type { AuthUser } from '@/types';
 import { useNotificationStore } from '@/lib/notifications/store';
 import { LoginView } from '@/components/app/login-view';
 import { AppShell } from '@/components/app/app-shell';
@@ -88,7 +89,9 @@ export default function Home() {
       const userStr = localStorage.getItem('cmms_user');
       if (token && userStr) {
         try {
-          const user = JSON.parse(userStr);
+          const raw = JSON.parse(userStr) as AuthUser;
+          // Normalize role to lowercase (consistent with store's normalizeUser)
+          const user = { ...raw, role: ((raw.role as string) || '').toLowerCase() as AuthUser['role'] };
           useAuthStore.setState({ user, token, isAuthenticated: true });
         } catch {
           localStorage.clear();
