@@ -85,6 +85,9 @@ export function generateToken(payload: object): string {
   return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
 }
 
+/** Alias used by session routes */
+export const generateSessionToken = generateToken;
+
 export function verifyToken(token: string): jwt.JwtPayload | null {
   try {
     return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
