@@ -78,6 +78,27 @@ const nextConfig: NextConfig = {
     },
   }),
 
+  // ============================================================
+  // API PROXY — Forward /api/* to Render backend in production
+  // ============================================================
+  // In development, API routes run locally via Next.js.
+  // In production (Vercel), ALL /api/ requests are proxied to the
+  // Render Express backend which has the real database connection.
+  async rewrites() {
+    // Only proxy in production or when BACKEND_URL is explicitly set
+    const backendUrl = process.env.BACKEND_URL;
+    if (process.env.NODE_ENV === 'production' || backendUrl) {
+      const target = backendUrl || 'https://mohd-hms.onrender.com';
+      return [
+        {
+          source: '/api/:path*',
+          destination: `${target}/api/:path*`,
+        },
+      ];
+    }
+    return [];
+  },
+
   compress: true,
   poweredByHeader: false,
 };
