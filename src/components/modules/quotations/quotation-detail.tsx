@@ -12,7 +12,7 @@ import {
   ArrowLeft, Printer, Mail, MessageCircle, MoreVertical,
   Loader2, AlertCircle, CheckCircle2, Send, X,
   MapPin, Phone, MailIcon, User, Calendar, Hash, Building2, Landmark, Truck,
-  Copy, FileText, RotateCcw, Pencil,
+  Copy, FileText, RotateCcw, Pencil, Download,
 } from 'lucide-react';
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
@@ -21,6 +21,7 @@ import { toast } from 'sonner';
 import { useAppStore, useAuthStore, hasMinRole } from '@/store';
 import type { QuotationLineItem, QuotationStatus } from '@/types';
 import { numberToCurrencyWords } from '@/lib/number-to-words';
+import { COMPANY as COMPANY_BASE, DEFAULT_QUOTATION_TERMS } from '@/lib/company';
 import { format } from 'date-fns';
 import JsBarcode from 'jsbarcode';
 import dynamic from 'next/dynamic';
@@ -67,26 +68,9 @@ const WORKFLOW_TRANSITIONS: Record<string, { label: string; target: string; icon
   ],
 };
 
-const DEFAULT_TERMS = [
-  'This quotation is valid for the period stated above only.',
-  '50% advance payment and balance upon completion.',
-  'Delivery period: 3 working days after confirmation.',
-  'Price quoted are in BND and inclusive of installation.',
-  'Warranty applies only to workmanship.',
-  'Material warranty follows manufacturer terms.',
-  'Additional works are subject to variation order.',
-  'Payment by bank transfer or cheque.',
-];
+const DEFAULT_TERMS = DEFAULT_QUOTATION_TERMS;
 
-const COMPANY = {
-  name: 'SMART MAINTENANCE SERVICES SDN BHD',
-  shortName: 'S',
-  address: 'No. 25, Spg 88, Jln Gadong BE1318, Bandar Seri Begawan, Brunei Darussalam',
-  phone: '+673 245 6789',
-  email: 'info@smartms.com',
-  website: 'www.smartms.com',
-  regNo: 'BE1318',
-};
+const COMPANY = { ...COMPANY_BASE, address: COMPANY_BASE.fullAddress };
 
 // ============ HELPERS ============
 
@@ -247,15 +231,69 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
     }
   };
 
-  const handlePrint = () => window.print();
+  const fetchQuotationPdfBlob = async (download: boolean) => {
+    const res = await fetch(`/api/quotations/${id}/pdf${download ? '?download=1' : ''}`, {
+      headers: { Authorization: `Bearer ${token()}` },
+    });
+    if (!res.ok) throw new Error('Failed to generate PDF');
+    return res.blob();
+  };
 
-  const handleSendEmail = () => {
-    if (!qt) return;
-    const subject = encodeURIComponent(`Quotation ${qt.quotationNo || 'N/A'} - ${COMPANY.name}`);
-    const body = encodeURIComponent(
-      `Dear ${qt.customer?.name || 'Customer'},\n\nPlease find attached quotation for ${qt.title}.\n\nTotal Amount: ${qt.currency || 'BND'} ${fmtBND(qt.total)}\nValid Until: ${fmtDate(qt.validUntil)}\n\nThank you for your interest.\n\nBest regards,\n${COMPANY.name}\n${COMPANY.phone}`
-    );
-    window.open(`mailto:${qt.customer?.email || ''}?subject=${subject}&body=${body}`);
+  const handlePrint = async () => {
+    if (!id) return;
+    setActionLoading(true);
+    try {
+      const blob = await fetchQuotationPdfBlob(false);
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    } catch {
+      toast.error('Failed to open quotation PDF');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!id || !qt) return;
+    setActionLoading(true);
+    try {
+      const blob = await fetchQuotationPdfBlob(true);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Quotation-${(qt.quotationNo || qt.id).replace(/\//g, '-')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast.error('Failed to download quotation PDF');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!id || !qt) return;
+    if (!qt.customer?.email) {
+      toast.error('This customer has no email address on file');
+      return;
+    }
+    setActionLoading(true);
+    try {
+      const res = await fetch(`/api/quotations/${id}/send-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send email');
+      toast.success(`Quotation emailed to ${qt.customer.email}`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to send quotation email');
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const handleSendWhatsApp = () => {
@@ -335,10 +373,10 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
             </Button>
           ))}
 
-          <Button variant="outline" size="sm" onClick={handlePrint}>
+          <Button variant="outline" size="sm" onClick={handlePrint} disabled={actionLoading}>
             <Printer className="h-4 w-4 mr-1.5" /> Print
           </Button>
-          <Button variant="outline" size="sm" onClick={handleSendEmail}>
+          <Button variant="outline" size="sm" onClick={handleSendEmail} disabled={actionLoading}>
             <Mail className="h-4 w-4 mr-1.5" /> Email
           </Button>
           <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
@@ -353,6 +391,9 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={handleCopyNumber}>
                 <Copy className="h-4 w-4 mr-2" /> Copy Quotation No.
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDownloadPdf}>
+                <Download className="h-4 w-4 mr-2" /> Download PDF
               </DropdownMenuItem>
               {canManage && qt.status === 'DRAFT' && (
                 <DropdownMenuItem onClick={() => setView('quotation-edit', { id: qt.id })}>

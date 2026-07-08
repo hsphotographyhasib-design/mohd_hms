@@ -25,6 +25,7 @@ import { toast } from 'sonner';
 import { useAppStore, useAuthStore, hasMinRole } from '@/store';
 import type { InvoiceItem, InvoiceLineItem } from '@/types';
 import { numberToCurrencyWords } from '@/lib/number-to-words';
+import { COMPANY as COMPANY_BASE, DEFAULT_INVOICE_TERMS } from '@/lib/company';
 import { format } from 'date-fns';
 import JsBarcode from 'jsbarcode';
 import dynamic from 'next/dynamic';
@@ -36,25 +37,9 @@ const QRCodeSVG = dynamic(
 
 // ============ CONSTANTS ============
 
-const DEFAULT_TERMS = [
-  '50% advance payment and balance upon completion.',
-  'Price validity: 60 days from the invoice date.',
-  'Delivery period: 3 working days.',
-  'Additional works are subject to variation order.',
-  'Warranty applies only to workmanship.',
-  'Material warranty follows manufacturer terms.',
-  'Payment by bank transfer or cheque.',
-];
+const DEFAULT_TERMS = DEFAULT_INVOICE_TERMS;
 
-const COMPANY = {
-  name: 'SMART MAINTENANCE SERVICES SDN BHD',
-  shortName: 'S',
-  address: 'No. 25, Spg 88, Jln Gadong BE1318, Bandar Seri Begawan, Brunei Darussalam',
-  phone: '+673 245 6789',
-  email: 'info@smartms.com',
-  website: 'www.smartms.com',
-  regNo: 'BE1318',
-};
+const COMPANY = { ...COMPANY_BASE, address: COMPANY_BASE.fullAddress };
 
 const STATUS_STYLES: Record<string, { label: string; className: string }> = {
   DRAFT: { label: 'Draft', className: 'bg-gray-100 text-gray-700 border-gray-300' },
@@ -201,15 +186,69 @@ export function InvoiceDetail() {
     setShowCancelDialog(false);
   };
 
-  const handlePrint = () => window.print();
+  const fetchInvoicePdfBlob = async (download: boolean) => {
+    const res = await fetch(`/api/invoices/${id}/pdf${download ? '?download=1' : ''}`, {
+      headers: { Authorization: `Bearer ${token()}` },
+    });
+    if (!res.ok) throw new Error('Failed to generate PDF');
+    return res.blob();
+  };
 
-  const handleSendEmail = () => {
-    if (!inv) return;
-    const subject = encodeURIComponent(`Invoice ${inv.invoiceNumber} - ${COMPANY.name}`);
-    const body = encodeURIComponent(
-      `Dear ${inv.customerName},\n\nPlease find attached invoice ${inv.invoiceNumber} for ${inv.title}.\n\nTotal Amount: BND ${fmtBND(inv.total)}\nDue Date: ${fmtDate(inv.dueDate)}\n\nThank you for your business.\n\nBest regards,\n${COMPANY.name}\n${COMPANY.phone}\n${COMPANY.email}`
-    );
-    window.open(`mailto:${inv.customerEmail || ''}?subject=${subject}&body=${body}`);
+  const handlePrint = async () => {
+    if (!id) return;
+    setActionLoading(true);
+    try {
+      const blob = await fetchInvoicePdfBlob(false);
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    } catch {
+      toast.error('Failed to open invoice PDF');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleDownloadPdf = async () => {
+    if (!id || !inv) return;
+    setActionLoading(true);
+    try {
+      const blob = await fetchInvoicePdfBlob(true);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Invoice-${inv.invoiceNumber.replace(/\//g, '-')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch {
+      toast.error('Failed to download invoice PDF');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleSendEmail = async () => {
+    if (!id || !inv) return;
+    if (!inv.customerEmail) {
+      toast.error('This customer has no email address on file');
+      return;
+    }
+    setActionLoading(true);
+    try {
+      const res = await fetch(`/api/invoices/${id}/send-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to send email');
+      toast.success(`Invoice emailed to ${inv.customerEmail}`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to send invoice email');
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   const handleSendWhatsApp = () => {
@@ -270,10 +309,10 @@ export function InvoiceDetail() {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <Button variant="outline" size="sm" onClick={handlePrint}>
+          <Button variant="outline" size="sm" onClick={handlePrint} disabled={actionLoading}>
             <Printer className="h-4 w-4 mr-1.5" /> Print
           </Button>
-          <Button variant="outline" size="sm" onClick={handleSendEmail}>
+          <Button variant="outline" size="sm" onClick={handleSendEmail} disabled={actionLoading}>
             <Mail className="h-4 w-4 mr-1.5" /> Email
           </Button>
           <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
@@ -286,7 +325,7 @@ export function InvoiceDetail() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => toast.info('PDF download coming soon')}>
+              <DropdownMenuItem onClick={handleDownloadPdf}>
                 <Download className="h-4 w-4 mr-2" /> Download PDF
               </DropdownMenuItem>
               {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
