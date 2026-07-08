@@ -9,6 +9,9 @@ import {
   getUserDevices,
 } from '../lib/notification.service.js';
 import { isFirebaseConfigured } from '../lib/firebase.js';
+import { cachedFetch } from '../cache/cache.service.js';
+import { TTL } from '../cache/cache.constants.js';
+import { notificationsKey, invalidateNotifications } from '../cache/cache.utils.js';
 
 const router = Router();
 
@@ -45,47 +48,52 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
 
     const skip = (page - 1) * limit;
 
-    const [notifications, total, unreadResult] = await Promise.all([
-      db.notification.findMany({
-        where,
-        orderBy: { createdAt: 'desc' },
-        skip,
-        take: limit,
-        select: {
-          id: true,
-          userId: true,
-          type: true,
-          title: true,
-          message: true,
-          data: true,
-          priority: true,
-          isRead: true,
-          readAt: true,
-          archivedAt: true,
-          relatedEntityType: true,
-          relatedEntityId: true,
-          actionUrl: true,
-          actionLabel: true,
-          createdBy: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      }),
-      db.notification.count({ where }),
-      // Unread count for THIS user only (even if admin viewing all)
-      db.notification.count({
-        where: { tenantId, userId, isRead: false },
-      }),
-    ]);
+    const cacheKey = notificationsKey('list', tenantId, userId, `p${page}:l${limit}:read${isRead}:type${type}:q${search}`);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const [notifications, total, unreadResult] = await Promise.all([
+        db.notification.findMany({
+          where,
+          orderBy: { createdAt: 'desc' },
+          skip,
+          take: limit,
+          select: {
+            id: true,
+            userId: true,
+            type: true,
+            title: true,
+            message: true,
+            data: true,
+            priority: true,
+            isRead: true,
+            readAt: true,
+            archivedAt: true,
+            relatedEntityType: true,
+            relatedEntityId: true,
+            actionUrl: true,
+            actionLabel: true,
+            createdBy: true,
+            createdAt: true,
+            updatedAt: true,
+          },
+        }),
+        db.notification.count({ where }),
+        // Unread count for THIS user only (even if admin viewing all)
+        db.notification.count({
+          where: { tenantId, userId, isRead: false },
+        }),
+      ]);
 
-    res.json({
-      notifications,
-      unreadCount: unreadResult,
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
-    });
+      return {
+        notifications,
+        unreadCount: unreadResult,
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit),
+      };
+    }, TTL.notificationList);
+
+    res.json(data);
   } catch (error) {
     console.error('[Notifications] List error:', error);
     res.status(500).json({ error: 'Failed to fetch notifications' });
@@ -98,11 +106,15 @@ router.route('/unread-count').get(requireAuth, async (req: Request, res: Respons
     const userId = req.user!.userId as string;
     const tenantId = req.tenantId!;
 
-    const count = await db.notification.count({
-      where: { tenantId, userId, isRead: false },
-    });
+    const cacheKey = notificationsKey('unread', tenantId, userId);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const count = await db.notification.count({
+        where: { tenantId, userId, isRead: false },
+      });
+      return { count };
+    }, TTL.notificationUnread);
 
-    res.json({ count });
+    res.json(data);
   } catch (error) {
     console.error('[Notifications] Unread count error:', error);
     res.status(500).json({ error: 'Failed to get unread count' });
@@ -113,6 +125,7 @@ router.route('/unread-count').get(requireAuth, async (req: Request, res: Respons
 router.route('/:id/read').patch(requireAuth, async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId as string;
+    const tenantId = req.tenantId!;
     const userRole = (req.user!.role as string).toLowerCase();
     const isAdmin = userRole === 'super_admin' || userRole === 'admin';
     const { id } = req.params;
@@ -140,6 +153,8 @@ router.route('/:id/read').patch(requireAuth, async (req: Request, res: Response)
       select: { id: true, isRead: true, readAt: true },
     });
 
+    invalidateNotifications(tenantId, userId).catch(() => {});
+
     res.json(updated);
   } catch (error) {
     console.error('[Notifications] Mark read error:', error);
@@ -158,6 +173,8 @@ router.route('/read-all').patch(requireAuth, async (req: Request, res: Response)
       data: { isRead: true, readAt: new Date() },
     });
 
+    invalidateNotifications(tenantId, userId).catch(() => {});
+
     res.json({ markedRead: result.count });
   } catch (error) {
     console.error('[Notifications] Mark all read error:', error);
@@ -169,6 +186,7 @@ router.route('/read-all').patch(requireAuth, async (req: Request, res: Response)
 router.route('/:id').delete(requireAuth, async (req: Request, res: Response) => {
   try {
     const userId = req.user!.userId as string;
+    const tenantId = req.tenantId!;
     const userRole = (req.user!.role as string).toLowerCase();
     const isAdmin = userRole === 'super_admin' || userRole === 'admin';
     const { id } = req.params;
@@ -189,6 +207,7 @@ router.route('/:id').delete(requireAuth, async (req: Request, res: Response) => 
     }
 
     await db.notification.delete({ where: { id } });
+    invalidateNotifications(tenantId, userId).catch(() => {});
     res.json({ deleted: true });
   } catch (error) {
     console.error('[Notifications] Delete error:', error);
@@ -224,6 +243,8 @@ router.route('/test').post(requireAuth, async (req: Request, res: Response) => {
       category: 'system',
       sendPush: true,
     });
+
+    invalidateNotifications(tenantId, userId).catch(() => {});
 
     res.json({ success: true, message: 'Test notification sent' });
   } catch (error) {

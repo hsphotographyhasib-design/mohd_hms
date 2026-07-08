@@ -11,6 +11,11 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 
+// ─── Cache & Queue ─────────────────────────────────────────────────────────
+import { initRedis, isRedisAvailable } from './cache/redis.client.js';
+import { startWorkers, stopWorkers } from './queue/queue.service.js';
+import './queue/queue.workers.js'; // Register all job handlers
+
 // ─── Route imports ────────────────────────────────────────────────────────
 import authRoutes from './routes/auth.routes.js';
 import departmentsRoutes from './routes/departments.routes.js';
@@ -22,6 +27,7 @@ import employeesRoutes from './routes/employees.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import googleAuthRoutes from './routes/google-auth.routes.js';
 import notificationRoutes from './routes/notifications.routes.js';
+import cacheRoutes from './routes/cache.routes.js';
 
 // ─── App Setup ───────────────────────────────────────────────────────────
 const app = express();
@@ -77,6 +83,7 @@ app.use('/api/employees', employeesRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/auth/google', googleAuthRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/cache', cacheRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────
 app.use((_req, res) => {
@@ -96,12 +103,35 @@ app.use((err: Error, _req: express.Request, res: express.Response, _next: expres
   });
 });
 
+// ─── Initialize Redis & Start Queue Workers ────────────────────────────────
+initRedis();
+
+const QUEUE_NAMES = ['emails', 'notifications', 'whatsapp', 'reminders'];
+if (isRedisAvailable()) {
+  startWorkers(QUEUE_NAMES);
+  console.log(`[MOHD.HMS Backend] Queue workers started for: ${QUEUE_NAMES.join(', ')}`);
+}
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('[MOHD.HMS Backend] SIGTERM received — shutting down...');
+  stopWorkers();
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  console.log('[MOHD.HMS Backend] SIGINT received — shutting down...');
+  stopWorkers();
+  process.exit(0);
+});
+
 // ─── Start Server ─────────────────────────────────────────────────────────
 app.listen(PORT, () => {
   console.log(`[MOHD.HMS Backend] Running on port ${PORT}`);
   console.log(`[MOHD.HMS Backend] Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`[MOHD.HMS Backend] Frontend URL: ${FRONTEND_URL}`);
   console.log(`[MOHD.HMS Backend] Supabase URL: ${process.env.SUPABASE_URL || 'not configured'}`);
+  console.log(`[MOHD.HMS Backend] Redis: ${isRedisAvailable() ? 'connected' : 'not configured (caching disabled)'}`);
 });
 
 export default app;

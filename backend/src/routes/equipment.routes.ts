@@ -2,6 +2,9 @@ import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { generateAssetNumber } from '../lib/auth.js';
+import { cachedFetch } from '../cache/cache.service.js';
+import { TTL } from '../cache/cache.constants.js';
+import { equipmentKey, invalidateEquipment, invalidateDashboard } from '../cache/cache.utils.js';
 
 const router = Router();
 
@@ -31,53 +34,58 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     if (status) where.status = status;
     if (customerId) where.customerId = customerId;
 
-    const [items, total] = await Promise.all([
-      db.equipment.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-      }),
-      db.equipment.count({ where }),
-    ]);
+    const cacheKey = equipmentKey('list', tenantId, `p${page}:s${pageSize}:q${search}:cat${category}:st${status}:cust${customerId}`);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const [items, total] = await Promise.all([
+        db.equipment.findMany({
+          where,
+          skip,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+        }),
+        db.equipment.count({ where }),
+      ]);
 
-    const data = (items as any[]).map((eq: any) => ({
-      id: eq.id,
-      tenantId: eq.tenantId,
-      customerId: eq.customerId,
-      customerName: eq.customer?.name,
-      name: eq.name,
-      category: eq.category,
-      assetNumber: eq.assetNumber,
-      qrCode: eq.qrCode,
-      qrId: eq.qrId,
-      brand: eq.brand,
-      model: eq.model,
-      serialNumber: eq.serialNumber,
-      location: eq.location,
-      building: eq.building,
-      room: eq.room,
-      installDate: eq.installDate?.toISOString?.() || null,
-      warrantyExpiry: eq.warrantyExpiry?.toISOString?.() || null,
-      warrantyInfo: eq.warrantyInfo,
-      status: eq.status,
-      condition: eq.condition,
-      photos: eq.photos,
-      documents: eq.documents,
-      specifications: eq.specifications,
-      notes: eq.notes,
-      createdAt: eq.createdAt?.toISOString?.() || eq.createdAt,
-      updatedAt: eq.updatedAt?.toISOString?.() || eq.updatedAt,
-      _count: eq._count,
-    }));
+      const mapped = (items as any[]).map((eq: any) => ({
+        id: eq.id,
+        tenantId: eq.tenantId,
+        customerId: eq.customerId,
+        customerName: eq.customer?.name,
+        name: eq.name,
+        category: eq.category,
+        assetNumber: eq.assetNumber,
+        qrCode: eq.qrCode,
+        qrId: eq.qrId,
+        brand: eq.brand,
+        model: eq.model,
+        serialNumber: eq.serialNumber,
+        location: eq.location,
+        building: eq.building,
+        room: eq.room,
+        installDate: eq.installDate?.toISOString?.() || null,
+        warrantyExpiry: eq.warrantyExpiry?.toISOString?.() || null,
+        warrantyInfo: eq.warrantyInfo,
+        status: eq.status,
+        condition: eq.condition,
+        photos: eq.photos,
+        documents: eq.documents,
+        specifications: eq.specifications,
+        notes: eq.notes,
+        createdAt: eq.createdAt?.toISOString?.() || eq.createdAt,
+        updatedAt: eq.updatedAt?.toISOString?.() || eq.updatedAt,
+        _count: eq._count,
+      }));
 
-    res.json({
-      data,
-      total: total as number,
-      page,
-      pageSize,
-      totalPages: Math.ceil((total as number) / pageSize),
-    });
+      return {
+        data: mapped,
+        total: total as number,
+        page,
+        pageSize,
+        totalPages: Math.ceil((total as number) / pageSize),
+      };
+    }, TTL.equipmentList);
+
+    res.json(data);
   } catch (error) {
     console.error('Equipment list error:', error);
     res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
@@ -135,6 +143,9 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     db.equipmentQrCode.create({
       data: { tenantId, equipmentId: (equipment as any).id, qrId, qrUrl: `/equipment/${qrId}` },
     }).catch(() => {});
+
+    invalidateEquipment(tenantId).catch(() => {});
+    invalidateDashboard(tenantId).catch(() => {});
 
     const eq = equipment as any;
     res.status(201).json({

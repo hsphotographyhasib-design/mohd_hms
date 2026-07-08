@@ -2,6 +2,9 @@ import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { generateCustomerNumber } from '../lib/auth.js';
+import { cachedFetch } from '../cache/cache.service.js';
+import { TTL } from '../cache/cache.constants.js';
+import { customerKey, invalidateCustomers } from '../cache/cache.utils.js';
 
 const router = Router();
 
@@ -25,46 +28,51 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
       ];
     }
 
-    const [items, total] = await Promise.all([
-      db.customer.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-      }),
-      db.customer.count({ where }),
-    ]);
+    const cacheKey = customerKey('list', tenantId, `p${page}:s${pageSize}:q${search}`);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const [items, total] = await Promise.all([
+        db.customer.findMany({
+          where,
+          skip,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+        }),
+        db.customer.count({ where }),
+      ]);
 
-    const data = (items as any[]).map((c: any) => ({
-      id: c.id,
-      tenantId: c.tenantId,
-      name: c.name,
-      email: c.email,
-      phone: c.phone,
-      address: c.address,
-      companyName: c.companyName,
-      customerNumber: c.customerNumber,
-      building: c.building,
-      floor: c.floor,
-      unit: c.unit,
-      photo: c.photo,
-      paymentTerms: c.paymentTerms,
-      pic: c.pic,
-      country: c.country,
-      district: c.district,
-      taxRate: c.taxRate,
-      isActive: c.isActive,
-      createdAt: c.createdAt?.toISOString?.() || c.createdAt,
-      updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
-    }));
+      const mapped = (items as any[]).map((c: any) => ({
+        id: c.id,
+        tenantId: c.tenantId,
+        name: c.name,
+        email: c.email,
+        phone: c.phone,
+        address: c.address,
+        companyName: c.companyName,
+        customerNumber: c.customerNumber,
+        building: c.building,
+        floor: c.floor,
+        unit: c.unit,
+        photo: c.photo,
+        paymentTerms: c.paymentTerms,
+        pic: c.pic,
+        country: c.country,
+        district: c.district,
+        taxRate: c.taxRate,
+        isActive: c.isActive,
+        createdAt: c.createdAt?.toISOString?.() || c.createdAt,
+        updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
+      }));
 
-    res.json({
-      data,
-      total: total as number,
-      page,
-      pageSize,
-      totalPages: Math.ceil((total as number) / pageSize),
-    });
+      return {
+        data: mapped,
+        total: total as number,
+        page,
+        pageSize,
+        totalPages: Math.ceil((total as number) / pageSize),
+      };
+    }, TTL.customerList);
+
+    res.json(data);
   } catch (error) {
     console.error('Customers list error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -105,6 +113,9 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     });
 
     const c = customer as any;
+
+    invalidateCustomers(tenantId).catch(() => {});
+
     res.status(201).json({
       id: c.id,
       tenantId: c.tenantId,

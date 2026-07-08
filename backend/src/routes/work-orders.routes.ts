@@ -2,6 +2,9 @@ import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { sendNotification } from '../lib/notification.service.js';
+import { cachedFetch } from '../cache/cache.service.js';
+import { TTL } from '../cache/cache.constants.js';
+import { workOrdersKey, invalidateWorkOrders, invalidateDashboard } from '../cache/cache.utils.js';
 
 const router = Router();
 
@@ -46,89 +49,94 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     if (status) where.status = status;
     if (type) where.type = type;
 
-    const [items, total] = await Promise.all([
-      db.workOrder.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-      }),
-      db.workOrder.count({ where }),
-    ]);
+    const cacheKey = workOrdersKey('list', tenantId, userId, role, `p${page}:s${pageSize}:q${search}:st${status}:t${type}`);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const [items, total] = await Promise.all([
+        db.workOrder.findMany({
+          where,
+          skip,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+        }),
+        db.workOrder.count({ where }),
+      ]);
 
-    const data = (items as any[]).map((wo: any) => ({
-      id: wo.id,
-      tenantId: wo.tenantId,
-      workOrderNumber: wo.workOrderNumber,
-      complaintId: wo.complaintId,
-      customerId: wo.customerId,
-      customerName: wo.customer?.companyName || wo.customer?.name,
-      equipmentId: wo.equipmentId,
-      equipmentName: wo.equipment?.name,
-      equipmentAsset: wo.equipment?.assetNumber,
-      title: wo.title,
-      description: wo.description,
-      source: wo.source,
-      reference: wo.reference,
-      status: wo.status,
-      priority: wo.priority,
-      type: wo.type,
-      category: wo.category,
-      subCategory: wo.subCategory,
-      assignedToId: wo.assignedToId,
-      assignedToName: wo.assignedTo?.name,
-      supervisorId: wo.supervisorId,
-      supervisorName: wo.supervisor?.name,
-      createdBy: wo.createdBy,
-      creatorName: wo.creator?.name,
-      scheduledDate: wo.scheduledDate?.toISOString?.() || null,
-      startTime: wo.startTime,
-      dueDate: wo.dueDate?.toISOString?.() || null,
-      dueTime: wo.dueTime,
-      building: wo.building,
-      floor: wo.floor,
-      siteId: wo.siteId,
-      estimatedHours: wo.estimatedHours,
-      startedAt: wo.startedAt?.toISOString?.() || null,
-      completedAt: wo.completedAt?.toISOString?.() || null,
-      laborHours: wo.laborHours,
-      laborCost: wo.laborCost,
-      materialCost: wo.materialCost,
-      totalCost: wo.totalCost,
-      notes: wo.notes,
-      internalNotes: wo.internalNotes,
-      photos: wo.photos,
-      checklistData: wo.checklistData,
-      checklistId: wo.checklistId,
-      technicianSignature: wo.technicianSignature,
-      customerSignature: wo.customerSignature,
-      isDraft: wo.isDraft,
-      permitRequired: wo.permitRequired,
-      lockoutTagoutRequired: wo.lockoutTagoutRequired,
-      highRiskWork: wo.highRiskWork,
-      safetyEquipmentReq: wo.safetyEquipmentReq,
-      safetyNotes: wo.safetyNotes,
-      attachments: wo.attachments,
-      createdAt: wo.createdAt?.toISOString?.() || wo.createdAt,
-      updatedAt: wo.updatedAt?.toISOString?.() || wo.updatedAt,
-      materials: (wo.materials || []).map((m: any) => ({
-        id: m.id,
-        workOrderId: m.workOrderId,
-        inventoryItemId: m.inventoryItemId,
-        itemName: m.inventoryItem?.name,
-        quantity: m.quantity,
-        unitCost: m.unitCost,
-        totalCost: m.totalCost,
-      })),
-    }));
+      const mapped = (items as any[]).map((wo: any) => ({
+        id: wo.id,
+        tenantId: wo.tenantId,
+        workOrderNumber: wo.workOrderNumber,
+        complaintId: wo.complaintId,
+        customerId: wo.customerId,
+        customerName: wo.customer?.companyName || wo.customer?.name,
+        equipmentId: wo.equipmentId,
+        equipmentName: wo.equipment?.name,
+        equipmentAsset: wo.equipment?.assetNumber,
+        title: wo.title,
+        description: wo.description,
+        source: wo.source,
+        reference: wo.reference,
+        status: wo.status,
+        priority: wo.priority,
+        type: wo.type,
+        category: wo.category,
+        subCategory: wo.subCategory,
+        assignedToId: wo.assignedToId,
+        assignedToName: wo.assignedTo?.name,
+        supervisorId: wo.supervisorId,
+        supervisorName: wo.supervisor?.name,
+        createdBy: wo.createdBy,
+        creatorName: wo.creator?.name,
+        scheduledDate: wo.scheduledDate?.toISOString?.() || null,
+        startTime: wo.startTime,
+        dueDate: wo.dueDate?.toISOString?.() || null,
+        dueTime: wo.dueTime,
+        building: wo.building,
+        floor: wo.floor,
+        siteId: wo.siteId,
+        estimatedHours: wo.estimatedHours,
+        startedAt: wo.startedAt?.toISOString?.() || null,
+        completedAt: wo.completedAt?.toISOString?.() || null,
+        laborHours: wo.laborHours,
+        laborCost: wo.laborCost,
+        materialCost: wo.materialCost,
+        totalCost: wo.totalCost,
+        notes: wo.notes,
+        internalNotes: wo.internalNotes,
+        photos: wo.photos,
+        checklistData: wo.checklistData,
+        checklistId: wo.checklistId,
+        technicianSignature: wo.technicianSignature,
+        customerSignature: wo.customerSignature,
+        isDraft: wo.isDraft,
+        permitRequired: wo.permitRequired,
+        lockoutTagoutRequired: wo.lockoutTagoutRequired,
+        highRiskWork: wo.highRiskWork,
+        safetyEquipmentReq: wo.safetyEquipmentReq,
+        safetyNotes: wo.safetyNotes,
+        attachments: wo.attachments,
+        createdAt: wo.createdAt?.toISOString?.() || wo.createdAt,
+        updatedAt: wo.updatedAt?.toISOString?.() || wo.updatedAt,
+        materials: (wo.materials || []).map((m: any) => ({
+          id: m.id,
+          workOrderId: m.workOrderId,
+          inventoryItemId: m.inventoryItemId,
+          itemName: m.inventoryItem?.name,
+          quantity: m.quantity,
+          unitCost: m.unitCost,
+          totalCost: m.totalCost,
+        })),
+      }));
 
-    res.json({
-      data,
-      total: total as number,
-      page,
-      pageSize,
-      totalPages: Math.ceil((total as number) / pageSize),
-    });
+      return {
+        data: mapped,
+        total: total as number,
+        page,
+        pageSize,
+        totalPages: Math.ceil((total as number) / pageSize),
+      };
+    }, TTL.workOrderList);
+
+    res.json(data);
   } catch (error) {
     console.error('Work orders list error:', error);
     res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
@@ -268,6 +276,9 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
       }).catch(() => {});
     }
 
+    invalidateWorkOrders(tenantId).catch(() => {});
+    invalidateDashboard(tenantId).catch(() => {});
+
     res.status(201).json({
       id: wo.id,
       tenantId: wo.tenantId,
@@ -313,29 +324,36 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
 // ─── GET /next-number — Get next WO number ───────────────────────────────────
 router.route('/next-number').get(requireAuth, async (req: Request, res: Response) => {
   try {
-    const tenantId = req.tenantId;
+    const tenantId = req.tenantId!;
+    const userId = req.user!.userId as string;
+    const role = (req.user!.role as string).toLowerCase();
     const year = new Date().getFullYear();
     const prefix = `WO/HMS/${year}/`;
 
-    const where: Record<string, unknown> = tenantId
-      ? { tenantId, workOrderNumber: { startsWith: prefix } }
-      : { workOrderNumber: { startsWith: prefix } };
+    const cacheKey = workOrdersKey('next-number', tenantId, userId, role);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const where: Record<string, unknown> = tenantId
+        ? { tenantId, workOrderNumber: { startsWith: prefix } }
+        : { workOrderNumber: { startsWith: prefix } };
 
-    const latestWo = await db.workOrder.findFirst({
-      where,
-      orderBy: { workOrderNumber: 'desc' },
-      select: { workOrderNumber: true },
-    });
+      const latestWo = await db.workOrder.findFirst({
+        where,
+        orderBy: { workOrderNumber: 'desc' },
+        select: { workOrderNumber: true },
+      });
 
-    let nextNum = 1;
-    if ((latestWo as any)?.workOrderNumber) {
-      const parts = (latestWo as any).workOrderNumber.split('/');
-      const numStr = parts[parts.length - 1];
-      const parsed = parseInt(numStr, 10);
-      if (!isNaN(parsed)) nextNum = parsed + 1;
-    }
+      let nextNum = 1;
+      if ((latestWo as any)?.workOrderNumber) {
+        const parts = (latestWo as any).workOrderNumber.split('/');
+        const numStr = parts[parts.length - 1];
+        const parsed = parseInt(numStr, 10);
+        if (!isNaN(parsed)) nextNum = parsed + 1;
+      }
 
-    res.json({ nextNumber: `${prefix}${String(nextNum).padStart(6, '0')}` });
+      return { nextNumber: `${prefix}${String(nextNum).padStart(6, '0')}` };
+    }, TTL.workOrderNextNumber);
+
+    res.json(data);
   } catch (error) {
     console.error('Next WO number error:', error);
     const year = new Date().getFullYear();

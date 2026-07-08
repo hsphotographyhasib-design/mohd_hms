@@ -2,6 +2,9 @@ import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { sendNotification } from '../lib/notification.service.js';
+import { cachedFetch } from '../cache/cache.service.js';
+import { TTL } from '../cache/cache.constants.js';
+import { complaintsKey, invalidateComplaints, invalidateDashboard } from '../cache/cache.utils.js';
 
 const router = Router();
 
@@ -55,49 +58,55 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     if (status) where.status = status;
     if (priority) where.priority = priority;
 
-    const [items, total] = await Promise.all([
-      db.complaint.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-      }),
-      db.complaint.count({ where }),
-    ]);
+    const userId = req.user!.userId as string;
+    const cacheKey = complaintsKey('list', tenantId, userId, role, `p${page}:s${pageSize}:q${search}:st${status}:pr${priority}`);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const [items, total] = await Promise.all([
+        db.complaint.findMany({
+          where,
+          skip,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+        }),
+        db.complaint.count({ where }),
+      ]);
 
-    const data = (items as any[]).map((c: any) => ({
-      id: c.id,
-      tenantId: c.tenantId,
-      customerId: c.customerId,
-      customerName: c.customer?.name,
-      equipmentId: c.equipmentId,
-      equipmentName: c.equipment?.name,
-      title: c.title,
-      description: c.description,
-      priority: c.priority,
-      status: c.status,
-      category: c.category,
-      photos: c.photos,
-      assignedToId: c.assignedToId,
-      assignedToName: c.assignedTo?.name,
-      supervisorId: c.supervisorId,
-      supervisorName: c.supervisor?.name,
-      resolutionNotes: c.resolutionNotes,
-      customerRating: c.customerRating,
-      customerFeedback: c.customerFeedback,
-      resolvedAt: c.resolvedAt?.toISOString?.() || null,
-      closedAt: c.closedAt?.toISOString?.() || null,
-      createdAt: c.createdAt?.toISOString?.() || c.createdAt,
-      updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
-    }));
+      const mapped = (items as any[]).map((c: any) => ({
+        id: c.id,
+        tenantId: c.tenantId,
+        customerId: c.customerId,
+        customerName: c.customer?.name,
+        equipmentId: c.equipmentId,
+        equipmentName: c.equipment?.name,
+        title: c.title,
+        description: c.description,
+        priority: c.priority,
+        status: c.status,
+        category: c.category,
+        photos: c.photos,
+        assignedToId: c.assignedToId,
+        assignedToName: c.assignedTo?.name,
+        supervisorId: c.supervisorId,
+        supervisorName: c.supervisor?.name,
+        resolutionNotes: c.resolutionNotes,
+        customerRating: c.customerRating,
+        customerFeedback: c.customerFeedback,
+        resolvedAt: c.resolvedAt?.toISOString?.() || null,
+        closedAt: c.closedAt?.toISOString?.() || null,
+        createdAt: c.createdAt?.toISOString?.() || c.createdAt,
+        updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
+      }));
 
-    res.json({
-      data,
-      total: total as number,
-      page,
-      pageSize,
-      totalPages: Math.ceil((total as number) / pageSize),
-    });
+      return {
+        data: mapped,
+        total: total as number,
+        page,
+        pageSize,
+        totalPages: Math.ceil((total as number) / pageSize),
+      };
+    }, TTL.complaintList);
+
+    res.json(data);
   } catch (error) {
     console.error('Complaints list error:', error);
     res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
@@ -242,6 +251,9 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
       }).catch(() => {});
     }
 
+    invalidateComplaints(tenantId).catch(() => {});
+    invalidateDashboard(tenantId).catch(() => {});
+
     res.status(201).json({
       id: (complaint as any).id,
       complaintNumber,
@@ -275,57 +287,64 @@ router.route('/:id').get(requireAuth, async (req: Request, res: Response) => {
     const role = (req.user!.role as string).toLowerCase();
     const { id } = req.params;
 
-    const complaint = await db.complaint.findFirst({
-      where: { tenantId, id },
-    });
+    const userId = req.user!.userId as string;
+    const cacheKey = complaintsKey('detail', tenantId, userId, role, id as string);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const complaint = await db.complaint.findFirst({
+        where: { tenantId, id },
+      });
 
-    if (!complaint) {
+      if (!complaint) return null;
+
+      const c = complaint as any;
+      return {
+        id: c.id,
+        tenantId: c.tenantId,
+        customerId: c.customerId,
+        customerName: c.customer?.name,
+        equipmentId: c.equipmentId,
+        equipmentName: c.equipment?.name,
+        title: c.title,
+        description: c.description,
+        priority: c.priority,
+        status: c.status,
+        category: c.category,
+        photos: c.photos,
+        gpsLocation: c.gpsLocation,
+        assignedToId: c.assignedToId,
+        assignedToName: c.assignedTo?.name,
+        supervisorId: c.supervisorId,
+        supervisorName: c.supervisor?.name,
+        resolutionNotes: c.resolutionNotes,
+        customerRating: c.customerRating,
+        customerFeedback: c.customerFeedback,
+        resolvedAt: c.resolvedAt?.toISOString?.() || null,
+        closedAt: c.closedAt?.toISOString?.() || null,
+        createdAt: c.createdAt?.toISOString?.() || c.createdAt,
+        updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
+        workOrders: (c.workOrders || []).map((wo: any) => ({
+          id: wo.id,
+          tenantId: wo.tenantId,
+          title: wo.title,
+          description: wo.description,
+          status: wo.status,
+          priority: wo.priority,
+          type: wo.type,
+          assignedToId: wo.assignedToId,
+          assignedToName: wo.assignedTo?.name,
+          equipmentName: wo.equipment?.name,
+          totalCost: wo.totalCost,
+          createdAt: wo.createdAt?.toISOString?.() || wo.createdAt,
+          updatedAt: wo.updatedAt?.toISOString?.() || wo.updatedAt,
+        })),
+      };
+    }, TTL.complaintDetail);
+
+    if (!data) {
       res.status(404).json({ error: 'Complaint not found' });
       return;
     }
-
-    const c = complaint as any;
-    res.json({
-      id: c.id,
-      tenantId: c.tenantId,
-      customerId: c.customerId,
-      customerName: c.customer?.name,
-      equipmentId: c.equipmentId,
-      equipmentName: c.equipment?.name,
-      title: c.title,
-      description: c.description,
-      priority: c.priority,
-      status: c.status,
-      category: c.category,
-      photos: c.photos,
-      gpsLocation: c.gpsLocation,
-      assignedToId: c.assignedToId,
-      assignedToName: c.assignedTo?.name,
-      supervisorId: c.supervisorId,
-      supervisorName: c.supervisor?.name,
-      resolutionNotes: c.resolutionNotes,
-      customerRating: c.customerRating,
-      customerFeedback: c.customerFeedback,
-      resolvedAt: c.resolvedAt?.toISOString?.() || null,
-      closedAt: c.closedAt?.toISOString?.() || null,
-      createdAt: c.createdAt?.toISOString?.() || c.createdAt,
-      updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
-      workOrders: (c.workOrders || []).map((wo: any) => ({
-        id: wo.id,
-        tenantId: wo.tenantId,
-        title: wo.title,
-        description: wo.description,
-        status: wo.status,
-        priority: wo.priority,
-        type: wo.type,
-        assignedToId: wo.assignedToId,
-        assignedToName: wo.assignedTo?.name,
-        equipmentName: wo.equipment?.name,
-        totalCost: wo.totalCost,
-        createdAt: wo.createdAt?.toISOString?.() || wo.createdAt,
-        updatedAt: wo.updatedAt?.toISOString?.() || wo.updatedAt,
-      })),
-    });
+    res.json(data);
   } catch (error) {
     console.error('Complaint get error:', error);
     res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
@@ -400,6 +419,9 @@ router.route('/:id').patch(requireAuth, async (req: Request, res: Response) => {
       where: { id },
       data: updateData,
     });
+
+    invalidateComplaints(tenantId).catch(() => {});
+    invalidateDashboard(tenantId).catch(() => {});
 
     const u = updated as any;
     res.json({

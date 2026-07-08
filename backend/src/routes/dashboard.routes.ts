@@ -1,6 +1,9 @@
 import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
+import { cachedFetch } from '../cache/cache.service.js';
+import { TTL } from '../cache/cache.constants.js';
+import { dashboardKey, getUserContext } from '../cache/cache.utils.js';
 
 const router = Router();
 
@@ -704,102 +707,108 @@ router.route('/kpi').get(requireAuth, async (req: Request, res: Response) => {
 
     console.log(`[Dashboard/${role}] ${req.method} /api/dashboard${req.path} userId=${userId}`);
 
-    const scope = await buildDashboardScope(tenantId, userId, role);
+    const cacheKey = dashboardKey('kpi', tenantId, userId, role);
 
-    const [
-      complaintStatusGroups,
-      woStatusGroups,
-      paidRevenue,
-      pendingInvoiceCount,
-      overdueInvoiceCount,
-      totalCustomers,
-      totalEmployees,
-      totalEquipment,
-      activeEquipment,
-      lowStockRaw,
-      pmAll,
-    ] = await Promise.all([
-      scope.canSeeComplaints
-        ? db.complaint.groupBy({ by: ['status'], where: scope.complaintWhere, _count: { id: true } })
-        : Promise.resolve([]),
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const scope = await buildDashboardScope(tenantId, userId, role);
 
-      woGroupBy(scope, ['status']),
+      const [
+        complaintStatusGroups,
+        woStatusGroups,
+        paidRevenue,
+        pendingInvoiceCount,
+        overdueInvoiceCount,
+        totalCustomers,
+        totalEmployees,
+        totalEquipment,
+        activeEquipment,
+        lowStockRaw,
+        pmAll,
+      ] = await Promise.all([
+        scope.canSeeComplaints
+          ? db.complaint.groupBy({ by: ['status'], where: scope.complaintWhere, _count: { id: true } })
+          : Promise.resolve([]),
 
-      scope.canSeeRevenue
-        ? db.invoice.aggregate({ where: { ...scope.invoiceWhere, status: 'PAID' }, _sum: { total: true } })
-        : Promise.resolve({ _sum: { total: 0 } }),
+        woGroupBy(scope, ['status']),
 
-      scope.canSeeRevenue
-        ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'PENDING' } })
-        : Promise.resolve(0),
+        scope.canSeeRevenue
+          ? db.invoice.aggregate({ where: { ...scope.invoiceWhere, status: 'PAID' }, _sum: { total: true } })
+          : Promise.resolve({ _sum: { total: 0 } }),
 
-      scope.canSeeRevenue
-        ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'OVERDUE' } })
-        : Promise.resolve(0),
+        scope.canSeeRevenue
+          ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'PENDING' } })
+          : Promise.resolve(0),
 
-      scope.canSeeCustomers
-        ? (scope.customerCountOverride != null
-            ? Promise.resolve(scope.customerCountOverride)
-            : db.customer.count({ where: { tenantId, isActive: true } }))
-        : Promise.resolve(0),
+        scope.canSeeRevenue
+          ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'OVERDUE' } })
+          : Promise.resolve(0),
 
-      scope.canSeeEmployees
-        ? db.user.count({ where: { tenantId, isActive: true } })
-        : Promise.resolve(0),
+        scope.canSeeCustomers
+          ? (scope.customerCountOverride != null
+              ? Promise.resolve(scope.customerCountOverride)
+              : db.customer.count({ where: { tenantId, isActive: true } }))
+          : Promise.resolve(0),
 
-      scope.canSeeEquipment
-        ? db.equipment.count({ where: scope.equipmentWhere })
-        : Promise.resolve(0),
+        scope.canSeeEmployees
+          ? db.user.count({ where: { tenantId, isActive: true } })
+          : Promise.resolve(0),
 
-      scope.canSeeEquipment
-        ? db.equipment.count({ where: { ...scope.equipmentWhere, status: 'active' } })
-        : Promise.resolve(0),
+        scope.canSeeEquipment
+          ? db.equipment.count({ where: scope.equipmentWhere })
+          : Promise.resolve(0),
 
-      scope.canSeeInventory
-        ? db.inventoryItem.findMany({
-            where: { tenantId, isActive: true },
-            select: { quantity: true, minStock: true },
-          })
-        : Promise.resolve([]),
+        scope.canSeeEquipment
+          ? db.equipment.count({ where: { ...scope.equipmentWhere, status: 'active' } })
+          : Promise.resolve(0),
 
-      scope.canSeePm
-        ? db.pmSchedule.findMany({ where: scope.pmWhere, select: { status: true } })
-        : Promise.resolve([]),
-    ]);
+        scope.canSeeInventory
+          ? db.inventoryItem.findMany({
+              where: { tenantId, isActive: true },
+              select: { quantity: true, minStock: true },
+            })
+          : Promise.resolve([]),
 
-    // ── Process ───────────────────────────────────────────────────────
-    const cStatusMap = toStatusMap(complaintStatusGroups as Record<string, unknown>[]);
-    const openComplaints = cStatusMap['OPEN'] ?? cStatusMap['NEW'] ?? 0;
-    const inProgressComplaints = cStatusMap['IN_PROGRESS'] ?? cStatusMap['ACCEPTED'] ?? 0;
+        scope.canSeePm
+          ? db.pmSchedule.findMany({ where: scope.pmWhere, select: { status: true } })
+          : Promise.resolve([]),
+      ]);
 
-    const woMap = toStatusMap(woStatusGroups as Record<string, unknown>[]);
-    const totalWorkOrders = Object.values(woMap).reduce((s, v) => s + v, 0);
-    const pendingWorkOrders = woMap['PENDING'] ?? 0;
-    const completedWorkOrders = woMap['COMPLETED'] ?? 0;
+      // ── Process ───────────────────────────────────────────────────────
+      const cStatusMap = toStatusMap(complaintStatusGroups as Record<string, unknown>[]);
+      const openComplaints = cStatusMap['OPEN'] ?? cStatusMap['NEW'] ?? 0;
+      const inProgressComplaints = cStatusMap['IN_PROGRESS'] ?? cStatusMap['ACCEPTED'] ?? 0;
 
-    const lowStockItems = scope.canSeeInventory
-      ? (lowStockRaw as any[]).filter((i: any) => i.quantity <= i.minStock).length
-      : 0;
+      const woMap = toStatusMap(woStatusGroups as Record<string, unknown>[]);
+      const totalWorkOrders = Object.values(woMap).reduce((s, v) => s + v, 0);
+      const pendingWorkOrders = woMap['PENDING'] ?? 0;
+      const completedWorkOrders = woMap['COMPLETED'] ?? 0;
 
-    const pmCompliance = calcPmCompliance(pmAll as Record<string, unknown>[]);
+      const lowStockItems = scope.canSeeInventory
+        ? (lowStockRaw as any[]).filter((i: any) => i.quantity <= i.minStock).length
+        : 0;
 
-    res.json({
-      totalEquipment: totalEquipment as number,
-      activeEquipment: activeEquipment as number,
-      openComplaints,
-      inProgressComplaints,
-      totalWorkOrders,
-      pendingWorkOrders,
-      completedWorkOrders,
-      totalRevenue: ((paidRevenue as any)?._sum?.total) || 0,
-      pendingInvoices: pendingInvoiceCount as number,
-      overdueInvoices: overdueInvoiceCount as number,
-      pmCompliance,
-      totalCustomers: totalCustomers as number,
-      totalEmployees: totalEmployees as number,
-      lowStockItems,
-      accessLevel: role,
-    });
+      const pmCompliance = calcPmCompliance(pmAll as Record<string, unknown>[]);
+
+      return {
+        totalEquipment: totalEquipment as number,
+        activeEquipment: activeEquipment as number,
+        openComplaints,
+        inProgressComplaints,
+        totalWorkOrders,
+        pendingWorkOrders,
+        completedWorkOrders,
+        totalRevenue: ((paidRevenue as any)?._sum?.total) || 0,
+        pendingInvoices: pendingInvoiceCount as number,
+        overdueInvoices: overdueInvoiceCount as number,
+        pmCompliance,
+        totalCustomers: totalCustomers as number,
+        totalEmployees: totalEmployees as number,
+        lowStockItems,
+        accessLevel: role,
+      };
+    }, TTL.dashboardKpi);
+
+    res.json(data);
   } catch (error) {
     console.error('Dashboard KPI error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -818,72 +827,77 @@ router.route('/charts').get(requireAuth, async (req: Request, res: Response) => 
 
     console.log(`[Dashboard/${role}] ${req.method} /api/dashboard${req.path} userId=${userId}`);
 
-    const scope = await buildDashboardScope(tenantId, userId, role);
+    const cacheKey = dashboardKey('charts', tenantId, userId, role);
 
-    const [
-      complaintsByCategoryRaw,
-      complaintsByStatusRaw,
-      monthlyRevenueInvoices,
-      pmAll,
-    ] = await Promise.all([
-      scope.canSeeComplaints
-        ? db.complaint.groupBy({
-            by: ['category'],
-            where: { ...scope.complaintWhere, category: { not: null } },
-            _count: { id: true },
-          })
-        : Promise.resolve([]),
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const scope = await buildDashboardScope(tenantId, userId, role);
 
-      scope.canSeeComplaints
-        ? db.complaint.groupBy({
-            by: ['status'],
-            where: scope.complaintWhere,
-            _count: { id: true },
-          })
-        : Promise.resolve([]),
+      const [
+        complaintsByCategoryRaw,
+        complaintsByStatusRaw,
+        monthlyRevenueInvoices,
+        pmAll,
+      ] = await Promise.all([
+        scope.canSeeComplaints
+          ? db.complaint.groupBy({
+              by: ['category'],
+              where: { ...scope.complaintWhere, category: { not: null } },
+              _count: { id: true },
+            })
+          : Promise.resolve([]),
 
-      scope.canSeeRevenue
-        ? db.invoice.findMany({
-            where: { ...scope.invoiceWhere, status: 'PAID', paidAt: { not: null } },
-            select: { total: true, paidAt: true },
-          })
-        : Promise.resolve([]),
+        scope.canSeeComplaints
+          ? db.complaint.groupBy({
+              by: ['status'],
+              where: scope.complaintWhere,
+              _count: { id: true },
+            })
+          : Promise.resolve([]),
 
-      scope.canSeePm
-        ? db.pmSchedule.findMany({ where: scope.pmWhere, select: { status: true } })
-        : Promise.resolve([]),
-    ]);
+        scope.canSeeRevenue
+          ? db.invoice.findMany({
+              where: { ...scope.invoiceWhere, status: 'PAID', paidAt: { not: null } },
+              select: { total: true, paidAt: true },
+            })
+          : Promise.resolve([]),
 
-    // ── Process ───────────────────────────────────────────────────────
-    const monthlyRevenue = buildMonthlyRevenue(monthlyRevenueInvoices as Record<string, unknown>[]);
+        scope.canSeePm
+          ? db.pmSchedule.findMany({ where: scope.pmWhere, select: { status: true } })
+          : Promise.resolve([]),
+      ]);
 
-    const complaintsByCategory = (complaintsByCategoryRaw as Record<string, unknown>[]).map((c: any) => ({
-      category: c.category || 'Unknown',
-      count: c._count.id,
-    }));
+      const monthlyRevenue = buildMonthlyRevenue(monthlyRevenueInvoices as Record<string, unknown>[]);
 
-    const complaintsByStatus = (complaintsByStatusRaw as Record<string, unknown>[]).map((c: any) => ({
-      status: c.status,
-      count: c._count.id,
-    }));
+      const complaintsByCategory = (complaintsByCategoryRaw as Record<string, unknown>[]).map((c: any) => ({
+        category: c.category || 'Unknown',
+        count: c._count.id,
+      }));
 
-    const pmCompliance = calcPmCompliance(pmAll as Record<string, unknown>[]);
+      const complaintsByStatus = (complaintsByStatusRaw as Record<string, unknown>[]).map((c: any) => ({
+        status: c.status,
+        count: c._count.id,
+      }));
 
-    const upcomingPmCounts = {
-      completed: (pmAll as any[]).filter((pm: any) => pm.status === 'completed').length,
-      overdue: (pmAll as any[]).filter((pm: any) => pm.status === 'overdue').length,
-      scheduled: (pmAll as any[]).filter(
-        (pm: any) => pm.status === 'scheduled' || pm.status === 'active',
-      ).length,
-    };
+      const pmCompliance = calcPmCompliance(pmAll as Record<string, unknown>[]);
 
-    res.json({
-      monthlyRevenue,
-      complaintsByCategory,
-      complaintsByStatus,
-      pmCompliance,
-      upcomingPmCounts,
-    });
+      const upcomingPmCounts = {
+        completed: (pmAll as any[]).filter((pm: any) => pm.status === 'completed').length,
+        overdue: (pmAll as any[]).filter((pm: any) => pm.status === 'overdue').length,
+        scheduled: (pmAll as any[]).filter(
+          (pm: any) => pm.status === 'scheduled' || pm.status === 'active',
+        ).length,
+      };
+
+      return {
+        monthlyRevenue,
+        complaintsByCategory,
+        complaintsByStatus,
+        pmCompliance,
+        upcomingPmCounts,
+      };
+    }, TTL.dashboardCharts);
+
+    res.json(data);
   } catch (error) {
     console.error('Dashboard charts error:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -902,60 +916,66 @@ router.route('/recent').get(requireAuth, async (req: Request, res: Response) => 
 
     console.log(`[Dashboard/${role}] ${req.method} /api/dashboard${req.path} userId=${userId}`);
 
-    const scope = await buildDashboardScope(tenantId, userId, role);
+    const cacheKey = dashboardKey('recent', tenantId, userId, role);
 
-    const [recentComplaintsRaw, recentWorkOrdersRaw, upcomingPmRaw] = await Promise.all([
-      scope.canSeeComplaints
-        ? db.complaint.findMany({
-            where: scope.complaintWhere,
-            take: 5,
-            orderBy: { createdAt: 'desc' },
-            select: {
-              id: true, tenantId: true, customerId: true, equipmentId: true,
-              title: true, description: true, priority: true, status: true,
-              category: true, assignedToId: true, supervisorId: true,
-              createdAt: true, updatedAt: true, resolvedAt: true, closedAt: true,
-            },
-          })
-        : Promise.resolve([]),
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const scope = await buildDashboardScope(tenantId, userId, role);
 
-      woFindMany(scope, {
-        take: 5,
-        orderBy: { createdAt: 'desc' },
-        select: {
-          id: true, tenantId: true, complaintId: true, equipmentId: true,
-          title: true, description: true, status: true, priority: true,
-          type: true, assignedToId: true, scheduledDate: true,
-          completedAt: true, totalCost: true, createdAt: true, updatedAt: true,
-        },
-      }),
+      const [recentComplaintsRaw, recentWorkOrdersRaw, upcomingPmRaw] = await Promise.all([
+        scope.canSeeComplaints
+          ? db.complaint.findMany({
+              where: scope.complaintWhere,
+              take: 5,
+              orderBy: { createdAt: 'desc' },
+              select: {
+                id: true, tenantId: true, customerId: true, equipmentId: true,
+                title: true, description: true, priority: true, status: true,
+                category: true, assignedToId: true, supervisorId: true,
+                createdAt: true, updatedAt: true, resolvedAt: true, closedAt: true,
+              },
+            })
+          : Promise.resolve([]),
 
-      scope.canSeePm
-        ? db.pmSchedule.findMany({
-            where: { ...scope.pmWhere, status: 'active', nextDueDate: { gte: new Date() } },
-            take: 6,
-            orderBy: { nextDueDate: 'asc' },
-            select: {
-              id: true, tenantId: true, equipmentId: true, title: true,
-              description: true, frequency: true, lastExecuted: true,
-              nextDueDate: true, assignedToId: true, status: true,
-              createdAt: true, updatedAt: true,
-            },
-          })
-        : Promise.resolve([]),
-    ]);
+        woFindMany(scope, {
+          take: 5,
+          orderBy: { createdAt: 'desc' },
+          select: {
+            id: true, tenantId: true, complaintId: true, equipmentId: true,
+            title: true, description: true, status: true, priority: true,
+            type: true, assignedToId: true, scheduledDate: true,
+            completedAt: true, totalCost: true, createdAt: true, updatedAt: true,
+          },
+        }),
 
-    const [formattedComplaints, formattedWorkOrders, formattedPm] = await Promise.all([
-      enrichComplaints(recentComplaintsRaw as Record<string, unknown>[]),
-      enrichWorkOrders(recentWorkOrdersRaw as Record<string, unknown>[]),
-      enrichPmSchedules(upcomingPmRaw as Record<string, unknown>[]),
-    ]);
+        scope.canSeePm
+          ? db.pmSchedule.findMany({
+              where: { ...scope.pmWhere, status: 'active', nextDueDate: { gte: new Date() } },
+              take: 6,
+              orderBy: { nextDueDate: 'asc' },
+              select: {
+                id: true, tenantId: true, equipmentId: true, title: true,
+                description: true, frequency: true, lastExecuted: true,
+                nextDueDate: true, assignedToId: true, status: true,
+                createdAt: true, updatedAt: true,
+              },
+            })
+          : Promise.resolve([]),
+      ]);
 
-    res.json({
-      recentComplaints: formattedComplaints,
-      recentWorkOrders: formattedWorkOrders,
-      upcomingPm: formattedPm,
-    });
+      const [formattedComplaints, formattedWorkOrders, formattedPm] = await Promise.all([
+        enrichComplaints(recentComplaintsRaw as Record<string, unknown>[]),
+        enrichWorkOrders(recentWorkOrdersRaw as Record<string, unknown>[]),
+        enrichPmSchedules(upcomingPmRaw as Record<string, unknown>[]),
+      ]);
+
+      return {
+        recentComplaints: formattedComplaints,
+        recentWorkOrders: formattedWorkOrders,
+        upcomingPm: formattedPm,
+      };
+    }, TTL.dashboardRecent);
+
+    res.json(data);
   } catch (error) {
     console.error('Dashboard recent error:', error);
     res.status(500).json({ error: 'Internal server error' });

@@ -2,6 +2,9 @@ import { Router, Request, Response } from 'express';
 import { db } from '../lib/db.js';
 import { requireAuth } from '../middleware/auth.js';
 import { hashPassword } from '../lib/auth.js';
+import { cachedFetch } from '../cache/cache.service.js';
+import { TTL } from '../cache/cache.constants.js';
+import { employeeKey, invalidateEmployees, invalidateDashboard } from '../cache/cache.utils.js';
 
 const router = Router();
 
@@ -27,42 +30,47 @@ router.route('/').get(requireAuth, async (req: Request, res: Response) => {
     if (role) where.role = role;
     if (departmentId) where.departmentId = departmentId;
 
-    const [items, total] = await Promise.all([
-      db.user.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-      }),
-      db.user.count({ where }),
-    ]);
+    const cacheKey = employeeKey('list', tenantId, `p${page}:s${pageSize}:q${search}:role${role}:dept${departmentId}`);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const [items, total] = await Promise.all([
+        db.user.findMany({
+          where,
+          skip,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+        }),
+        db.user.count({ where }),
+      ]);
 
-    const data = (items as any[]).map((u: any) => ({
-      id: u.id,
-      tenantId: u.tenantId,
-      email: u.email,
-      name: u.name,
-      phone: u.phone,
-      avatar: u.avatar,
-      role: u.role,
-      employeeNumber: u.employeeNumber,
-      departmentId: u.departmentId,
-      departmentName: u.department?.name,
-      isActive: u.isActive,
-      isOnline: u.isOnline,
-      lastLogin: u.lastLogin?.toISOString?.() || null,
-      profileCompleted: u.profileCompleted,
-      createdAt: u.createdAt?.toISOString?.() || u.createdAt,
-      updatedAt: u.updatedAt?.toISOString?.() || u.updatedAt,
-    }));
+      const mapped = (items as any[]).map((u: any) => ({
+        id: u.id,
+        tenantId: u.tenantId,
+        email: u.email,
+        name: u.name,
+        phone: u.phone,
+        avatar: u.avatar,
+        role: u.role,
+        employeeNumber: u.employeeNumber,
+        departmentId: u.departmentId,
+        departmentName: u.department?.name,
+        isActive: u.isActive,
+        isOnline: u.isOnline,
+        lastLogin: u.lastLogin?.toISOString?.() || null,
+        profileCompleted: u.profileCompleted,
+        createdAt: u.createdAt?.toISOString?.() || u.createdAt,
+        updatedAt: u.updatedAt?.toISOString?.() || u.updatedAt,
+      }));
 
-    res.json({
-      data,
-      total: total as number,
-      page,
-      pageSize,
-      totalPages: Math.ceil((total as number) / pageSize),
-    });
+      return {
+        data: mapped,
+        total: total as number,
+        page,
+        pageSize,
+        totalPages: Math.ceil((total as number) / pageSize),
+      };
+    }, TTL.employeeList);
+
+    res.json(data);
   } catch (error) {
     console.error('Employees list error:', error);
     res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
@@ -105,6 +113,10 @@ router.route('/').post(requireAuth, async (req: Request, res: Response) => {
     } as any);
 
     const e = employee as any;
+
+    invalidateEmployees(tenantId).catch(() => {});
+    invalidateDashboard(tenantId).catch(() => {});
+
     res.status(201).json({
       id: e.id,
       tenantId: e.tenantId,
