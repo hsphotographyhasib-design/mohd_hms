@@ -57,3 +57,29 @@ Stage Summary:
 - Render env vars updated successfully via API
 - Deploy triggered to pick up new Firebase config
 - Still missing: NEXT_PUBLIC_FIREBASE_VAPID_KEY (need from Firebase Console) and FIREBASE_PRIVATE_KEY/FIREBASE_CLIENT_EMAIL (need Service Account key)
+---
+Task ID: 4
+Agent: Main
+Task: Update Firebase environment variables on Vercel via API
+
+Work Log:
+- First token (vck_) had no project access — project was under team scope
+- Second token (vcp_) found project: mohd-hms (prj_ldAQBelQwhUFqvFO7y8deJPjCKBG)
+- Found 7 existing Firebase env vars, all with empty values and type=sensitive
+- Deleted all 6 empty Firebase env vars (kept VAPID_KEY which user hasn't provided yet)
+- Recreated 6 env vars with actual values as type=plain:
+  - NEXT_PUBLIC_FIREBASE_API_KEY ✅
+  - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN ✅
+  - NEXT_PUBLIC_FIREBASE_PROJECT_ID ✅
+  - NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ✅
+  - NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID ✅
+  - NEXT_PUBLIC_FIREBASE_APP_ID ✅
+- Verified all 6 have correct values via GET /env
+- NEXT_PUBLIC_FIREBASE_VAPID_KEY still empty (user hasn't provided)
+- Redeploy API endpoint not accessible with this token type (project-scoped)
+- Project is linked to GitHub — next git push will trigger deploy with new env vars
+
+Stage Summary:
+- Vercel env vars updated successfully (6/7 Firebase vars)
+- Missing: NEXT_PUBLIC_FIREBASE_VAPID_KEY (needs user to generate from Firebase Console)
+- Next push to GitHub will auto-deploy with the new env vars
