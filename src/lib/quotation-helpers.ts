@@ -12,20 +12,39 @@ export interface LineItem {
   [key: string]: unknown;
 }
 
+// Accepts either a parsed array or the raw JSON string that some callers send,
+// and never throws on a malformed payload.
+function normalizeLineItems(items: LineItem[] | string | null | undefined): LineItem[] {
+  if (typeof items === 'string') {
+    try {
+      const parsed = JSON.parse(items);
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      return [];
+    }
+  }
+  return Array.isArray(items) ? items : [];
+}
+
+// A line's contribution is quantity * rate when both are present (so a tampered
+// `amount` can't diverge from the quantity/rate shown), otherwise it falls back
+// to the line's own `amount` for flat "description + amount" line items.
+function lineAmount(item: LineItem): number {
+  const rate = item.rate ?? item.unitPrice;
+  const quantity = item.quantity;
+  if (rate != null && quantity != null) {
+    return Number(quantity) * Number(rate);
+  }
+  return Number(item.amount) || 0;
+}
+
 export function computeTotals(
-  items: LineItem[],
+  items: LineItem[] | string | null | undefined,
   taxRate = 0,
   discount = 0,
   shipping = 0,
 ) {
-  // Recompute each line's amount from quantity * rate rather than trusting the
-  // client-supplied amount, so a mismatched/tampered amount can't diverge from
-  // the quantity and rate the line item actually shows.
-  const subtotal = items.reduce((sum, item) => {
-    const rate = item.rate ?? item.unitPrice ?? 0;
-    const quantity = item.quantity ?? 0;
-    return sum + quantity * rate;
-  }, 0);
+  const subtotal = normalizeLineItems(items).reduce((sum, item) => sum + lineAmount(item), 0);
   const tax = subtotal * (taxRate / 100);
   const total = subtotal + tax - discount + shipping;
   return { subtotal, tax, discount, shipping, total };

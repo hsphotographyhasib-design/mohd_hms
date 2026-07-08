@@ -1,38 +1,8 @@
 import { db } from '@/lib/db';
-import { format } from 'date-fns';
 import { numberToCurrencyWords } from '@/lib/number-to-words';
 import { DEFAULT_INVOICE_TERMS, DEFAULT_PAYMENT } from '@/lib/company';
-import type { PrintableDocumentData, PrintableLineItem } from './types';
-
-function fmtDate(d?: Date | null): string {
-  return d ? format(d, 'dd/MM/yyyy') : '—';
-}
-
-function parseItems(itemsJson: string): PrintableLineItem[] {
-  try {
-    const parsed = JSON.parse(itemsJson);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.map((item: Record<string, unknown>) => ({
-      title: String(item.title || item.description || 'Item'),
-      description: item.title ? (item.description ? String(item.description) : undefined) : undefined,
-      unit: item.unit ? String(item.unit) : 'Nos',
-      quantity: Number(item.quantity) || 0,
-      rate: Number(item.rate ?? item.unitPrice) || 0,
-      amount: Number(item.amount) || 0,
-    }));
-  } catch {
-    return [];
-  }
-}
-
-function parseTerms(termsJson: string | null): string[] {
-  if (!termsJson) return DEFAULT_INVOICE_TERMS;
-  try {
-    const parsed = JSON.parse(termsJson);
-    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-  } catch { /* fall through */ }
-  return DEFAULT_INVOICE_TERMS;
-}
+import { fmtDate, parsePrintableItems, parseTermsOr } from './parse-helpers';
+import type { PrintableDocumentData } from './types';
 
 export async function buildInvoicePrintData(tenantId: string, invoiceId: string): Promise<PrintableDocumentData | null> {
   const invoice = await db.invoice.findFirst({
@@ -94,7 +64,7 @@ export async function buildInvoicePrintData(tenantId: string, invoiceId: string)
         ...(invoice.transactionId ? [{ label: 'Transaction ID', value: invoice.transactionId }] : []),
       ],
     },
-    items: parseItems(invoice.items),
+    items: parsePrintableItems(invoice.items),
     currency,
     subtotal: invoice.subtotal,
     discount: invoice.discount,
@@ -103,7 +73,7 @@ export async function buildInvoicePrintData(tenantId: string, invoiceId: string)
     shipping: invoice.shipping,
     total: invoice.total,
     amountInWords: numberToCurrencyWords(invoice.total),
-    terms: parseTerms(invoice.terms),
+    terms: parseTermsOr(invoice.terms, DEFAULT_INVOICE_TERMS),
     notes: invoice.notes ? [invoice.notes] : ['Thank you for choosing us.', 'We look forward to working with you again.'],
     authorizedByName: invoice.preparer?.name || invoice.creator?.name,
     authorizedByRole: 'Authorised Signature',

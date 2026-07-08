@@ -144,8 +144,9 @@ export async function POST(request: NextRequest) {
           newQty = await decrementItemQuantityFloored(tx, itemId, tenantId, quantity);
           break;
         case 'adjustment':
-          // For adjustment, quantity is the new total (absolute set — inherent to the operation).
-          newQty = quantity;
+          // For adjustment, quantity is the new total (absolute set — inherent to the
+          // operation), floored at zero so a negative payload can't corrupt stock.
+          newQty = Math.max(0, quantity);
           await tx.inventoryItem.update({ where: { id: itemId }, data: { quantity: newQty } });
           break;
         case 'transfer':

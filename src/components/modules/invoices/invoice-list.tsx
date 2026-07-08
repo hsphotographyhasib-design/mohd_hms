@@ -91,17 +91,21 @@ export function InvoiceList() {
 
   const handleSubmit = async () => {
     if (!form.title || !form.customerId) { toast.error('Title and customer are required'); return; }
-    const validItems = form.items.filter((it) => it.description && it.amount);
+    const validItems = form.items
+      .filter((it) => it.description && it.amount)
+      .map((it) => {
+        const amount = parseFloat(it.amount || '0') || 0;
+        return { title: it.description, description: '', unit: 'Nos', quantity: 1, rate: amount, amount };
+      });
     if (validItems.length === 0) { toast.error('Add at least one line item'); return; }
     setSubmitting(true);
     try {
-      const subtotal = validItems.reduce((s, it) => s + parseFloat(it.amount || '0'), 0);
-      const tax = subtotal * 0.1;
-      const total = subtotal + tax;
+      // Send a plain items array (not a JSON string) and let the server derive
+      // subtotal/tax/total; taxRate 10 reproduces this dialog's flat 10% tax.
       const res = await fetch('/api/invoices', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
-        body: JSON.stringify({ ...form, items: JSON.stringify(validItems), subtotal, tax, total }),
+        body: JSON.stringify({ ...form, items: validItems, taxRate: 10 }),
       });
       if (!res.ok) throw new Error();
       toast.success('Invoice created');

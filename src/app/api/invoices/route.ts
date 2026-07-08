@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
         invoiceNumber,
         title,
         description: description || null,
-        items: items ? JSON.stringify(items) : null,
+        items: items ? JSON.stringify(items) : '[]',
         subtotal,
         taxRate: taxRate || 0,
         tax,

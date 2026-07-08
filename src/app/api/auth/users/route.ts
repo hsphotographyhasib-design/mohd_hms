@@ -137,6 +137,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Name, email, and password are required' }, { status: 400 });
     }
 
+    // Only a super_admin may create another super_admin — an admin must not be
+    // able to escalate a new account above their own privilege level.
+    const newRole = role || 'technician';
+    if (newRole === 'super_admin' && payload.role !== 'super_admin') {
+      return NextResponse.json({ error: 'Only a super admin can assign the super admin role' }, { status: 403 });
+    }
+
     // Check for duplicate email
     const existing = await withRetry(
       () => db.user.findFirst({ where: { tenantId, email } }),
@@ -156,7 +163,7 @@ export async function POST(request: NextRequest) {
             email,
             passwordHash,
             name,
-            role: role || 'technician',
+            role: newRole,
             profileCompleted: false,
             departmentId: departmentId || null,
             phone: phone || null,

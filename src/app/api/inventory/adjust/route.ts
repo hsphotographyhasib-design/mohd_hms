@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
         }
         case 'adjustment': {
           previousQuantity = item.quantity;
-          newQuantity = quantity; // absolute value for adjustments
+          newQuantity = Math.max(0, quantity); // absolute value for adjustments, never negative
           await tx.inventoryItem.update({ where: { id: itemId }, data: { quantity: newQuantity } });
           break;
         }

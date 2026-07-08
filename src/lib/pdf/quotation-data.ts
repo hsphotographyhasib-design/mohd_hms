@@ -1,38 +1,8 @@
 import { db } from '@/lib/db';
-import { format } from 'date-fns';
 import { numberToCurrencyWords } from '@/lib/number-to-words';
 import { DEFAULT_QUOTATION_TERMS } from '@/lib/company';
-import type { PrintableDocumentData, PrintableLineItem } from './types';
-
-function fmtDate(d?: Date | null): string {
-  return d ? format(d, 'dd/MM/yyyy') : '—';
-}
-
-function parseItems(itemsJson: string): PrintableLineItem[] {
-  try {
-    const parsed = JSON.parse(itemsJson);
-    if (!Array.isArray(parsed)) return [];
-    return parsed.map((item: Record<string, unknown>) => ({
-      title: String(item.title || item.description || 'Item'),
-      description: item.title ? (item.description ? String(item.description) : undefined) : undefined,
-      unit: item.unit ? String(item.unit) : 'Nos',
-      quantity: Number(item.quantity) || 0,
-      rate: Number(item.rate ?? item.unitPrice) || 0,
-      amount: Number(item.amount) || 0,
-    }));
-  } catch {
-    return [];
-  }
-}
-
-function parseTerms(termsJson: string | null): string[] {
-  if (!termsJson) return DEFAULT_QUOTATION_TERMS;
-  try {
-    const parsed = JSON.parse(termsJson);
-    if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-  } catch { /* fall through */ }
-  return DEFAULT_QUOTATION_TERMS;
-}
+import { fmtDate, parsePrintableItems, parseTermsOr } from './parse-helpers';
+import type { PrintableDocumentData } from './types';
 
 export async function buildQuotationPrintData(tenantId: string, quotationId: string): Promise<PrintableDocumentData | null> {
   const quotation = await db.quotation.findFirst({
@@ -84,7 +54,7 @@ export async function buildQuotationPrintData(tenantId: string, quotationId: str
         { label: 'Status', value: quotation.status, highlight: isAccepted },
       ],
     },
-    items: parseItems(quotation.items),
+    items: parsePrintableItems(quotation.items),
     currency,
     subtotal: quotation.subtotal,
     discount: quotation.discount,
@@ -93,7 +63,7 @@ export async function buildQuotationPrintData(tenantId: string, quotationId: str
     shipping: quotation.shipping,
     total: quotation.total,
     amountInWords: numberToCurrencyWords(quotation.total),
-    terms: parseTerms(quotation.terms),
+    terms: parseTermsOr(quotation.terms, DEFAULT_QUOTATION_TERMS),
     notes: quotation.notes ? [quotation.notes] : ['Thank you for considering our services.', 'We look forward to working with you.'],
     authorizedByName: quotation.preparedByUser?.name,
     authorizedByRole: 'Authorised Signature',
