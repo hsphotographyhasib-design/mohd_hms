@@ -1,15 +1,16 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback, useSyncExternalStore } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, useSyncExternalStore } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppStore, useAuthStore } from '@/store';
 import { useNotificationStore } from '@/lib/notifications/store';
 import { EnablePushButton, TestNotificationButton } from '@/components/notifications/notification-permission';
 import { useFcm } from '@/hooks/use-fcm';
-import type { AppView } from '@/types';
+import type { AppView, UserRole } from '@/types';
 import { cn } from '@/lib/utils';
 import { useTheme } from 'next-themes';
 import { toast } from 'sonner';
+import { getQuickActionsForView } from '@/lib/quick-actions-config';
 import {
   Building2,
   Search,
@@ -27,8 +28,6 @@ import {
   AlertTriangle,
   ClipboardList,
   Receipt,
-  FileText,
-  Package,
   Users,
   ChevronRight,
   Check,
@@ -49,14 +48,6 @@ const SEARCH_QUICK_LINKS: { label: string; icon: React.ReactNode; view: AppView 
   { label: 'Work Orders', icon: <ClipboardList className="h-4 w-4" />, view: 'work-orders' },
   { label: 'Customers', icon: <Users className="h-4 w-4" />, view: 'customers' },
   { label: 'Invoices', icon: <Receipt className="h-4 w-4" />, view: 'invoices' },
-];
-
-const QUICK_ACTIONS: { label: string; icon: React.ReactNode; view: AppView }[] = [
-  { label: 'Create Complaint', icon: <AlertTriangle className="h-4 w-4" />, view: 'complaints' },
-  { label: 'Create Work Order', icon: <ClipboardList className="h-4 w-4" />, view: 'work-orders' },
-  { label: 'Create Invoice', icon: <Receipt className="h-4 w-4" />, view: 'invoices' },
-  { label: 'Create Quotation', icon: <FileText className="h-4 w-4" />, view: 'quotations' },
-  { label: 'Add Equipment', icon: <Package className="h-4 w-4" />, view: 'equipment' },
 ];
 
 // ============================================================
@@ -126,6 +117,7 @@ export function AppHeader() {
   // ---- State & Stores ----
   const { setView } = useAppStore();
   const { user, secureLogout } = useAuthStore();
+  const currentView = useAppStore((s) => s.currentView);
   const { unreadCount, dbNotifications, markAllAsRead } = useNotificationStore();
   const { theme, setTheme } = useTheme();
   const fcm = useFcm();
@@ -221,12 +213,36 @@ export function AppHeader() {
   );
 
   const handleQuickActionClick = useCallback(
-    (view: AppView) => {
-      setView(view);
+    (action: { view?: AppView; handler?: string }) => {
+      if (action.handler) {
+        // Handler-based actions navigate to a specific view
+        const handlerViewMap: Record<string, AppView> = {
+          'compose-email': 'email-management',
+          'send-whatsapp': 'whatsapp-chats',
+          'test-email': 'email-management',
+          'import-inventory': 'inventory',
+          'export-inventory': 'inventory',
+          'add-income': 'finance',
+          'add-expense': 'finance',
+          'schedule-email': 'email-management',
+        };
+        const targetView = handlerViewMap[action.handler];
+        if (targetView) setView(targetView);
+        setQuickActionsOpen(false);
+        return;
+      }
+      if (action.view) {
+        setView(action.view);
+      }
       setQuickActionsOpen(false);
     },
     [setView]
   );
+
+  const dynamicQuickActions = useMemo(() => {
+    const role = (user?.role as UserRole) || 'customer';
+    return getQuickActionsForView(currentView, role);
+  }, [currentView, user?.role]);
 
   const handleLanguageToggle = useCallback(() => {
     const next = lang === 'EN' ? 'MS' : 'EN';
@@ -698,18 +714,27 @@ export function AppHeader() {
               <p className="text-xs font-medium text-muted-foreground/70 uppercase tracking-wider px-2 py-1.5">
                 Quick Actions
               </p>
-              {QUICK_ACTIONS.map((action) => (
-                <button
-                  key={action.view}
-                  onClick={() => handleQuickActionClick(action.view)}
-                  className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors group"
-                >
-                  <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-muted/60 text-muted-foreground group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:group-hover:bg-emerald-900/50 dark:group-hover:text-emerald-400 transition-colors">
-                    {action.icon}
-                  </span>
-                  {action.label}
-                </button>
-              ))}
+              {dynamicQuickActions.length === 0 ? (
+                <p className="text-xs text-muted-foreground/50 px-2 py-4 text-center">
+                  No quick actions available for this page.
+                </p>
+              ) : (
+                dynamicQuickActions.map((action) => {
+                  const IconComp = action.icon;
+                  return (
+                    <button
+                      key={action.label + (action.view || action.handler || '')}
+                      onClick={() => handleQuickActionClick(action)}
+                      className="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-foreground hover:bg-emerald-50/50 dark:hover:bg-emerald-950/30 transition-colors group"
+                    >
+                      <span className="flex items-center justify-center h-8 w-8 rounded-lg bg-muted/60 text-muted-foreground group-hover:bg-emerald-100 group-hover:text-emerald-600 dark:group-hover:bg-emerald-900/50 dark:group-hover:text-emerald-400 transition-colors">
+                        <IconComp className="h-4 w-4" />
+                      </span>
+                      {action.label}
+                    </button>
+                  );
+                })
+              )}
             </motion.div>
           )}
         </AnimatePresence>

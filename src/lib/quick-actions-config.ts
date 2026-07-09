@@ -11,6 +11,7 @@ import {
   Download,
   FileText,
   QrCode,
+  Play,
   Printer,
   Upload,
   Calendar,
@@ -25,6 +26,7 @@ import {
   RefreshCw,
   CheckCircle2,
   Trash2,
+  TrendingUp,
   Check,
   FileDown,
   FileSpreadsheet,
@@ -91,10 +93,15 @@ export type QuickActionsMap = Record<string, QuickActionItem[]>;
 // ============================================================
 
 const VIEW_PREFIX_MAP: Record<string, string> = {
+  'new-complaint': 'complaints',
   'complaint-detail': 'complaints',
+  'complaint-assignment': 'complaints',
+  'new-work-order': 'work-orders',
   'work-order-detail': 'work-orders',
+  'equipment-register': 'equipment',
   'equipment-detail': 'equipment',
   'invoice-detail': 'invoices',
+  'new-quotation': 'quotations',
   'quotation-detail': 'quotations',
   'quotation-edit': 'quotations',
   'session-settings': 'session-management',
@@ -169,6 +176,7 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
     { label: 'Send Email', icon: Mail, handler: 'compose-email', feature: 'email', roles: ['super_admin', 'admin'] },
     { label: 'Send WhatsApp', icon: MessageCircle, handler: 'send-whatsapp', feature: 'whatsapp', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
     { label: 'Export', icon: Download, view: 'complaints', feature: 'complaints', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'] },
+    { label: 'Reassign Technician', icon: UserCheck, view: 'complaint-assignment', feature: 'complaints', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
   ],
 
   // ─── Work Orders ────────────────────────────────────────
@@ -178,6 +186,8 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
     { label: 'Schedule Work', icon: CalendarClock, view: 'work-orders', feature: 'work-orders', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
     { label: 'Generate Service Report', icon: FileBarChart, view: 'reports', feature: 'reports', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'] },
     { label: 'Upload Photos', icon: Upload, view: 'work-orders', feature: 'work-orders', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician'] },
+    { label: 'Start Work', icon: Play, view: 'work-orders', feature: 'work-orders', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician'] },
+    { label: 'Close Work Order', icon: CheckCircle2, view: 'work-orders', feature: 'work-orders', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
   ],
 
   // ─── Preventive Maintenance ─────────────────────────────
@@ -196,6 +206,9 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
     { label: 'Purchase Request', icon: ShoppingCart, view: 'purchases', feature: 'purchases', roles: ['super_admin', 'admin', 'manager'] },
     { label: 'Print Barcode', icon: Printer, view: 'inventory', feature: 'inventory', roles: ['super_admin', 'admin', 'manager'] },
     { label: 'Generate QR Code', icon: QrCode, view: 'equipment', feature: 'equipment', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
+    { label: 'Import Inventory', icon: Upload, handler: 'import-inventory', feature: 'inventory', roles: ['super_admin', 'admin', 'manager'] },
+    { label: 'Export Inventory', icon: Download, handler: 'export-inventory', feature: 'inventory', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'] },
+    { label: 'Scan QR Code', icon: ScanLine, view: 'equipment', feature: 'equipment', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician'] },
   ],
 
   // ─── Equipment ──────────────────────────────────────────
@@ -243,6 +256,7 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
     { label: 'Add Expense', icon: Receipt, view: 'finance', feature: 'finance', roles: ['super_admin', 'admin', 'manager', 'finance'] },
     { label: 'Financial Report', icon: BarChart3, view: 'reports', feature: 'reports', roles: ['super_admin', 'admin', 'manager', 'finance'] },
     { label: 'Export Ledger', icon: FileSpreadsheet, view: 'finance', feature: 'finance', roles: ['super_admin', 'admin', 'manager', 'finance'] },
+    { label: 'Add Income', icon: TrendingUp, handler: 'add-income', feature: 'finance', roles: ['super_admin', 'admin', 'manager', 'finance'] },
   ],
 
   // ─── Purchases ──────────────────────────────────────────
@@ -266,6 +280,7 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
     { label: 'Export PDF', icon: FileDown, view: 'reports', feature: 'reports', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'] },
     { label: 'Export Excel', icon: FileSpreadsheet, view: 'reports', feature: 'reports', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'] },
     { label: 'Print Report', icon: Printer, view: 'reports', feature: 'reports', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'] },
+    { label: 'Schedule Report', icon: Clock, view: 'reports', feature: 'reports', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'] },
   ],
 
   // ─── Notifications ──────────────────────────────────────
@@ -290,6 +305,7 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
     { label: 'Send Test Email', icon: MailCheck, handler: 'test-email', feature: 'email', roles: ['super_admin', 'admin'] },
     { label: 'View Logs', icon: FileSearch, view: 'email-management', feature: 'email', roles: ['super_admin', 'admin'] },
     { label: 'Create Template', icon: FileCode, view: 'email-management', feature: 'email', roles: ['super_admin', 'admin'] },
+    { label: 'Schedule Email', icon: Clock, handler: 'schedule-email', feature: 'email', roles: ['super_admin', 'admin'] },
   ],
 
   // ─── WhatsApp ───────────────────────────────────────────
@@ -306,6 +322,13 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
     { label: 'Manage Services', icon: Wrench, view: 'cms-services', feature: 'cms', roles: ['super_admin', 'admin'] },
     { label: 'SEO Settings', icon: Globe, view: 'cms-seo', feature: 'cms', roles: ['super_admin', 'admin'] },
     { label: 'View Site', icon: Eye, view: 'cms-dashboard', feature: 'cms', roles: ['super_admin', 'admin'] },
+  ],
+
+  // ─── Users ────────────────────────────────────────────
+  users: [
+    { label: 'Add User', icon: UserPlus, view: 'user-management', feature: 'user-management', roles: ['super_admin', 'admin'] },
+    { label: 'View Roles', icon: Shield, view: 'settings', feature: 'user-management', roles: ['super_admin', 'admin'] },
+    { label: 'Export Users', icon: Download, view: 'user-management', feature: 'user-management', roles: ['super_admin', 'admin'] },
   ],
 
   // ─── User Management ────────────────────────────────────
@@ -341,6 +364,7 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
     { label: 'Assign Complaint', icon: ClipboardCheck, view: 'complaint-assignment', feature: 'complaints', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
     { label: 'Assign WO', icon: ClipboardList, view: 'work-orders', feature: 'work-orders', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
     { label: 'View Workload', icon: BarChart3, view: 'technicians', feature: 'technicians', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
+    { label: 'Technician Status', icon: Activity, view: 'technicians', feature: 'technicians', roles: ['super_admin', 'admin', 'manager', 'supervisor'] },
   ],
 
   // ─── System Health ──────────────────────────────────────
