@@ -53,28 +53,36 @@ function _ensureSupabase(): any {
 }
 
 /**
+ * Determine if Supabase should be used.
+ *
+ * Checks (in priority order):
+ * 1. USE_SUPABASE === 'true' — explicit opt-in
+ * 2. NEXT_PUBLIC_SUPABASE_URL is set AND NODE_ENV === 'production' — auto-detect
+ *
+ * This dual-signal approach handles edge cases where USE_SUPABASE might not
+ * be propagated correctly in certain deployment environments.
+ */
+function _shouldUseSupabase(): boolean {
+  if (process.env.USE_SUPABASE === 'true') return true;
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NODE_ENV === 'production') return true;
+  return false;
+}
+
+/**
  * Main db proxy — lazily decides Supabase vs Prisma on each property access.
  * This guarantees process.env is evaluated at runtime, not at build time.
  */
 export const db: any = new Proxy({} as any, {
   get(_target, prop, receiver) {
-    // Handle db-level methods first
-    if (prop === '$transaction' || prop === '$connect' || prop === '$disconnect' ||
-        prop === '$on' || prop === '$queryRaw' || prop === '$queryRawUnsafe' ||
-        prop === '$executeRaw' || prop === '$executeRawUnsafe') {
-      const client = process.env.USE_SUPABASE === 'true' ? _ensureSupabase() : _ensurePrisma();
-      const value = Reflect.get(client, prop, receiver);
-      return typeof value === "function" ? value.bind(client) : value;
-    }
-
-    // Table-level access (e.g., db.user, db.complaint)
-    const client = process.env.USE_SUPABASE === 'true' ? _ensureSupabase() : _ensurePrisma();
+    const useSupabase = _shouldUseSupabase();
+    const client = useSupabase ? _ensureSupabase() : _ensurePrisma();
     const value = Reflect.get(client, prop, receiver);
     return typeof value === "function" ? value.bind(client) : value;
   },
   has(_target, prop) {
     try {
-      const client = process.env.USE_SUPABASE === 'true' ? _ensureSupabase() : _ensurePrisma();
+      const useSupabase = _shouldUseSupabase();
+      const client = useSupabase ? _ensureSupabase() : _ensurePrisma();
       return prop in client;
     } catch { return false; }
   },
