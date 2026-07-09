@@ -5,9 +5,11 @@
  * Otherwise, lazily loads Prisma/SQLite only when first needed.
  *
  * All 100+ API routes import { db } from '@/lib/db' — no changes needed.
+ *
+ * IMPORTANT: The db proxy uses LAZY evaluation — process.env.USE_SUPABASE is
+ * checked on every property access, not at module load time. This ensures
+ * runtime environment variables (Vercel, Docker, etc.) are respected.
  */
-
-import { supabaseDb } from './supabase-db';
 
 /**
  * Lazy Prisma proxy — calls prisma() factory on first property access.
@@ -36,10 +38,47 @@ const _lazyPrisma = new Proxy({} as any, {
   },
 });
 
-export const db: any =
-  process.env.USE_SUPABASE === 'true'
-    ? supabaseDb
-    : _lazyPrisma;
+/**
+ * Lazy-load supabase-db only when needed (avoids importing it in local dev
+ * when USE_SUPABASE is not set, which would fail on missing env vars).
+ */
+let _supabaseCache: any = undefined;
+
+function _ensureSupabase(): any {
+  if (!_supabaseCache) {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    _supabaseCache = require('./supabase-db').supabaseDb;
+  }
+  return _supabaseCache;
+}
+
+/**
+ * Main db proxy — lazily decides Supabase vs Prisma on each property access.
+ * This guarantees process.env is evaluated at runtime, not at build time.
+ */
+export const db: any = new Proxy({} as any, {
+  get(_target, prop, receiver) {
+    // Handle db-level methods first
+    if (prop === '$transaction' || prop === '$connect' || prop === '$disconnect' ||
+        prop === '$on' || prop === '$queryRaw' || prop === '$queryRawUnsafe' ||
+        prop === '$executeRaw' || prop === '$executeRawUnsafe') {
+      const client = process.env.USE_SUPABASE === 'true' ? _ensureSupabase() : _ensurePrisma();
+      const value = Reflect.get(client, prop, receiver);
+      return typeof value === "function" ? value.bind(client) : value;
+    }
+
+    // Table-level access (e.g., db.user, db.complaint)
+    const client = process.env.USE_SUPABASE === 'true' ? _ensureSupabase() : _ensurePrisma();
+    const value = Reflect.get(client, prop, receiver);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+  has(_target, prop) {
+    try {
+      const client = process.env.USE_SUPABASE === 'true' ? _ensureSupabase() : _ensurePrisma();
+      return prop in client;
+    } catch { return false; }
+  },
+});
 
 // Lazy type re-export (never evaluated at runtime)
 export type { PrismaClient } from "../../generated/prisma/client";
