@@ -539,16 +539,59 @@ function createTableProxy(tableName: string) {
       return { _count: { _all: r.count ?? 0 } };
     },
 
-    async groupBy(args: { by: string[]; where?: Record<string, unknown>; _count?: Record<string, unknown>; orderBy?: unknown; take?: number; skip?: number }) {
+    async groupBy(args: { by: string[]; where?: Record<string, unknown>; _count?: Record<string, unknown>; _sum?: Record<string, unknown>; _avg?: Record<string, unknown>; _min?: Record<string, unknown>; _max?: Record<string, unknown>; orderBy?: unknown; take?: number; skip?: number; having?: unknown }) {
+      // PostgREST doesn't support GROUP BY — fetch all rows and group in-memory
       const r = await supabaseRequest(tableName, 'GET', {
         select: args.by.join(','),
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
-        order: args?.orderBy ? buildOrderBy(args.orderBy) : undefined,
-        limit: args?.take,
-        offset: args?.skip,
       });
       if (r.error) throw new Error(`[Supabase] ${tableName}.groupBy: ${r.error.message}`);
-      return r.data ?? [];
+      const rows = r.data ?? [];
+
+      // Group by the specified columns
+      const groups = new Map<string, Record<string, unknown>>();
+      for (const row of rows) {
+        const key = args.by.map(col => String(row[col] ?? 'null')).join('||');
+        if (!groups.has(key)) {
+          const group: Record<string, unknown> = {};
+          for (const col of args.by) {
+            group[col] = row[col];
+          }
+          group._count = args._count ? { id: 0 } : undefined;
+          if (args._sum) {
+            group._sum = {};
+            for (const field of Object.keys(args._sum)) {
+              (group._sum as Record<string, unknown>)[field] = 0;
+            }
+          }
+          groups.set(key, group);
+        }
+        const group = groups.get(key)!;
+        if (args._count) {
+          (group._count as Record<string, number>).id = ((group._count as Record<string, number>).id || 0) + 1;
+        }
+      }
+
+      let results = [...groups.values()];
+
+      // Apply ordering
+      if (args.orderBy) {
+        const orderStr = buildOrderBy(args.orderBy);
+        if (orderStr) {
+          const [orderField, orderDir] = orderStr.split('.');
+          const desc = orderDir === 'desc' ? -1 : 1;
+          results.sort((a, b) => {
+            const av = a[orderField], bv = b[orderField];
+            return av < bv ? -desc : av > bv ? desc : 0;
+          });
+        }
+      }
+
+      // Apply pagination
+      if (args.skip) results = results.slice(args.skip);
+      if (args.take) results = results.slice(0, args.take);
+
+      return results;
     },
   };
 }

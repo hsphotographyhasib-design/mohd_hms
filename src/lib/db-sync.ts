@@ -180,6 +180,9 @@ export async function ensureTableSync(tableName: string): Promise<void> {
  * Sets a global flag to prevent redundant full scans.
  */
 export async function ensureAllTablesSynced(): Promise<void> {
+  // No-op when using Supabase — schema is managed via Supabase migrations
+  if (process.env.USE_SUPABASE === 'true') return;
+
   if (_globalSynced) return;
   _globalSynced = true;
 

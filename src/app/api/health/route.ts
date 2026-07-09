@@ -8,13 +8,21 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     // Verify database connectivity with a lightweight query
+    // Use User table count (works with both Prisma and Supabase REST)
     let dbStatus: 'connected' | 'error' = 'connected';
     let dbLatencyMs: number | null = null;
     let dbError: string | null = null;
+    const isSupabase = process.env.USE_SUPABASE === 'true';
 
     try {
       const start = performance.now();
-      await db.$queryRaw`SELECT 1 as ok`;
+      if (isSupabase) {
+        // For Supabase: use a simple table count query (lightweight, reliable)
+        await db.user.count();
+      } else {
+        // For Prisma/SQLite: use raw SQL
+        await db.$queryRaw`SELECT 1 as ok`;
+      }
       dbLatencyMs = Math.round(performance.now() - start);
     } catch (dbErr: any) {
       dbStatus = 'error';
@@ -28,9 +36,11 @@ export async function GET() {
       version: process.env.npm_package_version || '0.2.0',
       environment: env.nodeEnv,
       database: {
+        type: isSupabase ? 'supabase' : 'sqlite',
         status: dbStatus,
         latencyMs: dbLatencyMs,
         error: dbError,
+        supabaseUrl: isSupabase ? (process.env.NEXT_PUBLIC_SUPABASE_URL || 'not set') : undefined,
       },
       fcm: {
         adminConfigured: isFcmAdminConfigured(),
