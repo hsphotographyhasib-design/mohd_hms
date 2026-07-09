@@ -187,3 +187,26 @@ Stage Summary:
 - Response format matches frontend FinanceData interface exactly
 - Local dev server OOM-kills (3.9GB RAM) but code verified correct via API test
 - Pushed to main → Vercel auto-deploy
+
+---
+Task ID: 6
+Agent: Main Agent
+Task: Integrate enterprise InventoryItemForm for Add Item button
+
+Work Log:
+- User reported clicking "Add Item" in Inventory opened wrong/simple form
+- Discovered InventoryItemForm (768 lines, 11-section enterprise form) was defined but never imported
+- InventoryItems used a 150-line inline Sheet form with limited fields
+- Rewrote inventory-items.tsx to delegate to InventoryItemForm component
+- Removed all inline form state (form, submitting, categories, subcategories, fv, f helpers)
+- openEdit now just sets editId (InventoryItemForm handles its own data fetch)
+- ESLint: 0 errors on both files
+- Pushed: 2e9a7c7
+
+Stage Summary:
+- "Add Item" button now opens the full enterprise form with:
+  - Basic Information, Category & Classification, Unit & Measurement
+  - Inventory Control, Images & Attachments, Pricing (Purchase/Selling/Service tabs)
+  - Service & Labour Pricing, Additional Info, Notes, Settings
+- Reduced inventory-items.tsx from 508 → 298 lines (removed duplicate form)
+- Both create and edit modes supported via editId prop
