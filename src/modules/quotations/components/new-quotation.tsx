@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef, Fragment } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
@@ -16,9 +16,10 @@ import {
   ArrowLeft, Plus, Trash2, Printer, FileText, Send,
   MessageSquare, Search, X, CheckCircle2, Circle,
   Loader2, Upload, Sparkles, Package, Wrench,
-  Save, Eye, Paperclip, RotateCcw,
+  Save, Eye, Paperclip, RotateCcw, FileDown, MessageCircle,
   Bot,
 } from 'lucide-react';
+import { QuotationPreviewDialog } from './quotation-preview-dialog';
 import { QuotationLineItemsGrid } from './quotation-line-items-grid';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
 import type { QuotationLineItem, EmployeeData } from '@/core/types';
@@ -145,6 +146,10 @@ export function NewQuotation() {
   // --- State ---
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [pdfLoading, setPdfLoading] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
+  const [savedQuotationId, setSavedQuotationId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [quotationNo, setQuotationNo] = useState('');
   const [employees, setEmployees] = useState<EmployeeData[]>([]);
@@ -431,6 +436,166 @@ export function NewQuotation() {
     }
   }, [selectedCustomer, lineItems, formData, quotationNo, subtotal, taxAmount, grandTotal, setView]);
 
+  // --- Preview / PDF / Email / WhatsApp helpers ---
+  const buildPreviewData = () => ({
+    id: savedQuotationId || 'preview',
+    quotationNo,
+    title: formData.projectName || 'Quotation',
+    description: formData.description,
+    referenceNo: formData.referenceNo,
+    projectName: formData.projectName,
+    site: formData.site,
+    preparedByName: formData.preparedBy,
+    items: JSON.stringify(lineItems.filter((i) => i.title.trim() !== '')),
+    terms: JSON.stringify(formData.terms),
+    currency: formData.currency,
+    subtotal,
+    taxRate: parseFloat(formData.taxRate),
+    tax: taxAmount,
+    discount: formData.discount,
+    shipping: formData.shipping,
+    total: grandTotal,
+    status: 'DRAFT',
+    validUntil: formData.validUntil ? new Date(formData.validUntil).toISOString() : undefined,
+    notes: formData.notes,
+    createdAt: new Date().toISOString(),
+    customer: selectedCustomer
+      ? {
+          name: selectedCustomer.name,
+          phone: selectedCustomer.phone || undefined,
+          email: selectedCustomer.email || undefined,
+          address: selectedCustomer.address || undefined,
+          companyName: selectedCustomer.companyName || undefined,
+          pic: selectedCustomer.pic || undefined,
+        }
+      : undefined,
+  });
+
+  const handleSaveSilent = async (): Promise<string | null> => {
+    if (!selectedCustomer) { toast.error('Please select a customer'); return null; }
+    const itemsToSave = lineItems.filter(i => i.title.trim());
+    if (itemsToSave.length === 0) { toast.error('Add at least one line item'); return null; }
+    try {
+      const payload = {
+        customerId: selectedCustomer.id,
+        title: formData.projectName || 'Quotation',
+        quotationNo,
+        description: formData.description,
+        referenceNo: formData.referenceNo,
+        projectName: formData.projectName,
+        site: formData.site,
+        preparedBy: formData.preparedBy || null,
+        items: JSON.stringify(itemsToSave),
+        terms: JSON.stringify(formData.terms),
+        currency: formData.currency,
+        taxRate: parseFloat(formData.taxRate),
+        discount: formData.discount,
+        shipping: formData.shipping,
+        subtotal,
+        tax: taxAmount,
+        total: grandTotal,
+        status: 'DRAFT',
+        validUntil: formData.validUntil || null,
+        notes: formData.notes,
+        exchangeRate: formData.exchangeRate,
+        labourCost: formData.labourCost,
+        materialCost: formData.materialCost,
+        attachments: formData.attachments.length > 0 ? JSON.stringify(formData.attachments) : null,
+      };
+      const res = savedQuotationId
+        ? await fetch(`/api/quotations/${savedQuotationId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', ...authHeaders() },
+            body: JSON.stringify(payload),
+          })
+        : await fetch('/api/quotations/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...authHeaders() },
+            body: JSON.stringify(payload),
+          });
+      if (!res.ok) throw new Error('Save failed');
+      const data = await res.json();
+      const id = data.id || savedQuotationId;
+      if (id && !savedQuotationId) {
+        setSavedQuotationId(id);
+        setQuotationNo(data.quotationNo || quotationNo);
+      }
+      return id;
+    } catch {
+      toast.error('Please save the quotation first');
+      return null;
+    }
+  };
+
+  const handlePreview = () => setShowPreview(true);
+
+  const handleDownloadPdf = async () => {
+    const id = await handleSaveSilent();
+    if (!id) return;
+    setPdfLoading(true);
+    try {
+      const res = await fetch(`/api/quotations/${id}/generate-pdf`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+      if (!res.ok) throw new Error();
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Quotation-${quotationNo.replace(/\s+/g, '-')}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success('PDF downloaded');
+    } catch {
+      toast.error('Failed to generate PDF');
+    } finally {
+      setPdfLoading(false);
+    }
+  };
+
+  const handleSendEmail = async () => {
+    const id = await handleSaveSilent();
+    if (!id) return;
+    if (!selectedCustomer?.email) { toast.error('No customer email found'); return; }
+    setEmailLoading(true);
+    try {
+      const res = await fetch(`/api/quotations/${id}/send-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Email failed');
+      toast.success(`Quotation sent to ${selectedCustomer.email}`);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to send email');
+    } finally {
+      setEmailLoading(false);
+    }
+  };
+
+  const handleSendWhatsApp = async () => {
+    const id = await handleSaveSilent();
+    if (!id) return;
+    if (!selectedCustomer?.phone) { toast.error('No customer phone found'); return; }
+    try {
+      const res = await fetch(`/api/quotations/${id}/send-whatsapp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+        body: JSON.stringify({}),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'WhatsApp failed');
+      window.open(data.whatsappLink, '_blank');
+    } catch {
+      const msg = encodeURIComponent(`Dear ${selectedCustomer.name},\n\nQuotation *${quotationNo}*\nAmount: *${formData.currency} ${grandTotal.toLocaleString('en-US', { minimumFractionDigits: 2 })}*\n\n- MOHD.HMS ENTERPRISE`);
+      const phone = (selectedCustomer.phone || '').replace(/[^0-9]/g, '');
+      window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
+    }
+  };
+
   // --- Close customer dropdown on outside click ---
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -454,6 +619,7 @@ export function NewQuotation() {
   }
 
   return (
+    <Fragment>
     <TooltipProvider>
       <div className="flex flex-col min-h-full">
         {/* ==================== QUOTATION INFO (FULL WIDTH) ==================== */}
@@ -1028,7 +1194,7 @@ export function NewQuotation() {
               <div className="flex flex-wrap items-center gap-2">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-9 text-sm">
+                    <Button variant="outline" size="sm" className="h-9 text-sm" onClick={handlePreview}>
                       <Eye className="h-4 w-4 mr-1.5" /> Preview
                     </Button>
                   </TooltipTrigger>
@@ -1036,8 +1202,9 @@ export function NewQuotation() {
                 </Tooltip>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="sm" className="h-9 text-sm">
-                      <FileText className="h-4 w-4 mr-1.5" /> PDF
+                    <Button variant="outline" size="sm" className="h-9 text-sm" onClick={handleDownloadPdf} disabled={pdfLoading}>
+                      {pdfLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <FileDown className="h-4 w-4 mr-1.5" />}
+                      PDF
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>Generate PDF</TooltipContent>
@@ -1054,8 +1221,9 @@ export function NewQuotation() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="secondary" size="sm" className="h-9 text-sm"
-                      onClick={() => toast.info('Email sending — coming soon')}>
-                      <Send className="h-4 w-4 mr-1.5" /> Email
+                      onClick={handleSendEmail} disabled={emailLoading}>
+                      {emailLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Send className="h-4 w-4 mr-1.5" />}
+                      Email
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>Send via Email</TooltipContent>
@@ -1063,8 +1231,8 @@ export function NewQuotation() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="secondary" size="sm" className="h-9 text-sm"
-                      onClick={() => toast.info('WhatsApp sending — coming soon')}>
-                      <MessageSquare className="h-4 w-4 mr-1.5" /> WhatsApp
+                      onClick={handleSendWhatsApp}>
+                      <MessageCircle className="h-4 w-4 mr-1.5" /> WhatsApp
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>Send via WhatsApp</TooltipContent>
@@ -1124,5 +1292,16 @@ export function NewQuotation() {
         </div>
       </div>
     </TooltipProvider>
+
+      <QuotationPreviewDialog
+        open={showPreview}
+        onOpenChange={setShowPreview}
+        quotation={buildPreviewData()}
+        onPrint={() => window.print()}
+        onDownloadPdf={handleDownloadPdf}
+        onSendEmail={handleSendEmail}
+        onSendWhatsApp={handleSendWhatsApp}
+      />
+    </Fragment>
   );
 }

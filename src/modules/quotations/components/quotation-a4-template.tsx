@@ -191,7 +191,7 @@ export function QuotationA4Template({
 
   return (
     <div
-      className={className}
+      className={`quotation-a4-template ${className || ''}`}
       style={{
         width: '210mm',
         minHeight: '297mm',
@@ -790,7 +790,7 @@ export function QuotationA4Template({
             backgroundColor: COMPANY_COLORS.green,
             borderRadius: '1px',
           }} />
-          TERMS &amp; CONDITIONS
+          {'TERMS & CONDITIONS'}
         </div>
         <ol
           style={{
@@ -997,42 +997,20 @@ export function QuotationA4Template({
       </div>
 
       {/* =====================================================
-          PRINT STYLES (embedded for self-containment)
+          PRINT STYLES
           ===================================================== */}
-      <style jsx global>{`
+      <style dangerouslySetInnerHTML={{ __html: `
         @page {
           size: A4 portrait;
           margin: 0;
         }
-
         @media print {
-          body {
-            margin: 0;
-            padding: 0;
-            background: white;
-          }
-
-          .quotation-a4-template {
-            box-shadow: none !important;
-            border: none !important;
-            border-radius: 0 !important;
-          }
-
-          /* Repeat table header on each page */
-          thead {
-            display: table-header-group;
-          }
-
-          tr {
-            break-inside: avoid;
-          }
-
-          /* Avoid breaking inside info cards */
-          div[style*="border: 1px solid"] {
-            break-inside: avoid;
-          }
+          body { margin: 0; padding: 0; background: white; }
+          .quotation-a4-template { box-shadow: none !important; border: none !important; border-radius: 0 !important; }
+          thead { display: table-header-group; }
+          tr { break-inside: avoid; }
         }
-      `}</style>
+      `}} />
     </div>
   );
 }
