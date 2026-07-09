@@ -334,7 +334,7 @@ export type CmsAnnouncementScalarWhereWithAggregatesInput = {
 }
 
 export type CmsAnnouncementCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   text: string
   type?: string
@@ -344,11 +344,11 @@ export type CmsAnnouncementCreateInput = {
   scheduledTo?: Date | string | null
   displayOrder?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsAnnouncementUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   text: string
   type?: string
@@ -358,7 +358,7 @@ export type CmsAnnouncementUncheckedCreateInput = {
   scheduledTo?: Date | string | null
   displayOrder?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsAnnouncementUpdateInput = {
@@ -390,7 +390,7 @@ export type CmsAnnouncementUncheckedUpdateInput = {
 }
 
 export type CmsAnnouncementCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   text: string
   type?: string
@@ -400,7 +400,7 @@ export type CmsAnnouncementCreateManyInput = {
   scheduledTo?: Date | string | null
   displayOrder?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsAnnouncementUpdateManyMutationInput = {

@@ -383,7 +383,7 @@ export type CmsServiceScalarWhereWithAggregatesInput = {
 }
 
 export type CmsServiceCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   slug: string
@@ -397,11 +397,11 @@ export type CmsServiceCreateInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsServiceUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   slug: string
@@ -415,7 +415,7 @@ export type CmsServiceUncheckedCreateInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsServiceUpdateInput = {
@@ -455,7 +455,7 @@ export type CmsServiceUncheckedUpdateInput = {
 }
 
 export type CmsServiceCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   slug: string
@@ -469,7 +469,7 @@ export type CmsServiceCreateManyInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsServiceUpdateManyMutationInput = {

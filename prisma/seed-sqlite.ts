@@ -15,18 +15,23 @@ console.log(`[Seed] Using database: ${dbUrl}`);
 const adapter = new PrismaLibSql({ url: dbUrl });
 const prisma = new PrismaClient({ adapter });
 
+const NOW = new Date();
+
 async function main() {
   // 1. Create tenant
   const tenant = await prisma.tenant.upsert({
     where: { domain: "demo.facilitypro.com" },
     update: {},
     create: {
+      id: "tenant-demo",
       name: "FacilityPro Demo",
       domain: "demo.facilitypro.com",
       email: "admin@facilitypro.com",
       phone: "+6738888888",
       plan: "professional",
       address: "Brunei Darussalam",
+      createdAt: NOW,
+      updatedAt: NOW,
     },
   });
   console.log(`[Seed] Tenant: ${tenant.id} (${tenant.name})`);
@@ -37,6 +42,7 @@ async function main() {
     where: { tenantId_email: { tenantId: tenant.id, email: "admin@facilitypro.com" } },
     update: { passwordHash },
     create: {
+      id: "user-admin",
       email: "admin@facilitypro.com",
       name: "Admin User",
       role: "super_admin",
@@ -44,6 +50,8 @@ async function main() {
       passwordHash,
       isActive: true,
       profileCompleted: true,
+      createdAt: NOW,
+      updatedAt: NOW,
     },
   });
   console.log(`[Seed] Admin: ${admin.id} (${admin.email})`);
@@ -65,7 +73,7 @@ async function main() {
     await prisma.department.upsert({
       where: { id: `dept-${slug}` },
       update: {},
-      create: { id: `dept-${slug}`, name, tenantId: tenant.id },
+      create: { id: `dept-${slug}`, name, tenantId: tenant.id, createdAt: NOW, updatedAt: NOW },
     });
   }
   console.log(`[Seed] Created ${deptNames.length} departments`);
@@ -87,7 +95,7 @@ async function main() {
     await prisma.inventoryCategory.upsert({
       where: { id: `invcat-${slug}` },
       update: {},
-      create: { id: `invcat-${slug}`, name, tenantId: tenant.id },
+      create: { id: `invcat-${slug}`, name, tenantId: tenant.id, createdAt: NOW, updatedAt: NOW },
     });
   }
   console.log(`[Seed] Created ${invCategories.length} inventory categories`);
@@ -102,6 +110,8 @@ async function main() {
       code: "WH-001",
       type: "main",
       tenantId: tenant.id,
+      createdAt: NOW,
+      updatedAt: NOW,
     },
   });
   console.log(`[Seed] Created 1 warehouse`);

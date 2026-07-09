@@ -246,8 +246,8 @@ export type ScanLogWhereInput = {
   location?: Prisma.StringNullableFilter<"ScanLog"> | string | null
   referer?: Prisma.StringNullableFilter<"ScanLog"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ScanLog"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   equipment?: Prisma.XOR<Prisma.EquipmentScalarRelationFilter, Prisma.EquipmentWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type ScanLogOrderByWithRelationInput = {
@@ -264,8 +264,8 @@ export type ScanLogOrderByWithRelationInput = {
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   referer?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
   equipment?: Prisma.EquipmentOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type ScanLogWhereUniqueInput = Prisma.AtLeast<{
@@ -285,8 +285,8 @@ export type ScanLogWhereUniqueInput = Prisma.AtLeast<{
   location?: Prisma.StringNullableFilter<"ScanLog"> | string | null
   referer?: Prisma.StringNullableFilter<"ScanLog"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ScanLog"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   equipment?: Prisma.XOR<Prisma.EquipmentScalarRelationFilter, Prisma.EquipmentWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id">
 
 export type ScanLogOrderByWithAggregationInput = {
@@ -328,7 +328,7 @@ export type ScanLogScalarWhereWithAggregatesInput = {
 }
 
 export type ScanLogCreateInput = {
-  id?: string
+  id: string
   qrId: string
   scannedBy?: string | null
   scannedByName?: string | null
@@ -339,12 +339,12 @@ export type ScanLogCreateInput = {
   location?: string | null
   referer?: string | null
   createdAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutScanLogsInput
-  equipment: Prisma.EquipmentCreateNestedOneWithoutScanLogsInput
+  equipment: Prisma.EquipmentCreateNestedOneWithoutScanLogInput
+  tenant: Prisma.TenantCreateNestedOneWithoutScanLogInput
 }
 
 export type ScanLogUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   equipmentId: string
   qrId: string
@@ -371,8 +371,8 @@ export type ScanLogUpdateInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutScanLogsNestedInput
-  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutScanLogsNestedInput
+  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutScanLogNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutScanLogNestedInput
 }
 
 export type ScanLogUncheckedUpdateInput = {
@@ -392,7 +392,7 @@ export type ScanLogUncheckedUpdateInput = {
 }
 
 export type ScanLogCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   equipmentId: string
   qrId: string
@@ -495,48 +495,6 @@ export type ScanLogMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
-export type ScanLogCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput> | Prisma.ScanLogCreateWithoutTenantInput[] | Prisma.ScanLogUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutTenantInput | Prisma.ScanLogCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.ScanLogCreateManyTenantInputEnvelope
-  connect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-}
-
-export type ScanLogUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput> | Prisma.ScanLogCreateWithoutTenantInput[] | Prisma.ScanLogUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutTenantInput | Prisma.ScanLogCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.ScanLogCreateManyTenantInputEnvelope
-  connect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-}
-
-export type ScanLogUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput> | Prisma.ScanLogCreateWithoutTenantInput[] | Prisma.ScanLogUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutTenantInput | Prisma.ScanLogCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.ScanLogUpsertWithWhereUniqueWithoutTenantInput | Prisma.ScanLogUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.ScanLogCreateManyTenantInputEnvelope
-  set?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-  disconnect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-  delete?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-  connect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-  update?: Prisma.ScanLogUpdateWithWhereUniqueWithoutTenantInput | Prisma.ScanLogUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.ScanLogUpdateManyWithWhereWithoutTenantInput | Prisma.ScanLogUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
-}
-
-export type ScanLogUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput> | Prisma.ScanLogCreateWithoutTenantInput[] | Prisma.ScanLogUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutTenantInput | Prisma.ScanLogCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.ScanLogUpsertWithWhereUniqueWithoutTenantInput | Prisma.ScanLogUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.ScanLogCreateManyTenantInputEnvelope
-  set?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-  disconnect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-  delete?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-  connect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
-  update?: Prisma.ScanLogUpdateWithWhereUniqueWithoutTenantInput | Prisma.ScanLogUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.ScanLogUpdateManyWithWhereWithoutTenantInput | Prisma.ScanLogUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
-}
-
 export type ScanLogCreateNestedManyWithoutEquipmentInput = {
   create?: Prisma.XOR<Prisma.ScanLogCreateWithoutEquipmentInput, Prisma.ScanLogUncheckedCreateWithoutEquipmentInput> | Prisma.ScanLogCreateWithoutEquipmentInput[] | Prisma.ScanLogUncheckedCreateWithoutEquipmentInput[]
   connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutEquipmentInput | Prisma.ScanLogCreateOrConnectWithoutEquipmentInput[]
@@ -579,82 +537,50 @@ export type ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput = {
   deleteMany?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
 }
 
-export type ScanLogCreateWithoutTenantInput = {
-  id?: string
-  qrId: string
-  scannedBy?: string | null
-  scannedByName?: string | null
-  ipAddress?: string | null
-  userAgent?: string | null
-  device?: string | null
-  browser?: string | null
-  location?: string | null
-  referer?: string | null
-  createdAt?: Date | string
-  equipment: Prisma.EquipmentCreateNestedOneWithoutScanLogsInput
+export type ScanLogCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput> | Prisma.ScanLogCreateWithoutTenantInput[] | Prisma.ScanLogUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutTenantInput | Prisma.ScanLogCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.ScanLogCreateManyTenantInputEnvelope
+  connect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
 }
 
-export type ScanLogUncheckedCreateWithoutTenantInput = {
-  id?: string
-  equipmentId: string
-  qrId: string
-  scannedBy?: string | null
-  scannedByName?: string | null
-  ipAddress?: string | null
-  userAgent?: string | null
-  device?: string | null
-  browser?: string | null
-  location?: string | null
-  referer?: string | null
-  createdAt?: Date | string
+export type ScanLogUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput> | Prisma.ScanLogCreateWithoutTenantInput[] | Prisma.ScanLogUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutTenantInput | Prisma.ScanLogCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.ScanLogCreateManyTenantInputEnvelope
+  connect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
 }
 
-export type ScanLogCreateOrConnectWithoutTenantInput = {
-  where: Prisma.ScanLogWhereUniqueInput
-  create: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput>
+export type ScanLogUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput> | Prisma.ScanLogCreateWithoutTenantInput[] | Prisma.ScanLogUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutTenantInput | Prisma.ScanLogCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.ScanLogUpsertWithWhereUniqueWithoutTenantInput | Prisma.ScanLogUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.ScanLogCreateManyTenantInputEnvelope
+  set?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
+  disconnect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
+  delete?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
+  connect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
+  update?: Prisma.ScanLogUpdateWithWhereUniqueWithoutTenantInput | Prisma.ScanLogUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.ScanLogUpdateManyWithWhereWithoutTenantInput | Prisma.ScanLogUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
 }
 
-export type ScanLogCreateManyTenantInputEnvelope = {
-  data: Prisma.ScanLogCreateManyTenantInput | Prisma.ScanLogCreateManyTenantInput[]
-}
-
-export type ScanLogUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.ScanLogWhereUniqueInput
-  update: Prisma.XOR<Prisma.ScanLogUpdateWithoutTenantInput, Prisma.ScanLogUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput>
-}
-
-export type ScanLogUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.ScanLogWhereUniqueInput
-  data: Prisma.XOR<Prisma.ScanLogUpdateWithoutTenantInput, Prisma.ScanLogUncheckedUpdateWithoutTenantInput>
-}
-
-export type ScanLogUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.ScanLogScalarWhereInput
-  data: Prisma.XOR<Prisma.ScanLogUpdateManyMutationInput, Prisma.ScanLogUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type ScanLogScalarWhereInput = {
-  AND?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
-  OR?: Prisma.ScanLogScalarWhereInput[]
-  NOT?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
-  id?: Prisma.StringFilter<"ScanLog"> | string
-  tenantId?: Prisma.StringFilter<"ScanLog"> | string
-  equipmentId?: Prisma.StringFilter<"ScanLog"> | string
-  qrId?: Prisma.StringFilter<"ScanLog"> | string
-  scannedBy?: Prisma.StringNullableFilter<"ScanLog"> | string | null
-  scannedByName?: Prisma.StringNullableFilter<"ScanLog"> | string | null
-  ipAddress?: Prisma.StringNullableFilter<"ScanLog"> | string | null
-  userAgent?: Prisma.StringNullableFilter<"ScanLog"> | string | null
-  device?: Prisma.StringNullableFilter<"ScanLog"> | string | null
-  browser?: Prisma.StringNullableFilter<"ScanLog"> | string | null
-  location?: Prisma.StringNullableFilter<"ScanLog"> | string | null
-  referer?: Prisma.StringNullableFilter<"ScanLog"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"ScanLog"> | Date | string
+export type ScanLogUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput> | Prisma.ScanLogCreateWithoutTenantInput[] | Prisma.ScanLogUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ScanLogCreateOrConnectWithoutTenantInput | Prisma.ScanLogCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.ScanLogUpsertWithWhereUniqueWithoutTenantInput | Prisma.ScanLogUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.ScanLogCreateManyTenantInputEnvelope
+  set?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
+  disconnect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
+  delete?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
+  connect?: Prisma.ScanLogWhereUniqueInput | Prisma.ScanLogWhereUniqueInput[]
+  update?: Prisma.ScanLogUpdateWithWhereUniqueWithoutTenantInput | Prisma.ScanLogUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.ScanLogUpdateManyWithWhereWithoutTenantInput | Prisma.ScanLogUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
 }
 
 export type ScanLogCreateWithoutEquipmentInput = {
-  id?: string
+  id: string
   qrId: string
   scannedBy?: string | null
   scannedByName?: string | null
@@ -665,11 +591,11 @@ export type ScanLogCreateWithoutEquipmentInput = {
   location?: string | null
   referer?: string | null
   createdAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutScanLogsInput
+  tenant: Prisma.TenantCreateNestedOneWithoutScanLogInput
 }
 
 export type ScanLogUncheckedCreateWithoutEquipmentInput = {
-  id?: string
+  id: string
   tenantId: string
   qrId: string
   scannedBy?: string | null
@@ -708,8 +634,42 @@ export type ScanLogUpdateManyWithWhereWithoutEquipmentInput = {
   data: Prisma.XOR<Prisma.ScanLogUpdateManyMutationInput, Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentInput>
 }
 
-export type ScanLogCreateManyTenantInput = {
-  id?: string
+export type ScanLogScalarWhereInput = {
+  AND?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
+  OR?: Prisma.ScanLogScalarWhereInput[]
+  NOT?: Prisma.ScanLogScalarWhereInput | Prisma.ScanLogScalarWhereInput[]
+  id?: Prisma.StringFilter<"ScanLog"> | string
+  tenantId?: Prisma.StringFilter<"ScanLog"> | string
+  equipmentId?: Prisma.StringFilter<"ScanLog"> | string
+  qrId?: Prisma.StringFilter<"ScanLog"> | string
+  scannedBy?: Prisma.StringNullableFilter<"ScanLog"> | string | null
+  scannedByName?: Prisma.StringNullableFilter<"ScanLog"> | string | null
+  ipAddress?: Prisma.StringNullableFilter<"ScanLog"> | string | null
+  userAgent?: Prisma.StringNullableFilter<"ScanLog"> | string | null
+  device?: Prisma.StringNullableFilter<"ScanLog"> | string | null
+  browser?: Prisma.StringNullableFilter<"ScanLog"> | string | null
+  location?: Prisma.StringNullableFilter<"ScanLog"> | string | null
+  referer?: Prisma.StringNullableFilter<"ScanLog"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ScanLog"> | Date | string
+}
+
+export type ScanLogCreateWithoutTenantInput = {
+  id: string
+  qrId: string
+  scannedBy?: string | null
+  scannedByName?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  device?: string | null
+  browser?: string | null
+  location?: string | null
+  referer?: string | null
+  createdAt?: Date | string
+  equipment: Prisma.EquipmentCreateNestedOneWithoutScanLogInput
+}
+
+export type ScanLogUncheckedCreateWithoutTenantInput = {
+  id: string
   equipmentId: string
   qrId: string
   scannedBy?: string | null
@@ -723,53 +683,33 @@ export type ScanLogCreateManyTenantInput = {
   createdAt?: Date | string
 }
 
-export type ScanLogUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.StringFieldUpdateOperationsInput | string
-  scannedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scannedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutScanLogsNestedInput
+export type ScanLogCreateOrConnectWithoutTenantInput = {
+  where: Prisma.ScanLogWhereUniqueInput
+  create: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput>
 }
 
-export type ScanLogUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.StringFieldUpdateOperationsInput | string
-  scannedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scannedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type ScanLogCreateManyTenantInputEnvelope = {
+  data: Prisma.ScanLogCreateManyTenantInput | Prisma.ScanLogCreateManyTenantInput[]
 }
 
-export type ScanLogUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.StringFieldUpdateOperationsInput | string
-  scannedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scannedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type ScanLogUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.ScanLogWhereUniqueInput
+  update: Prisma.XOR<Prisma.ScanLogUpdateWithoutTenantInput, Prisma.ScanLogUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.ScanLogCreateWithoutTenantInput, Prisma.ScanLogUncheckedCreateWithoutTenantInput>
+}
+
+export type ScanLogUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.ScanLogWhereUniqueInput
+  data: Prisma.XOR<Prisma.ScanLogUpdateWithoutTenantInput, Prisma.ScanLogUncheckedUpdateWithoutTenantInput>
+}
+
+export type ScanLogUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.ScanLogScalarWhereInput
+  data: Prisma.XOR<Prisma.ScanLogUpdateManyMutationInput, Prisma.ScanLogUncheckedUpdateManyWithoutTenantInput>
 }
 
 export type ScanLogCreateManyEquipmentInput = {
-  id?: string
+  id: string
   tenantId: string
   qrId: string
   scannedBy?: string | null
@@ -795,7 +735,7 @@ export type ScanLogUpdateWithoutEquipmentInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   referer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutScanLogsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutScanLogNestedInput
 }
 
 export type ScanLogUncheckedUpdateWithoutEquipmentInput = {
@@ -828,6 +768,66 @@ export type ScanLogUncheckedUpdateManyWithoutEquipmentInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type ScanLogCreateManyTenantInput = {
+  id: string
+  equipmentId: string
+  qrId: string
+  scannedBy?: string | null
+  scannedByName?: string | null
+  ipAddress?: string | null
+  userAgent?: string | null
+  device?: string | null
+  browser?: string | null
+  location?: string | null
+  referer?: string | null
+  createdAt?: Date | string
+}
+
+export type ScanLogUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.StringFieldUpdateOperationsInput | string
+  scannedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scannedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutScanLogNestedInput
+}
+
+export type ScanLogUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.StringFieldUpdateOperationsInput | string
+  scannedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scannedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ScanLogUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.StringFieldUpdateOperationsInput | string
+  scannedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scannedByName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  ipAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  userAgent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  device?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  browser?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type ScanLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -844,8 +844,8 @@ export type ScanLogSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   location?: boolean
   referer?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["scanLog"]>
 
 export type ScanLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -862,8 +862,8 @@ export type ScanLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   location?: boolean
   referer?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["scanLog"]>
 
 export type ScanLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -880,8 +880,8 @@ export type ScanLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   location?: boolean
   referer?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["scanLog"]>
 
 export type ScanLogSelectScalar = {
@@ -902,23 +902,23 @@ export type ScanLogSelectScalar = {
 
 export type ScanLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "equipmentId" | "qrId" | "scannedBy" | "scannedByName" | "ipAddress" | "userAgent" | "device" | "browser" | "location" | "referer" | "createdAt", ExtArgs["result"]["scanLog"]>
 export type ScanLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type ScanLogIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type ScanLogIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $ScanLogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ScanLog"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
     equipment: Prisma.$EquipmentPayload<ExtArgs>
+    tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1328,8 +1328,8 @@ readonly fields: ScanLogFieldRefs;
  */
 export interface Prisma__ScanLogClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   equipment<T extends Prisma.EquipmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EquipmentDefaultArgs<ExtArgs>>): Prisma.Prisma__EquipmentClient<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

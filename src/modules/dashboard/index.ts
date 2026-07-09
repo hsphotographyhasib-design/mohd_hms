@@ -8,10 +8,15 @@ export {
   type DashboardChartsData,
   type DashboardRecentData,
   type DashboardFilters,
+  type DashboardError,
+  type DashboardErrorCategory,
   useDashboardKpi,
   useDashboardCharts,
   useDashboardRecent,
   useInvalidateDashboard,
+  useDashboardBackgroundRecovery,
+  useDashboardHealth,
+  getDashboardErrorMessage,
 } from './hooks/use-dashboard-queries';
 
 // ─── Services ─────────────────────────────────────────────────────────────────

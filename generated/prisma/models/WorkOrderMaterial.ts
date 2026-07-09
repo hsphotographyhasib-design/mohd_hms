@@ -232,8 +232,8 @@ export type WorkOrderMaterialWhereInput = {
   quantity?: Prisma.IntFilter<"WorkOrderMaterial"> | number
   unitCost?: Prisma.FloatFilter<"WorkOrderMaterial"> | number
   totalCost?: Prisma.FloatFilter<"WorkOrderMaterial"> | number
-  workOrder?: Prisma.XOR<Prisma.WorkOrderScalarRelationFilter, Prisma.WorkOrderWhereInput>
   inventoryItem?: Prisma.XOR<Prisma.InventoryItemScalarRelationFilter, Prisma.InventoryItemWhereInput>
+  workOrder?: Prisma.XOR<Prisma.WorkOrderScalarRelationFilter, Prisma.WorkOrderWhereInput>
 }
 
 export type WorkOrderMaterialOrderByWithRelationInput = {
@@ -243,8 +243,8 @@ export type WorkOrderMaterialOrderByWithRelationInput = {
   quantity?: Prisma.SortOrder
   unitCost?: Prisma.SortOrder
   totalCost?: Prisma.SortOrder
-  workOrder?: Prisma.WorkOrderOrderByWithRelationInput
   inventoryItem?: Prisma.InventoryItemOrderByWithRelationInput
+  workOrder?: Prisma.WorkOrderOrderByWithRelationInput
 }
 
 export type WorkOrderMaterialWhereUniqueInput = Prisma.AtLeast<{
@@ -257,8 +257,8 @@ export type WorkOrderMaterialWhereUniqueInput = Prisma.AtLeast<{
   quantity?: Prisma.IntFilter<"WorkOrderMaterial"> | number
   unitCost?: Prisma.FloatFilter<"WorkOrderMaterial"> | number
   totalCost?: Prisma.FloatFilter<"WorkOrderMaterial"> | number
-  workOrder?: Prisma.XOR<Prisma.WorkOrderScalarRelationFilter, Prisma.WorkOrderWhereInput>
   inventoryItem?: Prisma.XOR<Prisma.InventoryItemScalarRelationFilter, Prisma.InventoryItemWhereInput>
+  workOrder?: Prisma.XOR<Prisma.WorkOrderScalarRelationFilter, Prisma.WorkOrderWhereInput>
 }, "id">
 
 export type WorkOrderMaterialOrderByWithAggregationInput = {
@@ -288,16 +288,16 @@ export type WorkOrderMaterialScalarWhereWithAggregatesInput = {
 }
 
 export type WorkOrderMaterialCreateInput = {
-  id?: string
+  id: string
   quantity: number
   unitCost: number
   totalCost: number
-  workOrder: Prisma.WorkOrderCreateNestedOneWithoutMaterialsInput
-  inventoryItem: Prisma.InventoryItemCreateNestedOneWithoutWorkOrderMaterialsInput
+  inventoryItem: Prisma.InventoryItemCreateNestedOneWithoutWorkOrderMaterialInput
+  workOrder: Prisma.WorkOrderCreateNestedOneWithoutWorkOrderMaterialInput
 }
 
 export type WorkOrderMaterialUncheckedCreateInput = {
-  id?: string
+  id: string
   workOrderId: string
   inventoryItemId: string
   quantity: number
@@ -310,8 +310,8 @@ export type WorkOrderMaterialUpdateInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
   totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  workOrder?: Prisma.WorkOrderUpdateOneRequiredWithoutMaterialsNestedInput
-  inventoryItem?: Prisma.InventoryItemUpdateOneRequiredWithoutWorkOrderMaterialsNestedInput
+  inventoryItem?: Prisma.InventoryItemUpdateOneRequiredWithoutWorkOrderMaterialNestedInput
+  workOrder?: Prisma.WorkOrderUpdateOneRequiredWithoutWorkOrderMaterialNestedInput
 }
 
 export type WorkOrderMaterialUncheckedUpdateInput = {
@@ -324,7 +324,7 @@ export type WorkOrderMaterialUncheckedUpdateInput = {
 }
 
 export type WorkOrderMaterialCreateManyInput = {
-  id?: string
+  id: string
   workOrderId: string
   inventoryItemId: string
   quantity: number
@@ -397,48 +397,6 @@ export type WorkOrderMaterialSumOrderByAggregateInput = {
   totalCost?: Prisma.SortOrder
 }
 
-export type WorkOrderMaterialCreateNestedManyWithoutWorkOrderInput = {
-  create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput> | Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput[]
-  connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput[]
-  createMany?: Prisma.WorkOrderMaterialCreateManyWorkOrderInputEnvelope
-  connect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-}
-
-export type WorkOrderMaterialUncheckedCreateNestedManyWithoutWorkOrderInput = {
-  create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput> | Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput[]
-  connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput[]
-  createMany?: Prisma.WorkOrderMaterialCreateManyWorkOrderInputEnvelope
-  connect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-}
-
-export type WorkOrderMaterialUpdateManyWithoutWorkOrderNestedInput = {
-  create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput> | Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput[]
-  connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput[]
-  upsert?: Prisma.WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput[]
-  createMany?: Prisma.WorkOrderMaterialCreateManyWorkOrderInputEnvelope
-  set?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-  disconnect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-  delete?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-  connect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-  update?: Prisma.WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput[]
-  updateMany?: Prisma.WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput[]
-  deleteMany?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
-}
-
-export type WorkOrderMaterialUncheckedUpdateManyWithoutWorkOrderNestedInput = {
-  create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput> | Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput[]
-  connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput[]
-  upsert?: Prisma.WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput[]
-  createMany?: Prisma.WorkOrderMaterialCreateManyWorkOrderInputEnvelope
-  set?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-  disconnect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-  delete?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-  connect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
-  update?: Prisma.WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput[]
-  updateMany?: Prisma.WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput[]
-  deleteMany?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
-}
-
 export type WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput = {
   create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutInventoryItemInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutInventoryItemInput> | Prisma.WorkOrderMaterialCreateWithoutInventoryItemInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutInventoryItemInput[]
   connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutInventoryItemInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutInventoryItemInput[]
@@ -481,69 +439,58 @@ export type WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput 
   deleteMany?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
 }
 
-export type WorkOrderMaterialCreateWithoutWorkOrderInput = {
-  id?: string
-  quantity: number
-  unitCost: number
-  totalCost: number
-  inventoryItem: Prisma.InventoryItemCreateNestedOneWithoutWorkOrderMaterialsInput
+export type WorkOrderMaterialCreateNestedManyWithoutWorkOrderInput = {
+  create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput> | Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput[]
+  connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput[]
+  createMany?: Prisma.WorkOrderMaterialCreateManyWorkOrderInputEnvelope
+  connect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
 }
 
-export type WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput = {
-  id?: string
-  inventoryItemId: string
-  quantity: number
-  unitCost: number
-  totalCost: number
+export type WorkOrderMaterialUncheckedCreateNestedManyWithoutWorkOrderInput = {
+  create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput> | Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput[]
+  connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput[]
+  createMany?: Prisma.WorkOrderMaterialCreateManyWorkOrderInputEnvelope
+  connect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
 }
 
-export type WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput = {
-  where: Prisma.WorkOrderMaterialWhereUniqueInput
-  create: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput>
+export type WorkOrderMaterialUpdateManyWithoutWorkOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput> | Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput[]
+  connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput[]
+  upsert?: Prisma.WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput[]
+  createMany?: Prisma.WorkOrderMaterialCreateManyWorkOrderInputEnvelope
+  set?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
+  disconnect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
+  delete?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
+  connect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
+  update?: Prisma.WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput[]
+  updateMany?: Prisma.WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput[]
+  deleteMany?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
 }
 
-export type WorkOrderMaterialCreateManyWorkOrderInputEnvelope = {
-  data: Prisma.WorkOrderMaterialCreateManyWorkOrderInput | Prisma.WorkOrderMaterialCreateManyWorkOrderInput[]
-}
-
-export type WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput = {
-  where: Prisma.WorkOrderMaterialWhereUniqueInput
-  update: Prisma.XOR<Prisma.WorkOrderMaterialUpdateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedUpdateWithoutWorkOrderInput>
-  create: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput>
-}
-
-export type WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput = {
-  where: Prisma.WorkOrderMaterialWhereUniqueInput
-  data: Prisma.XOR<Prisma.WorkOrderMaterialUpdateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedUpdateWithoutWorkOrderInput>
-}
-
-export type WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput = {
-  where: Prisma.WorkOrderMaterialScalarWhereInput
-  data: Prisma.XOR<Prisma.WorkOrderMaterialUpdateManyMutationInput, Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutWorkOrderInput>
-}
-
-export type WorkOrderMaterialScalarWhereInput = {
-  AND?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
-  OR?: Prisma.WorkOrderMaterialScalarWhereInput[]
-  NOT?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
-  id?: Prisma.StringFilter<"WorkOrderMaterial"> | string
-  workOrderId?: Prisma.StringFilter<"WorkOrderMaterial"> | string
-  inventoryItemId?: Prisma.StringFilter<"WorkOrderMaterial"> | string
-  quantity?: Prisma.IntFilter<"WorkOrderMaterial"> | number
-  unitCost?: Prisma.FloatFilter<"WorkOrderMaterial"> | number
-  totalCost?: Prisma.FloatFilter<"WorkOrderMaterial"> | number
+export type WorkOrderMaterialUncheckedUpdateManyWithoutWorkOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput> | Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput[] | Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput[]
+  connectOrCreate?: Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput | Prisma.WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput[]
+  upsert?: Prisma.WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput[]
+  createMany?: Prisma.WorkOrderMaterialCreateManyWorkOrderInputEnvelope
+  set?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
+  disconnect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
+  delete?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
+  connect?: Prisma.WorkOrderMaterialWhereUniqueInput | Prisma.WorkOrderMaterialWhereUniqueInput[]
+  update?: Prisma.WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput[]
+  updateMany?: Prisma.WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput | Prisma.WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput[]
+  deleteMany?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
 }
 
 export type WorkOrderMaterialCreateWithoutInventoryItemInput = {
-  id?: string
+  id: string
   quantity: number
   unitCost: number
   totalCost: number
-  workOrder: Prisma.WorkOrderCreateNestedOneWithoutMaterialsInput
+  workOrder: Prisma.WorkOrderCreateNestedOneWithoutWorkOrderMaterialInput
 }
 
 export type WorkOrderMaterialUncheckedCreateWithoutInventoryItemInput = {
-  id?: string
+  id: string
   workOrderId: string
   quantity: number
   unitCost: number
@@ -575,40 +522,61 @@ export type WorkOrderMaterialUpdateManyWithWhereWithoutInventoryItemInput = {
   data: Prisma.XOR<Prisma.WorkOrderMaterialUpdateManyMutationInput, Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemInput>
 }
 
-export type WorkOrderMaterialCreateManyWorkOrderInput = {
-  id?: string
+export type WorkOrderMaterialScalarWhereInput = {
+  AND?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
+  OR?: Prisma.WorkOrderMaterialScalarWhereInput[]
+  NOT?: Prisma.WorkOrderMaterialScalarWhereInput | Prisma.WorkOrderMaterialScalarWhereInput[]
+  id?: Prisma.StringFilter<"WorkOrderMaterial"> | string
+  workOrderId?: Prisma.StringFilter<"WorkOrderMaterial"> | string
+  inventoryItemId?: Prisma.StringFilter<"WorkOrderMaterial"> | string
+  quantity?: Prisma.IntFilter<"WorkOrderMaterial"> | number
+  unitCost?: Prisma.FloatFilter<"WorkOrderMaterial"> | number
+  totalCost?: Prisma.FloatFilter<"WorkOrderMaterial"> | number
+}
+
+export type WorkOrderMaterialCreateWithoutWorkOrderInput = {
+  id: string
+  quantity: number
+  unitCost: number
+  totalCost: number
+  inventoryItem: Prisma.InventoryItemCreateNestedOneWithoutWorkOrderMaterialInput
+}
+
+export type WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput = {
+  id: string
   inventoryItemId: string
   quantity: number
   unitCost: number
   totalCost: number
 }
 
-export type WorkOrderMaterialUpdateWithoutWorkOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  inventoryItem?: Prisma.InventoryItemUpdateOneRequiredWithoutWorkOrderMaterialsNestedInput
+export type WorkOrderMaterialCreateOrConnectWithoutWorkOrderInput = {
+  where: Prisma.WorkOrderMaterialWhereUniqueInput
+  create: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput>
 }
 
-export type WorkOrderMaterialUncheckedUpdateWithoutWorkOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventoryItemId?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+export type WorkOrderMaterialCreateManyWorkOrderInputEnvelope = {
+  data: Prisma.WorkOrderMaterialCreateManyWorkOrderInput | Prisma.WorkOrderMaterialCreateManyWorkOrderInput[]
 }
 
-export type WorkOrderMaterialUncheckedUpdateManyWithoutWorkOrderInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  inventoryItemId?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+export type WorkOrderMaterialUpsertWithWhereUniqueWithoutWorkOrderInput = {
+  where: Prisma.WorkOrderMaterialWhereUniqueInput
+  update: Prisma.XOR<Prisma.WorkOrderMaterialUpdateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedUpdateWithoutWorkOrderInput>
+  create: Prisma.XOR<Prisma.WorkOrderMaterialCreateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedCreateWithoutWorkOrderInput>
+}
+
+export type WorkOrderMaterialUpdateWithWhereUniqueWithoutWorkOrderInput = {
+  where: Prisma.WorkOrderMaterialWhereUniqueInput
+  data: Prisma.XOR<Prisma.WorkOrderMaterialUpdateWithoutWorkOrderInput, Prisma.WorkOrderMaterialUncheckedUpdateWithoutWorkOrderInput>
+}
+
+export type WorkOrderMaterialUpdateManyWithWhereWithoutWorkOrderInput = {
+  where: Prisma.WorkOrderMaterialScalarWhereInput
+  data: Prisma.XOR<Prisma.WorkOrderMaterialUpdateManyMutationInput, Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutWorkOrderInput>
 }
 
 export type WorkOrderMaterialCreateManyInventoryItemInput = {
-  id?: string
+  id: string
   workOrderId: string
   quantity: number
   unitCost: number
@@ -620,7 +588,7 @@ export type WorkOrderMaterialUpdateWithoutInventoryItemInput = {
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
   unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
   totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  workOrder?: Prisma.WorkOrderUpdateOneRequiredWithoutMaterialsNestedInput
+  workOrder?: Prisma.WorkOrderUpdateOneRequiredWithoutWorkOrderMaterialNestedInput
 }
 
 export type WorkOrderMaterialUncheckedUpdateWithoutInventoryItemInput = {
@@ -639,6 +607,38 @@ export type WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemInput = {
   totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
 }
 
+export type WorkOrderMaterialCreateManyWorkOrderInput = {
+  id: string
+  inventoryItemId: string
+  quantity: number
+  unitCost: number
+  totalCost: number
+}
+
+export type WorkOrderMaterialUpdateWithoutWorkOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  inventoryItem?: Prisma.InventoryItemUpdateOneRequiredWithoutWorkOrderMaterialNestedInput
+}
+
+export type WorkOrderMaterialUncheckedUpdateWithoutWorkOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inventoryItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+}
+
+export type WorkOrderMaterialUncheckedUpdateManyWithoutWorkOrderInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  inventoryItemId?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+}
+
 
 
 export type WorkOrderMaterialSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -648,8 +648,8 @@ export type WorkOrderMaterialSelect<ExtArgs extends runtime.Types.Extensions.Int
   quantity?: boolean
   unitCost?: boolean
   totalCost?: boolean
-  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
   inventoryItem?: boolean | Prisma.InventoryItemDefaultArgs<ExtArgs>
+  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workOrderMaterial"]>
 
 export type WorkOrderMaterialSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -659,8 +659,8 @@ export type WorkOrderMaterialSelectCreateManyAndReturn<ExtArgs extends runtime.T
   quantity?: boolean
   unitCost?: boolean
   totalCost?: boolean
-  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
   inventoryItem?: boolean | Prisma.InventoryItemDefaultArgs<ExtArgs>
+  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workOrderMaterial"]>
 
 export type WorkOrderMaterialSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -670,8 +670,8 @@ export type WorkOrderMaterialSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   quantity?: boolean
   unitCost?: boolean
   totalCost?: boolean
-  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
   inventoryItem?: boolean | Prisma.InventoryItemDefaultArgs<ExtArgs>
+  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["workOrderMaterial"]>
 
 export type WorkOrderMaterialSelectScalar = {
@@ -685,23 +685,23 @@ export type WorkOrderMaterialSelectScalar = {
 
 export type WorkOrderMaterialOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "workOrderId" | "inventoryItemId" | "quantity" | "unitCost" | "totalCost", ExtArgs["result"]["workOrderMaterial"]>
 export type WorkOrderMaterialInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
   inventoryItem?: boolean | Prisma.InventoryItemDefaultArgs<ExtArgs>
+  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
 }
 export type WorkOrderMaterialIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
   inventoryItem?: boolean | Prisma.InventoryItemDefaultArgs<ExtArgs>
+  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
 }
 export type WorkOrderMaterialIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
   inventoryItem?: boolean | Prisma.InventoryItemDefaultArgs<ExtArgs>
+  workOrder?: boolean | Prisma.WorkOrderDefaultArgs<ExtArgs>
 }
 
 export type $WorkOrderMaterialPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "WorkOrderMaterial"
   objects: {
-    workOrder: Prisma.$WorkOrderPayload<ExtArgs>
     inventoryItem: Prisma.$InventoryItemPayload<ExtArgs>
+    workOrder: Prisma.$WorkOrderPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1104,8 +1104,8 @@ readonly fields: WorkOrderMaterialFieldRefs;
  */
 export interface Prisma__WorkOrderMaterialClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  workOrder<T extends Prisma.WorkOrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkOrderDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkOrderClient<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   inventoryItem<T extends Prisma.InventoryItemDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItemDefaultArgs<ExtArgs>>): Prisma.Prisma__InventoryItemClient<runtime.Types.Result.GetResult<Prisma.$InventoryItemPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  workOrder<T extends Prisma.WorkOrderDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WorkOrderDefaultArgs<ExtArgs>>): Prisma.Prisma__WorkOrderClient<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

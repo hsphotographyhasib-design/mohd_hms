@@ -322,7 +322,7 @@ export type CmsIndustryScalarWhereWithAggregatesInput = {
 }
 
 export type CmsIndustryCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   description?: string | null
@@ -331,11 +331,11 @@ export type CmsIndustryCreateInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsIndustryUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   description?: string | null
@@ -344,7 +344,7 @@ export type CmsIndustryUncheckedCreateInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsIndustryUpdateInput = {
@@ -374,7 +374,7 @@ export type CmsIndustryUncheckedUpdateInput = {
 }
 
 export type CmsIndustryCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   description?: string | null
@@ -383,7 +383,7 @@ export type CmsIndustryCreateManyInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsIndustryUpdateManyMutationInput = {

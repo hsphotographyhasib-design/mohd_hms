@@ -248,8 +248,8 @@ export type CustomerFeedbackWhereInput = {
   comment?: Prisma.StringNullableFilter<"CustomerFeedback"> | string | null
   source?: Prisma.StringFilter<"CustomerFeedback"> | string
   createdAt?: Prisma.DateTimeFilter<"CustomerFeedback"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type CustomerFeedbackOrderByWithRelationInput = {
@@ -262,8 +262,8 @@ export type CustomerFeedbackOrderByWithRelationInput = {
   comment?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
   customer?: Prisma.CustomerOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type CustomerFeedbackWhereUniqueInput = Prisma.AtLeast<{
@@ -279,8 +279,8 @@ export type CustomerFeedbackWhereUniqueInput = Prisma.AtLeast<{
   comment?: Prisma.StringNullableFilter<"CustomerFeedback"> | string | null
   source?: Prisma.StringFilter<"CustomerFeedback"> | string
   createdAt?: Prisma.DateTimeFilter<"CustomerFeedback"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id">
 
 export type CustomerFeedbackOrderByWithAggregationInput = {
@@ -316,19 +316,19 @@ export type CustomerFeedbackScalarWhereWithAggregatesInput = {
 }
 
 export type CustomerFeedbackCreateInput = {
-  id?: string
+  id: string
   complaintId?: string | null
   workOrderId?: string | null
   rating: number
   comment?: string | null
   source?: string
   createdAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomerFeedbacksInput
-  customer: Prisma.CustomerCreateNestedOneWithoutCustomerFeedbacksInput
+  customer: Prisma.CustomerCreateNestedOneWithoutCustomerFeedbackInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerFeedbackInput
 }
 
 export type CustomerFeedbackUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   customerId: string
   complaintId?: string | null
@@ -347,8 +347,8 @@ export type CustomerFeedbackUpdateInput = {
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerFeedbacksNestedInput
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutCustomerFeedbacksNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutCustomerFeedbackNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerFeedbackNestedInput
 }
 
 export type CustomerFeedbackUncheckedUpdateInput = {
@@ -364,7 +364,7 @@ export type CustomerFeedbackUncheckedUpdateInput = {
 }
 
 export type CustomerFeedbackCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   customerId: string
   complaintId?: string | null
@@ -451,48 +451,6 @@ export type CustomerFeedbackSumOrderByAggregateInput = {
   rating?: Prisma.SortOrder
 }
 
-export type CustomerFeedbackCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput> | Prisma.CustomerFeedbackCreateWithoutTenantInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput | Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.CustomerFeedbackCreateManyTenantInputEnvelope
-  connect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-}
-
-export type CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput> | Prisma.CustomerFeedbackCreateWithoutTenantInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput | Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.CustomerFeedbackCreateManyTenantInputEnvelope
-  connect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-}
-
-export type CustomerFeedbackUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput> | Prisma.CustomerFeedbackCreateWithoutTenantInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput | Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput | Prisma.CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.CustomerFeedbackCreateManyTenantInputEnvelope
-  set?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-  disconnect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-  delete?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-  connect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-  update?: Prisma.CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput | Prisma.CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.CustomerFeedbackUpdateManyWithWhereWithoutTenantInput | Prisma.CustomerFeedbackUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
-}
-
-export type CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput> | Prisma.CustomerFeedbackCreateWithoutTenantInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput | Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput | Prisma.CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.CustomerFeedbackCreateManyTenantInputEnvelope
-  set?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-  disconnect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-  delete?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-  connect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
-  update?: Prisma.CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput | Prisma.CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.CustomerFeedbackUpdateManyWithWhereWithoutTenantInput | Prisma.CustomerFeedbackUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
-}
-
 export type CustomerFeedbackCreateNestedManyWithoutCustomerInput = {
   create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutCustomerInput, Prisma.CustomerFeedbackUncheckedCreateWithoutCustomerInput> | Prisma.CustomerFeedbackCreateWithoutCustomerInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutCustomerInput[]
   connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutCustomerInput | Prisma.CustomerFeedbackCreateOrConnectWithoutCustomerInput[]
@@ -535,81 +493,61 @@ export type CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput = {
   deleteMany?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
 }
 
-export type CustomerFeedbackCreateWithoutTenantInput = {
-  id?: string
-  complaintId?: string | null
-  workOrderId?: string | null
-  rating: number
-  comment?: string | null
-  source?: string
-  createdAt?: Date | string
-  customer: Prisma.CustomerCreateNestedOneWithoutCustomerFeedbacksInput
+export type CustomerFeedbackCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput> | Prisma.CustomerFeedbackCreateWithoutTenantInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput | Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.CustomerFeedbackCreateManyTenantInputEnvelope
+  connect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
 }
 
-export type CustomerFeedbackUncheckedCreateWithoutTenantInput = {
-  id?: string
-  customerId: string
-  complaintId?: string | null
-  workOrderId?: string | null
-  rating: number
-  comment?: string | null
-  source?: string
-  createdAt?: Date | string
+export type CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput> | Prisma.CustomerFeedbackCreateWithoutTenantInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput | Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.CustomerFeedbackCreateManyTenantInputEnvelope
+  connect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
 }
 
-export type CustomerFeedbackCreateOrConnectWithoutTenantInput = {
-  where: Prisma.CustomerFeedbackWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput>
+export type CustomerFeedbackUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput> | Prisma.CustomerFeedbackCreateWithoutTenantInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput | Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput | Prisma.CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.CustomerFeedbackCreateManyTenantInputEnvelope
+  set?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
+  disconnect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
+  delete?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
+  connect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
+  update?: Prisma.CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput | Prisma.CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.CustomerFeedbackUpdateManyWithWhereWithoutTenantInput | Prisma.CustomerFeedbackUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
 }
 
-export type CustomerFeedbackCreateManyTenantInputEnvelope = {
-  data: Prisma.CustomerFeedbackCreateManyTenantInput | Prisma.CustomerFeedbackCreateManyTenantInput[]
-}
-
-export type CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.CustomerFeedbackWhereUniqueInput
-  update: Prisma.XOR<Prisma.CustomerFeedbackUpdateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput>
-}
-
-export type CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.CustomerFeedbackWhereUniqueInput
-  data: Prisma.XOR<Prisma.CustomerFeedbackUpdateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedUpdateWithoutTenantInput>
-}
-
-export type CustomerFeedbackUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.CustomerFeedbackScalarWhereInput
-  data: Prisma.XOR<Prisma.CustomerFeedbackUpdateManyMutationInput, Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type CustomerFeedbackScalarWhereInput = {
-  AND?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
-  OR?: Prisma.CustomerFeedbackScalarWhereInput[]
-  NOT?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
-  id?: Prisma.StringFilter<"CustomerFeedback"> | string
-  tenantId?: Prisma.StringFilter<"CustomerFeedback"> | string
-  customerId?: Prisma.StringFilter<"CustomerFeedback"> | string
-  complaintId?: Prisma.StringNullableFilter<"CustomerFeedback"> | string | null
-  workOrderId?: Prisma.StringNullableFilter<"CustomerFeedback"> | string | null
-  rating?: Prisma.IntFilter<"CustomerFeedback"> | number
-  comment?: Prisma.StringNullableFilter<"CustomerFeedback"> | string | null
-  source?: Prisma.StringFilter<"CustomerFeedback"> | string
-  createdAt?: Prisma.DateTimeFilter<"CustomerFeedback"> | Date | string
+export type CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput> | Prisma.CustomerFeedbackCreateWithoutTenantInput[] | Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput | Prisma.CustomerFeedbackCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput | Prisma.CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.CustomerFeedbackCreateManyTenantInputEnvelope
+  set?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
+  disconnect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
+  delete?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
+  connect?: Prisma.CustomerFeedbackWhereUniqueInput | Prisma.CustomerFeedbackWhereUniqueInput[]
+  update?: Prisma.CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput | Prisma.CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.CustomerFeedbackUpdateManyWithWhereWithoutTenantInput | Prisma.CustomerFeedbackUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
 }
 
 export type CustomerFeedbackCreateWithoutCustomerInput = {
-  id?: string
+  id: string
   complaintId?: string | null
   workOrderId?: string | null
   rating: number
   comment?: string | null
   source?: string
   createdAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomerFeedbacksInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerFeedbackInput
 }
 
 export type CustomerFeedbackUncheckedCreateWithoutCustomerInput = {
-  id?: string
+  id: string
   tenantId: string
   complaintId?: string | null
   workOrderId?: string | null
@@ -644,8 +582,34 @@ export type CustomerFeedbackUpdateManyWithWhereWithoutCustomerInput = {
   data: Prisma.XOR<Prisma.CustomerFeedbackUpdateManyMutationInput, Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerInput>
 }
 
-export type CustomerFeedbackCreateManyTenantInput = {
-  id?: string
+export type CustomerFeedbackScalarWhereInput = {
+  AND?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
+  OR?: Prisma.CustomerFeedbackScalarWhereInput[]
+  NOT?: Prisma.CustomerFeedbackScalarWhereInput | Prisma.CustomerFeedbackScalarWhereInput[]
+  id?: Prisma.StringFilter<"CustomerFeedback"> | string
+  tenantId?: Prisma.StringFilter<"CustomerFeedback"> | string
+  customerId?: Prisma.StringFilter<"CustomerFeedback"> | string
+  complaintId?: Prisma.StringNullableFilter<"CustomerFeedback"> | string | null
+  workOrderId?: Prisma.StringNullableFilter<"CustomerFeedback"> | string | null
+  rating?: Prisma.IntFilter<"CustomerFeedback"> | number
+  comment?: Prisma.StringNullableFilter<"CustomerFeedback"> | string | null
+  source?: Prisma.StringFilter<"CustomerFeedback"> | string
+  createdAt?: Prisma.DateTimeFilter<"CustomerFeedback"> | Date | string
+}
+
+export type CustomerFeedbackCreateWithoutTenantInput = {
+  id: string
+  complaintId?: string | null
+  workOrderId?: string | null
+  rating: number
+  comment?: string | null
+  source?: string
+  createdAt?: Date | string
+  customer: Prisma.CustomerCreateNestedOneWithoutCustomerFeedbackInput
+}
+
+export type CustomerFeedbackUncheckedCreateWithoutTenantInput = {
+  id: string
   customerId: string
   complaintId?: string | null
   workOrderId?: string | null
@@ -655,41 +619,33 @@ export type CustomerFeedbackCreateManyTenantInput = {
   createdAt?: Date | string
 }
 
-export type CustomerFeedbackUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutCustomerFeedbacksNestedInput
+export type CustomerFeedbackCreateOrConnectWithoutTenantInput = {
+  where: Prisma.CustomerFeedbackWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput>
 }
 
-export type CustomerFeedbackUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type CustomerFeedbackCreateManyTenantInputEnvelope = {
+  data: Prisma.CustomerFeedbackCreateManyTenantInput | Prisma.CustomerFeedbackCreateManyTenantInput[]
 }
 
-export type CustomerFeedbackUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  rating?: Prisma.IntFieldUpdateOperationsInput | number
-  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  source?: Prisma.StringFieldUpdateOperationsInput | string
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type CustomerFeedbackUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.CustomerFeedbackWhereUniqueInput
+  update: Prisma.XOR<Prisma.CustomerFeedbackUpdateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.CustomerFeedbackCreateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedCreateWithoutTenantInput>
+}
+
+export type CustomerFeedbackUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.CustomerFeedbackWhereUniqueInput
+  data: Prisma.XOR<Prisma.CustomerFeedbackUpdateWithoutTenantInput, Prisma.CustomerFeedbackUncheckedUpdateWithoutTenantInput>
+}
+
+export type CustomerFeedbackUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.CustomerFeedbackScalarWhereInput
+  data: Prisma.XOR<Prisma.CustomerFeedbackUpdateManyMutationInput, Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantInput>
 }
 
 export type CustomerFeedbackCreateManyCustomerInput = {
-  id?: string
+  id: string
   tenantId: string
   complaintId?: string | null
   workOrderId?: string | null
@@ -707,7 +663,7 @@ export type CustomerFeedbackUpdateWithoutCustomerInput = {
   comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerFeedbacksNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerFeedbackNestedInput
 }
 
 export type CustomerFeedbackUncheckedUpdateWithoutCustomerInput = {
@@ -732,6 +688,50 @@ export type CustomerFeedbackUncheckedUpdateManyWithoutCustomerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type CustomerFeedbackCreateManyTenantInput = {
+  id: string
+  customerId: string
+  complaintId?: string | null
+  workOrderId?: string | null
+  rating: number
+  comment?: string | null
+  source?: string
+  createdAt?: Date | string
+}
+
+export type CustomerFeedbackUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.IntFieldUpdateOperationsInput | number
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutCustomerFeedbackNestedInput
+}
+
+export type CustomerFeedbackUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.IntFieldUpdateOperationsInput | number
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CustomerFeedbackUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workOrderId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  rating?: Prisma.IntFieldUpdateOperationsInput | number
+  comment?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type CustomerFeedbackSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -744,8 +744,8 @@ export type CustomerFeedbackSelect<ExtArgs extends runtime.Types.Extensions.Inte
   comment?: boolean
   source?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customerFeedback"]>
 
 export type CustomerFeedbackSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -758,8 +758,8 @@ export type CustomerFeedbackSelectCreateManyAndReturn<ExtArgs extends runtime.Ty
   comment?: boolean
   source?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customerFeedback"]>
 
 export type CustomerFeedbackSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -772,8 +772,8 @@ export type CustomerFeedbackSelectUpdateManyAndReturn<ExtArgs extends runtime.Ty
   comment?: boolean
   source?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customerFeedback"]>
 
 export type CustomerFeedbackSelectScalar = {
@@ -790,23 +790,23 @@ export type CustomerFeedbackSelectScalar = {
 
 export type CustomerFeedbackOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "complaintId" | "workOrderId" | "rating" | "comment" | "source" | "createdAt", ExtArgs["result"]["customerFeedback"]>
 export type CustomerFeedbackInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type CustomerFeedbackIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type CustomerFeedbackIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $CustomerFeedbackPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CustomerFeedback"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
     customer: Prisma.$CustomerPayload<ExtArgs>
+    tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1212,8 +1212,8 @@ readonly fields: CustomerFeedbackFieldRefs;
  */
 export interface Prisma__CustomerFeedbackClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   customer<T extends Prisma.CustomerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CustomerDefaultArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

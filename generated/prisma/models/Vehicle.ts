@@ -285,7 +285,7 @@ export type VehicleWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  logs?: Prisma.VehicleLogListRelationFilter
+  VehicleLog?: Prisma.VehicleLogListRelationFilter
 }
 
 export type VehicleOrderByWithRelationInput = {
@@ -303,7 +303,7 @@ export type VehicleOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
-  logs?: Prisma.VehicleLogOrderByRelationAggregateInput
+  VehicleLog?: Prisma.VehicleLogOrderByRelationAggregateInput
 }
 
 export type VehicleWhereUniqueInput = Prisma.AtLeast<{
@@ -324,7 +324,7 @@ export type VehicleWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  logs?: Prisma.VehicleLogListRelationFilter
+  VehicleLog?: Prisma.VehicleLogListRelationFilter
 }, "id">
 
 export type VehicleOrderByWithAggregationInput = {
@@ -368,7 +368,7 @@ export type VehicleScalarWhereWithAggregatesInput = {
 }
 
 export type VehicleCreateInput = {
-  id?: string
+  id: string
   plateNumber: string
   make: string
   model: string
@@ -379,13 +379,13 @@ export type VehicleCreateInput = {
   currentMileage?: number | null
   nextServiceDate?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutVehiclesInput
-  logs?: Prisma.VehicleLogCreateNestedManyWithoutVehicleInput
+  updatedAt: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutVehicleInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   plateNumber: string
   make: string
@@ -397,8 +397,8 @@ export type VehicleUncheckedCreateInput = {
   currentMileage?: number | null
   nextServiceDate?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  logs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutVehicleInput
+  updatedAt: Date | string
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUpdateInput = {
@@ -414,8 +414,8 @@ export type VehicleUpdateInput = {
   nextServiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutVehiclesNestedInput
-  logs?: Prisma.VehicleLogUpdateManyWithoutVehicleNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutVehicleNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateInput = {
@@ -432,11 +432,11 @@ export type VehicleUncheckedUpdateInput = {
   nextServiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  logs?: Prisma.VehicleLogUncheckedUpdateManyWithoutVehicleNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   plateNumber: string
   make: string
@@ -448,7 +448,7 @@ export type VehicleCreateManyInput = {
   currentMileage?: number | null
   nextServiceDate?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type VehicleUpdateManyMutationInput = {
@@ -597,22 +597,22 @@ export type VehicleUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.VehicleScalarWhereInput | Prisma.VehicleScalarWhereInput[]
 }
 
-export type VehicleCreateNestedOneWithoutLogsInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutLogsInput, Prisma.VehicleUncheckedCreateWithoutLogsInput>
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutLogsInput
+export type VehicleCreateNestedOneWithoutVehicleLogInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutVehicleLogInput, Prisma.VehicleUncheckedCreateWithoutVehicleLogInput>
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutVehicleLogInput
   connect?: Prisma.VehicleWhereUniqueInput
 }
 
-export type VehicleUpdateOneRequiredWithoutLogsNestedInput = {
-  create?: Prisma.XOR<Prisma.VehicleCreateWithoutLogsInput, Prisma.VehicleUncheckedCreateWithoutLogsInput>
-  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutLogsInput
-  upsert?: Prisma.VehicleUpsertWithoutLogsInput
+export type VehicleUpdateOneRequiredWithoutVehicleLogNestedInput = {
+  create?: Prisma.XOR<Prisma.VehicleCreateWithoutVehicleLogInput, Prisma.VehicleUncheckedCreateWithoutVehicleLogInput>
+  connectOrCreate?: Prisma.VehicleCreateOrConnectWithoutVehicleLogInput
+  upsert?: Prisma.VehicleUpsertWithoutVehicleLogInput
   connect?: Prisma.VehicleWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.VehicleUpdateToOneWithWhereWithoutLogsInput, Prisma.VehicleUpdateWithoutLogsInput>, Prisma.VehicleUncheckedUpdateWithoutLogsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.VehicleUpdateToOneWithWhereWithoutVehicleLogInput, Prisma.VehicleUpdateWithoutVehicleLogInput>, Prisma.VehicleUncheckedUpdateWithoutVehicleLogInput>
 }
 
 export type VehicleCreateWithoutTenantInput = {
-  id?: string
+  id: string
   plateNumber: string
   make: string
   model: string
@@ -623,12 +623,12 @@ export type VehicleCreateWithoutTenantInput = {
   currentMileage?: number | null
   nextServiceDate?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  logs?: Prisma.VehicleLogCreateNestedManyWithoutVehicleInput
+  updatedAt: Date | string
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   plateNumber: string
   make: string
   model: string
@@ -639,8 +639,8 @@ export type VehicleUncheckedCreateWithoutTenantInput = {
   currentMileage?: number | null
   nextServiceDate?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  logs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutVehicleInput
+  updatedAt: Date | string
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutVehicleInput
 }
 
 export type VehicleCreateOrConnectWithoutTenantInput = {
@@ -687,8 +687,8 @@ export type VehicleScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Vehicle"> | Date | string
 }
 
-export type VehicleCreateWithoutLogsInput = {
-  id?: string
+export type VehicleCreateWithoutVehicleLogInput = {
+  id: string
   plateNumber: string
   make: string
   model: string
@@ -699,12 +699,12 @@ export type VehicleCreateWithoutLogsInput = {
   currentMileage?: number | null
   nextServiceDate?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutVehiclesInput
+  updatedAt: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutVehicleInput
 }
 
-export type VehicleUncheckedCreateWithoutLogsInput = {
-  id?: string
+export type VehicleUncheckedCreateWithoutVehicleLogInput = {
+  id: string
   tenantId: string
   plateNumber: string
   make: string
@@ -716,26 +716,26 @@ export type VehicleUncheckedCreateWithoutLogsInput = {
   currentMileage?: number | null
   nextServiceDate?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type VehicleCreateOrConnectWithoutLogsInput = {
+export type VehicleCreateOrConnectWithoutVehicleLogInput = {
   where: Prisma.VehicleWhereUniqueInput
-  create: Prisma.XOR<Prisma.VehicleCreateWithoutLogsInput, Prisma.VehicleUncheckedCreateWithoutLogsInput>
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutVehicleLogInput, Prisma.VehicleUncheckedCreateWithoutVehicleLogInput>
 }
 
-export type VehicleUpsertWithoutLogsInput = {
-  update: Prisma.XOR<Prisma.VehicleUpdateWithoutLogsInput, Prisma.VehicleUncheckedUpdateWithoutLogsInput>
-  create: Prisma.XOR<Prisma.VehicleCreateWithoutLogsInput, Prisma.VehicleUncheckedCreateWithoutLogsInput>
+export type VehicleUpsertWithoutVehicleLogInput = {
+  update: Prisma.XOR<Prisma.VehicleUpdateWithoutVehicleLogInput, Prisma.VehicleUncheckedUpdateWithoutVehicleLogInput>
+  create: Prisma.XOR<Prisma.VehicleCreateWithoutVehicleLogInput, Prisma.VehicleUncheckedCreateWithoutVehicleLogInput>
   where?: Prisma.VehicleWhereInput
 }
 
-export type VehicleUpdateToOneWithWhereWithoutLogsInput = {
+export type VehicleUpdateToOneWithWhereWithoutVehicleLogInput = {
   where?: Prisma.VehicleWhereInput
-  data: Prisma.XOR<Prisma.VehicleUpdateWithoutLogsInput, Prisma.VehicleUncheckedUpdateWithoutLogsInput>
+  data: Prisma.XOR<Prisma.VehicleUpdateWithoutVehicleLogInput, Prisma.VehicleUncheckedUpdateWithoutVehicleLogInput>
 }
 
-export type VehicleUpdateWithoutLogsInput = {
+export type VehicleUpdateWithoutVehicleLogInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.StringFieldUpdateOperationsInput | string
   make?: Prisma.StringFieldUpdateOperationsInput | string
@@ -748,10 +748,10 @@ export type VehicleUpdateWithoutLogsInput = {
   nextServiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutVehiclesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutVehicleNestedInput
 }
 
-export type VehicleUncheckedUpdateWithoutLogsInput = {
+export type VehicleUncheckedUpdateWithoutVehicleLogInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   plateNumber?: Prisma.StringFieldUpdateOperationsInput | string
@@ -768,7 +768,7 @@ export type VehicleUncheckedUpdateWithoutLogsInput = {
 }
 
 export type VehicleCreateManyTenantInput = {
-  id?: string
+  id: string
   plateNumber: string
   make: string
   model: string
@@ -779,7 +779,7 @@ export type VehicleCreateManyTenantInput = {
   currentMileage?: number | null
   nextServiceDate?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type VehicleUpdateWithoutTenantInput = {
@@ -795,7 +795,7 @@ export type VehicleUpdateWithoutTenantInput = {
   nextServiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  logs?: Prisma.VehicleLogUpdateManyWithoutVehicleNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateWithoutTenantInput = {
@@ -811,7 +811,7 @@ export type VehicleUncheckedUpdateWithoutTenantInput = {
   nextServiceDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  logs?: Prisma.VehicleLogUncheckedUpdateManyWithoutVehicleNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutVehicleNestedInput
 }
 
 export type VehicleUncheckedUpdateManyWithoutTenantInput = {
@@ -835,11 +835,11 @@ export type VehicleUncheckedUpdateManyWithoutTenantInput = {
  */
 
 export type VehicleCountOutputType = {
-  logs: number
+  VehicleLog: number
 }
 
 export type VehicleCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  logs?: boolean | VehicleCountOutputTypeCountLogsArgs
+  VehicleLog?: boolean | VehicleCountOutputTypeCountVehicleLogArgs
 }
 
 /**
@@ -855,7 +855,7 @@ export type VehicleCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
 /**
  * VehicleCountOutputType without action
  */
-export type VehicleCountOutputTypeCountLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type VehicleCountOutputTypeCountVehicleLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.VehicleLogWhereInput
 }
 
@@ -875,7 +875,7 @@ export type VehicleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   createdAt?: boolean
   updatedAt?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  logs?: boolean | Prisma.Vehicle$logsArgs<ExtArgs>
+  VehicleLog?: boolean | Prisma.Vehicle$VehicleLogArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["vehicle"]>
 
@@ -932,7 +932,7 @@ export type VehicleSelectScalar = {
 export type VehicleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "plateNumber" | "make" | "model" | "year" | "vin" | "fuelType" | "status" | "currentMileage" | "nextServiceDate" | "createdAt" | "updatedAt", ExtArgs["result"]["vehicle"]>
 export type VehicleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  logs?: boolean | Prisma.Vehicle$logsArgs<ExtArgs>
+  VehicleLog?: boolean | Prisma.Vehicle$VehicleLogArgs<ExtArgs>
   _count?: boolean | Prisma.VehicleCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type VehicleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -946,7 +946,7 @@ export type $VehiclePayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   name: "Vehicle"
   objects: {
     tenant: Prisma.$TenantPayload<ExtArgs>
-    logs: Prisma.$VehicleLogPayload<ExtArgs>[]
+    VehicleLog: Prisma.$VehicleLogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1357,7 +1357,7 @@ readonly fields: VehicleFieldRefs;
 export interface Prisma__VehicleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  logs<T extends Prisma.Vehicle$logsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$logsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehicleLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  VehicleLog<T extends Prisma.Vehicle$VehicleLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Vehicle$VehicleLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehicleLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1799,9 +1799,9 @@ export type VehicleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * Vehicle.logs
+ * Vehicle.VehicleLog
  */
-export type Vehicle$logsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Vehicle$VehicleLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the VehicleLog
    */

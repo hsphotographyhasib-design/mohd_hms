@@ -334,7 +334,7 @@ export type CmsContactMessageScalarWhereWithAggregatesInput = {
 }
 
 export type CmsContactMessageCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   email: string
@@ -347,11 +347,11 @@ export type CmsContactMessageCreateInput = {
   reply?: string | null
   replyAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsContactMessageUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   email: string
@@ -364,7 +364,7 @@ export type CmsContactMessageUncheckedCreateInput = {
   reply?: string | null
   replyAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsContactMessageUpdateInput = {
@@ -402,7 +402,7 @@ export type CmsContactMessageUncheckedUpdateInput = {
 }
 
 export type CmsContactMessageCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   email: string
@@ -415,7 +415,7 @@ export type CmsContactMessageCreateManyInput = {
   reply?: string | null
   replyAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsContactMessageUpdateManyMutationInput = {

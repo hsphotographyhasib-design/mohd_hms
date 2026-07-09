@@ -254,8 +254,8 @@ export type CustomerReportWhereInput = {
   resolutionNotes?: Prisma.StringNullableFilter<"CustomerReport"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CustomerReport"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CustomerReport"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type CustomerReportOrderByWithRelationInput = {
@@ -273,8 +273,8 @@ export type CustomerReportOrderByWithRelationInput = {
   resolutionNotes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
   customer?: Prisma.CustomerOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type CustomerReportWhereUniqueInput = Prisma.AtLeast<{
@@ -295,8 +295,8 @@ export type CustomerReportWhereUniqueInput = Prisma.AtLeast<{
   resolutionNotes?: Prisma.StringNullableFilter<"CustomerReport"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CustomerReport"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CustomerReport"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id">
 
 export type CustomerReportOrderByWithAggregationInput = {
@@ -340,7 +340,7 @@ export type CustomerReportScalarWhereWithAggregatesInput = {
 }
 
 export type CustomerReportCreateInput = {
-  id?: string
+  id: string
   sessionId?: string | null
   type?: string
   subject: string
@@ -351,13 +351,13 @@ export type CustomerReportCreateInput = {
   resolvedAt?: Date | string | null
   resolutionNotes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomerReportsInput
-  customer: Prisma.CustomerCreateNestedOneWithoutCustomerReportsInput
+  updatedAt: Date | string
+  customer: Prisma.CustomerCreateNestedOneWithoutCustomerReportInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerReportInput
 }
 
 export type CustomerReportUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   customerId: string
   sessionId?: string | null
@@ -370,7 +370,7 @@ export type CustomerReportUncheckedCreateInput = {
   resolvedAt?: Date | string | null
   resolutionNotes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CustomerReportUpdateInput = {
@@ -386,8 +386,8 @@ export type CustomerReportUpdateInput = {
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerReportsNestedInput
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutCustomerReportsNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutCustomerReportNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerReportNestedInput
 }
 
 export type CustomerReportUncheckedUpdateInput = {
@@ -408,7 +408,7 @@ export type CustomerReportUncheckedUpdateInput = {
 }
 
 export type CustomerReportCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   customerId: string
   sessionId?: string | null
@@ -421,7 +421,7 @@ export type CustomerReportCreateManyInput = {
   resolvedAt?: Date | string | null
   resolutionNotes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CustomerReportUpdateManyMutationInput = {
@@ -517,48 +517,6 @@ export type CustomerReportMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type CustomerReportCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput> | Prisma.CustomerReportCreateWithoutTenantInput[] | Prisma.CustomerReportUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutTenantInput | Prisma.CustomerReportCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.CustomerReportCreateManyTenantInputEnvelope
-  connect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-}
-
-export type CustomerReportUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput> | Prisma.CustomerReportCreateWithoutTenantInput[] | Prisma.CustomerReportUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutTenantInput | Prisma.CustomerReportCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.CustomerReportCreateManyTenantInputEnvelope
-  connect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-}
-
-export type CustomerReportUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput> | Prisma.CustomerReportCreateWithoutTenantInput[] | Prisma.CustomerReportUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutTenantInput | Prisma.CustomerReportCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.CustomerReportUpsertWithWhereUniqueWithoutTenantInput | Prisma.CustomerReportUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.CustomerReportCreateManyTenantInputEnvelope
-  set?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-  disconnect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-  delete?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-  connect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-  update?: Prisma.CustomerReportUpdateWithWhereUniqueWithoutTenantInput | Prisma.CustomerReportUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.CustomerReportUpdateManyWithWhereWithoutTenantInput | Prisma.CustomerReportUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
-}
-
-export type CustomerReportUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput> | Prisma.CustomerReportCreateWithoutTenantInput[] | Prisma.CustomerReportUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutTenantInput | Prisma.CustomerReportCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.CustomerReportUpsertWithWhereUniqueWithoutTenantInput | Prisma.CustomerReportUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.CustomerReportCreateManyTenantInputEnvelope
-  set?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-  disconnect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-  delete?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-  connect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
-  update?: Prisma.CustomerReportUpdateWithWhereUniqueWithoutTenantInput | Prisma.CustomerReportUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.CustomerReportUpdateManyWithWhereWithoutTenantInput | Prisma.CustomerReportUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
-}
-
 export type CustomerReportCreateNestedManyWithoutCustomerInput = {
   create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutCustomerInput, Prisma.CustomerReportUncheckedCreateWithoutCustomerInput> | Prisma.CustomerReportCreateWithoutCustomerInput[] | Prisma.CustomerReportUncheckedCreateWithoutCustomerInput[]
   connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutCustomerInput | Prisma.CustomerReportCreateOrConnectWithoutCustomerInput[]
@@ -601,85 +559,50 @@ export type CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput = {
   deleteMany?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
 }
 
-export type CustomerReportCreateWithoutTenantInput = {
-  id?: string
-  sessionId?: string | null
-  type?: string
-  subject: string
-  description: string
-  priority?: string
-  status?: string
-  resolvedById?: string | null
-  resolvedAt?: Date | string | null
-  resolutionNotes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  customer: Prisma.CustomerCreateNestedOneWithoutCustomerReportsInput
+export type CustomerReportCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput> | Prisma.CustomerReportCreateWithoutTenantInput[] | Prisma.CustomerReportUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutTenantInput | Prisma.CustomerReportCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.CustomerReportCreateManyTenantInputEnvelope
+  connect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
 }
 
-export type CustomerReportUncheckedCreateWithoutTenantInput = {
-  id?: string
-  customerId: string
-  sessionId?: string | null
-  type?: string
-  subject: string
-  description: string
-  priority?: string
-  status?: string
-  resolvedById?: string | null
-  resolvedAt?: Date | string | null
-  resolutionNotes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
+export type CustomerReportUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput> | Prisma.CustomerReportCreateWithoutTenantInput[] | Prisma.CustomerReportUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutTenantInput | Prisma.CustomerReportCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.CustomerReportCreateManyTenantInputEnvelope
+  connect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
 }
 
-export type CustomerReportCreateOrConnectWithoutTenantInput = {
-  where: Prisma.CustomerReportWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput>
+export type CustomerReportUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput> | Prisma.CustomerReportCreateWithoutTenantInput[] | Prisma.CustomerReportUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutTenantInput | Prisma.CustomerReportCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.CustomerReportUpsertWithWhereUniqueWithoutTenantInput | Prisma.CustomerReportUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.CustomerReportCreateManyTenantInputEnvelope
+  set?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
+  disconnect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
+  delete?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
+  connect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
+  update?: Prisma.CustomerReportUpdateWithWhereUniqueWithoutTenantInput | Prisma.CustomerReportUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.CustomerReportUpdateManyWithWhereWithoutTenantInput | Prisma.CustomerReportUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
 }
 
-export type CustomerReportCreateManyTenantInputEnvelope = {
-  data: Prisma.CustomerReportCreateManyTenantInput | Prisma.CustomerReportCreateManyTenantInput[]
-}
-
-export type CustomerReportUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.CustomerReportWhereUniqueInput
-  update: Prisma.XOR<Prisma.CustomerReportUpdateWithoutTenantInput, Prisma.CustomerReportUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput>
-}
-
-export type CustomerReportUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.CustomerReportWhereUniqueInput
-  data: Prisma.XOR<Prisma.CustomerReportUpdateWithoutTenantInput, Prisma.CustomerReportUncheckedUpdateWithoutTenantInput>
-}
-
-export type CustomerReportUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.CustomerReportScalarWhereInput
-  data: Prisma.XOR<Prisma.CustomerReportUpdateManyMutationInput, Prisma.CustomerReportUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type CustomerReportScalarWhereInput = {
-  AND?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
-  OR?: Prisma.CustomerReportScalarWhereInput[]
-  NOT?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
-  id?: Prisma.StringFilter<"CustomerReport"> | string
-  tenantId?: Prisma.StringFilter<"CustomerReport"> | string
-  customerId?: Prisma.StringFilter<"CustomerReport"> | string
-  sessionId?: Prisma.StringNullableFilter<"CustomerReport"> | string | null
-  type?: Prisma.StringFilter<"CustomerReport"> | string
-  subject?: Prisma.StringFilter<"CustomerReport"> | string
-  description?: Prisma.StringFilter<"CustomerReport"> | string
-  priority?: Prisma.StringFilter<"CustomerReport"> | string
-  status?: Prisma.StringFilter<"CustomerReport"> | string
-  resolvedById?: Prisma.StringNullableFilter<"CustomerReport"> | string | null
-  resolvedAt?: Prisma.DateTimeNullableFilter<"CustomerReport"> | Date | string | null
-  resolutionNotes?: Prisma.StringNullableFilter<"CustomerReport"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"CustomerReport"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"CustomerReport"> | Date | string
+export type CustomerReportUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput> | Prisma.CustomerReportCreateWithoutTenantInput[] | Prisma.CustomerReportUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.CustomerReportCreateOrConnectWithoutTenantInput | Prisma.CustomerReportCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.CustomerReportUpsertWithWhereUniqueWithoutTenantInput | Prisma.CustomerReportUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.CustomerReportCreateManyTenantInputEnvelope
+  set?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
+  disconnect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
+  delete?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
+  connect?: Prisma.CustomerReportWhereUniqueInput | Prisma.CustomerReportWhereUniqueInput[]
+  update?: Prisma.CustomerReportUpdateWithWhereUniqueWithoutTenantInput | Prisma.CustomerReportUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.CustomerReportUpdateManyWithWhereWithoutTenantInput | Prisma.CustomerReportUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
 }
 
 export type CustomerReportCreateWithoutCustomerInput = {
-  id?: string
+  id: string
   sessionId?: string | null
   type?: string
   subject: string
@@ -690,12 +613,12 @@ export type CustomerReportCreateWithoutCustomerInput = {
   resolvedAt?: Date | string | null
   resolutionNotes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomerReportsInput
+  updatedAt: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerReportInput
 }
 
 export type CustomerReportUncheckedCreateWithoutCustomerInput = {
-  id?: string
+  id: string
   tenantId: string
   sessionId?: string | null
   type?: string
@@ -707,7 +630,7 @@ export type CustomerReportUncheckedCreateWithoutCustomerInput = {
   resolvedAt?: Date | string | null
   resolutionNotes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CustomerReportCreateOrConnectWithoutCustomerInput = {
@@ -735,8 +658,44 @@ export type CustomerReportUpdateManyWithWhereWithoutCustomerInput = {
   data: Prisma.XOR<Prisma.CustomerReportUpdateManyMutationInput, Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerInput>
 }
 
-export type CustomerReportCreateManyTenantInput = {
-  id?: string
+export type CustomerReportScalarWhereInput = {
+  AND?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
+  OR?: Prisma.CustomerReportScalarWhereInput[]
+  NOT?: Prisma.CustomerReportScalarWhereInput | Prisma.CustomerReportScalarWhereInput[]
+  id?: Prisma.StringFilter<"CustomerReport"> | string
+  tenantId?: Prisma.StringFilter<"CustomerReport"> | string
+  customerId?: Prisma.StringFilter<"CustomerReport"> | string
+  sessionId?: Prisma.StringNullableFilter<"CustomerReport"> | string | null
+  type?: Prisma.StringFilter<"CustomerReport"> | string
+  subject?: Prisma.StringFilter<"CustomerReport"> | string
+  description?: Prisma.StringFilter<"CustomerReport"> | string
+  priority?: Prisma.StringFilter<"CustomerReport"> | string
+  status?: Prisma.StringFilter<"CustomerReport"> | string
+  resolvedById?: Prisma.StringNullableFilter<"CustomerReport"> | string | null
+  resolvedAt?: Prisma.DateTimeNullableFilter<"CustomerReport"> | Date | string | null
+  resolutionNotes?: Prisma.StringNullableFilter<"CustomerReport"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"CustomerReport"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"CustomerReport"> | Date | string
+}
+
+export type CustomerReportCreateWithoutTenantInput = {
+  id: string
+  sessionId?: string | null
+  type?: string
+  subject: string
+  description: string
+  priority?: string
+  status?: string
+  resolvedById?: string | null
+  resolvedAt?: Date | string | null
+  resolutionNotes?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  customer: Prisma.CustomerCreateNestedOneWithoutCustomerReportInput
+}
+
+export type CustomerReportUncheckedCreateWithoutTenantInput = {
+  id: string
   customerId: string
   sessionId?: string | null
   type?: string
@@ -748,59 +707,36 @@ export type CustomerReportCreateManyTenantInput = {
   resolvedAt?: Date | string | null
   resolutionNotes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type CustomerReportUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  priority?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  resolvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutCustomerReportsNestedInput
+export type CustomerReportCreateOrConnectWithoutTenantInput = {
+  where: Prisma.CustomerReportWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput>
 }
 
-export type CustomerReportUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  priority?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  resolvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type CustomerReportCreateManyTenantInputEnvelope = {
+  data: Prisma.CustomerReportCreateManyTenantInput | Prisma.CustomerReportCreateManyTenantInput[]
 }
 
-export type CustomerReportUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  type?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  priority?: Prisma.StringFieldUpdateOperationsInput | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  resolvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type CustomerReportUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.CustomerReportWhereUniqueInput
+  update: Prisma.XOR<Prisma.CustomerReportUpdateWithoutTenantInput, Prisma.CustomerReportUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.CustomerReportCreateWithoutTenantInput, Prisma.CustomerReportUncheckedCreateWithoutTenantInput>
+}
+
+export type CustomerReportUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.CustomerReportWhereUniqueInput
+  data: Prisma.XOR<Prisma.CustomerReportUpdateWithoutTenantInput, Prisma.CustomerReportUncheckedUpdateWithoutTenantInput>
+}
+
+export type CustomerReportUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.CustomerReportScalarWhereInput
+  data: Prisma.XOR<Prisma.CustomerReportUpdateManyMutationInput, Prisma.CustomerReportUncheckedUpdateManyWithoutTenantInput>
 }
 
 export type CustomerReportCreateManyCustomerInput = {
-  id?: string
+  id: string
   tenantId: string
   sessionId?: string | null
   type?: string
@@ -812,7 +748,7 @@ export type CustomerReportCreateManyCustomerInput = {
   resolvedAt?: Date | string | null
   resolutionNotes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CustomerReportUpdateWithoutCustomerInput = {
@@ -828,7 +764,7 @@ export type CustomerReportUpdateWithoutCustomerInput = {
   resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerReportsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerReportNestedInput
 }
 
 export type CustomerReportUncheckedUpdateWithoutCustomerInput = {
@@ -863,6 +799,70 @@ export type CustomerReportUncheckedUpdateManyWithoutCustomerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type CustomerReportCreateManyTenantInput = {
+  id: string
+  customerId: string
+  sessionId?: string | null
+  type?: string
+  subject: string
+  description: string
+  priority?: string
+  status?: string
+  resolvedById?: string | null
+  resolvedAt?: Date | string | null
+  resolutionNotes?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+}
+
+export type CustomerReportUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  resolvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutCustomerReportNestedInput
+}
+
+export type CustomerReportUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  resolvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CustomerReportUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  type?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  priority?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  resolvedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  resolvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  resolutionNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type CustomerReportSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -880,8 +880,8 @@ export type CustomerReportSelect<ExtArgs extends runtime.Types.Extensions.Intern
   resolutionNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customerReport"]>
 
 export type CustomerReportSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -899,8 +899,8 @@ export type CustomerReportSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   resolutionNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customerReport"]>
 
 export type CustomerReportSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -918,8 +918,8 @@ export type CustomerReportSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   resolutionNotes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customerReport"]>
 
 export type CustomerReportSelectScalar = {
@@ -941,23 +941,23 @@ export type CustomerReportSelectScalar = {
 
 export type CustomerReportOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "sessionId" | "type" | "subject" | "description" | "priority" | "status" | "resolvedById" | "resolvedAt" | "resolutionNotes" | "createdAt" | "updatedAt", ExtArgs["result"]["customerReport"]>
 export type CustomerReportInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type CustomerReportIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type CustomerReportIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $CustomerReportPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CustomerReport"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
     customer: Prisma.$CustomerPayload<ExtArgs>
+    tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1368,8 +1368,8 @@ readonly fields: CustomerReportFieldRefs;
  */
 export interface Prisma__CustomerReportClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   customer<T extends Prisma.CustomerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CustomerDefaultArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

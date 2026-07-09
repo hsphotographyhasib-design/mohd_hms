@@ -430,7 +430,7 @@ export type CmsHeroScalarWhereWithAggregatesInput = {
 }
 
 export type CmsHeroCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   headline?: string | null
   subheadline?: string | null
@@ -451,11 +451,11 @@ export type CmsHeroCreateInput = {
   isActive?: boolean
   publishedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsHeroUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   headline?: string | null
   subheadline?: string | null
@@ -476,7 +476,7 @@ export type CmsHeroUncheckedCreateInput = {
   isActive?: boolean
   publishedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsHeroUpdateInput = {
@@ -530,7 +530,7 @@ export type CmsHeroUncheckedUpdateInput = {
 }
 
 export type CmsHeroCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   headline?: string | null
   subheadline?: string | null
@@ -551,7 +551,7 @@ export type CmsHeroCreateManyInput = {
   isActive?: boolean
   publishedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsHeroUpdateManyMutationInput = {

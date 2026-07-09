@@ -352,16 +352,16 @@ export type CustomerWhereInput = {
   lastWhatsappActivity?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
+  Complaint?: Prisma.ComplaintListRelationFilter
+  ConversationThread?: Prisma.ConversationThreadListRelationFilter
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  equipment?: Prisma.EquipmentListRelationFilter
-  complaints?: Prisma.ComplaintListRelationFilter
-  invoices?: Prisma.InvoiceListRelationFilter
-  quotations?: Prisma.QuotationListRelationFilter
-  conversationThreads?: Prisma.ConversationThreadListRelationFilter
-  whatsappSessions?: Prisma.WhatsAppSessionListRelationFilter
-  customerFeedbacks?: Prisma.CustomerFeedbackListRelationFilter
-  customerReports?: Prisma.CustomerReportListRelationFilter
-  workOrders?: Prisma.WorkOrderListRelationFilter
+  CustomerFeedback?: Prisma.CustomerFeedbackListRelationFilter
+  CustomerReport?: Prisma.CustomerReportListRelationFilter
+  Equipment?: Prisma.EquipmentListRelationFilter
+  Invoice?: Prisma.InvoiceListRelationFilter
+  Quotation?: Prisma.QuotationListRelationFilter
+  WhatsAppSession?: Prisma.WhatsAppSessionListRelationFilter
+  WorkOrder?: Prisma.WorkOrderListRelationFilter
 }
 
 export type CustomerOrderByWithRelationInput = {
@@ -387,16 +387,16 @@ export type CustomerOrderByWithRelationInput = {
   lastWhatsappActivity?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  Complaint?: Prisma.ComplaintOrderByRelationAggregateInput
+  ConversationThread?: Prisma.ConversationThreadOrderByRelationAggregateInput
   tenant?: Prisma.TenantOrderByWithRelationInput
-  equipment?: Prisma.EquipmentOrderByRelationAggregateInput
-  complaints?: Prisma.ComplaintOrderByRelationAggregateInput
-  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
-  quotations?: Prisma.QuotationOrderByRelationAggregateInput
-  conversationThreads?: Prisma.ConversationThreadOrderByRelationAggregateInput
-  whatsappSessions?: Prisma.WhatsAppSessionOrderByRelationAggregateInput
-  customerFeedbacks?: Prisma.CustomerFeedbackOrderByRelationAggregateInput
-  customerReports?: Prisma.CustomerReportOrderByRelationAggregateInput
-  workOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
+  CustomerFeedback?: Prisma.CustomerFeedbackOrderByRelationAggregateInput
+  CustomerReport?: Prisma.CustomerReportOrderByRelationAggregateInput
+  Equipment?: Prisma.EquipmentOrderByRelationAggregateInput
+  Invoice?: Prisma.InvoiceOrderByRelationAggregateInput
+  Quotation?: Prisma.QuotationOrderByRelationAggregateInput
+  WhatsAppSession?: Prisma.WhatsAppSessionOrderByRelationAggregateInput
+  WorkOrder?: Prisma.WorkOrderOrderByRelationAggregateInput
 }
 
 export type CustomerWhereUniqueInput = Prisma.AtLeast<{
@@ -425,16 +425,16 @@ export type CustomerWhereUniqueInput = Prisma.AtLeast<{
   lastWhatsappActivity?: Prisma.DateTimeNullableFilter<"Customer"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
+  Complaint?: Prisma.ComplaintListRelationFilter
+  ConversationThread?: Prisma.ConversationThreadListRelationFilter
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  equipment?: Prisma.EquipmentListRelationFilter
-  complaints?: Prisma.ComplaintListRelationFilter
-  invoices?: Prisma.InvoiceListRelationFilter
-  quotations?: Prisma.QuotationListRelationFilter
-  conversationThreads?: Prisma.ConversationThreadListRelationFilter
-  whatsappSessions?: Prisma.WhatsAppSessionListRelationFilter
-  customerFeedbacks?: Prisma.CustomerFeedbackListRelationFilter
-  customerReports?: Prisma.CustomerReportListRelationFilter
-  workOrders?: Prisma.WorkOrderListRelationFilter
+  CustomerFeedback?: Prisma.CustomerFeedbackListRelationFilter
+  CustomerReport?: Prisma.CustomerReportListRelationFilter
+  Equipment?: Prisma.EquipmentListRelationFilter
+  Invoice?: Prisma.InvoiceListRelationFilter
+  Quotation?: Prisma.QuotationListRelationFilter
+  WhatsAppSession?: Prisma.WhatsAppSessionListRelationFilter
+  WorkOrder?: Prisma.WorkOrderListRelationFilter
 }, "id" | "customerNumber">
 
 export type CustomerOrderByWithAggregationInput = {
@@ -496,7 +496,7 @@ export type CustomerScalarWhereWithAggregatesInput = {
 }
 
 export type CustomerCreateInput = {
-  id?: string
+  id: string
   name: string
   email?: string | null
   phone: string
@@ -516,21 +516,21 @@ export type CustomerCreateInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   email?: string | null
@@ -551,16 +551,16 @@ export type CustomerUncheckedCreateInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerUpdateInput = {
@@ -585,16 +585,16 @@ export type CustomerUpdateInput = {
   lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateInput = {
@@ -620,19 +620,19 @@ export type CustomerUncheckedUpdateInput = {
   lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   email?: string | null
@@ -653,7 +653,7 @@ export type CustomerCreateManyInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CustomerUpdateManyMutationInput = {
@@ -705,14 +705,14 @@ export type CustomerUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type CustomerListRelationFilter = {
-  every?: Prisma.CustomerWhereInput
-  some?: Prisma.CustomerWhereInput
-  none?: Prisma.CustomerWhereInput
+export type CustomerScalarRelationFilter = {
+  is?: Prisma.CustomerWhereInput
+  isNot?: Prisma.CustomerWhereInput
 }
 
-export type CustomerOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
+export type CustomerNullableScalarRelationFilter = {
+  is?: Prisma.CustomerWhereInput | null
+  isNot?: Prisma.CustomerWhereInput | null
 }
 
 export type CustomerCountOrderByAggregateInput = {
@@ -798,14 +798,124 @@ export type CustomerSumOrderByAggregateInput = {
   taxRate?: Prisma.SortOrder
 }
 
-export type CustomerNullableScalarRelationFilter = {
-  is?: Prisma.CustomerWhereInput | null
-  isNot?: Prisma.CustomerWhereInput | null
+export type CustomerListRelationFilter = {
+  every?: Prisma.CustomerWhereInput
+  some?: Prisma.CustomerWhereInput
+  none?: Prisma.CustomerWhereInput
 }
 
-export type CustomerScalarRelationFilter = {
-  is?: Prisma.CustomerWhereInput
-  isNot?: Prisma.CustomerWhereInput
+export type CustomerOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type CustomerCreateNestedOneWithoutComplaintInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutComplaintInput, Prisma.CustomerUncheckedCreateWithoutComplaintInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutComplaintInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneRequiredWithoutComplaintNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutComplaintInput, Prisma.CustomerUncheckedCreateWithoutComplaintInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutComplaintInput
+  upsert?: Prisma.CustomerUpsertWithoutComplaintInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutComplaintInput, Prisma.CustomerUpdateWithoutComplaintInput>, Prisma.CustomerUncheckedUpdateWithoutComplaintInput>
+}
+
+export type CustomerCreateNestedOneWithoutConversationThreadInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutConversationThreadInput, Prisma.CustomerUncheckedCreateWithoutConversationThreadInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutConversationThreadInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneWithoutConversationThreadNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutConversationThreadInput, Prisma.CustomerUncheckedCreateWithoutConversationThreadInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutConversationThreadInput
+  upsert?: Prisma.CustomerUpsertWithoutConversationThreadInput
+  disconnect?: Prisma.CustomerWhereInput | boolean
+  delete?: Prisma.CustomerWhereInput | boolean
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutConversationThreadInput, Prisma.CustomerUpdateWithoutConversationThreadInput>, Prisma.CustomerUncheckedUpdateWithoutConversationThreadInput>
+}
+
+export type FloatFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
+export type CustomerCreateNestedOneWithoutCustomerFeedbackInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerFeedbackInput, Prisma.CustomerUncheckedCreateWithoutCustomerFeedbackInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCustomerFeedbackInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneRequiredWithoutCustomerFeedbackNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerFeedbackInput, Prisma.CustomerUncheckedCreateWithoutCustomerFeedbackInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCustomerFeedbackInput
+  upsert?: Prisma.CustomerUpsertWithoutCustomerFeedbackInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutCustomerFeedbackInput, Prisma.CustomerUpdateWithoutCustomerFeedbackInput>, Prisma.CustomerUncheckedUpdateWithoutCustomerFeedbackInput>
+}
+
+export type CustomerCreateNestedOneWithoutCustomerReportInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerReportInput, Prisma.CustomerUncheckedCreateWithoutCustomerReportInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCustomerReportInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneRequiredWithoutCustomerReportNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerReportInput, Prisma.CustomerUncheckedCreateWithoutCustomerReportInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCustomerReportInput
+  upsert?: Prisma.CustomerUpsertWithoutCustomerReportInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutCustomerReportInput, Prisma.CustomerUpdateWithoutCustomerReportInput>, Prisma.CustomerUncheckedUpdateWithoutCustomerReportInput>
+}
+
+export type CustomerCreateNestedOneWithoutEquipmentInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutEquipmentInput, Prisma.CustomerUncheckedCreateWithoutEquipmentInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutEquipmentInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneWithoutEquipmentNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutEquipmentInput, Prisma.CustomerUncheckedCreateWithoutEquipmentInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutEquipmentInput
+  upsert?: Prisma.CustomerUpsertWithoutEquipmentInput
+  disconnect?: Prisma.CustomerWhereInput | boolean
+  delete?: Prisma.CustomerWhereInput | boolean
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutEquipmentInput, Prisma.CustomerUpdateWithoutEquipmentInput>, Prisma.CustomerUncheckedUpdateWithoutEquipmentInput>
+}
+
+export type CustomerCreateNestedOneWithoutInvoiceInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutInvoiceInput, Prisma.CustomerUncheckedCreateWithoutInvoiceInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutInvoiceInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneRequiredWithoutInvoiceNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutInvoiceInput, Prisma.CustomerUncheckedCreateWithoutInvoiceInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutInvoiceInput
+  upsert?: Prisma.CustomerUpsertWithoutInvoiceInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutInvoiceInput, Prisma.CustomerUpdateWithoutInvoiceInput>, Prisma.CustomerUncheckedUpdateWithoutInvoiceInput>
+}
+
+export type CustomerCreateNestedOneWithoutQuotationInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutQuotationInput, Prisma.CustomerUncheckedCreateWithoutQuotationInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutQuotationInput
+  connect?: Prisma.CustomerWhereUniqueInput
+}
+
+export type CustomerUpdateOneRequiredWithoutQuotationNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutQuotationInput, Prisma.CustomerUncheckedCreateWithoutQuotationInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutQuotationInput
+  upsert?: Prisma.CustomerUpsertWithoutQuotationInput
+  connect?: Prisma.CustomerWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutQuotationInput, Prisma.CustomerUpdateWithoutQuotationInput>, Prisma.CustomerUncheckedUpdateWithoutQuotationInput>
 }
 
 export type CustomerCreateNestedManyWithoutTenantInput = {
@@ -850,150 +960,1076 @@ export type CustomerUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.CustomerScalarWhereInput | Prisma.CustomerScalarWhereInput[]
 }
 
-export type FloatFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
-export type CustomerCreateNestedOneWithoutEquipmentInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutEquipmentInput, Prisma.CustomerUncheckedCreateWithoutEquipmentInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutEquipmentInput
+export type CustomerCreateNestedOneWithoutWhatsAppSessionInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutWhatsAppSessionInput, Prisma.CustomerUncheckedCreateWithoutWhatsAppSessionInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWhatsAppSessionInput
   connect?: Prisma.CustomerWhereUniqueInput
 }
 
-export type CustomerUpdateOneWithoutEquipmentNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutEquipmentInput, Prisma.CustomerUncheckedCreateWithoutEquipmentInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutEquipmentInput
-  upsert?: Prisma.CustomerUpsertWithoutEquipmentInput
+export type CustomerUpdateOneWithoutWhatsAppSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutWhatsAppSessionInput, Prisma.CustomerUncheckedCreateWithoutWhatsAppSessionInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWhatsAppSessionInput
+  upsert?: Prisma.CustomerUpsertWithoutWhatsAppSessionInput
   disconnect?: Prisma.CustomerWhereInput | boolean
   delete?: Prisma.CustomerWhereInput | boolean
   connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutEquipmentInput, Prisma.CustomerUpdateWithoutEquipmentInput>, Prisma.CustomerUncheckedUpdateWithoutEquipmentInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutWhatsAppSessionInput, Prisma.CustomerUpdateWithoutWhatsAppSessionInput>, Prisma.CustomerUncheckedUpdateWithoutWhatsAppSessionInput>
 }
 
-export type CustomerCreateNestedOneWithoutComplaintsInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutComplaintsInput, Prisma.CustomerUncheckedCreateWithoutComplaintsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutComplaintsInput
+export type CustomerCreateNestedOneWithoutWorkOrderInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutWorkOrderInput, Prisma.CustomerUncheckedCreateWithoutWorkOrderInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWorkOrderInput
   connect?: Prisma.CustomerWhereUniqueInput
 }
 
-export type CustomerUpdateOneRequiredWithoutComplaintsNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutComplaintsInput, Prisma.CustomerUncheckedCreateWithoutComplaintsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutComplaintsInput
-  upsert?: Prisma.CustomerUpsertWithoutComplaintsInput
-  connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutComplaintsInput, Prisma.CustomerUpdateWithoutComplaintsInput>, Prisma.CustomerUncheckedUpdateWithoutComplaintsInput>
-}
-
-export type CustomerCreateNestedOneWithoutWorkOrdersInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutWorkOrdersInput, Prisma.CustomerUncheckedCreateWithoutWorkOrdersInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWorkOrdersInput
-  connect?: Prisma.CustomerWhereUniqueInput
-}
-
-export type CustomerUpdateOneWithoutWorkOrdersNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutWorkOrdersInput, Prisma.CustomerUncheckedCreateWithoutWorkOrdersInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWorkOrdersInput
-  upsert?: Prisma.CustomerUpsertWithoutWorkOrdersInput
+export type CustomerUpdateOneWithoutWorkOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.CustomerCreateWithoutWorkOrderInput, Prisma.CustomerUncheckedCreateWithoutWorkOrderInput>
+  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWorkOrderInput
+  upsert?: Prisma.CustomerUpsertWithoutWorkOrderInput
   disconnect?: Prisma.CustomerWhereInput | boolean
   delete?: Prisma.CustomerWhereInput | boolean
   connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutWorkOrdersInput, Prisma.CustomerUpdateWithoutWorkOrdersInput>, Prisma.CustomerUncheckedUpdateWithoutWorkOrdersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutWorkOrderInput, Prisma.CustomerUpdateWithoutWorkOrderInput>, Prisma.CustomerUncheckedUpdateWithoutWorkOrderInput>
 }
 
-export type CustomerCreateNestedOneWithoutQuotationsInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutQuotationsInput, Prisma.CustomerUncheckedCreateWithoutQuotationsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutQuotationsInput
-  connect?: Prisma.CustomerWhereUniqueInput
+export type CustomerCreateWithoutComplaintInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
 }
 
-export type CustomerUpdateOneRequiredWithoutQuotationsNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutQuotationsInput, Prisma.CustomerUncheckedCreateWithoutQuotationsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutQuotationsInput
-  upsert?: Prisma.CustomerUpsertWithoutQuotationsInput
-  connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutQuotationsInput, Prisma.CustomerUpdateWithoutQuotationsInput>, Prisma.CustomerUncheckedUpdateWithoutQuotationsInput>
+export type CustomerUncheckedCreateWithoutComplaintInput = {
+  id: string
+  tenantId: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
 }
 
-export type CustomerCreateNestedOneWithoutInvoicesInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutInvoicesInput, Prisma.CustomerUncheckedCreateWithoutInvoicesInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutInvoicesInput
-  connect?: Prisma.CustomerWhereUniqueInput
+export type CustomerCreateOrConnectWithoutComplaintInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutComplaintInput, Prisma.CustomerUncheckedCreateWithoutComplaintInput>
 }
 
-export type CustomerUpdateOneRequiredWithoutInvoicesNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutInvoicesInput, Prisma.CustomerUncheckedCreateWithoutInvoicesInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutInvoicesInput
-  upsert?: Prisma.CustomerUpsertWithoutInvoicesInput
-  connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutInvoicesInput, Prisma.CustomerUpdateWithoutInvoicesInput>, Prisma.CustomerUncheckedUpdateWithoutInvoicesInput>
+export type CustomerUpsertWithoutComplaintInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutComplaintInput, Prisma.CustomerUncheckedUpdateWithoutComplaintInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutComplaintInput, Prisma.CustomerUncheckedCreateWithoutComplaintInput>
+  where?: Prisma.CustomerWhereInput
 }
 
-export type CustomerCreateNestedOneWithoutWhatsappSessionsInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutWhatsappSessionsInput, Prisma.CustomerUncheckedCreateWithoutWhatsappSessionsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWhatsappSessionsInput
-  connect?: Prisma.CustomerWhereUniqueInput
+export type CustomerUpdateToOneWithWhereWithoutComplaintInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutComplaintInput, Prisma.CustomerUncheckedUpdateWithoutComplaintInput>
 }
 
-export type CustomerUpdateOneWithoutWhatsappSessionsNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutWhatsappSessionsInput, Prisma.CustomerUncheckedCreateWithoutWhatsappSessionsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutWhatsappSessionsInput
-  upsert?: Prisma.CustomerUpsertWithoutWhatsappSessionsInput
-  disconnect?: Prisma.CustomerWhereInput | boolean
-  delete?: Prisma.CustomerWhereInput | boolean
-  connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutWhatsappSessionsInput, Prisma.CustomerUpdateWithoutWhatsappSessionsInput>, Prisma.CustomerUncheckedUpdateWithoutWhatsappSessionsInput>
+export type CustomerUpdateWithoutComplaintInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
 }
 
-export type CustomerCreateNestedOneWithoutConversationThreadsInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutConversationThreadsInput, Prisma.CustomerUncheckedCreateWithoutConversationThreadsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutConversationThreadsInput
-  connect?: Prisma.CustomerWhereUniqueInput
+export type CustomerUncheckedUpdateWithoutComplaintInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
-export type CustomerUpdateOneWithoutConversationThreadsNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutConversationThreadsInput, Prisma.CustomerUncheckedCreateWithoutConversationThreadsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutConversationThreadsInput
-  upsert?: Prisma.CustomerUpsertWithoutConversationThreadsInput
-  disconnect?: Prisma.CustomerWhereInput | boolean
-  delete?: Prisma.CustomerWhereInput | boolean
-  connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutConversationThreadsInput, Prisma.CustomerUpdateWithoutConversationThreadsInput>, Prisma.CustomerUncheckedUpdateWithoutConversationThreadsInput>
+export type CustomerCreateWithoutConversationThreadInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
 }
 
-export type CustomerCreateNestedOneWithoutCustomerFeedbacksInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerFeedbacksInput, Prisma.CustomerUncheckedCreateWithoutCustomerFeedbacksInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCustomerFeedbacksInput
-  connect?: Prisma.CustomerWhereUniqueInput
+export type CustomerUncheckedCreateWithoutConversationThreadInput = {
+  id: string
+  tenantId: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
 }
 
-export type CustomerUpdateOneRequiredWithoutCustomerFeedbacksNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerFeedbacksInput, Prisma.CustomerUncheckedCreateWithoutCustomerFeedbacksInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCustomerFeedbacksInput
-  upsert?: Prisma.CustomerUpsertWithoutCustomerFeedbacksInput
-  connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutCustomerFeedbacksInput, Prisma.CustomerUpdateWithoutCustomerFeedbacksInput>, Prisma.CustomerUncheckedUpdateWithoutCustomerFeedbacksInput>
+export type CustomerCreateOrConnectWithoutConversationThreadInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutConversationThreadInput, Prisma.CustomerUncheckedCreateWithoutConversationThreadInput>
 }
 
-export type CustomerCreateNestedOneWithoutCustomerReportsInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerReportsInput, Prisma.CustomerUncheckedCreateWithoutCustomerReportsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCustomerReportsInput
-  connect?: Prisma.CustomerWhereUniqueInput
+export type CustomerUpsertWithoutConversationThreadInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutConversationThreadInput, Prisma.CustomerUncheckedUpdateWithoutConversationThreadInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutConversationThreadInput, Prisma.CustomerUncheckedCreateWithoutConversationThreadInput>
+  where?: Prisma.CustomerWhereInput
 }
 
-export type CustomerUpdateOneRequiredWithoutCustomerReportsNestedInput = {
-  create?: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerReportsInput, Prisma.CustomerUncheckedCreateWithoutCustomerReportsInput>
-  connectOrCreate?: Prisma.CustomerCreateOrConnectWithoutCustomerReportsInput
-  upsert?: Prisma.CustomerUpsertWithoutCustomerReportsInput
-  connect?: Prisma.CustomerWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CustomerUpdateToOneWithWhereWithoutCustomerReportsInput, Prisma.CustomerUpdateWithoutCustomerReportsInput>, Prisma.CustomerUncheckedUpdateWithoutCustomerReportsInput>
+export type CustomerUpdateToOneWithWhereWithoutConversationThreadInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutConversationThreadInput, Prisma.CustomerUncheckedUpdateWithoutConversationThreadInput>
+}
+
+export type CustomerUpdateWithoutConversationThreadInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutConversationThreadInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerCreateWithoutCustomerFeedbackInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutCustomerFeedbackInput = {
+  id: string
+  tenantId: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutCustomerFeedbackInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerFeedbackInput, Prisma.CustomerUncheckedCreateWithoutCustomerFeedbackInput>
+}
+
+export type CustomerUpsertWithoutCustomerFeedbackInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutCustomerFeedbackInput, Prisma.CustomerUncheckedUpdateWithoutCustomerFeedbackInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerFeedbackInput, Prisma.CustomerUncheckedCreateWithoutCustomerFeedbackInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutCustomerFeedbackInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutCustomerFeedbackInput, Prisma.CustomerUncheckedUpdateWithoutCustomerFeedbackInput>
+}
+
+export type CustomerUpdateWithoutCustomerFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutCustomerFeedbackInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerCreateWithoutCustomerReportInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutCustomerReportInput = {
+  id: string
+  tenantId: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutCustomerReportInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerReportInput, Prisma.CustomerUncheckedCreateWithoutCustomerReportInput>
+}
+
+export type CustomerUpsertWithoutCustomerReportInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutCustomerReportInput, Prisma.CustomerUncheckedUpdateWithoutCustomerReportInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerReportInput, Prisma.CustomerUncheckedCreateWithoutCustomerReportInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutCustomerReportInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutCustomerReportInput, Prisma.CustomerUncheckedUpdateWithoutCustomerReportInput>
+}
+
+export type CustomerUpdateWithoutCustomerReportInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutCustomerReportInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerCreateWithoutEquipmentInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutEquipmentInput = {
+  id: string
+  tenantId: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutEquipmentInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutEquipmentInput, Prisma.CustomerUncheckedCreateWithoutEquipmentInput>
+}
+
+export type CustomerUpsertWithoutEquipmentInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutEquipmentInput, Prisma.CustomerUncheckedUpdateWithoutEquipmentInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutEquipmentInput, Prisma.CustomerUncheckedCreateWithoutEquipmentInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutEquipmentInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutEquipmentInput, Prisma.CustomerUncheckedUpdateWithoutEquipmentInput>
+}
+
+export type CustomerUpdateWithoutEquipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutEquipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerCreateWithoutInvoiceInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutInvoiceInput = {
+  id: string
+  tenantId: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutInvoiceInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutInvoiceInput, Prisma.CustomerUncheckedCreateWithoutInvoiceInput>
+}
+
+export type CustomerUpsertWithoutInvoiceInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutInvoiceInput, Prisma.CustomerUncheckedUpdateWithoutInvoiceInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutInvoiceInput, Prisma.CustomerUncheckedCreateWithoutInvoiceInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutInvoiceInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutInvoiceInput, Prisma.CustomerUncheckedUpdateWithoutInvoiceInput>
+}
+
+export type CustomerUpdateWithoutInvoiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutInvoiceInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerCreateWithoutQuotationInput = {
+  id: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerUncheckedCreateWithoutQuotationInput = {
+  id: string
+  tenantId: string
+  name: string
+  email?: string | null
+  phone: string
+  address?: string | null
+  gpsLocation?: string | null
+  companyName?: string | null
+  customerNumber: string
+  photo?: string | null
+  paymentTerms?: string | null
+  pic?: string | null
+  country?: string | null
+  district?: string | null
+  taxRate?: number
+  isActive?: boolean
+  isWhatsappVerified?: boolean
+  whatsappId?: string | null
+  whatsappPhone?: string | null
+  lastWhatsappActivity?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+}
+
+export type CustomerCreateOrConnectWithoutQuotationInput = {
+  where: Prisma.CustomerWhereUniqueInput
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutQuotationInput, Prisma.CustomerUncheckedCreateWithoutQuotationInput>
+}
+
+export type CustomerUpsertWithoutQuotationInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutQuotationInput, Prisma.CustomerUncheckedUpdateWithoutQuotationInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutQuotationInput, Prisma.CustomerUncheckedCreateWithoutQuotationInput>
+  where?: Prisma.CustomerWhereInput
+}
+
+export type CustomerUpdateToOneWithWhereWithoutQuotationInput = {
+  where?: Prisma.CustomerWhereInput
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutQuotationInput, Prisma.CustomerUncheckedUpdateWithoutQuotationInput>
+}
+
+export type CustomerUpdateWithoutQuotationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+}
+
+export type CustomerUncheckedUpdateWithoutQuotationInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerCreateWithoutTenantInput = {
-  id?: string
+  id: string
   name: string
   email?: string | null
   phone: string
@@ -1013,20 +2049,20 @@ export type CustomerCreateWithoutTenantInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   name: string
   email?: string | null
   phone: string
@@ -1046,16 +2082,16 @@ export type CustomerUncheckedCreateWithoutTenantInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
 }
 
 export type CustomerCreateOrConnectWithoutTenantInput = {
@@ -1111,8 +2147,8 @@ export type CustomerScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Customer"> | Date | string
 }
 
-export type CustomerCreateWithoutEquipmentInput = {
-  id?: string
+export type CustomerCreateWithoutWhatsAppSessionInput = {
+  id: string
   name: string
   email?: string | null
   phone: string
@@ -1132,20 +2168,20 @@ export type CustomerCreateWithoutEquipmentInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
 }
 
-export type CustomerUncheckedCreateWithoutEquipmentInput = {
-  id?: string
+export type CustomerUncheckedCreateWithoutWhatsAppSessionInput = {
+  id: string
   tenantId: string
   name: string
   email?: string | null
@@ -1166,34 +2202,34 @@ export type CustomerUncheckedCreateWithoutEquipmentInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
 }
 
-export type CustomerCreateOrConnectWithoutEquipmentInput = {
+export type CustomerCreateOrConnectWithoutWhatsAppSessionInput = {
   where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutEquipmentInput, Prisma.CustomerUncheckedCreateWithoutEquipmentInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutWhatsAppSessionInput, Prisma.CustomerUncheckedCreateWithoutWhatsAppSessionInput>
 }
 
-export type CustomerUpsertWithoutEquipmentInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutEquipmentInput, Prisma.CustomerUncheckedUpdateWithoutEquipmentInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutEquipmentInput, Prisma.CustomerUncheckedCreateWithoutEquipmentInput>
+export type CustomerUpsertWithoutWhatsAppSessionInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutWhatsAppSessionInput, Prisma.CustomerUncheckedUpdateWithoutWhatsAppSessionInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutWhatsAppSessionInput, Prisma.CustomerUncheckedCreateWithoutWhatsAppSessionInput>
   where?: Prisma.CustomerWhereInput
 }
 
-export type CustomerUpdateToOneWithWhereWithoutEquipmentInput = {
+export type CustomerUpdateToOneWithWhereWithoutWhatsAppSessionInput = {
   where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutEquipmentInput, Prisma.CustomerUncheckedUpdateWithoutEquipmentInput>
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutWhatsAppSessionInput, Prisma.CustomerUncheckedUpdateWithoutWhatsAppSessionInput>
 }
 
-export type CustomerUpdateWithoutEquipmentInput = {
+export type CustomerUpdateWithoutWhatsAppSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1215,18 +2251,18 @@ export type CustomerUpdateWithoutEquipmentInput = {
   lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
 }
 
-export type CustomerUncheckedUpdateWithoutEquipmentInput = {
+export type CustomerUncheckedUpdateWithoutWhatsAppSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1249,18 +2285,18 @@ export type CustomerUncheckedUpdateWithoutEquipmentInput = {
   lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
-export type CustomerCreateWithoutComplaintsInput = {
-  id?: string
+export type CustomerCreateWithoutWorkOrderInput = {
+  id: string
   name: string
   email?: string | null
   phone: string
@@ -1280,20 +2316,20 @@ export type CustomerCreateWithoutComplaintsInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
+  tenant: Prisma.TenantCreateNestedOneWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
 }
 
-export type CustomerUncheckedCreateWithoutComplaintsInput = {
-  id?: string
+export type CustomerUncheckedCreateWithoutWorkOrderInput = {
+  id: string
   tenantId: string
   name: string
   email?: string | null
@@ -1314,34 +2350,34 @@ export type CustomerUncheckedCreateWithoutComplaintsInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
 }
 
-export type CustomerCreateOrConnectWithoutComplaintsInput = {
+export type CustomerCreateOrConnectWithoutWorkOrderInput = {
   where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutComplaintsInput, Prisma.CustomerUncheckedCreateWithoutComplaintsInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutWorkOrderInput, Prisma.CustomerUncheckedCreateWithoutWorkOrderInput>
 }
 
-export type CustomerUpsertWithoutComplaintsInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutComplaintsInput, Prisma.CustomerUncheckedUpdateWithoutComplaintsInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutComplaintsInput, Prisma.CustomerUncheckedCreateWithoutComplaintsInput>
+export type CustomerUpsertWithoutWorkOrderInput = {
+  update: Prisma.XOR<Prisma.CustomerUpdateWithoutWorkOrderInput, Prisma.CustomerUncheckedUpdateWithoutWorkOrderInput>
+  create: Prisma.XOR<Prisma.CustomerCreateWithoutWorkOrderInput, Prisma.CustomerUncheckedCreateWithoutWorkOrderInput>
   where?: Prisma.CustomerWhereInput
 }
 
-export type CustomerUpdateToOneWithWhereWithoutComplaintsInput = {
+export type CustomerUpdateToOneWithWhereWithoutWorkOrderInput = {
   where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutComplaintsInput, Prisma.CustomerUncheckedUpdateWithoutComplaintsInput>
+  data: Prisma.XOR<Prisma.CustomerUpdateWithoutWorkOrderInput, Prisma.CustomerUncheckedUpdateWithoutWorkOrderInput>
 }
 
-export type CustomerUpdateWithoutComplaintsInput = {
+export type CustomerUpdateWithoutWorkOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1363,18 +2399,18 @@ export type CustomerUpdateWithoutComplaintsInput = {
   lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
 }
 
-export type CustomerUncheckedUpdateWithoutComplaintsInput = {
+export type CustomerUncheckedUpdateWithoutWorkOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1397,1054 +2433,18 @@ export type CustomerUncheckedUpdateWithoutComplaintsInput = {
   lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerCreateWithoutWorkOrdersInput = {
-  id?: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerUncheckedCreateWithoutWorkOrdersInput = {
-  id?: string
-  tenantId: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerCreateOrConnectWithoutWorkOrdersInput = {
-  where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutWorkOrdersInput, Prisma.CustomerUncheckedCreateWithoutWorkOrdersInput>
-}
-
-export type CustomerUpsertWithoutWorkOrdersInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutWorkOrdersInput, Prisma.CustomerUncheckedUpdateWithoutWorkOrdersInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutWorkOrdersInput, Prisma.CustomerUncheckedCreateWithoutWorkOrdersInput>
-  where?: Prisma.CustomerWhereInput
-}
-
-export type CustomerUpdateToOneWithWhereWithoutWorkOrdersInput = {
-  where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutWorkOrdersInput, Prisma.CustomerUncheckedUpdateWithoutWorkOrdersInput>
-}
-
-export type CustomerUpdateWithoutWorkOrdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerUncheckedUpdateWithoutWorkOrdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerCreateWithoutQuotationsInput = {
-  id?: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerUncheckedCreateWithoutQuotationsInput = {
-  id?: string
-  tenantId: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerCreateOrConnectWithoutQuotationsInput = {
-  where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutQuotationsInput, Prisma.CustomerUncheckedCreateWithoutQuotationsInput>
-}
-
-export type CustomerUpsertWithoutQuotationsInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutQuotationsInput, Prisma.CustomerUncheckedUpdateWithoutQuotationsInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutQuotationsInput, Prisma.CustomerUncheckedCreateWithoutQuotationsInput>
-  where?: Prisma.CustomerWhereInput
-}
-
-export type CustomerUpdateToOneWithWhereWithoutQuotationsInput = {
-  where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutQuotationsInput, Prisma.CustomerUncheckedUpdateWithoutQuotationsInput>
-}
-
-export type CustomerUpdateWithoutQuotationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerUncheckedUpdateWithoutQuotationsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerCreateWithoutInvoicesInput = {
-  id?: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerUncheckedCreateWithoutInvoicesInput = {
-  id?: string
-  tenantId: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerCreateOrConnectWithoutInvoicesInput = {
-  where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutInvoicesInput, Prisma.CustomerUncheckedCreateWithoutInvoicesInput>
-}
-
-export type CustomerUpsertWithoutInvoicesInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutInvoicesInput, Prisma.CustomerUncheckedUpdateWithoutInvoicesInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutInvoicesInput, Prisma.CustomerUncheckedCreateWithoutInvoicesInput>
-  where?: Prisma.CustomerWhereInput
-}
-
-export type CustomerUpdateToOneWithWhereWithoutInvoicesInput = {
-  where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutInvoicesInput, Prisma.CustomerUncheckedUpdateWithoutInvoicesInput>
-}
-
-export type CustomerUpdateWithoutInvoicesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerUncheckedUpdateWithoutInvoicesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerCreateWithoutWhatsappSessionsInput = {
-  id?: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerUncheckedCreateWithoutWhatsappSessionsInput = {
-  id?: string
-  tenantId: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerCreateOrConnectWithoutWhatsappSessionsInput = {
-  where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutWhatsappSessionsInput, Prisma.CustomerUncheckedCreateWithoutWhatsappSessionsInput>
-}
-
-export type CustomerUpsertWithoutWhatsappSessionsInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutWhatsappSessionsInput, Prisma.CustomerUncheckedUpdateWithoutWhatsappSessionsInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutWhatsappSessionsInput, Prisma.CustomerUncheckedCreateWithoutWhatsappSessionsInput>
-  where?: Prisma.CustomerWhereInput
-}
-
-export type CustomerUpdateToOneWithWhereWithoutWhatsappSessionsInput = {
-  where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutWhatsappSessionsInput, Prisma.CustomerUncheckedUpdateWithoutWhatsappSessionsInput>
-}
-
-export type CustomerUpdateWithoutWhatsappSessionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerUncheckedUpdateWithoutWhatsappSessionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerCreateWithoutConversationThreadsInput = {
-  id?: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerUncheckedCreateWithoutConversationThreadsInput = {
-  id?: string
-  tenantId: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerCreateOrConnectWithoutConversationThreadsInput = {
-  where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutConversationThreadsInput, Prisma.CustomerUncheckedCreateWithoutConversationThreadsInput>
-}
-
-export type CustomerUpsertWithoutConversationThreadsInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutConversationThreadsInput, Prisma.CustomerUncheckedUpdateWithoutConversationThreadsInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutConversationThreadsInput, Prisma.CustomerUncheckedCreateWithoutConversationThreadsInput>
-  where?: Prisma.CustomerWhereInput
-}
-
-export type CustomerUpdateToOneWithWhereWithoutConversationThreadsInput = {
-  where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutConversationThreadsInput, Prisma.CustomerUncheckedUpdateWithoutConversationThreadsInput>
-}
-
-export type CustomerUpdateWithoutConversationThreadsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerUncheckedUpdateWithoutConversationThreadsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerCreateWithoutCustomerFeedbacksInput = {
-  id?: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerUncheckedCreateWithoutCustomerFeedbacksInput = {
-  id?: string
-  tenantId: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerReports?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerCreateOrConnectWithoutCustomerFeedbacksInput = {
-  where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerFeedbacksInput, Prisma.CustomerUncheckedCreateWithoutCustomerFeedbacksInput>
-}
-
-export type CustomerUpsertWithoutCustomerFeedbacksInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutCustomerFeedbacksInput, Prisma.CustomerUncheckedUpdateWithoutCustomerFeedbacksInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerFeedbacksInput, Prisma.CustomerUncheckedCreateWithoutCustomerFeedbacksInput>
-  where?: Prisma.CustomerWhereInput
-}
-
-export type CustomerUpdateToOneWithWhereWithoutCustomerFeedbacksInput = {
-  where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutCustomerFeedbacksInput, Prisma.CustomerUncheckedUpdateWithoutCustomerFeedbacksInput>
-}
-
-export type CustomerUpdateWithoutCustomerFeedbacksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerUncheckedUpdateWithoutCustomerFeedbacksInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerCreateWithoutCustomerReportsInput = {
-  id?: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutCustomersInput
-  equipment?: Prisma.EquipmentCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerUncheckedCreateWithoutCustomerReportsInput = {
-  id?: string
-  tenantId: string
-  name: string
-  email?: string | null
-  phone: string
-  address?: string | null
-  gpsLocation?: string | null
-  companyName?: string | null
-  customerNumber: string
-  photo?: string | null
-  paymentTerms?: string | null
-  pic?: string | null
-  country?: string | null
-  district?: string | null
-  taxRate?: number
-  isActive?: boolean
-  isWhatsappVerified?: boolean
-  whatsappId?: string | null
-  whatsappPhone?: string | null
-  lastWhatsappActivity?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutCustomerInput
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutCustomerInput
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCustomerInput
-  quotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutCustomerInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutCustomerInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutCustomerInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutCustomerInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCustomerInput
-}
-
-export type CustomerCreateOrConnectWithoutCustomerReportsInput = {
-  where: Prisma.CustomerWhereUniqueInput
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerReportsInput, Prisma.CustomerUncheckedCreateWithoutCustomerReportsInput>
-}
-
-export type CustomerUpsertWithoutCustomerReportsInput = {
-  update: Prisma.XOR<Prisma.CustomerUpdateWithoutCustomerReportsInput, Prisma.CustomerUncheckedUpdateWithoutCustomerReportsInput>
-  create: Prisma.XOR<Prisma.CustomerCreateWithoutCustomerReportsInput, Prisma.CustomerUncheckedCreateWithoutCustomerReportsInput>
-  where?: Prisma.CustomerWhereInput
-}
-
-export type CustomerUpdateToOneWithWhereWithoutCustomerReportsInput = {
-  where?: Prisma.CustomerWhereInput
-  data: Prisma.XOR<Prisma.CustomerUpdateWithoutCustomerReportsInput, Prisma.CustomerUncheckedUpdateWithoutCustomerReportsInput>
-}
-
-export type CustomerUpdateWithoutCustomerReportsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutCustomersNestedInput
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
-}
-
-export type CustomerUncheckedUpdateWithoutCustomerReportsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  phone?: Prisma.StringFieldUpdateOperationsInput | string
-  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  customerNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  paymentTerms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  pic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  country?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isWhatsappVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  whatsappId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  whatsappPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerCreateManyTenantInput = {
-  id?: string
+  id: string
   name: string
   email?: string | null
   phone: string
@@ -2464,7 +2464,7 @@ export type CustomerCreateManyTenantInput = {
   whatsappPhone?: string | null
   lastWhatsappActivity?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CustomerUpdateWithoutTenantInput = {
@@ -2489,15 +2489,15 @@ export type CustomerUpdateWithoutTenantInput = {
   lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
+  Complaint?: Prisma.ComplaintUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateWithoutTenantInput = {
@@ -2522,15 +2522,15 @@ export type CustomerUncheckedUpdateWithoutTenantInput = {
   lastWhatsappActivity?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
-  quotations?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
-  conversationThreads?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
-  whatsappSessions?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
-  customerFeedbacks?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
-  customerReports?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutCustomerNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutCustomerNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutCustomerNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutCustomerNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutCustomerNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutCustomerNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutCustomerNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutCustomerNestedInput
 }
 
 export type CustomerUncheckedUpdateManyWithoutTenantInput = {
@@ -2563,27 +2563,27 @@ export type CustomerUncheckedUpdateManyWithoutTenantInput = {
  */
 
 export type CustomerCountOutputType = {
-  equipment: number
-  complaints: number
-  invoices: number
-  quotations: number
-  conversationThreads: number
-  whatsappSessions: number
-  customerFeedbacks: number
-  customerReports: number
-  workOrders: number
+  Complaint: number
+  ConversationThread: number
+  CustomerFeedback: number
+  CustomerReport: number
+  Equipment: number
+  Invoice: number
+  Quotation: number
+  WhatsAppSession: number
+  WorkOrder: number
 }
 
 export type CustomerCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  equipment?: boolean | CustomerCountOutputTypeCountEquipmentArgs
-  complaints?: boolean | CustomerCountOutputTypeCountComplaintsArgs
-  invoices?: boolean | CustomerCountOutputTypeCountInvoicesArgs
-  quotations?: boolean | CustomerCountOutputTypeCountQuotationsArgs
-  conversationThreads?: boolean | CustomerCountOutputTypeCountConversationThreadsArgs
-  whatsappSessions?: boolean | CustomerCountOutputTypeCountWhatsappSessionsArgs
-  customerFeedbacks?: boolean | CustomerCountOutputTypeCountCustomerFeedbacksArgs
-  customerReports?: boolean | CustomerCountOutputTypeCountCustomerReportsArgs
-  workOrders?: boolean | CustomerCountOutputTypeCountWorkOrdersArgs
+  Complaint?: boolean | CustomerCountOutputTypeCountComplaintArgs
+  ConversationThread?: boolean | CustomerCountOutputTypeCountConversationThreadArgs
+  CustomerFeedback?: boolean | CustomerCountOutputTypeCountCustomerFeedbackArgs
+  CustomerReport?: boolean | CustomerCountOutputTypeCountCustomerReportArgs
+  Equipment?: boolean | CustomerCountOutputTypeCountEquipmentArgs
+  Invoice?: boolean | CustomerCountOutputTypeCountInvoiceArgs
+  Quotation?: boolean | CustomerCountOutputTypeCountQuotationArgs
+  WhatsAppSession?: boolean | CustomerCountOutputTypeCountWhatsAppSessionArgs
+  WorkOrder?: boolean | CustomerCountOutputTypeCountWorkOrderArgs
 }
 
 /**
@@ -2599,6 +2599,34 @@ export type CustomerCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ext
 /**
  * CustomerCountOutputType without action
  */
+export type CustomerCountOutputTypeCountComplaintArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ComplaintWhereInput
+}
+
+/**
+ * CustomerCountOutputType without action
+ */
+export type CustomerCountOutputTypeCountConversationThreadArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConversationThreadWhereInput
+}
+
+/**
+ * CustomerCountOutputType without action
+ */
+export type CustomerCountOutputTypeCountCustomerFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerFeedbackWhereInput
+}
+
+/**
+ * CustomerCountOutputType without action
+ */
+export type CustomerCountOutputTypeCountCustomerReportArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CustomerReportWhereInput
+}
+
+/**
+ * CustomerCountOutputType without action
+ */
 export type CustomerCountOutputTypeCountEquipmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EquipmentWhereInput
 }
@@ -2606,56 +2634,28 @@ export type CustomerCountOutputTypeCountEquipmentArgs<ExtArgs extends runtime.Ty
 /**
  * CustomerCountOutputType without action
  */
-export type CustomerCountOutputTypeCountComplaintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ComplaintWhereInput
-}
-
-/**
- * CustomerCountOutputType without action
- */
-export type CustomerCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CustomerCountOutputTypeCountInvoiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InvoiceWhereInput
 }
 
 /**
  * CustomerCountOutputType without action
  */
-export type CustomerCountOutputTypeCountQuotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CustomerCountOutputTypeCountQuotationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.QuotationWhereInput
 }
 
 /**
  * CustomerCountOutputType without action
  */
-export type CustomerCountOutputTypeCountConversationThreadsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ConversationThreadWhereInput
-}
-
-/**
- * CustomerCountOutputType without action
- */
-export type CustomerCountOutputTypeCountWhatsappSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CustomerCountOutputTypeCountWhatsAppSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WhatsAppSessionWhereInput
 }
 
 /**
  * CustomerCountOutputType without action
  */
-export type CustomerCountOutputTypeCountCustomerFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CustomerFeedbackWhereInput
-}
-
-/**
- * CustomerCountOutputType without action
- */
-export type CustomerCountOutputTypeCountCustomerReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.CustomerReportWhereInput
-}
-
-/**
- * CustomerCountOutputType without action
- */
-export type CustomerCountOutputTypeCountWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CustomerCountOutputTypeCountWorkOrderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WorkOrderWhereInput
 }
 
@@ -2683,16 +2683,16 @@ export type CustomerSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   lastWhatsappActivity?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  Complaint?: boolean | Prisma.Customer$ComplaintArgs<ExtArgs>
+  ConversationThread?: boolean | Prisma.Customer$ConversationThreadArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  equipment?: boolean | Prisma.Customer$equipmentArgs<ExtArgs>
-  complaints?: boolean | Prisma.Customer$complaintsArgs<ExtArgs>
-  invoices?: boolean | Prisma.Customer$invoicesArgs<ExtArgs>
-  quotations?: boolean | Prisma.Customer$quotationsArgs<ExtArgs>
-  conversationThreads?: boolean | Prisma.Customer$conversationThreadsArgs<ExtArgs>
-  whatsappSessions?: boolean | Prisma.Customer$whatsappSessionsArgs<ExtArgs>
-  customerFeedbacks?: boolean | Prisma.Customer$customerFeedbacksArgs<ExtArgs>
-  customerReports?: boolean | Prisma.Customer$customerReportsArgs<ExtArgs>
-  workOrders?: boolean | Prisma.Customer$workOrdersArgs<ExtArgs>
+  CustomerFeedback?: boolean | Prisma.Customer$CustomerFeedbackArgs<ExtArgs>
+  CustomerReport?: boolean | Prisma.Customer$CustomerReportArgs<ExtArgs>
+  Equipment?: boolean | Prisma.Customer$EquipmentArgs<ExtArgs>
+  Invoice?: boolean | Prisma.Customer$InvoiceArgs<ExtArgs>
+  Quotation?: boolean | Prisma.Customer$QuotationArgs<ExtArgs>
+  WhatsAppSession?: boolean | Prisma.Customer$WhatsAppSessionArgs<ExtArgs>
+  WorkOrder?: boolean | Prisma.Customer$WorkOrderArgs<ExtArgs>
   _count?: boolean | Prisma.CustomerCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["customer"]>
 
@@ -2775,16 +2775,16 @@ export type CustomerSelectScalar = {
 
 export type CustomerOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "name" | "email" | "phone" | "address" | "gpsLocation" | "companyName" | "customerNumber" | "photo" | "paymentTerms" | "pic" | "country" | "district" | "taxRate" | "isActive" | "isWhatsappVerified" | "whatsappId" | "whatsappPhone" | "lastWhatsappActivity" | "createdAt" | "updatedAt", ExtArgs["result"]["customer"]>
 export type CustomerInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  Complaint?: boolean | Prisma.Customer$ComplaintArgs<ExtArgs>
+  ConversationThread?: boolean | Prisma.Customer$ConversationThreadArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  equipment?: boolean | Prisma.Customer$equipmentArgs<ExtArgs>
-  complaints?: boolean | Prisma.Customer$complaintsArgs<ExtArgs>
-  invoices?: boolean | Prisma.Customer$invoicesArgs<ExtArgs>
-  quotations?: boolean | Prisma.Customer$quotationsArgs<ExtArgs>
-  conversationThreads?: boolean | Prisma.Customer$conversationThreadsArgs<ExtArgs>
-  whatsappSessions?: boolean | Prisma.Customer$whatsappSessionsArgs<ExtArgs>
-  customerFeedbacks?: boolean | Prisma.Customer$customerFeedbacksArgs<ExtArgs>
-  customerReports?: boolean | Prisma.Customer$customerReportsArgs<ExtArgs>
-  workOrders?: boolean | Prisma.Customer$workOrdersArgs<ExtArgs>
+  CustomerFeedback?: boolean | Prisma.Customer$CustomerFeedbackArgs<ExtArgs>
+  CustomerReport?: boolean | Prisma.Customer$CustomerReportArgs<ExtArgs>
+  Equipment?: boolean | Prisma.Customer$EquipmentArgs<ExtArgs>
+  Invoice?: boolean | Prisma.Customer$InvoiceArgs<ExtArgs>
+  Quotation?: boolean | Prisma.Customer$QuotationArgs<ExtArgs>
+  WhatsAppSession?: boolean | Prisma.Customer$WhatsAppSessionArgs<ExtArgs>
+  WorkOrder?: boolean | Prisma.Customer$WorkOrderArgs<ExtArgs>
   _count?: boolean | Prisma.CustomerCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CustomerIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2797,16 +2797,16 @@ export type CustomerIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
 export type $CustomerPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Customer"
   objects: {
+    Complaint: Prisma.$ComplaintPayload<ExtArgs>[]
+    ConversationThread: Prisma.$ConversationThreadPayload<ExtArgs>[]
     tenant: Prisma.$TenantPayload<ExtArgs>
-    equipment: Prisma.$EquipmentPayload<ExtArgs>[]
-    complaints: Prisma.$ComplaintPayload<ExtArgs>[]
-    invoices: Prisma.$InvoicePayload<ExtArgs>[]
-    quotations: Prisma.$QuotationPayload<ExtArgs>[]
-    conversationThreads: Prisma.$ConversationThreadPayload<ExtArgs>[]
-    whatsappSessions: Prisma.$WhatsAppSessionPayload<ExtArgs>[]
-    customerFeedbacks: Prisma.$CustomerFeedbackPayload<ExtArgs>[]
-    customerReports: Prisma.$CustomerReportPayload<ExtArgs>[]
-    workOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
+    CustomerFeedback: Prisma.$CustomerFeedbackPayload<ExtArgs>[]
+    CustomerReport: Prisma.$CustomerReportPayload<ExtArgs>[]
+    Equipment: Prisma.$EquipmentPayload<ExtArgs>[]
+    Invoice: Prisma.$InvoicePayload<ExtArgs>[]
+    Quotation: Prisma.$QuotationPayload<ExtArgs>[]
+    WhatsAppSession: Prisma.$WhatsAppSessionPayload<ExtArgs>[]
+    WorkOrder: Prisma.$WorkOrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3225,16 +3225,16 @@ readonly fields: CustomerFieldRefs;
  */
 export interface Prisma__CustomerClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  Complaint<T extends Prisma.Customer$ComplaintArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$ComplaintArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ConversationThread<T extends Prisma.Customer$ConversationThreadArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$ConversationThreadArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationThreadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  equipment<T extends Prisma.Customer$equipmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$equipmentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  complaints<T extends Prisma.Customer$complaintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$complaintsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  invoices<T extends Prisma.Customer$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  quotations<T extends Prisma.Customer$quotationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$quotationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  conversationThreads<T extends Prisma.Customer$conversationThreadsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$conversationThreadsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConversationThreadPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  whatsappSessions<T extends Prisma.Customer$whatsappSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$whatsappSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  customerFeedbacks<T extends Prisma.Customer$customerFeedbacksArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$customerFeedbacksArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  customerReports<T extends Prisma.Customer$customerReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$customerReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  workOrders<T extends Prisma.Customer$workOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$workOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  CustomerFeedback<T extends Prisma.Customer$CustomerFeedbackArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$CustomerFeedbackArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerFeedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  CustomerReport<T extends Prisma.Customer$CustomerReportArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$CustomerReportArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CustomerReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Equipment<T extends Prisma.Customer$EquipmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$EquipmentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Invoice<T extends Prisma.Customer$InvoiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$InvoiceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Quotation<T extends Prisma.Customer$QuotationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$QuotationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WhatsAppSession<T extends Prisma.Customer$WhatsAppSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$WhatsAppSessionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WorkOrder<T extends Prisma.Customer$WorkOrderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Customer$WorkOrderArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3685,33 +3685,9 @@ export type CustomerDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Customer.equipment
+ * Customer.Complaint
  */
-export type Customer$equipmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Equipment
-   */
-  select?: Prisma.EquipmentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Equipment
-   */
-  omit?: Prisma.EquipmentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.EquipmentInclude<ExtArgs> | null
-  where?: Prisma.EquipmentWhereInput
-  orderBy?: Prisma.EquipmentOrderByWithRelationInput | Prisma.EquipmentOrderByWithRelationInput[]
-  cursor?: Prisma.EquipmentWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.EquipmentScalarFieldEnum | Prisma.EquipmentScalarFieldEnum[]
-}
-
-/**
- * Customer.complaints
- */
-export type Customer$complaintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Customer$ComplaintArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Complaint
    */
@@ -3733,57 +3709,9 @@ export type Customer$complaintsArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Customer.invoices
+ * Customer.ConversationThread
  */
-export type Customer$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Invoice
-   */
-  select?: Prisma.InvoiceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Invoice
-   */
-  omit?: Prisma.InvoiceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.InvoiceInclude<ExtArgs> | null
-  where?: Prisma.InvoiceWhereInput
-  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
-  cursor?: Prisma.InvoiceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
-}
-
-/**
- * Customer.quotations
- */
-export type Customer$quotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Quotation
-   */
-  select?: Prisma.QuotationSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Quotation
-   */
-  omit?: Prisma.QuotationOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.QuotationInclude<ExtArgs> | null
-  where?: Prisma.QuotationWhereInput
-  orderBy?: Prisma.QuotationOrderByWithRelationInput | Prisma.QuotationOrderByWithRelationInput[]
-  cursor?: Prisma.QuotationWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.QuotationScalarFieldEnum | Prisma.QuotationScalarFieldEnum[]
-}
-
-/**
- * Customer.conversationThreads
- */
-export type Customer$conversationThreadsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Customer$ConversationThreadArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the ConversationThread
    */
@@ -3805,33 +3733,9 @@ export type Customer$conversationThreadsArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * Customer.whatsappSessions
+ * Customer.CustomerFeedback
  */
-export type Customer$whatsappSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the WhatsAppSession
-   */
-  select?: Prisma.WhatsAppSessionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the WhatsAppSession
-   */
-  omit?: Prisma.WhatsAppSessionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WhatsAppSessionInclude<ExtArgs> | null
-  where?: Prisma.WhatsAppSessionWhereInput
-  orderBy?: Prisma.WhatsAppSessionOrderByWithRelationInput | Prisma.WhatsAppSessionOrderByWithRelationInput[]
-  cursor?: Prisma.WhatsAppSessionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WhatsAppSessionScalarFieldEnum | Prisma.WhatsAppSessionScalarFieldEnum[]
-}
-
-/**
- * Customer.customerFeedbacks
- */
-export type Customer$customerFeedbacksArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Customer$CustomerFeedbackArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the CustomerFeedback
    */
@@ -3853,9 +3757,9 @@ export type Customer$customerFeedbacksArgs<ExtArgs extends runtime.Types.Extensi
 }
 
 /**
- * Customer.customerReports
+ * Customer.CustomerReport
  */
-export type Customer$customerReportsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Customer$CustomerReportArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the CustomerReport
    */
@@ -3877,9 +3781,105 @@ export type Customer$customerReportsArgs<ExtArgs extends runtime.Types.Extension
 }
 
 /**
- * Customer.workOrders
+ * Customer.Equipment
  */
-export type Customer$workOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Customer$EquipmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Equipment
+   */
+  select?: Prisma.EquipmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Equipment
+   */
+  omit?: Prisma.EquipmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EquipmentInclude<ExtArgs> | null
+  where?: Prisma.EquipmentWhereInput
+  orderBy?: Prisma.EquipmentOrderByWithRelationInput | Prisma.EquipmentOrderByWithRelationInput[]
+  cursor?: Prisma.EquipmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EquipmentScalarFieldEnum | Prisma.EquipmentScalarFieldEnum[]
+}
+
+/**
+ * Customer.Invoice
+ */
+export type Customer$InvoiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * Customer.Quotation
+ */
+export type Customer$QuotationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Quotation
+   */
+  select?: Prisma.QuotationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Quotation
+   */
+  omit?: Prisma.QuotationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuotationInclude<ExtArgs> | null
+  where?: Prisma.QuotationWhereInput
+  orderBy?: Prisma.QuotationOrderByWithRelationInput | Prisma.QuotationOrderByWithRelationInput[]
+  cursor?: Prisma.QuotationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QuotationScalarFieldEnum | Prisma.QuotationScalarFieldEnum[]
+}
+
+/**
+ * Customer.WhatsAppSession
+ */
+export type Customer$WhatsAppSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WhatsAppSession
+   */
+  select?: Prisma.WhatsAppSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WhatsAppSession
+   */
+  omit?: Prisma.WhatsAppSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WhatsAppSessionInclude<ExtArgs> | null
+  where?: Prisma.WhatsAppSessionWhereInput
+  orderBy?: Prisma.WhatsAppSessionOrderByWithRelationInput | Prisma.WhatsAppSessionOrderByWithRelationInput[]
+  cursor?: Prisma.WhatsAppSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WhatsAppSessionScalarFieldEnum | Prisma.WhatsAppSessionScalarFieldEnum[]
+}
+
+/**
+ * Customer.WorkOrder
+ */
+export type Customer$WorkOrderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the WorkOrder
    */

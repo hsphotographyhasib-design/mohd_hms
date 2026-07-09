@@ -264,10 +264,10 @@ export type ConversationThreadWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
   customerId?: Prisma.StringNullableFilter<"ConversationThread"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  session?: Prisma.XOR<Prisma.WhatsAppSessionScalarRelationFilter, Prisma.WhatsAppSessionWhereInput>
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
-  messages?: Prisma.WhatsAppMessageListRelationFilter
+  WhatsAppSession?: Prisma.XOR<Prisma.WhatsAppSessionScalarRelationFilter, Prisma.WhatsAppSessionWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  WhatsAppMessage?: Prisma.WhatsAppMessageListRelationFilter
 }
 
 export type ConversationThreadOrderByWithRelationInput = {
@@ -282,10 +282,10 @@ export type ConversationThreadOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   customerId?: Prisma.SortOrderInput | Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
-  session?: Prisma.WhatsAppSessionOrderByWithRelationInput
   customer?: Prisma.CustomerOrderByWithRelationInput
-  messages?: Prisma.WhatsAppMessageOrderByRelationAggregateInput
+  WhatsAppSession?: Prisma.WhatsAppSessionOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageOrderByRelationAggregateInput
 }
 
 export type ConversationThreadWhereUniqueInput = Prisma.AtLeast<{
@@ -303,10 +303,10 @@ export type ConversationThreadWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
   customerId?: Prisma.StringNullableFilter<"ConversationThread"> | string | null
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  session?: Prisma.XOR<Prisma.WhatsAppSessionScalarRelationFilter, Prisma.WhatsAppSessionWhereInput>
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
-  messages?: Prisma.WhatsAppMessageListRelationFilter
+  WhatsAppSession?: Prisma.XOR<Prisma.WhatsAppSessionScalarRelationFilter, Prisma.WhatsAppSessionWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  WhatsAppMessage?: Prisma.WhatsAppMessageListRelationFilter
 }, "id">
 
 export type ConversationThreadOrderByWithAggregationInput = {
@@ -346,22 +346,22 @@ export type ConversationThreadScalarWhereWithAggregatesInput = {
 }
 
 export type ConversationThreadCreateInput = {
-  id?: string
+  id: string
   subject?: string | null
   status?: string
   assignedToId?: string | null
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutConversationThreadsInput
-  session: Prisma.WhatsAppSessionCreateNestedOneWithoutThreadsInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutConversationThreadsInput
-  messages?: Prisma.WhatsAppMessageCreateNestedManyWithoutThreadInput
+  updatedAt: Date | string
+  customer?: Prisma.CustomerCreateNestedOneWithoutConversationThreadInput
+  WhatsAppSession: Prisma.WhatsAppSessionCreateNestedOneWithoutConversationThreadInput
+  tenant: Prisma.TenantCreateNestedOneWithoutConversationThreadInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutConversationThreadInput
 }
 
 export type ConversationThreadUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   sessionId: string
   subject?: string | null
@@ -370,9 +370,9 @@ export type ConversationThreadUncheckedCreateInput = {
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
   customerId?: string | null
-  messages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutThreadInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutConversationThreadInput
 }
 
 export type ConversationThreadUpdateInput = {
@@ -384,10 +384,10 @@ export type ConversationThreadUpdateInput = {
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutConversationThreadsNestedInput
-  session?: Prisma.WhatsAppSessionUpdateOneRequiredWithoutThreadsNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutConversationThreadsNestedInput
-  messages?: Prisma.WhatsAppMessageUpdateManyWithoutThreadNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutConversationThreadNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateOneRequiredWithoutConversationThreadNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutConversationThreadNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutConversationThreadNestedInput
 }
 
 export type ConversationThreadUncheckedUpdateInput = {
@@ -402,11 +402,11 @@ export type ConversationThreadUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  messages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutThreadNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutConversationThreadNestedInput
 }
 
 export type ConversationThreadCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   sessionId: string
   subject?: string | null
@@ -415,7 +415,7 @@ export type ConversationThreadCreateManyInput = {
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
   customerId?: string | null
 }
 
@@ -442,21 +442,6 @@ export type ConversationThreadUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-}
-
-export type ConversationThreadListRelationFilter = {
-  every?: Prisma.ConversationThreadWhereInput
-  some?: Prisma.ConversationThreadWhereInput
-  none?: Prisma.ConversationThreadWhereInput
-}
-
-export type ConversationThreadOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
-}
-
-export type ConversationThreadNullableScalarRelationFilter = {
-  is?: Prisma.ConversationThreadWhereInput | null
-  isNot?: Prisma.ConversationThreadWhereInput | null
 }
 
 export type ConversationThreadCountOrderByAggregateInput = {
@@ -509,46 +494,19 @@ export type ConversationThreadSumOrderByAggregateInput = {
   messageCount?: Prisma.SortOrder
 }
 
-export type ConversationThreadCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput> | Prisma.ConversationThreadCreateWithoutTenantInput[] | Prisma.ConversationThreadUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutTenantInput | Prisma.ConversationThreadCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.ConversationThreadCreateManyTenantInputEnvelope
-  connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+export type ConversationThreadListRelationFilter = {
+  every?: Prisma.ConversationThreadWhereInput
+  some?: Prisma.ConversationThreadWhereInput
+  none?: Prisma.ConversationThreadWhereInput
 }
 
-export type ConversationThreadUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput> | Prisma.ConversationThreadCreateWithoutTenantInput[] | Prisma.ConversationThreadUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutTenantInput | Prisma.ConversationThreadCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.ConversationThreadCreateManyTenantInputEnvelope
-  connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+export type ConversationThreadOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
-export type ConversationThreadUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput> | Prisma.ConversationThreadCreateWithoutTenantInput[] | Prisma.ConversationThreadUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutTenantInput | Prisma.ConversationThreadCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.ConversationThreadUpsertWithWhereUniqueWithoutTenantInput | Prisma.ConversationThreadUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.ConversationThreadCreateManyTenantInputEnvelope
-  set?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  disconnect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  delete?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  update?: Prisma.ConversationThreadUpdateWithWhereUniqueWithoutTenantInput | Prisma.ConversationThreadUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.ConversationThreadUpdateManyWithWhereWithoutTenantInput | Prisma.ConversationThreadUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
-}
-
-export type ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput> | Prisma.ConversationThreadCreateWithoutTenantInput[] | Prisma.ConversationThreadUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutTenantInput | Prisma.ConversationThreadCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.ConversationThreadUpsertWithWhereUniqueWithoutTenantInput | Prisma.ConversationThreadUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.ConversationThreadCreateManyTenantInputEnvelope
-  set?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  disconnect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  delete?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  update?: Prisma.ConversationThreadUpdateWithWhereUniqueWithoutTenantInput | Prisma.ConversationThreadUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.ConversationThreadUpdateManyWithWhereWithoutTenantInput | Prisma.ConversationThreadUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
+export type ConversationThreadNullableScalarRelationFilter = {
+  is?: Prisma.ConversationThreadWhereInput | null
+  isNot?: Prisma.ConversationThreadWhereInput | null
 }
 
 export type ConversationThreadCreateNestedManyWithoutCustomerInput = {
@@ -593,150 +551,122 @@ export type ConversationThreadUncheckedUpdateManyWithoutCustomerNestedInput = {
   deleteMany?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
 }
 
-export type ConversationThreadCreateNestedManyWithoutSessionInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutSessionInput> | Prisma.ConversationThreadCreateWithoutSessionInput[] | Prisma.ConversationThreadUncheckedCreateWithoutSessionInput[]
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutSessionInput | Prisma.ConversationThreadCreateOrConnectWithoutSessionInput[]
-  createMany?: Prisma.ConversationThreadCreateManySessionInputEnvelope
+export type ConversationThreadCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput> | Prisma.ConversationThreadCreateWithoutTenantInput[] | Prisma.ConversationThreadUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutTenantInput | Prisma.ConversationThreadCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.ConversationThreadCreateManyTenantInputEnvelope
   connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
 }
 
-export type ConversationThreadUncheckedCreateNestedManyWithoutSessionInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutSessionInput> | Prisma.ConversationThreadCreateWithoutSessionInput[] | Prisma.ConversationThreadUncheckedCreateWithoutSessionInput[]
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutSessionInput | Prisma.ConversationThreadCreateOrConnectWithoutSessionInput[]
-  createMany?: Prisma.ConversationThreadCreateManySessionInputEnvelope
+export type ConversationThreadUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput> | Prisma.ConversationThreadCreateWithoutTenantInput[] | Prisma.ConversationThreadUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutTenantInput | Prisma.ConversationThreadCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.ConversationThreadCreateManyTenantInputEnvelope
   connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
 }
 
-export type ConversationThreadUpdateManyWithoutSessionNestedInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutSessionInput> | Prisma.ConversationThreadCreateWithoutSessionInput[] | Prisma.ConversationThreadUncheckedCreateWithoutSessionInput[]
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutSessionInput | Prisma.ConversationThreadCreateOrConnectWithoutSessionInput[]
-  upsert?: Prisma.ConversationThreadUpsertWithWhereUniqueWithoutSessionInput | Prisma.ConversationThreadUpsertWithWhereUniqueWithoutSessionInput[]
-  createMany?: Prisma.ConversationThreadCreateManySessionInputEnvelope
+export type ConversationThreadUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput> | Prisma.ConversationThreadCreateWithoutTenantInput[] | Prisma.ConversationThreadUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutTenantInput | Prisma.ConversationThreadCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.ConversationThreadUpsertWithWhereUniqueWithoutTenantInput | Prisma.ConversationThreadUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.ConversationThreadCreateManyTenantInputEnvelope
   set?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
   disconnect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
   delete?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
   connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  update?: Prisma.ConversationThreadUpdateWithWhereUniqueWithoutSessionInput | Prisma.ConversationThreadUpdateWithWhereUniqueWithoutSessionInput[]
-  updateMany?: Prisma.ConversationThreadUpdateManyWithWhereWithoutSessionInput | Prisma.ConversationThreadUpdateManyWithWhereWithoutSessionInput[]
+  update?: Prisma.ConversationThreadUpdateWithWhereUniqueWithoutTenantInput | Prisma.ConversationThreadUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.ConversationThreadUpdateManyWithWhereWithoutTenantInput | Prisma.ConversationThreadUpdateManyWithWhereWithoutTenantInput[]
   deleteMany?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
 }
 
-export type ConversationThreadUncheckedUpdateManyWithoutSessionNestedInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutSessionInput> | Prisma.ConversationThreadCreateWithoutSessionInput[] | Prisma.ConversationThreadUncheckedCreateWithoutSessionInput[]
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutSessionInput | Prisma.ConversationThreadCreateOrConnectWithoutSessionInput[]
-  upsert?: Prisma.ConversationThreadUpsertWithWhereUniqueWithoutSessionInput | Prisma.ConversationThreadUpsertWithWhereUniqueWithoutSessionInput[]
-  createMany?: Prisma.ConversationThreadCreateManySessionInputEnvelope
+export type ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput> | Prisma.ConversationThreadCreateWithoutTenantInput[] | Prisma.ConversationThreadUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutTenantInput | Prisma.ConversationThreadCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.ConversationThreadUpsertWithWhereUniqueWithoutTenantInput | Prisma.ConversationThreadUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.ConversationThreadCreateManyTenantInputEnvelope
   set?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
   disconnect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
   delete?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
   connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
-  update?: Prisma.ConversationThreadUpdateWithWhereUniqueWithoutSessionInput | Prisma.ConversationThreadUpdateWithWhereUniqueWithoutSessionInput[]
-  updateMany?: Prisma.ConversationThreadUpdateManyWithWhereWithoutSessionInput | Prisma.ConversationThreadUpdateManyWithWhereWithoutSessionInput[]
+  update?: Prisma.ConversationThreadUpdateWithWhereUniqueWithoutTenantInput | Prisma.ConversationThreadUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.ConversationThreadUpdateManyWithWhereWithoutTenantInput | Prisma.ConversationThreadUpdateManyWithWhereWithoutTenantInput[]
   deleteMany?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
 }
 
-export type ConversationThreadCreateNestedOneWithoutMessagesInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutMessagesInput, Prisma.ConversationThreadUncheckedCreateWithoutMessagesInput>
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutMessagesInput
+export type ConversationThreadCreateNestedOneWithoutWhatsAppMessageInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppMessageInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppMessageInput>
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppMessageInput
   connect?: Prisma.ConversationThreadWhereUniqueInput
 }
 
-export type ConversationThreadUpdateOneWithoutMessagesNestedInput = {
-  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutMessagesInput, Prisma.ConversationThreadUncheckedCreateWithoutMessagesInput>
-  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutMessagesInput
-  upsert?: Prisma.ConversationThreadUpsertWithoutMessagesInput
+export type ConversationThreadUpdateOneWithoutWhatsAppMessageNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppMessageInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppMessageInput>
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppMessageInput
+  upsert?: Prisma.ConversationThreadUpsertWithoutWhatsAppMessageInput
   disconnect?: Prisma.ConversationThreadWhereInput | boolean
   delete?: Prisma.ConversationThreadWhereInput | boolean
   connect?: Prisma.ConversationThreadWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationThreadUpdateToOneWithWhereWithoutMessagesInput, Prisma.ConversationThreadUpdateWithoutMessagesInput>, Prisma.ConversationThreadUncheckedUpdateWithoutMessagesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ConversationThreadUpdateToOneWithWhereWithoutWhatsAppMessageInput, Prisma.ConversationThreadUpdateWithoutWhatsAppMessageInput>, Prisma.ConversationThreadUncheckedUpdateWithoutWhatsAppMessageInput>
 }
 
-export type ConversationThreadCreateWithoutTenantInput = {
-  id?: string
-  subject?: string | null
-  status?: string
-  assignedToId?: string | null
-  lastMessageAt?: Date | string
-  messageCount?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  session: Prisma.WhatsAppSessionCreateNestedOneWithoutThreadsInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutConversationThreadsInput
-  messages?: Prisma.WhatsAppMessageCreateNestedManyWithoutThreadInput
+export type ConversationThreadCreateNestedManyWithoutWhatsAppSessionInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput> | Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput[] | Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput[]
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput | Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput[]
+  createMany?: Prisma.ConversationThreadCreateManyWhatsAppSessionInputEnvelope
+  connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
 }
 
-export type ConversationThreadUncheckedCreateWithoutTenantInput = {
-  id?: string
-  sessionId: string
-  subject?: string | null
-  status?: string
-  assignedToId?: string | null
-  lastMessageAt?: Date | string
-  messageCount?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  customerId?: string | null
-  messages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutThreadInput
+export type ConversationThreadUncheckedCreateNestedManyWithoutWhatsAppSessionInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput> | Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput[] | Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput[]
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput | Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput[]
+  createMany?: Prisma.ConversationThreadCreateManyWhatsAppSessionInputEnvelope
+  connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
 }
 
-export type ConversationThreadCreateOrConnectWithoutTenantInput = {
-  where: Prisma.ConversationThreadWhereUniqueInput
-  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput>
+export type ConversationThreadUpdateManyWithoutWhatsAppSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput> | Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput[] | Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput[]
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput | Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput[]
+  upsert?: Prisma.ConversationThreadUpsertWithWhereUniqueWithoutWhatsAppSessionInput | Prisma.ConversationThreadUpsertWithWhereUniqueWithoutWhatsAppSessionInput[]
+  createMany?: Prisma.ConversationThreadCreateManyWhatsAppSessionInputEnvelope
+  set?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+  disconnect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+  delete?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+  connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+  update?: Prisma.ConversationThreadUpdateWithWhereUniqueWithoutWhatsAppSessionInput | Prisma.ConversationThreadUpdateWithWhereUniqueWithoutWhatsAppSessionInput[]
+  updateMany?: Prisma.ConversationThreadUpdateManyWithWhereWithoutWhatsAppSessionInput | Prisma.ConversationThreadUpdateManyWithWhereWithoutWhatsAppSessionInput[]
+  deleteMany?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
 }
 
-export type ConversationThreadCreateManyTenantInputEnvelope = {
-  data: Prisma.ConversationThreadCreateManyTenantInput | Prisma.ConversationThreadCreateManyTenantInput[]
-}
-
-export type ConversationThreadUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.ConversationThreadWhereUniqueInput
-  update: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutTenantInput, Prisma.ConversationThreadUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput>
-}
-
-export type ConversationThreadUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.ConversationThreadWhereUniqueInput
-  data: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutTenantInput, Prisma.ConversationThreadUncheckedUpdateWithoutTenantInput>
-}
-
-export type ConversationThreadUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.ConversationThreadScalarWhereInput
-  data: Prisma.XOR<Prisma.ConversationThreadUpdateManyMutationInput, Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type ConversationThreadScalarWhereInput = {
-  AND?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
-  OR?: Prisma.ConversationThreadScalarWhereInput[]
-  NOT?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
-  id?: Prisma.StringFilter<"ConversationThread"> | string
-  tenantId?: Prisma.StringFilter<"ConversationThread"> | string
-  sessionId?: Prisma.StringFilter<"ConversationThread"> | string
-  subject?: Prisma.StringNullableFilter<"ConversationThread"> | string | null
-  status?: Prisma.StringFilter<"ConversationThread"> | string
-  assignedToId?: Prisma.StringNullableFilter<"ConversationThread"> | string | null
-  lastMessageAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
-  messageCount?: Prisma.IntFilter<"ConversationThread"> | number
-  createdAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
-  customerId?: Prisma.StringNullableFilter<"ConversationThread"> | string | null
+export type ConversationThreadUncheckedUpdateManyWithoutWhatsAppSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput> | Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput[] | Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput[]
+  connectOrCreate?: Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput | Prisma.ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput[]
+  upsert?: Prisma.ConversationThreadUpsertWithWhereUniqueWithoutWhatsAppSessionInput | Prisma.ConversationThreadUpsertWithWhereUniqueWithoutWhatsAppSessionInput[]
+  createMany?: Prisma.ConversationThreadCreateManyWhatsAppSessionInputEnvelope
+  set?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+  disconnect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+  delete?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+  connect?: Prisma.ConversationThreadWhereUniqueInput | Prisma.ConversationThreadWhereUniqueInput[]
+  update?: Prisma.ConversationThreadUpdateWithWhereUniqueWithoutWhatsAppSessionInput | Prisma.ConversationThreadUpdateWithWhereUniqueWithoutWhatsAppSessionInput[]
+  updateMany?: Prisma.ConversationThreadUpdateManyWithWhereWithoutWhatsAppSessionInput | Prisma.ConversationThreadUpdateManyWithWhereWithoutWhatsAppSessionInput[]
+  deleteMany?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
 }
 
 export type ConversationThreadCreateWithoutCustomerInput = {
-  id?: string
+  id: string
   subject?: string | null
   status?: string
   assignedToId?: string | null
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutConversationThreadsInput
-  session: Prisma.WhatsAppSessionCreateNestedOneWithoutThreadsInput
-  messages?: Prisma.WhatsAppMessageCreateNestedManyWithoutThreadInput
+  updatedAt: Date | string
+  WhatsAppSession: Prisma.WhatsAppSessionCreateNestedOneWithoutConversationThreadInput
+  tenant: Prisma.TenantCreateNestedOneWithoutConversationThreadInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutConversationThreadInput
 }
 
 export type ConversationThreadUncheckedCreateWithoutCustomerInput = {
-  id?: string
+  id: string
   tenantId: string
   sessionId: string
   subject?: string | null
@@ -745,8 +675,8 @@ export type ConversationThreadUncheckedCreateWithoutCustomerInput = {
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
-  messages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutThreadInput
+  updatedAt: Date | string
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutConversationThreadInput
 }
 
 export type ConversationThreadCreateOrConnectWithoutCustomerInput = {
@@ -774,75 +704,92 @@ export type ConversationThreadUpdateManyWithWhereWithoutCustomerInput = {
   data: Prisma.XOR<Prisma.ConversationThreadUpdateManyMutationInput, Prisma.ConversationThreadUncheckedUpdateManyWithoutCustomerInput>
 }
 
-export type ConversationThreadCreateWithoutSessionInput = {
-  id?: string
-  subject?: string | null
-  status?: string
-  assignedToId?: string | null
-  lastMessageAt?: Date | string
-  messageCount?: number
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutConversationThreadsInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutConversationThreadsInput
-  messages?: Prisma.WhatsAppMessageCreateNestedManyWithoutThreadInput
+export type ConversationThreadScalarWhereInput = {
+  AND?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
+  OR?: Prisma.ConversationThreadScalarWhereInput[]
+  NOT?: Prisma.ConversationThreadScalarWhereInput | Prisma.ConversationThreadScalarWhereInput[]
+  id?: Prisma.StringFilter<"ConversationThread"> | string
+  tenantId?: Prisma.StringFilter<"ConversationThread"> | string
+  sessionId?: Prisma.StringFilter<"ConversationThread"> | string
+  subject?: Prisma.StringNullableFilter<"ConversationThread"> | string | null
+  status?: Prisma.StringFilter<"ConversationThread"> | string
+  assignedToId?: Prisma.StringNullableFilter<"ConversationThread"> | string | null
+  lastMessageAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
+  messageCount?: Prisma.IntFilter<"ConversationThread"> | number
+  createdAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"ConversationThread"> | Date | string
+  customerId?: Prisma.StringNullableFilter<"ConversationThread"> | string | null
 }
 
-export type ConversationThreadUncheckedCreateWithoutSessionInput = {
-  id?: string
-  tenantId: string
+export type ConversationThreadCreateWithoutTenantInput = {
+  id: string
   subject?: string | null
   status?: string
   assignedToId?: string | null
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
+  customer?: Prisma.CustomerCreateNestedOneWithoutConversationThreadInput
+  WhatsAppSession: Prisma.WhatsAppSessionCreateNestedOneWithoutConversationThreadInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutConversationThreadInput
+}
+
+export type ConversationThreadUncheckedCreateWithoutTenantInput = {
+  id: string
+  sessionId: string
+  subject?: string | null
+  status?: string
+  assignedToId?: string | null
+  lastMessageAt?: Date | string
+  messageCount?: number
+  createdAt?: Date | string
+  updatedAt: Date | string
   customerId?: string | null
-  messages?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutThreadInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutConversationThreadInput
 }
 
-export type ConversationThreadCreateOrConnectWithoutSessionInput = {
+export type ConversationThreadCreateOrConnectWithoutTenantInput = {
   where: Prisma.ConversationThreadWhereUniqueInput
-  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutSessionInput>
+  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput>
 }
 
-export type ConversationThreadCreateManySessionInputEnvelope = {
-  data: Prisma.ConversationThreadCreateManySessionInput | Prisma.ConversationThreadCreateManySessionInput[]
+export type ConversationThreadCreateManyTenantInputEnvelope = {
+  data: Prisma.ConversationThreadCreateManyTenantInput | Prisma.ConversationThreadCreateManyTenantInput[]
 }
 
-export type ConversationThreadUpsertWithWhereUniqueWithoutSessionInput = {
+export type ConversationThreadUpsertWithWhereUniqueWithoutTenantInput = {
   where: Prisma.ConversationThreadWhereUniqueInput
-  update: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutSessionInput, Prisma.ConversationThreadUncheckedUpdateWithoutSessionInput>
-  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutSessionInput>
+  update: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutTenantInput, Prisma.ConversationThreadUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutTenantInput, Prisma.ConversationThreadUncheckedCreateWithoutTenantInput>
 }
 
-export type ConversationThreadUpdateWithWhereUniqueWithoutSessionInput = {
+export type ConversationThreadUpdateWithWhereUniqueWithoutTenantInput = {
   where: Prisma.ConversationThreadWhereUniqueInput
-  data: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutSessionInput, Prisma.ConversationThreadUncheckedUpdateWithoutSessionInput>
+  data: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutTenantInput, Prisma.ConversationThreadUncheckedUpdateWithoutTenantInput>
 }
 
-export type ConversationThreadUpdateManyWithWhereWithoutSessionInput = {
+export type ConversationThreadUpdateManyWithWhereWithoutTenantInput = {
   where: Prisma.ConversationThreadScalarWhereInput
-  data: Prisma.XOR<Prisma.ConversationThreadUpdateManyMutationInput, Prisma.ConversationThreadUncheckedUpdateManyWithoutSessionInput>
+  data: Prisma.XOR<Prisma.ConversationThreadUpdateManyMutationInput, Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantInput>
 }
 
-export type ConversationThreadCreateWithoutMessagesInput = {
-  id?: string
+export type ConversationThreadCreateWithoutWhatsAppMessageInput = {
+  id: string
   subject?: string | null
   status?: string
   assignedToId?: string | null
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutConversationThreadsInput
-  session: Prisma.WhatsAppSessionCreateNestedOneWithoutThreadsInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutConversationThreadsInput
+  updatedAt: Date | string
+  customer?: Prisma.CustomerCreateNestedOneWithoutConversationThreadInput
+  WhatsAppSession: Prisma.WhatsAppSessionCreateNestedOneWithoutConversationThreadInput
+  tenant: Prisma.TenantCreateNestedOneWithoutConversationThreadInput
 }
 
-export type ConversationThreadUncheckedCreateWithoutMessagesInput = {
-  id?: string
+export type ConversationThreadUncheckedCreateWithoutWhatsAppMessageInput = {
+  id: string
   tenantId: string
   sessionId: string
   subject?: string | null
@@ -851,27 +798,27 @@ export type ConversationThreadUncheckedCreateWithoutMessagesInput = {
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
   customerId?: string | null
 }
 
-export type ConversationThreadCreateOrConnectWithoutMessagesInput = {
+export type ConversationThreadCreateOrConnectWithoutWhatsAppMessageInput = {
   where: Prisma.ConversationThreadWhereUniqueInput
-  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutMessagesInput, Prisma.ConversationThreadUncheckedCreateWithoutMessagesInput>
+  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppMessageInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppMessageInput>
 }
 
-export type ConversationThreadUpsertWithoutMessagesInput = {
-  update: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutMessagesInput, Prisma.ConversationThreadUncheckedUpdateWithoutMessagesInput>
-  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutMessagesInput, Prisma.ConversationThreadUncheckedCreateWithoutMessagesInput>
+export type ConversationThreadUpsertWithoutWhatsAppMessageInput = {
+  update: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutWhatsAppMessageInput, Prisma.ConversationThreadUncheckedUpdateWithoutWhatsAppMessageInput>
+  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppMessageInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppMessageInput>
   where?: Prisma.ConversationThreadWhereInput
 }
 
-export type ConversationThreadUpdateToOneWithWhereWithoutMessagesInput = {
+export type ConversationThreadUpdateToOneWithWhereWithoutWhatsAppMessageInput = {
   where?: Prisma.ConversationThreadWhereInput
-  data: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutMessagesInput, Prisma.ConversationThreadUncheckedUpdateWithoutMessagesInput>
+  data: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutWhatsAppMessageInput, Prisma.ConversationThreadUncheckedUpdateWithoutWhatsAppMessageInput>
 }
 
-export type ConversationThreadUpdateWithoutMessagesInput = {
+export type ConversationThreadUpdateWithoutWhatsAppMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -880,12 +827,12 @@ export type ConversationThreadUpdateWithoutMessagesInput = {
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutConversationThreadsNestedInput
-  session?: Prisma.WhatsAppSessionUpdateOneRequiredWithoutThreadsNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutConversationThreadsNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutConversationThreadNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateOneRequiredWithoutConversationThreadNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutConversationThreadNestedInput
 }
 
-export type ConversationThreadUncheckedUpdateWithoutMessagesInput = {
+export type ConversationThreadUncheckedUpdateWithoutWhatsAppMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   sessionId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -899,62 +846,61 @@ export type ConversationThreadUncheckedUpdateWithoutMessagesInput = {
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type ConversationThreadCreateManyTenantInput = {
-  id?: string
-  sessionId: string
+export type ConversationThreadCreateWithoutWhatsAppSessionInput = {
+  id: string
   subject?: string | null
   status?: string
   assignedToId?: string | null
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
+  customer?: Prisma.CustomerCreateNestedOneWithoutConversationThreadInput
+  tenant: Prisma.TenantCreateNestedOneWithoutConversationThreadInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutConversationThreadInput
+}
+
+export type ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput = {
+  id: string
+  tenantId: string
+  subject?: string | null
+  status?: string
+  assignedToId?: string | null
+  lastMessageAt?: Date | string
+  messageCount?: number
+  createdAt?: Date | string
+  updatedAt: Date | string
   customerId?: string | null
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutConversationThreadInput
 }
 
-export type ConversationThreadUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  session?: Prisma.WhatsAppSessionUpdateOneRequiredWithoutThreadsNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutConversationThreadsNestedInput
-  messages?: Prisma.WhatsAppMessageUpdateManyWithoutThreadNestedInput
+export type ConversationThreadCreateOrConnectWithoutWhatsAppSessionInput = {
+  where: Prisma.ConversationThreadWhereUniqueInput
+  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput>
 }
 
-export type ConversationThreadUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  messages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutThreadNestedInput
+export type ConversationThreadCreateManyWhatsAppSessionInputEnvelope = {
+  data: Prisma.ConversationThreadCreateManyWhatsAppSessionInput | Prisma.ConversationThreadCreateManyWhatsAppSessionInput[]
 }
 
-export type ConversationThreadUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+export type ConversationThreadUpsertWithWhereUniqueWithoutWhatsAppSessionInput = {
+  where: Prisma.ConversationThreadWhereUniqueInput
+  update: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutWhatsAppSessionInput, Prisma.ConversationThreadUncheckedUpdateWithoutWhatsAppSessionInput>
+  create: Prisma.XOR<Prisma.ConversationThreadCreateWithoutWhatsAppSessionInput, Prisma.ConversationThreadUncheckedCreateWithoutWhatsAppSessionInput>
+}
+
+export type ConversationThreadUpdateWithWhereUniqueWithoutWhatsAppSessionInput = {
+  where: Prisma.ConversationThreadWhereUniqueInput
+  data: Prisma.XOR<Prisma.ConversationThreadUpdateWithoutWhatsAppSessionInput, Prisma.ConversationThreadUncheckedUpdateWithoutWhatsAppSessionInput>
+}
+
+export type ConversationThreadUpdateManyWithWhereWithoutWhatsAppSessionInput = {
+  where: Prisma.ConversationThreadScalarWhereInput
+  data: Prisma.XOR<Prisma.ConversationThreadUpdateManyMutationInput, Prisma.ConversationThreadUncheckedUpdateManyWithoutWhatsAppSessionInput>
 }
 
 export type ConversationThreadCreateManyCustomerInput = {
-  id?: string
+  id: string
   tenantId: string
   sessionId: string
   subject?: string | null
@@ -963,7 +909,7 @@ export type ConversationThreadCreateManyCustomerInput = {
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type ConversationThreadUpdateWithoutCustomerInput = {
@@ -975,9 +921,9 @@ export type ConversationThreadUpdateWithoutCustomerInput = {
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutConversationThreadsNestedInput
-  session?: Prisma.WhatsAppSessionUpdateOneRequiredWithoutThreadsNestedInput
-  messages?: Prisma.WhatsAppMessageUpdateManyWithoutThreadNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateOneRequiredWithoutConversationThreadNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutConversationThreadNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutConversationThreadNestedInput
 }
 
 export type ConversationThreadUncheckedUpdateWithoutCustomerInput = {
@@ -991,7 +937,7 @@ export type ConversationThreadUncheckedUpdateWithoutCustomerInput = {
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  messages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutThreadNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutConversationThreadNestedInput
 }
 
 export type ConversationThreadUncheckedUpdateManyWithoutCustomerInput = {
@@ -1007,20 +953,20 @@ export type ConversationThreadUncheckedUpdateManyWithoutCustomerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type ConversationThreadCreateManySessionInput = {
-  id?: string
-  tenantId: string
+export type ConversationThreadCreateManyTenantInput = {
+  id: string
+  sessionId: string
   subject?: string | null
   status?: string
   assignedToId?: string | null
   lastMessageAt?: Date | string
   messageCount?: number
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
   customerId?: string | null
 }
 
-export type ConversationThreadUpdateWithoutSessionInput = {
+export type ConversationThreadUpdateWithoutTenantInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1029,12 +975,66 @@ export type ConversationThreadUpdateWithoutSessionInput = {
   messageCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutConversationThreadsNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutConversationThreadsNestedInput
-  messages?: Prisma.WhatsAppMessageUpdateManyWithoutThreadNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutConversationThreadNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateOneRequiredWithoutConversationThreadNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutConversationThreadNestedInput
 }
 
-export type ConversationThreadUncheckedUpdateWithoutSessionInput = {
+export type ConversationThreadUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutConversationThreadNestedInput
+}
+
+export type ConversationThreadUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  sessionId?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type ConversationThreadCreateManyWhatsAppSessionInput = {
+  id: string
+  tenantId: string
+  subject?: string | null
+  status?: string
+  assignedToId?: string | null
+  lastMessageAt?: Date | string
+  messageCount?: number
+  createdAt?: Date | string
+  updatedAt: Date | string
+  customerId?: string | null
+}
+
+export type ConversationThreadUpdateWithoutWhatsAppSessionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastMessageAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  messageCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneWithoutConversationThreadNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutConversationThreadNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutConversationThreadNestedInput
+}
+
+export type ConversationThreadUncheckedUpdateWithoutWhatsAppSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1045,10 +1045,10 @@ export type ConversationThreadUncheckedUpdateWithoutSessionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  messages?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutThreadNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutConversationThreadNestedInput
 }
 
-export type ConversationThreadUncheckedUpdateManyWithoutSessionInput = {
+export type ConversationThreadUncheckedUpdateManyWithoutWhatsAppSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   subject?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1067,11 +1067,11 @@ export type ConversationThreadUncheckedUpdateManyWithoutSessionInput = {
  */
 
 export type ConversationThreadCountOutputType = {
-  messages: number
+  WhatsAppMessage: number
 }
 
 export type ConversationThreadCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  messages?: boolean | ConversationThreadCountOutputTypeCountMessagesArgs
+  WhatsAppMessage?: boolean | ConversationThreadCountOutputTypeCountWhatsAppMessageArgs
 }
 
 /**
@@ -1087,7 +1087,7 @@ export type ConversationThreadCountOutputTypeDefaultArgs<ExtArgs extends runtime
 /**
  * ConversationThreadCountOutputType without action
  */
-export type ConversationThreadCountOutputTypeCountMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ConversationThreadCountOutputTypeCountWhatsAppMessageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.WhatsAppMessageWhereInput
 }
 
@@ -1104,10 +1104,10 @@ export type ConversationThreadSelect<ExtArgs extends runtime.Types.Extensions.In
   createdAt?: boolean
   updatedAt?: boolean
   customerId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.ConversationThread$customerArgs<ExtArgs>
-  messages?: boolean | Prisma.ConversationThread$messagesArgs<ExtArgs>
+  WhatsAppSession?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  WhatsAppMessage?: boolean | Prisma.ConversationThread$WhatsAppMessageArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationThreadCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationThread"]>
 
@@ -1123,9 +1123,9 @@ export type ConversationThreadSelectCreateManyAndReturn<ExtArgs extends runtime.
   createdAt?: boolean
   updatedAt?: boolean
   customerId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.ConversationThread$customerArgs<ExtArgs>
+  WhatsAppSession?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationThread"]>
 
 export type ConversationThreadSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1140,9 +1140,9 @@ export type ConversationThreadSelectUpdateManyAndReturn<ExtArgs extends runtime.
   createdAt?: boolean
   updatedAt?: boolean
   customerId?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.ConversationThread$customerArgs<ExtArgs>
+  WhatsAppSession?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationThread"]>
 
 export type ConversationThreadSelectScalar = {
@@ -1161,30 +1161,30 @@ export type ConversationThreadSelectScalar = {
 
 export type ConversationThreadOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "sessionId" | "subject" | "status" | "assignedToId" | "lastMessageAt" | "messageCount" | "createdAt" | "updatedAt" | "customerId", ExtArgs["result"]["conversationThread"]>
 export type ConversationThreadInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.ConversationThread$customerArgs<ExtArgs>
-  messages?: boolean | Prisma.ConversationThread$messagesArgs<ExtArgs>
+  WhatsAppSession?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  WhatsAppMessage?: boolean | Prisma.ConversationThread$WhatsAppMessageArgs<ExtArgs>
   _count?: boolean | Prisma.ConversationThreadCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ConversationThreadIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.ConversationThread$customerArgs<ExtArgs>
+  WhatsAppSession?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type ConversationThreadIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  session?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.ConversationThread$customerArgs<ExtArgs>
+  WhatsAppSession?: boolean | Prisma.WhatsAppSessionDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $ConversationThreadPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ConversationThread"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
-    session: Prisma.$WhatsAppSessionPayload<ExtArgs>
     customer: Prisma.$CustomerPayload<ExtArgs> | null
-    messages: Prisma.$WhatsAppMessagePayload<ExtArgs>[]
+    WhatsAppSession: Prisma.$WhatsAppSessionPayload<ExtArgs>
+    tenant: Prisma.$TenantPayload<ExtArgs>
+    WhatsAppMessage: Prisma.$WhatsAppMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1592,10 +1592,10 @@ readonly fields: ConversationThreadFieldRefs;
  */
 export interface Prisma__ConversationThreadClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  session<T extends Prisma.WhatsAppSessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WhatsAppSessionDefaultArgs<ExtArgs>>): Prisma.Prisma__WhatsAppSessionClient<runtime.Types.Result.GetResult<Prisma.$WhatsAppSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   customer<T extends Prisma.ConversationThread$customerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationThread$customerArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  messages<T extends Prisma.ConversationThread$messagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationThread$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WhatsAppSession<T extends Prisma.WhatsAppSessionDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WhatsAppSessionDefaultArgs<ExtArgs>>): Prisma.Prisma__WhatsAppSessionClient<runtime.Types.Result.GetResult<Prisma.$WhatsAppSessionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  WhatsAppMessage<T extends Prisma.ConversationThread$WhatsAppMessageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ConversationThread$WhatsAppMessageArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2054,9 +2054,9 @@ export type ConversationThread$customerArgs<ExtArgs extends runtime.Types.Extens
 }
 
 /**
- * ConversationThread.messages
+ * ConversationThread.WhatsAppMessage
  */
-export type ConversationThread$messagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type ConversationThread$WhatsAppMessageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the WhatsAppMessage
    */

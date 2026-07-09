@@ -262,7 +262,7 @@ export type CmsActivityLogScalarWhereWithAggregatesInput = {
 }
 
 export type CmsActivityLogCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   userId?: string | null
   action: string
@@ -273,7 +273,7 @@ export type CmsActivityLogCreateInput = {
 }
 
 export type CmsActivityLogUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   userId?: string | null
   action: string
@@ -306,7 +306,7 @@ export type CmsActivityLogUncheckedUpdateInput = {
 }
 
 export type CmsActivityLogCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   userId?: string | null
   action: string

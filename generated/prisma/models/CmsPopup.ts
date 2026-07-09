@@ -310,7 +310,7 @@ export type CmsPopupScalarWhereWithAggregatesInput = {
 }
 
 export type CmsPopupCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   content?: string | null
@@ -321,11 +321,11 @@ export type CmsPopupCreateInput = {
   scheduledFrom?: Date | string | null
   scheduledTo?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsPopupUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   content?: string | null
@@ -336,7 +336,7 @@ export type CmsPopupUncheckedCreateInput = {
   scheduledFrom?: Date | string | null
   scheduledTo?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsPopupUpdateInput = {
@@ -370,7 +370,7 @@ export type CmsPopupUncheckedUpdateInput = {
 }
 
 export type CmsPopupCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   content?: string | null
@@ -381,7 +381,7 @@ export type CmsPopupCreateManyInput = {
   scheduledFrom?: Date | string | null
   scheduledTo?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsPopupUpdateManyMutationInput = {

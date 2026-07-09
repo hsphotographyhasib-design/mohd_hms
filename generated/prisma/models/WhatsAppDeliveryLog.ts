@@ -206,8 +206,8 @@ export type WhatsAppDeliveryLogWhereInput = {
   providerStatus?: Prisma.StringNullableFilter<"WhatsAppDeliveryLog"> | string | null
   timestamp?: Prisma.DateTimeFilter<"WhatsAppDeliveryLog"> | Date | string
   errorMessage?: Prisma.StringNullableFilter<"WhatsAppDeliveryLog"> | string | null
+  WhatsAppMessage?: Prisma.XOR<Prisma.WhatsAppMessageScalarRelationFilter, Prisma.WhatsAppMessageWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  message?: Prisma.XOR<Prisma.WhatsAppMessageScalarRelationFilter, Prisma.WhatsAppMessageWhereInput>
 }
 
 export type WhatsAppDeliveryLogOrderByWithRelationInput = {
@@ -219,8 +219,8 @@ export type WhatsAppDeliveryLogOrderByWithRelationInput = {
   providerStatus?: Prisma.SortOrderInput | Prisma.SortOrder
   timestamp?: Prisma.SortOrder
   errorMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  WhatsAppMessage?: Prisma.WhatsAppMessageOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
-  message?: Prisma.WhatsAppMessageOrderByWithRelationInput
 }
 
 export type WhatsAppDeliveryLogWhereUniqueInput = Prisma.AtLeast<{
@@ -235,8 +235,8 @@ export type WhatsAppDeliveryLogWhereUniqueInput = Prisma.AtLeast<{
   providerStatus?: Prisma.StringNullableFilter<"WhatsAppDeliveryLog"> | string | null
   timestamp?: Prisma.DateTimeFilter<"WhatsAppDeliveryLog"> | Date | string
   errorMessage?: Prisma.StringNullableFilter<"WhatsAppDeliveryLog"> | string | null
+  WhatsAppMessage?: Prisma.XOR<Prisma.WhatsAppMessageScalarRelationFilter, Prisma.WhatsAppMessageWhereInput>
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  message?: Prisma.XOR<Prisma.WhatsAppMessageScalarRelationFilter, Prisma.WhatsAppMessageWhereInput>
 }, "id">
 
 export type WhatsAppDeliveryLogOrderByWithAggregationInput = {
@@ -268,18 +268,18 @@ export type WhatsAppDeliveryLogScalarWhereWithAggregatesInput = {
 }
 
 export type WhatsAppDeliveryLogCreateInput = {
-  id?: string
+  id: string
   direction: string
   status: string
   providerStatus?: string | null
   timestamp?: Date | string
   errorMessage?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutWhatsappDeliveryLogsInput
-  message: Prisma.WhatsAppMessageCreateNestedOneWithoutDeliveryLogsInput
+  WhatsAppMessage: Prisma.WhatsAppMessageCreateNestedOneWithoutWhatsAppDeliveryLogInput
+  tenant: Prisma.TenantCreateNestedOneWithoutWhatsAppDeliveryLogInput
 }
 
 export type WhatsAppDeliveryLogUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   messageId: string
   direction: string
@@ -296,8 +296,8 @@ export type WhatsAppDeliveryLogUpdateInput = {
   providerStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutWhatsappDeliveryLogsNestedInput
-  message?: Prisma.WhatsAppMessageUpdateOneRequiredWithoutDeliveryLogsNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUpdateOneRequiredWithoutWhatsAppDeliveryLogNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutWhatsAppDeliveryLogNestedInput
 }
 
 export type WhatsAppDeliveryLogUncheckedUpdateInput = {
@@ -312,7 +312,7 @@ export type WhatsAppDeliveryLogUncheckedUpdateInput = {
 }
 
 export type WhatsAppDeliveryLogCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   messageId: string
   direction: string
@@ -427,60 +427,60 @@ export type WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.WhatsAppDeliveryLogScalarWhereInput | Prisma.WhatsAppDeliveryLogScalarWhereInput[]
 }
 
-export type WhatsAppDeliveryLogCreateNestedManyWithoutMessageInput = {
-  create?: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput> | Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput[] | Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput[]
-  connectOrCreate?: Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput | Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput[]
-  createMany?: Prisma.WhatsAppDeliveryLogCreateManyMessageInputEnvelope
+export type WhatsAppDeliveryLogCreateNestedManyWithoutWhatsAppMessageInput = {
+  create?: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput> | Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput[] | Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput[]
+  connectOrCreate?: Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput[]
+  createMany?: Prisma.WhatsAppDeliveryLogCreateManyWhatsAppMessageInputEnvelope
   connect?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
 }
 
-export type WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutMessageInput = {
-  create?: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput> | Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput[] | Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput[]
-  connectOrCreate?: Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput | Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput[]
-  createMany?: Prisma.WhatsAppDeliveryLogCreateManyMessageInputEnvelope
+export type WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutWhatsAppMessageInput = {
+  create?: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput> | Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput[] | Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput[]
+  connectOrCreate?: Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput[]
+  createMany?: Prisma.WhatsAppDeliveryLogCreateManyWhatsAppMessageInputEnvelope
   connect?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
 }
 
-export type WhatsAppDeliveryLogUpdateManyWithoutMessageNestedInput = {
-  create?: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput> | Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput[] | Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput[]
-  connectOrCreate?: Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput | Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput[]
-  upsert?: Prisma.WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutMessageInput | Prisma.WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutMessageInput[]
-  createMany?: Prisma.WhatsAppDeliveryLogCreateManyMessageInputEnvelope
+export type WhatsAppDeliveryLogUpdateManyWithoutWhatsAppMessageNestedInput = {
+  create?: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput> | Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput[] | Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput[]
+  connectOrCreate?: Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput[]
+  upsert?: Prisma.WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutWhatsAppMessageInput[]
+  createMany?: Prisma.WhatsAppDeliveryLogCreateManyWhatsAppMessageInputEnvelope
   set?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
   disconnect?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
   delete?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
   connect?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
-  update?: Prisma.WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutMessageInput | Prisma.WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutMessageInput[]
-  updateMany?: Prisma.WhatsAppDeliveryLogUpdateManyWithWhereWithoutMessageInput | Prisma.WhatsAppDeliveryLogUpdateManyWithWhereWithoutMessageInput[]
+  update?: Prisma.WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutWhatsAppMessageInput[]
+  updateMany?: Prisma.WhatsAppDeliveryLogUpdateManyWithWhereWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogUpdateManyWithWhereWithoutWhatsAppMessageInput[]
   deleteMany?: Prisma.WhatsAppDeliveryLogScalarWhereInput | Prisma.WhatsAppDeliveryLogScalarWhereInput[]
 }
 
-export type WhatsAppDeliveryLogUncheckedUpdateManyWithoutMessageNestedInput = {
-  create?: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput> | Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput[] | Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput[]
-  connectOrCreate?: Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput | Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput[]
-  upsert?: Prisma.WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutMessageInput | Prisma.WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutMessageInput[]
-  createMany?: Prisma.WhatsAppDeliveryLogCreateManyMessageInputEnvelope
+export type WhatsAppDeliveryLogUncheckedUpdateManyWithoutWhatsAppMessageNestedInput = {
+  create?: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput> | Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput[] | Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput[]
+  connectOrCreate?: Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput[]
+  upsert?: Prisma.WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutWhatsAppMessageInput[]
+  createMany?: Prisma.WhatsAppDeliveryLogCreateManyWhatsAppMessageInputEnvelope
   set?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
   disconnect?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
   delete?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
   connect?: Prisma.WhatsAppDeliveryLogWhereUniqueInput | Prisma.WhatsAppDeliveryLogWhereUniqueInput[]
-  update?: Prisma.WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutMessageInput | Prisma.WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutMessageInput[]
-  updateMany?: Prisma.WhatsAppDeliveryLogUpdateManyWithWhereWithoutMessageInput | Prisma.WhatsAppDeliveryLogUpdateManyWithWhereWithoutMessageInput[]
+  update?: Prisma.WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutWhatsAppMessageInput[]
+  updateMany?: Prisma.WhatsAppDeliveryLogUpdateManyWithWhereWithoutWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogUpdateManyWithWhereWithoutWhatsAppMessageInput[]
   deleteMany?: Prisma.WhatsAppDeliveryLogScalarWhereInput | Prisma.WhatsAppDeliveryLogScalarWhereInput[]
 }
 
 export type WhatsAppDeliveryLogCreateWithoutTenantInput = {
-  id?: string
+  id: string
   direction: string
   status: string
   providerStatus?: string | null
   timestamp?: Date | string
   errorMessage?: string | null
-  message: Prisma.WhatsAppMessageCreateNestedOneWithoutDeliveryLogsInput
+  WhatsAppMessage: Prisma.WhatsAppMessageCreateNestedOneWithoutWhatsAppDeliveryLogInput
 }
 
 export type WhatsAppDeliveryLogUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   messageId: string
   direction: string
   status: string
@@ -528,18 +528,18 @@ export type WhatsAppDeliveryLogScalarWhereInput = {
   errorMessage?: Prisma.StringNullableFilter<"WhatsAppDeliveryLog"> | string | null
 }
 
-export type WhatsAppDeliveryLogCreateWithoutMessageInput = {
-  id?: string
+export type WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput = {
+  id: string
   direction: string
   status: string
   providerStatus?: string | null
   timestamp?: Date | string
   errorMessage?: string | null
-  tenant: Prisma.TenantCreateNestedOneWithoutWhatsappDeliveryLogsInput
+  tenant: Prisma.TenantCreateNestedOneWithoutWhatsAppDeliveryLogInput
 }
 
-export type WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput = {
-  id?: string
+export type WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput = {
+  id: string
   tenantId: string
   direction: string
   status: string
@@ -548,33 +548,33 @@ export type WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput = {
   errorMessage?: string | null
 }
 
-export type WhatsAppDeliveryLogCreateOrConnectWithoutMessageInput = {
+export type WhatsAppDeliveryLogCreateOrConnectWithoutWhatsAppMessageInput = {
   where: Prisma.WhatsAppDeliveryLogWhereUniqueInput
-  create: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput>
+  create: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput>
 }
 
-export type WhatsAppDeliveryLogCreateManyMessageInputEnvelope = {
-  data: Prisma.WhatsAppDeliveryLogCreateManyMessageInput | Prisma.WhatsAppDeliveryLogCreateManyMessageInput[]
+export type WhatsAppDeliveryLogCreateManyWhatsAppMessageInputEnvelope = {
+  data: Prisma.WhatsAppDeliveryLogCreateManyWhatsAppMessageInput | Prisma.WhatsAppDeliveryLogCreateManyWhatsAppMessageInput[]
 }
 
-export type WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutMessageInput = {
+export type WhatsAppDeliveryLogUpsertWithWhereUniqueWithoutWhatsAppMessageInput = {
   where: Prisma.WhatsAppDeliveryLogWhereUniqueInput
-  update: Prisma.XOR<Prisma.WhatsAppDeliveryLogUpdateWithoutMessageInput, Prisma.WhatsAppDeliveryLogUncheckedUpdateWithoutMessageInput>
-  create: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutMessageInput>
+  update: Prisma.XOR<Prisma.WhatsAppDeliveryLogUpdateWithoutWhatsAppMessageInput, Prisma.WhatsAppDeliveryLogUncheckedUpdateWithoutWhatsAppMessageInput>
+  create: Prisma.XOR<Prisma.WhatsAppDeliveryLogCreateWithoutWhatsAppMessageInput, Prisma.WhatsAppDeliveryLogUncheckedCreateWithoutWhatsAppMessageInput>
 }
 
-export type WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutMessageInput = {
+export type WhatsAppDeliveryLogUpdateWithWhereUniqueWithoutWhatsAppMessageInput = {
   where: Prisma.WhatsAppDeliveryLogWhereUniqueInput
-  data: Prisma.XOR<Prisma.WhatsAppDeliveryLogUpdateWithoutMessageInput, Prisma.WhatsAppDeliveryLogUncheckedUpdateWithoutMessageInput>
+  data: Prisma.XOR<Prisma.WhatsAppDeliveryLogUpdateWithoutWhatsAppMessageInput, Prisma.WhatsAppDeliveryLogUncheckedUpdateWithoutWhatsAppMessageInput>
 }
 
-export type WhatsAppDeliveryLogUpdateManyWithWhereWithoutMessageInput = {
+export type WhatsAppDeliveryLogUpdateManyWithWhereWithoutWhatsAppMessageInput = {
   where: Prisma.WhatsAppDeliveryLogScalarWhereInput
-  data: Prisma.XOR<Prisma.WhatsAppDeliveryLogUpdateManyMutationInput, Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutMessageInput>
+  data: Prisma.XOR<Prisma.WhatsAppDeliveryLogUpdateManyMutationInput, Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutWhatsAppMessageInput>
 }
 
 export type WhatsAppDeliveryLogCreateManyTenantInput = {
-  id?: string
+  id: string
   messageId: string
   direction: string
   status: string
@@ -590,7 +590,7 @@ export type WhatsAppDeliveryLogUpdateWithoutTenantInput = {
   providerStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  message?: Prisma.WhatsAppMessageUpdateOneRequiredWithoutDeliveryLogsNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUpdateOneRequiredWithoutWhatsAppDeliveryLogNestedInput
 }
 
 export type WhatsAppDeliveryLogUncheckedUpdateWithoutTenantInput = {
@@ -613,8 +613,8 @@ export type WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type WhatsAppDeliveryLogCreateManyMessageInput = {
-  id?: string
+export type WhatsAppDeliveryLogCreateManyWhatsAppMessageInput = {
+  id: string
   tenantId: string
   direction: string
   status: string
@@ -623,17 +623,17 @@ export type WhatsAppDeliveryLogCreateManyMessageInput = {
   errorMessage?: string | null
 }
 
-export type WhatsAppDeliveryLogUpdateWithoutMessageInput = {
+export type WhatsAppDeliveryLogUpdateWithoutWhatsAppMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   direction?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
   providerStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   timestamp?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutWhatsappDeliveryLogsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutWhatsAppDeliveryLogNestedInput
 }
 
-export type WhatsAppDeliveryLogUncheckedUpdateWithoutMessageInput = {
+export type WhatsAppDeliveryLogUncheckedUpdateWithoutWhatsAppMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   direction?: Prisma.StringFieldUpdateOperationsInput | string
@@ -643,7 +643,7 @@ export type WhatsAppDeliveryLogUncheckedUpdateWithoutMessageInput = {
   errorMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
-export type WhatsAppDeliveryLogUncheckedUpdateManyWithoutMessageInput = {
+export type WhatsAppDeliveryLogUncheckedUpdateManyWithoutWhatsAppMessageInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   direction?: Prisma.StringFieldUpdateOperationsInput | string
@@ -664,8 +664,8 @@ export type WhatsAppDeliveryLogSelect<ExtArgs extends runtime.Types.Extensions.I
   providerStatus?: boolean
   timestamp?: boolean
   errorMessage?: boolean
+  WhatsAppMessage?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  message?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["whatsAppDeliveryLog"]>
 
 export type WhatsAppDeliveryLogSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -677,8 +677,8 @@ export type WhatsAppDeliveryLogSelectCreateManyAndReturn<ExtArgs extends runtime
   providerStatus?: boolean
   timestamp?: boolean
   errorMessage?: boolean
+  WhatsAppMessage?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  message?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["whatsAppDeliveryLog"]>
 
 export type WhatsAppDeliveryLogSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -690,8 +690,8 @@ export type WhatsAppDeliveryLogSelectUpdateManyAndReturn<ExtArgs extends runtime
   providerStatus?: boolean
   timestamp?: boolean
   errorMessage?: boolean
+  WhatsAppMessage?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  message?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["whatsAppDeliveryLog"]>
 
 export type WhatsAppDeliveryLogSelectScalar = {
@@ -707,23 +707,23 @@ export type WhatsAppDeliveryLogSelectScalar = {
 
 export type WhatsAppDeliveryLogOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "messageId" | "direction" | "status" | "providerStatus" | "timestamp" | "errorMessage", ExtArgs["result"]["whatsAppDeliveryLog"]>
 export type WhatsAppDeliveryLogInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  WhatsAppMessage?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  message?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
 }
 export type WhatsAppDeliveryLogIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  WhatsAppMessage?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  message?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
 }
 export type WhatsAppDeliveryLogIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  WhatsAppMessage?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  message?: boolean | Prisma.WhatsAppMessageDefaultArgs<ExtArgs>
 }
 
 export type $WhatsAppDeliveryLogPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "WhatsAppDeliveryLog"
   objects: {
+    WhatsAppMessage: Prisma.$WhatsAppMessagePayload<ExtArgs>
     tenant: Prisma.$TenantPayload<ExtArgs>
-    message: Prisma.$WhatsAppMessagePayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1128,8 +1128,8 @@ readonly fields: WhatsAppDeliveryLogFieldRefs;
  */
 export interface Prisma__WhatsAppDeliveryLogClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  WhatsAppMessage<T extends Prisma.WhatsAppMessageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WhatsAppMessageDefaultArgs<ExtArgs>>): Prisma.Prisma__WhatsAppMessageClient<runtime.Types.Result.GetResult<Prisma.$WhatsAppMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  message<T extends Prisma.WhatsAppMessageDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.WhatsAppMessageDefaultArgs<ExtArgs>>): Prisma.Prisma__WhatsAppMessageClient<runtime.Types.Result.GetResult<Prisma.$WhatsAppMessagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

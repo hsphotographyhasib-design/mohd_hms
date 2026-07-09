@@ -294,27 +294,27 @@ export type UserWhereInput = {
   profileCompleted?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  AuditLog?: Prisma.AuditLogListRelationFilter
+  AuthAuditLog?: Prisma.AuthAuditLogListRelationFilter
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintListRelationFilter
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintListRelationFilter
+  Device?: Prisma.DeviceListRelationFilter
+  DeviceToken?: Prisma.DeviceTokenListRelationFilter
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceListRelationFilter
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceListRelationFilter
+  LoginSession?: Prisma.LoginSessionListRelationFilter
+  NotificationLog?: Prisma.NotificationLogListRelationFilter
+  PasswordResetOtp?: Prisma.PasswordResetOtpListRelationFilter
+  PasswordResetToken?: Prisma.PasswordResetTokenListRelationFilter
+  PmSchedule?: Prisma.PmScheduleListRelationFilter
+  Quotation?: Prisma.QuotationListRelationFilter
+  TermsAcceptance?: Prisma.TermsAcceptanceListRelationFilter
   department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
-  assignedComplaints?: Prisma.ComplaintListRelationFilter
-  assignedWorkOrders?: Prisma.WorkOrderListRelationFilter
-  supervisedWorkOrders?: Prisma.WorkOrderListRelationFilter
-  createdWorkOrders?: Prisma.WorkOrderListRelationFilter
-  createdInvoices?: Prisma.InvoiceListRelationFilter
-  preparedInvoices?: Prisma.InvoiceListRelationFilter
-  pmSchedules?: Prisma.PmScheduleListRelationFilter
-  supervisorComplaints?: Prisma.ComplaintListRelationFilter
-  auditLogs?: Prisma.AuditLogListRelationFilter
-  vehicleLogs?: Prisma.VehicleLogListRelationFilter
-  loginSessions?: Prisma.LoginSessionListRelationFilter
-  devices?: Prisma.DeviceListRelationFilter
-  passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
-  passwordResetOtps?: Prisma.PasswordResetOtpListRelationFilter
-  authAuditLogs?: Prisma.AuthAuditLogListRelationFilter
-  termsAcceptances?: Prisma.TermsAcceptanceListRelationFilter
-  preparedQuotations?: Prisma.QuotationListRelationFilter
-  deviceTokens?: Prisma.DeviceTokenListRelationFilter
-  notificationLogs?: Prisma.NotificationLogListRelationFilter
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  VehicleLog?: Prisma.VehicleLogListRelationFilter
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderListRelationFilter
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderListRelationFilter
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -337,27 +337,27 @@ export type UserOrderByWithRelationInput = {
   profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  AuditLog?: Prisma.AuditLogOrderByRelationAggregateInput
+  AuthAuditLog?: Prisma.AuthAuditLogOrderByRelationAggregateInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintOrderByRelationAggregateInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintOrderByRelationAggregateInput
+  Device?: Prisma.DeviceOrderByRelationAggregateInput
+  DeviceToken?: Prisma.DeviceTokenOrderByRelationAggregateInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceOrderByRelationAggregateInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceOrderByRelationAggregateInput
+  LoginSession?: Prisma.LoginSessionOrderByRelationAggregateInput
+  NotificationLog?: Prisma.NotificationLogOrderByRelationAggregateInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpOrderByRelationAggregateInput
+  PasswordResetToken?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
+  PmSchedule?: Prisma.PmScheduleOrderByRelationAggregateInput
+  Quotation?: Prisma.QuotationOrderByRelationAggregateInput
+  TermsAcceptance?: Prisma.TermsAcceptanceOrderByRelationAggregateInput
   department?: Prisma.DepartmentOrderByWithRelationInput
-  assignedComplaints?: Prisma.ComplaintOrderByRelationAggregateInput
-  assignedWorkOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
-  supervisedWorkOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
-  createdWorkOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
-  createdInvoices?: Prisma.InvoiceOrderByRelationAggregateInput
-  preparedInvoices?: Prisma.InvoiceOrderByRelationAggregateInput
-  pmSchedules?: Prisma.PmScheduleOrderByRelationAggregateInput
-  supervisorComplaints?: Prisma.ComplaintOrderByRelationAggregateInput
-  auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
-  vehicleLogs?: Prisma.VehicleLogOrderByRelationAggregateInput
-  loginSessions?: Prisma.LoginSessionOrderByRelationAggregateInput
-  devices?: Prisma.DeviceOrderByRelationAggregateInput
-  passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
-  passwordResetOtps?: Prisma.PasswordResetOtpOrderByRelationAggregateInput
-  authAuditLogs?: Prisma.AuthAuditLogOrderByRelationAggregateInput
-  termsAcceptances?: Prisma.TermsAcceptanceOrderByRelationAggregateInput
-  preparedQuotations?: Prisma.QuotationOrderByRelationAggregateInput
-  deviceTokens?: Prisma.DeviceTokenOrderByRelationAggregateInput
-  notificationLogs?: Prisma.NotificationLogOrderByRelationAggregateInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
+  VehicleLog?: Prisma.VehicleLogOrderByRelationAggregateInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderOrderByRelationAggregateInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderOrderByRelationAggregateInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -384,28 +384,28 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   profileCompleted?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  AuditLog?: Prisma.AuditLogListRelationFilter
+  AuthAuditLog?: Prisma.AuthAuditLogListRelationFilter
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintListRelationFilter
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintListRelationFilter
+  Device?: Prisma.DeviceListRelationFilter
+  DeviceToken?: Prisma.DeviceTokenListRelationFilter
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceListRelationFilter
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceListRelationFilter
+  LoginSession?: Prisma.LoginSessionListRelationFilter
+  NotificationLog?: Prisma.NotificationLogListRelationFilter
+  PasswordResetOtp?: Prisma.PasswordResetOtpListRelationFilter
+  PasswordResetToken?: Prisma.PasswordResetTokenListRelationFilter
+  PmSchedule?: Prisma.PmScheduleListRelationFilter
+  Quotation?: Prisma.QuotationListRelationFilter
+  TermsAcceptance?: Prisma.TermsAcceptanceListRelationFilter
   department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
-  assignedComplaints?: Prisma.ComplaintListRelationFilter
-  assignedWorkOrders?: Prisma.WorkOrderListRelationFilter
-  supervisedWorkOrders?: Prisma.WorkOrderListRelationFilter
-  createdWorkOrders?: Prisma.WorkOrderListRelationFilter
-  createdInvoices?: Prisma.InvoiceListRelationFilter
-  preparedInvoices?: Prisma.InvoiceListRelationFilter
-  pmSchedules?: Prisma.PmScheduleListRelationFilter
-  supervisorComplaints?: Prisma.ComplaintListRelationFilter
-  auditLogs?: Prisma.AuditLogListRelationFilter
-  vehicleLogs?: Prisma.VehicleLogListRelationFilter
-  loginSessions?: Prisma.LoginSessionListRelationFilter
-  devices?: Prisma.DeviceListRelationFilter
-  passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
-  passwordResetOtps?: Prisma.PasswordResetOtpListRelationFilter
-  authAuditLogs?: Prisma.AuthAuditLogListRelationFilter
-  termsAcceptances?: Prisma.TermsAcceptanceListRelationFilter
-  preparedQuotations?: Prisma.QuotationListRelationFilter
-  deviceTokens?: Prisma.DeviceTokenListRelationFilter
-  notificationLogs?: Prisma.NotificationLogListRelationFilter
-}, "id" | "tenantId_email" | "googleId">
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  VehicleLog?: Prisma.VehicleLogListRelationFilter
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderListRelationFilter
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderListRelationFilter
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderListRelationFilter
+}, "id" | "googleId" | "tenantId_email">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -458,7 +458,7 @@ export type UserScalarWhereWithAggregatesInput = {
 }
 
 export type UserCreateInput = {
-  id?: string
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -474,32 +474,32 @@ export type UserCreateInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
 export type UserUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -517,26 +517,26 @@ export type UserUncheckedCreateInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
 export type UserUpdateInput = {
@@ -557,27 +557,27 @@ export type UserUpdateInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -600,29 +600,29 @@ export type UserUncheckedUpdateInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
 export type UserCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -640,7 +640,7 @@ export type UserCreateManyInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type UserUpdateManyMutationInput = {
@@ -683,6 +683,16 @@ export type UserUncheckedUpdateManyInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type UserScalarRelationFilter = {
+  is?: Prisma.UserWhereInput
+  isNot?: Prisma.UserWhereInput
+}
+
+export type UserNullableScalarRelationFilter = {
+  is?: Prisma.UserWhereInput | null
+  isNot?: Prisma.UserWhereInput | null
 }
 
 export type UserListRelationFilter = {
@@ -766,60 +776,66 @@ export type UserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type UserNullableScalarRelationFilter = {
-  is?: Prisma.UserWhereInput | null
-  isNot?: Prisma.UserWhereInput | null
+export type UserCreateNestedOneWithoutAuditLogInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogInput, Prisma.UserUncheckedCreateWithoutAuditLogInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogInput
+  connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserScalarRelationFilter = {
-  is?: Prisma.UserWhereInput
-  isNot?: Prisma.UserWhereInput
+export type UserUpdateOneRequiredWithoutAuditLogNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogInput, Prisma.UserUncheckedCreateWithoutAuditLogInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogInput
+  upsert?: Prisma.UserUpsertWithoutAuditLogInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogInput, Prisma.UserUpdateWithoutAuditLogInput>, Prisma.UserUncheckedUpdateWithoutAuditLogInput>
 }
 
-export type UserCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput> | Prisma.UserCreateWithoutTenantInput[] | Prisma.UserUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput | Prisma.UserCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.UserCreateManyTenantInputEnvelope
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+export type UserCreateNestedOneWithoutAuthAuditLogInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthAuditLogInput, Prisma.UserUncheckedCreateWithoutAuthAuditLogInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthAuditLogInput
+  connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput> | Prisma.UserCreateWithoutTenantInput[] | Prisma.UserUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput | Prisma.UserCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.UserCreateManyTenantInputEnvelope
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+export type UserUpdateOneWithoutAuthAuditLogNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthAuditLogInput, Prisma.UserUncheckedCreateWithoutAuthAuditLogInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthAuditLogInput
+  upsert?: Prisma.UserUpsertWithoutAuthAuditLogInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthAuditLogInput, Prisma.UserUpdateWithoutAuthAuditLogInput>, Prisma.UserUncheckedUpdateWithoutAuthAuditLogInput>
 }
 
-export type UserUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput> | Prisma.UserCreateWithoutTenantInput[] | Prisma.UserUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput | Prisma.UserCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutTenantInput | Prisma.UserUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.UserCreateManyTenantInputEnvelope
-  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  update?: Prisma.UserUpdateWithWhereUniqueWithoutTenantInput | Prisma.UserUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.UserUpdateManyWithWhereWithoutTenantInput | Prisma.UserUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+export type UserCreateNestedOneWithoutComplaint_Complaint_supervisorIdToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutComplaint_Complaint_supervisorIdToUserInput, Prisma.UserUncheckedCreateWithoutComplaint_Complaint_supervisorIdToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutComplaint_Complaint_supervisorIdToUserInput
+  connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput> | Prisma.UserCreateWithoutTenantInput[] | Prisma.UserUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput | Prisma.UserCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutTenantInput | Prisma.UserUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.UserCreateManyTenantInputEnvelope
-  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
-  update?: Prisma.UserUpdateWithWhereUniqueWithoutTenantInput | Prisma.UserUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.UserUpdateManyWithWhereWithoutTenantInput | Prisma.UserUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+export type UserCreateNestedOneWithoutComplaint_Complaint_assignedToIdToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutComplaint_Complaint_assignedToIdToUserInput, Prisma.UserUncheckedCreateWithoutComplaint_Complaint_assignedToIdToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutComplaint_Complaint_assignedToIdToUserInput
+  connect?: Prisma.UserWhereUniqueInput
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
+export type UserUpdateOneWithoutComplaint_Complaint_supervisorIdToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutComplaint_Complaint_supervisorIdToUserInput, Prisma.UserUncheckedCreateWithoutComplaint_Complaint_supervisorIdToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutComplaint_Complaint_supervisorIdToUserInput
+  upsert?: Prisma.UserUpsertWithoutComplaint_Complaint_supervisorIdToUserInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutComplaint_Complaint_supervisorIdToUserInput, Prisma.UserUpdateWithoutComplaint_Complaint_supervisorIdToUserInput>, Prisma.UserUncheckedUpdateWithoutComplaint_Complaint_supervisorIdToUserInput>
+}
+
+export type UserUpdateOneWithoutComplaint_Complaint_assignedToIdToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutComplaint_Complaint_assignedToIdToUserInput, Prisma.UserUncheckedCreateWithoutComplaint_Complaint_assignedToIdToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutComplaint_Complaint_assignedToIdToUserInput
+  upsert?: Prisma.UserUpsertWithoutComplaint_Complaint_assignedToIdToUserInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutComplaint_Complaint_assignedToIdToUserInput, Prisma.UserUpdateWithoutComplaint_Complaint_assignedToIdToUserInput>, Prisma.UserUncheckedUpdateWithoutComplaint_Complaint_assignedToIdToUserInput>
 }
 
 export type UserCreateNestedManyWithoutDepartmentInput = {
@@ -864,296 +880,276 @@ export type UserUncheckedUpdateManyWithoutDepartmentNestedInput = {
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
 }
 
-export type UserCreateNestedOneWithoutAssignedComplaintsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedComplaintsInput, Prisma.UserUncheckedCreateWithoutAssignedComplaintsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedComplaintsInput
+export type UserCreateNestedOneWithoutDeviceInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeviceInput, Prisma.UserUncheckedCreateWithoutDeviceInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeviceInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserCreateNestedOneWithoutSupervisorComplaintsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSupervisorComplaintsInput, Prisma.UserUncheckedCreateWithoutSupervisorComplaintsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupervisorComplaintsInput
+export type UserUpdateOneRequiredWithoutDeviceNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeviceInput, Prisma.UserUncheckedCreateWithoutDeviceInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeviceInput
+  upsert?: Prisma.UserUpsertWithoutDeviceInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeviceInput, Prisma.UserUpdateWithoutDeviceInput>, Prisma.UserUncheckedUpdateWithoutDeviceInput>
+}
+
+export type UserCreateNestedOneWithoutDeviceTokenInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeviceTokenInput, Prisma.UserUncheckedCreateWithoutDeviceTokenInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeviceTokenInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutAssignedComplaintsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedComplaintsInput, Prisma.UserUncheckedCreateWithoutAssignedComplaintsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedComplaintsInput
-  upsert?: Prisma.UserUpsertWithoutAssignedComplaintsInput
+export type UserUpdateOneRequiredWithoutDeviceTokenNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutDeviceTokenInput, Prisma.UserUncheckedCreateWithoutDeviceTokenInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeviceTokenInput
+  upsert?: Prisma.UserUpsertWithoutDeviceTokenInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeviceTokenInput, Prisma.UserUpdateWithoutDeviceTokenInput>, Prisma.UserUncheckedUpdateWithoutDeviceTokenInput>
+}
+
+export type UserCreateNestedOneWithoutInvoice_Invoice_preparedByToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_preparedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_preparedByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoice_Invoice_preparedByToUserInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutInvoice_Invoice_createdByToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoice_Invoice_createdByToUserInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutInvoice_Invoice_preparedByToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_preparedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_preparedByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoice_Invoice_preparedByToUserInput
+  upsert?: Prisma.UserUpsertWithoutInvoice_Invoice_preparedByToUserInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedComplaintsInput, Prisma.UserUpdateWithoutAssignedComplaintsInput>, Prisma.UserUncheckedUpdateWithoutAssignedComplaintsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoice_Invoice_preparedByToUserInput, Prisma.UserUpdateWithoutInvoice_Invoice_preparedByToUserInput>, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_preparedByToUserInput>
 }
 
-export type UserUpdateOneWithoutSupervisorComplaintsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSupervisorComplaintsInput, Prisma.UserUncheckedCreateWithoutSupervisorComplaintsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupervisorComplaintsInput
-  upsert?: Prisma.UserUpsertWithoutSupervisorComplaintsInput
+export type UserUpdateOneWithoutInvoice_Invoice_createdByToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoice_Invoice_createdByToUserInput
+  upsert?: Prisma.UserUpsertWithoutInvoice_Invoice_createdByToUserInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupervisorComplaintsInput, Prisma.UserUpdateWithoutSupervisorComplaintsInput>, Prisma.UserUncheckedUpdateWithoutSupervisorComplaintsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUpdateWithoutInvoice_Invoice_createdByToUserInput>, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_createdByToUserInput>
 }
 
-export type UserCreateNestedOneWithoutAssignedWorkOrdersInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutAssignedWorkOrdersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedWorkOrdersInput
+export type UserCreateNestedOneWithoutLoginSessionInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionInput, Prisma.UserUncheckedCreateWithoutLoginSessionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoginSessionInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserCreateNestedOneWithoutSupervisedWorkOrdersInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutSupervisedWorkOrdersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupervisedWorkOrdersInput
+export type UserUpdateOneRequiredWithoutLoginSessionNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionInput, Prisma.UserUncheckedCreateWithoutLoginSessionInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoginSessionInput
+  upsert?: Prisma.UserUpsertWithoutLoginSessionInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLoginSessionInput, Prisma.UserUpdateWithoutLoginSessionInput>, Prisma.UserUncheckedUpdateWithoutLoginSessionInput>
+}
+
+export type UserCreateNestedOneWithoutNotificationLogInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationLogInput, Prisma.UserUncheckedCreateWithoutNotificationLogInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationLogInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserCreateNestedOneWithoutCreatedWorkOrdersInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedWorkOrdersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedWorkOrdersInput
+export type UserUpdateOneRequiredWithoutNotificationLogNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationLogInput, Prisma.UserUncheckedCreateWithoutNotificationLogInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationLogInput
+  upsert?: Prisma.UserUpsertWithoutNotificationLogInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationLogInput, Prisma.UserUpdateWithoutNotificationLogInput>, Prisma.UserUncheckedUpdateWithoutNotificationLogInput>
+}
+
+export type UserCreateNestedOneWithoutPasswordResetOtpInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetOtpInput, Prisma.UserUncheckedCreateWithoutPasswordResetOtpInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetOtpInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutAssignedWorkOrdersNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutAssignedWorkOrdersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedWorkOrdersInput
-  upsert?: Prisma.UserUpsertWithoutAssignedWorkOrdersInput
+export type UserUpdateOneRequiredWithoutPasswordResetOtpNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetOtpInput, Prisma.UserUncheckedCreateWithoutPasswordResetOtpInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetOtpInput
+  upsert?: Prisma.UserUpsertWithoutPasswordResetOtpInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetOtpInput, Prisma.UserUpdateWithoutPasswordResetOtpInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetOtpInput>
+}
+
+export type UserCreateNestedOneWithoutPasswordResetTokenInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokenInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokenInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetTokenInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPasswordResetTokenNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokenInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokenInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetTokenInput
+  upsert?: Prisma.UserUpsertWithoutPasswordResetTokenInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetTokenInput, Prisma.UserUpdateWithoutPasswordResetTokenInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetTokenInput>
+}
+
+export type UserCreateNestedOneWithoutPmScheduleInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPmScheduleInput, Prisma.UserUncheckedCreateWithoutPmScheduleInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPmScheduleInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutPmScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPmScheduleInput, Prisma.UserUncheckedCreateWithoutPmScheduleInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPmScheduleInput
+  upsert?: Prisma.UserUpsertWithoutPmScheduleInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedWorkOrdersInput, Prisma.UserUpdateWithoutAssignedWorkOrdersInput>, Prisma.UserUncheckedUpdateWithoutAssignedWorkOrdersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPmScheduleInput, Prisma.UserUpdateWithoutPmScheduleInput>, Prisma.UserUncheckedUpdateWithoutPmScheduleInput>
 }
 
-export type UserUpdateOneWithoutSupervisedWorkOrdersNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutSupervisedWorkOrdersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupervisedWorkOrdersInput
-  upsert?: Prisma.UserUpsertWithoutSupervisedWorkOrdersInput
+export type UserCreateNestedOneWithoutQuotationInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutQuotationInput, Prisma.UserUncheckedCreateWithoutQuotationInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutQuotationInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutQuotationNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutQuotationInput, Prisma.UserUncheckedCreateWithoutQuotationInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutQuotationInput
+  upsert?: Prisma.UserUpsertWithoutQuotationInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupervisedWorkOrdersInput, Prisma.UserUpdateWithoutSupervisedWorkOrdersInput>, Prisma.UserUncheckedUpdateWithoutSupervisedWorkOrdersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutQuotationInput, Prisma.UserUpdateWithoutQuotationInput>, Prisma.UserUncheckedUpdateWithoutQuotationInput>
 }
 
-export type UserUpdateOneWithoutCreatedWorkOrdersNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedWorkOrdersInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedWorkOrdersInput
-  upsert?: Prisma.UserUpsertWithoutCreatedWorkOrdersInput
+export type UserCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput> | Prisma.UserCreateWithoutTenantInput[] | Prisma.UserUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput | Prisma.UserCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.UserCreateManyTenantInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput> | Prisma.UserCreateWithoutTenantInput[] | Prisma.UserUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput | Prisma.UserCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.UserCreateManyTenantInputEnvelope
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+}
+
+export type UserUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput> | Prisma.UserCreateWithoutTenantInput[] | Prisma.UserUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput | Prisma.UserCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutTenantInput | Prisma.UserUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.UserCreateManyTenantInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutTenantInput | Prisma.UserUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutTenantInput | Prisma.UserUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput> | Prisma.UserCreateWithoutTenantInput[] | Prisma.UserUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTenantInput | Prisma.UserCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.UserUpsertWithWhereUniqueWithoutTenantInput | Prisma.UserUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.UserCreateManyTenantInputEnvelope
+  set?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  disconnect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  delete?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  connect?: Prisma.UserWhereUniqueInput | Prisma.UserWhereUniqueInput[]
+  update?: Prisma.UserUpdateWithWhereUniqueWithoutTenantInput | Prisma.UserUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.UserUpdateManyWithWhereWithoutTenantInput | Prisma.UserUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type UserCreateNestedOneWithoutTermsAcceptanceInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTermsAcceptanceInput, Prisma.UserUncheckedCreateWithoutTermsAcceptanceInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTermsAcceptanceInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutTermsAcceptanceNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutTermsAcceptanceInput, Prisma.UserUncheckedCreateWithoutTermsAcceptanceInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTermsAcceptanceInput
+  upsert?: Prisma.UserUpsertWithoutTermsAcceptanceInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTermsAcceptanceInput, Prisma.UserUpdateWithoutTermsAcceptanceInput>, Prisma.UserUncheckedUpdateWithoutTermsAcceptanceInput>
+}
+
+export type UserCreateNestedOneWithoutVehicleLogInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVehicleLogInput, Prisma.UserUncheckedCreateWithoutVehicleLogInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVehicleLogInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutVehicleLogNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutVehicleLogInput, Prisma.UserUncheckedCreateWithoutVehicleLogInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVehicleLogInput
+  upsert?: Prisma.UserUpsertWithoutVehicleLogInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedWorkOrdersInput, Prisma.UserUpdateWithoutCreatedWorkOrdersInput>, Prisma.UserUncheckedUpdateWithoutCreatedWorkOrdersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVehicleLogInput, Prisma.UserUpdateWithoutVehicleLogInput>, Prisma.UserUncheckedUpdateWithoutVehicleLogInput>
 }
 
-export type UserCreateNestedOneWithoutPmSchedulesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPmSchedulesInput, Prisma.UserUncheckedCreateWithoutPmSchedulesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPmSchedulesInput
+export type UserCreateNestedOneWithoutWorkOrder_WorkOrder_createdByToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_createdByToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_createdByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrder_WorkOrder_createdByToUserInput
   connect?: Prisma.UserWhereUniqueInput
 }
 
-export type UserUpdateOneWithoutPmSchedulesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPmSchedulesInput, Prisma.UserUncheckedCreateWithoutPmSchedulesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPmSchedulesInput
-  upsert?: Prisma.UserUpsertWithoutPmSchedulesInput
+export type UserCreateNestedOneWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrder_WorkOrder_supervisorIdToUserInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrder_WorkOrder_assignedToIdToUserInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutWorkOrder_WorkOrder_createdByToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_createdByToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_createdByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrder_WorkOrder_createdByToUserInput
+  upsert?: Prisma.UserUpsertWithoutWorkOrder_WorkOrder_createdByToUserInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPmSchedulesInput, Prisma.UserUpdateWithoutPmSchedulesInput>, Prisma.UserUncheckedUpdateWithoutPmSchedulesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkOrder_WorkOrder_createdByToUserInput, Prisma.UserUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput>, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput>
 }
 
-export type UserCreateNestedOneWithoutPreparedQuotationsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPreparedQuotationsInput, Prisma.UserUncheckedCreateWithoutPreparedQuotationsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPreparedQuotationsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutPreparedQuotationsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPreparedQuotationsInput, Prisma.UserUncheckedCreateWithoutPreparedQuotationsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPreparedQuotationsInput
-  upsert?: Prisma.UserUpsertWithoutPreparedQuotationsInput
+export type UserUpdateOneWithoutWorkOrder_WorkOrder_supervisorIdToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrder_WorkOrder_supervisorIdToUserInput
+  upsert?: Prisma.UserUpsertWithoutWorkOrder_WorkOrder_supervisorIdToUserInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPreparedQuotationsInput, Prisma.UserUpdateWithoutPreparedQuotationsInput>, Prisma.UserUncheckedUpdateWithoutPreparedQuotationsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkOrder_WorkOrder_supervisorIdToUserInput, Prisma.UserUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput>, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput>
 }
 
-export type UserCreateNestedOneWithoutCreatedInvoicesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedInvoicesInput, Prisma.UserUncheckedCreateWithoutCreatedInvoicesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedInvoicesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserCreateNestedOneWithoutPreparedInvoicesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPreparedInvoicesInput, Prisma.UserUncheckedCreateWithoutPreparedInvoicesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPreparedInvoicesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutCreatedInvoicesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedInvoicesInput, Prisma.UserUncheckedCreateWithoutCreatedInvoicesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedInvoicesInput
-  upsert?: Prisma.UserUpsertWithoutCreatedInvoicesInput
+export type UserUpdateOneWithoutWorkOrder_WorkOrder_assignedToIdToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutWorkOrder_WorkOrder_assignedToIdToUserInput
+  upsert?: Prisma.UserUpsertWithoutWorkOrder_WorkOrder_assignedToIdToUserInput
   disconnect?: Prisma.UserWhereInput | boolean
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedInvoicesInput, Prisma.UserUpdateWithoutCreatedInvoicesInput>, Prisma.UserUncheckedUpdateWithoutCreatedInvoicesInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutWorkOrder_WorkOrder_assignedToIdToUserInput, Prisma.UserUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput>, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput>
 }
 
-export type UserUpdateOneWithoutPreparedInvoicesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPreparedInvoicesInput, Prisma.UserUncheckedCreateWithoutPreparedInvoicesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPreparedInvoicesInput
-  upsert?: Prisma.UserUpsertWithoutPreparedInvoicesInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPreparedInvoicesInput, Prisma.UserUpdateWithoutPreparedInvoicesInput>, Prisma.UserUncheckedUpdateWithoutPreparedInvoicesInput>
-}
-
-export type UserCreateNestedOneWithoutVehicleLogsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutVehicleLogsInput, Prisma.UserUncheckedCreateWithoutVehicleLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVehicleLogsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutVehicleLogsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutVehicleLogsInput, Prisma.UserUncheckedCreateWithoutVehicleLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutVehicleLogsInput
-  upsert?: Prisma.UserUpsertWithoutVehicleLogsInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutVehicleLogsInput, Prisma.UserUpdateWithoutVehicleLogsInput>, Prisma.UserUncheckedUpdateWithoutVehicleLogsInput>
-}
-
-export type UserCreateNestedOneWithoutDeviceTokensInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDeviceTokensInput, Prisma.UserUncheckedCreateWithoutDeviceTokensInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeviceTokensInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutDeviceTokensNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDeviceTokensInput, Prisma.UserUncheckedCreateWithoutDeviceTokensInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDeviceTokensInput
-  upsert?: Prisma.UserUpsertWithoutDeviceTokensInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDeviceTokensInput, Prisma.UserUpdateWithoutDeviceTokensInput>, Prisma.UserUncheckedUpdateWithoutDeviceTokensInput>
-}
-
-export type UserCreateNestedOneWithoutNotificationLogsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationLogsInput, Prisma.UserUncheckedCreateWithoutNotificationLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationLogsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutNotificationLogsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationLogsInput, Prisma.UserUncheckedCreateWithoutNotificationLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationLogsInput
-  upsert?: Prisma.UserUpsertWithoutNotificationLogsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutNotificationLogsInput, Prisma.UserUpdateWithoutNotificationLogsInput>, Prisma.UserUncheckedUpdateWithoutNotificationLogsInput>
-}
-
-export type UserCreateNestedOneWithoutAuditLogsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutAuditLogsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuditLogsInput
-  upsert?: Prisma.UserUpsertWithoutAuditLogsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuditLogsInput, Prisma.UserUpdateWithoutAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
-}
-
-export type UserCreateNestedOneWithoutLoginSessionsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionsInput, Prisma.UserUncheckedCreateWithoutLoginSessionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoginSessionsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutLoginSessionsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionsInput, Prisma.UserUncheckedCreateWithoutLoginSessionsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLoginSessionsInput
-  upsert?: Prisma.UserUpsertWithoutLoginSessionsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutLoginSessionsInput, Prisma.UserUpdateWithoutLoginSessionsInput>, Prisma.UserUncheckedUpdateWithoutLoginSessionsInput>
-}
-
-export type UserCreateNestedOneWithoutDevicesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDevicesInput, Prisma.UserUncheckedCreateWithoutDevicesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDevicesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutDevicesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutDevicesInput, Prisma.UserUncheckedCreateWithoutDevicesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutDevicesInput
-  upsert?: Prisma.UserUpsertWithoutDevicesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutDevicesInput, Prisma.UserUpdateWithoutDevicesInput>, Prisma.UserUncheckedUpdateWithoutDevicesInput>
-}
-
-export type UserCreateNestedOneWithoutPasswordResetTokensInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokensInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokensInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetTokensInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutPasswordResetTokensNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokensInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokensInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetTokensInput
-  upsert?: Prisma.UserUpsertWithoutPasswordResetTokensInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetTokensInput, Prisma.UserUpdateWithoutPasswordResetTokensInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
-}
-
-export type UserCreateNestedOneWithoutPasswordResetOtpsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetOtpsInput, Prisma.UserUncheckedCreateWithoutPasswordResetOtpsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetOtpsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutPasswordResetOtpsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetOtpsInput, Prisma.UserUncheckedCreateWithoutPasswordResetOtpsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPasswordResetOtpsInput
-  upsert?: Prisma.UserUpsertWithoutPasswordResetOtpsInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPasswordResetOtpsInput, Prisma.UserUpdateWithoutPasswordResetOtpsInput>, Prisma.UserUncheckedUpdateWithoutPasswordResetOtpsInput>
-}
-
-export type UserCreateNestedOneWithoutAuthAuditLogsInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuthAuditLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthAuditLogsInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneWithoutAuthAuditLogsNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutAuthAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuthAuditLogsInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAuthAuditLogsInput
-  upsert?: Prisma.UserUpsertWithoutAuthAuditLogsInput
-  disconnect?: Prisma.UserWhereInput | boolean
-  delete?: Prisma.UserWhereInput | boolean
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAuthAuditLogsInput, Prisma.UserUpdateWithoutAuthAuditLogsInput>, Prisma.UserUncheckedUpdateWithoutAuthAuditLogsInput>
-}
-
-export type UserCreateNestedOneWithoutTermsAcceptancesInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTermsAcceptancesInput, Prisma.UserUncheckedCreateWithoutTermsAcceptancesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTermsAcceptancesInput
-  connect?: Prisma.UserWhereUniqueInput
-}
-
-export type UserUpdateOneRequiredWithoutTermsAcceptancesNestedInput = {
-  create?: Prisma.XOR<Prisma.UserCreateWithoutTermsAcceptancesInput, Prisma.UserUncheckedCreateWithoutTermsAcceptancesInput>
-  connectOrCreate?: Prisma.UserCreateOrConnectWithoutTermsAcceptancesInput
-  upsert?: Prisma.UserUpsertWithoutTermsAcceptancesInput
-  connect?: Prisma.UserWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutTermsAcceptancesInput, Prisma.UserUpdateWithoutTermsAcceptancesInput>, Prisma.UserUncheckedUpdateWithoutTermsAcceptancesInput>
-}
-
-export type UserCreateWithoutTenantInput = {
-  id?: string
+export type UserCreateWithoutAuditLogInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -1169,31 +1165,32 @@ export type UserCreateWithoutTenantInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutTenantInput = {
-  id?: string
+export type UserUncheckedCreateWithoutAuditLogInput = {
+  id: string
+  tenantId: string
   email: string
   passwordHash?: string | null
   name: string
@@ -1210,80 +1207,125 @@ export type UserUncheckedCreateWithoutTenantInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutTenantInput = {
+export type UserCreateOrConnectWithoutAuditLogInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogInput, Prisma.UserUncheckedCreateWithoutAuditLogInput>
 }
 
-export type UserCreateManyTenantInputEnvelope = {
-  data: Prisma.UserCreateManyTenantInput | Prisma.UserCreateManyTenantInput[]
+export type UserUpsertWithoutAuditLogInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogInput, Prisma.UserUncheckedUpdateWithoutAuditLogInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogInput, Prisma.UserUncheckedCreateWithoutAuditLogInput>
+  where?: Prisma.UserWhereInput
 }
 
-export type UserUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.UserWhereUniqueInput
-  update: Prisma.XOR<Prisma.UserUpdateWithoutTenantInput, Prisma.UserUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput>
+export type UserUpdateToOneWithWhereWithoutAuditLogInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogInput, Prisma.UserUncheckedUpdateWithoutAuditLogInput>
 }
 
-export type UserUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.UserWhereUniqueInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutTenantInput, Prisma.UserUncheckedUpdateWithoutTenantInput>
+export type UserUpdateWithoutAuditLogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.UserScalarWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutTenantInput>
+export type UserUncheckedUpdateWithoutAuditLogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserScalarWhereInput = {
-  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
-  OR?: Prisma.UserScalarWhereInput[]
-  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
-  id?: Prisma.StringFilter<"User"> | string
-  tenantId?: Prisma.StringFilter<"User"> | string
-  email?: Prisma.StringFilter<"User"> | string
-  passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
-  name?: Prisma.StringFilter<"User"> | string
-  phone?: Prisma.StringNullableFilter<"User"> | string | null
-  avatar?: Prisma.StringNullableFilter<"User"> | string | null
-  role?: Prisma.StringFilter<"User"> | string
-  employeeNumber?: Prisma.StringNullableFilter<"User"> | string | null
-  departmentId?: Prisma.StringNullableFilter<"User"> | string | null
-  authProvider?: Prisma.StringNullableFilter<"User"> | string | null
-  googleId?: Prisma.StringNullableFilter<"User"> | string | null
-  isActive?: Prisma.BoolFilter<"User"> | boolean
-  isOnline?: Prisma.BoolFilter<"User"> | boolean
-  lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
-  gpsLocation?: Prisma.StringNullableFilter<"User"> | string | null
-  profileCompleted?: Prisma.BoolFilter<"User"> | boolean
-  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
-}
-
-export type UserCreateWithoutDepartmentInput = {
-  id?: string
+export type UserCreateWithoutAuthAuditLogInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -1299,31 +1341,559 @@ export type UserCreateWithoutDepartmentInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserUncheckedCreateWithoutAuthAuditLogInput = {
+  id: string
+  tenantId: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserCreateOrConnectWithoutAuthAuditLogInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthAuditLogInput, Prisma.UserUncheckedCreateWithoutAuthAuditLogInput>
+}
+
+export type UserUpsertWithoutAuthAuditLogInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthAuditLogInput, Prisma.UserUncheckedUpdateWithoutAuthAuditLogInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAuthAuditLogInput, Prisma.UserUncheckedCreateWithoutAuthAuditLogInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAuthAuditLogInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthAuditLogInput, Prisma.UserUncheckedUpdateWithoutAuthAuditLogInput>
+}
+
+export type UserUpdateWithoutAuthAuditLogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAuthAuditLogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserCreateWithoutComplaint_Complaint_supervisorIdToUserInput = {
+  id: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserUncheckedCreateWithoutComplaint_Complaint_supervisorIdToUserInput = {
+  id: string
+  tenantId: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserCreateOrConnectWithoutComplaint_Complaint_supervisorIdToUserInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutComplaint_Complaint_supervisorIdToUserInput, Prisma.UserUncheckedCreateWithoutComplaint_Complaint_supervisorIdToUserInput>
+}
+
+export type UserCreateWithoutComplaint_Complaint_assignedToIdToUserInput = {
+  id: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserUncheckedCreateWithoutComplaint_Complaint_assignedToIdToUserInput = {
+  id: string
+  tenantId: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserCreateOrConnectWithoutComplaint_Complaint_assignedToIdToUserInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutComplaint_Complaint_assignedToIdToUserInput, Prisma.UserUncheckedCreateWithoutComplaint_Complaint_assignedToIdToUserInput>
+}
+
+export type UserUpsertWithoutComplaint_Complaint_supervisorIdToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutComplaint_Complaint_supervisorIdToUserInput, Prisma.UserUncheckedUpdateWithoutComplaint_Complaint_supervisorIdToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutComplaint_Complaint_supervisorIdToUserInput, Prisma.UserUncheckedCreateWithoutComplaint_Complaint_supervisorIdToUserInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutComplaint_Complaint_supervisorIdToUserInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutComplaint_Complaint_supervisorIdToUserInput, Prisma.UserUncheckedUpdateWithoutComplaint_Complaint_supervisorIdToUserInput>
+}
+
+export type UserUpdateWithoutComplaint_Complaint_supervisorIdToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutComplaint_Complaint_supervisorIdToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUpsertWithoutComplaint_Complaint_assignedToIdToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutComplaint_Complaint_assignedToIdToUserInput, Prisma.UserUncheckedUpdateWithoutComplaint_Complaint_assignedToIdToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutComplaint_Complaint_assignedToIdToUserInput, Prisma.UserUncheckedCreateWithoutComplaint_Complaint_assignedToIdToUserInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutComplaint_Complaint_assignedToIdToUserInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutComplaint_Complaint_assignedToIdToUserInput, Prisma.UserUncheckedUpdateWithoutComplaint_Complaint_assignedToIdToUserInput>
+}
+
+export type UserUpdateWithoutComplaint_Complaint_assignedToIdToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutComplaint_Complaint_assignedToIdToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserCreateWithoutDepartmentInput = {
+  id: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
 export type UserUncheckedCreateWithoutDepartmentInput = {
-  id?: string
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -1340,26 +1910,26 @@ export type UserUncheckedCreateWithoutDepartmentInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
 export type UserCreateOrConnectWithoutDepartmentInput = {
@@ -1387,8 +1957,33 @@ export type UserUpdateManyWithWhereWithoutDepartmentInput = {
   data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutDepartmentInput>
 }
 
-export type UserCreateWithoutAssignedComplaintsInput = {
-  id?: string
+export type UserScalarWhereInput = {
+  AND?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  OR?: Prisma.UserScalarWhereInput[]
+  NOT?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+  id?: Prisma.StringFilter<"User"> | string
+  tenantId?: Prisma.StringFilter<"User"> | string
+  email?: Prisma.StringFilter<"User"> | string
+  passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
+  name?: Prisma.StringFilter<"User"> | string
+  phone?: Prisma.StringNullableFilter<"User"> | string | null
+  avatar?: Prisma.StringNullableFilter<"User"> | string | null
+  role?: Prisma.StringFilter<"User"> | string
+  employeeNumber?: Prisma.StringNullableFilter<"User"> | string | null
+  departmentId?: Prisma.StringNullableFilter<"User"> | string | null
+  authProvider?: Prisma.StringNullableFilter<"User"> | string | null
+  googleId?: Prisma.StringNullableFilter<"User"> | string | null
+  isActive?: Prisma.BoolFilter<"User"> | boolean
+  isOnline?: Prisma.BoolFilter<"User"> | boolean
+  lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  gpsLocation?: Prisma.StringNullableFilter<"User"> | string | null
+  profileCompleted?: Prisma.BoolFilter<"User"> | boolean
+  createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+}
+
+export type UserCreateWithoutDeviceInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -1404,31 +1999,31 @@ export type UserCreateWithoutAssignedComplaintsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutAssignedComplaintsInput = {
-  id?: string
+export type UserUncheckedCreateWithoutDeviceInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -1446,129 +2041,44 @@ export type UserUncheckedCreateWithoutAssignedComplaintsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutAssignedComplaintsInput = {
+export type UserCreateOrConnectWithoutDeviceInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedComplaintsInput, Prisma.UserUncheckedCreateWithoutAssignedComplaintsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeviceInput, Prisma.UserUncheckedCreateWithoutDeviceInput>
 }
 
-export type UserCreateWithoutSupervisorComplaintsInput = {
-  id?: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutSupervisorComplaintsInput = {
-  id?: string
-  tenantId: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  departmentId?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutSupervisorComplaintsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSupervisorComplaintsInput, Prisma.UserUncheckedCreateWithoutSupervisorComplaintsInput>
-}
-
-export type UserUpsertWithoutAssignedComplaintsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedComplaintsInput, Prisma.UserUncheckedUpdateWithoutAssignedComplaintsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedComplaintsInput, Prisma.UserUncheckedCreateWithoutAssignedComplaintsInput>
+export type UserUpsertWithoutDeviceInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeviceInput, Prisma.UserUncheckedUpdateWithoutDeviceInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeviceInput, Prisma.UserUncheckedCreateWithoutDeviceInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAssignedComplaintsInput = {
+export type UserUpdateToOneWithWhereWithoutDeviceInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedComplaintsInput, Prisma.UserUncheckedUpdateWithoutAssignedComplaintsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeviceInput, Prisma.UserUncheckedUpdateWithoutDeviceInput>
 }
 
-export type UserUpdateWithoutAssignedComplaintsInput = {
+export type UserUpdateWithoutDeviceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1586,29 +2096,29 @@ export type UserUpdateWithoutAssignedComplaintsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAssignedComplaintsInput = {
+export type UserUncheckedUpdateWithoutDeviceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1628,119 +2138,28 @@ export type UserUncheckedUpdateWithoutAssignedComplaintsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUpsertWithoutSupervisorComplaintsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSupervisorComplaintsInput, Prisma.UserUncheckedUpdateWithoutSupervisorComplaintsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutSupervisorComplaintsInput, Prisma.UserUncheckedCreateWithoutSupervisorComplaintsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutSupervisorComplaintsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSupervisorComplaintsInput, Prisma.UserUncheckedUpdateWithoutSupervisorComplaintsInput>
-}
-
-export type UserUpdateWithoutSupervisorComplaintsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutSupervisorComplaintsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutAssignedWorkOrdersInput = {
-  id?: string
+export type UserCreateWithoutDeviceTokenInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -1756,31 +2175,31 @@ export type UserCreateWithoutAssignedWorkOrdersInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutAssignedWorkOrdersInput = {
-  id?: string
+export type UserUncheckedCreateWithoutDeviceTokenInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -1798,34 +2217,125 @@ export type UserUncheckedCreateWithoutAssignedWorkOrdersInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutAssignedWorkOrdersInput = {
+export type UserCreateOrConnectWithoutDeviceTokenInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutAssignedWorkOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeviceTokenInput, Prisma.UserUncheckedCreateWithoutDeviceTokenInput>
 }
 
-export type UserCreateWithoutSupervisedWorkOrdersInput = {
-  id?: string
+export type UserUpsertWithoutDeviceTokenInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutDeviceTokenInput, Prisma.UserUncheckedUpdateWithoutDeviceTokenInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutDeviceTokenInput, Prisma.UserUncheckedCreateWithoutDeviceTokenInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutDeviceTokenInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutDeviceTokenInput, Prisma.UserUncheckedUpdateWithoutDeviceTokenInput>
+}
+
+export type UserUpdateWithoutDeviceTokenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutDeviceTokenInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserCreateWithoutInvoice_Invoice_preparedByToUserInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -1841,31 +2351,31 @@ export type UserCreateWithoutSupervisedWorkOrdersInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutSupervisedWorkOrdersInput = {
-  id?: string
+export type UserUncheckedCreateWithoutInvoice_Invoice_preparedByToUserInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -1883,34 +2393,34 @@ export type UserUncheckedCreateWithoutSupervisedWorkOrdersInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutSupervisedWorkOrdersInput = {
+export type UserCreateOrConnectWithoutInvoice_Invoice_preparedByToUserInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutSupervisedWorkOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_preparedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_preparedByToUserInput>
 }
 
-export type UserCreateWithoutCreatedWorkOrdersInput = {
-  id?: string
+export type UserCreateWithoutInvoice_Invoice_createdByToUserInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -1926,31 +2436,31 @@ export type UserCreateWithoutCreatedWorkOrdersInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutCreatedWorkOrdersInput = {
-  id?: string
+export type UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -1968,44 +2478,44 @@ export type UserUncheckedCreateWithoutCreatedWorkOrdersInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutCreatedWorkOrdersInput = {
+export type UserCreateOrConnectWithoutInvoice_Invoice_createdByToUserInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedWorkOrdersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput>
 }
 
-export type UserUpsertWithoutAssignedWorkOrdersInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedWorkOrdersInput, Prisma.UserUncheckedUpdateWithoutAssignedWorkOrdersInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutAssignedWorkOrdersInput>
+export type UserUpsertWithoutInvoice_Invoice_preparedByToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvoice_Invoice_preparedByToUserInput, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_preparedByToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_preparedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_preparedByToUserInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAssignedWorkOrdersInput = {
+export type UserUpdateToOneWithWhereWithoutInvoice_Invoice_preparedByToUserInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedWorkOrdersInput, Prisma.UserUncheckedUpdateWithoutAssignedWorkOrdersInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvoice_Invoice_preparedByToUserInput, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_preparedByToUserInput>
 }
 
-export type UserUpdateWithoutAssignedWorkOrdersInput = {
+export type UserUpdateWithoutInvoice_Invoice_preparedByToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2023,120 +2533,29 @@ export type UserUpdateWithoutAssignedWorkOrdersInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAssignedWorkOrdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserUpsertWithoutSupervisedWorkOrdersInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedUpdateWithoutSupervisedWorkOrdersInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutSupervisedWorkOrdersInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutSupervisedWorkOrdersInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutSupervisedWorkOrdersInput, Prisma.UserUncheckedUpdateWithoutSupervisedWorkOrdersInput>
-}
-
-export type UserUpdateWithoutSupervisedWorkOrdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutSupervisedWorkOrdersInput = {
+export type UserUncheckedUpdateWithoutInvoice_Invoice_preparedByToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2156,38 +2575,38 @@ export type UserUncheckedUpdateWithoutSupervisedWorkOrdersInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUpsertWithoutCreatedWorkOrdersInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedWorkOrdersInput, Prisma.UserUncheckedUpdateWithoutCreatedWorkOrdersInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedWorkOrdersInput, Prisma.UserUncheckedCreateWithoutCreatedWorkOrdersInput>
+export type UserUpsertWithoutInvoice_Invoice_createdByToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_createdByToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutCreatedWorkOrdersInput = {
+export type UserUpdateToOneWithWhereWithoutInvoice_Invoice_createdByToUserInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedWorkOrdersInput, Prisma.UserUncheckedUpdateWithoutCreatedWorkOrdersInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_createdByToUserInput>
 }
 
-export type UserUpdateWithoutCreatedWorkOrdersInput = {
+export type UserUpdateWithoutInvoice_Invoice_createdByToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2205,29 +2624,29 @@ export type UserUpdateWithoutCreatedWorkOrdersInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutCreatedWorkOrdersInput = {
+export type UserUncheckedUpdateWithoutInvoice_Invoice_createdByToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2247,28 +2666,28 @@ export type UserUncheckedUpdateWithoutCreatedWorkOrdersInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutPmSchedulesInput = {
-  id?: string
+export type UserCreateWithoutLoginSessionInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -2284,31 +2703,31 @@ export type UserCreateWithoutPmSchedulesInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutPmSchedulesInput = {
-  id?: string
+export type UserUncheckedCreateWithoutLoginSessionInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -2326,44 +2745,44 @@ export type UserUncheckedCreateWithoutPmSchedulesInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutPmSchedulesInput = {
+export type UserCreateOrConnectWithoutLoginSessionInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPmSchedulesInput, Prisma.UserUncheckedCreateWithoutPmSchedulesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionInput, Prisma.UserUncheckedCreateWithoutLoginSessionInput>
 }
 
-export type UserUpsertWithoutPmSchedulesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPmSchedulesInput, Prisma.UserUncheckedUpdateWithoutPmSchedulesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPmSchedulesInput, Prisma.UserUncheckedCreateWithoutPmSchedulesInput>
+export type UserUpsertWithoutLoginSessionInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutLoginSessionInput, Prisma.UserUncheckedUpdateWithoutLoginSessionInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionInput, Prisma.UserUncheckedCreateWithoutLoginSessionInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutPmSchedulesInput = {
+export type UserUpdateToOneWithWhereWithoutLoginSessionInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPmSchedulesInput, Prisma.UserUncheckedUpdateWithoutPmSchedulesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutLoginSessionInput, Prisma.UserUncheckedUpdateWithoutLoginSessionInput>
 }
 
-export type UserUpdateWithoutPmSchedulesInput = {
+export type UserUpdateWithoutLoginSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2381,29 +2800,29 @@ export type UserUpdateWithoutPmSchedulesInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutPmSchedulesInput = {
+export type UserUncheckedUpdateWithoutLoginSessionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2423,28 +2842,28 @@ export type UserUncheckedUpdateWithoutPmSchedulesInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutPreparedQuotationsInput = {
-  id?: string
+export type UserCreateWithoutNotificationLogInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -2460,31 +2879,31 @@ export type UserCreateWithoutPreparedQuotationsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutPreparedQuotationsInput = {
-  id?: string
+export type UserUncheckedCreateWithoutNotificationLogInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -2502,44 +2921,44 @@ export type UserUncheckedCreateWithoutPreparedQuotationsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutPreparedQuotationsInput = {
+export type UserCreateOrConnectWithoutNotificationLogInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPreparedQuotationsInput, Prisma.UserUncheckedCreateWithoutPreparedQuotationsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationLogInput, Prisma.UserUncheckedCreateWithoutNotificationLogInput>
 }
 
-export type UserUpsertWithoutPreparedQuotationsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPreparedQuotationsInput, Prisma.UserUncheckedUpdateWithoutPreparedQuotationsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPreparedQuotationsInput, Prisma.UserUncheckedCreateWithoutPreparedQuotationsInput>
+export type UserUpsertWithoutNotificationLogInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationLogInput, Prisma.UserUncheckedUpdateWithoutNotificationLogInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationLogInput, Prisma.UserUncheckedCreateWithoutNotificationLogInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutPreparedQuotationsInput = {
+export type UserUpdateToOneWithWhereWithoutNotificationLogInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPreparedQuotationsInput, Prisma.UserUncheckedUpdateWithoutPreparedQuotationsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationLogInput, Prisma.UserUncheckedUpdateWithoutNotificationLogInput>
 }
 
-export type UserUpdateWithoutPreparedQuotationsInput = {
+export type UserUpdateWithoutNotificationLogInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2557,29 +2976,29 @@ export type UserUpdateWithoutPreparedQuotationsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutPreparedQuotationsInput = {
+export type UserUncheckedUpdateWithoutNotificationLogInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2599,28 +3018,28 @@ export type UserUncheckedUpdateWithoutPreparedQuotationsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutCreatedInvoicesInput = {
-  id?: string
+export type UserCreateWithoutPasswordResetOtpInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -2636,31 +3055,31 @@ export type UserCreateWithoutCreatedInvoicesInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutCreatedInvoicesInput = {
-  id?: string
+export type UserUncheckedCreateWithoutPasswordResetOtpInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -2678,34 +3097,125 @@ export type UserUncheckedCreateWithoutCreatedInvoicesInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutCreatedInvoicesInput = {
+export type UserCreateOrConnectWithoutPasswordResetOtpInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedInvoicesInput, Prisma.UserUncheckedCreateWithoutCreatedInvoicesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetOtpInput, Prisma.UserUncheckedCreateWithoutPasswordResetOtpInput>
 }
 
-export type UserCreateWithoutPreparedInvoicesInput = {
-  id?: string
+export type UserUpsertWithoutPasswordResetOtpInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetOtpInput, Prisma.UserUncheckedUpdateWithoutPasswordResetOtpInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetOtpInput, Prisma.UserUncheckedCreateWithoutPasswordResetOtpInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPasswordResetOtpInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetOtpInput, Prisma.UserUncheckedUpdateWithoutPasswordResetOtpInput>
+}
+
+export type UserUpdateWithoutPasswordResetOtpInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPasswordResetOtpInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserCreateWithoutPasswordResetTokenInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -2721,31 +3231,31 @@ export type UserCreateWithoutPreparedInvoicesInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutPreparedInvoicesInput = {
-  id?: string
+export type UserUncheckedCreateWithoutPasswordResetTokenInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -2763,44 +3273,44 @@ export type UserUncheckedCreateWithoutPreparedInvoicesInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutPreparedInvoicesInput = {
+export type UserCreateOrConnectWithoutPasswordResetTokenInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPreparedInvoicesInput, Prisma.UserUncheckedCreateWithoutPreparedInvoicesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokenInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokenInput>
 }
 
-export type UserUpsertWithoutCreatedInvoicesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedInvoicesInput, Prisma.UserUncheckedUpdateWithoutCreatedInvoicesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedInvoicesInput, Prisma.UserUncheckedCreateWithoutCreatedInvoicesInput>
+export type UserUpsertWithoutPasswordResetTokenInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetTokenInput, Prisma.UserUncheckedUpdateWithoutPasswordResetTokenInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokenInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokenInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutCreatedInvoicesInput = {
+export type UserUpdateToOneWithWhereWithoutPasswordResetTokenInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedInvoicesInput, Prisma.UserUncheckedUpdateWithoutCreatedInvoicesInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetTokenInput, Prisma.UserUncheckedUpdateWithoutPasswordResetTokenInput>
 }
 
-export type UserUpdateWithoutCreatedInvoicesInput = {
+export type UserUpdateWithoutPasswordResetTokenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2818,120 +3328,29 @@ export type UserUpdateWithoutCreatedInvoicesInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutCreatedInvoicesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserUpsertWithoutPreparedInvoicesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPreparedInvoicesInput, Prisma.UserUncheckedUpdateWithoutPreparedInvoicesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPreparedInvoicesInput, Prisma.UserUncheckedCreateWithoutPreparedInvoicesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutPreparedInvoicesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPreparedInvoicesInput, Prisma.UserUncheckedUpdateWithoutPreparedInvoicesInput>
-}
-
-export type UserUpdateWithoutPreparedInvoicesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutPreparedInvoicesInput = {
+export type UserUncheckedUpdateWithoutPasswordResetTokenInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2951,28 +3370,28 @@ export type UserUncheckedUpdateWithoutPreparedInvoicesInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutVehicleLogsInput = {
-  id?: string
+export type UserCreateWithoutPmScheduleInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -2988,31 +3407,31 @@ export type UserCreateWithoutVehicleLogsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutVehicleLogsInput = {
-  id?: string
+export type UserUncheckedCreateWithoutPmScheduleInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -3030,44 +3449,44 @@ export type UserUncheckedCreateWithoutVehicleLogsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutVehicleLogsInput = {
+export type UserCreateOrConnectWithoutPmScheduleInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutVehicleLogsInput, Prisma.UserUncheckedCreateWithoutVehicleLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPmScheduleInput, Prisma.UserUncheckedCreateWithoutPmScheduleInput>
 }
 
-export type UserUpsertWithoutVehicleLogsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutVehicleLogsInput, Prisma.UserUncheckedUpdateWithoutVehicleLogsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutVehicleLogsInput, Prisma.UserUncheckedCreateWithoutVehicleLogsInput>
+export type UserUpsertWithoutPmScheduleInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPmScheduleInput, Prisma.UserUncheckedUpdateWithoutPmScheduleInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPmScheduleInput, Prisma.UserUncheckedCreateWithoutPmScheduleInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutVehicleLogsInput = {
+export type UserUpdateToOneWithWhereWithoutPmScheduleInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutVehicleLogsInput, Prisma.UserUncheckedUpdateWithoutVehicleLogsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPmScheduleInput, Prisma.UserUncheckedUpdateWithoutPmScheduleInput>
 }
 
-export type UserUpdateWithoutVehicleLogsInput = {
+export type UserUpdateWithoutPmScheduleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3085,29 +3504,29 @@ export type UserUpdateWithoutVehicleLogsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutVehicleLogsInput = {
+export type UserUncheckedUpdateWithoutPmScheduleInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3127,28 +3546,28 @@ export type UserUncheckedUpdateWithoutVehicleLogsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutDeviceTokensInput = {
-  id?: string
+export type UserCreateWithoutQuotationInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -3164,31 +3583,31 @@ export type UserCreateWithoutDeviceTokensInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutDeviceTokensInput = {
-  id?: string
+export type UserUncheckedCreateWithoutQuotationInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -3206,44 +3625,44 @@ export type UserUncheckedCreateWithoutDeviceTokensInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutDeviceTokensInput = {
+export type UserCreateOrConnectWithoutQuotationInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutDeviceTokensInput, Prisma.UserUncheckedCreateWithoutDeviceTokensInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutQuotationInput, Prisma.UserUncheckedCreateWithoutQuotationInput>
 }
 
-export type UserUpsertWithoutDeviceTokensInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutDeviceTokensInput, Prisma.UserUncheckedUpdateWithoutDeviceTokensInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutDeviceTokensInput, Prisma.UserUncheckedCreateWithoutDeviceTokensInput>
+export type UserUpsertWithoutQuotationInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutQuotationInput, Prisma.UserUncheckedUpdateWithoutQuotationInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutQuotationInput, Prisma.UserUncheckedCreateWithoutQuotationInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutDeviceTokensInput = {
+export type UserUpdateToOneWithWhereWithoutQuotationInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutDeviceTokensInput, Prisma.UserUncheckedUpdateWithoutDeviceTokensInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutQuotationInput, Prisma.UserUncheckedUpdateWithoutQuotationInput>
 }
 
-export type UserUpdateWithoutDeviceTokensInput = {
+export type UserUpdateWithoutQuotationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3261,29 +3680,29 @@ export type UserUpdateWithoutDeviceTokensInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutDeviceTokensInput = {
+export type UserUncheckedUpdateWithoutQuotationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3303,28 +3722,28 @@ export type UserUncheckedUpdateWithoutDeviceTokensInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutNotificationLogsInput = {
-  id?: string
+export type UserCreateWithoutTenantInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -3340,31 +3759,136 @@ export type UserCreateWithoutNotificationLogsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutNotificationLogsInput = {
-  id?: string
+export type UserUncheckedCreateWithoutTenantInput = {
+  id: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserCreateOrConnectWithoutTenantInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput>
+}
+
+export type UserCreateManyTenantInputEnvelope = {
+  data: Prisma.UserCreateManyTenantInput | Prisma.UserCreateManyTenantInput[]
+}
+
+export type UserUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.UserWhereUniqueInput
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTenantInput, Prisma.UserUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTenantInput, Prisma.UserUncheckedCreateWithoutTenantInput>
+}
+
+export type UserUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.UserWhereUniqueInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTenantInput, Prisma.UserUncheckedUpdateWithoutTenantInput>
+}
+
+export type UserUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.UserScalarWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateManyMutationInput, Prisma.UserUncheckedUpdateManyWithoutTenantInput>
+}
+
+export type UserCreateWithoutTermsAcceptanceInput = {
+  id: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserUncheckedCreateWithoutTermsAcceptanceInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -3382,44 +3906,44 @@ export type UserUncheckedCreateWithoutNotificationLogsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutNotificationLogsInput = {
+export type UserCreateOrConnectWithoutTermsAcceptanceInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationLogsInput, Prisma.UserUncheckedCreateWithoutNotificationLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTermsAcceptanceInput, Prisma.UserUncheckedCreateWithoutTermsAcceptanceInput>
 }
 
-export type UserUpsertWithoutNotificationLogsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutNotificationLogsInput, Prisma.UserUncheckedUpdateWithoutNotificationLogsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutNotificationLogsInput, Prisma.UserUncheckedCreateWithoutNotificationLogsInput>
+export type UserUpsertWithoutTermsAcceptanceInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutTermsAcceptanceInput, Prisma.UserUncheckedUpdateWithoutTermsAcceptanceInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutTermsAcceptanceInput, Prisma.UserUncheckedCreateWithoutTermsAcceptanceInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutNotificationLogsInput = {
+export type UserUpdateToOneWithWhereWithoutTermsAcceptanceInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutNotificationLogsInput, Prisma.UserUncheckedUpdateWithoutNotificationLogsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutTermsAcceptanceInput, Prisma.UserUncheckedUpdateWithoutTermsAcceptanceInput>
 }
 
-export type UserUpdateWithoutNotificationLogsInput = {
+export type UserUpdateWithoutTermsAcceptanceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3437,29 +3961,29 @@ export type UserUpdateWithoutNotificationLogsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutNotificationLogsInput = {
+export type UserUncheckedUpdateWithoutTermsAcceptanceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3479,28 +4003,28 @@ export type UserUncheckedUpdateWithoutNotificationLogsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutAuditLogsInput = {
-  id?: string
+export type UserCreateWithoutVehicleLogInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -3516,31 +4040,31 @@ export type UserCreateWithoutAuditLogsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutAuditLogsInput = {
-  id?: string
+export type UserUncheckedCreateWithoutVehicleLogInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -3558,44 +4082,44 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutAuditLogsInput = {
+export type UserCreateOrConnectWithoutVehicleLogInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVehicleLogInput, Prisma.UserUncheckedCreateWithoutVehicleLogInput>
 }
 
-export type UserUpsertWithoutAuditLogsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuditLogsInput>
+export type UserUpsertWithoutVehicleLogInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutVehicleLogInput, Prisma.UserUncheckedUpdateWithoutVehicleLogInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutVehicleLogInput, Prisma.UserUncheckedCreateWithoutVehicleLogInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAuditLogsInput = {
+export type UserUpdateToOneWithWhereWithoutVehicleLogInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuditLogsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutVehicleLogInput, Prisma.UserUncheckedUpdateWithoutVehicleLogInput>
 }
 
-export type UserUpdateWithoutAuditLogsInput = {
+export type UserUpdateWithoutVehicleLogInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3613,29 +4137,29 @@ export type UserUpdateWithoutAuditLogsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAuditLogsInput = {
+export type UserUncheckedUpdateWithoutVehicleLogInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -3655,28 +4179,28 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutLoginSessionsInput = {
-  id?: string
+export type UserCreateWithoutWorkOrder_WorkOrder_createdByToUserInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -3692,31 +4216,31 @@ export type UserCreateWithoutLoginSessionsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutLoginSessionsInput = {
-  id?: string
+export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_createdByToUserInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -3734,125 +4258,34 @@ export type UserUncheckedCreateWithoutLoginSessionsInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutLoginSessionsInput = {
+export type UserCreateOrConnectWithoutWorkOrder_WorkOrder_createdByToUserInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionsInput, Prisma.UserUncheckedCreateWithoutLoginSessionsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_createdByToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_createdByToUserInput>
 }
 
-export type UserUpsertWithoutLoginSessionsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutLoginSessionsInput, Prisma.UserUncheckedUpdateWithoutLoginSessionsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutLoginSessionsInput, Prisma.UserUncheckedCreateWithoutLoginSessionsInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutLoginSessionsInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutLoginSessionsInput, Prisma.UserUncheckedUpdateWithoutLoginSessionsInput>
-}
-
-export type UserUpdateWithoutLoginSessionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutLoginSessionsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutDevicesInput = {
-  id?: string
+export type UserCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -3868,31 +4301,31 @@ export type UserCreateWithoutDevicesInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutDevicesInput = {
-  id?: string
+export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -3910,125 +4343,34 @@ export type UserUncheckedCreateWithoutDevicesInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutDevicesInput = {
+export type UserCreateOrConnectWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutDevicesInput, Prisma.UserUncheckedCreateWithoutDevicesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput>
 }
 
-export type UserUpsertWithoutDevicesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutDevicesInput, Prisma.UserUncheckedUpdateWithoutDevicesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutDevicesInput, Prisma.UserUncheckedCreateWithoutDevicesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutDevicesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutDevicesInput, Prisma.UserUncheckedUpdateWithoutDevicesInput>
-}
-
-export type UserUpdateWithoutDevicesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutDevicesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutPasswordResetTokensInput = {
-  id?: string
+export type UserCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
+  id: string
   email: string
   passwordHash?: string | null
   name: string
@@ -4044,31 +4386,31 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
 }
 
-export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
-  id?: string
+export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -4086,44 +4428,44 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
 }
 
-export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
+export type UserCreateOrConnectWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
   where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokensInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokensInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput>
 }
 
-export type UserUpsertWithoutPasswordResetTokensInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetTokensInput, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetTokensInput, Prisma.UserUncheckedCreateWithoutPasswordResetTokensInput>
+export type UserUpsertWithoutWorkOrder_WorkOrder_createdByToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_createdByToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_createdByToUserInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutPasswordResetTokensInput = {
+export type UserUpdateToOneWithWhereWithoutWorkOrder_WorkOrder_createdByToUserInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetTokensInput, Prisma.UserUncheckedUpdateWithoutPasswordResetTokensInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput>
 }
 
-export type UserUpdateWithoutPasswordResetTokensInput = {
+export type UserUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4141,29 +4483,29 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
+export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4183,123 +4525,38 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutPasswordResetOtpsInput = {
-  id?: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutPasswordResetOtpsInput = {
-  id?: string
-  tenantId: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  departmentId?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutPasswordResetOtpsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetOtpsInput, Prisma.UserUncheckedCreateWithoutPasswordResetOtpsInput>
-}
-
-export type UserUpsertWithoutPasswordResetOtpsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetOtpsInput, Prisma.UserUncheckedUpdateWithoutPasswordResetOtpsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutPasswordResetOtpsInput, Prisma.UserUncheckedCreateWithoutPasswordResetOtpsInput>
+export type UserUpsertWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutPasswordResetOtpsInput = {
+export type UserUpdateToOneWithWhereWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutPasswordResetOtpsInput, Prisma.UserUncheckedUpdateWithoutPasswordResetOtpsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput>
 }
 
-export type UserUpdateWithoutPasswordResetOtpsInput = {
+export type UserUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4317,29 +4574,29 @@ export type UserUpdateWithoutPasswordResetOtpsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutPasswordResetOtpsInput = {
+export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4359,123 +4616,38 @@ export type UserUncheckedUpdateWithoutPasswordResetOtpsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
-export type UserCreateWithoutAuthAuditLogsInput = {
-  id?: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutAuthAuditLogsInput = {
-  id?: string
-  tenantId: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  departmentId?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutAuthAuditLogsInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuthAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuthAuditLogsInput>
-}
-
-export type UserUpsertWithoutAuthAuditLogsInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutAuthAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuthAuditLogsInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutAuthAuditLogsInput, Prisma.UserUncheckedCreateWithoutAuthAuditLogsInput>
+export type UserUpsertWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput, Prisma.UserUncheckedCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput>
   where?: Prisma.UserWhereInput
 }
 
-export type UserUpdateToOneWithWhereWithoutAuthAuditLogsInput = {
+export type UserUpdateToOneWithWhereWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
   where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutAuthAuditLogsInput, Prisma.UserUncheckedUpdateWithoutAuthAuditLogsInput>
+  data: Prisma.XOR<Prisma.UserUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput, Prisma.UserUncheckedUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput>
 }
 
-export type UserUpdateWithoutAuthAuditLogsInput = {
+export type UserUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4493,29 +4665,29 @@ export type UserUpdateWithoutAuthAuditLogsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
 }
 
-export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
+export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
@@ -4535,326 +4707,28 @@ export type UserUncheckedUpdateWithoutAuthAuditLogsInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateWithoutTermsAcceptancesInput = {
-  id?: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutUsersInput
-  department?: Prisma.DepartmentCreateNestedOneWithoutUsersInput
-  assignedComplaints?: Prisma.ComplaintCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
-}
-
-export type UserUncheckedCreateWithoutTermsAcceptancesInput = {
-  id?: string
-  tenantId: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  departmentId?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutAssignedToInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutSupervisorInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutCreatorInput
-  createdInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutCreatorInput
-  preparedInvoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutPreparerInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutSupervisorInput
-  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
-  loginSessions?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
-  devices?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
-  preparedQuotations?: Prisma.QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
-  notificationLogs?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
-}
-
-export type UserCreateOrConnectWithoutTermsAcceptancesInput = {
-  where: Prisma.UserWhereUniqueInput
-  create: Prisma.XOR<Prisma.UserCreateWithoutTermsAcceptancesInput, Prisma.UserUncheckedCreateWithoutTermsAcceptancesInput>
-}
-
-export type UserUpsertWithoutTermsAcceptancesInput = {
-  update: Prisma.XOR<Prisma.UserUpdateWithoutTermsAcceptancesInput, Prisma.UserUncheckedUpdateWithoutTermsAcceptancesInput>
-  create: Prisma.XOR<Prisma.UserCreateWithoutTermsAcceptancesInput, Prisma.UserUncheckedCreateWithoutTermsAcceptancesInput>
-  where?: Prisma.UserWhereInput
-}
-
-export type UserUpdateToOneWithWhereWithoutTermsAcceptancesInput = {
-  where?: Prisma.UserWhereInput
-  data: Prisma.XOR<Prisma.UserUpdateWithoutTermsAcceptancesInput, Prisma.UserUncheckedUpdateWithoutTermsAcceptancesInput>
-}
-
-export type UserUpdateWithoutTermsAcceptancesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutTermsAcceptancesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserCreateManyTenantInput = {
-  id?: string
-  email: string
-  passwordHash?: string | null
-  name: string
-  phone?: string | null
-  avatar?: string | null
-  role?: string
-  employeeNumber?: string | null
-  departmentId?: string | null
-  authProvider?: string | null
-  googleId?: string | null
-  isActive?: boolean
-  isOnline?: boolean
-  lastLogin?: Date | string | null
-  gpsLocation?: string | null
-  profileCompleted?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type UserUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  department?: Prisma.DepartmentUpdateOneWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
-}
-
-export type UserUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  email?: Prisma.StringFieldUpdateOperationsInput | string
-  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  role?: Prisma.StringFieldUpdateOperationsInput | string
-  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
 }
 
 export type UserCreateManyDepartmentInput = {
-  id?: string
+  id: string
   tenantId: string
   email: string
   passwordHash?: string | null
@@ -4871,7 +4745,7 @@ export type UserCreateManyDepartmentInput = {
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type UserUpdateWithoutDepartmentInput = {
@@ -4892,26 +4766,26 @@ export type UserUpdateWithoutDepartmentInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutUsersNestedInput
-  assignedComplaints?: Prisma.ComplaintUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDepartmentInput = {
@@ -4933,25 +4807,25 @@ export type UserUncheckedUpdateWithoutDepartmentInput = {
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutAssignedToNestedInput
-  assignedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisedWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutSupervisorNestedInput
-  createdWorkOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutCreatorNestedInput
-  createdInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutCreatorNestedInput
-  preparedInvoices?: Prisma.InvoiceUncheckedUpdateManyWithoutPreparerNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput
-  supervisorComplaints?: Prisma.ComplaintUncheckedUpdateManyWithoutSupervisorNestedInput
-  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
-  vehicleLogs?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
-  loginSessions?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
-  devices?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
-  passwordResetOtps?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
-  authAuditLogs?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
-  termsAcceptances?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
-  preparedQuotations?: Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput
-  deviceTokens?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
-  notificationLogs?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutDepartmentInput = {
@@ -4975,53 +4849,175 @@ export type UserUncheckedUpdateManyWithoutDepartmentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type UserCreateManyTenantInput = {
+  id: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+}
+
+export type UserUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 /**
  * Count Type UserCountOutputType
  */
 
 export type UserCountOutputType = {
-  assignedComplaints: number
-  assignedWorkOrders: number
-  supervisedWorkOrders: number
-  createdWorkOrders: number
-  createdInvoices: number
-  preparedInvoices: number
-  pmSchedules: number
-  supervisorComplaints: number
-  auditLogs: number
-  vehicleLogs: number
-  loginSessions: number
-  devices: number
-  passwordResetTokens: number
-  passwordResetOtps: number
-  authAuditLogs: number
-  termsAcceptances: number
-  preparedQuotations: number
-  deviceTokens: number
-  notificationLogs: number
+  AuditLog: number
+  AuthAuditLog: number
+  Complaint_Complaint_supervisorIdToUser: number
+  Complaint_Complaint_assignedToIdToUser: number
+  Device: number
+  DeviceToken: number
+  Invoice_Invoice_preparedByToUser: number
+  Invoice_Invoice_createdByToUser: number
+  LoginSession: number
+  NotificationLog: number
+  PasswordResetOtp: number
+  PasswordResetToken: number
+  PmSchedule: number
+  Quotation: number
+  TermsAcceptance: number
+  VehicleLog: number
+  WorkOrder_WorkOrder_createdByToUser: number
+  WorkOrder_WorkOrder_supervisorIdToUser: number
+  WorkOrder_WorkOrder_assignedToIdToUser: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  assignedComplaints?: boolean | UserCountOutputTypeCountAssignedComplaintsArgs
-  assignedWorkOrders?: boolean | UserCountOutputTypeCountAssignedWorkOrdersArgs
-  supervisedWorkOrders?: boolean | UserCountOutputTypeCountSupervisedWorkOrdersArgs
-  createdWorkOrders?: boolean | UserCountOutputTypeCountCreatedWorkOrdersArgs
-  createdInvoices?: boolean | UserCountOutputTypeCountCreatedInvoicesArgs
-  preparedInvoices?: boolean | UserCountOutputTypeCountPreparedInvoicesArgs
-  pmSchedules?: boolean | UserCountOutputTypeCountPmSchedulesArgs
-  supervisorComplaints?: boolean | UserCountOutputTypeCountSupervisorComplaintsArgs
-  auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
-  vehicleLogs?: boolean | UserCountOutputTypeCountVehicleLogsArgs
-  loginSessions?: boolean | UserCountOutputTypeCountLoginSessionsArgs
-  devices?: boolean | UserCountOutputTypeCountDevicesArgs
-  passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
-  passwordResetOtps?: boolean | UserCountOutputTypeCountPasswordResetOtpsArgs
-  authAuditLogs?: boolean | UserCountOutputTypeCountAuthAuditLogsArgs
-  termsAcceptances?: boolean | UserCountOutputTypeCountTermsAcceptancesArgs
-  preparedQuotations?: boolean | UserCountOutputTypeCountPreparedQuotationsArgs
-  deviceTokens?: boolean | UserCountOutputTypeCountDeviceTokensArgs
-  notificationLogs?: boolean | UserCountOutputTypeCountNotificationLogsArgs
+  AuditLog?: boolean | UserCountOutputTypeCountAuditLogArgs
+  AuthAuditLog?: boolean | UserCountOutputTypeCountAuthAuditLogArgs
+  Complaint_Complaint_supervisorIdToUser?: boolean | UserCountOutputTypeCountComplaint_Complaint_supervisorIdToUserArgs
+  Complaint_Complaint_assignedToIdToUser?: boolean | UserCountOutputTypeCountComplaint_Complaint_assignedToIdToUserArgs
+  Device?: boolean | UserCountOutputTypeCountDeviceArgs
+  DeviceToken?: boolean | UserCountOutputTypeCountDeviceTokenArgs
+  Invoice_Invoice_preparedByToUser?: boolean | UserCountOutputTypeCountInvoice_Invoice_preparedByToUserArgs
+  Invoice_Invoice_createdByToUser?: boolean | UserCountOutputTypeCountInvoice_Invoice_createdByToUserArgs
+  LoginSession?: boolean | UserCountOutputTypeCountLoginSessionArgs
+  NotificationLog?: boolean | UserCountOutputTypeCountNotificationLogArgs
+  PasswordResetOtp?: boolean | UserCountOutputTypeCountPasswordResetOtpArgs
+  PasswordResetToken?: boolean | UserCountOutputTypeCountPasswordResetTokenArgs
+  PmSchedule?: boolean | UserCountOutputTypeCountPmScheduleArgs
+  Quotation?: boolean | UserCountOutputTypeCountQuotationArgs
+  TermsAcceptance?: boolean | UserCountOutputTypeCountTermsAcceptanceArgs
+  VehicleLog?: boolean | UserCountOutputTypeCountVehicleLogArgs
+  WorkOrder_WorkOrder_createdByToUser?: boolean | UserCountOutputTypeCountWorkOrder_WorkOrder_createdByToUserArgs
+  WorkOrder_WorkOrder_supervisorIdToUser?: boolean | UserCountOutputTypeCountWorkOrder_WorkOrder_supervisorIdToUserArgs
+  WorkOrder_WorkOrder_assignedToIdToUser?: boolean | UserCountOutputTypeCountWorkOrder_WorkOrder_assignedToIdToUserArgs
 }
 
 /**
@@ -5037,134 +5033,134 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountAssignedComplaintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ComplaintWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountAssignedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkOrderWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountSupervisedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkOrderWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountCreatedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkOrderWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountCreatedInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvoiceWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountPreparedInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.InvoiceWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountPmSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PmScheduleWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountSupervisorComplaintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.ComplaintWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountAuditLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuditLogWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountVehicleLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.VehicleLogWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountLoginSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.LoginSessionWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountDevicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.DeviceWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountPasswordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PasswordResetTokenWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountPasswordResetOtpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PasswordResetOtpWhereInput
-}
-
-/**
- * UserCountOutputType without action
- */
-export type UserCountOutputTypeCountAuthAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountAuthAuditLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.AuthAuditLogWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountTermsAcceptancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.TermsAcceptanceWhereInput
+export type UserCountOutputTypeCountComplaint_Complaint_supervisorIdToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ComplaintWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountPreparedQuotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.QuotationWhereInput
+export type UserCountOutputTypeCountComplaint_Complaint_assignedToIdToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ComplaintWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountDeviceTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountDeviceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DeviceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountDeviceTokenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.DeviceTokenWhereInput
 }
 
 /**
  * UserCountOutputType without action
  */
-export type UserCountOutputTypeCountNotificationLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type UserCountOutputTypeCountInvoice_Invoice_preparedByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInvoice_Invoice_createdByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLoginSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.LoginSessionWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountNotificationLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.NotificationLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPasswordResetOtpArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PasswordResetOtpWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPasswordResetTokenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PasswordResetTokenWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPmScheduleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PmScheduleWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountQuotationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.QuotationWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountTermsAcceptanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TermsAcceptanceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountVehicleLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.VehicleLogWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWorkOrder_WorkOrder_createdByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWorkOrder_WorkOrder_supervisorIdToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountWorkOrder_WorkOrder_assignedToIdToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderWhereInput
 }
 
 
@@ -5188,27 +5184,27 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   profileCompleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  AuditLog?: boolean | Prisma.User$AuditLogArgs<ExtArgs>
+  AuthAuditLog?: boolean | Prisma.User$AuthAuditLogArgs<ExtArgs>
+  Complaint_Complaint_supervisorIdToUser?: boolean | Prisma.User$Complaint_Complaint_supervisorIdToUserArgs<ExtArgs>
+  Complaint_Complaint_assignedToIdToUser?: boolean | Prisma.User$Complaint_Complaint_assignedToIdToUserArgs<ExtArgs>
+  Device?: boolean | Prisma.User$DeviceArgs<ExtArgs>
+  DeviceToken?: boolean | Prisma.User$DeviceTokenArgs<ExtArgs>
+  Invoice_Invoice_preparedByToUser?: boolean | Prisma.User$Invoice_Invoice_preparedByToUserArgs<ExtArgs>
+  Invoice_Invoice_createdByToUser?: boolean | Prisma.User$Invoice_Invoice_createdByToUserArgs<ExtArgs>
+  LoginSession?: boolean | Prisma.User$LoginSessionArgs<ExtArgs>
+  NotificationLog?: boolean | Prisma.User$NotificationLogArgs<ExtArgs>
+  PasswordResetOtp?: boolean | Prisma.User$PasswordResetOtpArgs<ExtArgs>
+  PasswordResetToken?: boolean | Prisma.User$PasswordResetTokenArgs<ExtArgs>
+  PmSchedule?: boolean | Prisma.User$PmScheduleArgs<ExtArgs>
+  Quotation?: boolean | Prisma.User$QuotationArgs<ExtArgs>
+  TermsAcceptance?: boolean | Prisma.User$TermsAcceptanceArgs<ExtArgs>
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
-  assignedComplaints?: boolean | Prisma.User$assignedComplaintsArgs<ExtArgs>
-  assignedWorkOrders?: boolean | Prisma.User$assignedWorkOrdersArgs<ExtArgs>
-  supervisedWorkOrders?: boolean | Prisma.User$supervisedWorkOrdersArgs<ExtArgs>
-  createdWorkOrders?: boolean | Prisma.User$createdWorkOrdersArgs<ExtArgs>
-  createdInvoices?: boolean | Prisma.User$createdInvoicesArgs<ExtArgs>
-  preparedInvoices?: boolean | Prisma.User$preparedInvoicesArgs<ExtArgs>
-  pmSchedules?: boolean | Prisma.User$pmSchedulesArgs<ExtArgs>
-  supervisorComplaints?: boolean | Prisma.User$supervisorComplaintsArgs<ExtArgs>
-  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
-  vehicleLogs?: boolean | Prisma.User$vehicleLogsArgs<ExtArgs>
-  loginSessions?: boolean | Prisma.User$loginSessionsArgs<ExtArgs>
-  devices?: boolean | Prisma.User$devicesArgs<ExtArgs>
-  passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
-  passwordResetOtps?: boolean | Prisma.User$passwordResetOtpsArgs<ExtArgs>
-  authAuditLogs?: boolean | Prisma.User$authAuditLogsArgs<ExtArgs>
-  termsAcceptances?: boolean | Prisma.User$termsAcceptancesArgs<ExtArgs>
-  preparedQuotations?: boolean | Prisma.User$preparedQuotationsArgs<ExtArgs>
-  deviceTokens?: boolean | Prisma.User$deviceTokensArgs<ExtArgs>
-  notificationLogs?: boolean | Prisma.User$notificationLogsArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  VehicleLog?: boolean | Prisma.User$VehicleLogArgs<ExtArgs>
+  WorkOrder_WorkOrder_createdByToUser?: boolean | Prisma.User$WorkOrder_WorkOrder_createdByToUserArgs<ExtArgs>
+  WorkOrder_WorkOrder_supervisorIdToUser?: boolean | Prisma.User$WorkOrder_WorkOrder_supervisorIdToUserArgs<ExtArgs>
+  WorkOrder_WorkOrder_assignedToIdToUser?: boolean | Prisma.User$WorkOrder_WorkOrder_assignedToIdToUserArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -5232,8 +5228,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   profileCompleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -5256,8 +5252,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   profileCompleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -5284,62 +5280,62 @@ export type UserSelectScalar = {
 
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "passwordHash" | "name" | "phone" | "avatar" | "role" | "employeeNumber" | "departmentId" | "authProvider" | "googleId" | "isActive" | "isOnline" | "lastLogin" | "gpsLocation" | "profileCompleted" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  AuditLog?: boolean | Prisma.User$AuditLogArgs<ExtArgs>
+  AuthAuditLog?: boolean | Prisma.User$AuthAuditLogArgs<ExtArgs>
+  Complaint_Complaint_supervisorIdToUser?: boolean | Prisma.User$Complaint_Complaint_supervisorIdToUserArgs<ExtArgs>
+  Complaint_Complaint_assignedToIdToUser?: boolean | Prisma.User$Complaint_Complaint_assignedToIdToUserArgs<ExtArgs>
+  Device?: boolean | Prisma.User$DeviceArgs<ExtArgs>
+  DeviceToken?: boolean | Prisma.User$DeviceTokenArgs<ExtArgs>
+  Invoice_Invoice_preparedByToUser?: boolean | Prisma.User$Invoice_Invoice_preparedByToUserArgs<ExtArgs>
+  Invoice_Invoice_createdByToUser?: boolean | Prisma.User$Invoice_Invoice_createdByToUserArgs<ExtArgs>
+  LoginSession?: boolean | Prisma.User$LoginSessionArgs<ExtArgs>
+  NotificationLog?: boolean | Prisma.User$NotificationLogArgs<ExtArgs>
+  PasswordResetOtp?: boolean | Prisma.User$PasswordResetOtpArgs<ExtArgs>
+  PasswordResetToken?: boolean | Prisma.User$PasswordResetTokenArgs<ExtArgs>
+  PmSchedule?: boolean | Prisma.User$PmScheduleArgs<ExtArgs>
+  Quotation?: boolean | Prisma.User$QuotationArgs<ExtArgs>
+  TermsAcceptance?: boolean | Prisma.User$TermsAcceptanceArgs<ExtArgs>
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
-  assignedComplaints?: boolean | Prisma.User$assignedComplaintsArgs<ExtArgs>
-  assignedWorkOrders?: boolean | Prisma.User$assignedWorkOrdersArgs<ExtArgs>
-  supervisedWorkOrders?: boolean | Prisma.User$supervisedWorkOrdersArgs<ExtArgs>
-  createdWorkOrders?: boolean | Prisma.User$createdWorkOrdersArgs<ExtArgs>
-  createdInvoices?: boolean | Prisma.User$createdInvoicesArgs<ExtArgs>
-  preparedInvoices?: boolean | Prisma.User$preparedInvoicesArgs<ExtArgs>
-  pmSchedules?: boolean | Prisma.User$pmSchedulesArgs<ExtArgs>
-  supervisorComplaints?: boolean | Prisma.User$supervisorComplaintsArgs<ExtArgs>
-  auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
-  vehicleLogs?: boolean | Prisma.User$vehicleLogsArgs<ExtArgs>
-  loginSessions?: boolean | Prisma.User$loginSessionsArgs<ExtArgs>
-  devices?: boolean | Prisma.User$devicesArgs<ExtArgs>
-  passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
-  passwordResetOtps?: boolean | Prisma.User$passwordResetOtpsArgs<ExtArgs>
-  authAuditLogs?: boolean | Prisma.User$authAuditLogsArgs<ExtArgs>
-  termsAcceptances?: boolean | Prisma.User$termsAcceptancesArgs<ExtArgs>
-  preparedQuotations?: boolean | Prisma.User$preparedQuotationsArgs<ExtArgs>
-  deviceTokens?: boolean | Prisma.User$deviceTokensArgs<ExtArgs>
-  notificationLogs?: boolean | Prisma.User$notificationLogsArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  VehicleLog?: boolean | Prisma.User$VehicleLogArgs<ExtArgs>
+  WorkOrder_WorkOrder_createdByToUser?: boolean | Prisma.User$WorkOrder_WorkOrder_createdByToUserArgs<ExtArgs>
+  WorkOrder_WorkOrder_supervisorIdToUser?: boolean | Prisma.User$WorkOrder_WorkOrder_supervisorIdToUserArgs<ExtArgs>
+  WorkOrder_WorkOrder_assignedToIdToUser?: boolean | Prisma.User$WorkOrder_WorkOrder_assignedToIdToUserArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type UserIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   department?: boolean | Prisma.User$departmentArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "User"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    AuditLog: Prisma.$AuditLogPayload<ExtArgs>[]
+    AuthAuditLog: Prisma.$AuthAuditLogPayload<ExtArgs>[]
+    Complaint_Complaint_supervisorIdToUser: Prisma.$ComplaintPayload<ExtArgs>[]
+    Complaint_Complaint_assignedToIdToUser: Prisma.$ComplaintPayload<ExtArgs>[]
+    Device: Prisma.$DevicePayload<ExtArgs>[]
+    DeviceToken: Prisma.$DeviceTokenPayload<ExtArgs>[]
+    Invoice_Invoice_preparedByToUser: Prisma.$InvoicePayload<ExtArgs>[]
+    Invoice_Invoice_createdByToUser: Prisma.$InvoicePayload<ExtArgs>[]
+    LoginSession: Prisma.$LoginSessionPayload<ExtArgs>[]
+    NotificationLog: Prisma.$NotificationLogPayload<ExtArgs>[]
+    PasswordResetOtp: Prisma.$PasswordResetOtpPayload<ExtArgs>[]
+    PasswordResetToken: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
+    PmSchedule: Prisma.$PmSchedulePayload<ExtArgs>[]
+    Quotation: Prisma.$QuotationPayload<ExtArgs>[]
+    TermsAcceptance: Prisma.$TermsAcceptancePayload<ExtArgs>[]
     department: Prisma.$DepartmentPayload<ExtArgs> | null
-    assignedComplaints: Prisma.$ComplaintPayload<ExtArgs>[]
-    assignedWorkOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
-    supervisedWorkOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
-    createdWorkOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
-    createdInvoices: Prisma.$InvoicePayload<ExtArgs>[]
-    preparedInvoices: Prisma.$InvoicePayload<ExtArgs>[]
-    pmSchedules: Prisma.$PmSchedulePayload<ExtArgs>[]
-    supervisorComplaints: Prisma.$ComplaintPayload<ExtArgs>[]
-    auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
-    vehicleLogs: Prisma.$VehicleLogPayload<ExtArgs>[]
-    loginSessions: Prisma.$LoginSessionPayload<ExtArgs>[]
-    devices: Prisma.$DevicePayload<ExtArgs>[]
-    passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
-    passwordResetOtps: Prisma.$PasswordResetOtpPayload<ExtArgs>[]
-    authAuditLogs: Prisma.$AuthAuditLogPayload<ExtArgs>[]
-    termsAcceptances: Prisma.$TermsAcceptancePayload<ExtArgs>[]
-    preparedQuotations: Prisma.$QuotationPayload<ExtArgs>[]
-    deviceTokens: Prisma.$DeviceTokenPayload<ExtArgs>[]
-    notificationLogs: Prisma.$NotificationLogPayload<ExtArgs>[]
+    tenant: Prisma.$TenantPayload<ExtArgs>
+    VehicleLog: Prisma.$VehicleLogPayload<ExtArgs>[]
+    WorkOrder_WorkOrder_createdByToUser: Prisma.$WorkOrderPayload<ExtArgs>[]
+    WorkOrder_WorkOrder_supervisorIdToUser: Prisma.$WorkOrderPayload<ExtArgs>[]
+    WorkOrder_WorkOrder_assignedToIdToUser: Prisma.$WorkOrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -5755,27 +5751,27 @@ readonly fields: UserFieldRefs;
  */
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  AuditLog<T extends Prisma.User$AuditLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$AuditLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  AuthAuditLog<T extends Prisma.User$AuthAuditLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$AuthAuditLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Complaint_Complaint_supervisorIdToUser<T extends Prisma.User$Complaint_Complaint_supervisorIdToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$Complaint_Complaint_supervisorIdToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Complaint_Complaint_assignedToIdToUser<T extends Prisma.User$Complaint_Complaint_assignedToIdToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$Complaint_Complaint_assignedToIdToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Device<T extends Prisma.User$DeviceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$DeviceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  DeviceToken<T extends Prisma.User$DeviceTokenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$DeviceTokenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Invoice_Invoice_preparedByToUser<T extends Prisma.User$Invoice_Invoice_preparedByToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$Invoice_Invoice_preparedByToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Invoice_Invoice_createdByToUser<T extends Prisma.User$Invoice_Invoice_createdByToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$Invoice_Invoice_createdByToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  LoginSession<T extends Prisma.User$LoginSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$LoginSessionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  NotificationLog<T extends Prisma.User$NotificationLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$NotificationLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  PasswordResetOtp<T extends Prisma.User$PasswordResetOtpArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$PasswordResetOtpArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetOtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  PasswordResetToken<T extends Prisma.User$PasswordResetTokenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$PasswordResetTokenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  PmSchedule<T extends Prisma.User$PmScheduleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$PmScheduleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PmSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Quotation<T extends Prisma.User$QuotationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$QuotationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  TermsAcceptance<T extends Prisma.User$TermsAcceptanceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$TermsAcceptanceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TermsAcceptancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   department<T extends Prisma.User$departmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$departmentArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  assignedComplaints<T extends Prisma.User$assignedComplaintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedComplaintsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  assignedWorkOrders<T extends Prisma.User$assignedWorkOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedWorkOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  supervisedWorkOrders<T extends Prisma.User$supervisedWorkOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supervisedWorkOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdWorkOrders<T extends Prisma.User$createdWorkOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdWorkOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  createdInvoices<T extends Prisma.User$createdInvoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  preparedInvoices<T extends Prisma.User$preparedInvoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$preparedInvoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  pmSchedules<T extends Prisma.User$pmSchedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$pmSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PmSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  supervisorComplaints<T extends Prisma.User$supervisorComplaintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supervisorComplaintsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  auditLogs<T extends Prisma.User$auditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  vehicleLogs<T extends Prisma.User$vehicleLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$vehicleLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehicleLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  loginSessions<T extends Prisma.User$loginSessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$loginSessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  devices<T extends Prisma.User$devicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$devicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DevicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  passwordResetOtps<T extends Prisma.User$passwordResetOtpsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetOtpsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetOtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  authAuditLogs<T extends Prisma.User$authAuditLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$authAuditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AuthAuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  termsAcceptances<T extends Prisma.User$termsAcceptancesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$termsAcceptancesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TermsAcceptancePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  preparedQuotations<T extends Prisma.User$preparedQuotationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$preparedQuotationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$QuotationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  deviceTokens<T extends Prisma.User$deviceTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$deviceTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  notificationLogs<T extends Prisma.User$notificationLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  VehicleLog<T extends Prisma.User$VehicleLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$VehicleLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$VehicleLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WorkOrder_WorkOrder_createdByToUser<T extends Prisma.User$WorkOrder_WorkOrder_createdByToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$WorkOrder_WorkOrder_createdByToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WorkOrder_WorkOrder_supervisorIdToUser<T extends Prisma.User$WorkOrder_WorkOrder_supervisorIdToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$WorkOrder_WorkOrder_supervisorIdToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WorkOrder_WorkOrder_assignedToIdToUser<T extends Prisma.User$WorkOrder_WorkOrder_assignedToIdToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$WorkOrder_WorkOrder_assignedToIdToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6223,220 +6219,9 @@ export type UserDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.department
+ * User.AuditLog
  */
-export type User$departmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Department
-   */
-  select?: Prisma.DepartmentSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Department
-   */
-  omit?: Prisma.DepartmentOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DepartmentInclude<ExtArgs> | null
-  where?: Prisma.DepartmentWhereInput
-}
-
-/**
- * User.assignedComplaints
- */
-export type User$assignedComplaintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Complaint
-   */
-  select?: Prisma.ComplaintSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Complaint
-   */
-  omit?: Prisma.ComplaintOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ComplaintInclude<ExtArgs> | null
-  where?: Prisma.ComplaintWhereInput
-  orderBy?: Prisma.ComplaintOrderByWithRelationInput | Prisma.ComplaintOrderByWithRelationInput[]
-  cursor?: Prisma.ComplaintWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ComplaintScalarFieldEnum | Prisma.ComplaintScalarFieldEnum[]
-}
-
-/**
- * User.assignedWorkOrders
- */
-export type User$assignedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the WorkOrder
-   */
-  select?: Prisma.WorkOrderSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the WorkOrder
-   */
-  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WorkOrderInclude<ExtArgs> | null
-  where?: Prisma.WorkOrderWhereInput
-  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
-  cursor?: Prisma.WorkOrderWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
-}
-
-/**
- * User.supervisedWorkOrders
- */
-export type User$supervisedWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the WorkOrder
-   */
-  select?: Prisma.WorkOrderSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the WorkOrder
-   */
-  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WorkOrderInclude<ExtArgs> | null
-  where?: Prisma.WorkOrderWhereInput
-  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
-  cursor?: Prisma.WorkOrderWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
-}
-
-/**
- * User.createdWorkOrders
- */
-export type User$createdWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the WorkOrder
-   */
-  select?: Prisma.WorkOrderSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the WorkOrder
-   */
-  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.WorkOrderInclude<ExtArgs> | null
-  where?: Prisma.WorkOrderWhereInput
-  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
-  cursor?: Prisma.WorkOrderWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
-}
-
-/**
- * User.createdInvoices
- */
-export type User$createdInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Invoice
-   */
-  select?: Prisma.InvoiceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Invoice
-   */
-  omit?: Prisma.InvoiceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.InvoiceInclude<ExtArgs> | null
-  where?: Prisma.InvoiceWhereInput
-  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
-  cursor?: Prisma.InvoiceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
-}
-
-/**
- * User.preparedInvoices
- */
-export type User$preparedInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Invoice
-   */
-  select?: Prisma.InvoiceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Invoice
-   */
-  omit?: Prisma.InvoiceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.InvoiceInclude<ExtArgs> | null
-  where?: Prisma.InvoiceWhereInput
-  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
-  cursor?: Prisma.InvoiceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
-}
-
-/**
- * User.pmSchedules
- */
-export type User$pmSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PmSchedule
-   */
-  select?: Prisma.PmScheduleSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PmSchedule
-   */
-  omit?: Prisma.PmScheduleOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PmScheduleInclude<ExtArgs> | null
-  where?: Prisma.PmScheduleWhereInput
-  orderBy?: Prisma.PmScheduleOrderByWithRelationInput | Prisma.PmScheduleOrderByWithRelationInput[]
-  cursor?: Prisma.PmScheduleWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PmScheduleScalarFieldEnum | Prisma.PmScheduleScalarFieldEnum[]
-}
-
-/**
- * User.supervisorComplaints
- */
-export type User$supervisorComplaintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Complaint
-   */
-  select?: Prisma.ComplaintSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Complaint
-   */
-  omit?: Prisma.ComplaintOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.ComplaintInclude<ExtArgs> | null
-  where?: Prisma.ComplaintWhereInput
-  orderBy?: Prisma.ComplaintOrderByWithRelationInput | Prisma.ComplaintOrderByWithRelationInput[]
-  cursor?: Prisma.ComplaintWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.ComplaintScalarFieldEnum | Prisma.ComplaintScalarFieldEnum[]
-}
-
-/**
- * User.auditLogs
- */
-export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$AuditLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the AuditLog
    */
@@ -6458,129 +6243,9 @@ export type User$auditLogsArgs<ExtArgs extends runtime.Types.Extensions.Internal
 }
 
 /**
- * User.vehicleLogs
+ * User.AuthAuditLog
  */
-export type User$vehicleLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the VehicleLog
-   */
-  select?: Prisma.VehicleLogSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the VehicleLog
-   */
-  omit?: Prisma.VehicleLogOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.VehicleLogInclude<ExtArgs> | null
-  where?: Prisma.VehicleLogWhereInput
-  orderBy?: Prisma.VehicleLogOrderByWithRelationInput | Prisma.VehicleLogOrderByWithRelationInput[]
-  cursor?: Prisma.VehicleLogWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.VehicleLogScalarFieldEnum | Prisma.VehicleLogScalarFieldEnum[]
-}
-
-/**
- * User.loginSessions
- */
-export type User$loginSessionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the LoginSession
-   */
-  select?: Prisma.LoginSessionSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the LoginSession
-   */
-  omit?: Prisma.LoginSessionOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.LoginSessionInclude<ExtArgs> | null
-  where?: Prisma.LoginSessionWhereInput
-  orderBy?: Prisma.LoginSessionOrderByWithRelationInput | Prisma.LoginSessionOrderByWithRelationInput[]
-  cursor?: Prisma.LoginSessionWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.LoginSessionScalarFieldEnum | Prisma.LoginSessionScalarFieldEnum[]
-}
-
-/**
- * User.devices
- */
-export type User$devicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Device
-   */
-  select?: Prisma.DeviceSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Device
-   */
-  omit?: Prisma.DeviceOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.DeviceInclude<ExtArgs> | null
-  where?: Prisma.DeviceWhereInput
-  orderBy?: Prisma.DeviceOrderByWithRelationInput | Prisma.DeviceOrderByWithRelationInput[]
-  cursor?: Prisma.DeviceWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.DeviceScalarFieldEnum | Prisma.DeviceScalarFieldEnum[]
-}
-
-/**
- * User.passwordResetTokens
- */
-export type User$passwordResetTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PasswordResetToken
-   */
-  select?: Prisma.PasswordResetTokenSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PasswordResetToken
-   */
-  omit?: Prisma.PasswordResetTokenOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PasswordResetTokenInclude<ExtArgs> | null
-  where?: Prisma.PasswordResetTokenWhereInput
-  orderBy?: Prisma.PasswordResetTokenOrderByWithRelationInput | Prisma.PasswordResetTokenOrderByWithRelationInput[]
-  cursor?: Prisma.PasswordResetTokenWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
-}
-
-/**
- * User.passwordResetOtps
- */
-export type User$passwordResetOtpsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the PasswordResetOtp
-   */
-  select?: Prisma.PasswordResetOtpSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the PasswordResetOtp
-   */
-  omit?: Prisma.PasswordResetOtpOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.PasswordResetOtpInclude<ExtArgs> | null
-  where?: Prisma.PasswordResetOtpWhereInput
-  orderBy?: Prisma.PasswordResetOtpOrderByWithRelationInput | Prisma.PasswordResetOtpOrderByWithRelationInput[]
-  cursor?: Prisma.PasswordResetOtpWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.PasswordResetOtpScalarFieldEnum | Prisma.PasswordResetOtpScalarFieldEnum[]
-}
-
-/**
- * User.authAuditLogs
- */
-export type User$authAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$AuthAuditLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the AuthAuditLog
    */
@@ -6602,57 +6267,81 @@ export type User$authAuditLogsArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * User.termsAcceptances
+ * User.Complaint_Complaint_supervisorIdToUser
  */
-export type User$termsAcceptancesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$Complaint_Complaint_supervisorIdToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the TermsAcceptance
+   * Select specific fields to fetch from the Complaint
    */
-  select?: Prisma.TermsAcceptanceSelect<ExtArgs> | null
+  select?: Prisma.ComplaintSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the TermsAcceptance
+   * Omit specific fields from the Complaint
    */
-  omit?: Prisma.TermsAcceptanceOmit<ExtArgs> | null
+  omit?: Prisma.ComplaintOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.TermsAcceptanceInclude<ExtArgs> | null
-  where?: Prisma.TermsAcceptanceWhereInput
-  orderBy?: Prisma.TermsAcceptanceOrderByWithRelationInput | Prisma.TermsAcceptanceOrderByWithRelationInput[]
-  cursor?: Prisma.TermsAcceptanceWhereUniqueInput
+  include?: Prisma.ComplaintInclude<ExtArgs> | null
+  where?: Prisma.ComplaintWhereInput
+  orderBy?: Prisma.ComplaintOrderByWithRelationInput | Prisma.ComplaintOrderByWithRelationInput[]
+  cursor?: Prisma.ComplaintWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.TermsAcceptanceScalarFieldEnum | Prisma.TermsAcceptanceScalarFieldEnum[]
+  distinct?: Prisma.ComplaintScalarFieldEnum | Prisma.ComplaintScalarFieldEnum[]
 }
 
 /**
- * User.preparedQuotations
+ * User.Complaint_Complaint_assignedToIdToUser
  */
-export type User$preparedQuotationsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$Complaint_Complaint_assignedToIdToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the Quotation
+   * Select specific fields to fetch from the Complaint
    */
-  select?: Prisma.QuotationSelect<ExtArgs> | null
+  select?: Prisma.ComplaintSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the Quotation
+   * Omit specific fields from the Complaint
    */
-  omit?: Prisma.QuotationOmit<ExtArgs> | null
+  omit?: Prisma.ComplaintOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.QuotationInclude<ExtArgs> | null
-  where?: Prisma.QuotationWhereInput
-  orderBy?: Prisma.QuotationOrderByWithRelationInput | Prisma.QuotationOrderByWithRelationInput[]
-  cursor?: Prisma.QuotationWhereUniqueInput
+  include?: Prisma.ComplaintInclude<ExtArgs> | null
+  where?: Prisma.ComplaintWhereInput
+  orderBy?: Prisma.ComplaintOrderByWithRelationInput | Prisma.ComplaintOrderByWithRelationInput[]
+  cursor?: Prisma.ComplaintWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.QuotationScalarFieldEnum | Prisma.QuotationScalarFieldEnum[]
+  distinct?: Prisma.ComplaintScalarFieldEnum | Prisma.ComplaintScalarFieldEnum[]
 }
 
 /**
- * User.deviceTokens
+ * User.Device
  */
-export type User$deviceTokensArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$DeviceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Device
+   */
+  select?: Prisma.DeviceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Device
+   */
+  omit?: Prisma.DeviceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DeviceInclude<ExtArgs> | null
+  where?: Prisma.DeviceWhereInput
+  orderBy?: Prisma.DeviceOrderByWithRelationInput | Prisma.DeviceOrderByWithRelationInput[]
+  cursor?: Prisma.DeviceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DeviceScalarFieldEnum | Prisma.DeviceScalarFieldEnum[]
+}
+
+/**
+ * User.DeviceToken
+ */
+export type User$DeviceTokenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the DeviceToken
    */
@@ -6674,9 +6363,81 @@ export type User$deviceTokensArgs<ExtArgs extends runtime.Types.Extensions.Inter
 }
 
 /**
- * User.notificationLogs
+ * User.Invoice_Invoice_preparedByToUser
  */
-export type User$notificationLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type User$Invoice_Invoice_preparedByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * User.Invoice_Invoice_createdByToUser
+ */
+export type User$Invoice_Invoice_createdByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * User.LoginSession
+ */
+export type User$LoginSessionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the LoginSession
+   */
+  select?: Prisma.LoginSessionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LoginSession
+   */
+  omit?: Prisma.LoginSessionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LoginSessionInclude<ExtArgs> | null
+  where?: Prisma.LoginSessionWhereInput
+  orderBy?: Prisma.LoginSessionOrderByWithRelationInput | Prisma.LoginSessionOrderByWithRelationInput[]
+  cursor?: Prisma.LoginSessionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.LoginSessionScalarFieldEnum | Prisma.LoginSessionScalarFieldEnum[]
+}
+
+/**
+ * User.NotificationLog
+ */
+export type User$NotificationLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the NotificationLog
    */
@@ -6695,6 +6456,241 @@ export type User$notificationLogsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.NotificationLogScalarFieldEnum | Prisma.NotificationLogScalarFieldEnum[]
+}
+
+/**
+ * User.PasswordResetOtp
+ */
+export type User$PasswordResetOtpArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordResetOtp
+   */
+  select?: Prisma.PasswordResetOtpSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordResetOtp
+   */
+  omit?: Prisma.PasswordResetOtpOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordResetOtpInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetOtpWhereInput
+  orderBy?: Prisma.PasswordResetOtpOrderByWithRelationInput | Prisma.PasswordResetOtpOrderByWithRelationInput[]
+  cursor?: Prisma.PasswordResetOtpWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PasswordResetOtpScalarFieldEnum | Prisma.PasswordResetOtpScalarFieldEnum[]
+}
+
+/**
+ * User.PasswordResetToken
+ */
+export type User$PasswordResetTokenArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PasswordResetToken
+   */
+  select?: Prisma.PasswordResetTokenSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PasswordResetToken
+   */
+  omit?: Prisma.PasswordResetTokenOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PasswordResetTokenInclude<ExtArgs> | null
+  where?: Prisma.PasswordResetTokenWhereInput
+  orderBy?: Prisma.PasswordResetTokenOrderByWithRelationInput | Prisma.PasswordResetTokenOrderByWithRelationInput[]
+  cursor?: Prisma.PasswordResetTokenWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PasswordResetTokenScalarFieldEnum | Prisma.PasswordResetTokenScalarFieldEnum[]
+}
+
+/**
+ * User.PmSchedule
+ */
+export type User$PmScheduleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PmSchedule
+   */
+  select?: Prisma.PmScheduleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PmSchedule
+   */
+  omit?: Prisma.PmScheduleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PmScheduleInclude<ExtArgs> | null
+  where?: Prisma.PmScheduleWhereInput
+  orderBy?: Prisma.PmScheduleOrderByWithRelationInput | Prisma.PmScheduleOrderByWithRelationInput[]
+  cursor?: Prisma.PmScheduleWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PmScheduleScalarFieldEnum | Prisma.PmScheduleScalarFieldEnum[]
+}
+
+/**
+ * User.Quotation
+ */
+export type User$QuotationArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Quotation
+   */
+  select?: Prisma.QuotationSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Quotation
+   */
+  omit?: Prisma.QuotationOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.QuotationInclude<ExtArgs> | null
+  where?: Prisma.QuotationWhereInput
+  orderBy?: Prisma.QuotationOrderByWithRelationInput | Prisma.QuotationOrderByWithRelationInput[]
+  cursor?: Prisma.QuotationWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.QuotationScalarFieldEnum | Prisma.QuotationScalarFieldEnum[]
+}
+
+/**
+ * User.TermsAcceptance
+ */
+export type User$TermsAcceptanceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TermsAcceptance
+   */
+  select?: Prisma.TermsAcceptanceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TermsAcceptance
+   */
+  omit?: Prisma.TermsAcceptanceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TermsAcceptanceInclude<ExtArgs> | null
+  where?: Prisma.TermsAcceptanceWhereInput
+  orderBy?: Prisma.TermsAcceptanceOrderByWithRelationInput | Prisma.TermsAcceptanceOrderByWithRelationInput[]
+  cursor?: Prisma.TermsAcceptanceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TermsAcceptanceScalarFieldEnum | Prisma.TermsAcceptanceScalarFieldEnum[]
+}
+
+/**
+ * User.department
+ */
+export type User$departmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Department
+   */
+  select?: Prisma.DepartmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Department
+   */
+  omit?: Prisma.DepartmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepartmentInclude<ExtArgs> | null
+  where?: Prisma.DepartmentWhereInput
+}
+
+/**
+ * User.VehicleLog
+ */
+export type User$VehicleLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the VehicleLog
+   */
+  select?: Prisma.VehicleLogSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the VehicleLog
+   */
+  omit?: Prisma.VehicleLogOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.VehicleLogInclude<ExtArgs> | null
+  where?: Prisma.VehicleLogWhereInput
+  orderBy?: Prisma.VehicleLogOrderByWithRelationInput | Prisma.VehicleLogOrderByWithRelationInput[]
+  cursor?: Prisma.VehicleLogWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.VehicleLogScalarFieldEnum | Prisma.VehicleLogScalarFieldEnum[]
+}
+
+/**
+ * User.WorkOrder_WorkOrder_createdByToUser
+ */
+export type User$WorkOrder_WorkOrder_createdByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkOrder
+   */
+  select?: Prisma.WorkOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkOrder
+   */
+  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkOrderInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderWhereInput
+  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
+}
+
+/**
+ * User.WorkOrder_WorkOrder_supervisorIdToUser
+ */
+export type User$WorkOrder_WorkOrder_supervisorIdToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkOrder
+   */
+  select?: Prisma.WorkOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkOrder
+   */
+  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkOrderInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderWhereInput
+  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
+}
+
+/**
+ * User.WorkOrder_WorkOrder_assignedToIdToUser
+ */
+export type User$WorkOrder_WorkOrder_assignedToIdToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the WorkOrder
+   */
+  select?: Prisma.WorkOrderSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the WorkOrder
+   */
+  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.WorkOrderInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderWhereInput
+  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
 }
 
 /**

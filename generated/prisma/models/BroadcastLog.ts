@@ -425,7 +425,7 @@ export type BroadcastLogScalarWhereWithAggregatesInput = {
 }
 
 export type BroadcastLogCreateInput = {
-  id?: string
+  id: string
   title: string
   content: string
   templateId?: string | null
@@ -440,12 +440,12 @@ export type BroadcastLogCreateInput = {
   completedAt?: Date | string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutBroadcastLogsInput
+  updatedAt: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutBroadcastLogInput
 }
 
 export type BroadcastLogUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   content: string
@@ -461,7 +461,7 @@ export type BroadcastLogUncheckedCreateInput = {
   completedAt?: Date | string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type BroadcastLogUpdateInput = {
@@ -481,7 +481,7 @@ export type BroadcastLogUpdateInput = {
   createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutBroadcastLogsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutBroadcastLogNestedInput
 }
 
 export type BroadcastLogUncheckedUpdateInput = {
@@ -505,7 +505,7 @@ export type BroadcastLogUncheckedUpdateInput = {
 }
 
 export type BroadcastLogCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   content: string
@@ -521,7 +521,7 @@ export type BroadcastLogCreateManyInput = {
   completedAt?: Date | string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type BroadcastLogUpdateManyMutationInput = {
@@ -561,16 +561,6 @@ export type BroadcastLogUncheckedUpdateManyInput = {
   createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type BroadcastLogListRelationFilter = {
-  every?: Prisma.BroadcastLogWhereInput
-  some?: Prisma.BroadcastLogWhereInput
-  none?: Prisma.BroadcastLogWhereInput
-}
-
-export type BroadcastLogOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type BroadcastLogCountOrderByAggregateInput = {
@@ -649,6 +639,24 @@ export type BroadcastLogSumOrderByAggregateInput = {
   readCount?: Prisma.SortOrder
 }
 
+export type BroadcastLogListRelationFilter = {
+  every?: Prisma.BroadcastLogWhereInput
+  some?: Prisma.BroadcastLogWhereInput
+  none?: Prisma.BroadcastLogWhereInput
+}
+
+export type BroadcastLogOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
+}
+
 export type BroadcastLogCreateNestedManyWithoutTenantInput = {
   create?: Prisma.XOR<Prisma.BroadcastLogCreateWithoutTenantInput, Prisma.BroadcastLogUncheckedCreateWithoutTenantInput> | Prisma.BroadcastLogCreateWithoutTenantInput[] | Prisma.BroadcastLogUncheckedCreateWithoutTenantInput[]
   connectOrCreate?: Prisma.BroadcastLogCreateOrConnectWithoutTenantInput | Prisma.BroadcastLogCreateOrConnectWithoutTenantInput[]
@@ -692,7 +700,7 @@ export type BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput = {
 }
 
 export type BroadcastLogCreateWithoutTenantInput = {
-  id?: string
+  id: string
   title: string
   content: string
   templateId?: string | null
@@ -707,11 +715,11 @@ export type BroadcastLogCreateWithoutTenantInput = {
   completedAt?: Date | string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type BroadcastLogUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   title: string
   content: string
   templateId?: string | null
@@ -726,7 +734,7 @@ export type BroadcastLogUncheckedCreateWithoutTenantInput = {
   completedAt?: Date | string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type BroadcastLogCreateOrConnectWithoutTenantInput = {
@@ -778,7 +786,7 @@ export type BroadcastLogScalarWhereInput = {
 }
 
 export type BroadcastLogCreateManyTenantInput = {
-  id?: string
+  id: string
   title: string
   content: string
   templateId?: string | null
@@ -793,7 +801,7 @@ export type BroadcastLogCreateManyTenantInput = {
   completedAt?: Date | string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type BroadcastLogUpdateWithoutTenantInput = {

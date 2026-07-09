@@ -382,7 +382,7 @@ export type CmsFooterScalarWhereWithAggregatesInput = {
 }
 
 export type CmsFooterCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   companyDescription?: string | null
   address?: string | null
@@ -399,11 +399,11 @@ export type CmsFooterCreateInput = {
   termsLink?: string | null
   menuLinks?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsFooterUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   companyDescription?: string | null
   address?: string | null
@@ -420,7 +420,7 @@ export type CmsFooterUncheckedCreateInput = {
   termsLink?: string | null
   menuLinks?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsFooterUpdateInput = {
@@ -466,7 +466,7 @@ export type CmsFooterUncheckedUpdateInput = {
 }
 
 export type CmsFooterCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   companyDescription?: string | null
   address?: string | null
@@ -483,7 +483,7 @@ export type CmsFooterCreateManyInput = {
   termsLink?: string | null
   menuLinks?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsFooterUpdateManyMutationInput = {

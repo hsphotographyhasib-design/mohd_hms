@@ -230,7 +230,7 @@ export type CmsCareerApplicationWhereInput = {
   status?: Prisma.StringFilter<"CmsCareerApplication"> | string
   createdAt?: Prisma.DateTimeFilter<"CmsCareerApplication"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CmsCareerApplication"> | Date | string
-  job?: Prisma.XOR<Prisma.CmsCareerJobScalarRelationFilter, Prisma.CmsCareerJobWhereInput>
+  CmsCareerJob?: Prisma.XOR<Prisma.CmsCareerJobScalarRelationFilter, Prisma.CmsCareerJobWhereInput>
 }
 
 export type CmsCareerApplicationOrderByWithRelationInput = {
@@ -245,7 +245,7 @@ export type CmsCareerApplicationOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  job?: Prisma.CmsCareerJobOrderByWithRelationInput
+  CmsCareerJob?: Prisma.CmsCareerJobOrderByWithRelationInput
 }
 
 export type CmsCareerApplicationWhereUniqueInput = Prisma.AtLeast<{
@@ -263,7 +263,7 @@ export type CmsCareerApplicationWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.StringFilter<"CmsCareerApplication"> | string
   createdAt?: Prisma.DateTimeFilter<"CmsCareerApplication"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CmsCareerApplication"> | Date | string
-  job?: Prisma.XOR<Prisma.CmsCareerJobScalarRelationFilter, Prisma.CmsCareerJobWhereInput>
+  CmsCareerJob?: Prisma.XOR<Prisma.CmsCareerJobScalarRelationFilter, Prisma.CmsCareerJobWhereInput>
 }, "id">
 
 export type CmsCareerApplicationOrderByWithAggregationInput = {
@@ -301,7 +301,7 @@ export type CmsCareerApplicationScalarWhereWithAggregatesInput = {
 }
 
 export type CmsCareerApplicationCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   fullName: string
   email: string
@@ -310,12 +310,12 @@ export type CmsCareerApplicationCreateInput = {
   coverLetter?: string | null
   status?: string
   createdAt?: Date | string
-  updatedAt?: Date | string
-  job: Prisma.CmsCareerJobCreateNestedOneWithoutApplicationsInput
+  updatedAt: Date | string
+  CmsCareerJob: Prisma.CmsCareerJobCreateNestedOneWithoutCmsCareerApplicationInput
 }
 
 export type CmsCareerApplicationUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   jobId: string
   fullName: string
@@ -325,7 +325,7 @@ export type CmsCareerApplicationUncheckedCreateInput = {
   coverLetter?: string | null
   status?: string
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsCareerApplicationUpdateInput = {
@@ -339,7 +339,7 @@ export type CmsCareerApplicationUpdateInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  job?: Prisma.CmsCareerJobUpdateOneRequiredWithoutApplicationsNestedInput
+  CmsCareerJob?: Prisma.CmsCareerJobUpdateOneRequiredWithoutCmsCareerApplicationNestedInput
 }
 
 export type CmsCareerApplicationUncheckedUpdateInput = {
@@ -357,7 +357,7 @@ export type CmsCareerApplicationUncheckedUpdateInput = {
 }
 
 export type CmsCareerApplicationCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   jobId: string
   fullName: string
@@ -367,7 +367,7 @@ export type CmsCareerApplicationCreateManyInput = {
   coverLetter?: string | null
   status?: string
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsCareerApplicationUpdateManyMutationInput = {
@@ -395,16 +395,6 @@ export type CmsCareerApplicationUncheckedUpdateManyInput = {
   status?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type CmsCareerApplicationListRelationFilter = {
-  every?: Prisma.CmsCareerApplicationWhereInput
-  some?: Prisma.CmsCareerApplicationWhereInput
-  none?: Prisma.CmsCareerApplicationWhereInput
-}
-
-export type CmsCareerApplicationOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type CmsCareerApplicationCountOrderByAggregateInput = {
@@ -449,50 +439,60 @@ export type CmsCareerApplicationMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type CmsCareerApplicationCreateNestedManyWithoutJobInput = {
-  create?: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput> | Prisma.CmsCareerApplicationCreateWithoutJobInput[] | Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput[]
-  connectOrCreate?: Prisma.CmsCareerApplicationCreateOrConnectWithoutJobInput | Prisma.CmsCareerApplicationCreateOrConnectWithoutJobInput[]
-  createMany?: Prisma.CmsCareerApplicationCreateManyJobInputEnvelope
+export type CmsCareerApplicationListRelationFilter = {
+  every?: Prisma.CmsCareerApplicationWhereInput
+  some?: Prisma.CmsCareerApplicationWhereInput
+  none?: Prisma.CmsCareerApplicationWhereInput
+}
+
+export type CmsCareerApplicationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type CmsCareerApplicationCreateNestedManyWithoutCmsCareerJobInput = {
+  create?: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput> | Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput[] | Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput[]
+  connectOrCreate?: Prisma.CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput[]
+  createMany?: Prisma.CmsCareerApplicationCreateManyCmsCareerJobInputEnvelope
   connect?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
 }
 
-export type CmsCareerApplicationUncheckedCreateNestedManyWithoutJobInput = {
-  create?: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput> | Prisma.CmsCareerApplicationCreateWithoutJobInput[] | Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput[]
-  connectOrCreate?: Prisma.CmsCareerApplicationCreateOrConnectWithoutJobInput | Prisma.CmsCareerApplicationCreateOrConnectWithoutJobInput[]
-  createMany?: Prisma.CmsCareerApplicationCreateManyJobInputEnvelope
+export type CmsCareerApplicationUncheckedCreateNestedManyWithoutCmsCareerJobInput = {
+  create?: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput> | Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput[] | Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput[]
+  connectOrCreate?: Prisma.CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput[]
+  createMany?: Prisma.CmsCareerApplicationCreateManyCmsCareerJobInputEnvelope
   connect?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
 }
 
-export type CmsCareerApplicationUpdateManyWithoutJobNestedInput = {
-  create?: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput> | Prisma.CmsCareerApplicationCreateWithoutJobInput[] | Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput[]
-  connectOrCreate?: Prisma.CmsCareerApplicationCreateOrConnectWithoutJobInput | Prisma.CmsCareerApplicationCreateOrConnectWithoutJobInput[]
-  upsert?: Prisma.CmsCareerApplicationUpsertWithWhereUniqueWithoutJobInput | Prisma.CmsCareerApplicationUpsertWithWhereUniqueWithoutJobInput[]
-  createMany?: Prisma.CmsCareerApplicationCreateManyJobInputEnvelope
+export type CmsCareerApplicationUpdateManyWithoutCmsCareerJobNestedInput = {
+  create?: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput> | Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput[] | Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput[]
+  connectOrCreate?: Prisma.CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput[]
+  upsert?: Prisma.CmsCareerApplicationUpsertWithWhereUniqueWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationUpsertWithWhereUniqueWithoutCmsCareerJobInput[]
+  createMany?: Prisma.CmsCareerApplicationCreateManyCmsCareerJobInputEnvelope
   set?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
   disconnect?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
   delete?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
   connect?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
-  update?: Prisma.CmsCareerApplicationUpdateWithWhereUniqueWithoutJobInput | Prisma.CmsCareerApplicationUpdateWithWhereUniqueWithoutJobInput[]
-  updateMany?: Prisma.CmsCareerApplicationUpdateManyWithWhereWithoutJobInput | Prisma.CmsCareerApplicationUpdateManyWithWhereWithoutJobInput[]
+  update?: Prisma.CmsCareerApplicationUpdateWithWhereUniqueWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationUpdateWithWhereUniqueWithoutCmsCareerJobInput[]
+  updateMany?: Prisma.CmsCareerApplicationUpdateManyWithWhereWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationUpdateManyWithWhereWithoutCmsCareerJobInput[]
   deleteMany?: Prisma.CmsCareerApplicationScalarWhereInput | Prisma.CmsCareerApplicationScalarWhereInput[]
 }
 
-export type CmsCareerApplicationUncheckedUpdateManyWithoutJobNestedInput = {
-  create?: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput> | Prisma.CmsCareerApplicationCreateWithoutJobInput[] | Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput[]
-  connectOrCreate?: Prisma.CmsCareerApplicationCreateOrConnectWithoutJobInput | Prisma.CmsCareerApplicationCreateOrConnectWithoutJobInput[]
-  upsert?: Prisma.CmsCareerApplicationUpsertWithWhereUniqueWithoutJobInput | Prisma.CmsCareerApplicationUpsertWithWhereUniqueWithoutJobInput[]
-  createMany?: Prisma.CmsCareerApplicationCreateManyJobInputEnvelope
+export type CmsCareerApplicationUncheckedUpdateManyWithoutCmsCareerJobNestedInput = {
+  create?: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput> | Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput[] | Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput[]
+  connectOrCreate?: Prisma.CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput[]
+  upsert?: Prisma.CmsCareerApplicationUpsertWithWhereUniqueWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationUpsertWithWhereUniqueWithoutCmsCareerJobInput[]
+  createMany?: Prisma.CmsCareerApplicationCreateManyCmsCareerJobInputEnvelope
   set?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
   disconnect?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
   delete?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
   connect?: Prisma.CmsCareerApplicationWhereUniqueInput | Prisma.CmsCareerApplicationWhereUniqueInput[]
-  update?: Prisma.CmsCareerApplicationUpdateWithWhereUniqueWithoutJobInput | Prisma.CmsCareerApplicationUpdateWithWhereUniqueWithoutJobInput[]
-  updateMany?: Prisma.CmsCareerApplicationUpdateManyWithWhereWithoutJobInput | Prisma.CmsCareerApplicationUpdateManyWithWhereWithoutJobInput[]
+  update?: Prisma.CmsCareerApplicationUpdateWithWhereUniqueWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationUpdateWithWhereUniqueWithoutCmsCareerJobInput[]
+  updateMany?: Prisma.CmsCareerApplicationUpdateManyWithWhereWithoutCmsCareerJobInput | Prisma.CmsCareerApplicationUpdateManyWithWhereWithoutCmsCareerJobInput[]
   deleteMany?: Prisma.CmsCareerApplicationScalarWhereInput | Prisma.CmsCareerApplicationScalarWhereInput[]
 }
 
-export type CmsCareerApplicationCreateWithoutJobInput = {
-  id?: string
+export type CmsCareerApplicationCreateWithoutCmsCareerJobInput = {
+  id: string
   tenantId: string
   fullName: string
   email: string
@@ -501,11 +501,11 @@ export type CmsCareerApplicationCreateWithoutJobInput = {
   coverLetter?: string | null
   status?: string
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type CmsCareerApplicationUncheckedCreateWithoutJobInput = {
-  id?: string
+export type CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput = {
+  id: string
   tenantId: string
   fullName: string
   email: string
@@ -514,32 +514,32 @@ export type CmsCareerApplicationUncheckedCreateWithoutJobInput = {
   coverLetter?: string | null
   status?: string
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type CmsCareerApplicationCreateOrConnectWithoutJobInput = {
+export type CmsCareerApplicationCreateOrConnectWithoutCmsCareerJobInput = {
   where: Prisma.CmsCareerApplicationWhereUniqueInput
-  create: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput>
+  create: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput>
 }
 
-export type CmsCareerApplicationCreateManyJobInputEnvelope = {
-  data: Prisma.CmsCareerApplicationCreateManyJobInput | Prisma.CmsCareerApplicationCreateManyJobInput[]
+export type CmsCareerApplicationCreateManyCmsCareerJobInputEnvelope = {
+  data: Prisma.CmsCareerApplicationCreateManyCmsCareerJobInput | Prisma.CmsCareerApplicationCreateManyCmsCareerJobInput[]
 }
 
-export type CmsCareerApplicationUpsertWithWhereUniqueWithoutJobInput = {
+export type CmsCareerApplicationUpsertWithWhereUniqueWithoutCmsCareerJobInput = {
   where: Prisma.CmsCareerApplicationWhereUniqueInput
-  update: Prisma.XOR<Prisma.CmsCareerApplicationUpdateWithoutJobInput, Prisma.CmsCareerApplicationUncheckedUpdateWithoutJobInput>
-  create: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutJobInput>
+  update: Prisma.XOR<Prisma.CmsCareerApplicationUpdateWithoutCmsCareerJobInput, Prisma.CmsCareerApplicationUncheckedUpdateWithoutCmsCareerJobInput>
+  create: Prisma.XOR<Prisma.CmsCareerApplicationCreateWithoutCmsCareerJobInput, Prisma.CmsCareerApplicationUncheckedCreateWithoutCmsCareerJobInput>
 }
 
-export type CmsCareerApplicationUpdateWithWhereUniqueWithoutJobInput = {
+export type CmsCareerApplicationUpdateWithWhereUniqueWithoutCmsCareerJobInput = {
   where: Prisma.CmsCareerApplicationWhereUniqueInput
-  data: Prisma.XOR<Prisma.CmsCareerApplicationUpdateWithoutJobInput, Prisma.CmsCareerApplicationUncheckedUpdateWithoutJobInput>
+  data: Prisma.XOR<Prisma.CmsCareerApplicationUpdateWithoutCmsCareerJobInput, Prisma.CmsCareerApplicationUncheckedUpdateWithoutCmsCareerJobInput>
 }
 
-export type CmsCareerApplicationUpdateManyWithWhereWithoutJobInput = {
+export type CmsCareerApplicationUpdateManyWithWhereWithoutCmsCareerJobInput = {
   where: Prisma.CmsCareerApplicationScalarWhereInput
-  data: Prisma.XOR<Prisma.CmsCareerApplicationUpdateManyMutationInput, Prisma.CmsCareerApplicationUncheckedUpdateManyWithoutJobInput>
+  data: Prisma.XOR<Prisma.CmsCareerApplicationUpdateManyMutationInput, Prisma.CmsCareerApplicationUncheckedUpdateManyWithoutCmsCareerJobInput>
 }
 
 export type CmsCareerApplicationScalarWhereInput = {
@@ -559,8 +559,8 @@ export type CmsCareerApplicationScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"CmsCareerApplication"> | Date | string
 }
 
-export type CmsCareerApplicationCreateManyJobInput = {
-  id?: string
+export type CmsCareerApplicationCreateManyCmsCareerJobInput = {
+  id: string
   tenantId: string
   fullName: string
   email: string
@@ -569,10 +569,10 @@ export type CmsCareerApplicationCreateManyJobInput = {
   coverLetter?: string | null
   status?: string
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type CmsCareerApplicationUpdateWithoutJobInput = {
+export type CmsCareerApplicationUpdateWithoutCmsCareerJobInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -585,7 +585,7 @@ export type CmsCareerApplicationUpdateWithoutJobInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type CmsCareerApplicationUncheckedUpdateWithoutJobInput = {
+export type CmsCareerApplicationUncheckedUpdateWithoutCmsCareerJobInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -598,7 +598,7 @@ export type CmsCareerApplicationUncheckedUpdateWithoutJobInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type CmsCareerApplicationUncheckedUpdateManyWithoutJobInput = {
+export type CmsCareerApplicationUncheckedUpdateManyWithoutCmsCareerJobInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
@@ -625,7 +625,7 @@ export type CmsCareerApplicationSelect<ExtArgs extends runtime.Types.Extensions.
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  job?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
+  CmsCareerJob?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cmsCareerApplication"]>
 
 export type CmsCareerApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -640,7 +640,7 @@ export type CmsCareerApplicationSelectCreateManyAndReturn<ExtArgs extends runtim
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  job?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
+  CmsCareerJob?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cmsCareerApplication"]>
 
 export type CmsCareerApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -655,7 +655,7 @@ export type CmsCareerApplicationSelectUpdateManyAndReturn<ExtArgs extends runtim
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  job?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
+  CmsCareerJob?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cmsCareerApplication"]>
 
 export type CmsCareerApplicationSelectScalar = {
@@ -674,19 +674,19 @@ export type CmsCareerApplicationSelectScalar = {
 
 export type CmsCareerApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "jobId" | "fullName" | "email" | "phone" | "resumeUrl" | "coverLetter" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["cmsCareerApplication"]>
 export type CmsCareerApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  job?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
+  CmsCareerJob?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
 }
 export type CmsCareerApplicationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  job?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
+  CmsCareerJob?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
 }
 export type CmsCareerApplicationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  job?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
+  CmsCareerJob?: boolean | Prisma.CmsCareerJobDefaultArgs<ExtArgs>
 }
 
 export type $CmsCareerApplicationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CmsCareerApplication"
   objects: {
-    job: Prisma.$CmsCareerJobPayload<ExtArgs>
+    CmsCareerJob: Prisma.$CmsCareerJobPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1094,7 +1094,7 @@ readonly fields: CmsCareerApplicationFieldRefs;
  */
 export interface Prisma__CmsCareerApplicationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  job<T extends Prisma.CmsCareerJobDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CmsCareerJobDefaultArgs<ExtArgs>>): Prisma.Prisma__CmsCareerJobClient<runtime.Types.Result.GetResult<Prisma.$CmsCareerJobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  CmsCareerJob<T extends Prisma.CmsCareerJobDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CmsCareerJobDefaultArgs<ExtArgs>>): Prisma.Prisma__CmsCareerJobClient<runtime.Types.Result.GetResult<Prisma.$CmsCareerJobPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

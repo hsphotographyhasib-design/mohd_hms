@@ -18,25 +18,175 @@ export { Prisma }
 export * as $Enums from './enums'
 export * from './enums';
 /**
- * Model Tenant
+ * Model Attendance
  * 
  */
-export type Tenant = Prisma.TenantModel
+export type Attendance = Prisma.AttendanceModel
 /**
- * Model User
+ * Model AuditLog
  * 
  */
-export type User = Prisma.UserModel
+export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model AuthAuditLog
+ * 
+ */
+export type AuthAuditLog = Prisma.AuthAuditLogModel
+/**
+ * Model BroadcastLog
+ * 
+ */
+export type BroadcastLog = Prisma.BroadcastLogModel
+/**
+ * Model ChecklistTemplate
+ * 
+ */
+export type ChecklistTemplate = Prisma.ChecklistTemplateModel
+/**
+ * Model CmsActivityLog
+ * 
+ */
+export type CmsActivityLog = Prisma.CmsActivityLogModel
+/**
+ * Model CmsAnnouncement
+ * 
+ */
+export type CmsAnnouncement = Prisma.CmsAnnouncementModel
+/**
+ * Model CmsBlog
+ * 
+ */
+export type CmsBlog = Prisma.CmsBlogModel
+/**
+ * Model CmsBlogCategory
+ * 
+ */
+export type CmsBlogCategory = Prisma.CmsBlogCategoryModel
+/**
+ * Model CmsCareerApplication
+ * 
+ */
+export type CmsCareerApplication = Prisma.CmsCareerApplicationModel
+/**
+ * Model CmsCareerJob
+ * 
+ */
+export type CmsCareerJob = Prisma.CmsCareerJobModel
+/**
+ * Model CmsContactMessage
+ * 
+ */
+export type CmsContactMessage = Prisma.CmsContactMessageModel
+/**
+ * Model CmsFooter
+ * 
+ */
+export type CmsFooter = Prisma.CmsFooterModel
+/**
+ * Model CmsForm
+ * 
+ */
+export type CmsForm = Prisma.CmsFormModel
+/**
+ * Model CmsHero
+ * 
+ */
+export type CmsHero = Prisma.CmsHeroModel
+/**
+ * Model CmsIndustry
+ * 
+ */
+export type CmsIndustry = Prisma.CmsIndustryModel
+/**
+ * Model CmsMedia
+ * 
+ */
+export type CmsMedia = Prisma.CmsMediaModel
+/**
+ * Model CmsPopup
+ * 
+ */
+export type CmsPopup = Prisma.CmsPopupModel
+/**
+ * Model CmsProject
+ * 
+ */
+export type CmsProject = Prisma.CmsProjectModel
+/**
+ * Model CmsSeo
+ * 
+ */
+export type CmsSeo = Prisma.CmsSeoModel
+/**
+ * Model CmsService
+ * 
+ */
+export type CmsService = Prisma.CmsServiceModel
+/**
+ * Model CmsSetting
+ * 
+ */
+export type CmsSetting = Prisma.CmsSettingModel
+/**
+ * Model CmsTestimonial
+ * 
+ */
+export type CmsTestimonial = Prisma.CmsTestimonialModel
+/**
+ * Model Complaint
+ * 
+ */
+export type Complaint = Prisma.ComplaintModel
+/**
+ * Model ComplaintTimeline
+ * 
+ */
+export type ComplaintTimeline = Prisma.ComplaintTimelineModel
+/**
+ * Model ConversationThread
+ * 
+ */
+export type ConversationThread = Prisma.ConversationThreadModel
+/**
+ * Model Customer
+ * 
+ */
+export type Customer = Prisma.CustomerModel
+/**
+ * Model CustomerFeedback
+ * 
+ */
+export type CustomerFeedback = Prisma.CustomerFeedbackModel
+/**
+ * Model CustomerReport
+ * 
+ */
+export type CustomerReport = Prisma.CustomerReportModel
 /**
  * Model Department
  * 
  */
 export type Department = Prisma.DepartmentModel
 /**
- * Model Customer
+ * Model Device
  * 
  */
-export type Customer = Prisma.CustomerModel
+export type Device = Prisma.DeviceModel
+/**
+ * Model DeviceToken
+ * 
+ */
+export type DeviceToken = Prisma.DeviceTokenModel
+/**
+ * Model EmailLog
+ * 
+ */
+export type EmailLog = Prisma.EmailLogModel
+/**
+ * Model EmailTemplate
+ * 
+ */
+export type EmailTemplate = Prisma.EmailTemplateModel
 /**
  * Model Equipment
  * 
@@ -48,80 +198,180 @@ export type Equipment = Prisma.EquipmentModel
  */
 export type EquipmentQrCode = Prisma.EquipmentQrCodeModel
 /**
- * Model ScanLog
+ * Model HrAnnouncement
  * 
  */
-export type ScanLog = Prisma.ScanLogModel
+export type HrAnnouncement = Prisma.HrAnnouncementModel
 /**
- * Model Complaint
+ * Model HrAssetAssignment
  * 
  */
-export type Complaint = Prisma.ComplaintModel
+export type HrAssetAssignment = Prisma.HrAssetAssignmentModel
 /**
- * Model WorkOrder
+ * Model HrCandidate
  * 
  */
-export type WorkOrder = Prisma.WorkOrderModel
+export type HrCandidate = Prisma.HrCandidateModel
 /**
- * Model WorkOrderMaterial
+ * Model HrDisciplinaryAction
  * 
  */
-export type WorkOrderMaterial = Prisma.WorkOrderMaterialModel
+export type HrDisciplinaryAction = Prisma.HrDisciplinaryActionModel
 /**
- * Model ChecklistTemplate
+ * Model HrEmployee
  * 
  */
-export type ChecklistTemplate = Prisma.ChecklistTemplateModel
+export type HrEmployee = Prisma.HrEmployeeModel
 /**
- * Model PmSchedule
+ * Model HrEmployeeDocument
  * 
  */
-export type PmSchedule = Prisma.PmScheduleModel
+export type HrEmployeeDocument = Prisma.HrEmployeeDocumentModel
 /**
- * Model Quotation
+ * Model HrExpenseClaim
  * 
  */
-export type Quotation = Prisma.QuotationModel
+export type HrExpenseClaim = Prisma.HrExpenseClaimModel
 /**
- * Model Invoice
+ * Model HrHoliday
  * 
  */
-export type Invoice = Prisma.InvoiceModel
+export type HrHoliday = Prisma.HrHolidayModel
+/**
+ * Model HrJobPosition
+ * 
+ */
+export type HrJobPosition = Prisma.HrJobPositionModel
+/**
+ * Model HrLeaveBalance
+ * 
+ */
+export type HrLeaveBalance = Prisma.HrLeaveBalanceModel
+/**
+ * Model HrLeaveRequest
+ * 
+ */
+export type HrLeaveRequest = Prisma.HrLeaveRequestModel
+/**
+ * Model HrLeaveType
+ * 
+ */
+export type HrLeaveType = Prisma.HrLeaveTypeModel
+/**
+ * Model HrMedicalRecord
+ * 
+ */
+export type HrMedicalRecord = Prisma.HrMedicalRecordModel
+/**
+ * Model HrOvertimeRequest
+ * 
+ */
+export type HrOvertimeRequest = Prisma.HrOvertimeRequestModel
+/**
+ * Model HrPayroll
+ * 
+ */
+export type HrPayroll = Prisma.HrPayrollModel
+/**
+ * Model HrPerformanceReview
+ * 
+ */
+export type HrPerformanceReview = Prisma.HrPerformanceReviewModel
+/**
+ * Model HrShift
+ * 
+ */
+export type HrShift = Prisma.HrShiftModel
+/**
+ * Model HrShiftSchedule
+ * 
+ */
+export type HrShiftSchedule = Prisma.HrShiftScheduleModel
+/**
+ * Model HrTraining
+ * 
+ */
+export type HrTraining = Prisma.HrTrainingModel
+/**
+ * Model HrTrainingRecord
+ * 
+ */
+export type HrTrainingRecord = Prisma.HrTrainingRecordModel
+/**
+ * Model HrTravelRequest
+ * 
+ */
+export type HrTravelRequest = Prisma.HrTravelRequestModel
+/**
+ * Model HrVisitor
+ * 
+ */
+export type HrVisitor = Prisma.HrVisitorModel
 /**
  * Model InventoryCategory
  * 
  */
 export type InventoryCategory = Prisma.InventoryCategoryModel
 /**
- * Model InventorySubcategory
- * 
- */
-export type InventorySubcategory = Prisma.InventorySubcategoryModel
-/**
  * Model InventoryItem
  * 
  */
 export type InventoryItem = Prisma.InventoryItemModel
 /**
- * Model Warehouse
+ * Model InventorySubcategory
  * 
  */
-export type Warehouse = Prisma.WarehouseModel
+export type InventorySubcategory = Prisma.InventorySubcategoryModel
 /**
- * Model WarehouseStock
+ * Model Invoice
  * 
  */
-export type WarehouseStock = Prisma.WarehouseStockModel
+export type Invoice = Prisma.InvoiceModel
 /**
  * Model ItemSupplier
  * 
  */
 export type ItemSupplier = Prisma.ItemSupplierModel
 /**
- * Model StockMovement
+ * Model LeaveRequest
  * 
  */
-export type StockMovement = Prisma.StockMovementModel
+export type LeaveRequest = Prisma.LeaveRequestModel
+/**
+ * Model LoginSession
+ * 
+ */
+export type LoginSession = Prisma.LoginSessionModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
+/**
+ * Model NotificationLog
+ * 
+ */
+export type NotificationLog = Prisma.NotificationLogModel
+/**
+ * Model OtpCode
+ * 
+ */
+export type OtpCode = Prisma.OtpCodeModel
+/**
+ * Model PasswordResetOtp
+ * 
+ */
+export type PasswordResetOtp = Prisma.PasswordResetOtpModel
+/**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
+ * Model PmSchedule
+ * 
+ */
+export type PmSchedule = Prisma.PmScheduleModel
 /**
  * Model PriceBook
  * 
@@ -138,6 +388,36 @@ export type PriceBookEntry = Prisma.PriceBookEntryModel
  */
 export type PurchaseOrder = Prisma.PurchaseOrderModel
 /**
+ * Model Quotation
+ * 
+ */
+export type Quotation = Prisma.QuotationModel
+/**
+ * Model ScanLog
+ * 
+ */
+export type ScanLog = Prisma.ScanLogModel
+/**
+ * Model StockMovement
+ * 
+ */
+export type StockMovement = Prisma.StockMovementModel
+/**
+ * Model Tenant
+ * 
+ */
+export type Tenant = Prisma.TenantModel
+/**
+ * Model TermsAcceptance
+ * 
+ */
+export type TermsAcceptance = Prisma.TermsAcceptanceModel
+/**
+ * Model User
+ * 
+ */
+export type User = Prisma.UserModel
+/**
  * Model Vehicle
  * 
  */
@@ -148,327 +428,47 @@ export type Vehicle = Prisma.VehicleModel
  */
 export type VehicleLog = Prisma.VehicleLogModel
 /**
- * Model ComplaintTimeline
+ * Model Warehouse
  * 
  */
-export type ComplaintTimeline = Prisma.ComplaintTimelineModel
+export type Warehouse = Prisma.WarehouseModel
 /**
- * Model Notification
+ * Model WarehouseStock
  * 
  */
-export type Notification = Prisma.NotificationModel
-/**
- * Model DeviceToken
- * 
- */
-export type DeviceToken = Prisma.DeviceTokenModel
-/**
- * Model NotificationLog
- * 
- */
-export type NotificationLog = Prisma.NotificationLogModel
-/**
- * Model AuditLog
- * 
- */
-export type AuditLog = Prisma.AuditLogModel
-/**
- * Model LeaveRequest
- * 
- */
-export type LeaveRequest = Prisma.LeaveRequestModel
-/**
- * Model Attendance
- * 
- */
-export type Attendance = Prisma.AttendanceModel
-/**
- * Model HrShift
- * 
- */
-export type HrShift = Prisma.HrShiftModel
-/**
- * Model HrShiftSchedule
- * 
- */
-export type HrShiftSchedule = Prisma.HrShiftScheduleModel
-/**
- * Model HrHoliday
- * 
- */
-export type HrHoliday = Prisma.HrHolidayModel
-/**
- * Model HrEmployee
- * 
- */
-export type HrEmployee = Prisma.HrEmployeeModel
-/**
- * Model HrLeaveType
- * 
- */
-export type HrLeaveType = Prisma.HrLeaveTypeModel
-/**
- * Model HrLeaveBalance
- * 
- */
-export type HrLeaveBalance = Prisma.HrLeaveBalanceModel
-/**
- * Model HrLeaveRequest
- * 
- */
-export type HrLeaveRequest = Prisma.HrLeaveRequestModel
-/**
- * Model HrPayroll
- * 
- */
-export type HrPayroll = Prisma.HrPayrollModel
-/**
- * Model HrOvertimeRequest
- * 
- */
-export type HrOvertimeRequest = Prisma.HrOvertimeRequestModel
-/**
- * Model HrJobPosition
- * 
- */
-export type HrJobPosition = Prisma.HrJobPositionModel
-/**
- * Model HrCandidate
- * 
- */
-export type HrCandidate = Prisma.HrCandidateModel
-/**
- * Model HrPerformanceReview
- * 
- */
-export type HrPerformanceReview = Prisma.HrPerformanceReviewModel
-/**
- * Model HrTraining
- * 
- */
-export type HrTraining = Prisma.HrTrainingModel
-/**
- * Model HrTrainingRecord
- * 
- */
-export type HrTrainingRecord = Prisma.HrTrainingRecordModel
-/**
- * Model HrAssetAssignment
- * 
- */
-export type HrAssetAssignment = Prisma.HrAssetAssignmentModel
-/**
- * Model HrEmployeeDocument
- * 
- */
-export type HrEmployeeDocument = Prisma.HrEmployeeDocumentModel
-/**
- * Model HrVisitor
- * 
- */
-export type HrVisitor = Prisma.HrVisitorModel
-/**
- * Model HrMedicalRecord
- * 
- */
-export type HrMedicalRecord = Prisma.HrMedicalRecordModel
-/**
- * Model HrTravelRequest
- * 
- */
-export type HrTravelRequest = Prisma.HrTravelRequestModel
-/**
- * Model HrExpenseClaim
- * 
- */
-export type HrExpenseClaim = Prisma.HrExpenseClaimModel
-/**
- * Model HrDisciplinaryAction
- * 
- */
-export type HrDisciplinaryAction = Prisma.HrDisciplinaryActionModel
-/**
- * Model HrAnnouncement
- * 
- */
-export type HrAnnouncement = Prisma.HrAnnouncementModel
-/**
- * Model CmsSetting
- * 
- */
-export type CmsSetting = Prisma.CmsSettingModel
-/**
- * Model CmsHero
- * 
- */
-export type CmsHero = Prisma.CmsHeroModel
-/**
- * Model CmsService
- * 
- */
-export type CmsService = Prisma.CmsServiceModel
-/**
- * Model CmsIndustry
- * 
- */
-export type CmsIndustry = Prisma.CmsIndustryModel
-/**
- * Model CmsProject
- * 
- */
-export type CmsProject = Prisma.CmsProjectModel
-/**
- * Model CmsBlogCategory
- * 
- */
-export type CmsBlogCategory = Prisma.CmsBlogCategoryModel
-/**
- * Model CmsBlog
- * 
- */
-export type CmsBlog = Prisma.CmsBlogModel
-/**
- * Model CmsTestimonial
- * 
- */
-export type CmsTestimonial = Prisma.CmsTestimonialModel
-/**
- * Model CmsCareerJob
- * 
- */
-export type CmsCareerJob = Prisma.CmsCareerJobModel
-/**
- * Model CmsCareerApplication
- * 
- */
-export type CmsCareerApplication = Prisma.CmsCareerApplicationModel
-/**
- * Model CmsContactMessage
- * 
- */
-export type CmsContactMessage = Prisma.CmsContactMessageModel
-/**
- * Model CmsMedia
- * 
- */
-export type CmsMedia = Prisma.CmsMediaModel
-/**
- * Model CmsSeo
- * 
- */
-export type CmsSeo = Prisma.CmsSeoModel
-/**
- * Model CmsFooter
- * 
- */
-export type CmsFooter = Prisma.CmsFooterModel
-/**
- * Model CmsAnnouncement
- * 
- */
-export type CmsAnnouncement = Prisma.CmsAnnouncementModel
-/**
- * Model CmsPopup
- * 
- */
-export type CmsPopup = Prisma.CmsPopupModel
-/**
- * Model CmsForm
- * 
- */
-export type CmsForm = Prisma.CmsFormModel
-/**
- * Model CmsActivityLog
- * 
- */
-export type CmsActivityLog = Prisma.CmsActivityLogModel
+export type WarehouseStock = Prisma.WarehouseStockModel
 /**
  * Model WhatsAppConfig
  * 
  */
 export type WhatsAppConfig = Prisma.WhatsAppConfigModel
 /**
- * Model WhatsAppSession
+ * Model WhatsAppDeliveryLog
  * 
  */
-export type WhatsAppSession = Prisma.WhatsAppSessionModel
+export type WhatsAppDeliveryLog = Prisma.WhatsAppDeliveryLogModel
 /**
  * Model WhatsAppMessage
  * 
  */
 export type WhatsAppMessage = Prisma.WhatsAppMessageModel
 /**
- * Model ConversationThread
+ * Model WhatsAppSession
  * 
  */
-export type ConversationThread = Prisma.ConversationThreadModel
+export type WhatsAppSession = Prisma.WhatsAppSessionModel
 /**
  * Model WhatsAppTemplate
  * 
  */
 export type WhatsAppTemplate = Prisma.WhatsAppTemplateModel
 /**
- * Model CustomerFeedback
+ * Model WorkOrder
  * 
  */
-export type CustomerFeedback = Prisma.CustomerFeedbackModel
+export type WorkOrder = Prisma.WorkOrderModel
 /**
- * Model CustomerReport
+ * Model WorkOrderMaterial
  * 
  */
-export type CustomerReport = Prisma.CustomerReportModel
-/**
- * Model BroadcastLog
- * 
- */
-export type BroadcastLog = Prisma.BroadcastLogModel
-/**
- * Model WhatsAppDeliveryLog
- * 
- */
-export type WhatsAppDeliveryLog = Prisma.WhatsAppDeliveryLogModel
-/**
- * Model OtpCode
- * 
- */
-export type OtpCode = Prisma.OtpCodeModel
-/**
- * Model LoginSession
- * 
- */
-export type LoginSession = Prisma.LoginSessionModel
-/**
- * Model Device
- * 
- */
-export type Device = Prisma.DeviceModel
-/**
- * Model PasswordResetToken
- * 
- */
-export type PasswordResetToken = Prisma.PasswordResetTokenModel
-/**
- * Model PasswordResetOtp
- * 
- */
-export type PasswordResetOtp = Prisma.PasswordResetOtpModel
-/**
- * Model AuthAuditLog
- * 
- */
-export type AuthAuditLog = Prisma.AuthAuditLogModel
-/**
- * Model TermsAcceptance
- * 
- */
-export type TermsAcceptance = Prisma.TermsAcceptanceModel
-/**
- * Model EmailLog
- * 
- */
-export type EmailLog = Prisma.EmailLogModel
-/**
- * Model EmailTemplate
- * 
- */
-export type EmailTemplate = Prisma.EmailTemplateModel
+export type WorkOrderMaterial = Prisma.WorkOrderMaterialModel

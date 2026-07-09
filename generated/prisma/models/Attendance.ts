@@ -359,7 +359,7 @@ export type AttendanceScalarWhereWithAggregatesInput = {
 }
 
 export type AttendanceCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   userId: string
   date: Date | string
@@ -371,11 +371,11 @@ export type AttendanceCreateInput = {
   status?: string
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type AttendanceUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   userId: string
   date: Date | string
@@ -387,7 +387,7 @@ export type AttendanceUncheckedCreateInput = {
   status?: string
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type AttendanceUpdateInput = {
@@ -423,7 +423,7 @@ export type AttendanceUncheckedUpdateInput = {
 }
 
 export type AttendanceCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   userId: string
   date: Date | string
@@ -435,7 +435,7 @@ export type AttendanceCreateManyInput = {
   status?: string
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type AttendanceUpdateManyMutationInput = {
@@ -530,6 +530,30 @@ export type AttendanceMinOrderByAggregateInput = {
 
 export type AttendanceSumOrderByAggregateInput = {
   hoursWorked?: Prisma.SortOrder
+}
+
+export type StringFieldUpdateOperationsInput = {
+  set?: string
+}
+
+export type DateTimeFieldUpdateOperationsInput = {
+  set?: Date | string
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
+}
+
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
+export type NullableFloatFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 

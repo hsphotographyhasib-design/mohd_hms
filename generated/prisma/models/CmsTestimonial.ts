@@ -350,7 +350,7 @@ export type CmsTestimonialScalarWhereWithAggregatesInput = {
 }
 
 export type CmsTestimonialCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   customerName: string
   company?: string | null
@@ -361,11 +361,11 @@ export type CmsTestimonialCreateInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsTestimonialUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   customerName: string
   company?: string | null
@@ -376,7 +376,7 @@ export type CmsTestimonialUncheckedCreateInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsTestimonialUpdateInput = {
@@ -410,7 +410,7 @@ export type CmsTestimonialUncheckedUpdateInput = {
 }
 
 export type CmsTestimonialCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   customerName: string
   company?: string | null
@@ -421,7 +421,7 @@ export type CmsTestimonialCreateManyInput = {
   displayOrder?: number
   isEnabled?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsTestimonialUpdateManyMutationInput = {

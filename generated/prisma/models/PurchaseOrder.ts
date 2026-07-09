@@ -393,7 +393,7 @@ export type PurchaseOrderScalarWhereWithAggregatesInput = {
 }
 
 export type PurchaseOrderCreateInput = {
-  id?: string
+  id: string
   poNumber: string
   supplier: string
   supplierContact?: string | null
@@ -406,12 +406,12 @@ export type PurchaseOrderCreateInput = {
   receivedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutPurchaseOrdersInput
+  updatedAt: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutPurchaseOrderInput
 }
 
 export type PurchaseOrderUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   poNumber: string
   supplier: string
@@ -425,7 +425,7 @@ export type PurchaseOrderUncheckedCreateInput = {
   receivedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PurchaseOrderUpdateInput = {
@@ -443,7 +443,7 @@ export type PurchaseOrderUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutPurchaseOrdersNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutPurchaseOrderNestedInput
 }
 
 export type PurchaseOrderUncheckedUpdateInput = {
@@ -465,7 +465,7 @@ export type PurchaseOrderUncheckedUpdateInput = {
 }
 
 export type PurchaseOrderCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   poNumber: string
   supplier: string
@@ -479,7 +479,7 @@ export type PurchaseOrderCreateManyInput = {
   receivedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PurchaseOrderUpdateManyMutationInput = {
@@ -515,16 +515,6 @@ export type PurchaseOrderUncheckedUpdateManyInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type PurchaseOrderListRelationFilter = {
-  every?: Prisma.PurchaseOrderWhereInput
-  some?: Prisma.PurchaseOrderWhereInput
-  none?: Prisma.PurchaseOrderWhereInput
-}
-
-export type PurchaseOrderOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type PurchaseOrderCountOrderByAggregateInput = {
@@ -593,6 +583,16 @@ export type PurchaseOrderSumOrderByAggregateInput = {
   total?: Prisma.SortOrder
 }
 
+export type PurchaseOrderListRelationFilter = {
+  every?: Prisma.PurchaseOrderWhereInput
+  some?: Prisma.PurchaseOrderWhereInput
+  none?: Prisma.PurchaseOrderWhereInput
+}
+
+export type PurchaseOrderOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type PurchaseOrderCreateNestedManyWithoutTenantInput = {
   create?: Prisma.XOR<Prisma.PurchaseOrderCreateWithoutTenantInput, Prisma.PurchaseOrderUncheckedCreateWithoutTenantInput> | Prisma.PurchaseOrderCreateWithoutTenantInput[] | Prisma.PurchaseOrderUncheckedCreateWithoutTenantInput[]
   connectOrCreate?: Prisma.PurchaseOrderCreateOrConnectWithoutTenantInput | Prisma.PurchaseOrderCreateOrConnectWithoutTenantInput[]
@@ -636,7 +636,7 @@ export type PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput = {
 }
 
 export type PurchaseOrderCreateWithoutTenantInput = {
-  id?: string
+  id: string
   poNumber: string
   supplier: string
   supplierContact?: string | null
@@ -649,11 +649,11 @@ export type PurchaseOrderCreateWithoutTenantInput = {
   receivedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PurchaseOrderUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   poNumber: string
   supplier: string
   supplierContact?: string | null
@@ -666,7 +666,7 @@ export type PurchaseOrderUncheckedCreateWithoutTenantInput = {
   receivedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PurchaseOrderCreateOrConnectWithoutTenantInput = {
@@ -716,7 +716,7 @@ export type PurchaseOrderScalarWhereInput = {
 }
 
 export type PurchaseOrderCreateManyTenantInput = {
-  id?: string
+  id: string
   poNumber: string
   supplier: string
   supplierContact?: string | null
@@ -729,7 +729,7 @@ export type PurchaseOrderCreateManyTenantInput = {
   receivedAt?: Date | string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PurchaseOrderUpdateWithoutTenantInput = {

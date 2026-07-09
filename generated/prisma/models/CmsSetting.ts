@@ -251,23 +251,23 @@ export type CmsSettingScalarWhereWithAggregatesInput = {
 }
 
 export type CmsSettingCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   key: string
   value: string
   category?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsSettingUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   key: string
   value: string
   category?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsSettingUpdateInput = {
@@ -291,13 +291,13 @@ export type CmsSettingUncheckedUpdateInput = {
 }
 
 export type CmsSettingCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   key: string
   value: string
   category?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsSettingUpdateManyMutationInput = {

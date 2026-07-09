@@ -198,7 +198,7 @@ export type CmsBlogCategoryWhereInput = {
   description?: Prisma.StringNullableFilter<"CmsBlogCategory"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CmsBlogCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CmsBlogCategory"> | Date | string
-  blogs?: Prisma.CmsBlogListRelationFilter
+  CmsBlog?: Prisma.CmsBlogListRelationFilter
 }
 
 export type CmsBlogCategoryOrderByWithRelationInput = {
@@ -209,7 +209,7 @@ export type CmsBlogCategoryOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  blogs?: Prisma.CmsBlogOrderByRelationAggregateInput
+  CmsBlog?: Prisma.CmsBlogOrderByRelationAggregateInput
 }
 
 export type CmsBlogCategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -224,7 +224,7 @@ export type CmsBlogCategoryWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"CmsBlogCategory"> | string | null
   createdAt?: Prisma.DateTimeFilter<"CmsBlogCategory"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"CmsBlogCategory"> | Date | string
-  blogs?: Prisma.CmsBlogListRelationFilter
+  CmsBlog?: Prisma.CmsBlogListRelationFilter
 }, "id" | "tenantId_slug">
 
 export type CmsBlogCategoryOrderByWithAggregationInput = {
@@ -254,25 +254,25 @@ export type CmsBlogCategoryScalarWhereWithAggregatesInput = {
 }
 
 export type CmsBlogCategoryCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   slug: string
   description?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  blogs?: Prisma.CmsBlogCreateNestedManyWithoutCategoryInput
+  updatedAt: Date | string
+  CmsBlog?: Prisma.CmsBlogCreateNestedManyWithoutCmsBlogCategoryInput
 }
 
 export type CmsBlogCategoryUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   slug: string
   description?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  blogs?: Prisma.CmsBlogUncheckedCreateNestedManyWithoutCategoryInput
+  updatedAt: Date | string
+  CmsBlog?: Prisma.CmsBlogUncheckedCreateNestedManyWithoutCmsBlogCategoryInput
 }
 
 export type CmsBlogCategoryUpdateInput = {
@@ -283,7 +283,7 @@ export type CmsBlogCategoryUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  blogs?: Prisma.CmsBlogUpdateManyWithoutCategoryNestedInput
+  CmsBlog?: Prisma.CmsBlogUpdateManyWithoutCmsBlogCategoryNestedInput
 }
 
 export type CmsBlogCategoryUncheckedUpdateInput = {
@@ -294,17 +294,17 @@ export type CmsBlogCategoryUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  blogs?: Prisma.CmsBlogUncheckedUpdateManyWithoutCategoryNestedInput
+  CmsBlog?: Prisma.CmsBlogUncheckedUpdateManyWithoutCmsBlogCategoryNestedInput
 }
 
 export type CmsBlogCategoryCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   slug: string
   description?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsBlogCategoryUpdateManyMutationInput = {
@@ -325,6 +325,11 @@ export type CmsBlogCategoryUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CmsBlogCategoryNullableScalarRelationFilter = {
+  is?: Prisma.CmsBlogCategoryWhereInput | null
+  isNot?: Prisma.CmsBlogCategoryWhereInput | null
 }
 
 export type CmsBlogCategoryTenantIdSlugCompoundUniqueInput = {
@@ -362,64 +367,59 @@ export type CmsBlogCategoryMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
-export type CmsBlogCategoryNullableScalarRelationFilter = {
-  is?: Prisma.CmsBlogCategoryWhereInput | null
-  isNot?: Prisma.CmsBlogCategoryWhereInput | null
-}
-
-export type CmsBlogCategoryCreateNestedOneWithoutBlogsInput = {
-  create?: Prisma.XOR<Prisma.CmsBlogCategoryCreateWithoutBlogsInput, Prisma.CmsBlogCategoryUncheckedCreateWithoutBlogsInput>
-  connectOrCreate?: Prisma.CmsBlogCategoryCreateOrConnectWithoutBlogsInput
+export type CmsBlogCategoryCreateNestedOneWithoutCmsBlogInput = {
+  create?: Prisma.XOR<Prisma.CmsBlogCategoryCreateWithoutCmsBlogInput, Prisma.CmsBlogCategoryUncheckedCreateWithoutCmsBlogInput>
+  connectOrCreate?: Prisma.CmsBlogCategoryCreateOrConnectWithoutCmsBlogInput
   connect?: Prisma.CmsBlogCategoryWhereUniqueInput
 }
 
-export type CmsBlogCategoryUpdateOneWithoutBlogsNestedInput = {
-  create?: Prisma.XOR<Prisma.CmsBlogCategoryCreateWithoutBlogsInput, Prisma.CmsBlogCategoryUncheckedCreateWithoutBlogsInput>
-  connectOrCreate?: Prisma.CmsBlogCategoryCreateOrConnectWithoutBlogsInput
-  upsert?: Prisma.CmsBlogCategoryUpsertWithoutBlogsInput
+export type CmsBlogCategoryUpdateOneWithoutCmsBlogNestedInput = {
+  create?: Prisma.XOR<Prisma.CmsBlogCategoryCreateWithoutCmsBlogInput, Prisma.CmsBlogCategoryUncheckedCreateWithoutCmsBlogInput>
+  connectOrCreate?: Prisma.CmsBlogCategoryCreateOrConnectWithoutCmsBlogInput
+  upsert?: Prisma.CmsBlogCategoryUpsertWithoutCmsBlogInput
   disconnect?: Prisma.CmsBlogCategoryWhereInput | boolean
   delete?: Prisma.CmsBlogCategoryWhereInput | boolean
   connect?: Prisma.CmsBlogCategoryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CmsBlogCategoryUpdateToOneWithWhereWithoutBlogsInput, Prisma.CmsBlogCategoryUpdateWithoutBlogsInput>, Prisma.CmsBlogCategoryUncheckedUpdateWithoutBlogsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CmsBlogCategoryUpdateToOneWithWhereWithoutCmsBlogInput, Prisma.CmsBlogCategoryUpdateWithoutCmsBlogInput>, Prisma.CmsBlogCategoryUncheckedUpdateWithoutCmsBlogInput>
 }
 
-export type CmsBlogCategoryCreateWithoutBlogsInput = {
-  id?: string
+export type CmsBlogCategoryCreateWithoutCmsBlogInput = {
+  id: string
   tenantId: string
   name: string
   slug: string
   description?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type CmsBlogCategoryUncheckedCreateWithoutBlogsInput = {
-  id?: string
+export type CmsBlogCategoryUncheckedCreateWithoutCmsBlogInput = {
+  id: string
   tenantId: string
   name: string
   slug: string
   description?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type CmsBlogCategoryCreateOrConnectWithoutBlogsInput = {
+export type CmsBlogCategoryCreateOrConnectWithoutCmsBlogInput = {
   where: Prisma.CmsBlogCategoryWhereUniqueInput
-  create: Prisma.XOR<Prisma.CmsBlogCategoryCreateWithoutBlogsInput, Prisma.CmsBlogCategoryUncheckedCreateWithoutBlogsInput>
+  create: Prisma.XOR<Prisma.CmsBlogCategoryCreateWithoutCmsBlogInput, Prisma.CmsBlogCategoryUncheckedCreateWithoutCmsBlogInput>
 }
 
-export type CmsBlogCategoryUpsertWithoutBlogsInput = {
-  update: Prisma.XOR<Prisma.CmsBlogCategoryUpdateWithoutBlogsInput, Prisma.CmsBlogCategoryUncheckedUpdateWithoutBlogsInput>
-  create: Prisma.XOR<Prisma.CmsBlogCategoryCreateWithoutBlogsInput, Prisma.CmsBlogCategoryUncheckedCreateWithoutBlogsInput>
+export type CmsBlogCategoryUpsertWithoutCmsBlogInput = {
+  update: Prisma.XOR<Prisma.CmsBlogCategoryUpdateWithoutCmsBlogInput, Prisma.CmsBlogCategoryUncheckedUpdateWithoutCmsBlogInput>
+  create: Prisma.XOR<Prisma.CmsBlogCategoryCreateWithoutCmsBlogInput, Prisma.CmsBlogCategoryUncheckedCreateWithoutCmsBlogInput>
   where?: Prisma.CmsBlogCategoryWhereInput
 }
 
-export type CmsBlogCategoryUpdateToOneWithWhereWithoutBlogsInput = {
+export type CmsBlogCategoryUpdateToOneWithWhereWithoutCmsBlogInput = {
   where?: Prisma.CmsBlogCategoryWhereInput
-  data: Prisma.XOR<Prisma.CmsBlogCategoryUpdateWithoutBlogsInput, Prisma.CmsBlogCategoryUncheckedUpdateWithoutBlogsInput>
+  data: Prisma.XOR<Prisma.CmsBlogCategoryUpdateWithoutCmsBlogInput, Prisma.CmsBlogCategoryUncheckedUpdateWithoutCmsBlogInput>
 }
 
-export type CmsBlogCategoryUpdateWithoutBlogsInput = {
+export type CmsBlogCategoryUpdateWithoutCmsBlogInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -429,7 +429,7 @@ export type CmsBlogCategoryUpdateWithoutBlogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type CmsBlogCategoryUncheckedUpdateWithoutBlogsInput = {
+export type CmsBlogCategoryUncheckedUpdateWithoutCmsBlogInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
@@ -445,11 +445,11 @@ export type CmsBlogCategoryUncheckedUpdateWithoutBlogsInput = {
  */
 
 export type CmsBlogCategoryCountOutputType = {
-  blogs: number
+  CmsBlog: number
 }
 
 export type CmsBlogCategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  blogs?: boolean | CmsBlogCategoryCountOutputTypeCountBlogsArgs
+  CmsBlog?: boolean | CmsBlogCategoryCountOutputTypeCountCmsBlogArgs
 }
 
 /**
@@ -465,7 +465,7 @@ export type CmsBlogCategoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Ty
 /**
  * CmsBlogCategoryCountOutputType without action
  */
-export type CmsBlogCategoryCountOutputTypeCountBlogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CmsBlogCategoryCountOutputTypeCountCmsBlogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.CmsBlogWhereInput
 }
 
@@ -478,7 +478,7 @@ export type CmsBlogCategorySelect<ExtArgs extends runtime.Types.Extensions.Inter
   description?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  blogs?: boolean | Prisma.CmsBlogCategory$blogsArgs<ExtArgs>
+  CmsBlog?: boolean | Prisma.CmsBlogCategory$CmsBlogArgs<ExtArgs>
   _count?: boolean | Prisma.CmsBlogCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["cmsBlogCategory"]>
 
@@ -514,7 +514,7 @@ export type CmsBlogCategorySelectScalar = {
 
 export type CmsBlogCategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "name" | "slug" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["cmsBlogCategory"]>
 export type CmsBlogCategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  blogs?: boolean | Prisma.CmsBlogCategory$blogsArgs<ExtArgs>
+  CmsBlog?: boolean | Prisma.CmsBlogCategory$CmsBlogArgs<ExtArgs>
   _count?: boolean | Prisma.CmsBlogCategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CmsBlogCategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -523,7 +523,7 @@ export type CmsBlogCategoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Ty
 export type $CmsBlogCategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "CmsBlogCategory"
   objects: {
-    blogs: Prisma.$CmsBlogPayload<ExtArgs>[]
+    CmsBlog: Prisma.$CmsBlogPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -927,7 +927,7 @@ readonly fields: CmsBlogCategoryFieldRefs;
  */
 export interface Prisma__CmsBlogCategoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  blogs<T extends Prisma.CmsBlogCategory$blogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CmsBlogCategory$blogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CmsBlogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  CmsBlog<T extends Prisma.CmsBlogCategory$CmsBlogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CmsBlogCategory$CmsBlogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CmsBlogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1355,9 +1355,9 @@ export type CmsBlogCategoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * CmsBlogCategory.blogs
+ * CmsBlogCategory.CmsBlog
  */
-export type CmsBlogCategory$blogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type CmsBlogCategory$CmsBlogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the CmsBlog
    */

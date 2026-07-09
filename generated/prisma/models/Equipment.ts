@@ -392,13 +392,13 @@ export type EquipmentWhereInput = {
   lastScannedAt?: Prisma.DateTimeNullableFilter<"Equipment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  Complaint?: Prisma.ComplaintListRelationFilter
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
-  complaints?: Prisma.ComplaintListRelationFilter
-  workOrders?: Prisma.WorkOrderListRelationFilter
-  pmSchedules?: Prisma.PmScheduleListRelationFilter
-  scanLogs?: Prisma.ScanLogListRelationFilter
-  qrCodeRecord?: Prisma.XOR<Prisma.EquipmentQrCodeNullableScalarRelationFilter, Prisma.EquipmentQrCodeWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  EquipmentQrCode?: Prisma.XOR<Prisma.EquipmentQrCodeNullableScalarRelationFilter, Prisma.EquipmentQrCodeWhereInput> | null
+  PmSchedule?: Prisma.PmScheduleListRelationFilter
+  ScanLog?: Prisma.ScanLogListRelationFilter
+  WorkOrder?: Prisma.WorkOrderListRelationFilter
 }
 
 export type EquipmentOrderByWithRelationInput = {
@@ -429,13 +429,13 @@ export type EquipmentOrderByWithRelationInput = {
   lastScannedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  Complaint?: Prisma.ComplaintOrderByRelationAggregateInput
   customer?: Prisma.CustomerOrderByWithRelationInput
-  complaints?: Prisma.ComplaintOrderByRelationAggregateInput
-  workOrders?: Prisma.WorkOrderOrderByRelationAggregateInput
-  pmSchedules?: Prisma.PmScheduleOrderByRelationAggregateInput
-  scanLogs?: Prisma.ScanLogOrderByRelationAggregateInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeOrderByWithRelationInput
+  PmSchedule?: Prisma.PmScheduleOrderByRelationAggregateInput
+  ScanLog?: Prisma.ScanLogOrderByRelationAggregateInput
+  WorkOrder?: Prisma.WorkOrderOrderByRelationAggregateInput
 }
 
 export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
@@ -469,13 +469,13 @@ export type EquipmentWhereUniqueInput = Prisma.AtLeast<{
   lastScannedAt?: Prisma.DateTimeNullableFilter<"Equipment"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  Complaint?: Prisma.ComplaintListRelationFilter
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
-  complaints?: Prisma.ComplaintListRelationFilter
-  workOrders?: Prisma.WorkOrderListRelationFilter
-  pmSchedules?: Prisma.PmScheduleListRelationFilter
-  scanLogs?: Prisma.ScanLogListRelationFilter
-  qrCodeRecord?: Prisma.XOR<Prisma.EquipmentQrCodeNullableScalarRelationFilter, Prisma.EquipmentQrCodeWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  EquipmentQrCode?: Prisma.XOR<Prisma.EquipmentQrCodeNullableScalarRelationFilter, Prisma.EquipmentQrCodeWhereInput> | null
+  PmSchedule?: Prisma.PmScheduleListRelationFilter
+  ScanLog?: Prisma.ScanLogListRelationFilter
+  WorkOrder?: Prisma.WorkOrderListRelationFilter
 }, "id" | "assetNumber" | "qrCode" | "qrId">
 
 export type EquipmentOrderByWithAggregationInput = {
@@ -547,7 +547,7 @@ export type EquipmentScalarWhereWithAggregatesInput = {
 }
 
 export type EquipmentCreateInput = {
-  id?: string
+  id: string
   name: string
   category: string
   assetNumber: string
@@ -571,18 +571,18 @@ export type EquipmentCreateInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
   customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   customerId?: string | null
   name: string
@@ -608,12 +608,12 @@ export type EquipmentUncheckedCreateInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
 export type EquipmentUpdateInput = {
@@ -642,13 +642,13 @@ export type EquipmentUpdateInput = {
   lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
+  Complaint?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
   customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateInput = {
@@ -679,15 +679,15 @@ export type EquipmentUncheckedUpdateInput = {
   lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   customerId?: string | null
   name: string
@@ -713,7 +713,7 @@ export type EquipmentCreateManyInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type EquipmentUpdateManyMutationInput = {
@@ -772,6 +772,11 @@ export type EquipmentUncheckedUpdateManyInput = {
   lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type EquipmentNullableScalarRelationFilter = {
+  is?: Prisma.EquipmentWhereInput | null
+  isNot?: Prisma.EquipmentWhereInput | null
 }
 
 export type EquipmentListRelationFilter = {
@@ -887,51 +892,20 @@ export type EquipmentScalarRelationFilter = {
   isNot?: Prisma.EquipmentWhereInput
 }
 
-export type EquipmentNullableScalarRelationFilter = {
-  is?: Prisma.EquipmentWhereInput | null
-  isNot?: Prisma.EquipmentWhereInput | null
+export type EquipmentCreateNestedOneWithoutComplaintInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutComplaintInput, Prisma.EquipmentUncheckedCreateWithoutComplaintInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutComplaintInput
+  connect?: Prisma.EquipmentWhereUniqueInput
 }
 
-export type EquipmentCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput> | Prisma.EquipmentCreateWithoutTenantInput[] | Prisma.EquipmentUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutTenantInput | Prisma.EquipmentCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.EquipmentCreateManyTenantInputEnvelope
-  connect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-}
-
-export type EquipmentUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput> | Prisma.EquipmentCreateWithoutTenantInput[] | Prisma.EquipmentUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutTenantInput | Prisma.EquipmentCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.EquipmentCreateManyTenantInputEnvelope
-  connect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-}
-
-export type EquipmentUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput> | Prisma.EquipmentCreateWithoutTenantInput[] | Prisma.EquipmentUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutTenantInput | Prisma.EquipmentCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.EquipmentUpsertWithWhereUniqueWithoutTenantInput | Prisma.EquipmentUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.EquipmentCreateManyTenantInputEnvelope
-  set?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-  disconnect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-  delete?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-  connect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-  update?: Prisma.EquipmentUpdateWithWhereUniqueWithoutTenantInput | Prisma.EquipmentUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.EquipmentUpdateManyWithWhereWithoutTenantInput | Prisma.EquipmentUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.EquipmentScalarWhereInput | Prisma.EquipmentScalarWhereInput[]
-}
-
-export type EquipmentUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput> | Prisma.EquipmentCreateWithoutTenantInput[] | Prisma.EquipmentUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutTenantInput | Prisma.EquipmentCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.EquipmentUpsertWithWhereUniqueWithoutTenantInput | Prisma.EquipmentUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.EquipmentCreateManyTenantInputEnvelope
-  set?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-  disconnect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-  delete?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-  connect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
-  update?: Prisma.EquipmentUpdateWithWhereUniqueWithoutTenantInput | Prisma.EquipmentUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.EquipmentUpdateManyWithWhereWithoutTenantInput | Prisma.EquipmentUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.EquipmentScalarWhereInput | Prisma.EquipmentScalarWhereInput[]
+export type EquipmentUpdateOneWithoutComplaintNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutComplaintInput, Prisma.EquipmentUncheckedCreateWithoutComplaintInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutComplaintInput
+  upsert?: Prisma.EquipmentUpsertWithoutComplaintInput
+  disconnect?: Prisma.EquipmentWhereInput | boolean
+  delete?: Prisma.EquipmentWhereInput | boolean
+  connect?: Prisma.EquipmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutComplaintInput, Prisma.EquipmentUpdateWithoutComplaintInput>, Prisma.EquipmentUncheckedUpdateWithoutComplaintInput>
 }
 
 export type EquipmentCreateNestedManyWithoutCustomerInput = {
@@ -976,82 +950,108 @@ export type EquipmentUncheckedUpdateManyWithoutCustomerNestedInput = {
   deleteMany?: Prisma.EquipmentScalarWhereInput | Prisma.EquipmentScalarWhereInput[]
 }
 
-export type EquipmentCreateNestedOneWithoutQrCodeRecordInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutQrCodeRecordInput, Prisma.EquipmentUncheckedCreateWithoutQrCodeRecordInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutQrCodeRecordInput
+export type EquipmentCreateNestedOneWithoutEquipmentQrCodeInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutEquipmentQrCodeInput, Prisma.EquipmentUncheckedCreateWithoutEquipmentQrCodeInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutEquipmentQrCodeInput
   connect?: Prisma.EquipmentWhereUniqueInput
 }
 
-export type EquipmentUpdateOneRequiredWithoutQrCodeRecordNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutQrCodeRecordInput, Prisma.EquipmentUncheckedCreateWithoutQrCodeRecordInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutQrCodeRecordInput
-  upsert?: Prisma.EquipmentUpsertWithoutQrCodeRecordInput
+export type EquipmentUpdateOneRequiredWithoutEquipmentQrCodeNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutEquipmentQrCodeInput, Prisma.EquipmentUncheckedCreateWithoutEquipmentQrCodeInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutEquipmentQrCodeInput
+  upsert?: Prisma.EquipmentUpsertWithoutEquipmentQrCodeInput
   connect?: Prisma.EquipmentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutQrCodeRecordInput, Prisma.EquipmentUpdateWithoutQrCodeRecordInput>, Prisma.EquipmentUncheckedUpdateWithoutQrCodeRecordInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutEquipmentQrCodeInput, Prisma.EquipmentUpdateWithoutEquipmentQrCodeInput>, Prisma.EquipmentUncheckedUpdateWithoutEquipmentQrCodeInput>
 }
 
-export type EquipmentCreateNestedOneWithoutScanLogsInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutScanLogsInput, Prisma.EquipmentUncheckedCreateWithoutScanLogsInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutScanLogsInput
-  connect?: Prisma.EquipmentWhereUniqueInput
-}
-
-export type EquipmentUpdateOneRequiredWithoutScanLogsNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutScanLogsInput, Prisma.EquipmentUncheckedCreateWithoutScanLogsInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutScanLogsInput
-  upsert?: Prisma.EquipmentUpsertWithoutScanLogsInput
-  connect?: Prisma.EquipmentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutScanLogsInput, Prisma.EquipmentUpdateWithoutScanLogsInput>, Prisma.EquipmentUncheckedUpdateWithoutScanLogsInput>
-}
-
-export type EquipmentCreateNestedOneWithoutComplaintsInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutComplaintsInput, Prisma.EquipmentUncheckedCreateWithoutComplaintsInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutComplaintsInput
+export type EquipmentCreateNestedOneWithoutPmScheduleInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutPmScheduleInput, Prisma.EquipmentUncheckedCreateWithoutPmScheduleInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutPmScheduleInput
   connect?: Prisma.EquipmentWhereUniqueInput
 }
 
-export type EquipmentUpdateOneWithoutComplaintsNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutComplaintsInput, Prisma.EquipmentUncheckedCreateWithoutComplaintsInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutComplaintsInput
-  upsert?: Prisma.EquipmentUpsertWithoutComplaintsInput
+export type EquipmentUpdateOneRequiredWithoutPmScheduleNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutPmScheduleInput, Prisma.EquipmentUncheckedCreateWithoutPmScheduleInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutPmScheduleInput
+  upsert?: Prisma.EquipmentUpsertWithoutPmScheduleInput
+  connect?: Prisma.EquipmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutPmScheduleInput, Prisma.EquipmentUpdateWithoutPmScheduleInput>, Prisma.EquipmentUncheckedUpdateWithoutPmScheduleInput>
+}
+
+export type EquipmentCreateNestedOneWithoutScanLogInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutScanLogInput, Prisma.EquipmentUncheckedCreateWithoutScanLogInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutScanLogInput
+  connect?: Prisma.EquipmentWhereUniqueInput
+}
+
+export type EquipmentUpdateOneRequiredWithoutScanLogNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutScanLogInput, Prisma.EquipmentUncheckedCreateWithoutScanLogInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutScanLogInput
+  upsert?: Prisma.EquipmentUpsertWithoutScanLogInput
+  connect?: Prisma.EquipmentWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutScanLogInput, Prisma.EquipmentUpdateWithoutScanLogInput>, Prisma.EquipmentUncheckedUpdateWithoutScanLogInput>
+}
+
+export type EquipmentCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput> | Prisma.EquipmentCreateWithoutTenantInput[] | Prisma.EquipmentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutTenantInput | Prisma.EquipmentCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.EquipmentCreateManyTenantInputEnvelope
+  connect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+}
+
+export type EquipmentUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput> | Prisma.EquipmentCreateWithoutTenantInput[] | Prisma.EquipmentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutTenantInput | Prisma.EquipmentCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.EquipmentCreateManyTenantInputEnvelope
+  connect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+}
+
+export type EquipmentUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput> | Prisma.EquipmentCreateWithoutTenantInput[] | Prisma.EquipmentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutTenantInput | Prisma.EquipmentCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.EquipmentUpsertWithWhereUniqueWithoutTenantInput | Prisma.EquipmentUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.EquipmentCreateManyTenantInputEnvelope
+  set?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+  disconnect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+  delete?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+  connect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+  update?: Prisma.EquipmentUpdateWithWhereUniqueWithoutTenantInput | Prisma.EquipmentUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.EquipmentUpdateManyWithWhereWithoutTenantInput | Prisma.EquipmentUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.EquipmentScalarWhereInput | Prisma.EquipmentScalarWhereInput[]
+}
+
+export type EquipmentUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput> | Prisma.EquipmentCreateWithoutTenantInput[] | Prisma.EquipmentUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutTenantInput | Prisma.EquipmentCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.EquipmentUpsertWithWhereUniqueWithoutTenantInput | Prisma.EquipmentUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.EquipmentCreateManyTenantInputEnvelope
+  set?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+  disconnect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+  delete?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+  connect?: Prisma.EquipmentWhereUniqueInput | Prisma.EquipmentWhereUniqueInput[]
+  update?: Prisma.EquipmentUpdateWithWhereUniqueWithoutTenantInput | Prisma.EquipmentUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.EquipmentUpdateManyWithWhereWithoutTenantInput | Prisma.EquipmentUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.EquipmentScalarWhereInput | Prisma.EquipmentScalarWhereInput[]
+}
+
+export type EquipmentCreateNestedOneWithoutWorkOrderInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutWorkOrderInput, Prisma.EquipmentUncheckedCreateWithoutWorkOrderInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutWorkOrderInput
+  connect?: Prisma.EquipmentWhereUniqueInput
+}
+
+export type EquipmentUpdateOneWithoutWorkOrderNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutWorkOrderInput, Prisma.EquipmentUncheckedCreateWithoutWorkOrderInput>
+  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutWorkOrderInput
+  upsert?: Prisma.EquipmentUpsertWithoutWorkOrderInput
   disconnect?: Prisma.EquipmentWhereInput | boolean
   delete?: Prisma.EquipmentWhereInput | boolean
   connect?: Prisma.EquipmentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutComplaintsInput, Prisma.EquipmentUpdateWithoutComplaintsInput>, Prisma.EquipmentUncheckedUpdateWithoutComplaintsInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutWorkOrderInput, Prisma.EquipmentUpdateWithoutWorkOrderInput>, Prisma.EquipmentUncheckedUpdateWithoutWorkOrderInput>
 }
 
-export type EquipmentCreateNestedOneWithoutWorkOrdersInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutWorkOrdersInput, Prisma.EquipmentUncheckedCreateWithoutWorkOrdersInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutWorkOrdersInput
-  connect?: Prisma.EquipmentWhereUniqueInput
-}
-
-export type EquipmentUpdateOneWithoutWorkOrdersNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutWorkOrdersInput, Prisma.EquipmentUncheckedCreateWithoutWorkOrdersInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutWorkOrdersInput
-  upsert?: Prisma.EquipmentUpsertWithoutWorkOrdersInput
-  disconnect?: Prisma.EquipmentWhereInput | boolean
-  delete?: Prisma.EquipmentWhereInput | boolean
-  connect?: Prisma.EquipmentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutWorkOrdersInput, Prisma.EquipmentUpdateWithoutWorkOrdersInput>, Prisma.EquipmentUncheckedUpdateWithoutWorkOrdersInput>
-}
-
-export type EquipmentCreateNestedOneWithoutPmSchedulesInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutPmSchedulesInput, Prisma.EquipmentUncheckedCreateWithoutPmSchedulesInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutPmSchedulesInput
-  connect?: Prisma.EquipmentWhereUniqueInput
-}
-
-export type EquipmentUpdateOneRequiredWithoutPmSchedulesNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentCreateWithoutPmSchedulesInput, Prisma.EquipmentUncheckedCreateWithoutPmSchedulesInput>
-  connectOrCreate?: Prisma.EquipmentCreateOrConnectWithoutPmSchedulesInput
-  upsert?: Prisma.EquipmentUpsertWithoutPmSchedulesInput
-  connect?: Prisma.EquipmentWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentUpdateToOneWithWhereWithoutPmSchedulesInput, Prisma.EquipmentUpdateWithoutPmSchedulesInput>, Prisma.EquipmentUncheckedUpdateWithoutPmSchedulesInput>
-}
-
-export type EquipmentCreateWithoutTenantInput = {
-  id?: string
+export type EquipmentCreateWithoutComplaintInput = {
+  id: string
   name: string
   category: string
   assetNumber: string
@@ -1075,17 +1075,18 @@ export type EquipmentCreateWithoutTenantInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
   customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
 }
 
-export type EquipmentUncheckedCreateWithoutTenantInput = {
-  id?: string
+export type EquipmentUncheckedCreateWithoutComplaintInput = {
+  id: string
+  tenantId: string
   customerId?: string | null
   name: string
   category: string
@@ -1110,37 +1111,188 @@ export type EquipmentUncheckedCreateWithoutTenantInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  updatedAt: Date | string
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
-export type EquipmentCreateOrConnectWithoutTenantInput = {
+export type EquipmentCreateOrConnectWithoutComplaintInput = {
   where: Prisma.EquipmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutComplaintInput, Prisma.EquipmentUncheckedCreateWithoutComplaintInput>
 }
 
-export type EquipmentCreateManyTenantInputEnvelope = {
-  data: Prisma.EquipmentCreateManyTenantInput | Prisma.EquipmentCreateManyTenantInput[]
+export type EquipmentUpsertWithoutComplaintInput = {
+  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutComplaintInput, Prisma.EquipmentUncheckedUpdateWithoutComplaintInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutComplaintInput, Prisma.EquipmentUncheckedCreateWithoutComplaintInput>
+  where?: Prisma.EquipmentWhereInput
 }
 
-export type EquipmentUpsertWithWhereUniqueWithoutTenantInput = {
+export type EquipmentUpdateToOneWithWhereWithoutComplaintInput = {
+  where?: Prisma.EquipmentWhereInput
+  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutComplaintInput, Prisma.EquipmentUncheckedUpdateWithoutComplaintInput>
+}
+
+export type EquipmentUpdateWithoutComplaintInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentUncheckedUpdateWithoutComplaintInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentCreateWithoutCustomerInput = {
+  id: string
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
+  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentUncheckedCreateWithoutCustomerInput = {
+  id: string
+  tenantId: string
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentCreateOrConnectWithoutCustomerInput = {
   where: Prisma.EquipmentWhereUniqueInput
-  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutTenantInput, Prisma.EquipmentUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutCustomerInput, Prisma.EquipmentUncheckedCreateWithoutCustomerInput>
 }
 
-export type EquipmentUpdateWithWhereUniqueWithoutTenantInput = {
+export type EquipmentCreateManyCustomerInputEnvelope = {
+  data: Prisma.EquipmentCreateManyCustomerInput | Prisma.EquipmentCreateManyCustomerInput[]
+}
+
+export type EquipmentUpsertWithWhereUniqueWithoutCustomerInput = {
   where: Prisma.EquipmentWhereUniqueInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutTenantInput, Prisma.EquipmentUncheckedUpdateWithoutTenantInput>
+  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutCustomerInput, Prisma.EquipmentUncheckedUpdateWithoutCustomerInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutCustomerInput, Prisma.EquipmentUncheckedCreateWithoutCustomerInput>
 }
 
-export type EquipmentUpdateManyWithWhereWithoutTenantInput = {
+export type EquipmentUpdateWithWhereUniqueWithoutCustomerInput = {
+  where: Prisma.EquipmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutCustomerInput, Prisma.EquipmentUncheckedUpdateWithoutCustomerInput>
+}
+
+export type EquipmentUpdateManyWithWhereWithoutCustomerInput = {
   where: Prisma.EquipmentScalarWhereInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateManyMutationInput, Prisma.EquipmentUncheckedUpdateManyWithoutTenantInput>
+  data: Prisma.XOR<Prisma.EquipmentUpdateManyMutationInput, Prisma.EquipmentUncheckedUpdateManyWithoutCustomerInput>
 }
 
 export type EquipmentScalarWhereInput = {
@@ -1176,8 +1328,8 @@ export type EquipmentScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Equipment"> | Date | string
 }
 
-export type EquipmentCreateWithoutCustomerInput = {
-  id?: string
+export type EquipmentCreateWithoutEquipmentQrCodeInput = {
+  id: string
   name: string
   category: string
   assetNumber: string
@@ -1201,18 +1353,19 @@ export type EquipmentCreateWithoutCustomerInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
   tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
 }
 
-export type EquipmentUncheckedCreateWithoutCustomerInput = {
-  id?: string
+export type EquipmentUncheckedCreateWithoutEquipmentQrCodeInput = {
+  id: string
   tenantId: string
+  customerId?: string | null
   name: string
   category: string
   assetNumber: string
@@ -1236,41 +1389,496 @@ export type EquipmentUncheckedCreateWithoutCustomerInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
-export type EquipmentCreateOrConnectWithoutCustomerInput = {
+export type EquipmentCreateOrConnectWithoutEquipmentQrCodeInput = {
   where: Prisma.EquipmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutCustomerInput, Prisma.EquipmentUncheckedCreateWithoutCustomerInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutEquipmentQrCodeInput, Prisma.EquipmentUncheckedCreateWithoutEquipmentQrCodeInput>
 }
 
-export type EquipmentCreateManyCustomerInputEnvelope = {
-  data: Prisma.EquipmentCreateManyCustomerInput | Prisma.EquipmentCreateManyCustomerInput[]
+export type EquipmentUpsertWithoutEquipmentQrCodeInput = {
+  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutEquipmentQrCodeInput, Prisma.EquipmentUncheckedUpdateWithoutEquipmentQrCodeInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutEquipmentQrCodeInput, Prisma.EquipmentUncheckedCreateWithoutEquipmentQrCodeInput>
+  where?: Prisma.EquipmentWhereInput
 }
 
-export type EquipmentUpsertWithWhereUniqueWithoutCustomerInput = {
+export type EquipmentUpdateToOneWithWhereWithoutEquipmentQrCodeInput = {
+  where?: Prisma.EquipmentWhereInput
+  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutEquipmentQrCodeInput, Prisma.EquipmentUncheckedUpdateWithoutEquipmentQrCodeInput>
+}
+
+export type EquipmentUpdateWithoutEquipmentQrCodeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentUncheckedUpdateWithoutEquipmentQrCodeInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentCreateWithoutPmScheduleInput = {
+  id: string
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
+  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentUncheckedCreateWithoutPmScheduleInput = {
+  id: string
+  tenantId: string
+  customerId?: string | null
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentCreateOrConnectWithoutPmScheduleInput = {
   where: Prisma.EquipmentWhereUniqueInput
-  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutCustomerInput, Prisma.EquipmentUncheckedUpdateWithoutCustomerInput>
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutCustomerInput, Prisma.EquipmentUncheckedCreateWithoutCustomerInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutPmScheduleInput, Prisma.EquipmentUncheckedCreateWithoutPmScheduleInput>
 }
 
-export type EquipmentUpdateWithWhereUniqueWithoutCustomerInput = {
+export type EquipmentUpsertWithoutPmScheduleInput = {
+  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutPmScheduleInput, Prisma.EquipmentUncheckedUpdateWithoutPmScheduleInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutPmScheduleInput, Prisma.EquipmentUncheckedCreateWithoutPmScheduleInput>
+  where?: Prisma.EquipmentWhereInput
+}
+
+export type EquipmentUpdateToOneWithWhereWithoutPmScheduleInput = {
+  where?: Prisma.EquipmentWhereInput
+  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutPmScheduleInput, Prisma.EquipmentUncheckedUpdateWithoutPmScheduleInput>
+}
+
+export type EquipmentUpdateWithoutPmScheduleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentUncheckedUpdateWithoutPmScheduleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentCreateWithoutScanLogInput = {
+  id: string
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
+  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentUncheckedCreateWithoutScanLogInput = {
+  id: string
+  tenantId: string
+  customerId?: string | null
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentCreateOrConnectWithoutScanLogInput = {
   where: Prisma.EquipmentWhereUniqueInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutCustomerInput, Prisma.EquipmentUncheckedUpdateWithoutCustomerInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutScanLogInput, Prisma.EquipmentUncheckedCreateWithoutScanLogInput>
 }
 
-export type EquipmentUpdateManyWithWhereWithoutCustomerInput = {
+export type EquipmentUpsertWithoutScanLogInput = {
+  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutScanLogInput, Prisma.EquipmentUncheckedUpdateWithoutScanLogInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutScanLogInput, Prisma.EquipmentUncheckedCreateWithoutScanLogInput>
+  where?: Prisma.EquipmentWhereInput
+}
+
+export type EquipmentUpdateToOneWithWhereWithoutScanLogInput = {
+  where?: Prisma.EquipmentWhereInput
+  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutScanLogInput, Prisma.EquipmentUncheckedUpdateWithoutScanLogInput>
+}
+
+export type EquipmentUpdateWithoutScanLogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentUncheckedUpdateWithoutScanLogInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentCreateWithoutTenantInput = {
+  id: string
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
+  customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentUncheckedCreateWithoutTenantInput = {
+  id: string
+  customerId?: string | null
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
+}
+
+export type EquipmentCreateOrConnectWithoutTenantInput = {
+  where: Prisma.EquipmentWhereUniqueInput
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput>
+}
+
+export type EquipmentCreateManyTenantInputEnvelope = {
+  data: Prisma.EquipmentCreateManyTenantInput | Prisma.EquipmentCreateManyTenantInput[]
+}
+
+export type EquipmentUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.EquipmentWhereUniqueInput
+  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutTenantInput, Prisma.EquipmentUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutTenantInput, Prisma.EquipmentUncheckedCreateWithoutTenantInput>
+}
+
+export type EquipmentUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.EquipmentWhereUniqueInput
+  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutTenantInput, Prisma.EquipmentUncheckedUpdateWithoutTenantInput>
+}
+
+export type EquipmentUpdateManyWithWhereWithoutTenantInput = {
   where: Prisma.EquipmentScalarWhereInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateManyMutationInput, Prisma.EquipmentUncheckedUpdateManyWithoutCustomerInput>
+  data: Prisma.XOR<Prisma.EquipmentUpdateManyMutationInput, Prisma.EquipmentUncheckedUpdateManyWithoutTenantInput>
 }
 
-export type EquipmentCreateWithoutQrCodeRecordInput = {
-  id?: string
+export type EquipmentCreateWithoutWorkOrderInput = {
+  id: string
   name: string
   category: string
   assetNumber: string
@@ -1294,17 +1902,17 @@ export type EquipmentCreateWithoutQrCodeRecordInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
   customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
+  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
 }
 
-export type EquipmentUncheckedCreateWithoutQrCodeRecordInput = {
-  id?: string
+export type EquipmentUncheckedCreateWithoutWorkOrderInput = {
+  id: string
   tenantId: string
   customerId?: string | null
   name: string
@@ -1330,30 +1938,30 @@ export type EquipmentUncheckedCreateWithoutQrCodeRecordInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
+  updatedAt: Date | string
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
 }
 
-export type EquipmentCreateOrConnectWithoutQrCodeRecordInput = {
+export type EquipmentCreateOrConnectWithoutWorkOrderInput = {
   where: Prisma.EquipmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutQrCodeRecordInput, Prisma.EquipmentUncheckedCreateWithoutQrCodeRecordInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutWorkOrderInput, Prisma.EquipmentUncheckedCreateWithoutWorkOrderInput>
 }
 
-export type EquipmentUpsertWithoutQrCodeRecordInput = {
-  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutQrCodeRecordInput, Prisma.EquipmentUncheckedUpdateWithoutQrCodeRecordInput>
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutQrCodeRecordInput, Prisma.EquipmentUncheckedCreateWithoutQrCodeRecordInput>
+export type EquipmentUpsertWithoutWorkOrderInput = {
+  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutWorkOrderInput, Prisma.EquipmentUncheckedUpdateWithoutWorkOrderInput>
+  create: Prisma.XOR<Prisma.EquipmentCreateWithoutWorkOrderInput, Prisma.EquipmentUncheckedCreateWithoutWorkOrderInput>
   where?: Prisma.EquipmentWhereInput
 }
 
-export type EquipmentUpdateToOneWithWhereWithoutQrCodeRecordInput = {
+export type EquipmentUpdateToOneWithWhereWithoutWorkOrderInput = {
   where?: Prisma.EquipmentWhereInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutQrCodeRecordInput, Prisma.EquipmentUncheckedUpdateWithoutQrCodeRecordInput>
+  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutWorkOrderInput, Prisma.EquipmentUncheckedUpdateWithoutWorkOrderInput>
 }
 
-export type EquipmentUpdateWithoutQrCodeRecordInput = {
+export type EquipmentUpdateWithoutWorkOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1379,15 +1987,15 @@ export type EquipmentUpdateWithoutQrCodeRecordInput = {
   lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
+  Complaint?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
   customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
 }
 
-export type EquipmentUncheckedUpdateWithoutQrCodeRecordInput = {
+export type EquipmentUncheckedUpdateWithoutWorkOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1415,748 +2023,14 @@ export type EquipmentUncheckedUpdateWithoutQrCodeRecordInput = {
   lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
-}
-
-export type EquipmentCreateWithoutScanLogsInput = {
-  id?: string
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
-}
-
-export type EquipmentUncheckedCreateWithoutScanLogsInput = {
-  id?: string
-  tenantId: string
-  customerId?: string | null
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
-}
-
-export type EquipmentCreateOrConnectWithoutScanLogsInput = {
-  where: Prisma.EquipmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutScanLogsInput, Prisma.EquipmentUncheckedCreateWithoutScanLogsInput>
-}
-
-export type EquipmentUpsertWithoutScanLogsInput = {
-  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutScanLogsInput, Prisma.EquipmentUncheckedUpdateWithoutScanLogsInput>
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutScanLogsInput, Prisma.EquipmentUncheckedCreateWithoutScanLogsInput>
-  where?: Prisma.EquipmentWhereInput
-}
-
-export type EquipmentUpdateToOneWithWhereWithoutScanLogsInput = {
-  where?: Prisma.EquipmentWhereInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutScanLogsInput, Prisma.EquipmentUncheckedUpdateWithoutScanLogsInput>
-}
-
-export type EquipmentUpdateWithoutScanLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentUncheckedUpdateWithoutScanLogsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentCreateWithoutComplaintsInput = {
-  id?: string
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
-}
-
-export type EquipmentUncheckedCreateWithoutComplaintsInput = {
-  id?: string
-  tenantId: string
-  customerId?: string | null
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
-}
-
-export type EquipmentCreateOrConnectWithoutComplaintsInput = {
-  where: Prisma.EquipmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutComplaintsInput, Prisma.EquipmentUncheckedCreateWithoutComplaintsInput>
-}
-
-export type EquipmentUpsertWithoutComplaintsInput = {
-  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutComplaintsInput, Prisma.EquipmentUncheckedUpdateWithoutComplaintsInput>
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutComplaintsInput, Prisma.EquipmentUncheckedCreateWithoutComplaintsInput>
-  where?: Prisma.EquipmentWhereInput
-}
-
-export type EquipmentUpdateToOneWithWhereWithoutComplaintsInput = {
-  where?: Prisma.EquipmentWhereInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutComplaintsInput, Prisma.EquipmentUncheckedUpdateWithoutComplaintsInput>
-}
-
-export type EquipmentUpdateWithoutComplaintsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentUncheckedUpdateWithoutComplaintsInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentCreateWithoutWorkOrdersInput = {
-  id?: string
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
-}
-
-export type EquipmentUncheckedCreateWithoutWorkOrdersInput = {
-  id?: string
-  tenantId: string
-  customerId?: string | null
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
-  pmSchedules?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
-}
-
-export type EquipmentCreateOrConnectWithoutWorkOrdersInput = {
-  where: Prisma.EquipmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutWorkOrdersInput, Prisma.EquipmentUncheckedCreateWithoutWorkOrdersInput>
-}
-
-export type EquipmentUpsertWithoutWorkOrdersInput = {
-  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutWorkOrdersInput, Prisma.EquipmentUncheckedUpdateWithoutWorkOrdersInput>
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutWorkOrdersInput, Prisma.EquipmentUncheckedCreateWithoutWorkOrdersInput>
-  where?: Prisma.EquipmentWhereInput
-}
-
-export type EquipmentUpdateToOneWithWhereWithoutWorkOrdersInput = {
-  where?: Prisma.EquipmentWhereInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutWorkOrdersInput, Prisma.EquipmentUncheckedUpdateWithoutWorkOrdersInput>
-}
-
-export type EquipmentUpdateWithoutWorkOrdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentUncheckedUpdateWithoutWorkOrdersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentCreateWithoutPmSchedulesInput = {
-  id?: string
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentInput
-  customer?: Prisma.CustomerCreateNestedOneWithoutEquipmentInput
-  complaints?: Prisma.ComplaintCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeCreateNestedOneWithoutEquipmentInput
-}
-
-export type EquipmentUncheckedCreateWithoutPmSchedulesInput = {
-  id?: string
-  tenantId: string
-  customerId?: string | null
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  complaints?: Prisma.ComplaintUncheckedCreateNestedManyWithoutEquipmentInput
-  workOrders?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutEquipmentInput
-  scanLogs?: Prisma.ScanLogUncheckedCreateNestedManyWithoutEquipmentInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput
-}
-
-export type EquipmentCreateOrConnectWithoutPmSchedulesInput = {
-  where: Prisma.EquipmentWhereUniqueInput
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutPmSchedulesInput, Prisma.EquipmentUncheckedCreateWithoutPmSchedulesInput>
-}
-
-export type EquipmentUpsertWithoutPmSchedulesInput = {
-  update: Prisma.XOR<Prisma.EquipmentUpdateWithoutPmSchedulesInput, Prisma.EquipmentUncheckedUpdateWithoutPmSchedulesInput>
-  create: Prisma.XOR<Prisma.EquipmentCreateWithoutPmSchedulesInput, Prisma.EquipmentUncheckedCreateWithoutPmSchedulesInput>
-  where?: Prisma.EquipmentWhereInput
-}
-
-export type EquipmentUpdateToOneWithWhereWithoutPmSchedulesInput = {
-  where?: Prisma.EquipmentWhereInput
-  data: Prisma.XOR<Prisma.EquipmentUpdateWithoutPmSchedulesInput, Prisma.EquipmentUncheckedUpdateWithoutPmSchedulesInput>
-}
-
-export type EquipmentUpdateWithoutPmSchedulesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
-  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentUncheckedUpdateWithoutPmSchedulesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentCreateManyTenantInput = {
-  id?: string
-  customerId?: string | null
-  name: string
-  category: string
-  assetNumber: string
-  qrCode: string
-  qrId?: string | null
-  brand?: string | null
-  model?: string | null
-  serialNumber?: string | null
-  location?: string | null
-  building?: string | null
-  room?: string | null
-  installDate?: Date | string | null
-  warrantyExpiry?: Date | string | null
-  warrantyInfo?: string | null
-  status?: string
-  condition?: string
-  photos?: string | null
-  documents?: string | null
-  specifications?: string | null
-  notes?: string | null
-  scanCount?: number
-  lastScannedAt?: Date | string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type EquipmentUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
-}
-
-export type EquipmentUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  category?: Prisma.StringFieldUpdateOperationsInput | string
-  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
-  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  condition?: Prisma.StringFieldUpdateOperationsInput | string
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
-  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentCreateManyCustomerInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   category: string
@@ -2181,7 +2055,7 @@ export type EquipmentCreateManyCustomerInput = {
   scanCount?: number
   lastScannedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type EquipmentUpdateWithoutCustomerInput = {
@@ -2210,12 +2084,12 @@ export type EquipmentUpdateWithoutCustomerInput = {
   lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
   tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentNestedInput
-  complaints?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateWithoutCustomerInput = {
@@ -2245,16 +2119,142 @@ export type EquipmentUncheckedUpdateWithoutCustomerInput = {
   lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaints?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
-  workOrders?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
-  pmSchedules?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
-  scanLogs?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
-  qrCodeRecord?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
 }
 
 export type EquipmentUncheckedUpdateManyWithoutCustomerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type EquipmentCreateManyTenantInput = {
+  id: string
+  customerId?: string | null
+  name: string
+  category: string
+  assetNumber: string
+  qrCode: string
+  qrId?: string | null
+  brand?: string | null
+  model?: string | null
+  serialNumber?: string | null
+  location?: string | null
+  building?: string | null
+  room?: string | null
+  installDate?: Date | string | null
+  warrantyExpiry?: Date | string | null
+  warrantyInfo?: string | null
+  status?: string
+  condition?: string
+  photos?: string | null
+  documents?: string | null
+  specifications?: string | null
+  notes?: string | null
+  scanCount?: number
+  lastScannedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+}
+
+export type EquipmentUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUpdateManyWithoutEquipmentNestedInput
+  customer?: Prisma.CustomerUpdateOneWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
+  qrCode?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  building?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  room?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  installDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  warrantyInfo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  condition?: Prisma.StringFieldUpdateOperationsInput | string
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  documents?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  specifications?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scanCount?: Prisma.IntFieldUpdateOperationsInput | number
+  lastScannedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutEquipmentNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutEquipmentNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutEquipmentNestedInput
+}
+
+export type EquipmentUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   name?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.StringFieldUpdateOperationsInput | string
   assetNumber?: Prisma.StringFieldUpdateOperationsInput | string
@@ -2287,17 +2287,17 @@ export type EquipmentUncheckedUpdateManyWithoutCustomerInput = {
  */
 
 export type EquipmentCountOutputType = {
-  complaints: number
-  workOrders: number
-  pmSchedules: number
-  scanLogs: number
+  Complaint: number
+  PmSchedule: number
+  ScanLog: number
+  WorkOrder: number
 }
 
 export type EquipmentCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  complaints?: boolean | EquipmentCountOutputTypeCountComplaintsArgs
-  workOrders?: boolean | EquipmentCountOutputTypeCountWorkOrdersArgs
-  pmSchedules?: boolean | EquipmentCountOutputTypeCountPmSchedulesArgs
-  scanLogs?: boolean | EquipmentCountOutputTypeCountScanLogsArgs
+  Complaint?: boolean | EquipmentCountOutputTypeCountComplaintArgs
+  PmSchedule?: boolean | EquipmentCountOutputTypeCountPmScheduleArgs
+  ScanLog?: boolean | EquipmentCountOutputTypeCountScanLogArgs
+  WorkOrder?: boolean | EquipmentCountOutputTypeCountWorkOrderArgs
 }
 
 /**
@@ -2313,29 +2313,29 @@ export type EquipmentCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
 /**
  * EquipmentCountOutputType without action
  */
-export type EquipmentCountOutputTypeCountComplaintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type EquipmentCountOutputTypeCountComplaintArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ComplaintWhereInput
 }
 
 /**
  * EquipmentCountOutputType without action
  */
-export type EquipmentCountOutputTypeCountWorkOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkOrderWhereInput
-}
-
-/**
- * EquipmentCountOutputType without action
- */
-export type EquipmentCountOutputTypeCountPmSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type EquipmentCountOutputTypeCountPmScheduleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.PmScheduleWhereInput
 }
 
 /**
  * EquipmentCountOutputType without action
  */
-export type EquipmentCountOutputTypeCountScanLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type EquipmentCountOutputTypeCountScanLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ScanLogWhereInput
+}
+
+/**
+ * EquipmentCountOutputType without action
+ */
+export type EquipmentCountOutputTypeCountWorkOrderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderWhereInput
 }
 
 
@@ -2367,13 +2367,13 @@ export type EquipmentSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   lastScannedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  Complaint?: boolean | Prisma.Equipment$ComplaintArgs<ExtArgs>
   customer?: boolean | Prisma.Equipment$customerArgs<ExtArgs>
-  complaints?: boolean | Prisma.Equipment$complaintsArgs<ExtArgs>
-  workOrders?: boolean | Prisma.Equipment$workOrdersArgs<ExtArgs>
-  pmSchedules?: boolean | Prisma.Equipment$pmSchedulesArgs<ExtArgs>
-  scanLogs?: boolean | Prisma.Equipment$scanLogsArgs<ExtArgs>
-  qrCodeRecord?: boolean | Prisma.Equipment$qrCodeRecordArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  EquipmentQrCode?: boolean | Prisma.Equipment$EquipmentQrCodeArgs<ExtArgs>
+  PmSchedule?: boolean | Prisma.Equipment$PmScheduleArgs<ExtArgs>
+  ScanLog?: boolean | Prisma.Equipment$ScanLogArgs<ExtArgs>
+  WorkOrder?: boolean | Prisma.Equipment$WorkOrderArgs<ExtArgs>
   _count?: boolean | Prisma.EquipmentCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipment"]>
 
@@ -2405,8 +2405,8 @@ export type EquipmentSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   lastScannedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.Equipment$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipment"]>
 
 export type EquipmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2437,8 +2437,8 @@ export type EquipmentSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   lastScannedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.Equipment$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipment"]>
 
 export type EquipmentSelectScalar = {
@@ -2473,34 +2473,34 @@ export type EquipmentSelectScalar = {
 
 export type EquipmentOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "name" | "category" | "assetNumber" | "qrCode" | "qrId" | "brand" | "model" | "serialNumber" | "location" | "building" | "room" | "installDate" | "warrantyExpiry" | "warrantyInfo" | "status" | "condition" | "photos" | "documents" | "specifications" | "notes" | "scanCount" | "lastScannedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["equipment"]>
 export type EquipmentInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  Complaint?: boolean | Prisma.Equipment$ComplaintArgs<ExtArgs>
   customer?: boolean | Prisma.Equipment$customerArgs<ExtArgs>
-  complaints?: boolean | Prisma.Equipment$complaintsArgs<ExtArgs>
-  workOrders?: boolean | Prisma.Equipment$workOrdersArgs<ExtArgs>
-  pmSchedules?: boolean | Prisma.Equipment$pmSchedulesArgs<ExtArgs>
-  scanLogs?: boolean | Prisma.Equipment$scanLogsArgs<ExtArgs>
-  qrCodeRecord?: boolean | Prisma.Equipment$qrCodeRecordArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  EquipmentQrCode?: boolean | Prisma.Equipment$EquipmentQrCodeArgs<ExtArgs>
+  PmSchedule?: boolean | Prisma.Equipment$PmScheduleArgs<ExtArgs>
+  ScanLog?: boolean | Prisma.Equipment$ScanLogArgs<ExtArgs>
+  WorkOrder?: boolean | Prisma.Equipment$WorkOrderArgs<ExtArgs>
   _count?: boolean | Prisma.EquipmentCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EquipmentIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.Equipment$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type EquipmentIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   customer?: boolean | Prisma.Equipment$customerArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $EquipmentPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Equipment"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    Complaint: Prisma.$ComplaintPayload<ExtArgs>[]
     customer: Prisma.$CustomerPayload<ExtArgs> | null
-    complaints: Prisma.$ComplaintPayload<ExtArgs>[]
-    workOrders: Prisma.$WorkOrderPayload<ExtArgs>[]
-    pmSchedules: Prisma.$PmSchedulePayload<ExtArgs>[]
-    scanLogs: Prisma.$ScanLogPayload<ExtArgs>[]
-    qrCodeRecord: Prisma.$EquipmentQrCodePayload<ExtArgs> | null
+    tenant: Prisma.$TenantPayload<ExtArgs>
+    EquipmentQrCode: Prisma.$EquipmentQrCodePayload<ExtArgs> | null
+    PmSchedule: Prisma.$PmSchedulePayload<ExtArgs>[]
+    ScanLog: Prisma.$ScanLogPayload<ExtArgs>[]
+    WorkOrder: Prisma.$WorkOrderPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2924,13 +2924,13 @@ readonly fields: EquipmentFieldRefs;
  */
 export interface Prisma__EquipmentClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  Complaint<T extends Prisma.Equipment$ComplaintArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$ComplaintArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   customer<T extends Prisma.Equipment$customerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$customerArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  complaints<T extends Prisma.Equipment$complaintsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$complaintsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  workOrders<T extends Prisma.Equipment$workOrdersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$workOrdersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  pmSchedules<T extends Prisma.Equipment$pmSchedulesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$pmSchedulesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PmSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  scanLogs<T extends Prisma.Equipment$scanLogsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$scanLogsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  qrCodeRecord<T extends Prisma.Equipment$qrCodeRecordArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$qrCodeRecordArgs<ExtArgs>>): Prisma.Prisma__EquipmentQrCodeClient<runtime.Types.Result.GetResult<Prisma.$EquipmentQrCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  EquipmentQrCode<T extends Prisma.Equipment$EquipmentQrCodeArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$EquipmentQrCodeArgs<ExtArgs>>): Prisma.Prisma__EquipmentQrCodeClient<runtime.Types.Result.GetResult<Prisma.$EquipmentQrCodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  PmSchedule<T extends Prisma.Equipment$PmScheduleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$PmScheduleArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PmSchedulePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ScanLog<T extends Prisma.Equipment$ScanLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$ScanLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ScanLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WorkOrder<T extends Prisma.Equipment$WorkOrderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Equipment$WorkOrderArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3386,28 +3386,9 @@ export type EquipmentDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Equipment.customer
+ * Equipment.Complaint
  */
-export type Equipment$customerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the Customer
-   */
-  select?: Prisma.CustomerSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the Customer
-   */
-  omit?: Prisma.CustomerOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.CustomerInclude<ExtArgs> | null
-  where?: Prisma.CustomerWhereInput
-}
-
-/**
- * Equipment.complaints
- */
-export type Equipment$complaintsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Equipment$ComplaintArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Complaint
    */
@@ -3429,33 +3410,47 @@ export type Equipment$complaintsArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * Equipment.workOrders
+ * Equipment.customer
  */
-export type Equipment$workOrdersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Equipment$customerArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the WorkOrder
+   * Select specific fields to fetch from the Customer
    */
-  select?: Prisma.WorkOrderSelect<ExtArgs> | null
+  select?: Prisma.CustomerSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the WorkOrder
+   * Omit specific fields from the Customer
    */
-  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
+  omit?: Prisma.CustomerOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WorkOrderInclude<ExtArgs> | null
-  where?: Prisma.WorkOrderWhereInput
-  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
-  cursor?: Prisma.WorkOrderWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
+  include?: Prisma.CustomerInclude<ExtArgs> | null
+  where?: Prisma.CustomerWhereInput
 }
 
 /**
- * Equipment.pmSchedules
+ * Equipment.EquipmentQrCode
  */
-export type Equipment$pmSchedulesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Equipment$EquipmentQrCodeArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EquipmentQrCode
+   */
+  select?: Prisma.EquipmentQrCodeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EquipmentQrCode
+   */
+  omit?: Prisma.EquipmentQrCodeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EquipmentQrCodeInclude<ExtArgs> | null
+  where?: Prisma.EquipmentQrCodeWhereInput
+}
+
+/**
+ * Equipment.PmSchedule
+ */
+export type Equipment$PmScheduleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the PmSchedule
    */
@@ -3477,9 +3472,9 @@ export type Equipment$pmSchedulesArgs<ExtArgs extends runtime.Types.Extensions.I
 }
 
 /**
- * Equipment.scanLogs
+ * Equipment.ScanLog
  */
-export type Equipment$scanLogsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Equipment$ScanLogArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the ScanLog
    */
@@ -3501,22 +3496,27 @@ export type Equipment$scanLogsArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
- * Equipment.qrCodeRecord
+ * Equipment.WorkOrder
  */
-export type Equipment$qrCodeRecordArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Equipment$WorkOrderArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the EquipmentQrCode
+   * Select specific fields to fetch from the WorkOrder
    */
-  select?: Prisma.EquipmentQrCodeSelect<ExtArgs> | null
+  select?: Prisma.WorkOrderSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the EquipmentQrCode
+   * Omit specific fields from the WorkOrder
    */
-  omit?: Prisma.EquipmentQrCodeOmit<ExtArgs> | null
+  omit?: Prisma.WorkOrderOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.EquipmentQrCodeInclude<ExtArgs> | null
-  where?: Prisma.EquipmentQrCodeWhereInput
+  include?: Prisma.WorkOrderInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderWhereInput
+  orderBy?: Prisma.WorkOrderOrderByWithRelationInput | Prisma.WorkOrderOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
 }
 
 /**

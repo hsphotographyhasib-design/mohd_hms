@@ -6,32 +6,48 @@ import { buildDashboardScope } from '@/modules/dashboard/services/dashboard-scop
 export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+const PROXY_TIMEOUT_MS = 12_000;
 
 export async function GET(request: NextRequest) {
+  const startTime = Date.now();
+
   // ── Production: proxy to Render backend ────────────────────────────────
   if (BACKEND_URL) {
-    try {
-      const authHeader = request.headers.get('authorization') || '';
-      const searchParams = request.nextUrl.searchParams.toString();
-      const url = searchParams
-        ? `${BACKEND_URL}/api/dashboard/kpi?${searchParams}`
-        : `${BACKEND_URL}/api/dashboard/kpi`;
+    const authHeader = request.headers.get('authorization') || '';
+    const searchParams = request.nextUrl.searchParams.toString();
+    const url = searchParams
+      ? `${BACKEND_URL}/api/dashboard/kpi?${searchParams}`
+      : `${BACKEND_URL}/api/dashboard/kpi`;
 
-      // Extract userId for audit logging (best-effort from token)
-      const token = authHeader.replace('Bearer ', '');
-      const payload = verifyToken(token);
-      if (payload) {
-        console.log(`[Dashboard/${payload.role}] GET /api/dashboard/kpi userId=${payload.userId}`);
-      }
+    // Audit log
+    const token = authHeader.replace('Bearer ', '');
+    const payload = verifyToken(token);
+    if (payload) {
+      console.log(`[Dashboard/${payload.role}] GET /api/dashboard/kpi userId=${payload.userId}`);
+    }
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
 
       const res = await fetch(url, {
         headers: { Authorization: authHeader, 'Content-Type': 'application/json' },
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
+
       const data = await res.json();
+      console.log(`[Dashboard/KPI] Proxy ${res.status} in ${Date.now() - startTime}ms`);
       return NextResponse.json(data, { status: res.status });
-    } catch (error) {
-      console.error('Dashboard KPI proxy error:', error);
-      return NextResponse.json({ error: 'Backend service unavailable' }, { status: 502 });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      const isTimeout = error instanceof DOMException && error.name === 'AbortError';
+      console.error(`[Dashboard/KPI] Proxy error (${isTimeout ? 'timeout' : 'network'}): ${msg}`);
+      return NextResponse.json(
+        { error: isTimeout ? 'Backend request timed out' : 'Backend service unavailable' },
+        { status: 502 },
+      );
     }
   }
 
@@ -40,19 +56,26 @@ export async function GET(request: NextRequest) {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!payload) {
+      console.log('[Dashboard/KPI] 401 — invalid or missing token');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const tenantId = payload.tenantId as string;
+    const role = (payload.role as string).toLowerCase();
 
     const scope = await buildDashboardScope({
       userId: payload.userId as string,
       tenantId,
-      role: (payload.role as string).toLowerCase(),
+      role,
       email: payload.email as string | undefined,
     });
-    if (!scope) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!scope) {
+      console.log(`[Dashboard/KPI] 401 — buildDashboardScope returned null for userId=${payload.userId} role=${role}`);
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-    console.log(`[Dashboard/${payload.role}] GET /api/dashboard/kpi userId=${payload.userId}`);
+    console.log(`[Dashboard/${role}] GET /api/dashboard/kpi userId=${payload.userId}`);
 
     const [
       complaintStatusCounts,
@@ -90,7 +113,7 @@ export async function GET(request: NextRequest) {
         ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'OVERDUE' } })
         : Promise.resolve(0),
       scope.canSeeCustomers
-        ? (payload.role === 'customer'
+        ? (role === 'customer'
             ? Promise.resolve(1)
             : db.customer.count({ where: { tenantId, isActive: true } }))
         : Promise.resolve(0),
@@ -144,6 +167,8 @@ export async function GET(request: NextRequest) {
     const pmCompleted = pmAll.filter((pm: any) => pm.status === 'completed').length;
     const pmCompliance = pmTotal > 0 ? Math.round((pmCompleted / pmTotal) * 100) : 0;
 
+    console.log(`[Dashboard/KPI] 200 in ${Date.now() - startTime}ms`);
+
     return NextResponse.json({
       totalEquipment,
       activeEquipment,
@@ -159,10 +184,11 @@ export async function GET(request: NextRequest) {
       totalCustomers: totalCustomers as number,
       totalEmployees: totalEmployees as number,
       lowStockItems,
-      accessLevel: payload.role,
+      accessLevel: role,
     });
   } catch (error) {
-    console.error('Dashboard KPI error:', error);
+    const duration = Date.now() - startTime;
+    console.error(`[Dashboard/KPI] 500 in ${duration}ms:`, error);
     return NextResponse.json(
       { error: getDbFriendlyMessage(error) },
       { status: 500, headers: getErrorHeaders(error) },

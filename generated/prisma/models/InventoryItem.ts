@@ -940,14 +940,14 @@ export type InventoryItemWhereInput = {
   isActive?: Prisma.BoolFilter<"InventoryItem"> | boolean
   createdAt?: Prisma.DateTimeFilter<"InventoryItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InventoryItem"> | Date | string
+  InventorySubcategory?: Prisma.XOR<Prisma.InventorySubcategoryNullableScalarRelationFilter, Prisma.InventorySubcategoryWhereInput> | null
+  inventoryCategory?: Prisma.XOR<Prisma.InventoryCategoryNullableScalarRelationFilter, Prisma.InventoryCategoryWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  category?: Prisma.XOR<Prisma.InventoryCategoryNullableScalarRelationFilter, Prisma.InventoryCategoryWhereInput> | null
-  subcategory?: Prisma.XOR<Prisma.InventorySubcategoryNullableScalarRelationFilter, Prisma.InventorySubcategoryWhereInput> | null
-  workOrderMaterials?: Prisma.WorkOrderMaterialListRelationFilter
-  suppliers?: Prisma.ItemSupplierListRelationFilter
-  stockMovements?: Prisma.StockMovementListRelationFilter
-  warehouseStock?: Prisma.WarehouseStockListRelationFilter
-  priceBookEntries?: Prisma.PriceBookEntryListRelationFilter
+  ItemSupplier?: Prisma.ItemSupplierListRelationFilter
+  PriceBookEntry?: Prisma.PriceBookEntryListRelationFilter
+  StockMovement?: Prisma.StockMovementListRelationFilter
+  WarehouseStock?: Prisma.WarehouseStockListRelationFilter
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialListRelationFilter
 }
 
 export type InventoryItemOrderByWithRelationInput = {
@@ -1029,14 +1029,14 @@ export type InventoryItemOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  InventorySubcategory?: Prisma.InventorySubcategoryOrderByWithRelationInput
+  inventoryCategory?: Prisma.InventoryCategoryOrderByWithRelationInput
   tenant?: Prisma.TenantOrderByWithRelationInput
-  category?: Prisma.InventoryCategoryOrderByWithRelationInput
-  subcategory?: Prisma.InventorySubcategoryOrderByWithRelationInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialOrderByRelationAggregateInput
-  suppliers?: Prisma.ItemSupplierOrderByRelationAggregateInput
-  stockMovements?: Prisma.StockMovementOrderByRelationAggregateInput
-  warehouseStock?: Prisma.WarehouseStockOrderByRelationAggregateInput
-  priceBookEntries?: Prisma.PriceBookEntryOrderByRelationAggregateInput
+  ItemSupplier?: Prisma.ItemSupplierOrderByRelationAggregateInput
+  PriceBookEntry?: Prisma.PriceBookEntryOrderByRelationAggregateInput
+  StockMovement?: Prisma.StockMovementOrderByRelationAggregateInput
+  WarehouseStock?: Prisma.WarehouseStockOrderByRelationAggregateInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialOrderByRelationAggregateInput
 }
 
 export type InventoryItemWhereUniqueInput = Prisma.AtLeast<{
@@ -1121,14 +1121,14 @@ export type InventoryItemWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"InventoryItem"> | boolean
   createdAt?: Prisma.DateTimeFilter<"InventoryItem"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"InventoryItem"> | Date | string
+  InventorySubcategory?: Prisma.XOR<Prisma.InventorySubcategoryNullableScalarRelationFilter, Prisma.InventorySubcategoryWhereInput> | null
+  inventoryCategory?: Prisma.XOR<Prisma.InventoryCategoryNullableScalarRelationFilter, Prisma.InventoryCategoryWhereInput> | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
-  category?: Prisma.XOR<Prisma.InventoryCategoryNullableScalarRelationFilter, Prisma.InventoryCategoryWhereInput> | null
-  subcategory?: Prisma.XOR<Prisma.InventorySubcategoryNullableScalarRelationFilter, Prisma.InventorySubcategoryWhereInput> | null
-  workOrderMaterials?: Prisma.WorkOrderMaterialListRelationFilter
-  suppliers?: Prisma.ItemSupplierListRelationFilter
-  stockMovements?: Prisma.StockMovementListRelationFilter
-  warehouseStock?: Prisma.WarehouseStockListRelationFilter
-  priceBookEntries?: Prisma.PriceBookEntryListRelationFilter
+  ItemSupplier?: Prisma.ItemSupplierListRelationFilter
+  PriceBookEntry?: Prisma.PriceBookEntryListRelationFilter
+  StockMovement?: Prisma.StockMovementListRelationFilter
+  WarehouseStock?: Prisma.WarehouseStockListRelationFilter
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialListRelationFilter
 }, "id" | "itemCode" | "sku" | "barcode">
 
 export type InventoryItemOrderByWithAggregationInput = {
@@ -1302,7 +1302,7 @@ export type InventoryItemScalarWhereWithAggregatesInput = {
 }
 
 export type InventoryItemCreateInput = {
-  id?: string
+  id: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -1376,19 +1376,19 @@ export type InventoryItemCreateInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutInventoryInput
-  category?: Prisma.InventoryCategoryCreateNestedOneWithoutItemsInput
-  subcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutItemsInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutInventoryItemInput
+  inventoryCategory?: Prisma.InventoryCategoryCreateNestedOneWithoutInventoryItemInput
+  tenant: Prisma.TenantCreateNestedOneWithoutInventoryItemInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
 }
 
 export type InventoryItemUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   itemCode?: string | null
   sku?: string | null
@@ -1465,12 +1465,12 @@ export type InventoryItemUncheckedCreateInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
 }
 
 export type InventoryItemUpdateInput = {
@@ -1549,14 +1549,14 @@ export type InventoryItemUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryNestedInput
-  category?: Prisma.InventoryCategoryUpdateOneWithoutItemsNestedInput
-  subcategory?: Prisma.InventorySubcategoryUpdateOneWithoutItemsNestedInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutItemNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateOneWithoutInventoryItemNestedInput
+  inventoryCategory?: Prisma.InventoryCategoryUpdateOneWithoutInventoryItemNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateInput = {
@@ -1638,15 +1638,15 @@ export type InventoryItemUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
 }
 
 export type InventoryItemCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   itemCode?: string | null
   sku?: string | null
@@ -1723,7 +1723,7 @@ export type InventoryItemCreateManyInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type InventoryItemUpdateManyMutationInput = {
@@ -1893,11 +1893,6 @@ export type InventoryItemListRelationFilter = {
 
 export type InventoryItemOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type InventoryItemScalarRelationFilter = {
-  is?: Prisma.InventoryItemWhereInput
-  isNot?: Prisma.InventoryItemWhereInput
 }
 
 export type InventoryItemCountOrderByAggregateInput = {
@@ -2221,6 +2216,137 @@ export type InventoryItemSumOrderByAggregateInput = {
   estimatedHours?: Prisma.SortOrder
 }
 
+export type InventoryItemScalarRelationFilter = {
+  is?: Prisma.InventoryItemWhereInput
+  isNot?: Prisma.InventoryItemWhereInput
+}
+
+export type InventoryItemCreateNestedManyWithoutInventoryCategoryInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventoryCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput> | Prisma.InventoryItemCreateWithoutInventoryCategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput[]
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutInventoryCategoryInput | Prisma.InventoryItemCreateOrConnectWithoutInventoryCategoryInput[]
+  createMany?: Prisma.InventoryItemCreateManyInventoryCategoryInputEnvelope
+  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+}
+
+export type InventoryItemUncheckedCreateNestedManyWithoutInventoryCategoryInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventoryCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput> | Prisma.InventoryItemCreateWithoutInventoryCategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput[]
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutInventoryCategoryInput | Prisma.InventoryItemCreateOrConnectWithoutInventoryCategoryInput[]
+  createMany?: Prisma.InventoryItemCreateManyInventoryCategoryInputEnvelope
+  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+}
+
+export type InventoryItemUpdateManyWithoutInventoryCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventoryCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput> | Prisma.InventoryItemCreateWithoutInventoryCategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput[]
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutInventoryCategoryInput | Prisma.InventoryItemCreateOrConnectWithoutInventoryCategoryInput[]
+  upsert?: Prisma.InventoryItemUpsertWithWhereUniqueWithoutInventoryCategoryInput | Prisma.InventoryItemUpsertWithWhereUniqueWithoutInventoryCategoryInput[]
+  createMany?: Prisma.InventoryItemCreateManyInventoryCategoryInputEnvelope
+  set?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  disconnect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  delete?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  update?: Prisma.InventoryItemUpdateWithWhereUniqueWithoutInventoryCategoryInput | Prisma.InventoryItemUpdateWithWhereUniqueWithoutInventoryCategoryInput[]
+  updateMany?: Prisma.InventoryItemUpdateManyWithWhereWithoutInventoryCategoryInput | Prisma.InventoryItemUpdateManyWithWhereWithoutInventoryCategoryInput[]
+  deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
+}
+
+export type InventoryItemUncheckedUpdateManyWithoutInventoryCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventoryCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput> | Prisma.InventoryItemCreateWithoutInventoryCategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput[]
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutInventoryCategoryInput | Prisma.InventoryItemCreateOrConnectWithoutInventoryCategoryInput[]
+  upsert?: Prisma.InventoryItemUpsertWithWhereUniqueWithoutInventoryCategoryInput | Prisma.InventoryItemUpsertWithWhereUniqueWithoutInventoryCategoryInput[]
+  createMany?: Prisma.InventoryItemCreateManyInventoryCategoryInputEnvelope
+  set?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  disconnect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  delete?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  update?: Prisma.InventoryItemUpdateWithWhereUniqueWithoutInventoryCategoryInput | Prisma.InventoryItemUpdateWithWhereUniqueWithoutInventoryCategoryInput[]
+  updateMany?: Prisma.InventoryItemUpdateManyWithWhereWithoutInventoryCategoryInput | Prisma.InventoryItemUpdateManyWithWhereWithoutInventoryCategoryInput[]
+  deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
+}
+
+export type InventoryItemCreateNestedManyWithoutInventorySubcategoryInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventorySubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput> | Prisma.InventoryItemCreateWithoutInventorySubcategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput[]
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutInventorySubcategoryInput | Prisma.InventoryItemCreateOrConnectWithoutInventorySubcategoryInput[]
+  createMany?: Prisma.InventoryItemCreateManyInventorySubcategoryInputEnvelope
+  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+}
+
+export type InventoryItemUncheckedCreateNestedManyWithoutInventorySubcategoryInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventorySubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput> | Prisma.InventoryItemCreateWithoutInventorySubcategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput[]
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutInventorySubcategoryInput | Prisma.InventoryItemCreateOrConnectWithoutInventorySubcategoryInput[]
+  createMany?: Prisma.InventoryItemCreateManyInventorySubcategoryInputEnvelope
+  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+}
+
+export type InventoryItemUpdateManyWithoutInventorySubcategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventorySubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput> | Prisma.InventoryItemCreateWithoutInventorySubcategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput[]
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutInventorySubcategoryInput | Prisma.InventoryItemCreateOrConnectWithoutInventorySubcategoryInput[]
+  upsert?: Prisma.InventoryItemUpsertWithWhereUniqueWithoutInventorySubcategoryInput | Prisma.InventoryItemUpsertWithWhereUniqueWithoutInventorySubcategoryInput[]
+  createMany?: Prisma.InventoryItemCreateManyInventorySubcategoryInputEnvelope
+  set?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  disconnect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  delete?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  update?: Prisma.InventoryItemUpdateWithWhereUniqueWithoutInventorySubcategoryInput | Prisma.InventoryItemUpdateWithWhereUniqueWithoutInventorySubcategoryInput[]
+  updateMany?: Prisma.InventoryItemUpdateManyWithWhereWithoutInventorySubcategoryInput | Prisma.InventoryItemUpdateManyWithWhereWithoutInventorySubcategoryInput[]
+  deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
+}
+
+export type InventoryItemUncheckedUpdateManyWithoutInventorySubcategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventorySubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput> | Prisma.InventoryItemCreateWithoutInventorySubcategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput[]
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutInventorySubcategoryInput | Prisma.InventoryItemCreateOrConnectWithoutInventorySubcategoryInput[]
+  upsert?: Prisma.InventoryItemUpsertWithWhereUniqueWithoutInventorySubcategoryInput | Prisma.InventoryItemUpsertWithWhereUniqueWithoutInventorySubcategoryInput[]
+  createMany?: Prisma.InventoryItemCreateManyInventorySubcategoryInputEnvelope
+  set?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  disconnect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  delete?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
+  update?: Prisma.InventoryItemUpdateWithWhereUniqueWithoutInventorySubcategoryInput | Prisma.InventoryItemUpdateWithWhereUniqueWithoutInventorySubcategoryInput[]
+  updateMany?: Prisma.InventoryItemUpdateManyWithWhereWithoutInventorySubcategoryInput | Prisma.InventoryItemUpdateManyWithWhereWithoutInventorySubcategoryInput[]
+  deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
+}
+
+export type InventoryItemCreateNestedOneWithoutItemSupplierInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutItemSupplierInput, Prisma.InventoryItemUncheckedCreateWithoutItemSupplierInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutItemSupplierInput
+  connect?: Prisma.InventoryItemWhereUniqueInput
+}
+
+export type InventoryItemUpdateOneRequiredWithoutItemSupplierNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutItemSupplierInput, Prisma.InventoryItemUncheckedCreateWithoutItemSupplierInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutItemSupplierInput
+  upsert?: Prisma.InventoryItemUpsertWithoutItemSupplierInput
+  connect?: Prisma.InventoryItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutItemSupplierInput, Prisma.InventoryItemUpdateWithoutItemSupplierInput>, Prisma.InventoryItemUncheckedUpdateWithoutItemSupplierInput>
+}
+
+export type InventoryItemCreateNestedOneWithoutPriceBookEntryInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutPriceBookEntryInput, Prisma.InventoryItemUncheckedCreateWithoutPriceBookEntryInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutPriceBookEntryInput
+  connect?: Prisma.InventoryItemWhereUniqueInput
+}
+
+export type InventoryItemUpdateOneRequiredWithoutPriceBookEntryNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutPriceBookEntryInput, Prisma.InventoryItemUncheckedCreateWithoutPriceBookEntryInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutPriceBookEntryInput
+  upsert?: Prisma.InventoryItemUpsertWithoutPriceBookEntryInput
+  connect?: Prisma.InventoryItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutPriceBookEntryInput, Prisma.InventoryItemUpdateWithoutPriceBookEntryInput>, Prisma.InventoryItemUncheckedUpdateWithoutPriceBookEntryInput>
+}
+
+export type InventoryItemCreateNestedOneWithoutStockMovementInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutStockMovementInput, Prisma.InventoryItemUncheckedCreateWithoutStockMovementInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutStockMovementInput
+  connect?: Prisma.InventoryItemWhereUniqueInput
+}
+
+export type InventoryItemUpdateOneRequiredWithoutStockMovementNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutStockMovementInput, Prisma.InventoryItemUncheckedCreateWithoutStockMovementInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutStockMovementInput
+  upsert?: Prisma.InventoryItemUpsertWithoutStockMovementInput
+  connect?: Prisma.InventoryItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutStockMovementInput, Prisma.InventoryItemUpdateWithoutStockMovementInput>, Prisma.InventoryItemUncheckedUpdateWithoutStockMovementInput>
+}
+
 export type InventoryItemCreateNestedManyWithoutTenantInput = {
   create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutTenantInput, Prisma.InventoryItemUncheckedCreateWithoutTenantInput> | Prisma.InventoryItemCreateWithoutTenantInput[] | Prisma.InventoryItemUncheckedCreateWithoutTenantInput[]
   connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutTenantInput | Prisma.InventoryItemCreateOrConnectWithoutTenantInput[]
@@ -2263,104 +2389,6 @@ export type InventoryItemUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
 }
 
-export type InventoryItemCreateNestedOneWithoutWorkOrderMaterialsInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutWorkOrderMaterialsInput, Prisma.InventoryItemUncheckedCreateWithoutWorkOrderMaterialsInput>
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutWorkOrderMaterialsInput
-  connect?: Prisma.InventoryItemWhereUniqueInput
-}
-
-export type InventoryItemUpdateOneRequiredWithoutWorkOrderMaterialsNestedInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutWorkOrderMaterialsInput, Prisma.InventoryItemUncheckedCreateWithoutWorkOrderMaterialsInput>
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutWorkOrderMaterialsInput
-  upsert?: Prisma.InventoryItemUpsertWithoutWorkOrderMaterialsInput
-  connect?: Prisma.InventoryItemWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutWorkOrderMaterialsInput, Prisma.InventoryItemUpdateWithoutWorkOrderMaterialsInput>, Prisma.InventoryItemUncheckedUpdateWithoutWorkOrderMaterialsInput>
-}
-
-export type InventoryItemCreateNestedManyWithoutCategoryInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutCategoryInput> | Prisma.InventoryItemCreateWithoutCategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutCategoryInput[]
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutCategoryInput | Prisma.InventoryItemCreateOrConnectWithoutCategoryInput[]
-  createMany?: Prisma.InventoryItemCreateManyCategoryInputEnvelope
-  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-}
-
-export type InventoryItemUncheckedCreateNestedManyWithoutCategoryInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutCategoryInput> | Prisma.InventoryItemCreateWithoutCategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutCategoryInput[]
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutCategoryInput | Prisma.InventoryItemCreateOrConnectWithoutCategoryInput[]
-  createMany?: Prisma.InventoryItemCreateManyCategoryInputEnvelope
-  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-}
-
-export type InventoryItemUpdateManyWithoutCategoryNestedInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutCategoryInput> | Prisma.InventoryItemCreateWithoutCategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutCategoryInput[]
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutCategoryInput | Prisma.InventoryItemCreateOrConnectWithoutCategoryInput[]
-  upsert?: Prisma.InventoryItemUpsertWithWhereUniqueWithoutCategoryInput | Prisma.InventoryItemUpsertWithWhereUniqueWithoutCategoryInput[]
-  createMany?: Prisma.InventoryItemCreateManyCategoryInputEnvelope
-  set?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  disconnect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  delete?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  update?: Prisma.InventoryItemUpdateWithWhereUniqueWithoutCategoryInput | Prisma.InventoryItemUpdateWithWhereUniqueWithoutCategoryInput[]
-  updateMany?: Prisma.InventoryItemUpdateManyWithWhereWithoutCategoryInput | Prisma.InventoryItemUpdateManyWithWhereWithoutCategoryInput[]
-  deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
-}
-
-export type InventoryItemUncheckedUpdateManyWithoutCategoryNestedInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutCategoryInput> | Prisma.InventoryItemCreateWithoutCategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutCategoryInput[]
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutCategoryInput | Prisma.InventoryItemCreateOrConnectWithoutCategoryInput[]
-  upsert?: Prisma.InventoryItemUpsertWithWhereUniqueWithoutCategoryInput | Prisma.InventoryItemUpsertWithWhereUniqueWithoutCategoryInput[]
-  createMany?: Prisma.InventoryItemCreateManyCategoryInputEnvelope
-  set?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  disconnect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  delete?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  update?: Prisma.InventoryItemUpdateWithWhereUniqueWithoutCategoryInput | Prisma.InventoryItemUpdateWithWhereUniqueWithoutCategoryInput[]
-  updateMany?: Prisma.InventoryItemUpdateManyWithWhereWithoutCategoryInput | Prisma.InventoryItemUpdateManyWithWhereWithoutCategoryInput[]
-  deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
-}
-
-export type InventoryItemCreateNestedManyWithoutSubcategoryInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutSubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput> | Prisma.InventoryItemCreateWithoutSubcategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput[]
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutSubcategoryInput | Prisma.InventoryItemCreateOrConnectWithoutSubcategoryInput[]
-  createMany?: Prisma.InventoryItemCreateManySubcategoryInputEnvelope
-  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-}
-
-export type InventoryItemUncheckedCreateNestedManyWithoutSubcategoryInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutSubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput> | Prisma.InventoryItemCreateWithoutSubcategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput[]
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutSubcategoryInput | Prisma.InventoryItemCreateOrConnectWithoutSubcategoryInput[]
-  createMany?: Prisma.InventoryItemCreateManySubcategoryInputEnvelope
-  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-}
-
-export type InventoryItemUpdateManyWithoutSubcategoryNestedInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutSubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput> | Prisma.InventoryItemCreateWithoutSubcategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput[]
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutSubcategoryInput | Prisma.InventoryItemCreateOrConnectWithoutSubcategoryInput[]
-  upsert?: Prisma.InventoryItemUpsertWithWhereUniqueWithoutSubcategoryInput | Prisma.InventoryItemUpsertWithWhereUniqueWithoutSubcategoryInput[]
-  createMany?: Prisma.InventoryItemCreateManySubcategoryInputEnvelope
-  set?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  disconnect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  delete?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  update?: Prisma.InventoryItemUpdateWithWhereUniqueWithoutSubcategoryInput | Prisma.InventoryItemUpdateWithWhereUniqueWithoutSubcategoryInput[]
-  updateMany?: Prisma.InventoryItemUpdateManyWithWhereWithoutSubcategoryInput | Prisma.InventoryItemUpdateManyWithWhereWithoutSubcategoryInput[]
-  deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
-}
-
-export type InventoryItemUncheckedUpdateManyWithoutSubcategoryNestedInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutSubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput> | Prisma.InventoryItemCreateWithoutSubcategoryInput[] | Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput[]
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutSubcategoryInput | Prisma.InventoryItemCreateOrConnectWithoutSubcategoryInput[]
-  upsert?: Prisma.InventoryItemUpsertWithWhereUniqueWithoutSubcategoryInput | Prisma.InventoryItemUpsertWithWhereUniqueWithoutSubcategoryInput[]
-  createMany?: Prisma.InventoryItemCreateManySubcategoryInputEnvelope
-  set?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  disconnect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  delete?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  connect?: Prisma.InventoryItemWhereUniqueInput | Prisma.InventoryItemWhereUniqueInput[]
-  update?: Prisma.InventoryItemUpdateWithWhereUniqueWithoutSubcategoryInput | Prisma.InventoryItemUpdateWithWhereUniqueWithoutSubcategoryInput[]
-  updateMany?: Prisma.InventoryItemUpdateManyWithWhereWithoutSubcategoryInput | Prisma.InventoryItemUpdateManyWithWhereWithoutSubcategoryInput[]
-  deleteMany?: Prisma.InventoryItemScalarWhereInput | Prisma.InventoryItemScalarWhereInput[]
-}
-
 export type InventoryItemCreateNestedOneWithoutWarehouseStockInput = {
   create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutWarehouseStockInput, Prisma.InventoryItemUncheckedCreateWithoutWarehouseStockInput>
   connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutWarehouseStockInput
@@ -2375,50 +2403,22 @@ export type InventoryItemUpdateOneRequiredWithoutWarehouseStockNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutWarehouseStockInput, Prisma.InventoryItemUpdateWithoutWarehouseStockInput>, Prisma.InventoryItemUncheckedUpdateWithoutWarehouseStockInput>
 }
 
-export type InventoryItemCreateNestedOneWithoutSuppliersInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutSuppliersInput, Prisma.InventoryItemUncheckedCreateWithoutSuppliersInput>
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutSuppliersInput
+export type InventoryItemCreateNestedOneWithoutWorkOrderMaterialInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutWorkOrderMaterialInput, Prisma.InventoryItemUncheckedCreateWithoutWorkOrderMaterialInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutWorkOrderMaterialInput
   connect?: Prisma.InventoryItemWhereUniqueInput
 }
 
-export type InventoryItemUpdateOneRequiredWithoutSuppliersNestedInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutSuppliersInput, Prisma.InventoryItemUncheckedCreateWithoutSuppliersInput>
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutSuppliersInput
-  upsert?: Prisma.InventoryItemUpsertWithoutSuppliersInput
+export type InventoryItemUpdateOneRequiredWithoutWorkOrderMaterialNestedInput = {
+  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutWorkOrderMaterialInput, Prisma.InventoryItemUncheckedCreateWithoutWorkOrderMaterialInput>
+  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutWorkOrderMaterialInput
+  upsert?: Prisma.InventoryItemUpsertWithoutWorkOrderMaterialInput
   connect?: Prisma.InventoryItemWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutSuppliersInput, Prisma.InventoryItemUpdateWithoutSuppliersInput>, Prisma.InventoryItemUncheckedUpdateWithoutSuppliersInput>
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutWorkOrderMaterialInput, Prisma.InventoryItemUpdateWithoutWorkOrderMaterialInput>, Prisma.InventoryItemUncheckedUpdateWithoutWorkOrderMaterialInput>
 }
 
-export type InventoryItemCreateNestedOneWithoutStockMovementsInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutStockMovementsInput, Prisma.InventoryItemUncheckedCreateWithoutStockMovementsInput>
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutStockMovementsInput
-  connect?: Prisma.InventoryItemWhereUniqueInput
-}
-
-export type InventoryItemUpdateOneRequiredWithoutStockMovementsNestedInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutStockMovementsInput, Prisma.InventoryItemUncheckedCreateWithoutStockMovementsInput>
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutStockMovementsInput
-  upsert?: Prisma.InventoryItemUpsertWithoutStockMovementsInput
-  connect?: Prisma.InventoryItemWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutStockMovementsInput, Prisma.InventoryItemUpdateWithoutStockMovementsInput>, Prisma.InventoryItemUncheckedUpdateWithoutStockMovementsInput>
-}
-
-export type InventoryItemCreateNestedOneWithoutPriceBookEntriesInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutPriceBookEntriesInput, Prisma.InventoryItemUncheckedCreateWithoutPriceBookEntriesInput>
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutPriceBookEntriesInput
-  connect?: Prisma.InventoryItemWhereUniqueInput
-}
-
-export type InventoryItemUpdateOneRequiredWithoutPriceBookEntriesNestedInput = {
-  create?: Prisma.XOR<Prisma.InventoryItemCreateWithoutPriceBookEntriesInput, Prisma.InventoryItemUncheckedCreateWithoutPriceBookEntriesInput>
-  connectOrCreate?: Prisma.InventoryItemCreateOrConnectWithoutPriceBookEntriesInput
-  upsert?: Prisma.InventoryItemUpsertWithoutPriceBookEntriesInput
-  connect?: Prisma.InventoryItemWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.InventoryItemUpdateToOneWithWhereWithoutPriceBookEntriesInput, Prisma.InventoryItemUpdateWithoutPriceBookEntriesInput>, Prisma.InventoryItemUncheckedUpdateWithoutPriceBookEntriesInput>
-}
-
-export type InventoryItemCreateWithoutTenantInput = {
-  id?: string
+export type InventoryItemCreateWithoutInventoryCategoryInput = {
+  id: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -2492,18 +2492,19 @@ export type InventoryItemCreateWithoutTenantInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  category?: Prisma.InventoryCategoryCreateNestedOneWithoutItemsInput
-  subcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutItemsInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutInventoryItemInput
+  tenant: Prisma.TenantCreateNestedOneWithoutInventoryItemInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemUncheckedCreateWithoutTenantInput = {
-  id?: string
+export type InventoryItemUncheckedCreateWithoutInventoryCategoryInput = {
+  id: string
+  tenantId: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -2511,7 +2512,6 @@ export type InventoryItemUncheckedCreateWithoutTenantInput = {
   name: string
   shortName?: string | null
   itemType?: string
-  categoryId?: string | null
   subcategoryId?: string | null
   description?: string | null
   shortDescription?: string | null
@@ -2579,37 +2579,37 @@ export type InventoryItemUncheckedCreateWithoutTenantInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemCreateOrConnectWithoutTenantInput = {
+export type InventoryItemCreateOrConnectWithoutInventoryCategoryInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutTenantInput, Prisma.InventoryItemUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventoryCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput>
 }
 
-export type InventoryItemCreateManyTenantInputEnvelope = {
-  data: Prisma.InventoryItemCreateManyTenantInput | Prisma.InventoryItemCreateManyTenantInput[]
+export type InventoryItemCreateManyInventoryCategoryInputEnvelope = {
+  data: Prisma.InventoryItemCreateManyInventoryCategoryInput | Prisma.InventoryItemCreateManyInventoryCategoryInput[]
 }
 
-export type InventoryItemUpsertWithWhereUniqueWithoutTenantInput = {
+export type InventoryItemUpsertWithWhereUniqueWithoutInventoryCategoryInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutTenantInput, Prisma.InventoryItemUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutTenantInput, Prisma.InventoryItemUncheckedCreateWithoutTenantInput>
+  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutInventoryCategoryInput, Prisma.InventoryItemUncheckedUpdateWithoutInventoryCategoryInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventoryCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventoryCategoryInput>
 }
 
-export type InventoryItemUpdateWithWhereUniqueWithoutTenantInput = {
+export type InventoryItemUpdateWithWhereUniqueWithoutInventoryCategoryInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutTenantInput, Prisma.InventoryItemUncheckedUpdateWithoutTenantInput>
+  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutInventoryCategoryInput, Prisma.InventoryItemUncheckedUpdateWithoutInventoryCategoryInput>
 }
 
-export type InventoryItemUpdateManyWithWhereWithoutTenantInput = {
+export type InventoryItemUpdateManyWithWhereWithoutInventoryCategoryInput = {
   where: Prisma.InventoryItemScalarWhereInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateManyMutationInput, Prisma.InventoryItemUncheckedUpdateManyWithoutTenantInput>
+  data: Prisma.XOR<Prisma.InventoryItemUpdateManyMutationInput, Prisma.InventoryItemUncheckedUpdateManyWithoutInventoryCategoryInput>
 }
 
 export type InventoryItemScalarWhereInput = {
@@ -2696,8 +2696,8 @@ export type InventoryItemScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"InventoryItem"> | Date | string
 }
 
-export type InventoryItemCreateWithoutWorkOrderMaterialsInput = {
-  id?: string
+export type InventoryItemCreateWithoutInventorySubcategoryInput = {
+  id: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -2771,18 +2771,213 @@ export type InventoryItemCreateWithoutWorkOrderMaterialsInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutInventoryInput
-  category?: Prisma.InventoryCategoryCreateNestedOneWithoutItemsInput
-  subcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutItemsInput
-  suppliers?: Prisma.ItemSupplierCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  inventoryCategory?: Prisma.InventoryCategoryCreateNestedOneWithoutInventoryItemInput
+  tenant: Prisma.TenantCreateNestedOneWithoutInventoryItemInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemUncheckedCreateWithoutWorkOrderMaterialsInput = {
-  id?: string
+export type InventoryItemUncheckedCreateWithoutInventorySubcategoryInput = {
+  id: string
+  tenantId: string
+  itemCode?: string | null
+  sku?: string | null
+  barcode?: string | null
+  qrCode?: string | null
+  name: string
+  shortName?: string | null
+  itemType?: string
+  categoryId?: string | null
+  description?: string | null
+  shortDescription?: string | null
+  brand?: string | null
+  manufacturer?: string | null
+  model?: string | null
+  partNumber?: string | null
+  serialNumber?: string | null
+  unit?: string
+  unitWeight?: number | null
+  dimensions?: string | null
+  purchaseCost?: number
+  averageCost?: number
+  standardCost?: number
+  lastPurchaseCost?: number
+  sellingPrice?: number
+  dealerPrice?: number
+  contractorPrice?: number
+  customerPrice?: number
+  vipPrice?: number
+  internalCost?: number
+  labourCost?: number
+  installationCost?: number
+  serviceCost?: number
+  transportationCost?: number
+  mobilizationCost?: number
+  equipmentRental?: number
+  emergencyCallOut?: number
+  afterHoursCharge?: number
+  weekendCharge?: number
+  publicHolidayCharge?: number
+  currency?: string
+  quantity?: number
+  minStock?: number
+  maxStock?: number | null
+  reorderLevel?: number
+  safetyStock?: number
+  unitCost?: number
+  supplier?: string | null
+  location?: string | null
+  photos?: string | null
+  attachments?: string | null
+  technicalDatasheet?: string | null
+  msds?: string | null
+  warranty?: string | null
+  warrantyExpiry?: Date | string | null
+  countryOfOrigin?: string | null
+  hsCode?: string | null
+  tags?: string | null
+  status?: string
+  approvalStatus?: string
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  version?: number
+  hourlyRate?: number | null
+  dailyRate?: number | null
+  overtimeRate?: number | null
+  weekendRate?: number | null
+  publicHolidayRate?: number | null
+  dailyRentalRate?: number | null
+  monthlyRentalRate?: number | null
+  estimatedHours?: number | null
+  requiredSkills?: string | null
+  sop?: string | null
+  remarks?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
+}
+
+export type InventoryItemCreateOrConnectWithoutInventorySubcategoryInput = {
+  where: Prisma.InventoryItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventorySubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput>
+}
+
+export type InventoryItemCreateManyInventorySubcategoryInputEnvelope = {
+  data: Prisma.InventoryItemCreateManyInventorySubcategoryInput | Prisma.InventoryItemCreateManyInventorySubcategoryInput[]
+}
+
+export type InventoryItemUpsertWithWhereUniqueWithoutInventorySubcategoryInput = {
+  where: Prisma.InventoryItemWhereUniqueInput
+  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutInventorySubcategoryInput, Prisma.InventoryItemUncheckedUpdateWithoutInventorySubcategoryInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutInventorySubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutInventorySubcategoryInput>
+}
+
+export type InventoryItemUpdateWithWhereUniqueWithoutInventorySubcategoryInput = {
+  where: Prisma.InventoryItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutInventorySubcategoryInput, Prisma.InventoryItemUncheckedUpdateWithoutInventorySubcategoryInput>
+}
+
+export type InventoryItemUpdateManyWithWhereWithoutInventorySubcategoryInput = {
+  where: Prisma.InventoryItemScalarWhereInput
+  data: Prisma.XOR<Prisma.InventoryItemUpdateManyMutationInput, Prisma.InventoryItemUncheckedUpdateManyWithoutInventorySubcategoryInput>
+}
+
+export type InventoryItemCreateWithoutItemSupplierInput = {
+  id: string
+  itemCode?: string | null
+  sku?: string | null
+  barcode?: string | null
+  qrCode?: string | null
+  name: string
+  shortName?: string | null
+  itemType?: string
+  description?: string | null
+  shortDescription?: string | null
+  brand?: string | null
+  manufacturer?: string | null
+  model?: string | null
+  partNumber?: string | null
+  serialNumber?: string | null
+  unit?: string
+  unitWeight?: number | null
+  dimensions?: string | null
+  purchaseCost?: number
+  averageCost?: number
+  standardCost?: number
+  lastPurchaseCost?: number
+  sellingPrice?: number
+  dealerPrice?: number
+  contractorPrice?: number
+  customerPrice?: number
+  vipPrice?: number
+  internalCost?: number
+  labourCost?: number
+  installationCost?: number
+  serviceCost?: number
+  transportationCost?: number
+  mobilizationCost?: number
+  equipmentRental?: number
+  emergencyCallOut?: number
+  afterHoursCharge?: number
+  weekendCharge?: number
+  publicHolidayCharge?: number
+  currency?: string
+  quantity?: number
+  minStock?: number
+  maxStock?: number | null
+  reorderLevel?: number
+  safetyStock?: number
+  unitCost?: number
+  supplier?: string | null
+  location?: string | null
+  photos?: string | null
+  attachments?: string | null
+  technicalDatasheet?: string | null
+  msds?: string | null
+  warranty?: string | null
+  warrantyExpiry?: Date | string | null
+  countryOfOrigin?: string | null
+  hsCode?: string | null
+  tags?: string | null
+  status?: string
+  approvalStatus?: string
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  version?: number
+  hourlyRate?: number | null
+  dailyRate?: number | null
+  overtimeRate?: number | null
+  weekendRate?: number | null
+  publicHolidayRate?: number | null
+  dailyRentalRate?: number | null
+  monthlyRentalRate?: number | null
+  estimatedHours?: number | null
+  requiredSkills?: string | null
+  sop?: string | null
+  remarks?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutInventoryItemInput
+  inventoryCategory?: Prisma.InventoryCategoryCreateNestedOneWithoutInventoryItemInput
+  tenant: Prisma.TenantCreateNestedOneWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
+}
+
+export type InventoryItemUncheckedCreateWithoutItemSupplierInput = {
+  id: string
   tenantId: string
   itemCode?: string | null
   sku?: string | null
@@ -2859,30 +3054,30 @@ export type InventoryItemUncheckedCreateWithoutWorkOrderMaterialsInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  suppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemCreateOrConnectWithoutWorkOrderMaterialsInput = {
+export type InventoryItemCreateOrConnectWithoutItemSupplierInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutWorkOrderMaterialsInput, Prisma.InventoryItemUncheckedCreateWithoutWorkOrderMaterialsInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutItemSupplierInput, Prisma.InventoryItemUncheckedCreateWithoutItemSupplierInput>
 }
 
-export type InventoryItemUpsertWithoutWorkOrderMaterialsInput = {
-  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutWorkOrderMaterialsInput, Prisma.InventoryItemUncheckedUpdateWithoutWorkOrderMaterialsInput>
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutWorkOrderMaterialsInput, Prisma.InventoryItemUncheckedCreateWithoutWorkOrderMaterialsInput>
+export type InventoryItemUpsertWithoutItemSupplierInput = {
+  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutItemSupplierInput, Prisma.InventoryItemUncheckedUpdateWithoutItemSupplierInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutItemSupplierInput, Prisma.InventoryItemUncheckedCreateWithoutItemSupplierInput>
   where?: Prisma.InventoryItemWhereInput
 }
 
-export type InventoryItemUpdateToOneWithWhereWithoutWorkOrderMaterialsInput = {
+export type InventoryItemUpdateToOneWithWhereWithoutItemSupplierInput = {
   where?: Prisma.InventoryItemWhereInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutWorkOrderMaterialsInput, Prisma.InventoryItemUncheckedUpdateWithoutWorkOrderMaterialsInput>
+  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutItemSupplierInput, Prisma.InventoryItemUncheckedUpdateWithoutItemSupplierInput>
 }
 
-export type InventoryItemUpdateWithoutWorkOrderMaterialsInput = {
+export type InventoryItemUpdateWithoutItemSupplierInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2958,16 +3153,16 @@ export type InventoryItemUpdateWithoutWorkOrderMaterialsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryNestedInput
-  category?: Prisma.InventoryCategoryUpdateOneWithoutItemsNestedInput
-  subcategory?: Prisma.InventorySubcategoryUpdateOneWithoutItemsNestedInput
-  suppliers?: Prisma.ItemSupplierUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutItemNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateOneWithoutInventoryItemNestedInput
+  inventoryCategory?: Prisma.InventoryCategoryUpdateOneWithoutInventoryItemNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemUncheckedUpdateWithoutWorkOrderMaterialsInput = {
+export type InventoryItemUncheckedUpdateWithoutItemSupplierInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3046,14 +3241,14 @@ export type InventoryItemUncheckedUpdateWithoutWorkOrderMaterialsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  suppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemCreateWithoutCategoryInput = {
-  id?: string
+export type InventoryItemCreateWithoutPriceBookEntryInput = {
+  id: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -3127,18 +3322,18 @@ export type InventoryItemCreateWithoutCategoryInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutInventoryInput
-  subcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutItemsInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutInventoryItemInput
+  inventoryCategory?: Prisma.InventoryCategoryCreateNestedOneWithoutInventoryItemInput
+  tenant: Prisma.TenantCreateNestedOneWithoutInventoryItemInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemUncheckedCreateWithoutCategoryInput = {
-  id?: string
+export type InventoryItemUncheckedCreateWithoutPriceBookEntryInput = {
+  id: string
   tenantId: string
   itemCode?: string | null
   sku?: string | null
@@ -3147,6 +3342,7 @@ export type InventoryItemUncheckedCreateWithoutCategoryInput = {
   name: string
   shortName?: string | null
   itemType?: string
+  categoryId?: string | null
   subcategoryId?: string | null
   description?: string | null
   shortDescription?: string | null
@@ -3214,41 +3410,201 @@ export type InventoryItemUncheckedCreateWithoutCategoryInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemCreateOrConnectWithoutCategoryInput = {
+export type InventoryItemCreateOrConnectWithoutPriceBookEntryInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutPriceBookEntryInput, Prisma.InventoryItemUncheckedCreateWithoutPriceBookEntryInput>
 }
 
-export type InventoryItemCreateManyCategoryInputEnvelope = {
-  data: Prisma.InventoryItemCreateManyCategoryInput | Prisma.InventoryItemCreateManyCategoryInput[]
+export type InventoryItemUpsertWithoutPriceBookEntryInput = {
+  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutPriceBookEntryInput, Prisma.InventoryItemUncheckedUpdateWithoutPriceBookEntryInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutPriceBookEntryInput, Prisma.InventoryItemUncheckedCreateWithoutPriceBookEntryInput>
+  where?: Prisma.InventoryItemWhereInput
 }
 
-export type InventoryItemUpsertWithWhereUniqueWithoutCategoryInput = {
-  where: Prisma.InventoryItemWhereUniqueInput
-  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutCategoryInput, Prisma.InventoryItemUncheckedUpdateWithoutCategoryInput>
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutCategoryInput, Prisma.InventoryItemUncheckedCreateWithoutCategoryInput>
+export type InventoryItemUpdateToOneWithWhereWithoutPriceBookEntryInput = {
+  where?: Prisma.InventoryItemWhereInput
+  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutPriceBookEntryInput, Prisma.InventoryItemUncheckedUpdateWithoutPriceBookEntryInput>
 }
 
-export type InventoryItemUpdateWithWhereUniqueWithoutCategoryInput = {
-  where: Prisma.InventoryItemWhereUniqueInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutCategoryInput, Prisma.InventoryItemUncheckedUpdateWithoutCategoryInput>
+export type InventoryItemUpdateWithoutPriceBookEntryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
+  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
+  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateOneWithoutInventoryItemNestedInput
+  inventoryCategory?: Prisma.InventoryCategoryUpdateOneWithoutInventoryItemNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemUpdateManyWithWhereWithoutCategoryInput = {
-  where: Prisma.InventoryItemScalarWhereInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateManyMutationInput, Prisma.InventoryItemUncheckedUpdateManyWithoutCategoryInput>
+export type InventoryItemUncheckedUpdateWithoutPriceBookEntryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
+  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
+  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemCreateWithoutSubcategoryInput = {
-  id?: string
+export type InventoryItemCreateWithoutStockMovementInput = {
+  id: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -3322,18 +3678,18 @@ export type InventoryItemCreateWithoutSubcategoryInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutInventoryInput
-  category?: Prisma.InventoryCategoryCreateNestedOneWithoutItemsInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutInventoryItemInput
+  inventoryCategory?: Prisma.InventoryCategoryCreateNestedOneWithoutInventoryItemInput
+  tenant: Prisma.TenantCreateNestedOneWithoutInventoryItemInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemUncheckedCreateWithoutSubcategoryInput = {
-  id?: string
+export type InventoryItemUncheckedCreateWithoutStockMovementInput = {
+  id: string
   tenantId: string
   itemCode?: string | null
   sku?: string | null
@@ -3343,6 +3699,7 @@ export type InventoryItemUncheckedCreateWithoutSubcategoryInput = {
   shortName?: string | null
   itemType?: string
   categoryId?: string | null
+  subcategoryId?: string | null
   description?: string | null
   shortDescription?: string | null
   brand?: string | null
@@ -3409,41 +3766,396 @@ export type InventoryItemUncheckedCreateWithoutSubcategoryInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemCreateOrConnectWithoutSubcategoryInput = {
+export type InventoryItemCreateOrConnectWithoutStockMovementInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutSubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutStockMovementInput, Prisma.InventoryItemUncheckedCreateWithoutStockMovementInput>
 }
 
-export type InventoryItemCreateManySubcategoryInputEnvelope = {
-  data: Prisma.InventoryItemCreateManySubcategoryInput | Prisma.InventoryItemCreateManySubcategoryInput[]
+export type InventoryItemUpsertWithoutStockMovementInput = {
+  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutStockMovementInput, Prisma.InventoryItemUncheckedUpdateWithoutStockMovementInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutStockMovementInput, Prisma.InventoryItemUncheckedCreateWithoutStockMovementInput>
+  where?: Prisma.InventoryItemWhereInput
 }
 
-export type InventoryItemUpsertWithWhereUniqueWithoutSubcategoryInput = {
+export type InventoryItemUpdateToOneWithWhereWithoutStockMovementInput = {
+  where?: Prisma.InventoryItemWhereInput
+  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutStockMovementInput, Prisma.InventoryItemUncheckedUpdateWithoutStockMovementInput>
+}
+
+export type InventoryItemUpdateWithoutStockMovementInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
+  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
+  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateOneWithoutInventoryItemNestedInput
+  inventoryCategory?: Prisma.InventoryCategoryUpdateOneWithoutInventoryItemNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
+}
+
+export type InventoryItemUncheckedUpdateWithoutStockMovementInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
+  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
+  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
+}
+
+export type InventoryItemCreateWithoutTenantInput = {
+  id: string
+  itemCode?: string | null
+  sku?: string | null
+  barcode?: string | null
+  qrCode?: string | null
+  name: string
+  shortName?: string | null
+  itemType?: string
+  description?: string | null
+  shortDescription?: string | null
+  brand?: string | null
+  manufacturer?: string | null
+  model?: string | null
+  partNumber?: string | null
+  serialNumber?: string | null
+  unit?: string
+  unitWeight?: number | null
+  dimensions?: string | null
+  purchaseCost?: number
+  averageCost?: number
+  standardCost?: number
+  lastPurchaseCost?: number
+  sellingPrice?: number
+  dealerPrice?: number
+  contractorPrice?: number
+  customerPrice?: number
+  vipPrice?: number
+  internalCost?: number
+  labourCost?: number
+  installationCost?: number
+  serviceCost?: number
+  transportationCost?: number
+  mobilizationCost?: number
+  equipmentRental?: number
+  emergencyCallOut?: number
+  afterHoursCharge?: number
+  weekendCharge?: number
+  publicHolidayCharge?: number
+  currency?: string
+  quantity?: number
+  minStock?: number
+  maxStock?: number | null
+  reorderLevel?: number
+  safetyStock?: number
+  unitCost?: number
+  supplier?: string | null
+  location?: string | null
+  photos?: string | null
+  attachments?: string | null
+  technicalDatasheet?: string | null
+  msds?: string | null
+  warranty?: string | null
+  warrantyExpiry?: Date | string | null
+  countryOfOrigin?: string | null
+  hsCode?: string | null
+  tags?: string | null
+  status?: string
+  approvalStatus?: string
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  version?: number
+  hourlyRate?: number | null
+  dailyRate?: number | null
+  overtimeRate?: number | null
+  weekendRate?: number | null
+  publicHolidayRate?: number | null
+  dailyRentalRate?: number | null
+  monthlyRentalRate?: number | null
+  estimatedHours?: number | null
+  requiredSkills?: string | null
+  sop?: string | null
+  remarks?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutInventoryItemInput
+  inventoryCategory?: Prisma.InventoryCategoryCreateNestedOneWithoutInventoryItemInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
+}
+
+export type InventoryItemUncheckedCreateWithoutTenantInput = {
+  id: string
+  itemCode?: string | null
+  sku?: string | null
+  barcode?: string | null
+  qrCode?: string | null
+  name: string
+  shortName?: string | null
+  itemType?: string
+  categoryId?: string | null
+  subcategoryId?: string | null
+  description?: string | null
+  shortDescription?: string | null
+  brand?: string | null
+  manufacturer?: string | null
+  model?: string | null
+  partNumber?: string | null
+  serialNumber?: string | null
+  unit?: string
+  unitWeight?: number | null
+  dimensions?: string | null
+  purchaseCost?: number
+  averageCost?: number
+  standardCost?: number
+  lastPurchaseCost?: number
+  sellingPrice?: number
+  dealerPrice?: number
+  contractorPrice?: number
+  customerPrice?: number
+  vipPrice?: number
+  internalCost?: number
+  labourCost?: number
+  installationCost?: number
+  serviceCost?: number
+  transportationCost?: number
+  mobilizationCost?: number
+  equipmentRental?: number
+  emergencyCallOut?: number
+  afterHoursCharge?: number
+  weekendCharge?: number
+  publicHolidayCharge?: number
+  currency?: string
+  quantity?: number
+  minStock?: number
+  maxStock?: number | null
+  reorderLevel?: number
+  safetyStock?: number
+  unitCost?: number
+  supplier?: string | null
+  location?: string | null
+  photos?: string | null
+  attachments?: string | null
+  technicalDatasheet?: string | null
+  msds?: string | null
+  warranty?: string | null
+  warrantyExpiry?: Date | string | null
+  countryOfOrigin?: string | null
+  hsCode?: string | null
+  tags?: string | null
+  status?: string
+  approvalStatus?: string
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  version?: number
+  hourlyRate?: number | null
+  dailyRate?: number | null
+  overtimeRate?: number | null
+  weekendRate?: number | null
+  publicHolidayRate?: number | null
+  dailyRentalRate?: number | null
+  monthlyRentalRate?: number | null
+  estimatedHours?: number | null
+  requiredSkills?: string | null
+  sop?: string | null
+  remarks?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
+}
+
+export type InventoryItemCreateOrConnectWithoutTenantInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutSubcategoryInput, Prisma.InventoryItemUncheckedUpdateWithoutSubcategoryInput>
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutSubcategoryInput, Prisma.InventoryItemUncheckedCreateWithoutSubcategoryInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutTenantInput, Prisma.InventoryItemUncheckedCreateWithoutTenantInput>
 }
 
-export type InventoryItemUpdateWithWhereUniqueWithoutSubcategoryInput = {
+export type InventoryItemCreateManyTenantInputEnvelope = {
+  data: Prisma.InventoryItemCreateManyTenantInput | Prisma.InventoryItemCreateManyTenantInput[]
+}
+
+export type InventoryItemUpsertWithWhereUniqueWithoutTenantInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutSubcategoryInput, Prisma.InventoryItemUncheckedUpdateWithoutSubcategoryInput>
+  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutTenantInput, Prisma.InventoryItemUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutTenantInput, Prisma.InventoryItemUncheckedCreateWithoutTenantInput>
 }
 
-export type InventoryItemUpdateManyWithWhereWithoutSubcategoryInput = {
+export type InventoryItemUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.InventoryItemWhereUniqueInput
+  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutTenantInput, Prisma.InventoryItemUncheckedUpdateWithoutTenantInput>
+}
+
+export type InventoryItemUpdateManyWithWhereWithoutTenantInput = {
   where: Prisma.InventoryItemScalarWhereInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateManyMutationInput, Prisma.InventoryItemUncheckedUpdateManyWithoutSubcategoryInput>
+  data: Prisma.XOR<Prisma.InventoryItemUpdateManyMutationInput, Prisma.InventoryItemUncheckedUpdateManyWithoutTenantInput>
 }
 
 export type InventoryItemCreateWithoutWarehouseStockInput = {
-  id?: string
+  id: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -3517,18 +4229,18 @@ export type InventoryItemCreateWithoutWarehouseStockInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutInventoryInput
-  category?: Prisma.InventoryCategoryCreateNestedOneWithoutItemsInput
-  subcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutItemsInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutInventoryItemInput
+  inventoryCategory?: Prisma.InventoryCategoryCreateNestedOneWithoutInventoryItemInput
+  tenant: Prisma.TenantCreateNestedOneWithoutInventoryItemInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
 }
 
 export type InventoryItemUncheckedCreateWithoutWarehouseStockInput = {
-  id?: string
+  id: string
   tenantId: string
   itemCode?: string | null
   sku?: string | null
@@ -3605,11 +4317,11 @@ export type InventoryItemUncheckedCreateWithoutWarehouseStockInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutInventoryItemInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
 }
 
 export type InventoryItemCreateOrConnectWithoutWarehouseStockInput = {
@@ -3704,13 +4416,13 @@ export type InventoryItemUpdateWithoutWarehouseStockInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryNestedInput
-  category?: Prisma.InventoryCategoryUpdateOneWithoutItemsNestedInput
-  subcategory?: Prisma.InventorySubcategoryUpdateOneWithoutItemsNestedInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutItemNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateOneWithoutInventoryItemNestedInput
+  inventoryCategory?: Prisma.InventoryCategoryUpdateOneWithoutInventoryItemNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateWithoutWarehouseStockInput = {
@@ -3792,14 +4504,14 @@ export type InventoryItemUncheckedUpdateWithoutWarehouseStockInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemCreateWithoutSuppliersInput = {
-  id?: string
+export type InventoryItemCreateWithoutWorkOrderMaterialInput = {
+  id: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -3873,18 +4585,18 @@ export type InventoryItemCreateWithoutSuppliersInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutInventoryInput
-  category?: Prisma.InventoryCategoryCreateNestedOneWithoutItemsInput
-  subcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutItemsInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
-  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutInventoryItemInput
+  inventoryCategory?: Prisma.InventoryCategoryCreateNestedOneWithoutInventoryItemInput
+  tenant: Prisma.TenantCreateNestedOneWithoutInventoryItemInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemUncheckedCreateWithoutSuppliersInput = {
-  id?: string
+export type InventoryItemUncheckedCreateWithoutWorkOrderMaterialInput = {
+  id: string
   tenantId: string
   itemCode?: string | null
   sku?: string | null
@@ -3961,30 +4673,30 @@ export type InventoryItemUncheckedCreateWithoutSuppliersInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
-  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutInventoryItemInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutInventoryItemInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutInventoryItemInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutInventoryItemInput
 }
 
-export type InventoryItemCreateOrConnectWithoutSuppliersInput = {
+export type InventoryItemCreateOrConnectWithoutWorkOrderMaterialInput = {
   where: Prisma.InventoryItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutSuppliersInput, Prisma.InventoryItemUncheckedCreateWithoutSuppliersInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutWorkOrderMaterialInput, Prisma.InventoryItemUncheckedCreateWithoutWorkOrderMaterialInput>
 }
 
-export type InventoryItemUpsertWithoutSuppliersInput = {
-  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutSuppliersInput, Prisma.InventoryItemUncheckedUpdateWithoutSuppliersInput>
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutSuppliersInput, Prisma.InventoryItemUncheckedCreateWithoutSuppliersInput>
+export type InventoryItemUpsertWithoutWorkOrderMaterialInput = {
+  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutWorkOrderMaterialInput, Prisma.InventoryItemUncheckedUpdateWithoutWorkOrderMaterialInput>
+  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutWorkOrderMaterialInput, Prisma.InventoryItemUncheckedCreateWithoutWorkOrderMaterialInput>
   where?: Prisma.InventoryItemWhereInput
 }
 
-export type InventoryItemUpdateToOneWithWhereWithoutSuppliersInput = {
+export type InventoryItemUpdateToOneWithWhereWithoutWorkOrderMaterialInput = {
   where?: Prisma.InventoryItemWhereInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutSuppliersInput, Prisma.InventoryItemUncheckedUpdateWithoutSuppliersInput>
+  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutWorkOrderMaterialInput, Prisma.InventoryItemUncheckedUpdateWithoutWorkOrderMaterialInput>
 }
 
-export type InventoryItemUpdateWithoutSuppliersInput = {
+export type InventoryItemUpdateWithoutWorkOrderMaterialInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4060,16 +4772,16 @@ export type InventoryItemUpdateWithoutSuppliersInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryNestedInput
-  category?: Prisma.InventoryCategoryUpdateOneWithoutItemsNestedInput
-  subcategory?: Prisma.InventorySubcategoryUpdateOneWithoutItemsNestedInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
-  stockMovements?: Prisma.StockMovementUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutItemNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateOneWithoutInventoryItemNestedInput
+  inventoryCategory?: Prisma.InventoryCategoryUpdateOneWithoutInventoryItemNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemUncheckedUpdateWithoutSuppliersInput = {
+export type InventoryItemUncheckedUpdateWithoutWorkOrderMaterialInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4148,99 +4860,14 @@ export type InventoryItemUncheckedUpdateWithoutSuppliersInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
-  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemCreateWithoutStockMovementsInput = {
-  id?: string
-  itemCode?: string | null
-  sku?: string | null
-  barcode?: string | null
-  qrCode?: string | null
-  name: string
-  shortName?: string | null
-  itemType?: string
-  description?: string | null
-  shortDescription?: string | null
-  brand?: string | null
-  manufacturer?: string | null
-  model?: string | null
-  partNumber?: string | null
-  serialNumber?: string | null
-  unit?: string
-  unitWeight?: number | null
-  dimensions?: string | null
-  purchaseCost?: number
-  averageCost?: number
-  standardCost?: number
-  lastPurchaseCost?: number
-  sellingPrice?: number
-  dealerPrice?: number
-  contractorPrice?: number
-  customerPrice?: number
-  vipPrice?: number
-  internalCost?: number
-  labourCost?: number
-  installationCost?: number
-  serviceCost?: number
-  transportationCost?: number
-  mobilizationCost?: number
-  equipmentRental?: number
-  emergencyCallOut?: number
-  afterHoursCharge?: number
-  weekendCharge?: number
-  publicHolidayCharge?: number
-  currency?: string
-  quantity?: number
-  minStock?: number
-  maxStock?: number | null
-  reorderLevel?: number
-  safetyStock?: number
-  unitCost?: number
-  supplier?: string | null
-  location?: string | null
-  photos?: string | null
-  attachments?: string | null
-  technicalDatasheet?: string | null
-  msds?: string | null
-  warranty?: string | null
-  warrantyExpiry?: Date | string | null
-  countryOfOrigin?: string | null
-  hsCode?: string | null
-  tags?: string | null
-  status?: string
-  approvalStatus?: string
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  version?: number
-  hourlyRate?: number | null
-  dailyRate?: number | null
-  overtimeRate?: number | null
-  weekendRate?: number | null
-  publicHolidayRate?: number | null
-  dailyRentalRate?: number | null
-  monthlyRentalRate?: number | null
-  estimatedHours?: number | null
-  requiredSkills?: string | null
-  sop?: string | null
-  remarks?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutInventoryInput
-  category?: Prisma.InventoryCategoryCreateNestedOneWithoutItemsInput
-  subcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutItemsInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryCreateNestedManyWithoutItemInput
-}
-
-export type InventoryItemUncheckedCreateWithoutStockMovementsInput = {
-  id?: string
+export type InventoryItemCreateManyInventoryCategoryInput = {
+  id: string
   tenantId: string
   itemCode?: string | null
   sku?: string | null
@@ -4249,7 +4876,6 @@ export type InventoryItemUncheckedCreateWithoutStockMovementsInput = {
   name: string
   shortName?: string | null
   itemType?: string
-  categoryId?: string | null
   subcategoryId?: string | null
   description?: string | null
   shortDescription?: string | null
@@ -4317,30 +4943,10 @@ export type InventoryItemUncheckedCreateWithoutStockMovementsInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutItemInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutItemInput
+  updatedAt: Date | string
 }
 
-export type InventoryItemCreateOrConnectWithoutStockMovementsInput = {
-  where: Prisma.InventoryItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutStockMovementsInput, Prisma.InventoryItemUncheckedCreateWithoutStockMovementsInput>
-}
-
-export type InventoryItemUpsertWithoutStockMovementsInput = {
-  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutStockMovementsInput, Prisma.InventoryItemUncheckedUpdateWithoutStockMovementsInput>
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutStockMovementsInput, Prisma.InventoryItemUncheckedCreateWithoutStockMovementsInput>
-  where?: Prisma.InventoryItemWhereInput
-}
-
-export type InventoryItemUpdateToOneWithWhereWithoutStockMovementsInput = {
-  where?: Prisma.InventoryItemWhereInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutStockMovementsInput, Prisma.InventoryItemUncheckedUpdateWithoutStockMovementsInput>
-}
-
-export type InventoryItemUpdateWithoutStockMovementsInput = {
+export type InventoryItemUpdateWithoutInventoryCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4416,16 +5022,16 @@ export type InventoryItemUpdateWithoutStockMovementsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryNestedInput
-  category?: Prisma.InventoryCategoryUpdateOneWithoutItemsNestedInput
-  subcategory?: Prisma.InventorySubcategoryUpdateOneWithoutItemsNestedInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutItemNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateOneWithoutInventoryItemNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemUncheckedUpdateWithoutStockMovementsInput = {
+export type InventoryItemUncheckedUpdateWithoutInventoryCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4435,7 +5041,6 @@ export type InventoryItemUncheckedUpdateWithoutStockMovementsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4504,284 +5109,14 @@ export type InventoryItemUncheckedUpdateWithoutStockMovementsInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
 }
 
-export type InventoryItemCreateWithoutPriceBookEntriesInput = {
-  id?: string
-  itemCode?: string | null
-  sku?: string | null
-  barcode?: string | null
-  qrCode?: string | null
-  name: string
-  shortName?: string | null
-  itemType?: string
-  description?: string | null
-  shortDescription?: string | null
-  brand?: string | null
-  manufacturer?: string | null
-  model?: string | null
-  partNumber?: string | null
-  serialNumber?: string | null
-  unit?: string
-  unitWeight?: number | null
-  dimensions?: string | null
-  purchaseCost?: number
-  averageCost?: number
-  standardCost?: number
-  lastPurchaseCost?: number
-  sellingPrice?: number
-  dealerPrice?: number
-  contractorPrice?: number
-  customerPrice?: number
-  vipPrice?: number
-  internalCost?: number
-  labourCost?: number
-  installationCost?: number
-  serviceCost?: number
-  transportationCost?: number
-  mobilizationCost?: number
-  equipmentRental?: number
-  emergencyCallOut?: number
-  afterHoursCharge?: number
-  weekendCharge?: number
-  publicHolidayCharge?: number
-  currency?: string
-  quantity?: number
-  minStock?: number
-  maxStock?: number | null
-  reorderLevel?: number
-  safetyStock?: number
-  unitCost?: number
-  supplier?: string | null
-  location?: string | null
-  photos?: string | null
-  attachments?: string | null
-  technicalDatasheet?: string | null
-  msds?: string | null
-  warranty?: string | null
-  warrantyExpiry?: Date | string | null
-  countryOfOrigin?: string | null
-  hsCode?: string | null
-  tags?: string | null
-  status?: string
-  approvalStatus?: string
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  version?: number
-  hourlyRate?: number | null
-  dailyRate?: number | null
-  overtimeRate?: number | null
-  weekendRate?: number | null
-  publicHolidayRate?: number | null
-  dailyRentalRate?: number | null
-  monthlyRentalRate?: number | null
-  estimatedHours?: number | null
-  requiredSkills?: string | null
-  sop?: string | null
-  remarks?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutInventoryInput
-  category?: Prisma.InventoryCategoryCreateNestedOneWithoutItemsInput
-  subcategory?: Prisma.InventorySubcategoryCreateNestedOneWithoutItemsInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutItemInput
-}
-
-export type InventoryItemUncheckedCreateWithoutPriceBookEntriesInput = {
-  id?: string
-  tenantId: string
-  itemCode?: string | null
-  sku?: string | null
-  barcode?: string | null
-  qrCode?: string | null
-  name: string
-  shortName?: string | null
-  itemType?: string
-  categoryId?: string | null
-  subcategoryId?: string | null
-  description?: string | null
-  shortDescription?: string | null
-  brand?: string | null
-  manufacturer?: string | null
-  model?: string | null
-  partNumber?: string | null
-  serialNumber?: string | null
-  unit?: string
-  unitWeight?: number | null
-  dimensions?: string | null
-  purchaseCost?: number
-  averageCost?: number
-  standardCost?: number
-  lastPurchaseCost?: number
-  sellingPrice?: number
-  dealerPrice?: number
-  contractorPrice?: number
-  customerPrice?: number
-  vipPrice?: number
-  internalCost?: number
-  labourCost?: number
-  installationCost?: number
-  serviceCost?: number
-  transportationCost?: number
-  mobilizationCost?: number
-  equipmentRental?: number
-  emergencyCallOut?: number
-  afterHoursCharge?: number
-  weekendCharge?: number
-  publicHolidayCharge?: number
-  currency?: string
-  quantity?: number
-  minStock?: number
-  maxStock?: number | null
-  reorderLevel?: number
-  safetyStock?: number
-  unitCost?: number
-  supplier?: string | null
-  location?: string | null
-  photos?: string | null
-  attachments?: string | null
-  technicalDatasheet?: string | null
-  msds?: string | null
-  warranty?: string | null
-  warrantyExpiry?: Date | string | null
-  countryOfOrigin?: string | null
-  hsCode?: string | null
-  tags?: string | null
-  status?: string
-  approvalStatus?: string
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  version?: number
-  hourlyRate?: number | null
-  dailyRate?: number | null
-  overtimeRate?: number | null
-  weekendRate?: number | null
-  publicHolidayRate?: number | null
-  dailyRentalRate?: number | null
-  monthlyRentalRate?: number | null
-  estimatedHours?: number | null
-  requiredSkills?: string | null
-  sop?: string | null
-  remarks?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedCreateNestedManyWithoutInventoryItemInput
-  suppliers?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutItemInput
-  stockMovements?: Prisma.StockMovementUncheckedCreateNestedManyWithoutItemInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutItemInput
-}
-
-export type InventoryItemCreateOrConnectWithoutPriceBookEntriesInput = {
-  where: Prisma.InventoryItemWhereUniqueInput
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutPriceBookEntriesInput, Prisma.InventoryItemUncheckedCreateWithoutPriceBookEntriesInput>
-}
-
-export type InventoryItemUpsertWithoutPriceBookEntriesInput = {
-  update: Prisma.XOR<Prisma.InventoryItemUpdateWithoutPriceBookEntriesInput, Prisma.InventoryItemUncheckedUpdateWithoutPriceBookEntriesInput>
-  create: Prisma.XOR<Prisma.InventoryItemCreateWithoutPriceBookEntriesInput, Prisma.InventoryItemUncheckedCreateWithoutPriceBookEntriesInput>
-  where?: Prisma.InventoryItemWhereInput
-}
-
-export type InventoryItemUpdateToOneWithWhereWithoutPriceBookEntriesInput = {
-  where?: Prisma.InventoryItemWhereInput
-  data: Prisma.XOR<Prisma.InventoryItemUpdateWithoutPriceBookEntriesInput, Prisma.InventoryItemUncheckedUpdateWithoutPriceBookEntriesInput>
-}
-
-export type InventoryItemUpdateWithoutPriceBookEntriesInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
-  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
-  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
-  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  minStock?: Prisma.IntFieldUpdateOperationsInput | number
-  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryNestedInput
-  category?: Prisma.InventoryCategoryUpdateOneWithoutItemsNestedInput
-  subcategory?: Prisma.InventorySubcategoryUpdateOneWithoutItemsNestedInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUpdateManyWithoutItemNestedInput
-}
-
-export type InventoryItemUncheckedUpdateWithoutPriceBookEntriesInput = {
+export type InventoryItemUncheckedUpdateManyWithoutInventoryCategoryInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4791,7 +5126,6 @@ export type InventoryItemUncheckedUpdateWithoutPriceBookEntriesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -4860,14 +5194,340 @@ export type InventoryItemUncheckedUpdateWithoutPriceBookEntriesInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutItemNestedInput
+}
+
+export type InventoryItemCreateManyInventorySubcategoryInput = {
+  id: string
+  tenantId: string
+  itemCode?: string | null
+  sku?: string | null
+  barcode?: string | null
+  qrCode?: string | null
+  name: string
+  shortName?: string | null
+  itemType?: string
+  categoryId?: string | null
+  description?: string | null
+  shortDescription?: string | null
+  brand?: string | null
+  manufacturer?: string | null
+  model?: string | null
+  partNumber?: string | null
+  serialNumber?: string | null
+  unit?: string
+  unitWeight?: number | null
+  dimensions?: string | null
+  purchaseCost?: number
+  averageCost?: number
+  standardCost?: number
+  lastPurchaseCost?: number
+  sellingPrice?: number
+  dealerPrice?: number
+  contractorPrice?: number
+  customerPrice?: number
+  vipPrice?: number
+  internalCost?: number
+  labourCost?: number
+  installationCost?: number
+  serviceCost?: number
+  transportationCost?: number
+  mobilizationCost?: number
+  equipmentRental?: number
+  emergencyCallOut?: number
+  afterHoursCharge?: number
+  weekendCharge?: number
+  publicHolidayCharge?: number
+  currency?: string
+  quantity?: number
+  minStock?: number
+  maxStock?: number | null
+  reorderLevel?: number
+  safetyStock?: number
+  unitCost?: number
+  supplier?: string | null
+  location?: string | null
+  photos?: string | null
+  attachments?: string | null
+  technicalDatasheet?: string | null
+  msds?: string | null
+  warranty?: string | null
+  warrantyExpiry?: Date | string | null
+  countryOfOrigin?: string | null
+  hsCode?: string | null
+  tags?: string | null
+  status?: string
+  approvalStatus?: string
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  version?: number
+  hourlyRate?: number | null
+  dailyRate?: number | null
+  overtimeRate?: number | null
+  weekendRate?: number | null
+  publicHolidayRate?: number | null
+  dailyRentalRate?: number | null
+  monthlyRentalRate?: number | null
+  estimatedHours?: number | null
+  requiredSkills?: string | null
+  sop?: string | null
+  remarks?: string | null
+  isActive?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+}
+
+export type InventoryItemUpdateWithoutInventorySubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
+  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
+  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  inventoryCategory?: Prisma.InventoryCategoryUpdateOneWithoutInventoryItemNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
+}
+
+export type InventoryItemUncheckedUpdateWithoutInventorySubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
+  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
+  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
+}
+
+export type InventoryItemUncheckedUpdateManyWithoutInventorySubcategoryInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  itemType?: Prisma.StringFieldUpdateOperationsInput | string
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  unit?: Prisma.StringFieldUpdateOperationsInput | string
+  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
+  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
+  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
+  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  quantity?: Prisma.IntFieldUpdateOperationsInput | number
+  minStock?: Prisma.IntFieldUpdateOperationsInput | number
+  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
+  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
+  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
+  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type InventoryItemCreateManyTenantInput = {
-  id?: string
+  id: string
   itemCode?: string | null
   sku?: string | null
   barcode?: string | null
@@ -4943,7 +5603,7 @@ export type InventoryItemCreateManyTenantInput = {
   remarks?: string | null
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type InventoryItemUpdateWithoutTenantInput = {
@@ -5022,13 +5682,13 @@ export type InventoryItemUpdateWithoutTenantInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  category?: Prisma.InventoryCategoryUpdateOneWithoutItemsNestedInput
-  subcategory?: Prisma.InventorySubcategoryUpdateOneWithoutItemsNestedInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutItemNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateOneWithoutInventoryItemNestedInput
+  inventoryCategory?: Prisma.InventoryCategoryUpdateOneWithoutInventoryItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateWithoutTenantInput = {
@@ -5109,11 +5769,11 @@ export type InventoryItemUncheckedUpdateWithoutTenantInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutItemNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutInventoryItemNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutInventoryItemNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutInventoryItemNestedInput
+  WorkOrderMaterial?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
 }
 
 export type InventoryItemUncheckedUpdateManyWithoutTenantInput = {
@@ -5196,685 +5856,25 @@ export type InventoryItemUncheckedUpdateManyWithoutTenantInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type InventoryItemCreateManyCategoryInput = {
-  id?: string
-  tenantId: string
-  itemCode?: string | null
-  sku?: string | null
-  barcode?: string | null
-  qrCode?: string | null
-  name: string
-  shortName?: string | null
-  itemType?: string
-  subcategoryId?: string | null
-  description?: string | null
-  shortDescription?: string | null
-  brand?: string | null
-  manufacturer?: string | null
-  model?: string | null
-  partNumber?: string | null
-  serialNumber?: string | null
-  unit?: string
-  unitWeight?: number | null
-  dimensions?: string | null
-  purchaseCost?: number
-  averageCost?: number
-  standardCost?: number
-  lastPurchaseCost?: number
-  sellingPrice?: number
-  dealerPrice?: number
-  contractorPrice?: number
-  customerPrice?: number
-  vipPrice?: number
-  internalCost?: number
-  labourCost?: number
-  installationCost?: number
-  serviceCost?: number
-  transportationCost?: number
-  mobilizationCost?: number
-  equipmentRental?: number
-  emergencyCallOut?: number
-  afterHoursCharge?: number
-  weekendCharge?: number
-  publicHolidayCharge?: number
-  currency?: string
-  quantity?: number
-  minStock?: number
-  maxStock?: number | null
-  reorderLevel?: number
-  safetyStock?: number
-  unitCost?: number
-  supplier?: string | null
-  location?: string | null
-  photos?: string | null
-  attachments?: string | null
-  technicalDatasheet?: string | null
-  msds?: string | null
-  warranty?: string | null
-  warrantyExpiry?: Date | string | null
-  countryOfOrigin?: string | null
-  hsCode?: string | null
-  tags?: string | null
-  status?: string
-  approvalStatus?: string
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  version?: number
-  hourlyRate?: number | null
-  dailyRate?: number | null
-  overtimeRate?: number | null
-  weekendRate?: number | null
-  publicHolidayRate?: number | null
-  dailyRentalRate?: number | null
-  monthlyRentalRate?: number | null
-  estimatedHours?: number | null
-  requiredSkills?: string | null
-  sop?: string | null
-  remarks?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type InventoryItemUpdateWithoutCategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
-  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
-  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
-  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  minStock?: Prisma.IntFieldUpdateOperationsInput | number
-  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryNestedInput
-  subcategory?: Prisma.InventorySubcategoryUpdateOneWithoutItemsNestedInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutItemNestedInput
-}
-
-export type InventoryItemUncheckedUpdateWithoutCategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
-  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
-  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
-  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  minStock?: Prisma.IntFieldUpdateOperationsInput | number
-  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutItemNestedInput
-}
-
-export type InventoryItemUncheckedUpdateManyWithoutCategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  subcategoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
-  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
-  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
-  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  minStock?: Prisma.IntFieldUpdateOperationsInput | number
-  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type InventoryItemCreateManySubcategoryInput = {
-  id?: string
-  tenantId: string
-  itemCode?: string | null
-  sku?: string | null
-  barcode?: string | null
-  qrCode?: string | null
-  name: string
-  shortName?: string | null
-  itemType?: string
-  categoryId?: string | null
-  description?: string | null
-  shortDescription?: string | null
-  brand?: string | null
-  manufacturer?: string | null
-  model?: string | null
-  partNumber?: string | null
-  serialNumber?: string | null
-  unit?: string
-  unitWeight?: number | null
-  dimensions?: string | null
-  purchaseCost?: number
-  averageCost?: number
-  standardCost?: number
-  lastPurchaseCost?: number
-  sellingPrice?: number
-  dealerPrice?: number
-  contractorPrice?: number
-  customerPrice?: number
-  vipPrice?: number
-  internalCost?: number
-  labourCost?: number
-  installationCost?: number
-  serviceCost?: number
-  transportationCost?: number
-  mobilizationCost?: number
-  equipmentRental?: number
-  emergencyCallOut?: number
-  afterHoursCharge?: number
-  weekendCharge?: number
-  publicHolidayCharge?: number
-  currency?: string
-  quantity?: number
-  minStock?: number
-  maxStock?: number | null
-  reorderLevel?: number
-  safetyStock?: number
-  unitCost?: number
-  supplier?: string | null
-  location?: string | null
-  photos?: string | null
-  attachments?: string | null
-  technicalDatasheet?: string | null
-  msds?: string | null
-  warranty?: string | null
-  warrantyExpiry?: Date | string | null
-  countryOfOrigin?: string | null
-  hsCode?: string | null
-  tags?: string | null
-  status?: string
-  approvalStatus?: string
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  version?: number
-  hourlyRate?: number | null
-  dailyRate?: number | null
-  overtimeRate?: number | null
-  weekendRate?: number | null
-  publicHolidayRate?: number | null
-  dailyRentalRate?: number | null
-  monthlyRentalRate?: number | null
-  estimatedHours?: number | null
-  requiredSkills?: string | null
-  sop?: string | null
-  remarks?: string | null
-  isActive?: boolean
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type InventoryItemUpdateWithoutSubcategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
-  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
-  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
-  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  minStock?: Prisma.IntFieldUpdateOperationsInput | number
-  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutInventoryNestedInput
-  category?: Prisma.InventoryCategoryUpdateOneWithoutItemsNestedInput
-  workOrderMaterials?: Prisma.WorkOrderMaterialUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUpdateManyWithoutItemNestedInput
-}
-
-export type InventoryItemUncheckedUpdateWithoutSubcategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
-  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
-  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
-  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  minStock?: Prisma.IntFieldUpdateOperationsInput | number
-  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  workOrderMaterials?: Prisma.WorkOrderMaterialUncheckedUpdateManyWithoutInventoryItemNestedInput
-  suppliers?: Prisma.ItemSupplierUncheckedUpdateManyWithoutItemNestedInput
-  stockMovements?: Prisma.StockMovementUncheckedUpdateManyWithoutItemNestedInput
-  warehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutItemNestedInput
-  priceBookEntries?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutItemNestedInput
-}
-
-export type InventoryItemUncheckedUpdateManyWithoutSubcategoryInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  itemCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sku?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  barcode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  qrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  shortName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  itemType?: Prisma.StringFieldUpdateOperationsInput | string
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  brand?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  manufacturer?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  model?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  partNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  serialNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  unit?: Prisma.StringFieldUpdateOperationsInput | string
-  unitWeight?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dimensions?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  purchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  averageCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  standardCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  lastPurchaseCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  sellingPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  dealerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  contractorPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  customerPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  vipPrice?: Prisma.FloatFieldUpdateOperationsInput | number
-  internalCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  labourCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  installationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  serviceCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  transportationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  mobilizationCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  equipmentRental?: Prisma.FloatFieldUpdateOperationsInput | number
-  emergencyCallOut?: Prisma.FloatFieldUpdateOperationsInput | number
-  afterHoursCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  weekendCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  publicHolidayCharge?: Prisma.FloatFieldUpdateOperationsInput | number
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  minStock?: Prisma.IntFieldUpdateOperationsInput | number
-  maxStock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  reorderLevel?: Prisma.IntFieldUpdateOperationsInput | number
-  safetyStock?: Prisma.IntFieldUpdateOperationsInput | number
-  unitCost?: Prisma.FloatFieldUpdateOperationsInput | number
-  supplier?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  attachments?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  technicalDatasheet?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  msds?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warranty?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  warrantyExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  countryOfOrigin?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  hsCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  tags?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  approvalStatus?: Prisma.StringFieldUpdateOperationsInput | string
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  overtimeRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  weekendRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  publicHolidayRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  dailyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  monthlyRentalRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  estimatedHours?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
-  requiredSkills?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  sop?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  remarks?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
 
 /**
  * Count Type InventoryItemCountOutputType
  */
 
 export type InventoryItemCountOutputType = {
-  workOrderMaterials: number
-  suppliers: number
-  stockMovements: number
-  warehouseStock: number
-  priceBookEntries: number
+  ItemSupplier: number
+  PriceBookEntry: number
+  StockMovement: number
+  WarehouseStock: number
+  WorkOrderMaterial: number
 }
 
 export type InventoryItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  workOrderMaterials?: boolean | InventoryItemCountOutputTypeCountWorkOrderMaterialsArgs
-  suppliers?: boolean | InventoryItemCountOutputTypeCountSuppliersArgs
-  stockMovements?: boolean | InventoryItemCountOutputTypeCountStockMovementsArgs
-  warehouseStock?: boolean | InventoryItemCountOutputTypeCountWarehouseStockArgs
-  priceBookEntries?: boolean | InventoryItemCountOutputTypeCountPriceBookEntriesArgs
+  ItemSupplier?: boolean | InventoryItemCountOutputTypeCountItemSupplierArgs
+  PriceBookEntry?: boolean | InventoryItemCountOutputTypeCountPriceBookEntryArgs
+  StockMovement?: boolean | InventoryItemCountOutputTypeCountStockMovementArgs
+  WarehouseStock?: boolean | InventoryItemCountOutputTypeCountWarehouseStockArgs
+  WorkOrderMaterial?: boolean | InventoryItemCountOutputTypeCountWorkOrderMaterialArgs
 }
 
 /**
@@ -5890,21 +5890,21 @@ export type InventoryItemCountOutputTypeDefaultArgs<ExtArgs extends runtime.Type
 /**
  * InventoryItemCountOutputType without action
  */
-export type InventoryItemCountOutputTypeCountWorkOrderMaterialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.WorkOrderMaterialWhereInput
-}
-
-/**
- * InventoryItemCountOutputType without action
- */
-export type InventoryItemCountOutputTypeCountSuppliersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type InventoryItemCountOutputTypeCountItemSupplierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ItemSupplierWhereInput
 }
 
 /**
  * InventoryItemCountOutputType without action
  */
-export type InventoryItemCountOutputTypeCountStockMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type InventoryItemCountOutputTypeCountPriceBookEntryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PriceBookEntryWhereInput
+}
+
+/**
+ * InventoryItemCountOutputType without action
+ */
+export type InventoryItemCountOutputTypeCountStockMovementArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.StockMovementWhereInput
 }
 
@@ -5918,8 +5918,8 @@ export type InventoryItemCountOutputTypeCountWarehouseStockArgs<ExtArgs extends 
 /**
  * InventoryItemCountOutputType without action
  */
-export type InventoryItemCountOutputTypeCountPriceBookEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  where?: Prisma.PriceBookEntryWhereInput
+export type InventoryItemCountOutputTypeCountWorkOrderMaterialArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.WorkOrderMaterialWhereInput
 }
 
 
@@ -6002,14 +6002,14 @@ export type InventoryItemSelect<ExtArgs extends runtime.Types.Extensions.Interna
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  InventorySubcategory?: boolean | Prisma.InventoryItem$InventorySubcategoryArgs<ExtArgs>
+  inventoryCategory?: boolean | Prisma.InventoryItem$inventoryCategoryArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.InventoryItem$categoryArgs<ExtArgs>
-  subcategory?: boolean | Prisma.InventoryItem$subcategoryArgs<ExtArgs>
-  workOrderMaterials?: boolean | Prisma.InventoryItem$workOrderMaterialsArgs<ExtArgs>
-  suppliers?: boolean | Prisma.InventoryItem$suppliersArgs<ExtArgs>
-  stockMovements?: boolean | Prisma.InventoryItem$stockMovementsArgs<ExtArgs>
-  warehouseStock?: boolean | Prisma.InventoryItem$warehouseStockArgs<ExtArgs>
-  priceBookEntries?: boolean | Prisma.InventoryItem$priceBookEntriesArgs<ExtArgs>
+  ItemSupplier?: boolean | Prisma.InventoryItem$ItemSupplierArgs<ExtArgs>
+  PriceBookEntry?: boolean | Prisma.InventoryItem$PriceBookEntryArgs<ExtArgs>
+  StockMovement?: boolean | Prisma.InventoryItem$StockMovementArgs<ExtArgs>
+  WarehouseStock?: boolean | Prisma.InventoryItem$WarehouseStockArgs<ExtArgs>
+  WorkOrderMaterial?: boolean | Prisma.InventoryItem$WorkOrderMaterialArgs<ExtArgs>
   _count?: boolean | Prisma.InventoryItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["inventoryItem"]>
 
@@ -6092,9 +6092,9 @@ export type InventoryItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  InventorySubcategory?: boolean | Prisma.InventoryItem$InventorySubcategoryArgs<ExtArgs>
+  inventoryCategory?: boolean | Prisma.InventoryItem$inventoryCategoryArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.InventoryItem$categoryArgs<ExtArgs>
-  subcategory?: boolean | Prisma.InventoryItem$subcategoryArgs<ExtArgs>
 }, ExtArgs["result"]["inventoryItem"]>
 
 export type InventoryItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -6176,9 +6176,9 @@ export type InventoryItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   isActive?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  InventorySubcategory?: boolean | Prisma.InventoryItem$InventorySubcategoryArgs<ExtArgs>
+  inventoryCategory?: boolean | Prisma.InventoryItem$inventoryCategoryArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.InventoryItem$categoryArgs<ExtArgs>
-  subcategory?: boolean | Prisma.InventoryItem$subcategoryArgs<ExtArgs>
 }, ExtArgs["result"]["inventoryItem"]>
 
 export type InventoryItemSelectScalar = {
@@ -6264,38 +6264,38 @@ export type InventoryItemSelectScalar = {
 
 export type InventoryItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "itemCode" | "sku" | "barcode" | "qrCode" | "name" | "shortName" | "itemType" | "categoryId" | "subcategoryId" | "description" | "shortDescription" | "brand" | "manufacturer" | "model" | "partNumber" | "serialNumber" | "unit" | "unitWeight" | "dimensions" | "purchaseCost" | "averageCost" | "standardCost" | "lastPurchaseCost" | "sellingPrice" | "dealerPrice" | "contractorPrice" | "customerPrice" | "vipPrice" | "internalCost" | "labourCost" | "installationCost" | "serviceCost" | "transportationCost" | "mobilizationCost" | "equipmentRental" | "emergencyCallOut" | "afterHoursCharge" | "weekendCharge" | "publicHolidayCharge" | "currency" | "quantity" | "minStock" | "maxStock" | "reorderLevel" | "safetyStock" | "unitCost" | "supplier" | "location" | "photos" | "attachments" | "technicalDatasheet" | "msds" | "warranty" | "warrantyExpiry" | "countryOfOrigin" | "hsCode" | "tags" | "status" | "approvalStatus" | "approvedBy" | "approvedAt" | "version" | "hourlyRate" | "dailyRate" | "overtimeRate" | "weekendRate" | "publicHolidayRate" | "dailyRentalRate" | "monthlyRentalRate" | "estimatedHours" | "requiredSkills" | "sop" | "remarks" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["inventoryItem"]>
 export type InventoryItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  InventorySubcategory?: boolean | Prisma.InventoryItem$InventorySubcategoryArgs<ExtArgs>
+  inventoryCategory?: boolean | Prisma.InventoryItem$inventoryCategoryArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.InventoryItem$categoryArgs<ExtArgs>
-  subcategory?: boolean | Prisma.InventoryItem$subcategoryArgs<ExtArgs>
-  workOrderMaterials?: boolean | Prisma.InventoryItem$workOrderMaterialsArgs<ExtArgs>
-  suppliers?: boolean | Prisma.InventoryItem$suppliersArgs<ExtArgs>
-  stockMovements?: boolean | Prisma.InventoryItem$stockMovementsArgs<ExtArgs>
-  warehouseStock?: boolean | Prisma.InventoryItem$warehouseStockArgs<ExtArgs>
-  priceBookEntries?: boolean | Prisma.InventoryItem$priceBookEntriesArgs<ExtArgs>
+  ItemSupplier?: boolean | Prisma.InventoryItem$ItemSupplierArgs<ExtArgs>
+  PriceBookEntry?: boolean | Prisma.InventoryItem$PriceBookEntryArgs<ExtArgs>
+  StockMovement?: boolean | Prisma.InventoryItem$StockMovementArgs<ExtArgs>
+  WarehouseStock?: boolean | Prisma.InventoryItem$WarehouseStockArgs<ExtArgs>
+  WorkOrderMaterial?: boolean | Prisma.InventoryItem$WorkOrderMaterialArgs<ExtArgs>
   _count?: boolean | Prisma.InventoryItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type InventoryItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  InventorySubcategory?: boolean | Prisma.InventoryItem$InventorySubcategoryArgs<ExtArgs>
+  inventoryCategory?: boolean | Prisma.InventoryItem$inventoryCategoryArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.InventoryItem$categoryArgs<ExtArgs>
-  subcategory?: boolean | Prisma.InventoryItem$subcategoryArgs<ExtArgs>
 }
 export type InventoryItemIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  InventorySubcategory?: boolean | Prisma.InventoryItem$InventorySubcategoryArgs<ExtArgs>
+  inventoryCategory?: boolean | Prisma.InventoryItem$inventoryCategoryArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
-  category?: boolean | Prisma.InventoryItem$categoryArgs<ExtArgs>
-  subcategory?: boolean | Prisma.InventoryItem$subcategoryArgs<ExtArgs>
 }
 
 export type $InventoryItemPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "InventoryItem"
   objects: {
+    InventorySubcategory: Prisma.$InventorySubcategoryPayload<ExtArgs> | null
+    inventoryCategory: Prisma.$InventoryCategoryPayload<ExtArgs> | null
     tenant: Prisma.$TenantPayload<ExtArgs>
-    category: Prisma.$InventoryCategoryPayload<ExtArgs> | null
-    subcategory: Prisma.$InventorySubcategoryPayload<ExtArgs> | null
-    workOrderMaterials: Prisma.$WorkOrderMaterialPayload<ExtArgs>[]
-    suppliers: Prisma.$ItemSupplierPayload<ExtArgs>[]
-    stockMovements: Prisma.$StockMovementPayload<ExtArgs>[]
-    warehouseStock: Prisma.$WarehouseStockPayload<ExtArgs>[]
-    priceBookEntries: Prisma.$PriceBookEntryPayload<ExtArgs>[]
+    ItemSupplier: Prisma.$ItemSupplierPayload<ExtArgs>[]
+    PriceBookEntry: Prisma.$PriceBookEntryPayload<ExtArgs>[]
+    StockMovement: Prisma.$StockMovementPayload<ExtArgs>[]
+    WarehouseStock: Prisma.$WarehouseStockPayload<ExtArgs>[]
+    WorkOrderMaterial: Prisma.$WorkOrderMaterialPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -6770,14 +6770,14 @@ readonly fields: InventoryItemFieldRefs;
  */
 export interface Prisma__InventoryItemClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  InventorySubcategory<T extends Prisma.InventoryItem$InventorySubcategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$InventorySubcategoryArgs<ExtArgs>>): Prisma.Prisma__InventorySubcategoryClient<runtime.Types.Result.GetResult<Prisma.$InventorySubcategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  inventoryCategory<T extends Prisma.InventoryItem$inventoryCategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$inventoryCategoryArgs<ExtArgs>>): Prisma.Prisma__InventoryCategoryClient<runtime.Types.Result.GetResult<Prisma.$InventoryCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  category<T extends Prisma.InventoryItem$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$categoryArgs<ExtArgs>>): Prisma.Prisma__InventoryCategoryClient<runtime.Types.Result.GetResult<Prisma.$InventoryCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  subcategory<T extends Prisma.InventoryItem$subcategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$subcategoryArgs<ExtArgs>>): Prisma.Prisma__InventorySubcategoryClient<runtime.Types.Result.GetResult<Prisma.$InventorySubcategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  workOrderMaterials<T extends Prisma.InventoryItem$workOrderMaterialsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$workOrderMaterialsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  suppliers<T extends Prisma.InventoryItem$suppliersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$suppliersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  stockMovements<T extends Prisma.InventoryItem$stockMovementsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$stockMovementsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  warehouseStock<T extends Prisma.InventoryItem$warehouseStockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$warehouseStockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WarehouseStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-  priceBookEntries<T extends Prisma.InventoryItem$priceBookEntriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$priceBookEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PriceBookEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ItemSupplier<T extends Prisma.InventoryItem$ItemSupplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$ItemSupplierArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  PriceBookEntry<T extends Prisma.InventoryItem$PriceBookEntryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$PriceBookEntryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PriceBookEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  StockMovement<T extends Prisma.InventoryItem$StockMovementArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$StockMovementArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StockMovementPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WarehouseStock<T extends Prisma.InventoryItem$WarehouseStockArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$WarehouseStockArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WarehouseStockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  WorkOrderMaterial<T extends Prisma.InventoryItem$WorkOrderMaterialArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.InventoryItem$WorkOrderMaterialArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderMaterialPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7284,28 +7284,9 @@ export type InventoryItemDeleteManyArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * InventoryItem.category
+ * InventoryItem.InventorySubcategory
  */
-export type InventoryItem$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the InventoryCategory
-   */
-  select?: Prisma.InventoryCategorySelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the InventoryCategory
-   */
-  omit?: Prisma.InventoryCategoryOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.InventoryCategoryInclude<ExtArgs> | null
-  where?: Prisma.InventoryCategoryWhereInput
-}
-
-/**
- * InventoryItem.subcategory
- */
-export type InventoryItem$subcategoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type InventoryItem$InventorySubcategoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the InventorySubcategory
    */
@@ -7322,33 +7303,28 @@ export type InventoryItem$subcategoryArgs<ExtArgs extends runtime.Types.Extensio
 }
 
 /**
- * InventoryItem.workOrderMaterials
+ * InventoryItem.inventoryCategory
  */
-export type InventoryItem$workOrderMaterialsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type InventoryItem$inventoryCategoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the WorkOrderMaterial
+   * Select specific fields to fetch from the InventoryCategory
    */
-  select?: Prisma.WorkOrderMaterialSelect<ExtArgs> | null
+  select?: Prisma.InventoryCategorySelect<ExtArgs> | null
   /**
-   * Omit specific fields from the WorkOrderMaterial
+   * Omit specific fields from the InventoryCategory
    */
-  omit?: Prisma.WorkOrderMaterialOmit<ExtArgs> | null
+  omit?: Prisma.InventoryCategoryOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.WorkOrderMaterialInclude<ExtArgs> | null
-  where?: Prisma.WorkOrderMaterialWhereInput
-  orderBy?: Prisma.WorkOrderMaterialOrderByWithRelationInput | Prisma.WorkOrderMaterialOrderByWithRelationInput[]
-  cursor?: Prisma.WorkOrderMaterialWhereUniqueInput
-  take?: number
-  skip?: number
-  distinct?: Prisma.WorkOrderMaterialScalarFieldEnum | Prisma.WorkOrderMaterialScalarFieldEnum[]
+  include?: Prisma.InventoryCategoryInclude<ExtArgs> | null
+  where?: Prisma.InventoryCategoryWhereInput
 }
 
 /**
- * InventoryItem.suppliers
+ * InventoryItem.ItemSupplier
  */
-export type InventoryItem$suppliersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type InventoryItem$ItemSupplierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the ItemSupplier
    */
@@ -7370,9 +7346,33 @@ export type InventoryItem$suppliersArgs<ExtArgs extends runtime.Types.Extensions
 }
 
 /**
- * InventoryItem.stockMovements
+ * InventoryItem.PriceBookEntry
  */
-export type InventoryItem$stockMovementsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type InventoryItem$PriceBookEntryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PriceBookEntry
+   */
+  select?: Prisma.PriceBookEntrySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PriceBookEntry
+   */
+  omit?: Prisma.PriceBookEntryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PriceBookEntryInclude<ExtArgs> | null
+  where?: Prisma.PriceBookEntryWhereInput
+  orderBy?: Prisma.PriceBookEntryOrderByWithRelationInput | Prisma.PriceBookEntryOrderByWithRelationInput[]
+  cursor?: Prisma.PriceBookEntryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PriceBookEntryScalarFieldEnum | Prisma.PriceBookEntryScalarFieldEnum[]
+}
+
+/**
+ * InventoryItem.StockMovement
+ */
+export type InventoryItem$StockMovementArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the StockMovement
    */
@@ -7394,9 +7394,9 @@ export type InventoryItem$stockMovementsArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * InventoryItem.warehouseStock
+ * InventoryItem.WarehouseStock
  */
-export type InventoryItem$warehouseStockArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type InventoryItem$WarehouseStockArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the WarehouseStock
    */
@@ -7418,27 +7418,27 @@ export type InventoryItem$warehouseStockArgs<ExtArgs extends runtime.Types.Exten
 }
 
 /**
- * InventoryItem.priceBookEntries
+ * InventoryItem.WorkOrderMaterial
  */
-export type InventoryItem$priceBookEntriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type InventoryItem$WorkOrderMaterialArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
-   * Select specific fields to fetch from the PriceBookEntry
+   * Select specific fields to fetch from the WorkOrderMaterial
    */
-  select?: Prisma.PriceBookEntrySelect<ExtArgs> | null
+  select?: Prisma.WorkOrderMaterialSelect<ExtArgs> | null
   /**
-   * Omit specific fields from the PriceBookEntry
+   * Omit specific fields from the WorkOrderMaterial
    */
-  omit?: Prisma.PriceBookEntryOmit<ExtArgs> | null
+  omit?: Prisma.WorkOrderMaterialOmit<ExtArgs> | null
   /**
    * Choose, which related nodes to fetch as well
    */
-  include?: Prisma.PriceBookEntryInclude<ExtArgs> | null
-  where?: Prisma.PriceBookEntryWhereInput
-  orderBy?: Prisma.PriceBookEntryOrderByWithRelationInput | Prisma.PriceBookEntryOrderByWithRelationInput[]
-  cursor?: Prisma.PriceBookEntryWhereUniqueInput
+  include?: Prisma.WorkOrderMaterialInclude<ExtArgs> | null
+  where?: Prisma.WorkOrderMaterialWhereInput
+  orderBy?: Prisma.WorkOrderMaterialOrderByWithRelationInput | Prisma.WorkOrderMaterialOrderByWithRelationInput[]
+  cursor?: Prisma.WorkOrderMaterialWhereUniqueInput
   take?: number
   skip?: number
-  distinct?: Prisma.PriceBookEntryScalarFieldEnum | Prisma.PriceBookEntryScalarFieldEnum[]
+  distinct?: Prisma.WorkOrderMaterialScalarFieldEnum | Prisma.WorkOrderMaterialScalarFieldEnum[]
 }
 
 /**

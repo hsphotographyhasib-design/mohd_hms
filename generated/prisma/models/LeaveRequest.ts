@@ -358,7 +358,7 @@ export type LeaveRequestScalarWhereWithAggregatesInput = {
 }
 
 export type LeaveRequestCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   userId: string
   type: string
@@ -370,11 +370,11 @@ export type LeaveRequestCreateInput = {
   approvedBy?: string | null
   approvedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type LeaveRequestUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   userId: string
   type: string
@@ -386,7 +386,7 @@ export type LeaveRequestUncheckedCreateInput = {
   approvedBy?: string | null
   approvedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type LeaveRequestUpdateInput = {
@@ -422,7 +422,7 @@ export type LeaveRequestUncheckedUpdateInput = {
 }
 
 export type LeaveRequestCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   userId: string
   type: string
@@ -434,7 +434,7 @@ export type LeaveRequestCreateManyInput = {
   approvedBy?: string | null
   approvedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type LeaveRequestUpdateManyMutationInput = {

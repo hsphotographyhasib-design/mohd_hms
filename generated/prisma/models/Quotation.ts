@@ -436,10 +436,10 @@ export type QuotationWhereInput = {
   notes?: Prisma.StringNullableFilter<"Quotation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Quotation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Quotation"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  Invoice?: Prisma.InvoiceListRelationFilter
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
-  preparedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  invoices?: Prisma.InvoiceListRelationFilter
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type QuotationOrderByWithRelationInput = {
@@ -473,10 +473,10 @@ export type QuotationOrderByWithRelationInput = {
   notes?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  Invoice?: Prisma.InvoiceOrderByRelationAggregateInput
+  user?: Prisma.UserOrderByWithRelationInput
   customer?: Prisma.CustomerOrderByWithRelationInput
-  preparedByUser?: Prisma.UserOrderByWithRelationInput
-  invoices?: Prisma.InvoiceOrderByRelationAggregateInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type QuotationWhereUniqueInput = Prisma.AtLeast<{
@@ -513,10 +513,10 @@ export type QuotationWhereUniqueInput = Prisma.AtLeast<{
   notes?: Prisma.StringNullableFilter<"Quotation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Quotation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Quotation"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  Invoice?: Prisma.InvoiceListRelationFilter
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   customer?: Prisma.XOR<Prisma.CustomerScalarRelationFilter, Prisma.CustomerWhereInput>
-  preparedByUser?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
-  invoices?: Prisma.InvoiceListRelationFilter
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id">
 
 export type QuotationOrderByWithAggregationInput = {
@@ -594,7 +594,7 @@ export type QuotationScalarWhereWithAggregatesInput = {
 }
 
 export type QuotationCreateInput = {
-  id?: string
+  id: string
   complaintId?: string | null
   quotationNo?: string | null
   title: string
@@ -620,15 +620,15 @@ export type QuotationCreateInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutQuotationsInput
-  customer: Prisma.CustomerCreateNestedOneWithoutQuotationsInput
-  preparedByUser?: Prisma.UserCreateNestedOneWithoutPreparedQuotationsInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
+  updatedAt: Date | string
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
+  user?: Prisma.UserCreateNestedOneWithoutQuotationInput
+  customer: Prisma.CustomerCreateNestedOneWithoutQuotationInput
+  tenant: Prisma.TenantCreateNestedOneWithoutQuotationInput
 }
 
 export type QuotationUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   customerId: string
   complaintId?: string | null
@@ -657,8 +657,8 @@ export type QuotationUncheckedCreateInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
+  updatedAt: Date | string
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
 export type QuotationUpdateInput = {
@@ -689,10 +689,10 @@ export type QuotationUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutQuotationsNestedInput
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutQuotationsNestedInput
-  preparedByUser?: Prisma.UserUpdateOneWithoutPreparedQuotationsNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+  user?: Prisma.UserUpdateOneWithoutQuotationNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutQuotationNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateInput = {
@@ -726,11 +726,11 @@ export type QuotationUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   customerId: string
   complaintId?: string | null
@@ -759,7 +759,7 @@ export type QuotationCreateManyInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type QuotationUpdateManyMutationInput = {
@@ -833,6 +833,11 @@ export type QuotationListRelationFilter = {
 
 export type QuotationOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type QuotationNullableScalarRelationFilter = {
+  is?: Prisma.QuotationWhereInput | null
+  isNot?: Prisma.QuotationWhereInput | null
 }
 
 export type QuotationCountOrderByAggregateInput = {
@@ -952,9 +957,62 @@ export type QuotationSumOrderByAggregateInput = {
   total?: Prisma.SortOrder
 }
 
-export type QuotationNullableScalarRelationFilter = {
-  is?: Prisma.QuotationWhereInput | null
-  isNot?: Prisma.QuotationWhereInput | null
+export type QuotationCreateNestedManyWithoutCustomerInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput> | Prisma.QuotationCreateWithoutCustomerInput[] | Prisma.QuotationUncheckedCreateWithoutCustomerInput[]
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutCustomerInput | Prisma.QuotationCreateOrConnectWithoutCustomerInput[]
+  createMany?: Prisma.QuotationCreateManyCustomerInputEnvelope
+  connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+}
+
+export type QuotationUncheckedCreateNestedManyWithoutCustomerInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput> | Prisma.QuotationCreateWithoutCustomerInput[] | Prisma.QuotationUncheckedCreateWithoutCustomerInput[]
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutCustomerInput | Prisma.QuotationCreateOrConnectWithoutCustomerInput[]
+  createMany?: Prisma.QuotationCreateManyCustomerInputEnvelope
+  connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+}
+
+export type QuotationUpdateManyWithoutCustomerNestedInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput> | Prisma.QuotationCreateWithoutCustomerInput[] | Prisma.QuotationUncheckedCreateWithoutCustomerInput[]
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutCustomerInput | Prisma.QuotationCreateOrConnectWithoutCustomerInput[]
+  upsert?: Prisma.QuotationUpsertWithWhereUniqueWithoutCustomerInput | Prisma.QuotationUpsertWithWhereUniqueWithoutCustomerInput[]
+  createMany?: Prisma.QuotationCreateManyCustomerInputEnvelope
+  set?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+  disconnect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+  delete?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+  connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+  update?: Prisma.QuotationUpdateWithWhereUniqueWithoutCustomerInput | Prisma.QuotationUpdateWithWhereUniqueWithoutCustomerInput[]
+  updateMany?: Prisma.QuotationUpdateManyWithWhereWithoutCustomerInput | Prisma.QuotationUpdateManyWithWhereWithoutCustomerInput[]
+  deleteMany?: Prisma.QuotationScalarWhereInput | Prisma.QuotationScalarWhereInput[]
+}
+
+export type QuotationUncheckedUpdateManyWithoutCustomerNestedInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput> | Prisma.QuotationCreateWithoutCustomerInput[] | Prisma.QuotationUncheckedCreateWithoutCustomerInput[]
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutCustomerInput | Prisma.QuotationCreateOrConnectWithoutCustomerInput[]
+  upsert?: Prisma.QuotationUpsertWithWhereUniqueWithoutCustomerInput | Prisma.QuotationUpsertWithWhereUniqueWithoutCustomerInput[]
+  createMany?: Prisma.QuotationCreateManyCustomerInputEnvelope
+  set?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+  disconnect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+  delete?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+  connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
+  update?: Prisma.QuotationUpdateWithWhereUniqueWithoutCustomerInput | Prisma.QuotationUpdateWithWhereUniqueWithoutCustomerInput[]
+  updateMany?: Prisma.QuotationUpdateManyWithWhereWithoutCustomerInput | Prisma.QuotationUpdateManyWithWhereWithoutCustomerInput[]
+  deleteMany?: Prisma.QuotationScalarWhereInput | Prisma.QuotationScalarWhereInput[]
+}
+
+export type QuotationCreateNestedOneWithoutInvoiceInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutInvoiceInput, Prisma.QuotationUncheckedCreateWithoutInvoiceInput>
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutInvoiceInput
+  connect?: Prisma.QuotationWhereUniqueInput
+}
+
+export type QuotationUpdateOneWithoutInvoiceNestedInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutInvoiceInput, Prisma.QuotationUncheckedCreateWithoutInvoiceInput>
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutInvoiceInput
+  upsert?: Prisma.QuotationUpsertWithoutInvoiceInput
+  disconnect?: Prisma.QuotationWhereInput | boolean
+  delete?: Prisma.QuotationWhereInput | boolean
+  connect?: Prisma.QuotationWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.QuotationUpdateToOneWithWhereWithoutInvoiceInput, Prisma.QuotationUpdateWithoutInvoiceInput>, Prisma.QuotationUncheckedUpdateWithoutInvoiceInput>
 }
 
 export type QuotationCreateNestedManyWithoutTenantInput = {
@@ -999,108 +1057,50 @@ export type QuotationUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.QuotationScalarWhereInput | Prisma.QuotationScalarWhereInput[]
 }
 
-export type QuotationCreateNestedManyWithoutPreparedByUserInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutPreparedByUserInput, Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput> | Prisma.QuotationCreateWithoutPreparedByUserInput[] | Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput[]
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutPreparedByUserInput | Prisma.QuotationCreateOrConnectWithoutPreparedByUserInput[]
-  createMany?: Prisma.QuotationCreateManyPreparedByUserInputEnvelope
+export type QuotationCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutUserInput, Prisma.QuotationUncheckedCreateWithoutUserInput> | Prisma.QuotationCreateWithoutUserInput[] | Prisma.QuotationUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutUserInput | Prisma.QuotationCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.QuotationCreateManyUserInputEnvelope
   connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
 }
 
-export type QuotationUncheckedCreateNestedManyWithoutPreparedByUserInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutPreparedByUserInput, Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput> | Prisma.QuotationCreateWithoutPreparedByUserInput[] | Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput[]
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutPreparedByUserInput | Prisma.QuotationCreateOrConnectWithoutPreparedByUserInput[]
-  createMany?: Prisma.QuotationCreateManyPreparedByUserInputEnvelope
+export type QuotationUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutUserInput, Prisma.QuotationUncheckedCreateWithoutUserInput> | Prisma.QuotationCreateWithoutUserInput[] | Prisma.QuotationUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutUserInput | Prisma.QuotationCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.QuotationCreateManyUserInputEnvelope
   connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
 }
 
-export type QuotationUpdateManyWithoutPreparedByUserNestedInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutPreparedByUserInput, Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput> | Prisma.QuotationCreateWithoutPreparedByUserInput[] | Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput[]
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutPreparedByUserInput | Prisma.QuotationCreateOrConnectWithoutPreparedByUserInput[]
-  upsert?: Prisma.QuotationUpsertWithWhereUniqueWithoutPreparedByUserInput | Prisma.QuotationUpsertWithWhereUniqueWithoutPreparedByUserInput[]
-  createMany?: Prisma.QuotationCreateManyPreparedByUserInputEnvelope
+export type QuotationUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutUserInput, Prisma.QuotationUncheckedCreateWithoutUserInput> | Prisma.QuotationCreateWithoutUserInput[] | Prisma.QuotationUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutUserInput | Prisma.QuotationCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.QuotationUpsertWithWhereUniqueWithoutUserInput | Prisma.QuotationUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.QuotationCreateManyUserInputEnvelope
   set?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
   disconnect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
   delete?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
   connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  update?: Prisma.QuotationUpdateWithWhereUniqueWithoutPreparedByUserInput | Prisma.QuotationUpdateWithWhereUniqueWithoutPreparedByUserInput[]
-  updateMany?: Prisma.QuotationUpdateManyWithWhereWithoutPreparedByUserInput | Prisma.QuotationUpdateManyWithWhereWithoutPreparedByUserInput[]
+  update?: Prisma.QuotationUpdateWithWhereUniqueWithoutUserInput | Prisma.QuotationUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.QuotationUpdateManyWithWhereWithoutUserInput | Prisma.QuotationUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.QuotationScalarWhereInput | Prisma.QuotationScalarWhereInput[]
 }
 
-export type QuotationUncheckedUpdateManyWithoutPreparedByUserNestedInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutPreparedByUserInput, Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput> | Prisma.QuotationCreateWithoutPreparedByUserInput[] | Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput[]
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutPreparedByUserInput | Prisma.QuotationCreateOrConnectWithoutPreparedByUserInput[]
-  upsert?: Prisma.QuotationUpsertWithWhereUniqueWithoutPreparedByUserInput | Prisma.QuotationUpsertWithWhereUniqueWithoutPreparedByUserInput[]
-  createMany?: Prisma.QuotationCreateManyPreparedByUserInputEnvelope
+export type QuotationUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.QuotationCreateWithoutUserInput, Prisma.QuotationUncheckedCreateWithoutUserInput> | Prisma.QuotationCreateWithoutUserInput[] | Prisma.QuotationUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutUserInput | Prisma.QuotationCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.QuotationUpsertWithWhereUniqueWithoutUserInput | Prisma.QuotationUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.QuotationCreateManyUserInputEnvelope
   set?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
   disconnect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
   delete?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
   connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  update?: Prisma.QuotationUpdateWithWhereUniqueWithoutPreparedByUserInput | Prisma.QuotationUpdateWithWhereUniqueWithoutPreparedByUserInput[]
-  updateMany?: Prisma.QuotationUpdateManyWithWhereWithoutPreparedByUserInput | Prisma.QuotationUpdateManyWithWhereWithoutPreparedByUserInput[]
+  update?: Prisma.QuotationUpdateWithWhereUniqueWithoutUserInput | Prisma.QuotationUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.QuotationUpdateManyWithWhereWithoutUserInput | Prisma.QuotationUpdateManyWithWhereWithoutUserInput[]
   deleteMany?: Prisma.QuotationScalarWhereInput | Prisma.QuotationScalarWhereInput[]
 }
 
-export type QuotationCreateNestedManyWithoutCustomerInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput> | Prisma.QuotationCreateWithoutCustomerInput[] | Prisma.QuotationUncheckedCreateWithoutCustomerInput[]
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutCustomerInput | Prisma.QuotationCreateOrConnectWithoutCustomerInput[]
-  createMany?: Prisma.QuotationCreateManyCustomerInputEnvelope
-  connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-}
-
-export type QuotationUncheckedCreateNestedManyWithoutCustomerInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput> | Prisma.QuotationCreateWithoutCustomerInput[] | Prisma.QuotationUncheckedCreateWithoutCustomerInput[]
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutCustomerInput | Prisma.QuotationCreateOrConnectWithoutCustomerInput[]
-  createMany?: Prisma.QuotationCreateManyCustomerInputEnvelope
-  connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-}
-
-export type QuotationUpdateManyWithoutCustomerNestedInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput> | Prisma.QuotationCreateWithoutCustomerInput[] | Prisma.QuotationUncheckedCreateWithoutCustomerInput[]
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutCustomerInput | Prisma.QuotationCreateOrConnectWithoutCustomerInput[]
-  upsert?: Prisma.QuotationUpsertWithWhereUniqueWithoutCustomerInput | Prisma.QuotationUpsertWithWhereUniqueWithoutCustomerInput[]
-  createMany?: Prisma.QuotationCreateManyCustomerInputEnvelope
-  set?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  disconnect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  delete?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  update?: Prisma.QuotationUpdateWithWhereUniqueWithoutCustomerInput | Prisma.QuotationUpdateWithWhereUniqueWithoutCustomerInput[]
-  updateMany?: Prisma.QuotationUpdateManyWithWhereWithoutCustomerInput | Prisma.QuotationUpdateManyWithWhereWithoutCustomerInput[]
-  deleteMany?: Prisma.QuotationScalarWhereInput | Prisma.QuotationScalarWhereInput[]
-}
-
-export type QuotationUncheckedUpdateManyWithoutCustomerNestedInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput> | Prisma.QuotationCreateWithoutCustomerInput[] | Prisma.QuotationUncheckedCreateWithoutCustomerInput[]
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutCustomerInput | Prisma.QuotationCreateOrConnectWithoutCustomerInput[]
-  upsert?: Prisma.QuotationUpsertWithWhereUniqueWithoutCustomerInput | Prisma.QuotationUpsertWithWhereUniqueWithoutCustomerInput[]
-  createMany?: Prisma.QuotationCreateManyCustomerInputEnvelope
-  set?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  disconnect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  delete?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  connect?: Prisma.QuotationWhereUniqueInput | Prisma.QuotationWhereUniqueInput[]
-  update?: Prisma.QuotationUpdateWithWhereUniqueWithoutCustomerInput | Prisma.QuotationUpdateWithWhereUniqueWithoutCustomerInput[]
-  updateMany?: Prisma.QuotationUpdateManyWithWhereWithoutCustomerInput | Prisma.QuotationUpdateManyWithWhereWithoutCustomerInput[]
-  deleteMany?: Prisma.QuotationScalarWhereInput | Prisma.QuotationScalarWhereInput[]
-}
-
-export type QuotationCreateNestedOneWithoutInvoicesInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutInvoicesInput, Prisma.QuotationUncheckedCreateWithoutInvoicesInput>
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutInvoicesInput
-  connect?: Prisma.QuotationWhereUniqueInput
-}
-
-export type QuotationUpdateOneWithoutInvoicesNestedInput = {
-  create?: Prisma.XOR<Prisma.QuotationCreateWithoutInvoicesInput, Prisma.QuotationUncheckedCreateWithoutInvoicesInput>
-  connectOrCreate?: Prisma.QuotationCreateOrConnectWithoutInvoicesInput
-  upsert?: Prisma.QuotationUpsertWithoutInvoicesInput
-  disconnect?: Prisma.QuotationWhereInput | boolean
-  delete?: Prisma.QuotationWhereInput | boolean
-  connect?: Prisma.QuotationWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.QuotationUpdateToOneWithWhereWithoutInvoicesInput, Prisma.QuotationUpdateWithoutInvoicesInput>, Prisma.QuotationUncheckedUpdateWithoutInvoicesInput>
-}
-
-export type QuotationCreateWithoutTenantInput = {
-  id?: string
+export type QuotationCreateWithoutCustomerInput = {
+  id: string
   complaintId?: string | null
   quotationNo?: string | null
   title: string
@@ -1126,15 +1126,15 @@ export type QuotationCreateWithoutTenantInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  customer: Prisma.CustomerCreateNestedOneWithoutQuotationsInput
-  preparedByUser?: Prisma.UserCreateNestedOneWithoutPreparedQuotationsInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
+  updatedAt: Date | string
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
+  user?: Prisma.UserCreateNestedOneWithoutQuotationInput
+  tenant: Prisma.TenantCreateNestedOneWithoutQuotationInput
 }
 
-export type QuotationUncheckedCreateWithoutTenantInput = {
-  id?: string
-  customerId: string
+export type QuotationUncheckedCreateWithoutCustomerInput = {
+  id: string
+  tenantId: string
   complaintId?: string | null
   quotationNo?: string | null
   title: string
@@ -1161,33 +1161,33 @@ export type QuotationUncheckedCreateWithoutTenantInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
+  updatedAt: Date | string
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
-export type QuotationCreateOrConnectWithoutTenantInput = {
+export type QuotationCreateOrConnectWithoutCustomerInput = {
   where: Prisma.QuotationWhereUniqueInput
-  create: Prisma.XOR<Prisma.QuotationCreateWithoutTenantInput, Prisma.QuotationUncheckedCreateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput>
 }
 
-export type QuotationCreateManyTenantInputEnvelope = {
-  data: Prisma.QuotationCreateManyTenantInput | Prisma.QuotationCreateManyTenantInput[]
+export type QuotationCreateManyCustomerInputEnvelope = {
+  data: Prisma.QuotationCreateManyCustomerInput | Prisma.QuotationCreateManyCustomerInput[]
 }
 
-export type QuotationUpsertWithWhereUniqueWithoutTenantInput = {
+export type QuotationUpsertWithWhereUniqueWithoutCustomerInput = {
   where: Prisma.QuotationWhereUniqueInput
-  update: Prisma.XOR<Prisma.QuotationUpdateWithoutTenantInput, Prisma.QuotationUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.QuotationCreateWithoutTenantInput, Prisma.QuotationUncheckedCreateWithoutTenantInput>
+  update: Prisma.XOR<Prisma.QuotationUpdateWithoutCustomerInput, Prisma.QuotationUncheckedUpdateWithoutCustomerInput>
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput>
 }
 
-export type QuotationUpdateWithWhereUniqueWithoutTenantInput = {
+export type QuotationUpdateWithWhereUniqueWithoutCustomerInput = {
   where: Prisma.QuotationWhereUniqueInput
-  data: Prisma.XOR<Prisma.QuotationUpdateWithoutTenantInput, Prisma.QuotationUncheckedUpdateWithoutTenantInput>
+  data: Prisma.XOR<Prisma.QuotationUpdateWithoutCustomerInput, Prisma.QuotationUncheckedUpdateWithoutCustomerInput>
 }
 
-export type QuotationUpdateManyWithWhereWithoutTenantInput = {
+export type QuotationUpdateManyWithWhereWithoutCustomerInput = {
   where: Prisma.QuotationScalarWhereInput
-  data: Prisma.XOR<Prisma.QuotationUpdateManyMutationInput, Prisma.QuotationUncheckedUpdateManyWithoutTenantInput>
+  data: Prisma.XOR<Prisma.QuotationUpdateManyMutationInput, Prisma.QuotationUncheckedUpdateManyWithoutCustomerInput>
 }
 
 export type QuotationScalarWhereInput = {
@@ -1226,8 +1226,8 @@ export type QuotationScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Quotation"> | Date | string
 }
 
-export type QuotationCreateWithoutPreparedByUserInput = {
-  id?: string
+export type QuotationCreateWithoutInvoiceInput = {
+  id: string
   complaintId?: string | null
   quotationNo?: string | null
   title: string
@@ -1253,196 +1253,14 @@ export type QuotationCreateWithoutPreparedByUserInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutQuotationsInput
-  customer: Prisma.CustomerCreateNestedOneWithoutQuotationsInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
+  updatedAt: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutQuotationInput
+  customer: Prisma.CustomerCreateNestedOneWithoutQuotationInput
+  tenant: Prisma.TenantCreateNestedOneWithoutQuotationInput
 }
 
-export type QuotationUncheckedCreateWithoutPreparedByUserInput = {
-  id?: string
-  tenantId: string
-  customerId: string
-  complaintId?: string | null
-  quotationNo?: string | null
-  title: string
-  description?: string | null
-  referenceNo?: string | null
-  projectName?: string | null
-  site?: string | null
-  items: string
-  terms?: string | null
-  currency?: string
-  subtotal: number
-  taxRate?: number
-  tax?: number
-  discount?: number
-  shipping?: number
-  total: number
-  status?: string
-  validUntil?: Date | string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  sentAt?: Date | string | null
-  acceptedAt?: Date | string | null
-  pdfUrl?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
-}
-
-export type QuotationCreateOrConnectWithoutPreparedByUserInput = {
-  where: Prisma.QuotationWhereUniqueInput
-  create: Prisma.XOR<Prisma.QuotationCreateWithoutPreparedByUserInput, Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput>
-}
-
-export type QuotationCreateManyPreparedByUserInputEnvelope = {
-  data: Prisma.QuotationCreateManyPreparedByUserInput | Prisma.QuotationCreateManyPreparedByUserInput[]
-}
-
-export type QuotationUpsertWithWhereUniqueWithoutPreparedByUserInput = {
-  where: Prisma.QuotationWhereUniqueInput
-  update: Prisma.XOR<Prisma.QuotationUpdateWithoutPreparedByUserInput, Prisma.QuotationUncheckedUpdateWithoutPreparedByUserInput>
-  create: Prisma.XOR<Prisma.QuotationCreateWithoutPreparedByUserInput, Prisma.QuotationUncheckedCreateWithoutPreparedByUserInput>
-}
-
-export type QuotationUpdateWithWhereUniqueWithoutPreparedByUserInput = {
-  where: Prisma.QuotationWhereUniqueInput
-  data: Prisma.XOR<Prisma.QuotationUpdateWithoutPreparedByUserInput, Prisma.QuotationUncheckedUpdateWithoutPreparedByUserInput>
-}
-
-export type QuotationUpdateManyWithWhereWithoutPreparedByUserInput = {
-  where: Prisma.QuotationScalarWhereInput
-  data: Prisma.XOR<Prisma.QuotationUpdateManyMutationInput, Prisma.QuotationUncheckedUpdateManyWithoutPreparedByUserInput>
-}
-
-export type QuotationCreateWithoutCustomerInput = {
-  id?: string
-  complaintId?: string | null
-  quotationNo?: string | null
-  title: string
-  description?: string | null
-  referenceNo?: string | null
-  projectName?: string | null
-  site?: string | null
-  items: string
-  terms?: string | null
-  currency?: string
-  subtotal: number
-  taxRate?: number
-  tax?: number
-  discount?: number
-  shipping?: number
-  total: number
-  status?: string
-  validUntil?: Date | string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  sentAt?: Date | string | null
-  acceptedAt?: Date | string | null
-  pdfUrl?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutQuotationsInput
-  preparedByUser?: Prisma.UserCreateNestedOneWithoutPreparedQuotationsInput
-  invoices?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
-}
-
-export type QuotationUncheckedCreateWithoutCustomerInput = {
-  id?: string
-  tenantId: string
-  complaintId?: string | null
-  quotationNo?: string | null
-  title: string
-  description?: string | null
-  referenceNo?: string | null
-  projectName?: string | null
-  site?: string | null
-  preparedBy?: string | null
-  items: string
-  terms?: string | null
-  currency?: string
-  subtotal: number
-  taxRate?: number
-  tax?: number
-  discount?: number
-  shipping?: number
-  total: number
-  status?: string
-  validUntil?: Date | string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  sentAt?: Date | string | null
-  acceptedAt?: Date | string | null
-  pdfUrl?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  invoices?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
-}
-
-export type QuotationCreateOrConnectWithoutCustomerInput = {
-  where: Prisma.QuotationWhereUniqueInput
-  create: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput>
-}
-
-export type QuotationCreateManyCustomerInputEnvelope = {
-  data: Prisma.QuotationCreateManyCustomerInput | Prisma.QuotationCreateManyCustomerInput[]
-}
-
-export type QuotationUpsertWithWhereUniqueWithoutCustomerInput = {
-  where: Prisma.QuotationWhereUniqueInput
-  update: Prisma.XOR<Prisma.QuotationUpdateWithoutCustomerInput, Prisma.QuotationUncheckedUpdateWithoutCustomerInput>
-  create: Prisma.XOR<Prisma.QuotationCreateWithoutCustomerInput, Prisma.QuotationUncheckedCreateWithoutCustomerInput>
-}
-
-export type QuotationUpdateWithWhereUniqueWithoutCustomerInput = {
-  where: Prisma.QuotationWhereUniqueInput
-  data: Prisma.XOR<Prisma.QuotationUpdateWithoutCustomerInput, Prisma.QuotationUncheckedUpdateWithoutCustomerInput>
-}
-
-export type QuotationUpdateManyWithWhereWithoutCustomerInput = {
-  where: Prisma.QuotationScalarWhereInput
-  data: Prisma.XOR<Prisma.QuotationUpdateManyMutationInput, Prisma.QuotationUncheckedUpdateManyWithoutCustomerInput>
-}
-
-export type QuotationCreateWithoutInvoicesInput = {
-  id?: string
-  complaintId?: string | null
-  quotationNo?: string | null
-  title: string
-  description?: string | null
-  referenceNo?: string | null
-  projectName?: string | null
-  site?: string | null
-  items: string
-  terms?: string | null
-  currency?: string
-  subtotal: number
-  taxRate?: number
-  tax?: number
-  discount?: number
-  shipping?: number
-  total: number
-  status?: string
-  validUntil?: Date | string | null
-  approvedBy?: string | null
-  approvedAt?: Date | string | null
-  sentAt?: Date | string | null
-  acceptedAt?: Date | string | null
-  pdfUrl?: string | null
-  notes?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutQuotationsInput
-  customer: Prisma.CustomerCreateNestedOneWithoutQuotationsInput
-  preparedByUser?: Prisma.UserCreateNestedOneWithoutPreparedQuotationsInput
-}
-
-export type QuotationUncheckedCreateWithoutInvoicesInput = {
-  id?: string
+export type QuotationUncheckedCreateWithoutInvoiceInput = {
+  id: string
   tenantId: string
   customerId: string
   complaintId?: string | null
@@ -1471,26 +1289,26 @@ export type QuotationUncheckedCreateWithoutInvoicesInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type QuotationCreateOrConnectWithoutInvoicesInput = {
+export type QuotationCreateOrConnectWithoutInvoiceInput = {
   where: Prisma.QuotationWhereUniqueInput
-  create: Prisma.XOR<Prisma.QuotationCreateWithoutInvoicesInput, Prisma.QuotationUncheckedCreateWithoutInvoicesInput>
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutInvoiceInput, Prisma.QuotationUncheckedCreateWithoutInvoiceInput>
 }
 
-export type QuotationUpsertWithoutInvoicesInput = {
-  update: Prisma.XOR<Prisma.QuotationUpdateWithoutInvoicesInput, Prisma.QuotationUncheckedUpdateWithoutInvoicesInput>
-  create: Prisma.XOR<Prisma.QuotationCreateWithoutInvoicesInput, Prisma.QuotationUncheckedCreateWithoutInvoicesInput>
+export type QuotationUpsertWithoutInvoiceInput = {
+  update: Prisma.XOR<Prisma.QuotationUpdateWithoutInvoiceInput, Prisma.QuotationUncheckedUpdateWithoutInvoiceInput>
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutInvoiceInput, Prisma.QuotationUncheckedCreateWithoutInvoiceInput>
   where?: Prisma.QuotationWhereInput
 }
 
-export type QuotationUpdateToOneWithWhereWithoutInvoicesInput = {
+export type QuotationUpdateToOneWithWhereWithoutInvoiceInput = {
   where?: Prisma.QuotationWhereInput
-  data: Prisma.XOR<Prisma.QuotationUpdateWithoutInvoicesInput, Prisma.QuotationUncheckedUpdateWithoutInvoicesInput>
+  data: Prisma.XOR<Prisma.QuotationUpdateWithoutInvoiceInput, Prisma.QuotationUncheckedUpdateWithoutInvoiceInput>
 }
 
-export type QuotationUpdateWithoutInvoicesInput = {
+export type QuotationUpdateWithoutInvoiceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1518,12 +1336,12 @@ export type QuotationUpdateWithoutInvoicesInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutQuotationsNestedInput
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutQuotationsNestedInput
-  preparedByUser?: Prisma.UserUpdateOneWithoutPreparedQuotationsNestedInput
+  user?: Prisma.UserUpdateOneWithoutQuotationNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutQuotationNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutQuotationNestedInput
 }
 
-export type QuotationUncheckedUpdateWithoutInvoicesInput = {
+export type QuotationUncheckedUpdateWithoutInvoiceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   tenantId?: Prisma.StringFieldUpdateOperationsInput | string
   customerId?: Prisma.StringFieldUpdateOperationsInput | string
@@ -1556,8 +1374,41 @@ export type QuotationUncheckedUpdateWithoutInvoicesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
-export type QuotationCreateManyTenantInput = {
-  id?: string
+export type QuotationCreateWithoutTenantInput = {
+  id: string
+  complaintId?: string | null
+  quotationNo?: string | null
+  title: string
+  description?: string | null
+  referenceNo?: string | null
+  projectName?: string | null
+  site?: string | null
+  items: string
+  terms?: string | null
+  currency?: string
+  subtotal: number
+  taxRate?: number
+  tax?: number
+  discount?: number
+  shipping?: number
+  total: number
+  status?: string
+  validUntil?: Date | string | null
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  sentAt?: Date | string | null
+  acceptedAt?: Date | string | null
+  pdfUrl?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
+  user?: Prisma.UserCreateNestedOneWithoutQuotationInput
+  customer: Prisma.CustomerCreateNestedOneWithoutQuotationInput
+}
+
+export type QuotationUncheckedCreateWithoutTenantInput = {
+  id: string
   customerId: string
   complaintId?: string | null
   quotationNo?: string | null
@@ -1585,109 +1436,70 @@ export type QuotationCreateManyTenantInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
-export type QuotationUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  items?: Prisma.StringFieldUpdateOperationsInput | string
-  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  tax?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutQuotationsNestedInput
-  preparedByUser?: Prisma.UserUpdateOneWithoutPreparedQuotationsNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+export type QuotationCreateOrConnectWithoutTenantInput = {
+  where: Prisma.QuotationWhereUniqueInput
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutTenantInput, Prisma.QuotationUncheckedCreateWithoutTenantInput>
 }
 
-export type QuotationUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  preparedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  items?: Prisma.StringFieldUpdateOperationsInput | string
-  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  tax?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
+export type QuotationCreateManyTenantInputEnvelope = {
+  data: Prisma.QuotationCreateManyTenantInput | Prisma.QuotationCreateManyTenantInput[]
 }
 
-export type QuotationUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  preparedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  items?: Prisma.StringFieldUpdateOperationsInput | string
-  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  tax?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type QuotationUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.QuotationWhereUniqueInput
+  update: Prisma.XOR<Prisma.QuotationUpdateWithoutTenantInput, Prisma.QuotationUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutTenantInput, Prisma.QuotationUncheckedCreateWithoutTenantInput>
 }
 
-export type QuotationCreateManyPreparedByUserInput = {
-  id?: string
+export type QuotationUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.QuotationWhereUniqueInput
+  data: Prisma.XOR<Prisma.QuotationUpdateWithoutTenantInput, Prisma.QuotationUncheckedUpdateWithoutTenantInput>
+}
+
+export type QuotationUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.QuotationScalarWhereInput
+  data: Prisma.XOR<Prisma.QuotationUpdateManyMutationInput, Prisma.QuotationUncheckedUpdateManyWithoutTenantInput>
+}
+
+export type QuotationCreateWithoutUserInput = {
+  id: string
+  complaintId?: string | null
+  quotationNo?: string | null
+  title: string
+  description?: string | null
+  referenceNo?: string | null
+  projectName?: string | null
+  site?: string | null
+  items: string
+  terms?: string | null
+  currency?: string
+  subtotal: number
+  taxRate?: number
+  tax?: number
+  discount?: number
+  shipping?: number
+  total: number
+  status?: string
+  validUntil?: Date | string | null
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  sentAt?: Date | string | null
+  acceptedAt?: Date | string | null
+  pdfUrl?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutQuotationInput
+  customer: Prisma.CustomerCreateNestedOneWithoutQuotationInput
+  tenant: Prisma.TenantCreateNestedOneWithoutQuotationInput
+}
+
+export type QuotationUncheckedCreateWithoutUserInput = {
+  id: string
   tenantId: string
   customerId: string
   complaintId?: string | null
@@ -1715,109 +1527,37 @@ export type QuotationCreateManyPreparedByUserInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutQuotationInput
 }
 
-export type QuotationUpdateWithoutPreparedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  items?: Prisma.StringFieldUpdateOperationsInput | string
-  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  tax?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutQuotationsNestedInput
-  customer?: Prisma.CustomerUpdateOneRequiredWithoutQuotationsNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+export type QuotationCreateOrConnectWithoutUserInput = {
+  where: Prisma.QuotationWhereUniqueInput
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutUserInput, Prisma.QuotationUncheckedCreateWithoutUserInput>
 }
 
-export type QuotationUncheckedUpdateWithoutPreparedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  items?: Prisma.StringFieldUpdateOperationsInput | string
-  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  tax?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
+export type QuotationCreateManyUserInputEnvelope = {
+  data: Prisma.QuotationCreateManyUserInput | Prisma.QuotationCreateManyUserInput[]
 }
 
-export type QuotationUncheckedUpdateManyWithoutPreparedByUserInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  customerId?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  items?: Prisma.StringFieldUpdateOperationsInput | string
-  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  currency?: Prisma.StringFieldUpdateOperationsInput | string
-  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
-  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
-  tax?: Prisma.FloatFieldUpdateOperationsInput | number
-  discount?: Prisma.FloatFieldUpdateOperationsInput | number
-  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
-  total?: Prisma.FloatFieldUpdateOperationsInput | number
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type QuotationUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.QuotationWhereUniqueInput
+  update: Prisma.XOR<Prisma.QuotationUpdateWithoutUserInput, Prisma.QuotationUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.QuotationCreateWithoutUserInput, Prisma.QuotationUncheckedCreateWithoutUserInput>
+}
+
+export type QuotationUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.QuotationWhereUniqueInput
+  data: Prisma.XOR<Prisma.QuotationUpdateWithoutUserInput, Prisma.QuotationUncheckedUpdateWithoutUserInput>
+}
+
+export type QuotationUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.QuotationScalarWhereInput
+  data: Prisma.XOR<Prisma.QuotationUpdateManyMutationInput, Prisma.QuotationUncheckedUpdateManyWithoutUserInput>
 }
 
 export type QuotationCreateManyCustomerInput = {
-  id?: string
+  id: string
   tenantId: string
   complaintId?: string | null
   quotationNo?: string | null
@@ -1845,7 +1585,7 @@ export type QuotationCreateManyCustomerInput = {
   pdfUrl?: string | null
   notes?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type QuotationUpdateWithoutCustomerInput = {
@@ -1876,9 +1616,9 @@ export type QuotationUpdateWithoutCustomerInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutQuotationsNestedInput
-  preparedByUser?: Prisma.UserUpdateOneWithoutPreparedQuotationsNestedInput
-  invoices?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+  user?: Prisma.UserUpdateOneWithoutQuotationNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateWithoutCustomerInput = {
@@ -1911,7 +1651,7 @@ export type QuotationUncheckedUpdateWithoutCustomerInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  invoices?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
 }
 
 export type QuotationUncheckedUpdateManyWithoutCustomerInput = {
@@ -1946,17 +1686,277 @@ export type QuotationUncheckedUpdateManyWithoutCustomerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type QuotationCreateManyTenantInput = {
+  id: string
+  customerId: string
+  complaintId?: string | null
+  quotationNo?: string | null
+  title: string
+  description?: string | null
+  referenceNo?: string | null
+  projectName?: string | null
+  site?: string | null
+  preparedBy?: string | null
+  items: string
+  terms?: string | null
+  currency?: string
+  subtotal: number
+  taxRate?: number
+  tax?: number
+  discount?: number
+  shipping?: number
+  total: number
+  status?: string
+  validUntil?: Date | string | null
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  sentAt?: Date | string | null
+  acceptedAt?: Date | string | null
+  pdfUrl?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+}
+
+export type QuotationUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  items?: Prisma.StringFieldUpdateOperationsInput | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
+  discount?: Prisma.FloatFieldUpdateOperationsInput | number
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Invoice?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+  user?: Prisma.UserUpdateOneWithoutQuotationNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutQuotationNestedInput
+}
+
+export type QuotationUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  items?: Prisma.StringFieldUpdateOperationsInput | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
+  discount?: Prisma.FloatFieldUpdateOperationsInput | number
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
+}
+
+export type QuotationUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  preparedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  items?: Prisma.StringFieldUpdateOperationsInput | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
+  discount?: Prisma.FloatFieldUpdateOperationsInput | number
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type QuotationCreateManyUserInput = {
+  id: string
+  tenantId: string
+  customerId: string
+  complaintId?: string | null
+  quotationNo?: string | null
+  title: string
+  description?: string | null
+  referenceNo?: string | null
+  projectName?: string | null
+  site?: string | null
+  items: string
+  terms?: string | null
+  currency?: string
+  subtotal: number
+  taxRate?: number
+  tax?: number
+  discount?: number
+  shipping?: number
+  total: number
+  status?: string
+  validUntil?: Date | string | null
+  approvedBy?: string | null
+  approvedAt?: Date | string | null
+  sentAt?: Date | string | null
+  acceptedAt?: Date | string | null
+  pdfUrl?: string | null
+  notes?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+}
+
+export type QuotationUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  items?: Prisma.StringFieldUpdateOperationsInput | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
+  discount?: Prisma.FloatFieldUpdateOperationsInput | number
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Invoice?: Prisma.InvoiceUpdateManyWithoutQuotationNestedInput
+  customer?: Prisma.CustomerUpdateOneRequiredWithoutQuotationNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutQuotationNestedInput
+}
+
+export type QuotationUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  items?: Prisma.StringFieldUpdateOperationsInput | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
+  discount?: Prisma.FloatFieldUpdateOperationsInput | number
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutQuotationNestedInput
+}
+
+export type QuotationUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  customerId?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  quotationNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  referenceNo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  projectName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  site?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  items?: Prisma.StringFieldUpdateOperationsInput | string
+  terms?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  subtotal?: Prisma.FloatFieldUpdateOperationsInput | number
+  taxRate?: Prisma.FloatFieldUpdateOperationsInput | number
+  tax?: Prisma.FloatFieldUpdateOperationsInput | number
+  discount?: Prisma.FloatFieldUpdateOperationsInput | number
+  shipping?: Prisma.FloatFieldUpdateOperationsInput | number
+  total?: Prisma.FloatFieldUpdateOperationsInput | number
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  validUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  approvedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  approvedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  sentAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  acceptedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  pdfUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 /**
  * Count Type QuotationCountOutputType
  */
 
 export type QuotationCountOutputType = {
-  invoices: number
+  Invoice: number
 }
 
 export type QuotationCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  invoices?: boolean | QuotationCountOutputTypeCountInvoicesArgs
+  Invoice?: boolean | QuotationCountOutputTypeCountInvoiceArgs
 }
 
 /**
@@ -1972,7 +1972,7 @@ export type QuotationCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Ex
 /**
  * QuotationCountOutputType without action
  */
-export type QuotationCountOutputTypeCountInvoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type QuotationCountOutputTypeCountInvoiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InvoiceWhereInput
 }
 
@@ -2008,10 +2008,10 @@ export type QuotationSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  Invoice?: boolean | Prisma.Quotation$InvoiceArgs<ExtArgs>
+  user?: boolean | Prisma.Quotation$userArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
-  preparedByUser?: boolean | Prisma.Quotation$preparedByUserArgs<ExtArgs>
-  invoices?: boolean | Prisma.Quotation$invoicesArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.QuotationCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["quotation"]>
 
@@ -2046,9 +2046,9 @@ export type QuotationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Quotation$userArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
-  preparedByUser?: boolean | Prisma.Quotation$preparedByUserArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["quotation"]>
 
 export type QuotationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -2082,9 +2082,9 @@ export type QuotationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   notes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Quotation$userArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
-  preparedByUser?: boolean | Prisma.Quotation$preparedByUserArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["quotation"]>
 
 export type QuotationSelectScalar = {
@@ -2122,30 +2122,30 @@ export type QuotationSelectScalar = {
 
 export type QuotationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "complaintId" | "quotationNo" | "title" | "description" | "referenceNo" | "projectName" | "site" | "preparedBy" | "items" | "terms" | "currency" | "subtotal" | "taxRate" | "tax" | "discount" | "shipping" | "total" | "status" | "validUntil" | "approvedBy" | "approvedAt" | "sentAt" | "acceptedAt" | "pdfUrl" | "notes" | "createdAt" | "updatedAt", ExtArgs["result"]["quotation"]>
 export type QuotationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  Invoice?: boolean | Prisma.Quotation$InvoiceArgs<ExtArgs>
+  user?: boolean | Prisma.Quotation$userArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
-  preparedByUser?: boolean | Prisma.Quotation$preparedByUserArgs<ExtArgs>
-  invoices?: boolean | Prisma.Quotation$invoicesArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.QuotationCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type QuotationIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Quotation$userArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
-  preparedByUser?: boolean | Prisma.Quotation$preparedByUserArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type QuotationIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Quotation$userArgs<ExtArgs>
   customer?: boolean | Prisma.CustomerDefaultArgs<ExtArgs>
-  preparedByUser?: boolean | Prisma.Quotation$preparedByUserArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $QuotationPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Quotation"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    Invoice: Prisma.$InvoicePayload<ExtArgs>[]
+    user: Prisma.$UserPayload<ExtArgs> | null
     customer: Prisma.$CustomerPayload<ExtArgs>
-    preparedByUser: Prisma.$UserPayload<ExtArgs> | null
-    invoices: Prisma.$InvoicePayload<ExtArgs>[]
+    tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2572,10 +2572,10 @@ readonly fields: QuotationFieldRefs;
  */
 export interface Prisma__QuotationClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  Invoice<T extends Prisma.Quotation$InvoiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$InvoiceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  user<T extends Prisma.Quotation$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   customer<T extends Prisma.CustomerDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CustomerDefaultArgs<ExtArgs>>): Prisma.Prisma__CustomerClient<runtime.Types.Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  preparedByUser<T extends Prisma.Quotation$preparedByUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$preparedByUserArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-  invoices<T extends Prisma.Quotation$invoicesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Quotation$invoicesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3034,28 +3034,9 @@ export type QuotationDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
 }
 
 /**
- * Quotation.preparedByUser
+ * Quotation.Invoice
  */
-export type Quotation$preparedByUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  /**
-   * Select specific fields to fetch from the User
-   */
-  select?: Prisma.UserSelect<ExtArgs> | null
-  /**
-   * Omit specific fields from the User
-   */
-  omit?: Prisma.UserOmit<ExtArgs> | null
-  /**
-   * Choose, which related nodes to fetch as well
-   */
-  include?: Prisma.UserInclude<ExtArgs> | null
-  where?: Prisma.UserWhereInput
-}
-
-/**
- * Quotation.invoices
- */
-export type Quotation$invoicesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type Quotation$InvoiceArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Invoice
    */
@@ -3074,6 +3055,25 @@ export type Quotation$invoicesArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * Quotation.user
+ */
+export type Quotation$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

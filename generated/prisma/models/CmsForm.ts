@@ -262,25 +262,25 @@ export type CmsFormScalarWhereWithAggregatesInput = {
 }
 
 export type CmsFormCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   formType?: string
   fields: string
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsFormUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   formType?: string
   fields: string
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsFormUpdateInput = {
@@ -306,14 +306,14 @@ export type CmsFormUncheckedUpdateInput = {
 }
 
 export type CmsFormCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   formType?: string
   fields: string
   isActive?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsFormUpdateManyMutationInput = {

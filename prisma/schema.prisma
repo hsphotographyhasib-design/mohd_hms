@@ -7,1747 +7,268 @@ datasource db {
   provider = "sqlite"
 }
 
-// ============ TENANT & MULTI-TENANCY ============
-
-model Tenant {
-  id          String   @id @default(cuid())
-  name        String
-  domain      String   @unique
-  logo        String?
-  address     String?
-  phone       String?
-  email       String?
-  isActive    Boolean  @default(true)
-  plan        String   @default("professional") // free, professional, enterprise
-  maxUsers    Int      @default(50)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  users       User[]
-  customers   Customer[]
-  equipment   Equipment[]
-  complaints  Complaint[]
-  workOrders  WorkOrder[]
-  invoices    Invoice[]
-  quotations  Quotation[]
-  pmSchedules PmSchedule[]
-  inventory             InventoryItem[]
-  inventoryCategories   InventoryCategory[]
-  inventorySubcategories InventorySubcategory[]
-  inventoryWarehouses   Warehouse[]
-  inventorySuppliers    ItemSupplier[]
-  stockMovements        StockMovement[]
-  warehouseStocks       WarehouseStock[]
-  priceBooks            PriceBook[]
-  priceBookEntries      PriceBookEntry[]
-  purchaseOrders PurchaseOrder[]
-  vehicles    Vehicle[]
-  departments Department[]
-  notifications Notification[]
-  deviceTokens       DeviceToken[]
-  notificationLogs    NotificationLog[]
-  auditLogs   AuditLog[]
-  checklistTemplates ChecklistTemplate[]
-  whatsappConfigs      WhatsAppConfig[]
-  whatsappSessions     WhatsAppSession[]
-  whatsappMessages     WhatsAppMessage[]
-  conversationThreads  ConversationThread[]
-  whatsappTemplates    WhatsAppTemplate[]
-  broadcastLogs        BroadcastLog[]
-  whatsappDeliveryLogs WhatsAppDeliveryLog[]
-  customerFeedbacks    CustomerFeedback[]
-  customerReports      CustomerReport[]
-  complaintTimelines   ComplaintTimeline[]
-  equipmentQrCodes     EquipmentQrCode[]
-  scanLogs             ScanLog[]
-  otpCodes             OtpCode[]
-  loginSessions        LoginSession[]
-  devices              Device[]
-  passwordResetTokens  PasswordResetToken[]
-  passwordResetOtps    PasswordResetOtp[]
-  authAuditLogs        AuthAuditLog[]
-  emailLogs            EmailLog[]
-  emailTemplates       EmailTemplate[]
-  // HR Relations
-  hrShifts            HrShift[]
-  hrShiftSchedules    HrShiftSchedule[]
-  hrHolidays          HrHoliday[]
-  hrEmployees         HrEmployee[]
-  hrLeaveTypes        HrLeaveType[]
-  hrLeaveBalances     HrLeaveBalance[]
-  hrLeaveRequests     HrLeaveRequest[]
-  hrPayrolls          HrPayroll[]
-  hrOvertimeRequests  HrOvertimeRequest[]
-  hrJobPositions      HrJobPosition[]
-  hrCandidates        HrCandidate[]
-  hrPerformanceReviews HrPerformanceReview[]
-  hrTrainings         HrTraining[]
-  hrTrainingRecords   HrTrainingRecord[]
-  hrAssetAssignments  HrAssetAssignment[]
-  hrEmployeeDocuments HrEmployeeDocument[]
-  hrVisitors          HrVisitor[]
-  hrMedicalRecords    HrMedicalRecord[]
-  hrTravelRequests    HrTravelRequest[]
-  hrExpenseClaims     HrExpenseClaim[]
-  hrDisciplinaryActions HrDisciplinaryAction[]
-  hrAnnouncements     HrAnnouncement[]
-}
-
-// ============ USERS & AUTH ============
-
-model User {
-  id            String   @id @default(cuid())
-  tenantId      String
-  email         String
-  passwordHash  String?
-  name          String
-  phone         String?
-  avatar        String?
-  role          String   @default("technician") // super_admin, admin, manager, supervisor, technician, finance, customer, vendor, guest
-  employeeNumber String?
-  departmentId  String?
-  authProvider  String?  // "email", "google", "whatsapp"
-  googleId      String?  // Google sub (unique user ID)
-  isActive      Boolean  @default(true)
-  isOnline      Boolean  @default(false)
-  lastLogin     DateTime?
-  gpsLocation   String?  // JSON: {lat, lng}
-  profileCompleted Boolean @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  department    Department? @relation(fields: [departmentId], references: [id])
-  assignedComplaints  Complaint[]  @relation("TechnicianComplaints")
-  assignedWorkOrders  WorkOrder[]  @relation("TechnicianWorkOrders")
-  supervisedWorkOrders WorkOrder[] @relation("SupervisorWorkOrders")
-  createdWorkOrders   WorkOrder[]  @relation("CreatorWorkOrders")
-  createdInvoices     Invoice[]    @relation("CreatorInvoices")
-  preparedInvoices    Invoice[]    @relation("PreparerInvoices")
-  pmSchedules   PmSchedule[] @relation("PmScheduleAssignee")
-  supervisorComplaints Complaint[] @relation("SupervisorComplaints")
-  auditLogs    AuditLog[]
-  vehicleLogs  VehicleLog[]
-  loginSessions LoginSession[]
-  devices      Device[]
-  passwordResetTokens PasswordResetToken[]
-  passwordResetOtps    PasswordResetOtp[]
-  authAuditLogs AuthAuditLog[]
-  termsAcceptances TermsAcceptance[]
-  preparedQuotations Quotation[] @relation("QuotationPreparedBy")
-  deviceTokens       DeviceToken[]
-  notificationLogs    NotificationLog[]
-
-  @@unique([tenantId, email])
-  @@unique([googleId])
-  @@index([tenantId])
-  @@index([tenantId, phone])
-  @@index([tenantId, role])
-  @@index([tenantId, isActive])
-  @@index([tenantId, departmentId])
-  @@index([tenantId, employeeNumber])
-  @@index([phone])
-}
-
-// ============ DEPARTMENTS ============
-
-model Department {
-  id          String   @id @default(cuid())
-  tenantId    String
-  name        String
-  description String?
-  headId      String?
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
-  users       User[]
-  hrEmployees HrEmployee[]
-
-  @@index([tenantId])
-}
-
-// ============ CUSTOMERS ============
-
-model Customer {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String
-  email         String?
-  phone         String
-  address       String?
-  gpsLocation   String?  // JSON: {lat, lng}
-  companyName   String?
-  customerNumber String @unique
-  photo         String?
-  paymentTerms  String?  // e.g. "50% advance, balance upon completion"
-  pic           String?  // Person in Charge
-  country       String?  @default("Brunei")
-  district      String?
-  taxRate       Float    @default(0)
-  isActive      Boolean  @default(true)
-  isWhatsappVerified  Boolean  @default(false)
-  whatsappId          String?
-  whatsappPhone       String?
-  lastWhatsappActivity DateTime?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
-  equipment   Equipment[]
-  complaints  Complaint[]
-  invoices    Invoice[]
-  quotations  Quotation[]
-  conversationThreads ConversationThread[]
-  whatsappSessions     WhatsAppSession[]
-  customerFeedbacks    CustomerFeedback[]
-  customerReports      CustomerReport[]
-  workOrders           WorkOrder[]
-
-  @@index([tenantId])
-  @@index([tenantId, phone])
-  @@index([tenantId, isActive])
-}
-
-// ============ EQUIPMENT ============
-
-model Equipment {
-  id              String   @id @default(cuid())
-  tenantId        String
-  customerId      String?
-  name            String
-  category        String   // HVAC, Electrical, Plumbing, Generator, Mechanical, FireProtection
-  assetNumber     String   @unique
-  qrCode          String   @unique
-  qrId            String?   @unique  // QR-GEN-NFYH3RZAA format, used for public URLs
-  brand           String?
-  model           String?
-  serialNumber    String?
-  location        String?
-  building        String?
-  room            String?
-  installDate     DateTime?
-  warrantyExpiry  DateTime?
-  warrantyInfo    String?
-  status          String   @default("active") // active, inactive, under_maintenance, decommissioned, critical, out_of_service, overdue_pm
-  condition       String   @default("good") // good, fair, poor, critical
-  photos          String?  // JSON array of URLs
-  documents       String?  // JSON array of URLs
-  specifications  String? // JSON object
-  notes           String?
-  scanCount       Int      @default(0)
-  lastScannedAt   DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant          Tenant       @relation(fields: [tenantId], references: [id])
-  customer        Customer?    @relation(fields: [customerId], references: [id])
-  complaints      Complaint[]
-  workOrders      WorkOrder[]
-  pmSchedules     PmSchedule[]
-  scanLogs        ScanLog[]
-  qrCodeRecord    EquipmentQrCode?
-
-  @@index([tenantId])
-  @@index([tenantId, status])
-  @@index([tenantId, customerId])
-}
-
-// ============ EQUIPMENT QR CODES ============
-
-model EquipmentQrCode {
-  id            String   @id @default(cuid())
-  tenantId      String
-  equipmentId   String   @unique
-  qrId          String   @unique  // QR-GEN-NFYH3RZAA
-  qrUrl         String              // https://domain.com/equipment/QR-GEN-NFYH3RZAA
-  isActive      Boolean  @default(true)
-  generatedAt   DateTime @default(now())
-  lastRegeneratedAt DateTime?
-  version       Int      @default(1)
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  equipment     Equipment @relation(fields: [equipmentId], references: [id])
-}
-
-// ============ SCAN LOGS ============
-
-model ScanLog {
-  id            String   @id @default(cuid())
-  tenantId      String
-  equipmentId   String
-  qrId          String
-  scannedBy     String?  // userId or null for anonymous
-  scannedByName String?  // "Anonymous" for public scans
-  ipAddress     String?
-  userAgent     String?
-  device        String?  // mobile, desktop, tablet
-  browser       String?
-  location      String?  // geo if available
-  referer       String?
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  equipment     Equipment @relation(fields: [equipmentId], references: [id])
-
-  @@index([tenantId, equipmentId])
-  @@index([qrId])
-  @@index([createdAt])
-}
-
-// ============ COMPLAINTS ============
-
-model Complaint {
-  id              String   @id @default(cuid())
-  tenantId        String
-  customerId      String
-  equipmentId     String?
-  title           String
-  description     String
-  priority        String   @default("medium") // low, medium, high, critical
-  status          String   @default("NEW")
-  // Workflow: NEW, ASSIGNED, ACCEPTED, WORK_ORDER_CREATED, IN_PROGRESS,
-  //           WAITING_CLIENT_CONFIRMATION, CLIENT_CONFIRMED, DRAFT_INVOICE,
-  //           INVOICE_APPROVED, INVOICE_SENT, PAID, CLOSED, REWORK_REQUIRED
-  source          String   @default("admin") // portal, whatsapp, admin, qr_scan, mobile_app
-  category        String?  // HVAC, Electrical, Plumbing, etc.
-  photos          String?  // JSON array
-  gpsLocation     String?  // JSON: {lat, lng}
-  assignedToId    String?
-  supervisorId    String?
-  assignedBy      String?  // userId of the admin/supervisor who assigned the technician
-  assignedByRole  String?  // role of the assigner (admin, supervisor, super_admin, manager)
-  assignedAt      DateTime? // when the current technician was assigned
-  lastReassignedAt DateTime? // last reassignment timestamp
-  assignmentReason String?  // reason for assignment or reassignment
-  assignmentStatus String  @default("UNASSIGNED") // UNASSIGNED, PENDING_ACCEPTANCE, ACCEPTED, REJECTED
-  reassignmentCount Int    @default(0) // tracks how many times this complaint has been reassigned
-  slaResponseDeadline DateTime?  // deadline for technician to accept (e.g. 15min from assignment)
-  workOrderId     String?  // linked work order (generated on ACCEPTED)
-  invoiceId       String?  // linked invoice (generated on CLIENT_CONFIRMED)
-  eta             String?  // technician ETA
-  rejectionReason String?  // if technician rejects
-  reworkReason    String?  // if customer requests rework
-  customerSnapshot String?  // JSON: snapshot of customer info at complaint creation time
-  locationInfo    String?  // JSON: {building, floor, unit, room, address, district, postalCode, country}
-  resolutionNotes String?
-  customerRating  Int?
-  customerFeedback String?
-  acceptedAt      DateTime?
-  startedAt       DateTime?
-  completedAt     DateTime?
-  clientConfirmedAt DateTime?
-  resolvedAt      DateTime?
-  closedAt        DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  customer      Customer @relation(fields: [customerId], references: [id])
-  equipment     Equipment? @relation(fields: [equipmentId], references: [id])
-  assignedTo    User?    @relation("TechnicianComplaints", fields: [assignedToId], references: [id])
-  supervisor    User?    @relation("SupervisorComplaints", fields: [supervisorId], references: [id])
-  workOrders    WorkOrder[]
-  timeline      ComplaintTimeline[]
-
-  @@index([tenantId, status])
-  @@index([tenantId, assignedToId])
-  @@index([tenantId, assignedBy])
-  @@index([tenantId, customerId])
-  @@index([tenantId, category])
-  @@index([tenantId, createdAt])
-}
-
-// ============ WORK ORDERS ============
-
-model WorkOrder {
-  id              String   @id @default(cuid())
-  tenantId        String
-  workOrderNumber String?  @unique // e.g. WO/HMS/2026/000001
-  complaintId     String?
-  customerId      String?
-  equipmentId     String?
-  assetId         String?  // optional asset linkage
-  title           String
-  description     String
-  source          String   @default("manual") // complaint, preventive, manual, quotation, service_request, inspection_report
-  reference       String?  // e.g. Complaint ID, PM ID, SR ID
-  status          String   @default("DRAFT") // DRAFT, PENDING, ASSIGNED, ACCEPTED, IN_PROGRESS, COMPLETED, CLOSED, CANCELLED
-  priority        String   @default("medium") // emergency, high, medium, low
-  type            String   @default("corrective") // corrective, preventive, emergency, inspection, installation, breakdown
-  category        String?
-  subCategory     String?
-  sla             String?
-  estimatedHours  Float?
-  assignedToId    String?
-  supervisorId    String?
-  teamId          String?
-  createdBy        String?
-  scheduledDate   DateTime?
-  startTime       String?  // HH:mm format
-  dueDate         DateTime?
-  dueTime         String?  // HH:mm format
-  siteId          String?
-  building        String?
-  floor           String?
-  internalNotes   String?
-  checklistId     String?
-  // Safety & Compliance
-  permitRequired        Boolean @default(false)
-  lockoutTagoutRequired Boolean @default(false)
-  highRiskWork          Boolean @default(false)
-  safetyEquipmentReq    Boolean @default(false)
-  safetyNotes           String?  // additional safety requirements
-  // Existing fields
-  startedAt       DateTime?
-  completedAt     DateTime?
-  checkInGps      String?  // JSON: {lat, lng, timestamp}
-  checkOutGps     String?  // JSON: {lat, lng, timestamp}
-  laborHours      Float?
-  laborCost       Float?
-  materialCost    Float?
-  totalCost       Float?
-  notes           String?
-  photos          String?  // JSON array
-  beforePhotos    String?  // JSON array
-  afterPhotos     String?  // JSON array
-  videoUrl        String?
-  materialsUsed   String?  // JSON: [{name, qty, unit, cost}]
-  checklistData   String?  // JSON: completed checklist
-  remarks         String?
-  technicianSignature String?
-  customerSignature   String?
-  serviceReportPdf   String?
-  attachments     String?  // JSON: [{name, url, size, type, uploadedAt}]
-  isLocked        Boolean  @default(false)
-  isDraft         Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  complaint       Complaint? @relation(fields: [complaintId], references: [id])
-  customer        Customer? @relation(fields: [customerId], references: [id])
-  equipment       Equipment? @relation(fields: [equipmentId], references: [id])
-  assignedTo      User?    @relation("TechnicianWorkOrders", fields: [assignedToId], references: [id])
-  supervisor      User?    @relation("SupervisorWorkOrders", fields: [supervisorId], references: [id])
-  creator         User?    @relation("CreatorWorkOrders", fields: [createdBy], references: [id])
-  materials       WorkOrderMaterial[]
-  invoices        Invoice[]
-
-  @@index([tenantId, status])
-  @@index([tenantId, assignedToId])
-  @@index([tenantId, workOrderNumber])
-}
-
-model WorkOrderMaterial {
-  id            String   @id @default(cuid())
-  workOrderId   String
-  inventoryItemId String
-  quantity      Int
-  unitCost      Float
-  totalCost     Float
-
-  workOrder     WorkOrder @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
-  inventoryItem InventoryItem @relation(fields: [inventoryItemId], references: [id])
-}
-
-// ============ CHECKLIST TEMPLATES ============
-
-model ChecklistTemplate {
-  id          String   @id @default(cuid())
-  tenantId    String
-  name        String
-  category    String   // HVAC, Electrical, Plumbing, Generator, etc.
-  description String?
-  items       String   // JSON array of checklist items
-  isDefault   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
-}
-
-// ============ PREVENTIVE MAINTENANCE ============
-
-model PmSchedule {
-  id            String   @id @default(cuid())
-  tenantId      String
-  equipmentId   String
-  title         String
-  description   String?
-  frequency     String   // monthly, quarterly, half_yearly, yearly, custom
-  customDays    Int?
-  lastExecuted  DateTime?
-  nextDueDate   DateTime
-  assignedToId  String?
-  status        String   @default("active") // active, paused, completed
-  checklistTemplateId String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  equipment     Equipment @relation(fields: [equipmentId], references: [id])
-  assignedTo    User?    @relation("PmScheduleAssignee", fields: [assignedToId], references: [id])
-
-  @@index([tenantId])
-  @@index([tenantId, status])
-  @@index([tenantId, nextDueDate])
-}
-
-// ============ QUOTATIONS ============
-
-model Quotation {
-  id              String   @id @default(cuid())
-  tenantId        String
-  customerId      String
-  complaintId     String?
-  quotationNo     String?  // e.g. QTN/SMSB/01/4529
-  title           String
-  description     String?
-  referenceNo     String?  // internal reference
-  projectName     String?
-  site            String?
-  preparedBy      String?  // userId
-  items           String   // JSON array of line items
-  terms           String?  // JSON array of terms & conditions
-  currency        String   @default("BND")
-  subtotal        Float
-  taxRate         Float    @default(0)
-  tax             Float    @default(0)
-  discount        Float    @default(0)
-  shipping        Float    @default(0)
-  total           Float
-  status          String   @default("DRAFT") // DRAFT, REVIEW, APPROVED, SENT, ACCEPTED, REJECTED, EXPIRED, CONVERTED_WO, CONVERTED_INVOICE, PAID, CLOSED
-  validUntil      DateTime?
-  approvedBy      String?
-  approvedAt      DateTime?
-  sentAt          DateTime?
-  acceptedAt      DateTime?
-  pdfUrl          String?
-  notes           String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  customer      Customer @relation(fields: [customerId], references: [id])
-  preparedByUser User?  @relation("QuotationPreparedBy", fields: [preparedBy], references: [id])
-  invoices      Invoice[]
-}
-
-// ============ INVOICES ============
-
-model Invoice {
-  id              String   @id @default(cuid())
-  tenantId        String
-  customerId      String
-  workOrderId     String?
-  quotationId     String?
-  invoiceNumber   String   @unique
-  title           String
-  description     String?
-  items           String   // JSON array of line items: [{title,description,unit,quantity,rate,amount}]
-  subtotal        Float
-  taxRate         Float    @default(0)
-  tax             Float    @default(0)
-  discount        Float    @default(0)
-  shipping        Float    @default(0)
-  total           Float
-  status          String   @default("DRAFT") // DRAFT, PENDING, APPROVED, PAID, CANCELLED, OVERDUE
-  currency        String   @default("BND")
-  referenceNo     String?  // linked quotation number
-  poReference     String?  // customer PO number
-  paymentTerms    String?  // e.g. "30 Days"
-  dueDate         DateTime?
-  paidAt          DateTime?
-  paymentMethod   String?
-  paymentRef      String?
-  transactionId   String?  // bank transaction ID
-  bankName        String?
-  bankAccountName String?
-  bankAccountNo   String?
-  sentVia         String?  // email, whatsapp, portal
-  pdfUrl          String?
-  notes           String?
-  terms           String?  // JSON array of terms & conditions
-  shipToName      String?
-  shipToAddress   String?
-  shipToPhone     String?
-  shipToContact   String?
-  preparedBy      String?  // userId
-  createdBy       String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  customer      Customer @relation(fields: [customerId], references: [id])
-  workOrder     WorkOrder? @relation(fields: [workOrderId], references: [id])
-  quotation     Quotation? @relation(fields: [quotationId], references: [id])
-  creator       User?    @relation("CreatorInvoices", fields: [createdBy], references: [id])
-  preparer      User?    @relation("PreparerInvoices", fields: [preparedBy], references: [id])
-
-  @@index([tenantId, status])
-}
-
-// ============ INVENTORY - ENTERPRISE ITEM MASTER ============
-
-model InventoryCategory {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String
-  code          String?  // e.g. HVAC, ELEC, PLMB
-  description   String?
-  icon          String?
-  color         String?  // hex color
-  displayOrder  Int      @default(0)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  items         InventoryItem[]
-  subcategories InventorySubcategory[]
-
-  @@unique([tenantId, name])
-  @@index([tenantId])
-}
-
-model InventorySubcategory {
-  id            String   @id @default(cuid())
-  tenantId      String
-  categoryId    String
-  name          String
-  code          String?
-  description   String?
-  displayOrder  Int      @default(0)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  category      InventoryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  items         InventoryItem[]
-
-  @@unique([tenantId, categoryId, name])
-  @@index([tenantId])
-  @@index([categoryId])
-}
-
-model InventoryItem {
-  id            String   @id @default(cuid())
-  tenantId      String
-
-  // === IDENTITY ===
-  itemCode      String?  @unique  // Auto-generated: ITM/HMS/2026/000001
-  sku           String?  @unique
-  barcode       String?  @unique
-  qrCode        String?
-  name          String
-  shortName     String?
-
-  // === CLASSIFICATION ===
-  itemType      String   @default("inventory") // inventory, spare_part, consumable, service, manpower, equipment_package, supply_only, supply_install, rental
-  categoryId    String?
-  subcategoryId String?
-
-  // === DESCRIPTION ===
-  description   String?
-  shortDescription String?
-
-  // === PHYSICAL ATTRIBUTES ===
-  brand         String?
-  manufacturer  String?
-  model         String?
-  partNumber    String?
-  serialNumber  String?
-  unit          String   @default("pcs")
-  unitWeight    Float?
-  dimensions    String?  // JSON: {length, width, height, unit}
-
-  // === PRICING ===
-  purchaseCost      Float    @default(0)
-  averageCost       Float    @default(0)
-  standardCost      Float    @default(0)
-  lastPurchaseCost  Float    @default(0)
-  sellingPrice      Float    @default(0)
-  dealerPrice       Float    @default(0)
-  contractorPrice   Float    @default(0)
-  customerPrice     Float    @default(0)
-  vipPrice          Float    @default(0)
-  internalCost      Float    @default(0)
-  labourCost        Float    @default(0)
-  installationCost  Float    @default(0)
-  serviceCost       Float    @default(0)
-  transportationCost Float    @default(0)
-  mobilizationCost  Float    @default(0)
-  equipmentRental   Float    @default(0)
-  emergencyCallOut  Float    @default(0)
-  afterHoursCharge  Float    @default(0)
-  weekendCharge     Float    @default(0)
-  publicHolidayCharge Float  @default(0)
-  currency          String   @default("BND")
-
-  // === STOCK (for physical items) ===
-  quantity      Int      @default(0)
-  minStock      Int      @default(0)
-  maxStock      Int?
-  reorderLevel  Int      @default(0)
-  safetyStock   Int      @default(0)
-
-  // === LEGACY FIELDS (kept for backward compat) ===
-  unitCost      Float    @default(0)
-  supplier      String?
-  location      String?
-
-  // === MEDIA ===
-  photos        String?  // JSON array of URLs
-  attachments   String?  // JSON array of document URLs
-  technicalDatasheet String?
-  msds          String?
-
-  // === WARRANTY & ORIGIN ===
-  warranty      String?
-  warrantyExpiry DateTime?
-  countryOfOrigin String?
-  hsCode        String?
-
-  // === TAGS & STATUS ===
-  tags          String?  // JSON array of strings
-  status        String   @default("draft") // draft, pending_approval, active, inactive, archived, discontinued
-  approvalStatus String  @default("pending") // pending, supervisor_review, manager_approved, admin_approved, rejected
-  approvedBy    String?
-  approvedAt    DateTime?
-
-  // === VERSIONING ===
-  version       Int      @default(1)
-
-  // === MANPOWER-SPECIFIC ===
-  hourlyRate    Float?
-  dailyRate     Float?
-  overtimeRate  Float?
-  weekendRate   Float?
-  publicHolidayRate Float?
-
-  // === RENTAL-SPECIFIC ===
-  dailyRentalRate  Float?
-  monthlyRentalRate Float?
-
-  // === SERVICE PACKAGE-SPECIFIC ===
-  estimatedHours  Float?
-  requiredSkills  String? // JSON array
-  sop             String? // Standard Operating Procedure
-
-  // === MISC ===
-  remarks       String?
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  category      InventoryCategory? @relation(fields: [categoryId], references: [id])
-  subcategory   InventorySubcategory? @relation(fields: [subcategoryId], references: [id])
-  workOrderMaterials WorkOrderMaterial[]
-  suppliers     ItemSupplier[]
-  stockMovements StockMovement[]
-  warehouseStock WarehouseStock[]
-  priceBookEntries PriceBookEntry[]
-
-  @@index([tenantId])
-  @@index([tenantId, itemType])
-  @@index([tenantId, categoryId])
-  @@index([tenantId, status])
-  @@index([tenantId, isActive])
-  @@index([sku])
-  @@index([barcode])
-  @@index([name])
-}
-
-// ============ WAREHOUSES ============
-
-model Warehouse {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String
-  code          String?
-  type          String   @default("main") // main, sub_warehouse, vehicle, technician, project, temporary
-  address       String?
-  manager       String?
-  phone         String?
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  stocks        WarehouseStock[]
-  movements     StockMovement[]
-
-  @@unique([tenantId, name])
-  @@index([tenantId])
-}
-
-model WarehouseStock {
-  id            String   @id @default(cuid())
-  tenantId      String
-  warehouseId   String
-  itemId        String
-  quantity      Int      @default(0)
-  reserved      Int      @default(0)
-  damaged       Int      @default(0)
-  returned      Int      @default(0)
-  batchNo       String?
-  lotNumber     String?
-  expiryDate    DateTime?
-  costMethod    String   @default("fifo") // fifo, lifo, weighted_average
-  updatedAt     DateTime @updatedAt
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  warehouse     Warehouse @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
-  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-
-  @@unique([warehouseId, itemId])
-  @@index([tenantId])
-  @@index([warehouseId])
-  @@index([itemId])
-}
-
-// ============ ITEM SUPPLIERS ============
-
-model ItemSupplier {
-  id            String   @id @default(cuid())
-  tenantId      String
-  itemId        String
-  supplierName  String
-  supplierCode  String?
-  contactPerson String?
-  phone         String?
-  email         String?
-  address       String?
-  leadTimeDays  Int      @default(0)
-  purchasePrice Float    @default(0)
-  moq           Int      @default(1) // Minimum Order Quantity
-  warranty      String?
-  paymentTerms  String?
-  rating        Int?     // 1-5
-  isPrimary     Boolean  @default(false)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-
-  @@index([tenantId])
-  @@index([itemId])
-  @@index([supplierName])
-}
-
-// ============ STOCK MOVEMENTS ============
-
-model StockMovement {
-  id            String   @id @default(cuid())
-  tenantId      String
-  itemId        String
-  warehouseId   String?
-  type          String   // stock_in, stock_out, adjustment, transfer, return, damage
-  quantity      Int
-  previousQty   Int      @default(0)
-  newQty        Int      @default(0)
-  reason        String?
-  referenceNo   String?  // PO number, WO number, etc.
-  referenceType String?  // purchase_order, work_order, adjustment, transfer
-  fromWarehouseId String? // For transfers
-  batchNo       String?
-  lotNumber     String?
-  expiryDate    DateTime?
-  unitCost      Float    @default(0)
-  notes         String?
-  performedBy   String?  // userId
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-  warehouse     Warehouse? @relation(fields: [warehouseId], references: [id])
-
-  @@index([tenantId, createdAt])
-  @@index([tenantId, itemId])
-  @@index([tenantId, type])
-  @@index([warehouseId])
-}
-
-// ============ PRICE BOOKS ============
-
-model PriceBook {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String
-  code          String?  // e.g. RETAIL, CORPORATE, GOV, VIP
-  description   String?
-  isDefault     Boolean  @default(false)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  entries       PriceBookEntry[]
-
-  @@unique([tenantId, name])
-  @@index([tenantId])
-}
-
-model PriceBookEntry {
-  id            String   @id @default(cuid())
-  tenantId      String
-  priceBookId   String
-  itemId        String
-  price         Float    @default(0)
-  discount      Float    @default(0) // percentage
-  currency      String   @default("BND")
-  effectiveFrom DateTime?
-  effectiveTo   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  priceBook     PriceBook @relation(fields: [priceBookId], references: [id], onDelete: Cascade)
-  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-
-  @@unique([priceBookId, itemId])
-  @@index([tenantId])
-  @@index([priceBookId])
-  @@index([itemId])
-}
-
-// ============ PURCHASE ORDERS ============
-
-model PurchaseOrder {
-  id            String   @id @default(cuid())
-  tenantId      String
-  poNumber      String   @unique
-  supplier      String
-  supplierContact String?
-  items         String   // JSON array
-  subtotal      Float
-  tax           Float    @default(0)
-  total         Float
-  status        String   @default("DRAFT") // DRAFT, SENT, APPROVED, RECEIVED, CANCELLED
-  expectedDate  DateTime?
-  receivedAt    DateTime?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-}
-
-// ============ VEHICLES ============
-
-model Vehicle {
-  id            String   @id @default(cuid())
-  tenantId      String
-  plateNumber   String
-  make          String
-  model         String
-  year          Int?
-  vin           String?
-  fuelType      String?
-  status        String   @default("active") // active, maintenance, decommissioned
-  currentMileage Float?
-  nextServiceDate DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  logs          VehicleLog[]
-}
-
-model VehicleLog {
-  id            String   @id @default(cuid())
-  vehicleId     String
-  userId        String?
-  type          String   // fuel, maintenance, repair
-  date          DateTime
-  odometer      Float?
-  quantity      Float?   // liters for fuel
-  cost          Float
-  description   String?
-  location      String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  vehicle       Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
-  user          User?    @relation(fields: [userId], references: [id])
-}
-
-// ============ COMPLAINT TIMELINE ============
-
-model ComplaintTimeline {
-  id              String   @id @default(cuid())
-  tenantId        String
-  complaintId     String
-  action          String   // created, assigned, accepted, rejected, started, checklist_updated, completed, client_confirmed, client_rejected, rework_required, invoice_generated, invoice_approved, invoice_sent, payment_received, closed, status_override
-  fromStatus      String?
-  toStatus        String?
-  description     String
-  performedBy     String?  // userId
-  performedByRole String?
-  metadata        String?  // JSON: extra data (technician name, ETA, etc.)
-  createdAt       DateTime @default(now())
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  complaint       Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
-
-  @@index([tenantId, complaintId])
-  @@index([complaintId, createdAt])
-}
-
-// ============ NOTIFICATIONS ============
-
-model Notification {
-  id               String   @id @default(cuid())
-  tenantId         String
-  userId           String?
-  type             String   // success, error, warning, info, approval, reminder, system_alert, loading, progress
-  title            String
-  message          String
-  data             String?  // JSON: extra metadata, action buttons, etc.
-  priority         String   @default("normal") // low, normal, high, urgent
-  isRead           Boolean  @default(false)
-  readAt           DateTime?
-  archivedAt       DateTime?
-  relatedEntityType String? // complaint, work_order, invoice, pm_schedule, quotation, equipment, user, inventory
-  relatedEntityId   String?
-  actionUrl        String? // client-side navigation target (e.g., "complaint-detail?id=xxx")
-  actionLabel      String? // button label (e.g., "View Complaint")
-  createdBy         String? // userId who triggered the notification
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
-
-  @@index([tenantId])
-  @@index([userId])
-  @@index([tenantId, userId])
-  @@index([tenantId, isRead])
-  @@index([tenantId, userId, isRead])
-  @@index([tenantId, userId, createdAt])
-  @@index([relatedEntityType, relatedEntityId])
-}
-
-// ============ FCM DEVICE TOKENS ============
-
-model DeviceToken {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String
-  token         String   // Firebase FCM device registration token
-  platform      String   // web, android, ios
-  browser       String?  // Chrome, Firefox, Safari, etc.
-  os            String?  // Windows, macOS, Linux, Android, iOS
-  deviceName    String?  // e.g., "John's MacBook Pro"
-  userAgent     String?
-  ipAddress     String?
-  isActive      Boolean  @default(true)
-  lastUsedAt    DateTime @default(now())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  user          User     @relation(fields: [userId], references: [id])
-
-  @@index([tenantId, userId])
-  @@index([tenantId, isActive])
-  @@index([token])
-  @@unique([token]) // FCM tokens are globally unique
-}
-
-// ============ NOTIFICATION DELIVERY LOGS ============
-
-model NotificationLog {
-  id                String   @id @default(cuid())
-  tenantId          String
-  notificationId    String?  // link to Notification record (null for system/push-only)
-  userId            String
-  deviceTokenId     String?
-  fcmMessageId      String?  // Firebase message ID for tracking
-  fcmToken          String?  // the token used for delivery
-  deliveryStatus    String   @default("pending") // pending, sent, delivered, failed, opened, clicked
-  errorMessage      String?
-  openedAt          DateTime?
-  clickedAt         DateTime?
-  createdAt         DateTime @default(now())
-
-  tenant            Tenant   @relation(fields: [tenantId], references: [id])
-  user              User     @relation(fields: [userId], references: [id])
-
-  @@index([tenantId, userId])
-  @@index([tenantId, deliveryStatus])
-  @@index([tenantId, createdAt])
-  @@index([notificationId])
-  @@index([fcmMessageId])
-}
-
-// ============ AUDIT LOGS ============
-
-model AuditLog {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String
-  action        String
-  entity        String
-  entityId      String?
-  oldValue      String?  // JSON: previous value
-  newValue      String?  // JSON: new value
-  details       String?  // JSON
-  ipAddress     String?
-  userAgent     String?
-  device        String?
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  user          User     @relation(fields: [userId], references: [id])
-
-  @@index([tenantId, createdAt])
-  @@index([tenantId, entity])
-  @@index([tenantId, entityId])
-}
-
-// ============ LEAVE & ATTENDANCE ============
-
-model LeaveRequest {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String
-  type          String   // sick, annual, emergency, personal
-  startDate     DateTime
-  endDate       DateTime
-  days          Float
-  reason        String?
-  status        String   @default("PENDING") // PENDING, APPROVED, REJECTED, CANCELLED
-  approvedBy    String?
-  approvedAt    DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-}
-
 model Attendance {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String
-  date          DateTime
-  checkIn       DateTime?
-  checkOut      DateTime?
-  checkInGps    String?
-  checkOutGps   String?
-  hoursWorked   Float?
-  status        String   @default("present") // present, absent, late, half_day, leave
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id          String    @id
+  tenantId    String
+  userId      String
+  date        DateTime
+  checkIn     DateTime?
+  checkOut    DateTime?
+  checkInGps  String?
+  checkOutGps String?
+  hoursWorked Float?
+  status      String    @default("present")
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
 
   @@unique([tenantId, userId, date])
-  @@index([tenantId])
   @@index([tenantId, userId])
-}
-
-// ============ HUMAN RESOURCES MANAGEMENT SYSTEM ============
-
-// --- HR: Shift & Schedule ---
-
-model HrShift {
-  id          String   @id @default(cuid())
-  tenantId    String
-  name        String
-  startTime   String   // "08:00"
-  endTime     String   // "17:00"
-  breakMinutes Int     @default(60)
-  color       String   @default("#3b82f6")
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
-  schedules   HrShiftSchedule[]
-  employees   HrEmployee[]
-
-  @@unique([tenantId, name])
   @@index([tenantId])
 }
 
-model HrShiftSchedule {
-  id          String   @id @default(cuid())
-  tenantId    String
-  employeeId  String
-  shiftId     String
-  effectiveFrom DateTime
-  effectiveTo   DateTime?
-  weeklyOffDays String   // JSON array: ["saturday","sunday"]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model AuditLog {
+  id        String   @id
+  tenantId  String
+  userId    String
+  action    String
+  entity    String
+  entityId  String?
+  oldValue  String?
+  newValue  String?
+  details   String?
+  ipAddress String?
+  userAgent String?
+  device    String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
 
-  tenant      Tenant   @relation(fields: [tenantId], references: [id])
-  shift       HrShift   @relation(fields: [shiftId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, shiftId])
+  @@index([tenantId, entityId])
+  @@index([tenantId, entity])
+  @@index([tenantId, createdAt])
 }
 
-model HrHoliday {
-  id          String   @id @default(cuid())
+model AuthAuditLog {
+  id        String   @id
+  tenantId  String?
+  userId    String?
+  email     String?
+  event     String
+  success   Boolean  @default(true)
+  ipAddress String?
+  userAgent String?
+  device    String?
+  browser   String?
+  metadata  String?
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+  tenant    Tenant?  @relation(fields: [tenantId], references: [id])
+
+  @@index([event])
+  @@index([ipAddress])
+  @@index([email])
+  @@index([tenantId, createdAt])
+}
+
+model BroadcastLog {
+  id             String    @id
+  tenantId       String
+  title          String
+  content        String
+  templateId     String?
+  recipientCount Int       @default(0)
+  sentCount      Int       @default(0)
+  deliveredCount Int       @default(0)
+  failedCount    Int       @default(0)
+  readCount      Int       @default(0)
+  status         String    @default("draft")
+  scheduledAt    DateTime?
+  sentAt         DateTime?
+  completedAt    DateTime?
+  createdBy      String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+}
+
+model ChecklistTemplate {
+  id          String   @id
   tenantId    String
   name        String
-  date        DateTime
-  type        String   @default("public") // public, company, optional
-  recurring   Boolean  @default(false)
+  category    String
+  description String?
+  items       String
+  isDefault   Boolean  @default(false)
   createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
+  updatedAt   DateTime
   tenant      Tenant   @relation(fields: [tenantId], references: [id])
+}
 
-  @@unique([tenantId, date])
+model CmsActivityLog {
+  id        String   @id
+  tenantId  String
+  userId    String?
+  action    String
+  section   String?
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
   @@index([tenantId])
 }
 
-// --- HR: Employee Extended Profile ---
+model CmsAnnouncement {
+  id            String    @id
+  tenantId      String
+  text          String
+  type          String    @default("info")
+  link          String?
+  isEnabled     Boolean   @default(true)
+  scheduledFrom DateTime?
+  scheduledTo   DateTime?
+  displayOrder  Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
 
-model HrEmployee {
-  id              String   @id @default(cuid())
+  @@index([tenantId])
+}
+
+model CmsBlog {
+  id              String           @id
   tenantId        String
-  userId          String   @unique
-  employeeId      String   // e.g. EMP-001
-  departmentId    String?
-  designation     String?
-  employmentType  String   @default("full_time") // full_time, part_time, contract, intern, temporary
-  reportingToId   String?  // employee ID of manager
-  basicSalary     Float?
-  nationality      String?
-  passportNumber  String?
-  passportExpiry  DateTime?
-  visaNumber      String?
-  visaExpiry      DateTime?
-  drivingLicense  String?
-  drivingLicenseExpiry DateTime?
-  joiningDate     DateTime?
-  probationEnds   DateTime?
-  contractEnd     DateTime?
-  bankName        String?
-  bankAccount     String?
-  bankBranch      String?
-  emergencyName   String?
-  emergencyPhone  String?
-  emergencyRelation String?
-  dateOfBirth     DateTime?
-  gender          String?  // male, female, other
-  maritalStatus   String?  // single, married, divorced, widowed
-  bloodGroup      String?
-  photo           String?
-  status          String   @default("active") // active, inactive, terminated, resigned, on_probation
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  title           String
+  slug            String
+  excerpt         String?
+  content         String?
+  featuredImage   String?
+  categoryId      String?
+  authorId        String?
+  status          String           @default("draft")
+  seoTitle        String?
+  seoDescription  String?
+  seoKeywords     String?
+  isFeatured      Boolean          @default(false)
+  publishedAt     DateTime?
+  scheduledAt     DateTime?
+  viewCount       Int              @default(0)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime
+  CmsBlogCategory CmsBlogCategory? @relation(fields: [categoryId], references: [id])
 
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  shift           HrShift?  @relation(fields: [shiftId], references: [id])
-  shiftId         String?
-  department      Department? @relation(fields: [departmentId], references: [id])
-  leaves          HrLeaveRequest[]
-  overtimeRequests HrOvertimeRequest[]
-  performanceReviews HrPerformanceReview[]
-  trainingRecords HrTrainingRecord[]
-  assetAssignments HrAssetAssignment[]
-  documents       HrEmployeeDocument[]
-  medicalRecords  HrMedicalRecord[]
-  travelRequests  HrTravelRequest[]
-  expenseClaims   HrExpenseClaim[]
-  disciplinaryActions HrDisciplinaryAction[]
-  payrollRecords  HrPayroll[]
-
-  @@unique([tenantId, employeeId])
-  @@index([tenantId])
-  @@index([tenantId, departmentId])
-  @@index([tenantId, status])
-}
-
-// --- HR: Leave Management ---
-
-model HrLeaveType {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String   // Annual, Medical, Emergency, Unpaid, Maternity, Compassionate
-  code          String   @unique // ANNUAL, MEDICAL, etc.
-  daysAllowed   Float
-  isPaid        Boolean  @default(true)
-  carryForward  Boolean  @default(false)
-  maxCarryDays  Float?
-  requiresDoc   Boolean  @default(false)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  balances      HrLeaveBalance[]
-
-  @@unique([tenantId, code])
+  @@unique([tenantId, slug])
   @@index([tenantId])
 }
 
-model HrLeaveBalance {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  leaveTypeId   String
-  totalDays     Float
-  usedDays      Float    @default(0)
-  carriedDays   Float    @default(0)
-  year          Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  leaveType     HrLeaveType @relation(fields: [leaveTypeId], references: [id])
-
-  @@unique([tenantId, employeeId, leaveTypeId, year])
-  @@index([tenantId, employeeId])
-}
-
-model HrLeaveRequest {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  leaveTypeId   String
-  startDate     DateTime
-  endDate       DateTime
-  days          Float
-  reason        String?
-  status        String   @default("PENDING") // PENDING, SUPERVISOR_APPROVED, HR_APPROVED, REJECTED, CANCELLED
-  supervisorId  String?
-  supervisorApprovedAt DateTime?
-  hrOfficerId   String?
-  hrApprovedAt  DateTime?
-  rejectedBy    String?
-  rejectedAt    DateTime?
-  rejectionReason String?
-  attachmentUrl  String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, status])
-  @@index([tenantId, leaveTypeId])
-}
-
-// --- HR: Payroll ---
-
-model HrPayroll {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  month         Int      // 1-12
-  year          Int
-  basicSalary   Float
-  allowances    Float    @default(0)
-  deductions    Float    @default(0)
-  overtimePay   Float    @default(0)
-  bonus         Float    @default(0)
-  loanDeduction Float    @default(0)
-  tax           Float    @default(0)
-  netPay        Float
-  status        String   @default("DRAFT") // DRAFT, PROCESSED, PAID
-  payslipUrl    String?
-  processedBy   String?
-  processedAt   DateTime?
-  paidAt        DateTime?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@unique([tenantId, employeeId, month, year])
-  @@index([tenantId, month, year])
-  @@index([tenantId, status])
-}
-
-// --- HR: Overtime ---
-
-model HrOvertimeRequest {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  date          DateTime
-  hours         Float
-  reason        String?
-  status        String   @default("PENDING") // PENDING, SUPERVISOR_APPROVED, HR_APPROVED, REJECTED, PAID
-  supervisorId  String?
-  supervisorApprovedAt DateTime?
-  hrOfficerId   String?
-  hrApprovedAt  DateTime?
-  rate          Float?
-  totalPay      Float?
-  payrollId     String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, status])
-}
-
-// --- HR: Recruitment ---
-
-model HrJobPosition {
-  id            String   @id @default(cuid())
-  tenantId      String
-  title         String
-  departmentId  String?
-  type          String   @default("full_time") // full_time, part_time, contract, intern
-  vacancies     Int      @default(1)
-  location      String?
-  salaryMin     Float?
-  salaryMax     Float?
-  description   String?
-  requirements  String?  // JSON
-  status        String   @default("open") // open, closed, on_hold, filled
-  postedDate    DateTime @default(now())
-  closingDate   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  applications  HrCandidate[]
-
-  @@index([tenantId, status])
-}
-
-model HrCandidate {
-  id            String   @id @default(cuid())
-  tenantId      String
-  jobId         String
-  name          String
-  email         String
-  phone         String?
-  resumeUrl     String?
-  coverLetterUrl String?
-  source        String?  // referral, linkedin, website, walk_in
-  status        String   @default("applied") // applied, screening, interview, offer, hired, rejected
-  appliedAt     DateTime @default(now())
-  interviewDate DateTime?
-  interviewerId String?
-  offerSalary   Float?
-  offerDate     DateTime?
-  notes         String?  // text
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  job           HrJobPosition @relation(fields: [jobId], references: [id])
-
-  @@index([tenantId, jobId])
-  @@index([tenantId, status])
-}
-
-// --- HR: Performance ---
-
-model HrPerformanceReview {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  period        String   // "Q1 2025", "Annual 2025"
-  type          String   @default("quarterly") // monthly, quarterly, semi_annual, annual
-  kpiScore      Float?
-  goalsScore    Float?
-  overallScore  Float?
-  rating        String?  // outstanding, excellent, good, satisfactory, needs_improvement, poor
-  employeeComments String? // text
-  managerComments  String? // text
-  reviewerId    String?
-  status        String   @default("draft") // draft, employee_review, manager_review, completed
-  completedAt   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, period])
-}
-
-// --- HR: Training ---
-
-model HrTraining {
-  id            String   @id @default(cuid())
-  tenantId      String
-  title         String
-  description   String?  // text
-  provider      String?
-  location      String?
-  startDate     DateTime
-  endDate       DateTime
-  cost          Float?
-  maxParticipants Int?
-  status        String   @default("planned") // planned, ongoing, completed, cancelled
-  certificateTemplate String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  records       HrTrainingRecord[]
-
-  @@index([tenantId, status])
-}
-
-model HrTrainingRecord {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  trainingId    String
-  status        String   @default("enrolled") // enrolled, in_progress, completed, failed, cancelled
-  score         Float?
-  certificateUrl String?
-  certificateExpiry DateTime?
-  completedAt   DateTime?
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-  training      HrTraining @relation(fields: [trainingId], references: [id])
-
-  @@unique([tenantId, employeeId, trainingId])
-  @@index([tenantId, employeeId])
-}
-
-// --- HR: Asset Assignment ---
-
-model HrAssetAssignment {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  assetType     String   // vehicle, laptop, mobile, tools, uniform, ppe, equipment
-  assetName     String
-  assetId       String?  // reference to equipment ID if applicable
-  serialNumber  String?
-  assignedDate  DateTime @default(now())
-  returnDate    DateTime?
-  status        String   @default("assigned") // assigned, returned, damaged, lost
-  condition     String?  // new, good, fair, poor
-  notes         String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, assetType])
-}
-
-// --- HR: Employee Documents ---
-
-model HrEmployeeDocument {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  documentType  String   // passport, visa, driving_license, certificate, contract, insurance, other
-  title         String
-  fileUrl       String
-  expiryDate    DateTime?
-  reminderDays  Int      @default(30)
-  status        String   @default("active") // active, expired, revoked
-  uploadedAt    DateTime @default(now())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, documentType])
-  @@index([tenantId, expiryDate])
-}
-
-// --- HR: Visitor Management ---
-
-model HrVisitor {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String
-  email         String?
-  phone         String?
-  company       String?
-  purpose       String?
-  hostEmployeeId String?
-  checkIn       DateTime?
-  checkOut      DateTime?
-  photoUrl      String?
-  idNumber      String?
-  badgeNumber   String?
-  status        String   @default("expected") // expected, checked_in, checked_out
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-
-  @@index([tenantId, status])
-  @@index([tenantId, checkIn])
-}
-
-// --- HR: Medical Records ---
-
-model HrMedicalRecord {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  recordType    String   // insurance, medical_certificate, vaccination, checkup
-  provider      String?
-  date          DateTime
-  expiryDate    DateTime?
-  details       String?  // text
-  fileUrl       String?
-  cost          Float?
-  status        String   @default("active") // active, expired
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, expiryDate])
-}
-
-// --- HR: Travel Requests ---
-
-model HrTravelRequest {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  destination   String
-  purpose       String
-  startDate     DateTime
-  endDate       DateTime
-  budget        Float?
-  actualCost    Float?
-  status        String   @default("PENDING") // PENDING, MANAGER_APPROVED, HR_APPROVED, REJECTED, COMPLETED, CANCELLED
-  approvedBy    String?
-  approvedAt    DateTime?
-  rejectionReason String?
-  notes         String?  // text
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, status])
-}
-
-// --- HR: Expense Claims ---
-
-model HrExpenseClaim {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  category      String   // fuel, travel, meals, accommodation, other
-  amount        Float
-  description   String
-  receiptUrl    String?
-  expenseDate   DateTime
-  status        String   @default("PENDING") // PENDING, MANAGER_APPROVED, HR_APPROVED, REJECTED, PAID, REJECTED
-  approvedBy    String?
-  approvedAt    DateTime?
-  paidAt        DateTime?
-  rejectionReason String?
-  payrollId     String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, status])
-  @@index([tenantId, category])
-}
-
-// --- HR: Disciplinary Actions ---
-
-model HrDisciplinaryAction {
-  id            String   @id @default(cuid())
-  tenantId      String
-  employeeId    String
-  type          String   // warning, suspension, investigation, termination, other
-  severity      String   @default("minor") // minor, major, critical
-  description   String   // text
-  incidentDate  DateTime
-  actionTaken   String?  // text
-  documentUrl   String?
-  issuedBy      String?
-  status        String   @default("active") // active, resolved, appealed, overturned
-  resolvedAt    DateTime?
-  resolution    String?  // text
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  employee      HrEmployee @relation(fields: [employeeId], references: [id])
-
-  @@index([tenantId, employeeId])
-  @@index([tenantId, type])
-}
-
-// --- HR: Announcements ---
-
-model HrAnnouncement {
-  id            String   @id @default(cuid())
-  tenantId      String
-  title         String
-  content       String   // text
-  type          String   @default("info") // info, holiday, emergency, event, policy
-  priority      String   @default("normal") // low, normal, high, urgent
-  targetRoles   String?  // JSON array of roles, null = all
-  targetDepartments String? // JSON array of dept IDs, null = all
-  isPopup       Boolean  @default(false)
-  popupExpiry   DateTime?
-  status        String   @default("published") // draft, published, archived
-  publishedBy   String?
-  publishedAt   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-
-  @@index([tenantId, type])
-  @@index([tenantId, status])
-}
-
-// ============ CMS - CONTENT MANAGEMENT SYSTEM ============
-
-// 1. CMS Settings - Global CMS settings (JSON blobs)
-model CmsSetting {
-  id          String   @id @default(cuid())
+model CmsBlogCategory {
+  id          String    @id
   tenantId    String
-  key         String
-  value       String   // JSON blob
-  category    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  name        String
+  slug        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+  CmsBlog     CmsBlog[]
 
-  @@unique([tenantId, key])
+  @@unique([tenantId, slug])
   @@index([tenantId])
 }
 
-// 2. CMS Hero - Hero section content
+model CmsCareerApplication {
+  id           String       @id
+  tenantId     String
+  jobId        String
+  fullName     String
+  email        String
+  phone        String?
+  resumeUrl    String?
+  coverLetter  String?
+  status       String       @default("new")
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime
+  CmsCareerJob CmsCareerJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+}
+
+model CmsCareerJob {
+  id                   String                 @id
+  tenantId             String
+  title                String
+  department           String?
+  description          String?
+  requirements         String?
+  salary               String?
+  status               String                 @default("open")
+  applicationDeadline  DateTime?
+  location             String?
+  type                 String                 @default("fulltime")
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime
+  CmsCareerApplication CmsCareerApplication[]
+
+  @@index([tenantId])
+}
+
+model CmsContactMessage {
+  id           String    @id
+  tenantId     String
+  name         String
+  email        String
+  phone        String?
+  subject      String?
+  message      String
+  source       String    @default("website")
+  status       String    @default("new")
+  assignedToId String?
+  reply        String?
+  replyAt      DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime
+
+  @@index([tenantId])
+}
+
+model CmsFooter {
+  id                 String   @id
+  tenantId           String
+  companyDescription String?
+  address            String?
+  phone              String?
+  email              String?
+  whatsapp           String?
+  facebook           String?
+  instagram          String?
+  linkedin           String?
+  twitter            String?
+  youtube            String?
+  copyrightText      String?
+  privacyPolicyLink  String?
+  termsLink          String?
+  menuLinks          String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime
+
+  @@index([tenantId])
+}
+
+model CmsForm {
+  id        String   @id
+  tenantId  String
+  name      String
+  formType  String   @default("contact")
+  fields    String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  @@index([tenantId])
+}
+
 model CmsHero {
-  id              String    @id @default(cuid())
+  id              String    @id
   tenantId        String
   headline        String?
   subheadline     String?
@@ -1768,222 +289,91 @@ model CmsHero {
   isActive        Boolean   @default(true)
   publishedAt     DateTime?
   createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  updatedAt       DateTime
 
   @@index([tenantId])
 }
 
-// 3. CMS Service - Services
-model CmsService {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String
-  slug          String
-  description   String?
-  image         String?
-  icon          String?
-  category      String?  // HVAC, Electrical, Plumbing, etc.
-  status        String   @default("draft") // active, draft
-  seoTitle      String?
-  seoDescription String?
-  displayOrder  Int      @default(0)
-  isEnabled     Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@unique([tenantId, slug])
-  @@index([tenantId])
-}
-
-// 4. CMS Industry - Industries served
 model CmsIndustry {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String
-  description   String?
-  image         String?
-  icon          String?
-  displayOrder  Int      @default(0)
-  isEnabled     Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id
+  tenantId     String
+  name         String
+  description  String?
+  image        String?
+  icon         String?
+  displayOrder Int      @default(0)
+  isEnabled    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
 
   @@index([tenantId])
 }
 
-// 5. CMS Project - Portfolio projects
+model CmsMedia {
+  id           String   @id
+  tenantId     String
+  fileName     String
+  originalName String
+  mimeType     String
+  size         Int
+  url          String
+  thumbnailUrl String?
+  folder       String?
+  category     String?
+  alt          String?
+  width        Int?
+  height       Int?
+  uploadedById String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
+
+  @@index([tenantId])
+}
+
+model CmsPopup {
+  id            String    @id
+  tenantId      String
+  title         String
+  content       String?
+  type          String    @default("welcome")
+  imageUrl      String?
+  frequency     String    @default("once")
+  isEnabled     Boolean   @default(true)
+  scheduledFrom DateTime?
+  scheduledTo   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+
+  @@index([tenantId])
+}
+
 model CmsProject {
-  id                String    @id @default(cuid())
+  id                String    @id
   tenantId          String
   title             String
   slug              String
   description       String?
   category          String?
   featuredImage     String?
-  images            String?   // JSON array
-  beforeAfterImages String?   // JSON
-  completionStatus  String    @default("planned") // planned, in_progress, completed
+  images            String?
+  beforeAfterImages String?
+  completionStatus  String    @default("planned")
   isFeatured        Boolean   @default(false)
-  galleryImages     String?   // JSON
+  galleryImages     String?
   seoTitle          String?
   seoDescription    String?
   displayOrder      Int       @default(0)
-  status            String    @default("draft") // active, draft
+  status            String    @default("draft")
   publishedAt       DateTime?
   createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  updatedAt         DateTime
 
   @@unique([tenantId, slug])
   @@index([tenantId])
 }
 
-// 6. CMS Blog Category - Blog categories
-model CmsBlogCategory {
-  id          String   @id @default(cuid())
-  tenantId    String
-  name        String
-  slug        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  blogs       CmsBlog[]
-
-  @@unique([tenantId, slug])
-  @@index([tenantId])
-}
-
-// 7. CMS Blog - Blog posts
-model CmsBlog {
-  id            String    @id @default(cuid())
-  tenantId      String
-  title         String
-  slug          String
-  excerpt       String?
-  content       String?   // rich text
-  featuredImage String?
-  categoryId    String?
-  authorId      String?   // User
-  status        String    @default("draft") // draft, published, scheduled
-  seoTitle      String?
-  seoDescription String?
-  seoKeywords   String?
-  isFeatured    Boolean   @default(false)
-  publishedAt   DateTime?
-  scheduledAt   DateTime?
-  viewCount     Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  category      CmsBlogCategory? @relation(fields: [categoryId], references: [id])
-
-  @@unique([tenantId, slug])
-  @@index([tenantId])
-}
-
-// 8. CMS Testimonial - Customer testimonials
-model CmsTestimonial {
-  id            String   @id @default(cuid())
-  tenantId      String
-  customerName  String
-  company       String?
-  photo         String?
-  rating        Int      // 1-5
-  comment       String
-  status        String   @default("draft") // active, draft
-  displayOrder  Int      @default(0)
-  isEnabled     Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@index([tenantId])
-}
-
-// 9. CMS Career Job - Career positions
-model CmsCareerJob {
-  id                String    @id @default(cuid())
-  tenantId          String
-  title             String
-  department        String?
-  description       String?
-  requirements      String?   // JSON
-  salary            String?
-  status            String    @default("open") // open, closed, filled
-  applicationDeadline DateTime?
-  location          String?
-  type              String    @default("fulltime") // fulltime, parttime, contract
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
-
-  applications      CmsCareerApplication[]
-
-  @@index([tenantId])
-}
-
-// 10. CMS Career Application - Job applications
-model CmsCareerApplication {
-  id            String   @id @default(cuid())
-  tenantId      String
-  jobId         String
-  fullName      String
-  email         String
-  phone         String?
-  resumeUrl     String?
-  coverLetter   String?
-  status        String   @default("new") // new, reviewed, shortlisted, rejected, hired
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  job          CmsCareerJob @relation(fields: [jobId], references: [id], onDelete: Cascade)
-
-  @@index([tenantId])
-}
-
-// 11. CMS Contact Message - Contact form submissions
-model CmsContactMessage {
-  id            String    @id @default(cuid())
-  tenantId      String
-  name          String
-  email         String
-  phone         String?
-  subject       String?
-  message       String
-  source        String    @default("website") // website, whatsapp, email, emergency
-  status        String    @default("new") // new, read, replied, archived
-  assignedToId  String?   // User
-  reply         String?
-  replyAt       DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@index([tenantId])
-}
-
-// 12. CMS Media - Media library
-model CmsMedia {
-  id            String   @id @default(cuid())
-  tenantId      String
-  fileName      String
-  originalName  String
-  mimeType      String
-  size          Int
-  url           String
-  thumbnailUrl  String?
-  folder        String?
-  category      String?
-  alt           String?
-  width         Int?
-  height        Int?
-  uploadedById  String?  // User
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@index([tenantId])
-}
-
-// 13. CMS SEO - SEO settings per page
 model CmsSeo {
-  id            String   @id @default(cuid())
+  id            String   @id
   tenantId      String
   pagePath      String
   title         String?
@@ -1992,558 +382,1923 @@ model CmsSeo {
   ogTitle       String?
   ogDescription String?
   ogImage       String?
-  schemaMarkup  String?  // JSON
+  schemaMarkup  String?
   canonicalUrl  String?
   createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  updatedAt     DateTime
 
   @@unique([tenantId, pagePath])
   @@index([tenantId])
 }
 
-// 14. CMS Footer - Footer settings
-model CmsFooter {
-  id                String   @id @default(cuid())
-  tenantId          String
-  companyDescription String?
-  address           String?
-  phone             String?
-  email             String?
-  whatsapp          String?
-  facebook          String?
-  instagram         String?
-  linkedin          String?
-  twitter           String?
-  youtube           String?
-  copyrightText     String?
-  privacyPolicyLink String?
-  termsLink         String?
-  menuLinks         String?  // JSON
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+model CmsService {
+  id             String   @id
+  tenantId       String
+  name           String
+  slug           String
+  description    String?
+  image          String?
+  icon           String?
+  category       String?
+  status         String   @default("draft")
+  seoTitle       String?
+  seoDescription String?
+  displayOrder   Int      @default(0)
+  isEnabled      Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+model CmsSetting {
+  id        String   @id
+  tenantId  String
+  key       String
+  value     String
+  category  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+
+  @@unique([tenantId, key])
+  @@index([tenantId])
+}
+
+model CmsTestimonial {
+  id           String   @id
+  tenantId     String
+  customerName String
+  company      String?
+  photo        String?
+  rating       Int
+  comment      String
+  status       String   @default("draft")
+  displayOrder Int      @default(0)
+  isEnabled    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime
 
   @@index([tenantId])
 }
 
-// 15. CMS Announcement - Announcement bar
-model CmsAnnouncement {
-  id            String    @id @default(cuid())
-  tenantId      String
-  text          String
-  type          String    @default("info") // maintenance, holiday, emergency, info
-  link          String?
-  isEnabled     Boolean   @default(true)
-  scheduledFrom DateTime?
-  scheduledTo   DateTime?
-  displayOrder  Int       @default(0)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+model Complaint {
+  id                                String              @id
+  tenantId                          String
+  customerId                        String
+  equipmentId                       String?
+  title                             String
+  description                       String
+  priority                          String              @default("medium")
+  status                            String              @default("NEW")
+  source                            String              @default("admin")
+  category                          String?
+  photos                            String?
+  gpsLocation                       String?
+  assignedToId                      String?
+  supervisorId                      String?
+  assignedBy                        String?
+  assignedByRole                    String?
+  assignedAt                        DateTime?
+  lastReassignedAt                  DateTime?
+  assignmentReason                  String?
+  assignmentStatus                  String              @default("UNASSIGNED")
+  reassignmentCount                 Int                 @default(0)
+  slaResponseDeadline               DateTime?
+  workOrderId                       String?
+  invoiceId                         String?
+  eta                               String?
+  rejectionReason                   String?
+  reworkReason                      String?
+  customerSnapshot                  String?
+  locationInfo                      String?
+  resolutionNotes                   String?
+  customerRating                    Int?
+  customerFeedback                  String?
+  acceptedAt                        DateTime?
+  startedAt                         DateTime?
+  completedAt                       DateTime?
+  clientConfirmedAt                 DateTime?
+  resolvedAt                        DateTime?
+  closedAt                          DateTime?
+  createdAt                         DateTime            @default(now())
+  updatedAt                         DateTime
+  User_Complaint_supervisorIdToUser User?               @relation("Complaint_supervisorIdToUser", fields: [supervisorId], references: [id])
+  User_Complaint_assignedToIdToUser User?               @relation("Complaint_assignedToIdToUser", fields: [assignedToId], references: [id])
+  equipment                         Equipment?          @relation(fields: [equipmentId], references: [id])
+  customer                          Customer            @relation(fields: [customerId], references: [id])
+  tenant                            Tenant              @relation(fields: [tenantId], references: [id])
+  ComplaintTimeline                 ComplaintTimeline[]
+  WorkOrder                         WorkOrder[]
 
-  @@index([tenantId])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, category])
+  @@index([tenantId, customerId])
+  @@index([tenantId, assignedBy])
+  @@index([tenantId, assignedToId])
+  @@index([tenantId, status])
 }
 
-// 16. CMS Popup - Popup management
-model CmsPopup {
-  id            String    @id @default(cuid())
-  tenantId      String
-  title         String
-  content       String?
-  type          String    @default("welcome") // welcome, alert, promotional, newsletter
-  imageUrl      String?
-  frequency     String    @default("once") // once, session, once/day, always
-  isEnabled     Boolean   @default(true)
-  scheduledFrom DateTime?
-  scheduledTo   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  @@index([tenantId])
-}
-
-// 17. CMS Form - Form builder
-model CmsForm {
-  id            String   @id @default(cuid())
-  tenantId      String
-  name          String
-  formType      String   @default("contact") // contact, career, feedback, survey, custom
-  fields        String   // JSON
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  @@index([tenantId])
-}
-
-// 18. CMS Activity Log - CMS audit log
-model CmsActivityLog {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String?
-  action        String
-  section       String?
-  details       String?  // JSON
-  ipAddress     String?
-  createdAt     DateTime @default(now())
-
-  @@index([tenantId])
-}
-
-// ============ WHATSAPP SYSTEM ============
-
-// 19. WhatsApp Config - Provider settings per tenant
-model WhatsAppConfig {
-  id              String   @id @default(cuid())
+model ComplaintTimeline {
+  id              String    @id
   tenantId        String
-  provider        String   @default("openwa") // openwa, meta, twilio
-  isEnabled       Boolean  @default(false)
-  phoneNumber     String?
-  businessName    String?
-  // OpenWA config
-  openwaBaseUrl   String?  // e.g. http://localhost:3001
-  openwaSession   String?
-  openwaApiKey    String?
-  openwaQrCode    String?  // base64 QR image
-  openwaStatus    String   @default("disconnected") // connected, disconnected, connecting
-  // Meta Cloud API config
-  metaAccessToken String?
-  metaPhoneNumberId String?
-  metaVerifyToken String?
-  metaWebhookSecret String?
-  metaBusinessAccountId String?
-  // Twilio config
-  twilioAccountSid  String?
-  twilioAuthToken   String?
-  twilioPhoneNumber String?
-  // General
-  autoReplyEnabled  Boolean @default(true)
-  welcomeMessage    String  @default("Welcome to MOHD.HMS ENTERPRISE!\n\nPlease choose:\n1️⃣ New Complaint\n2️⃣ Service Request\n3️⃣ Complaint Status\n4️⃣ My Equipment\n5️⃣ Work Order Status\n6️⃣ Invoices\n7️⃣ Emergency Service\n8️⃣ Speak to Customer Support")
-  emergencyNumbers  String?  // JSON array of phone numbers
-  defaultPriority   String  @default("medium")
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  complaintId     String
+  action          String
+  fromStatus      String?
+  toStatus        String?
+  description     String
+  performedBy     String?
+  performedByRole String?
+  metadata        String?
+  createdAt       DateTime  @default(now())
+  complaint       Complaint @relation(fields: [complaintId], references: [id], onDelete: Cascade)
+  tenant          Tenant    @relation(fields: [tenantId], references: [id])
 
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  sessions        WhatsAppSession[]
-
-  @@unique([tenantId])
+  @@index([complaintId, createdAt])
+  @@index([tenantId, complaintId])
 }
 
-// 20. WhatsApp Session - Per-customer conversation session
-model WhatsAppSession {
-  id              String   @id @default(cuid())
-  tenantId        String
-  configId        String
-  phoneNumber     String   // customer WhatsApp number (international format)
-  customerId      String?  // linked CMMS customer
-  sessionId       String?  // provider session ID
-  state           String   @default("menu") // menu, new_complaint_desc, new_complaint_media, new_complaint_equipment, service_request_desc, status_query, invoice_query, equipment_list, emergency_desc, feedback_rating, feedback_comment, escalation_desc, chat, appointment_date, appointment_time, appointment_location
-  stateData       String?  // JSON - temp data for current flow step
-  lastMessageAt   DateTime @default(now())
-  messageCount    Int      @default(0)
-  isActive        Boolean  @default(true)
-  isBlocked       Boolean  @default(false)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  config          WhatsAppConfig @relation(fields: [configId], references: [id])
-  customer        Customer? @relation(fields: [customerId], references: [id])
-  messages        WhatsAppMessage[]
-  threads         ConversationThread[]
-
-  @@index([tenantId, phoneNumber])
-  @@index([phoneNumber])
-  @@index([state])
-}
-
-// 21. WhatsApp Message - All messages (inbound + outbound)
-model WhatsAppMessage {
-  id              String   @id @default(cuid())
-  tenantId        String
-  sessionId       String
-  threadId        String?
-  direction       String   // inbound, outbound
-  messageType     String   @default("text") // text, image, video, audio, document, location, contact, sticker
-  content         String?  // text content
-  mediaUrl        String?
-  mediaType       String?
-  thumbnailUrl    String?
-  caption         String?
-  location        String?  // JSON: {lat, lng, address}
-  fromNumber      String?
-  toNumber        String?
-  providerMessageId String? // WhatsApp message ID from provider
-  status          String   @default("sent") // sent, delivered, read, failed
-  errorMessage    String?
-  isFromBot       Boolean  @default(false)
-  isTemplate      Boolean  @default(false)
-  metadata        String?  // JSON - extra data
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  session         WhatsAppSession @relation(fields: [sessionId], references: [id])
-  thread          ConversationThread? @relation(fields: [threadId], references: [id])
-  deliveryLogs    WhatsAppDeliveryLog[]
-
-  @@index([tenantId, sessionId])
-  @@index([sessionId])
-  @@index([providerMessageId])
-  @@index([createdAt])
-}
-
-// 22. Conversation Thread - Grouped conversations
 model ConversationThread {
-  id              String   @id @default(cuid())
+  id              String            @id
   tenantId        String
   sessionId       String
   subject         String?
-  status          String   @default("active") // active, resolved, archived
-  assignedToId    String?  // staff member handling this thread
-  lastMessageAt   DateTime @default(now())
-  messageCount    Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  session         WhatsAppSession @relation(fields: [sessionId], references: [id])
-  customer        Customer? @relation(fields: [customerId], references: [id])
+  status          String            @default("active")
+  assignedToId    String?
+  lastMessageAt   DateTime          @default(now())
+  messageCount    Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
   customerId      String?
-  messages        WhatsAppMessage[]
+  customer        Customer?         @relation(fields: [customerId], references: [id])
+  WhatsAppSession WhatsAppSession   @relation(fields: [sessionId], references: [id])
+  tenant          Tenant            @relation(fields: [tenantId], references: [id])
+  WhatsAppMessage WhatsAppMessage[]
 
-  @@index([tenantId, status])
-  @@index([sessionId])
   @@index([assignedToId])
+  @@index([sessionId])
+  @@index([tenantId, status])
 }
 
-// 23. WhatsApp Template - Message templates
-model WhatsAppTemplate {
-  id              String   @id @default(cuid())
+model Customer {
+  id                   String               @id
+  tenantId             String
+  name                 String
+  email                String?
+  phone                String
+  address              String?
+  gpsLocation          String?
+  companyName          String?
+  customerNumber       String               @unique
+  photo                String?
+  paymentTerms         String?
+  pic                  String?
+  country              String?              @default("Brunei")
+  district             String?
+  taxRate              Float                @default(0)
+  isActive             Boolean              @default(true)
+  isWhatsappVerified   Boolean              @default(false)
+  whatsappId           String?
+  whatsappPhone        String?
+  lastWhatsappActivity DateTime?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime
+  Complaint            Complaint[]
+  ConversationThread   ConversationThread[]
+  tenant               Tenant               @relation(fields: [tenantId], references: [id])
+  CustomerFeedback     CustomerFeedback[]
+  CustomerReport       CustomerReport[]
+  Equipment            Equipment[]
+  Invoice              Invoice[]
+  Quotation            Quotation[]
+  WhatsAppSession      WhatsAppSession[]
+  WorkOrder            WorkOrder[]
+
+  @@index([tenantId, isActive])
+  @@index([tenantId, phone])
+  @@index([tenantId])
+}
+
+model CustomerFeedback {
+  id          String   @id
+  tenantId    String
+  customerId  String
+  complaintId String?
+  workOrderId String?
+  rating      Int
+  comment     String?
+  source      String   @default("whatsapp")
+  createdAt   DateTime @default(now())
+  customer    Customer @relation(fields: [customerId], references: [id])
+  tenant      Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, customerId])
+}
+
+model CustomerReport {
+  id              String    @id
+  tenantId        String
+  customerId      String
+  sessionId       String?
+  type            String    @default("escalation")
+  subject         String
+  description     String
+  priority        String    @default("medium")
+  status          String    @default("OPEN")
+  resolvedById    String?
+  resolvedAt      DateTime?
+  resolutionNotes String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime
+  customer        Customer  @relation(fields: [customerId], references: [id])
+  tenant          Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+}
+
+model Department {
+  id          String       @id
+  tenantId    String
+  name        String
+  description String?
+  headId      String?
+  isActive    Boolean      @default(true)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime
+  tenant      Tenant       @relation(fields: [tenantId], references: [id])
+  HrEmployee  HrEmployee[]
+  User        User[]
+
+  @@index([tenantId])
+}
+
+model Device {
+  id        String   @id
+  tenantId  String
+  userId    String
+  name      String?
+  type      String?
+  browser   String?
+  os        String?
+  ipAddress String?
+  userAgent String?
+  lastSeen  DateTime @default(now())
+  isTrusted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, userId])
+  @@index([userId])
+}
+
+model DeviceToken {
+  id         String   @id
+  tenantId   String
+  userId     String
+  token      String   @unique
+  platform   String
+  browser    String?
+  os         String?
+  deviceName String?
+  userAgent  String?
+  ipAddress  String?
+  isActive   Boolean  @default(true)
+  lastUsedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime
+  user       User     @relation(fields: [userId], references: [id])
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([token])
+  @@index([tenantId, isActive])
+  @@index([tenantId, userId])
+}
+
+model EmailLog {
+  id                String         @id
+  tenantId          String
+  recipient         String
+  cc                String?
+  bcc               String?
+  subject           String
+  templateId        String?
+  templateName      String?
+  module            String?
+  status            String         @default("queued")
+  provider          String         @default("brevo")
+  providerMessageId String?
+  errorCode         String?
+  errorMessage      String?
+  retryCount        Int            @default(0)
+  maxRetries        Int            @default(5)
+  nextRetryAt       DateTime?
+  scheduledFor      DateTime?
+  ip                String?
+  userAgent         String?
+  metadata          String?
+  attachmentCount   Int            @default(0)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime
+  sentAt            DateTime?
+  deliveredAt       DateTime?
+  openedAt          DateTime?
+  bouncedAt         DateTime?
+  tenant            Tenant         @relation(fields: [tenantId], references: [id])
+  EmailTemplate     EmailTemplate? @relation(fields: [templateId], references: [id])
+
+  @@index([createdAt])
+  @@index([providerMessageId])
+  @@index([nextRetryAt])
+  @@index([scheduledFor])
+  @@index([status])
+  @@index([recipient])
+  @@index([tenantId, module])
+  @@index([tenantId, status])
+  @@index([tenantId, createdAt])
+}
+
+model EmailTemplate {
+  id          String     @id
+  tenantId    String
+  name        String
+  identifier  String
+  subject     String
+  module      String
+  description String?
+  bodyHtml    String
+  bodyText    String?
+  variables   String?
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime
+  EmailLog    EmailLog[]
+  tenant      Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, identifier])
+  @@index([tenantId, module])
+}
+
+model Equipment {
+  id              String           @id
+  tenantId        String
+  customerId      String?
+  name            String
+  category        String
+  assetNumber     String           @unique
+  qrCode          String           @unique
+  qrId            String?          @unique
+  brand           String?
+  model           String?
+  serialNumber    String?
+  location        String?
+  building        String?
+  room            String?
+  installDate     DateTime?
+  warrantyExpiry  DateTime?
+  warrantyInfo    String?
+  status          String           @default("active")
+  condition       String           @default("good")
+  photos          String?
+  documents       String?
+  specifications  String?
+  notes           String?
+  scanCount       Int              @default(0)
+  lastScannedAt   DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime
+  Complaint       Complaint[]
+  customer        Customer?        @relation(fields: [customerId], references: [id])
+  tenant          Tenant           @relation(fields: [tenantId], references: [id])
+  EquipmentQrCode EquipmentQrCode?
+  PmSchedule      PmSchedule[]
+  ScanLog         ScanLog[]
+  WorkOrder       WorkOrder[]
+
+  @@index([tenantId, customerId])
+  @@index([tenantId, status])
+  @@index([tenantId])
+}
+
+model EquipmentQrCode {
+  id                String    @id
+  tenantId          String
+  equipmentId       String    @unique
+  qrId              String    @unique
+  qrUrl             String
+  isActive          Boolean   @default(true)
+  generatedAt       DateTime  @default(now())
+  lastRegeneratedAt DateTime?
+  version           Int       @default(1)
+  equipment         Equipment @relation(fields: [equipmentId], references: [id])
+  tenant            Tenant    @relation(fields: [tenantId], references: [id])
+}
+
+model HrAnnouncement {
+  id                String    @id
+  tenantId          String
+  title             String
+  content           String
+  type              String    @default("info")
+  priority          String    @default("normal")
+  targetRoles       String?
+  targetDepartments String?
+  isPopup           Boolean   @default(false)
+  popupExpiry       DateTime?
+  status            String    @default("published")
+  publishedBy       String?
+  publishedAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime
+  tenant            Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([tenantId, type])
+}
+
+model HrAssetAssignment {
+  id           String     @id
+  tenantId     String
+  employeeId   String
+  assetType    String
+  assetName    String
+  assetId      String?
+  serialNumber String?
+  assignedDate DateTime   @default(now())
+  returnDate   DateTime?
+  status       String     @default("assigned")
+  condition    String?
+  notes        String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime
+  HrEmployee   HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant       Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, assetType])
+  @@index([tenantId, employeeId])
+}
+
+model HrCandidate {
+  id             String        @id
+  tenantId       String
+  jobId          String
+  name           String
+  email          String
+  phone          String?
+  resumeUrl      String?
+  coverLetterUrl String?
+  source         String?
+  status         String        @default("applied")
+  appliedAt      DateTime      @default(now())
+  interviewDate  DateTime?
+  interviewerId  String?
+  offerSalary    Float?
+  offerDate      DateTime?
+  notes          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime
+  HrJobPosition  HrJobPosition @relation(fields: [jobId], references: [id])
+  tenant         Tenant        @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([tenantId, jobId])
+}
+
+model HrDisciplinaryAction {
+  id           String     @id
+  tenantId     String
+  employeeId   String
+  type         String
+  severity     String     @default("minor")
+  description  String
+  incidentDate DateTime
+  actionTaken  String?
+  documentUrl  String?
+  issuedBy     String?
+  status       String     @default("active")
+  resolvedAt   DateTime?
+  resolution   String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime
+  HrEmployee   HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant       Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, type])
+  @@index([tenantId, employeeId])
+}
+
+model HrEmployee {
+  id                   String                 @id
+  tenantId             String
+  userId               String                 @unique
+  employeeId           String
+  departmentId         String?
+  designation          String?
+  employmentType       String                 @default("full_time")
+  reportingToId        String?
+  basicSalary          Float?
+  nationality          String?
+  passportNumber       String?
+  passportExpiry       DateTime?
+  visaNumber           String?
+  visaExpiry           DateTime?
+  drivingLicense       String?
+  drivingLicenseExpiry DateTime?
+  joiningDate          DateTime?
+  probationEnds        DateTime?
+  contractEnd          DateTime?
+  bankName             String?
+  bankAccount          String?
+  bankBranch           String?
+  emergencyName        String?
+  emergencyPhone       String?
+  emergencyRelation    String?
+  dateOfBirth          DateTime?
+  gender               String?
+  maritalStatus        String?
+  bloodGroup           String?
+  photo                String?
+  status               String                 @default("active")
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime
+  shiftId              String?
+  HrAssetAssignment    HrAssetAssignment[]
+  HrDisciplinaryAction HrDisciplinaryAction[]
+  department           Department?            @relation(fields: [departmentId], references: [id])
+  HrShift              HrShift?               @relation(fields: [shiftId], references: [id])
+  tenant               Tenant                 @relation(fields: [tenantId], references: [id])
+  HrEmployeeDocument   HrEmployeeDocument[]
+  HrExpenseClaim       HrExpenseClaim[]
+  HrLeaveRequest       HrLeaveRequest[]
+  HrMedicalRecord      HrMedicalRecord[]
+  HrOvertimeRequest    HrOvertimeRequest[]
+  HrPayroll            HrPayroll[]
+  HrPerformanceReview  HrPerformanceReview[]
+  HrTrainingRecord     HrTrainingRecord[]
+  HrTravelRequest      HrTravelRequest[]
+
+  @@unique([tenantId, employeeId])
+  @@index([tenantId, status])
+  @@index([tenantId, departmentId])
+  @@index([tenantId])
+}
+
+model HrEmployeeDocument {
+  id           String     @id
+  tenantId     String
+  employeeId   String
+  documentType String
+  title        String
+  fileUrl      String
+  expiryDate   DateTime?
+  reminderDays Int        @default(30)
+  status       String     @default("active")
+  uploadedAt   DateTime   @default(now())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime
+  HrEmployee   HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant       Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, expiryDate])
+  @@index([tenantId, documentType])
+  @@index([tenantId, employeeId])
+}
+
+model HrExpenseClaim {
+  id              String     @id
+  tenantId        String
+  employeeId      String
+  category        String
+  amount          Float
+  description     String
+  receiptUrl      String?
+  expenseDate     DateTime
+  status          String     @default("PENDING")
+  approvedBy      String?
+  approvedAt      DateTime?
+  paidAt          DateTime?
+  rejectionReason String?
+  payrollId       String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime
+  HrEmployee      HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant          Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, category])
+  @@index([tenantId, status])
+  @@index([tenantId, employeeId])
+}
+
+model HrHoliday {
+  id        String   @id
+  tenantId  String
+  name      String
+  date      DateTime
+  type      String   @default("public")
+  recurring Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, date])
+  @@index([tenantId])
+}
+
+model HrJobPosition {
+  id           String        @id
+  tenantId     String
+  title        String
+  departmentId String?
+  type         String        @default("full_time")
+  vacancies    Int           @default(1)
+  location     String?
+  salaryMin    Float?
+  salaryMax    Float?
+  description  String?
+  requirements String?
+  status       String        @default("open")
+  postedDate   DateTime      @default(now())
+  closingDate  DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime
+  HrCandidate  HrCandidate[]
+  tenant       Tenant        @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+}
+
+model HrLeaveBalance {
+  id          String      @id
+  tenantId    String
+  employeeId  String
+  leaveTypeId String
+  totalDays   Float
+  usedDays    Float       @default(0)
+  carriedDays Float       @default(0)
+  year        Int
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime
+  HrLeaveType HrLeaveType @relation(fields: [leaveTypeId], references: [id])
+  tenant      Tenant      @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, employeeId, leaveTypeId, year])
+  @@index([tenantId, employeeId])
+}
+
+model HrLeaveRequest {
+  id                   String     @id
+  tenantId             String
+  employeeId           String
+  leaveTypeId          String
+  startDate            DateTime
+  endDate              DateTime
+  days                 Float
+  reason               String?
+  status               String     @default("PENDING")
+  supervisorId         String?
+  supervisorApprovedAt DateTime?
+  hrOfficerId          String?
+  hrApprovedAt         DateTime?
+  rejectedBy           String?
+  rejectedAt           DateTime?
+  rejectionReason      String?
+  attachmentUrl        String?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime
+  HrEmployee           HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant               Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, leaveTypeId])
+  @@index([tenantId, status])
+  @@index([tenantId, employeeId])
+}
+
+model HrLeaveType {
+  id             String           @id
+  tenantId       String
+  name           String
+  code           String           @unique
+  daysAllowed    Float
+  isPaid         Boolean          @default(true)
+  carryForward   Boolean          @default(false)
+  maxCarryDays   Float?
+  requiresDoc    Boolean          @default(false)
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime
+  HrLeaveBalance HrLeaveBalance[]
+  tenant         Tenant           @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+}
+
+model HrMedicalRecord {
+  id         String     @id
+  tenantId   String
+  employeeId String
+  recordType String
+  provider   String?
+  date       DateTime
+  expiryDate DateTime?
+  details    String?
+  fileUrl    String?
+  cost       Float?
+  status     String     @default("active")
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime
+  HrEmployee HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant     Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, expiryDate])
+  @@index([tenantId, employeeId])
+}
+
+model HrOvertimeRequest {
+  id                   String     @id
+  tenantId             String
+  employeeId           String
+  date                 DateTime
+  hours                Float
+  reason               String?
+  status               String     @default("PENDING")
+  supervisorId         String?
+  supervisorApprovedAt DateTime?
+  hrOfficerId          String?
+  hrApprovedAt         DateTime?
+  rate                 Float?
+  totalPay             Float?
+  payrollId            String?
+  createdAt            DateTime   @default(now())
+  updatedAt            DateTime
+  HrEmployee           HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant               Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([tenantId, employeeId])
+}
+
+model HrPayroll {
+  id            String     @id
+  tenantId      String
+  employeeId    String
+  month         Int
+  year          Int
+  basicSalary   Float
+  allowances    Float      @default(0)
+  deductions    Float      @default(0)
+  overtimePay   Float      @default(0)
+  bonus         Float      @default(0)
+  loanDeduction Float      @default(0)
+  tax           Float      @default(0)
+  netPay        Float
+  status        String     @default("DRAFT")
+  payslipUrl    String?
+  processedBy   String?
+  processedAt   DateTime?
+  paidAt        DateTime?
+  notes         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime
+  HrEmployee    HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant        Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, employeeId, month, year])
+  @@index([tenantId, status])
+  @@index([tenantId, month, year])
+}
+
+model HrPerformanceReview {
+  id               String     @id
+  tenantId         String
+  employeeId       String
+  period           String
+  type             String     @default("quarterly")
+  kpiScore         Float?
+  goalsScore       Float?
+  overallScore     Float?
+  rating           String?
+  employeeComments String?
+  managerComments  String?
+  reviewerId       String?
+  status           String     @default("draft")
+  completedAt      DateTime?
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime
+  HrEmployee       HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant           Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, period])
+  @@index([tenantId, employeeId])
+}
+
+model HrShift {
+  id              String            @id
   tenantId        String
   name            String
-  category        String   // welcome, complaint_created, assigned, in_progress, completed, invoice, feedback, emergency, appointment, notification, custom
-  content         String   // template body with {{variables}}
-  variables        String?  // JSON array of variable names
-  mediaType       String?  // text, image, document
-  mediaUrl        String?  // URL for template media
-  isActive        Boolean  @default(true)
-  isSystem        Boolean  @default(false) // system templates can't be deleted
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  startTime       String
+  endTime         String
+  breakMinutes    Int               @default(60)
+  color           String            @default("#3b82f6")
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime
+  HrEmployee      HrEmployee[]
+  tenant          Tenant            @relation(fields: [tenantId], references: [id])
+  HrShiftSchedule HrShiftSchedule[]
 
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  @@unique([tenantId, name])
+  @@index([tenantId])
+}
+
+model HrShiftSchedule {
+  id            String    @id
+  tenantId      String
+  employeeId    String
+  shiftId       String
+  effectiveFrom DateTime
+  effectiveTo   DateTime?
+  weeklyOffDays String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime
+  HrShift       HrShift   @relation(fields: [shiftId], references: [id])
+  tenant        Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, shiftId])
+  @@index([tenantId, employeeId])
+}
+
+model HrTraining {
+  id                  String             @id
+  tenantId            String
+  title               String
+  description         String?
+  provider            String?
+  location            String?
+  startDate           DateTime
+  endDate             DateTime
+  cost                Float?
+  maxParticipants     Int?
+  status              String             @default("planned")
+  certificateTemplate String?
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime
+  tenant              Tenant             @relation(fields: [tenantId], references: [id])
+  HrTrainingRecord    HrTrainingRecord[]
+
+  @@index([tenantId, status])
+}
+
+model HrTrainingRecord {
+  id                String     @id
+  tenantId          String
+  employeeId        String
+  trainingId        String
+  status            String     @default("enrolled")
+  score             Float?
+  certificateUrl    String?
+  certificateExpiry DateTime?
+  completedAt       DateTime?
+  notes             String?
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime
+  HrTraining        HrTraining @relation(fields: [trainingId], references: [id])
+  HrEmployee        HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant            Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, employeeId, trainingId])
+  @@index([tenantId, employeeId])
+}
+
+model HrTravelRequest {
+  id              String     @id
+  tenantId        String
+  employeeId      String
+  destination     String
+  purpose         String
+  startDate       DateTime
+  endDate         DateTime
+  budget          Float?
+  actualCost      Float?
+  status          String     @default("PENDING")
+  approvedBy      String?
+  approvedAt      DateTime?
+  rejectionReason String?
+  notes           String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime
+  HrEmployee      HrEmployee @relation(fields: [employeeId], references: [id])
+  tenant          Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([tenantId, employeeId])
+}
+
+model HrVisitor {
+  id             String    @id
+  tenantId       String
+  name           String
+  email          String?
+  phone          String?
+  company        String?
+  purpose        String?
+  hostEmployeeId String?
+  checkIn        DateTime?
+  checkOut       DateTime?
+  photoUrl       String?
+  idNumber       String?
+  badgeNumber    String?
+  status         String    @default("expected")
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, checkIn])
+  @@index([tenantId, status])
+}
+
+model InventoryCategory {
+  id                   String                 @id
+  tenantId             String
+  name                 String
+  code                 String?
+  description          String?
+  icon                 String?
+  color                String?
+  displayOrder         Int                    @default(0)
+  isActive             Boolean                @default(true)
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime
+  tenant               Tenant                 @relation(fields: [tenantId], references: [id])
+  InventoryItem        InventoryItem[]
+  InventorySubcategory InventorySubcategory[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+}
+
+model InventoryItem {
+  id                   String                @id
+  tenantId             String
+  itemCode             String?               @unique
+  sku                  String?               @unique
+  barcode              String?               @unique
+  qrCode               String?
+  name                 String
+  shortName            String?
+  itemType             String                @default("inventory")
+  categoryId           String?
+  subcategoryId        String?
+  description          String?
+  shortDescription     String?
+  brand                String?
+  manufacturer         String?
+  model                String?
+  partNumber           String?
+  serialNumber         String?
+  unit                 String                @default("pcs")
+  unitWeight           Float?
+  dimensions           String?
+  purchaseCost         Float                 @default(0)
+  averageCost          Float                 @default(0)
+  standardCost         Float                 @default(0)
+  lastPurchaseCost     Float                 @default(0)
+  sellingPrice         Float                 @default(0)
+  dealerPrice          Float                 @default(0)
+  contractorPrice      Float                 @default(0)
+  customerPrice        Float                 @default(0)
+  vipPrice             Float                 @default(0)
+  internalCost         Float                 @default(0)
+  labourCost           Float                 @default(0)
+  installationCost     Float                 @default(0)
+  serviceCost          Float                 @default(0)
+  transportationCost   Float                 @default(0)
+  mobilizationCost     Float                 @default(0)
+  equipmentRental      Float                 @default(0)
+  emergencyCallOut     Float                 @default(0)
+  afterHoursCharge     Float                 @default(0)
+  weekendCharge        Float                 @default(0)
+  publicHolidayCharge  Float                 @default(0)
+  currency             String                @default("BND")
+  quantity             Int                   @default(0)
+  minStock             Int                   @default(0)
+  maxStock             Int?
+  reorderLevel         Int                   @default(0)
+  safetyStock          Int                   @default(0)
+  unitCost             Float                 @default(0)
+  supplier             String?
+  location             String?
+  photos               String?
+  attachments          String?
+  technicalDatasheet   String?
+  msds                 String?
+  warranty             String?
+  warrantyExpiry       DateTime?
+  countryOfOrigin      String?
+  hsCode               String?
+  tags                 String?
+  status               String                @default("draft")
+  approvalStatus       String                @default("pending")
+  approvedBy           String?
+  approvedAt           DateTime?
+  version              Int                   @default(1)
+  hourlyRate           Float?
+  dailyRate            Float?
+  overtimeRate         Float?
+  weekendRate          Float?
+  publicHolidayRate    Float?
+  dailyRentalRate      Float?
+  monthlyRentalRate    Float?
+  estimatedHours       Float?
+  requiredSkills       String?
+  sop                  String?
+  remarks              String?
+  isActive             Boolean               @default(true)
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime
+  InventorySubcategory InventorySubcategory? @relation(fields: [subcategoryId], references: [id])
+  inventoryCategory    InventoryCategory?    @relation(fields: [categoryId], references: [id])
+  tenant               Tenant                @relation(fields: [tenantId], references: [id])
+  ItemSupplier         ItemSupplier[]
+  PriceBookEntry       PriceBookEntry[]
+  StockMovement        StockMovement[]
+  WarehouseStock       WarehouseStock[]
+  WorkOrderMaterial    WorkOrderMaterial[]
+
+  @@index([name])
+  @@index([barcode])
+  @@index([sku])
+  @@index([tenantId, isActive])
+  @@index([tenantId, status])
+  @@index([tenantId, categoryId])
+  @@index([tenantId, itemType])
+  @@index([tenantId])
+}
+
+model InventorySubcategory {
+  id                String            @id
+  tenantId          String
+  categoryId        String
+  name              String
+  code              String?
+  description       String?
+  displayOrder      Int               @default(0)
+  isActive          Boolean           @default(true)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime
+  InventoryItem     InventoryItem[]
+  inventoryCategory InventoryCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  tenant            Tenant            @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, categoryId, name])
+  @@index([categoryId])
+  @@index([tenantId])
+}
+
+model Invoice {
+  id                            String     @id
+  tenantId                      String
+  customerId                    String
+  workOrderId                   String?
+  quotationId                   String?
+  invoiceNumber                 String     @unique
+  title                         String
+  description                   String?
+  items                         String
+  subtotal                      Float
+  taxRate                       Float      @default(0)
+  tax                           Float      @default(0)
+  discount                      Float      @default(0)
+  shipping                      Float      @default(0)
+  total                         Float
+  status                        String     @default("DRAFT")
+  currency                      String     @default("BND")
+  referenceNo                   String?
+  poReference                   String?
+  paymentTerms                  String?
+  dueDate                       DateTime?
+  paidAt                        DateTime?
+  paymentMethod                 String?
+  paymentRef                    String?
+  transactionId                 String?
+  bankName                      String?
+  bankAccountName               String?
+  bankAccountNo                 String?
+  sentVia                       String?
+  pdfUrl                        String?
+  notes                         String?
+  terms                         String?
+  shipToName                    String?
+  shipToAddress                 String?
+  shipToPhone                   String?
+  shipToContact                 String?
+  preparedBy                    String?
+  createdBy                     String?
+  createdAt                     DateTime   @default(now())
+  updatedAt                     DateTime
+  User_Invoice_preparedByToUser User?      @relation("Invoice_preparedByToUser", fields: [preparedBy], references: [id])
+  User_Invoice_createdByToUser  User?      @relation("Invoice_createdByToUser", fields: [createdBy], references: [id])
+  quotation                     Quotation? @relation(fields: [quotationId], references: [id])
+  workOrder                     WorkOrder? @relation(fields: [workOrderId], references: [id])
+  customer                      Customer   @relation(fields: [customerId], references: [id])
+  tenant                        Tenant     @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+}
+
+model ItemSupplier {
+  id            String        @id
+  tenantId      String
+  itemId        String
+  supplierName  String
+  supplierCode  String?
+  contactPerson String?
+  phone         String?
+  email         String?
+  address       String?
+  leadTimeDays  Int           @default(0)
+  purchasePrice Float         @default(0)
+  moq           Int           @default(1)
+  warranty      String?
+  paymentTerms  String?
+  rating        Int?
+  isPrimary     Boolean       @default(false)
+  isActive      Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime
+  inventoryItem InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  tenant        Tenant        @relation(fields: [tenantId], references: [id])
+
+  @@index([supplierName])
+  @@index([itemId])
+  @@index([tenantId])
+}
+
+model LeaveRequest {
+  id         String    @id
+  tenantId   String
+  userId     String
+  type       String
+  startDate  DateTime
+  endDate    DateTime
+  days       Float
+  reason     String?
+  status     String    @default("PENDING")
+  approvedBy String?
+  approvedAt DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+}
+
+model LoginSession {
+  id           String   @id
+  tenantId     String
+  userId       String
+  refreshToken String   @unique
+  deviceName   String?
+  deviceType   String?
+  browser      String?
+  os           String?
+  ipAddress    String?
+  userAgent    String?
+  isRevoked    Boolean  @default(false)
+  lastActivity DateTime @default(now())
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id])
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, userId])
+  @@index([refreshToken])
+  @@index([userId])
+}
+
+model Notification {
+  id                String    @id
+  tenantId          String
+  userId            String?
+  type              String
+  title             String
+  message           String
+  data              String?
+  priority          String    @default("normal")
+  isRead            Boolean   @default(false)
+  readAt            DateTime?
+  archivedAt        DateTime?
+  relatedEntityType String?
+  relatedEntityId   String?
+  actionUrl         String?
+  actionLabel       String?
+  createdBy         String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime
+  tenant            Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([relatedEntityType, relatedEntityId])
+  @@index([tenantId, userId, createdAt])
+  @@index([tenantId, userId, isRead])
+  @@index([tenantId, isRead])
+  @@index([tenantId, userId])
+  @@index([userId])
+  @@index([tenantId])
+}
+
+model NotificationLog {
+  id             String    @id
+  tenantId       String
+  notificationId String?
+  userId         String
+  deviceTokenId  String?
+  fcmMessageId   String?
+  fcmToken       String?
+  deliveryStatus String    @default("pending")
+  errorMessage   String?
+  openedAt       DateTime?
+  clickedAt      DateTime?
+  createdAt      DateTime  @default(now())
+  user           User      @relation(fields: [userId], references: [id])
+  tenant         Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([fcmMessageId])
+  @@index([notificationId])
+  @@index([tenantId, createdAt])
+  @@index([tenantId, deliveryStatus])
+  @@index([tenantId, userId])
+}
+
+model OtpCode {
+  id          String    @id
+  tenantId    String
+  phoneNumber String
+  code        String
+  purpose     String    @default("login")
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(5)
+  expiresAt   DateTime
+  verifiedAt  DateTime?
+  ipAddress   String?
+  userAgent   String?
+  createdAt   DateTime  @default(now())
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([expiresAt])
+  @@index([phoneNumber, expiresAt])
+  @@index([tenantId, phoneNumber])
+}
+
+model PasswordResetOtp {
+  id          String    @id
+  tenantId    String
+  userId      String
+  email       String
+  otpHash     String
+  expiresAt   DateTime
+  attempts    Int       @default(0)
+  maxAttempts Int       @default(5)
+  resendCount Int       @default(0)
+  maxResends  Int       @default(5)
+  createdAt   DateTime  @default(now())
+  usedAt      DateTime?
+  ipAddress   String?
+  device      String?
+  browser     String?
+  userAgent   String?
+  status      String    @default("active")
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([status])
+  @@index([expiresAt])
+  @@index([tenantId, userId])
+  @@index([email])
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String    @id
+  tenantId  String
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant    Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([expiresAt])
+  @@index([tenantId, userId])
+  @@index([userId])
+}
+
+model PmSchedule {
+  id                  String    @id
+  tenantId            String
+  equipmentId         String
+  title               String
+  description         String?
+  frequency           String
+  customDays          Int?
+  lastExecuted        DateTime?
+  nextDueDate         DateTime
+  assignedToId        String?
+  status              String    @default("active")
+  checklistTemplateId String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime
+  user                User?     @relation(fields: [assignedToId], references: [id])
+  equipment           Equipment @relation(fields: [equipmentId], references: [id])
+  tenant              Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, nextDueDate])
+  @@index([tenantId, status])
+  @@index([tenantId])
+}
+
+model PriceBook {
+  id             String           @id
+  tenantId       String
+  name           String
+  code           String?
+  description    String?
+  isDefault      Boolean          @default(false)
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime
+  tenant         Tenant           @relation(fields: [tenantId], references: [id])
+  PriceBookEntry PriceBookEntry[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+}
+
+model PriceBookEntry {
+  id            String        @id
+  tenantId      String
+  priceBookId   String
+  itemId        String
+  price         Float         @default(0)
+  discount      Float         @default(0)
+  currency      String        @default("BND")
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime
+  inventoryItem InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  PriceBook     PriceBook     @relation(fields: [priceBookId], references: [id], onDelete: Cascade)
+  tenant        Tenant        @relation(fields: [tenantId], references: [id])
+
+  @@unique([priceBookId, itemId])
+  @@index([itemId])
+  @@index([priceBookId])
+  @@index([tenantId])
+}
+
+model PurchaseOrder {
+  id              String    @id
+  tenantId        String
+  poNumber        String    @unique
+  supplier        String
+  supplierContact String?
+  items           String
+  subtotal        Float
+  tax             Float     @default(0)
+  total           Float
+  status          String    @default("DRAFT")
+  expectedDate    DateTime?
+  receivedAt      DateTime?
+  notes           String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime
+  tenant          Tenant    @relation(fields: [tenantId], references: [id])
+}
+
+model Quotation {
+  id          String    @id
+  tenantId    String
+  customerId  String
+  complaintId String?
+  quotationNo String?
+  title       String
+  description String?
+  referenceNo String?
+  projectName String?
+  site        String?
+  preparedBy  String?
+  items       String
+  terms       String?
+  currency    String    @default("BND")
+  subtotal    Float
+  taxRate     Float     @default(0)
+  tax         Float     @default(0)
+  discount    Float     @default(0)
+  shipping    Float     @default(0)
+  total       Float
+  status      String    @default("DRAFT")
+  validUntil  DateTime?
+  approvedBy  String?
+  approvedAt  DateTime?
+  sentAt      DateTime?
+  acceptedAt  DateTime?
+  pdfUrl      String?
+  notes       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime
+  Invoice     Invoice[]
+  user        User?     @relation(fields: [preparedBy], references: [id])
+  customer    Customer  @relation(fields: [customerId], references: [id])
+  tenant      Tenant    @relation(fields: [tenantId], references: [id])
+}
+
+model ScanLog {
+  id            String    @id
+  tenantId      String
+  equipmentId   String
+  qrId          String
+  scannedBy     String?
+  scannedByName String?
+  ipAddress     String?
+  userAgent     String?
+  device        String?
+  browser       String?
+  location      String?
+  referer       String?
+  createdAt     DateTime  @default(now())
+  equipment     Equipment @relation(fields: [equipmentId], references: [id])
+  tenant        Tenant    @relation(fields: [tenantId], references: [id])
+
+  @@index([createdAt])
+  @@index([qrId])
+  @@index([tenantId, equipmentId])
+}
+
+model StockMovement {
+  id              String        @id
+  tenantId        String
+  itemId          String
+  warehouseId     String?
+  type            String
+  quantity        Int
+  previousQty     Int           @default(0)
+  newQty          Int           @default(0)
+  reason          String?
+  referenceNo     String?
+  referenceType   String?
+  fromWarehouseId String?
+  batchNo         String?
+  lotNumber       String?
+  expiryDate      DateTime?
+  unitCost        Float         @default(0)
+  notes           String?
+  performedBy     String?
+  createdAt       DateTime      @default(now())
+  warehouse       Warehouse?    @relation(fields: [warehouseId], references: [id])
+  inventoryItem   InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  tenant          Tenant        @relation(fields: [tenantId], references: [id])
+
+  @@index([warehouseId])
+  @@index([tenantId, type])
+  @@index([tenantId, itemId])
+  @@index([tenantId, createdAt])
+}
+
+model Tenant {
+  id                   String                 @id
+  name                 String
+  domain               String                 @unique
+  logo                 String?
+  address              String?
+  phone                String?
+  email                String?
+  isActive             Boolean                @default(true)
+  plan                 String                 @default("professional")
+  maxUsers             Int                    @default(50)
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime
+  AuditLog             AuditLog[]
+  AuthAuditLog         AuthAuditLog[]
+  BroadcastLog         BroadcastLog[]
+  ChecklistTemplate    ChecklistTemplate[]
+  Complaint            Complaint[]
+  ComplaintTimeline    ComplaintTimeline[]
+  ConversationThread   ConversationThread[]
+  Customer             Customer[]
+  CustomerFeedback     CustomerFeedback[]
+  CustomerReport       CustomerReport[]
+  Department           Department[]
+  Device               Device[]
+  DeviceToken          DeviceToken[]
+  EmailLog             EmailLog[]
+  EmailTemplate        EmailTemplate[]
+  Equipment            Equipment[]
+  EquipmentQrCode      EquipmentQrCode[]
+  HrAnnouncement       HrAnnouncement[]
+  HrAssetAssignment    HrAssetAssignment[]
+  HrCandidate          HrCandidate[]
+  HrDisciplinaryAction HrDisciplinaryAction[]
+  HrEmployee           HrEmployee[]
+  HrEmployeeDocument   HrEmployeeDocument[]
+  HrExpenseClaim       HrExpenseClaim[]
+  HrHoliday            HrHoliday[]
+  HrJobPosition        HrJobPosition[]
+  HrLeaveBalance       HrLeaveBalance[]
+  HrLeaveRequest       HrLeaveRequest[]
+  HrLeaveType          HrLeaveType[]
+  HrMedicalRecord      HrMedicalRecord[]
+  HrOvertimeRequest    HrOvertimeRequest[]
+  HrPayroll            HrPayroll[]
+  HrPerformanceReview  HrPerformanceReview[]
+  HrShift              HrShift[]
+  HrShiftSchedule      HrShiftSchedule[]
+  HrTraining           HrTraining[]
+  HrTrainingRecord     HrTrainingRecord[]
+  HrTravelRequest      HrTravelRequest[]
+  HrVisitor            HrVisitor[]
+  InventoryCategory    InventoryCategory[]
+  InventoryItem        InventoryItem[]
+  InventorySubcategory InventorySubcategory[]
+  Invoice              Invoice[]
+  ItemSupplier         ItemSupplier[]
+  LoginSession         LoginSession[]
+  Notification         Notification[]
+  NotificationLog      NotificationLog[]
+  OtpCode              OtpCode[]
+  PasswordResetOtp     PasswordResetOtp[]
+  PasswordResetToken   PasswordResetToken[]
+  PmSchedule           PmSchedule[]
+  PriceBook            PriceBook[]
+  PriceBookEntry       PriceBookEntry[]
+  PurchaseOrder        PurchaseOrder[]
+  Quotation            Quotation[]
+  ScanLog              ScanLog[]
+  StockMovement        StockMovement[]
+  User                 User[]
+  Vehicle              Vehicle[]
+  Warehouse            Warehouse[]
+  WarehouseStock       WarehouseStock[]
+  WhatsAppConfig       WhatsAppConfig?
+  WhatsAppDeliveryLog  WhatsAppDeliveryLog[]
+  WhatsAppMessage      WhatsAppMessage[]
+  WhatsAppSession      WhatsAppSession[]
+  WhatsAppTemplate     WhatsAppTemplate[]
+  WorkOrder            WorkOrder[]
+}
+
+model TermsAcceptance {
+  id             String   @id
+  userId         String
+  tcVersion      String
+  privacyVersion String
+  ip             String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tcVersion])
+  @@index([userId, createdAt])
+}
+
+model User {
+  id                                     String               @id
+  tenantId                               String
+  email                                  String
+  passwordHash                           String?
+  name                                   String
+  phone                                  String?
+  avatar                                 String?
+  role                                   String               @default("technician")
+  employeeNumber                         String?
+  departmentId                           String?
+  authProvider                           String?
+  googleId                               String?              @unique
+  isActive                               Boolean              @default(true)
+  isOnline                               Boolean              @default(false)
+  lastLogin                              DateTime?
+  gpsLocation                            String?
+  profileCompleted                       Boolean              @default(false)
+  createdAt                              DateTime             @default(now())
+  updatedAt                              DateTime
+  AuditLog                               AuditLog[]
+  AuthAuditLog                           AuthAuditLog[]
+  Complaint_Complaint_supervisorIdToUser Complaint[]          @relation("Complaint_supervisorIdToUser")
+  Complaint_Complaint_assignedToIdToUser Complaint[]          @relation("Complaint_assignedToIdToUser")
+  Device                                 Device[]
+  DeviceToken                            DeviceToken[]
+  Invoice_Invoice_preparedByToUser       Invoice[]            @relation("Invoice_preparedByToUser")
+  Invoice_Invoice_createdByToUser        Invoice[]            @relation("Invoice_createdByToUser")
+  LoginSession                           LoginSession[]
+  NotificationLog                        NotificationLog[]
+  PasswordResetOtp                       PasswordResetOtp[]
+  PasswordResetToken                     PasswordResetToken[]
+  PmSchedule                             PmSchedule[]
+  Quotation                              Quotation[]
+  TermsAcceptance                        TermsAcceptance[]
+  department                             Department?          @relation(fields: [departmentId], references: [id])
+  tenant                                 Tenant               @relation(fields: [tenantId], references: [id])
+  VehicleLog                             VehicleLog[]
+  WorkOrder_WorkOrder_createdByToUser    WorkOrder[]          @relation("WorkOrder_createdByToUser")
+  WorkOrder_WorkOrder_supervisorIdToUser WorkOrder[]          @relation("WorkOrder_supervisorIdToUser")
+  WorkOrder_WorkOrder_assignedToIdToUser WorkOrder[]          @relation("WorkOrder_assignedToIdToUser")
+
+  @@unique([tenantId, email])
+  @@index([phone])
+  @@index([tenantId, employeeNumber])
+  @@index([tenantId, departmentId])
+  @@index([tenantId, isActive])
+  @@index([tenantId, role])
+  @@index([tenantId, phone])
+  @@index([tenantId])
+}
+
+model Vehicle {
+  id              String       @id
+  tenantId        String
+  plateNumber     String
+  make            String
+  model           String
+  year            Int?
+  vin             String?
+  fuelType        String?
+  status          String       @default("active")
+  currentMileage  Float?
+  nextServiceDate DateTime?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime
+  tenant          Tenant       @relation(fields: [tenantId], references: [id])
+  VehicleLog      VehicleLog[]
+}
+
+model VehicleLog {
+  id          String   @id
+  vehicleId   String
+  userId      String?
+  type        String
+  date        DateTime
+  odometer    Float?
+  quantity    Float?
+  cost        Float
+  description String?
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime
+  user        User?    @relation(fields: [userId], references: [id])
+  vehicle     Vehicle  @relation(fields: [vehicleId], references: [id], onDelete: Cascade)
+}
+
+model Warehouse {
+  id             String           @id
+  tenantId       String
+  name           String
+  code           String?
+  type           String           @default("main")
+  address        String?
+  manager        String?
+  phone          String?
+  isActive       Boolean          @default(true)
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime
+  StockMovement  StockMovement[]
+  tenant         Tenant           @relation(fields: [tenantId], references: [id])
+  WarehouseStock WarehouseStock[]
+
+  @@unique([tenantId, name])
+  @@index([tenantId])
+}
+
+model WarehouseStock {
+  id            String        @id
+  tenantId      String
+  warehouseId   String
+  itemId        String
+  quantity      Int           @default(0)
+  reserved      Int           @default(0)
+  damaged       Int           @default(0)
+  returned      Int           @default(0)
+  batchNo       String?
+  lotNumber     String?
+  expiryDate    DateTime?
+  costMethod    String        @default("fifo")
+  updatedAt     DateTime
+  createdAt     DateTime      @default(now())
+  inventoryItem InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  warehouse     Warehouse     @relation(fields: [warehouseId], references: [id], onDelete: Cascade)
+  tenant        Tenant        @relation(fields: [tenantId], references: [id])
+
+  @@unique([warehouseId, itemId])
+  @@index([itemId])
+  @@index([warehouseId])
+  @@index([tenantId])
+}
+
+model WhatsAppConfig {
+  id                    String            @id
+  tenantId              String            @unique
+  provider              String            @default("openwa")
+  isEnabled             Boolean           @default(false)
+  phoneNumber           String?
+  businessName          String?
+  openwaBaseUrl         String?
+  openwaSession         String?
+  openwaApiKey          String?
+  openwaQrCode          String?
+  openwaStatus          String            @default("disconnected")
+  metaAccessToken       String?
+  metaPhoneNumberId     String?
+  metaVerifyToken       String?
+  metaWebhookSecret     String?
+  metaBusinessAccountId String?
+  twilioAccountSid      String?
+  twilioAuthToken       String?
+  twilioPhoneNumber     String?
+  autoReplyEnabled      Boolean           @default(true)
+  welcomeMessage        String            @default("Welcome to MOHD.HMS ENTERPRISE!\n\nPlease choose:\n1️⃣ New Complaint\n2️⃣ Service Request\n3️⃣ Complaint Status\n4️⃣ My Equipment\n5️⃣ Work Order Status\n6️⃣ Invoices\n7️⃣ Emergency Service\n8️⃣ Speak to Customer Support")
+  emergencyNumbers      String?
+  defaultPriority       String            @default("medium")
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime
+  tenant                Tenant            @relation(fields: [tenantId], references: [id])
+  WhatsAppSession       WhatsAppSession[]
+}
+
+model WhatsAppDeliveryLog {
+  id              String          @id
+  tenantId        String
+  messageId       String
+  direction       String
+  status          String
+  providerStatus  String?
+  timestamp       DateTime        @default(now())
+  errorMessage    String?
+  WhatsAppMessage WhatsAppMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  tenant          Tenant          @relation(fields: [tenantId], references: [id])
+
+  @@index([messageId])
+  @@index([tenantId, messageId])
+}
+
+model WhatsAppMessage {
+  id                  String                @id
+  tenantId            String
+  sessionId           String
+  threadId            String?
+  direction           String
+  messageType         String                @default("text")
+  content             String?
+  mediaUrl            String?
+  mediaType           String?
+  thumbnailUrl        String?
+  caption             String?
+  location            String?
+  fromNumber          String?
+  toNumber            String?
+  providerMessageId   String?
+  status              String                @default("sent")
+  errorMessage        String?
+  isFromBot           Boolean               @default(false)
+  isTemplate          Boolean               @default(false)
+  metadata            String?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime
+  WhatsAppDeliveryLog WhatsAppDeliveryLog[]
+  conversationThread  ConversationThread?   @relation(fields: [threadId], references: [id])
+  WhatsAppSession     WhatsAppSession       @relation(fields: [sessionId], references: [id])
+  tenant              Tenant                @relation(fields: [tenantId], references: [id])
+
+  @@index([createdAt])
+  @@index([providerMessageId])
+  @@index([sessionId])
+  @@index([tenantId, sessionId])
+}
+
+model WhatsAppSession {
+  id                 String               @id
+  tenantId           String
+  configId           String
+  phoneNumber        String
+  customerId         String?
+  sessionId          String?
+  state              String               @default("menu")
+  stateData          String?
+  lastMessageAt      DateTime             @default(now())
+  messageCount       Int                  @default(0)
+  isActive           Boolean              @default(true)
+  isBlocked          Boolean              @default(false)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime
+  ConversationThread ConversationThread[]
+  WhatsAppMessage    WhatsAppMessage[]
+  customer           Customer?            @relation(fields: [customerId], references: [id])
+  WhatsAppConfig     WhatsAppConfig       @relation(fields: [configId], references: [id])
+  tenant             Tenant               @relation(fields: [tenantId], references: [id])
+
+  @@index([state])
+  @@index([phoneNumber])
+  @@index([tenantId, phoneNumber])
+}
+
+model WhatsAppTemplate {
+  id        String   @id
+  tenantId  String
+  name      String
+  category  String
+  content   String
+  variables String?
+  mediaType String?
+  mediaUrl  String?
+  isActive  Boolean  @default(true)
+  isSystem  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
 
   @@unique([tenantId, name])
   @@index([tenantId, category])
 }
 
-// 24. Customer Feedback via WhatsApp
-model CustomerFeedback {
-  id              String   @id @default(cuid())
-  tenantId        String
-  customerId      String
-  complaintId     String?
-  workOrderId     String?
-  rating          Int      // 1-5
-  comment         String?
-  source          String   @default("whatsapp") // whatsapp, portal, email
-  createdAt       DateTime @default(now())
+model WorkOrder {
+  id                                String              @id
+  tenantId                          String
+  workOrderNumber                   String?             @unique
+  complaintId                       String?
+  customerId                        String?
+  equipmentId                       String?
+  assetId                           String?
+  title                             String
+  description                       String
+  source                            String              @default("manual")
+  reference                         String?
+  status                            String              @default("DRAFT")
+  priority                          String              @default("medium")
+  type                              String              @default("corrective")
+  category                          String?
+  subCategory                       String?
+  sla                               String?
+  estimatedHours                    Float?
+  assignedToId                      String?
+  supervisorId                      String?
+  teamId                            String?
+  createdBy                         String?
+  scheduledDate                     DateTime?
+  startTime                         String?
+  dueDate                           DateTime?
+  dueTime                           String?
+  siteId                            String?
+  building                          String?
+  floor                             String?
+  internalNotes                     String?
+  checklistId                       String?
+  permitRequired                    Boolean             @default(false)
+  lockoutTagoutRequired             Boolean             @default(false)
+  highRiskWork                      Boolean             @default(false)
+  safetyEquipmentReq                Boolean             @default(false)
+  safetyNotes                       String?
+  startedAt                         DateTime?
+  completedAt                       DateTime?
+  checkInGps                        String?
+  checkOutGps                       String?
+  laborHours                        Float?
+  laborCost                         Float?
+  materialCost                      Float?
+  totalCost                         Float?
+  notes                             String?
+  photos                            String?
+  beforePhotos                      String?
+  afterPhotos                       String?
+  videoUrl                          String?
+  materialsUsed                     String?
+  checklistData                     String?
+  remarks                           String?
+  technicianSignature               String?
+  customerSignature                 String?
+  serviceReportPdf                  String?
+  attachments                       String?
+  isLocked                          Boolean             @default(false)
+  isDraft                           Boolean             @default(false)
+  createdAt                         DateTime            @default(now())
+  updatedAt                         DateTime
+  Invoice                           Invoice[]
+  User_WorkOrder_createdByToUser    User?               @relation("WorkOrder_createdByToUser", fields: [createdBy], references: [id])
+  User_WorkOrder_supervisorIdToUser User?               @relation("WorkOrder_supervisorIdToUser", fields: [supervisorId], references: [id])
+  User_WorkOrder_assignedToIdToUser User?               @relation("WorkOrder_assignedToIdToUser", fields: [assignedToId], references: [id])
+  equipment                         Equipment?          @relation(fields: [equipmentId], references: [id])
+  customer                          Customer?           @relation(fields: [customerId], references: [id])
+  complaint                         Complaint?          @relation(fields: [complaintId], references: [id])
+  tenant                            Tenant              @relation(fields: [tenantId], references: [id])
+  WorkOrderMaterial                 WorkOrderMaterial[]
 
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  customer        Customer @relation(fields: [customerId], references: [id])
-
-  @@index([tenantId, customerId])
-}
-
-// 25. Customer Report/Escalation via WhatsApp
-model CustomerReport {
-  id              String   @id @default(cuid())
-  tenantId        String
-  customerId      String
-  sessionId       String?
-  type            String   @default("escalation") // escalation, complaint, suggestion, other
-  subject         String
-  description     String
-  priority        String   @default("medium")
-  status          String   @default("OPEN") // OPEN, IN_REVIEW, RESOLVED, DISMISSED
-  resolvedById    String?
-  resolvedAt      DateTime?
-  resolutionNotes String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  customer        Customer @relation(fields: [customerId], references: [id])
-
+  @@index([tenantId, workOrderNumber])
+  @@index([tenantId, assignedToId])
   @@index([tenantId, status])
 }
 
-// 26. Broadcast Log - Mass message campaigns
-model BroadcastLog {
-  id              String   @id @default(cuid())
-  tenantId        String
-  title           String
-  content         String
-  templateId      String?
-  recipientCount  Int      @default(0)
-  sentCount       Int      @default(0)
-  deliveredCount  Int      @default(0)
-  failedCount     Int      @default(0)
-  readCount       Int      @default(0)
-  status          String   @default("draft") // draft, scheduled, sending, completed, failed
-  scheduledAt     DateTime?
-  sentAt          DateTime?
-  completedAt     DateTime?
-  createdBy       String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-
-  @@index([tenantId, status])
-}
-
-// 27. WhatsApp Delivery Log - Per-message delivery tracking
-model WhatsAppDeliveryLog {
-  id              String   @id @default(cuid())
-  tenantId        String
-  messageId       String
-  direction       String   // inbound, outbound
-  status          String   // sent, delivered, read, failed, deleted
-  providerStatus  String?  // raw provider status
-  timestamp       DateTime @default(now())
-  errorMessage    String?
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  message         WhatsAppMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
-
-  @@index([tenantId, messageId])
-  @@index([messageId])
-}
-
-// ============ WHATSAPP OTP AUTH ============
-
-model OtpCode {
-  id            String   @id @default(cuid())
-  tenantId      String
-  phoneNumber   String
-  code          String
-  purpose       String   @default("login") // login, registration, reset
-  attempts      Int      @default(0)
-  maxAttempts   Int      @default(5)
-  expiresAt     DateTime
-  verifiedAt    DateTime?
-  ipAddress     String?
-  userAgent     String?
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-
-  @@index([tenantId, phoneNumber])
-  @@index([phoneNumber, expiresAt])
-  @@index([expiresAt])
-}
-
-model LoginSession {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String
-  refreshToken  String   @unique
-  deviceName    String?
-  deviceType    String?  // mobile, tablet, desktop
-  browser       String?
-  os            String?
-  ipAddress     String?
-  userAgent     String?
-  isRevoked     Boolean  @default(false)
-  lastActivity  DateTime @default(now())
-  expiresAt     DateTime
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  user          User     @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([refreshToken])
-  @@index([tenantId, userId])
-}
-
-model Device {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String
-  name          String?
-  type          String?  // mobile, tablet, desktop
-  browser       String?
-  os            String?
-  ipAddress     String?
-  userAgent     String?
-  lastSeen      DateTime @default(now())
-  isTrusted     Boolean  @default(false)
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  user          User     @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([tenantId, userId])
-}
-// ============ PASSWORD RESET & AUTH AUDIT ============
-
-model PasswordResetToken {
-  id            String   @id @default(cuid())
-  tenantId      String
-  userId        String
-  tokenHash     String   @unique  // SHA-256 hash of the raw token (raw token never stored)
-  expiresAt     DateTime
-  usedAt        DateTime?
-  ipAddress     String?
-  userAgent     String?
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([tenantId, userId])
-  @@index([expiresAt])
-}
-
-// ============ PASSWORD RESET OTP (6-digit code-based) ============
-
-model PasswordResetOtp {
-  id            String    @id @default(cuid())
-  tenantId      String
-  userId        String
-  email         String                    // email address used to request reset
-  otpHash       String                    // SHA-256 hash of the 6-digit OTP (plaintext never stored)
-  expiresAt     DateTime                  // OTP expiration (default 10 min)
-  attempts      Int       @default(0)     // verification attempt count
-  maxAttempts   Int       @default(5)     // maximum allowed attempts
-  resendCount   Int       @default(0)     // how many times OTP has been resent
-  maxResends    Int       @default(5)     // maximum resend attempts
-  createdAt     DateTime  @default(now())
-  usedAt        DateTime?                  // set when OTP is verified and password is changed
-  ipAddress     String?
-  device        String?
-  browser       String?
-  userAgent     String?
-  status        String    @default("active") // active, verified, expired, locked, used
-
-  tenant        Tenant   @relation(fields: [tenantId], references: [id])
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId])
-  @@index([email])
-  @@index([tenantId, userId])
-  @@index([expiresAt])
-  @@index([status])
-}
-
-model AuthAuditLog {
-  id            String   @id @default(cuid())
-  tenantId      String?
-  userId        String?
-  email         String?  // captured even for unknown-account events
-  event         String   // password_reset_requested, reset_email_sent, token_verified, token_invalid, token_expired, password_changed, reset_failed, rate_limited
-  success       Boolean  @default(true)
-  ipAddress     String?
-  userAgent     String?
-  device        String?
-  browser       String?
-  metadata      String?  // JSON
-  createdAt     DateTime @default(now())
-
-  tenant        Tenant?  @relation(fields: [tenantId], references: [id])
-  user          User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-
-  @@index([tenantId, createdAt])
-  @@index([email])
-  @@index([ipAddress])
-  @@index([event])
-}
-
-// ============ TERMS ACCEPTANCE ============
-
-model TermsAcceptance {
-  id              String   @id @default(cuid())
-  userId          String
-  tcVersion       String
-  privacyVersion  String
-  ip              String?
-  userAgent       String?
-  createdAt       DateTime @default(now())
-
-  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@index([userId, createdAt])
-  @@index([tcVersion])
-}
-
-// ============ EMAIL SYSTEM ============
-
-model EmailLog {
-  id              String   @id @default(cuid())
-  tenantId        String
-  recipient       String
-  cc              String?
-  bcc             String?
-  subject         String
-  templateId      String?
-  templateName    String?
-  module          String?  // complaints, work-orders, invoices, quotations, auth, pm, equipment, inventory, finance, hr, inspection
-  status          String   @default("queued") // queued, sending, delivered, opened, clicked, bounced, failed, spam, unsubscribed
-  provider        String   @default("brevo") // brevo, console
-  providerMessageId String?
-  errorCode       String?
-  errorMessage    String?
-  retryCount      Int      @default(0)
-  maxRetries      Int      @default(5)
-  nextRetryAt     DateTime?
-  scheduledFor    DateTime?
-  ip              String?
-  userAgent       String?
-  metadata        String?  // JSON — stores module-specific data
-  attachmentCount Int      @default(0)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-  sentAt          DateTime?
-  deliveredAt     DateTime?
-  openedAt        DateTime?
-  bouncedAt       DateTime?
-
-  template        EmailTemplate? @relation(fields: [templateId], references: [id])
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-
-  @@index([tenantId, createdAt])
-  @@index([tenantId, status])
-  @@index([tenantId, module])
-  @@index([recipient])
-  @@index([status])
-  @@index([scheduledFor])
-  @@index([nextRetryAt])
-  @@index([providerMessageId])
-  @@index([createdAt])
-}
-
-model EmailTemplate {
-  id              String   @id @default(cuid())
-  tenantId        String
-  name            String
-  identifier      String   // e.g., "complaint.created", "invoice.sent"
-  subject         String
-  module          String
-  description     String?
-  bodyHtml        String   // HTML template with {{variables}}
-  bodyText        String?  // Plain text fallback
-  variables       String?  // JSON array of variable names
-  isActive        Boolean  @default(true)
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
-
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
-  emailLogs       EmailLog[]
-
-  @@unique([tenantId, identifier])
-  @@index([tenantId, module])
+model WorkOrderMaterial {
+  id              String        @id
+  workOrderId     String
+  inventoryItemId String
+  quantity        Int
+  unitCost        Float
+  totalCost       Float
+  inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
+  workOrder       WorkOrder     @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
 }

@@ -385,7 +385,7 @@ export type NotificationScalarWhereWithAggregatesInput = {
 }
 
 export type NotificationCreateInput = {
-  id?: string
+  id: string
   userId?: string | null
   type: string
   title: string
@@ -401,12 +401,12 @@ export type NotificationCreateInput = {
   actionLabel?: string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutNotificationsInput
+  updatedAt: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutNotificationInput
 }
 
 export type NotificationUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   userId?: string | null
   type: string
@@ -423,7 +423,7 @@ export type NotificationUncheckedCreateInput = {
   actionLabel?: string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type NotificationUpdateInput = {
@@ -444,7 +444,7 @@ export type NotificationUpdateInput = {
   createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutNotificationsNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutNotificationNestedInput
 }
 
 export type NotificationUncheckedUpdateInput = {
@@ -469,7 +469,7 @@ export type NotificationUncheckedUpdateInput = {
 }
 
 export type NotificationCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   userId?: string | null
   type: string
@@ -486,7 +486,7 @@ export type NotificationCreateManyInput = {
   actionLabel?: string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type NotificationUpdateManyMutationInput = {
@@ -528,16 +528,6 @@ export type NotificationUncheckedUpdateManyInput = {
   createdBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type NotificationListRelationFilter = {
-  every?: Prisma.NotificationWhereInput
-  some?: Prisma.NotificationWhereInput
-  none?: Prisma.NotificationWhereInput
-}
-
-export type NotificationOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type NotificationCountOrderByAggregateInput = {
@@ -603,6 +593,16 @@ export type NotificationMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
 }
 
+export type NotificationListRelationFilter = {
+  every?: Prisma.NotificationWhereInput
+  some?: Prisma.NotificationWhereInput
+  none?: Prisma.NotificationWhereInput
+}
+
+export type NotificationOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
 export type NotificationCreateNestedManyWithoutTenantInput = {
   create?: Prisma.XOR<Prisma.NotificationCreateWithoutTenantInput, Prisma.NotificationUncheckedCreateWithoutTenantInput> | Prisma.NotificationCreateWithoutTenantInput[] | Prisma.NotificationUncheckedCreateWithoutTenantInput[]
   connectOrCreate?: Prisma.NotificationCreateOrConnectWithoutTenantInput | Prisma.NotificationCreateOrConnectWithoutTenantInput[]
@@ -646,7 +646,7 @@ export type NotificationUncheckedUpdateManyWithoutTenantNestedInput = {
 }
 
 export type NotificationCreateWithoutTenantInput = {
-  id?: string
+  id: string
   userId?: string | null
   type: string
   title: string
@@ -662,11 +662,11 @@ export type NotificationCreateWithoutTenantInput = {
   actionLabel?: string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type NotificationUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   userId?: string | null
   type: string
   title: string
@@ -682,7 +682,7 @@ export type NotificationUncheckedCreateWithoutTenantInput = {
   actionLabel?: string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type NotificationCreateOrConnectWithoutTenantInput = {
@@ -735,7 +735,7 @@ export type NotificationScalarWhereInput = {
 }
 
 export type NotificationCreateManyTenantInput = {
-  id?: string
+  id: string
   userId?: string | null
   type: string
   title: string
@@ -751,7 +751,7 @@ export type NotificationCreateManyTenantInput = {
   actionLabel?: string | null
   createdBy?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type NotificationUpdateWithoutTenantInput = {

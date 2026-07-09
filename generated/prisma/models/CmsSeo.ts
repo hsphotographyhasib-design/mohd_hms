@@ -323,7 +323,7 @@ export type CmsSeoScalarWhereWithAggregatesInput = {
 }
 
 export type CmsSeoCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   pagePath: string
   title?: string | null
@@ -335,11 +335,11 @@ export type CmsSeoCreateInput = {
   schemaMarkup?: string | null
   canonicalUrl?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsSeoUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   pagePath: string
   title?: string | null
@@ -351,7 +351,7 @@ export type CmsSeoUncheckedCreateInput = {
   schemaMarkup?: string | null
   canonicalUrl?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsSeoUpdateInput = {
@@ -387,7 +387,7 @@ export type CmsSeoUncheckedUpdateInput = {
 }
 
 export type CmsSeoCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   pagePath: string
   title?: string | null
@@ -399,7 +399,7 @@ export type CmsSeoCreateManyInput = {
   schemaMarkup?: string | null
   canonicalUrl?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsSeoUpdateManyMutationInput = {

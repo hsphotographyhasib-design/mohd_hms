@@ -277,19 +277,19 @@ export type ChecklistTemplateScalarWhereWithAggregatesInput = {
 }
 
 export type ChecklistTemplateCreateInput = {
-  id?: string
+  id: string
   name: string
   category: string
   description?: string | null
   items: string
   isDefault?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutChecklistTemplatesInput
+  updatedAt: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutChecklistTemplateInput
 }
 
 export type ChecklistTemplateUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   category: string
@@ -297,7 +297,7 @@ export type ChecklistTemplateUncheckedCreateInput = {
   items: string
   isDefault?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type ChecklistTemplateUpdateInput = {
@@ -309,7 +309,7 @@ export type ChecklistTemplateUpdateInput = {
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutChecklistTemplatesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutChecklistTemplateNestedInput
 }
 
 export type ChecklistTemplateUncheckedUpdateInput = {
@@ -325,7 +325,7 @@ export type ChecklistTemplateUncheckedUpdateInput = {
 }
 
 export type ChecklistTemplateCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   category: string
@@ -333,7 +333,7 @@ export type ChecklistTemplateCreateManyInput = {
   items: string
   isDefault?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type ChecklistTemplateUpdateManyMutationInput = {
@@ -357,16 +357,6 @@ export type ChecklistTemplateUncheckedUpdateManyInput = {
   isDefault?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type ChecklistTemplateListRelationFilter = {
-  every?: Prisma.ChecklistTemplateWhereInput
-  some?: Prisma.ChecklistTemplateWhereInput
-  none?: Prisma.ChecklistTemplateWhereInput
-}
-
-export type ChecklistTemplateOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type ChecklistTemplateCountOrderByAggregateInput = {
@@ -403,6 +393,16 @@ export type ChecklistTemplateMinOrderByAggregateInput = {
   isDefault?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type ChecklistTemplateListRelationFilter = {
+  every?: Prisma.ChecklistTemplateWhereInput
+  some?: Prisma.ChecklistTemplateWhereInput
+  none?: Prisma.ChecklistTemplateWhereInput
+}
+
+export type ChecklistTemplateOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type ChecklistTemplateCreateNestedManyWithoutTenantInput = {
@@ -448,25 +448,25 @@ export type ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput = {
 }
 
 export type ChecklistTemplateCreateWithoutTenantInput = {
-  id?: string
+  id: string
   name: string
   category: string
   description?: string | null
   items: string
   isDefault?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type ChecklistTemplateUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   name: string
   category: string
   description?: string | null
   items: string
   isDefault?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type ChecklistTemplateCreateOrConnectWithoutTenantInput = {
@@ -510,14 +510,14 @@ export type ChecklistTemplateScalarWhereInput = {
 }
 
 export type ChecklistTemplateCreateManyTenantInput = {
-  id?: string
+  id: string
   name: string
   category: string
   description?: string | null
   items: string
   isDefault?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type ChecklistTemplateUpdateWithoutTenantInput = {

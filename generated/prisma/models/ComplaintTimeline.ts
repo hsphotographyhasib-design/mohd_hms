@@ -230,8 +230,8 @@ export type ComplaintTimelineWhereInput = {
   performedByRole?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
   metadata?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ComplaintTimeline"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   complaint?: Prisma.XOR<Prisma.ComplaintScalarRelationFilter, Prisma.ComplaintWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type ComplaintTimelineOrderByWithRelationInput = {
@@ -246,8 +246,8 @@ export type ComplaintTimelineOrderByWithRelationInput = {
   performedByRole?: Prisma.SortOrderInput | Prisma.SortOrder
   metadata?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
   complaint?: Prisma.ComplaintOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type ComplaintTimelineWhereUniqueInput = Prisma.AtLeast<{
@@ -265,8 +265,8 @@ export type ComplaintTimelineWhereUniqueInput = Prisma.AtLeast<{
   performedByRole?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
   metadata?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ComplaintTimeline"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   complaint?: Prisma.XOR<Prisma.ComplaintScalarRelationFilter, Prisma.ComplaintWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id">
 
 export type ComplaintTimelineOrderByWithAggregationInput = {
@@ -304,7 +304,7 @@ export type ComplaintTimelineScalarWhereWithAggregatesInput = {
 }
 
 export type ComplaintTimelineCreateInput = {
-  id?: string
+  id: string
   action: string
   fromStatus?: string | null
   toStatus?: string | null
@@ -313,12 +313,12 @@ export type ComplaintTimelineCreateInput = {
   performedByRole?: string | null
   metadata?: string | null
   createdAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutComplaintTimelinesInput
-  complaint: Prisma.ComplaintCreateNestedOneWithoutTimelineInput
+  complaint: Prisma.ComplaintCreateNestedOneWithoutComplaintTimelineInput
+  tenant: Prisma.TenantCreateNestedOneWithoutComplaintTimelineInput
 }
 
 export type ComplaintTimelineUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   complaintId: string
   action: string
@@ -341,8 +341,8 @@ export type ComplaintTimelineUpdateInput = {
   performedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutComplaintTimelinesNestedInput
-  complaint?: Prisma.ComplaintUpdateOneRequiredWithoutTimelineNestedInput
+  complaint?: Prisma.ComplaintUpdateOneRequiredWithoutComplaintTimelineNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutComplaintTimelineNestedInput
 }
 
 export type ComplaintTimelineUncheckedUpdateInput = {
@@ -360,7 +360,7 @@ export type ComplaintTimelineUncheckedUpdateInput = {
 }
 
 export type ComplaintTimelineCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   complaintId: string
   action: string
@@ -451,48 +451,6 @@ export type ComplaintTimelineMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
-export type ComplaintTimelineCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput> | Prisma.ComplaintTimelineCreateWithoutTenantInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput | Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.ComplaintTimelineCreateManyTenantInputEnvelope
-  connect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-}
-
-export type ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput> | Prisma.ComplaintTimelineCreateWithoutTenantInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput | Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.ComplaintTimelineCreateManyTenantInputEnvelope
-  connect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-}
-
-export type ComplaintTimelineUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput> | Prisma.ComplaintTimelineCreateWithoutTenantInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput | Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput | Prisma.ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.ComplaintTimelineCreateManyTenantInputEnvelope
-  set?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-  disconnect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-  delete?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-  connect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-  update?: Prisma.ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput | Prisma.ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.ComplaintTimelineUpdateManyWithWhereWithoutTenantInput | Prisma.ComplaintTimelineUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
-}
-
-export type ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput> | Prisma.ComplaintTimelineCreateWithoutTenantInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput | Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput | Prisma.ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.ComplaintTimelineCreateManyTenantInputEnvelope
-  set?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-  disconnect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-  delete?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-  connect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
-  update?: Prisma.ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput | Prisma.ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.ComplaintTimelineUpdateManyWithWhereWithoutTenantInput | Prisma.ComplaintTimelineUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
-}
-
 export type ComplaintTimelineCreateNestedManyWithoutComplaintInput = {
   create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutComplaintInput, Prisma.ComplaintTimelineUncheckedCreateWithoutComplaintInput> | Prisma.ComplaintTimelineCreateWithoutComplaintInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutComplaintInput[]
   connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutComplaintInput | Prisma.ComplaintTimelineCreateOrConnectWithoutComplaintInput[]
@@ -535,76 +493,50 @@ export type ComplaintTimelineUncheckedUpdateManyWithoutComplaintNestedInput = {
   deleteMany?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
 }
 
-export type ComplaintTimelineCreateWithoutTenantInput = {
-  id?: string
-  action: string
-  fromStatus?: string | null
-  toStatus?: string | null
-  description: string
-  performedBy?: string | null
-  performedByRole?: string | null
-  metadata?: string | null
-  createdAt?: Date | string
-  complaint: Prisma.ComplaintCreateNestedOneWithoutTimelineInput
+export type ComplaintTimelineCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput> | Prisma.ComplaintTimelineCreateWithoutTenantInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput | Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.ComplaintTimelineCreateManyTenantInputEnvelope
+  connect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
 }
 
-export type ComplaintTimelineUncheckedCreateWithoutTenantInput = {
-  id?: string
-  complaintId: string
-  action: string
-  fromStatus?: string | null
-  toStatus?: string | null
-  description: string
-  performedBy?: string | null
-  performedByRole?: string | null
-  metadata?: string | null
-  createdAt?: Date | string
+export type ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput> | Prisma.ComplaintTimelineCreateWithoutTenantInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput | Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.ComplaintTimelineCreateManyTenantInputEnvelope
+  connect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
 }
 
-export type ComplaintTimelineCreateOrConnectWithoutTenantInput = {
-  where: Prisma.ComplaintTimelineWhereUniqueInput
-  create: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput>
+export type ComplaintTimelineUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput> | Prisma.ComplaintTimelineCreateWithoutTenantInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput | Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput | Prisma.ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.ComplaintTimelineCreateManyTenantInputEnvelope
+  set?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
+  disconnect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
+  delete?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
+  connect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
+  update?: Prisma.ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput | Prisma.ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.ComplaintTimelineUpdateManyWithWhereWithoutTenantInput | Prisma.ComplaintTimelineUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
 }
 
-export type ComplaintTimelineCreateManyTenantInputEnvelope = {
-  data: Prisma.ComplaintTimelineCreateManyTenantInput | Prisma.ComplaintTimelineCreateManyTenantInput[]
-}
-
-export type ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.ComplaintTimelineWhereUniqueInput
-  update: Prisma.XOR<Prisma.ComplaintTimelineUpdateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput>
-}
-
-export type ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.ComplaintTimelineWhereUniqueInput
-  data: Prisma.XOR<Prisma.ComplaintTimelineUpdateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedUpdateWithoutTenantInput>
-}
-
-export type ComplaintTimelineUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.ComplaintTimelineScalarWhereInput
-  data: Prisma.XOR<Prisma.ComplaintTimelineUpdateManyMutationInput, Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantInput>
-}
-
-export type ComplaintTimelineScalarWhereInput = {
-  AND?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
-  OR?: Prisma.ComplaintTimelineScalarWhereInput[]
-  NOT?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
-  id?: Prisma.StringFilter<"ComplaintTimeline"> | string
-  tenantId?: Prisma.StringFilter<"ComplaintTimeline"> | string
-  complaintId?: Prisma.StringFilter<"ComplaintTimeline"> | string
-  action?: Prisma.StringFilter<"ComplaintTimeline"> | string
-  fromStatus?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
-  toStatus?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
-  description?: Prisma.StringFilter<"ComplaintTimeline"> | string
-  performedBy?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
-  performedByRole?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
-  metadata?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"ComplaintTimeline"> | Date | string
+export type ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput> | Prisma.ComplaintTimelineCreateWithoutTenantInput[] | Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput | Prisma.ComplaintTimelineCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput | Prisma.ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.ComplaintTimelineCreateManyTenantInputEnvelope
+  set?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
+  disconnect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
+  delete?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
+  connect?: Prisma.ComplaintTimelineWhereUniqueInput | Prisma.ComplaintTimelineWhereUniqueInput[]
+  update?: Prisma.ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput | Prisma.ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.ComplaintTimelineUpdateManyWithWhereWithoutTenantInput | Prisma.ComplaintTimelineUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
 }
 
 export type ComplaintTimelineCreateWithoutComplaintInput = {
-  id?: string
+  id: string
   action: string
   fromStatus?: string | null
   toStatus?: string | null
@@ -613,11 +545,11 @@ export type ComplaintTimelineCreateWithoutComplaintInput = {
   performedByRole?: string | null
   metadata?: string | null
   createdAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutComplaintTimelinesInput
+  tenant: Prisma.TenantCreateNestedOneWithoutComplaintTimelineInput
 }
 
 export type ComplaintTimelineUncheckedCreateWithoutComplaintInput = {
-  id?: string
+  id: string
   tenantId: string
   action: string
   fromStatus?: string | null
@@ -654,8 +586,38 @@ export type ComplaintTimelineUpdateManyWithWhereWithoutComplaintInput = {
   data: Prisma.XOR<Prisma.ComplaintTimelineUpdateManyMutationInput, Prisma.ComplaintTimelineUncheckedUpdateManyWithoutComplaintInput>
 }
 
-export type ComplaintTimelineCreateManyTenantInput = {
-  id?: string
+export type ComplaintTimelineScalarWhereInput = {
+  AND?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
+  OR?: Prisma.ComplaintTimelineScalarWhereInput[]
+  NOT?: Prisma.ComplaintTimelineScalarWhereInput | Prisma.ComplaintTimelineScalarWhereInput[]
+  id?: Prisma.StringFilter<"ComplaintTimeline"> | string
+  tenantId?: Prisma.StringFilter<"ComplaintTimeline"> | string
+  complaintId?: Prisma.StringFilter<"ComplaintTimeline"> | string
+  action?: Prisma.StringFilter<"ComplaintTimeline"> | string
+  fromStatus?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
+  toStatus?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
+  description?: Prisma.StringFilter<"ComplaintTimeline"> | string
+  performedBy?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
+  performedByRole?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
+  metadata?: Prisma.StringNullableFilter<"ComplaintTimeline"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"ComplaintTimeline"> | Date | string
+}
+
+export type ComplaintTimelineCreateWithoutTenantInput = {
+  id: string
+  action: string
+  fromStatus?: string | null
+  toStatus?: string | null
+  description: string
+  performedBy?: string | null
+  performedByRole?: string | null
+  metadata?: string | null
+  createdAt?: Date | string
+  complaint: Prisma.ComplaintCreateNestedOneWithoutComplaintTimelineInput
+}
+
+export type ComplaintTimelineUncheckedCreateWithoutTenantInput = {
+  id: string
   complaintId: string
   action: string
   fromStatus?: string | null
@@ -667,47 +629,33 @@ export type ComplaintTimelineCreateManyTenantInput = {
   createdAt?: Date | string
 }
 
-export type ComplaintTimelineUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.StringFieldUpdateOperationsInput | string
-  fromStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  toStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  performedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  complaint?: Prisma.ComplaintUpdateOneRequiredWithoutTimelineNestedInput
+export type ComplaintTimelineCreateOrConnectWithoutTenantInput = {
+  where: Prisma.ComplaintTimelineWhereUniqueInput
+  create: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput>
 }
 
-export type ComplaintTimelineUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.StringFieldUpdateOperationsInput | string
-  fromStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  toStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  performedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type ComplaintTimelineCreateManyTenantInputEnvelope = {
+  data: Prisma.ComplaintTimelineCreateManyTenantInput | Prisma.ComplaintTimelineCreateManyTenantInput[]
 }
 
-export type ComplaintTimelineUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  complaintId?: Prisma.StringFieldUpdateOperationsInput | string
-  action?: Prisma.StringFieldUpdateOperationsInput | string
-  fromStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  toStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  description?: Prisma.StringFieldUpdateOperationsInput | string
-  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  performedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type ComplaintTimelineUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.ComplaintTimelineWhereUniqueInput
+  update: Prisma.XOR<Prisma.ComplaintTimelineUpdateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.ComplaintTimelineCreateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedCreateWithoutTenantInput>
+}
+
+export type ComplaintTimelineUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.ComplaintTimelineWhereUniqueInput
+  data: Prisma.XOR<Prisma.ComplaintTimelineUpdateWithoutTenantInput, Prisma.ComplaintTimelineUncheckedUpdateWithoutTenantInput>
+}
+
+export type ComplaintTimelineUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.ComplaintTimelineScalarWhereInput
+  data: Prisma.XOR<Prisma.ComplaintTimelineUpdateManyMutationInput, Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantInput>
 }
 
 export type ComplaintTimelineCreateManyComplaintInput = {
-  id?: string
+  id: string
   tenantId: string
   action: string
   fromStatus?: string | null
@@ -729,7 +677,7 @@ export type ComplaintTimelineUpdateWithoutComplaintInput = {
   performedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutComplaintTimelinesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutComplaintTimelineNestedInput
 }
 
 export type ComplaintTimelineUncheckedUpdateWithoutComplaintInput = {
@@ -758,6 +706,58 @@ export type ComplaintTimelineUncheckedUpdateManyWithoutComplaintInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type ComplaintTimelineCreateManyTenantInput = {
+  id: string
+  complaintId: string
+  action: string
+  fromStatus?: string | null
+  toStatus?: string | null
+  description: string
+  performedBy?: string | null
+  performedByRole?: string | null
+  metadata?: string | null
+  createdAt?: Date | string
+}
+
+export type ComplaintTimelineUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.StringFieldUpdateOperationsInput | string
+  fromStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  complaint?: Prisma.ComplaintUpdateOneRequiredWithoutComplaintTimelineNestedInput
+}
+
+export type ComplaintTimelineUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.StringFieldUpdateOperationsInput | string
+  fromStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ComplaintTimelineUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintId?: Prisma.StringFieldUpdateOperationsInput | string
+  action?: Prisma.StringFieldUpdateOperationsInput | string
+  fromStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  toStatus?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  performedBy?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  performedByRole?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  metadata?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type ComplaintTimelineSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -772,8 +772,8 @@ export type ComplaintTimelineSelect<ExtArgs extends runtime.Types.Extensions.Int
   performedByRole?: boolean
   metadata?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   complaint?: boolean | Prisma.ComplaintDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["complaintTimeline"]>
 
 export type ComplaintTimelineSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -788,8 +788,8 @@ export type ComplaintTimelineSelectCreateManyAndReturn<ExtArgs extends runtime.T
   performedByRole?: boolean
   metadata?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   complaint?: boolean | Prisma.ComplaintDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["complaintTimeline"]>
 
 export type ComplaintTimelineSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -804,8 +804,8 @@ export type ComplaintTimelineSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   performedByRole?: boolean
   metadata?: boolean
   createdAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   complaint?: boolean | Prisma.ComplaintDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["complaintTimeline"]>
 
 export type ComplaintTimelineSelectScalar = {
@@ -824,23 +824,23 @@ export type ComplaintTimelineSelectScalar = {
 
 export type ComplaintTimelineOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "complaintId" | "action" | "fromStatus" | "toStatus" | "description" | "performedBy" | "performedByRole" | "metadata" | "createdAt", ExtArgs["result"]["complaintTimeline"]>
 export type ComplaintTimelineInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   complaint?: boolean | Prisma.ComplaintDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type ComplaintTimelineIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   complaint?: boolean | Prisma.ComplaintDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type ComplaintTimelineIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   complaint?: boolean | Prisma.ComplaintDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $ComplaintTimelinePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ComplaintTimeline"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
     complaint: Prisma.$ComplaintPayload<ExtArgs>
+    tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1248,8 +1248,8 @@ readonly fields: ComplaintTimelineFieldRefs;
  */
 export interface Prisma__ComplaintTimelineClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   complaint<T extends Prisma.ComplaintDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ComplaintDefaultArgs<ExtArgs>>): Prisma.Prisma__ComplaintClient<runtime.Types.Result.GetResult<Prisma.$ComplaintPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

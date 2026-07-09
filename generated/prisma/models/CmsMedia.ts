@@ -402,7 +402,7 @@ export type CmsMediaScalarWhereWithAggregatesInput = {
 }
 
 export type CmsMediaCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   fileName: string
   originalName: string
@@ -417,11 +417,11 @@ export type CmsMediaCreateInput = {
   height?: number | null
   uploadedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsMediaUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   fileName: string
   originalName: string
@@ -436,7 +436,7 @@ export type CmsMediaUncheckedCreateInput = {
   height?: number | null
   uploadedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsMediaUpdateInput = {
@@ -478,7 +478,7 @@ export type CmsMediaUncheckedUpdateInput = {
 }
 
 export type CmsMediaCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   fileName: string
   originalName: string
@@ -493,7 +493,7 @@ export type CmsMediaCreateManyInput = {
   height?: number | null
   uploadedById?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsMediaUpdateManyMutationInput = {
@@ -601,6 +601,14 @@ export type CmsMediaSumOrderByAggregateInput = {
   size?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
+}
+
+export type NullableIntFieldUpdateOperationsInput = {
+  set?: number | null
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 

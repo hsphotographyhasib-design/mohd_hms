@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState, useCallback } from 'react';
+import { memo, useState, useCallback, useEffect } from 'react';
 import { format } from 'date-fns';
 import {
   LineChart, Line, BarChart, Bar, PieChart, Pie, Cell,
@@ -11,6 +11,7 @@ import {
   TrendingUp, TrendingDown, Clock, Users, Package,
   Activity, CheckCircle2, Star, Calendar, ArrowRight,
   RefreshCw, ShieldCheck, Filter, X, LogOut,
+  WifiOff, ServerCrash, Loader2, Wifi,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
@@ -24,8 +25,10 @@ import { useAuthStore, useAppStore } from '@/app-shell/store';
 import type { ComplaintItem, WorkOrderItem, PmScheduleItem, UserRole } from '@/core/types';
 import {
   useDashboardKpi, useDashboardCharts, useDashboardRecent,
+  useDashboardBackgroundRecovery, useDashboardHealth, useInvalidateDashboard,
+  getDashboardErrorMessage,
 } from '@/modules/dashboard/hooks/use-dashboard-queries';
-import type { DashboardKpiData, DashboardChartsData, DashboardFilters } from '@/modules/dashboard/hooks/use-dashboard-queries';
+import type { DashboardKpiData, DashboardChartsData, DashboardFilters, DashboardError, DashboardErrorCategory } from '@/modules/dashboard/hooks/use-dashboard-queries';
 
 // ============ HELPERS ============
 
@@ -298,6 +301,158 @@ const DEFAULT_KPI: DashboardKpiData = {
   totalEmployees: 0, lowStockItems: 0, accessLevel: '',
 };
 
+// ── Error banner style config per category ──
+
+const ERROR_BANNER_CONFIG: Record<DashboardErrorCategory, {
+  icon: React.ReactNode;
+  bg: string;
+  border: string;
+  text: string;
+  iconColor: string;
+  showRetry: boolean;
+  autoRetryHint: boolean;
+}> = {
+  auth: {
+    icon: <LogOut className="h-3.5 w-3.5 shrink-0" />,
+    bg: 'bg-rose-50 dark:bg-rose-950/30',
+    border: 'border-rose-200 dark:border-rose-800',
+    text: 'text-rose-700 dark:text-rose-300',
+    iconColor: '',
+    showRetry: false,
+    autoRetryHint: false,
+  },
+  network: {
+    icon: <WifiOff className="h-3.5 w-3.5 shrink-0" />,
+    bg: 'bg-amber-50 dark:bg-amber-950/30',
+    border: 'border-amber-200 dark:border-amber-800',
+    text: 'text-amber-700 dark:text-amber-300',
+    iconColor: '',
+    showRetry: true,
+    autoRetryHint: true,
+  },
+  timeout: {
+    icon: <Clock className="h-3.5 w-3.5 shrink-0" />,
+    bg: 'bg-amber-50 dark:bg-amber-950/30',
+    border: 'border-amber-200 dark:border-amber-800',
+    text: 'text-amber-700 dark:text-amber-300',
+    iconColor: '',
+    showRetry: true,
+    autoRetryHint: true,
+  },
+  server: {
+    icon: <ServerCrash className="h-3.5 w-3.5 shrink-0" />,
+    bg: 'bg-amber-50 dark:bg-amber-950/30',
+    border: 'border-amber-200 dark:border-amber-800',
+    text: 'text-amber-700 dark:text-amber-300',
+    iconColor: '',
+    showRetry: true,
+    autoRetryHint: true,
+  },
+  parse: {
+    icon: <AlertTriangle className="h-3.5 w-3.5 shrink-0" />,
+    bg: 'bg-amber-50 dark:bg-amber-950/30',
+    border: 'border-amber-200 dark:border-amber-800',
+    text: 'text-amber-700 dark:text-amber-300',
+    iconColor: '',
+    showRetry: true,
+    autoRetryHint: true,
+  },
+  unavailable: {
+    icon: <ServerCrash className="h-3.5 w-3.5 shrink-0" />,
+    bg: 'bg-amber-50 dark:bg-amber-950/30',
+    border: 'border-amber-200 dark:border-amber-800',
+    text: 'text-amber-700 dark:text-amber-300',
+    iconColor: '',
+    showRetry: true,
+    autoRetryHint: true,
+  },
+  unknown: {
+    icon: <AlertTriangle className="h-3.5 w-3.5 shrink-0" />,
+    bg: 'bg-amber-50 dark:bg-amber-950/30',
+    border: 'border-amber-200 dark:border-amber-800',
+    text: 'text-amber-700 dark:text-amber-300',
+    iconColor: '',
+    showRetry: true,
+    autoRetryHint: false,
+  },
+};
+
+// ── Connection Health Banner ──
+
+const DashboardHealthBanner = memo(function DashboardHealthBanner({
+  health,
+  onRetry,
+}: {
+  health: { status: string; isLoading: boolean; error: DashboardError | null; errorMessage: string; errorCategory: DashboardErrorCategory | null };
+  onRetry: () => void;
+}) {
+  const [retrying, setRetrying] = useState(false);
+
+  const handleRetry = useCallback(() => {
+    setRetrying(true);
+    onRetry();
+    // Reset button state after a short delay (the query will update the UI)
+    setTimeout(() => setRetrying(false), 3_000);
+  }, [onRetry]);
+
+  if (health.status === 'loading' || health.status === 'healthy' || !health.error) return null;
+
+  const category = health.error.category;
+  const config = ERROR_BANNER_CONFIG[category] || ERROR_BANNER_CONFIG.unknown;
+
+  return (
+    <div className={`flex items-center gap-2.5 p-3 rounded-lg border ${config.bg} ${config.border} ${config.text} text-sm mb-4`}>
+      {config.icon}
+      <span className="flex-1">{health.errorMessage}</span>
+      {config.showRetry && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={handleRetry}
+          disabled={retrying}
+          className="h-7 px-3 text-xs font-medium shrink-0"
+        >
+          {retrying ? (
+            <><Loader2 className="h-3 w-3 mr-1.5 animate-spin" />Retrying…</>
+          ) : (
+            <><RefreshCw className="h-3 w-3 mr-1.5" />Retry Now</>
+          )}
+        </Button>
+      )}
+      {config.autoRetryHint && !retrying && (
+        <span className="text-xs opacity-70 shrink-0 hidden sm:inline">Auto-retrying…</span>
+      )}
+    </div>
+  );
+});
+
+// ── Connection Status Indicator (small dot in header) ──
+
+function ConnectionStatusDot({ status }: { status: string }) {
+  if (status === 'healthy') {
+    return (
+      <div className="flex items-center gap-1.5 text-xs text-emerald-600">
+        <Wifi className="h-3.5 w-3.5" />
+        <span className="hidden sm:inline">Live</span>
+      </div>
+    );
+  }
+  if (status === 'error') {
+    return (
+      <div className="flex items-center gap-1.5 text-xs text-amber-600">
+        <WifiOff className="h-3.5 w-3.5" />
+        <span className="hidden sm:inline">Reconnecting</span>
+      </div>
+    );
+  }
+  return (
+    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+      <span className="hidden sm:inline">Loading…</span>
+    </div>
+  );
+}
+
 const KpiCardsSection = memo(function KpiCardsSection({
   data,
   isLoading,
@@ -308,7 +463,7 @@ const KpiCardsSection = memo(function KpiCardsSection({
 }: {
   data: DashboardKpiData | undefined;
   isLoading: boolean;
-  error: Error | null;
+  error: DashboardError | null;
   refetch: () => void;
   upcomingPmLength: number;
   role: UserRole;
@@ -316,7 +471,7 @@ const KpiCardsSection = memo(function KpiCardsSection({
   // On error, show cards with default 0 values instead of an error banner
   const effectiveData = data ?? DEFAULT_KPI;
   const hasError = !!error && !data;
-  const isAuthError = hasError && (error?.message?.includes('Authentication') || error?.message?.includes('auth') || (error as any)?.isAuthError);
+  const isAuthError = hasError && error?.category === 'auth';
 
   if (isLoading && !hasError) {
     return (
@@ -347,10 +502,10 @@ const KpiCardsSection = memo(function KpiCardsSection({
           <span className="flex-1">Session expired — redirecting to login…</span>
         </div>
       )}
-      {hasError && !isAuthError && (
+      {hasError && !isAuthError && error && (
         <div className="flex items-center gap-2 p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs mb-2">
-          <RefreshCw className="h-3.5 w-3.5 shrink-0" />
-          <span className="flex-1">Unable to load live data — showing offline values</span>
+          {(ERROR_BANNER_CONFIG[error.category] || ERROR_BANNER_CONFIG.unknown).icon}
+          <span className="flex-1">{getDashboardErrorMessage(error)}</span>
           <button
             onClick={() => refetch()}
             className="text-xs font-medium underline hover:no-underline shrink-0"
@@ -1331,6 +1486,13 @@ export function DashboardView() {
   const charts = useDashboardCharts(role, canFilter ? filters : undefined);
   const recent = useDashboardRecent(role, canFilter ? filters : undefined);
 
+  // Background recovery: auto-retry failed queries every 30s
+  useDashboardBackgroundRecovery();
+
+  // Connection health: aggregate status across all 3 queries
+  const health = useDashboardHealth();
+  const invalidateDashboard = useInvalidateDashboard();
+
   const today = format(new Date(), 'EEEE, MMMM d, yyyy');
 
   const kpiData = kpi.data;
@@ -1383,13 +1545,19 @@ export function DashboardView() {
 
   return (
     <div className="p-4 md:p-6 space-y-6">
+      {/* ============ 0. CONNECTION HEALTH BANNER ============ */}
+      <DashboardHealthBanner health={health} onRetry={invalidateDashboard} />
+
       {/* ============ 1. WELCOME HEADER ============ */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
             Welcome back, {user?.name || 'User'}
           </h1>
-          <p className="text-muted-foreground mt-1">{today}</p>
+          <div className="flex items-center gap-3 mt-1">
+            <p className="text-muted-foreground">{today}</p>
+            <ConnectionStatusDot status={health.status} />
+          </div>
         </div>
         <div className="flex flex-wrap gap-2">
           {quickBadges.map((badge, i) => (

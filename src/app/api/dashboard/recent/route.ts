@@ -6,31 +6,47 @@ import { buildDashboardScope } from '@/modules/dashboard/services/dashboard-scop
 export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+const PROXY_TIMEOUT_MS = 12_000;
 
 export async function GET(request: NextRequest) {
+  const startTime = Date.now();
+
   // ── Production: proxy to Render backend ────────────────────────────────
   if (BACKEND_URL) {
-    try {
-      const authHeader = request.headers.get('authorization') || '';
-      const searchParams = request.nextUrl.searchParams.toString();
-      const url = searchParams
-        ? `${BACKEND_URL}/api/dashboard/recent?${searchParams}`
-        : `${BACKEND_URL}/api/dashboard/recent`;
+    const authHeader = request.headers.get('authorization') || '';
+    const searchParams = request.nextUrl.searchParams.toString();
+    const url = searchParams
+      ? `${BACKEND_URL}/api/dashboard/recent?${searchParams}`
+      : `${BACKEND_URL}/api/dashboard/recent`;
 
-      const token = authHeader.replace('Bearer ', '');
-      const payload = verifyToken(token);
-      if (payload) {
-        console.log(`[Dashboard/${payload.role}] GET /api/dashboard/recent userId=${payload.userId}`);
-      }
+    const token = authHeader.replace('Bearer ', '');
+    const payload = verifyToken(token);
+    if (payload) {
+      console.log(`[Dashboard/${payload.role}] GET /api/dashboard/recent userId=${payload.userId}`);
+    }
+
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
 
       const res = await fetch(url, {
         headers: { Authorization: authHeader, 'Content-Type': 'application/json' },
+        signal: controller.signal,
       });
+
+      clearTimeout(timeoutId);
+
       const data = await res.json();
+      console.log(`[Dashboard/Recent] Proxy ${res.status} in ${Date.now() - startTime}ms`);
       return NextResponse.json(data, { status: res.status });
-    } catch (error) {
-      console.error('Dashboard recent proxy error:', error);
-      return NextResponse.json({ error: 'Backend service unavailable' }, { status: 502 });
+    } catch (error: unknown) {
+      const msg = error instanceof Error ? error.message : String(error);
+      const isTimeout = error instanceof DOMException && error.name === 'AbortError';
+      console.error(`[Dashboard/Recent] Proxy error (${isTimeout ? 'timeout' : 'network'}): ${msg}`);
+      return NextResponse.json(
+        { error: isTimeout ? 'Backend request timed out' : 'Backend service unavailable' },
+        { status: 502 },
+      );
     }
   }
 
@@ -39,7 +55,10 @@ export async function GET(request: NextRequest) {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!payload) {
+      console.log('[Dashboard/Recent] 401 — invalid or missing token');
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     const tenantId = payload.tenantId as string;
     const role = (payload.role as string).toLowerCase();
@@ -50,7 +69,10 @@ export async function GET(request: NextRequest) {
       role,
       email: payload.email as string | undefined,
     });
-    if (!scope) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    if (!scope) {
+      console.log(`[Dashboard/Recent] 401 — buildDashboardScope returned null for userId=${payload.userId} role=${role}`);
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
     console.log(`[Dashboard/${role}] GET /api/dashboard/recent userId=${payload.userId}`);
 
@@ -138,6 +160,8 @@ export async function GET(request: NextRequest) {
         : Promise.resolve([]),
     ]);
 
+    console.log(`[Dashboard/Recent] 200 in ${Date.now() - startTime}ms`);
+
     return NextResponse.json({
       recentComplaints: (recentComplaints as any[]).map((c: any) => ({
         id: c.id,
@@ -197,7 +221,8 @@ export async function GET(request: NextRequest) {
       })),
     });
   } catch (error) {
-    console.error('Dashboard recent error:', error);
+    const duration = Date.now() - startTime;
+    console.error(`[Dashboard/Recent] 500 in ${duration}ms:`, error);
     return NextResponse.json(
       { error: getDbFriendlyMessage(error) },
       { status: 500, headers: getErrorHeaders(error) },

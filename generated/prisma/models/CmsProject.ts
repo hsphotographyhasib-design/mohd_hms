@@ -431,7 +431,7 @@ export type CmsProjectScalarWhereWithAggregatesInput = {
 }
 
 export type CmsProjectCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   slug: string
@@ -449,11 +449,11 @@ export type CmsProjectCreateInput = {
   status?: string
   publishedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsProjectUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   slug: string
@@ -471,7 +471,7 @@ export type CmsProjectUncheckedCreateInput = {
   status?: string
   publishedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsProjectUpdateInput = {
@@ -519,7 +519,7 @@ export type CmsProjectUncheckedUpdateInput = {
 }
 
 export type CmsProjectCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   slug: string
@@ -537,7 +537,7 @@ export type CmsProjectCreateManyInput = {
   status?: string
   publishedAt?: Date | string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type CmsProjectUpdateManyMutationInput = {

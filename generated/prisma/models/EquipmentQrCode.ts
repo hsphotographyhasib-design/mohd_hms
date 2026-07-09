@@ -248,8 +248,8 @@ export type EquipmentQrCodeWhereInput = {
   generatedAt?: Prisma.DateTimeFilter<"EquipmentQrCode"> | Date | string
   lastRegeneratedAt?: Prisma.DateTimeNullableFilter<"EquipmentQrCode"> | Date | string | null
   version?: Prisma.IntFilter<"EquipmentQrCode"> | number
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   equipment?: Prisma.XOR<Prisma.EquipmentScalarRelationFilter, Prisma.EquipmentWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type EquipmentQrCodeOrderByWithRelationInput = {
@@ -262,8 +262,8 @@ export type EquipmentQrCodeOrderByWithRelationInput = {
   generatedAt?: Prisma.SortOrder
   lastRegeneratedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   version?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
   equipment?: Prisma.EquipmentOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type EquipmentQrCodeWhereUniqueInput = Prisma.AtLeast<{
@@ -279,8 +279,8 @@ export type EquipmentQrCodeWhereUniqueInput = Prisma.AtLeast<{
   generatedAt?: Prisma.DateTimeFilter<"EquipmentQrCode"> | Date | string
   lastRegeneratedAt?: Prisma.DateTimeNullableFilter<"EquipmentQrCode"> | Date | string | null
   version?: Prisma.IntFilter<"EquipmentQrCode"> | number
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   equipment?: Prisma.XOR<Prisma.EquipmentScalarRelationFilter, Prisma.EquipmentWhereInput>
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id" | "equipmentId" | "qrId">
 
 export type EquipmentQrCodeOrderByWithAggregationInput = {
@@ -316,19 +316,19 @@ export type EquipmentQrCodeScalarWhereWithAggregatesInput = {
 }
 
 export type EquipmentQrCodeCreateInput = {
-  id?: string
+  id: string
   qrId: string
   qrUrl: string
   isActive?: boolean
   generatedAt?: Date | string
   lastRegeneratedAt?: Date | string | null
   version?: number
-  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentQrCodesInput
-  equipment: Prisma.EquipmentCreateNestedOneWithoutQrCodeRecordInput
+  equipment: Prisma.EquipmentCreateNestedOneWithoutEquipmentQrCodeInput
+  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentQrCodeInput
 }
 
 export type EquipmentQrCodeUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   equipmentId: string
   qrId: string
@@ -347,8 +347,8 @@ export type EquipmentQrCodeUpdateInput = {
   generatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastRegeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentQrCodesNestedInput
-  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutQrCodeRecordNestedInput
+  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutEquipmentQrCodeNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentQrCodeNestedInput
 }
 
 export type EquipmentQrCodeUncheckedUpdateInput = {
@@ -364,7 +364,7 @@ export type EquipmentQrCodeUncheckedUpdateInput = {
 }
 
 export type EquipmentQrCodeCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   equipmentId: string
   qrId: string
@@ -395,16 +395,6 @@ export type EquipmentQrCodeUncheckedUpdateManyInput = {
   generatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastRegeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-}
-
-export type EquipmentQrCodeListRelationFilter = {
-  every?: Prisma.EquipmentQrCodeWhereInput
-  some?: Prisma.EquipmentQrCodeWhereInput
-  none?: Prisma.EquipmentQrCodeWhereInput
-}
-
-export type EquipmentQrCodeOrderByRelationAggregateInput = {
-  _count?: Prisma.SortOrder
 }
 
 export type EquipmentQrCodeNullableScalarRelationFilter = {
@@ -456,6 +446,48 @@ export type EquipmentQrCodeSumOrderByAggregateInput = {
   version?: Prisma.SortOrder
 }
 
+export type EquipmentQrCodeListRelationFilter = {
+  every?: Prisma.EquipmentQrCodeWhereInput
+  some?: Prisma.EquipmentQrCodeWhereInput
+  none?: Prisma.EquipmentQrCodeWhereInput
+}
+
+export type EquipmentQrCodeOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
+}
+
+export type EquipmentQrCodeCreateNestedOneWithoutEquipmentInput = {
+  create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
+  connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutEquipmentInput
+  connect?: Prisma.EquipmentQrCodeWhereUniqueInput
+}
+
+export type EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput = {
+  create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
+  connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutEquipmentInput
+  connect?: Prisma.EquipmentQrCodeWhereUniqueInput
+}
+
+export type EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
+  connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutEquipmentInput
+  upsert?: Prisma.EquipmentQrCodeUpsertWithoutEquipmentInput
+  disconnect?: Prisma.EquipmentQrCodeWhereInput | boolean
+  delete?: Prisma.EquipmentQrCodeWhereInput | boolean
+  connect?: Prisma.EquipmentQrCodeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentQrCodeUpdateToOneWithWhereWithoutEquipmentInput, Prisma.EquipmentQrCodeUpdateWithoutEquipmentInput>, Prisma.EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput>
+}
+
+export type EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput = {
+  create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
+  connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutEquipmentInput
+  upsert?: Prisma.EquipmentQrCodeUpsertWithoutEquipmentInput
+  disconnect?: Prisma.EquipmentQrCodeWhereInput | boolean
+  delete?: Prisma.EquipmentQrCodeWhereInput | boolean
+  connect?: Prisma.EquipmentQrCodeWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentQrCodeUpdateToOneWithWhereWithoutEquipmentInput, Prisma.EquipmentQrCodeUpdateWithoutEquipmentInput>, Prisma.EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput>
+}
+
 export type EquipmentQrCodeCreateNestedManyWithoutTenantInput = {
   create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutTenantInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutTenantInput> | Prisma.EquipmentQrCodeCreateWithoutTenantInput[] | Prisma.EquipmentQrCodeUncheckedCreateWithoutTenantInput[]
   connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutTenantInput | Prisma.EquipmentQrCodeCreateOrConnectWithoutTenantInput[]
@@ -498,51 +530,79 @@ export type EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput = {
   deleteMany?: Prisma.EquipmentQrCodeScalarWhereInput | Prisma.EquipmentQrCodeScalarWhereInput[]
 }
 
-export type EquipmentQrCodeCreateNestedOneWithoutEquipmentInput = {
-  create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
-  connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutEquipmentInput
-  connect?: Prisma.EquipmentQrCodeWhereUniqueInput
-}
-
-export type EquipmentQrCodeUncheckedCreateNestedOneWithoutEquipmentInput = {
-  create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
-  connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutEquipmentInput
-  connect?: Prisma.EquipmentQrCodeWhereUniqueInput
-}
-
-export type EquipmentQrCodeUpdateOneWithoutEquipmentNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
-  connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutEquipmentInput
-  upsert?: Prisma.EquipmentQrCodeUpsertWithoutEquipmentInput
-  disconnect?: Prisma.EquipmentQrCodeWhereInput | boolean
-  delete?: Prisma.EquipmentQrCodeWhereInput | boolean
-  connect?: Prisma.EquipmentQrCodeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentQrCodeUpdateToOneWithWhereWithoutEquipmentInput, Prisma.EquipmentQrCodeUpdateWithoutEquipmentInput>, Prisma.EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput>
-}
-
-export type EquipmentQrCodeUncheckedUpdateOneWithoutEquipmentNestedInput = {
-  create?: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
-  connectOrCreate?: Prisma.EquipmentQrCodeCreateOrConnectWithoutEquipmentInput
-  upsert?: Prisma.EquipmentQrCodeUpsertWithoutEquipmentInput
-  disconnect?: Prisma.EquipmentQrCodeWhereInput | boolean
-  delete?: Prisma.EquipmentQrCodeWhereInput | boolean
-  connect?: Prisma.EquipmentQrCodeWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.EquipmentQrCodeUpdateToOneWithWhereWithoutEquipmentInput, Prisma.EquipmentQrCodeUpdateWithoutEquipmentInput>, Prisma.EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput>
-}
-
-export type EquipmentQrCodeCreateWithoutTenantInput = {
-  id?: string
+export type EquipmentQrCodeCreateWithoutEquipmentInput = {
+  id: string
   qrId: string
   qrUrl: string
   isActive?: boolean
   generatedAt?: Date | string
   lastRegeneratedAt?: Date | string | null
   version?: number
-  equipment: Prisma.EquipmentCreateNestedOneWithoutQrCodeRecordInput
+  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentQrCodeInput
+}
+
+export type EquipmentQrCodeUncheckedCreateWithoutEquipmentInput = {
+  id: string
+  tenantId: string
+  qrId: string
+  qrUrl: string
+  isActive?: boolean
+  generatedAt?: Date | string
+  lastRegeneratedAt?: Date | string | null
+  version?: number
+}
+
+export type EquipmentQrCodeCreateOrConnectWithoutEquipmentInput = {
+  where: Prisma.EquipmentQrCodeWhereUniqueInput
+  create: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
+}
+
+export type EquipmentQrCodeUpsertWithoutEquipmentInput = {
+  update: Prisma.XOR<Prisma.EquipmentQrCodeUpdateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput>
+  create: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
+  where?: Prisma.EquipmentQrCodeWhereInput
+}
+
+export type EquipmentQrCodeUpdateToOneWithWhereWithoutEquipmentInput = {
+  where?: Prisma.EquipmentQrCodeWhereInput
+  data: Prisma.XOR<Prisma.EquipmentQrCodeUpdateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput>
+}
+
+export type EquipmentQrCodeUpdateWithoutEquipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  generatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastRegeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentQrCodeNestedInput
+}
+
+export type EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrId?: Prisma.StringFieldUpdateOperationsInput | string
+  qrUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  generatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  lastRegeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+}
+
+export type EquipmentQrCodeCreateWithoutTenantInput = {
+  id: string
+  qrId: string
+  qrUrl: string
+  isActive?: boolean
+  generatedAt?: Date | string
+  lastRegeneratedAt?: Date | string | null
+  version?: number
+  equipment: Prisma.EquipmentCreateNestedOneWithoutEquipmentQrCodeInput
 }
 
 export type EquipmentQrCodeUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   equipmentId: string
   qrId: string
   qrUrl: string
@@ -592,68 +652,8 @@ export type EquipmentQrCodeScalarWhereInput = {
   version?: Prisma.IntFilter<"EquipmentQrCode"> | number
 }
 
-export type EquipmentQrCodeCreateWithoutEquipmentInput = {
-  id?: string
-  qrId: string
-  qrUrl: string
-  isActive?: boolean
-  generatedAt?: Date | string
-  lastRegeneratedAt?: Date | string | null
-  version?: number
-  tenant: Prisma.TenantCreateNestedOneWithoutEquipmentQrCodesInput
-}
-
-export type EquipmentQrCodeUncheckedCreateWithoutEquipmentInput = {
-  id?: string
-  tenantId: string
-  qrId: string
-  qrUrl: string
-  isActive?: boolean
-  generatedAt?: Date | string
-  lastRegeneratedAt?: Date | string | null
-  version?: number
-}
-
-export type EquipmentQrCodeCreateOrConnectWithoutEquipmentInput = {
-  where: Prisma.EquipmentQrCodeWhereUniqueInput
-  create: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
-}
-
-export type EquipmentQrCodeUpsertWithoutEquipmentInput = {
-  update: Prisma.XOR<Prisma.EquipmentQrCodeUpdateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput>
-  create: Prisma.XOR<Prisma.EquipmentQrCodeCreateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedCreateWithoutEquipmentInput>
-  where?: Prisma.EquipmentQrCodeWhereInput
-}
-
-export type EquipmentQrCodeUpdateToOneWithWhereWithoutEquipmentInput = {
-  where?: Prisma.EquipmentQrCodeWhereInput
-  data: Prisma.XOR<Prisma.EquipmentQrCodeUpdateWithoutEquipmentInput, Prisma.EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput>
-}
-
-export type EquipmentQrCodeUpdateWithoutEquipmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.StringFieldUpdateOperationsInput | string
-  qrUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  generatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastRegeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutEquipmentQrCodesNestedInput
-}
-
-export type EquipmentQrCodeUncheckedUpdateWithoutEquipmentInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  qrId?: Prisma.StringFieldUpdateOperationsInput | string
-  qrUrl?: Prisma.StringFieldUpdateOperationsInput | string
-  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
-  generatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastRegeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  version?: Prisma.IntFieldUpdateOperationsInput | number
-}
-
 export type EquipmentQrCodeCreateManyTenantInput = {
-  id?: string
+  id: string
   equipmentId: string
   qrId: string
   qrUrl: string
@@ -671,7 +671,7 @@ export type EquipmentQrCodeUpdateWithoutTenantInput = {
   generatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastRegeneratedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutQrCodeRecordNestedInput
+  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutEquipmentQrCodeNestedInput
 }
 
 export type EquipmentQrCodeUncheckedUpdateWithoutTenantInput = {
@@ -708,8 +708,8 @@ export type EquipmentQrCodeSelect<ExtArgs extends runtime.Types.Extensions.Inter
   generatedAt?: boolean
   lastRegeneratedAt?: boolean
   version?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipmentQrCode"]>
 
 export type EquipmentQrCodeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -722,8 +722,8 @@ export type EquipmentQrCodeSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   generatedAt?: boolean
   lastRegeneratedAt?: boolean
   version?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipmentQrCode"]>
 
 export type EquipmentQrCodeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -736,8 +736,8 @@ export type EquipmentQrCodeSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   generatedAt?: boolean
   lastRegeneratedAt?: boolean
   version?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["equipmentQrCode"]>
 
 export type EquipmentQrCodeSelectScalar = {
@@ -754,23 +754,23 @@ export type EquipmentQrCodeSelectScalar = {
 
 export type EquipmentQrCodeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "equipmentId" | "qrId" | "qrUrl" | "isActive" | "generatedAt" | "lastRegeneratedAt" | "version", ExtArgs["result"]["equipmentQrCode"]>
 export type EquipmentQrCodeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type EquipmentQrCodeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type EquipmentQrCodeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $EquipmentQrCodePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "EquipmentQrCode"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
     equipment: Prisma.$EquipmentPayload<ExtArgs>
+    tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1176,8 +1176,8 @@ readonly fields: EquipmentQrCodeFieldRefs;
  */
 export interface Prisma__EquipmentQrCodeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   equipment<T extends Prisma.EquipmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EquipmentDefaultArgs<ExtArgs>>): Prisma.Prisma__EquipmentClient<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

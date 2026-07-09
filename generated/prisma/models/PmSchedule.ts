@@ -288,9 +288,9 @@ export type PmScheduleWhereInput = {
   checklistTemplateId?: Prisma.StringNullableFilter<"PmSchedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   equipment?: Prisma.XOR<Prisma.EquipmentScalarRelationFilter, Prisma.EquipmentWhereInput>
-  assignedTo?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }
 
 export type PmScheduleOrderByWithRelationInput = {
@@ -308,9 +308,9 @@ export type PmScheduleOrderByWithRelationInput = {
   checklistTemplateId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  tenant?: Prisma.TenantOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   equipment?: Prisma.EquipmentOrderByWithRelationInput
-  assignedTo?: Prisma.UserOrderByWithRelationInput
+  tenant?: Prisma.TenantOrderByWithRelationInput
 }
 
 export type PmScheduleWhereUniqueInput = Prisma.AtLeast<{
@@ -331,9 +331,9 @@ export type PmScheduleWhereUniqueInput = Prisma.AtLeast<{
   checklistTemplateId?: Prisma.StringNullableFilter<"PmSchedule"> | string | null
   createdAt?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
-  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   equipment?: Prisma.XOR<Prisma.EquipmentScalarRelationFilter, Prisma.EquipmentWhereInput>
-  assignedTo?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
 }, "id">
 
 export type PmScheduleOrderByWithAggregationInput = {
@@ -379,7 +379,7 @@ export type PmScheduleScalarWhereWithAggregatesInput = {
 }
 
 export type PmScheduleCreateInput = {
-  id?: string
+  id: string
   title: string
   description?: string | null
   frequency: string
@@ -389,14 +389,14 @@ export type PmScheduleCreateInput = {
   status?: string
   checklistTemplateId?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutPmSchedulesInput
-  equipment: Prisma.EquipmentCreateNestedOneWithoutPmSchedulesInput
-  assignedTo?: Prisma.UserCreateNestedOneWithoutPmSchedulesInput
+  updatedAt: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutPmScheduleInput
+  equipment: Prisma.EquipmentCreateNestedOneWithoutPmScheduleInput
+  tenant: Prisma.TenantCreateNestedOneWithoutPmScheduleInput
 }
 
 export type PmScheduleUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   equipmentId: string
   title: string
@@ -409,7 +409,7 @@ export type PmScheduleUncheckedCreateInput = {
   status?: string
   checklistTemplateId?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PmScheduleUpdateInput = {
@@ -424,9 +424,9 @@ export type PmScheduleUpdateInput = {
   checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutPmSchedulesNestedInput
-  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutPmSchedulesNestedInput
-  assignedTo?: Prisma.UserUpdateOneWithoutPmSchedulesNestedInput
+  user?: Prisma.UserUpdateOneWithoutPmScheduleNestedInput
+  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutPmScheduleNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutPmScheduleNestedInput
 }
 
 export type PmScheduleUncheckedUpdateInput = {
@@ -447,7 +447,7 @@ export type PmScheduleUncheckedUpdateInput = {
 }
 
 export type PmScheduleCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   equipmentId: string
   title: string
@@ -460,7 +460,7 @@ export type PmScheduleCreateManyInput = {
   status?: string
   checklistTemplateId?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PmScheduleUpdateManyMutationInput = {
@@ -563,90 +563,6 @@ export type PmScheduleSumOrderByAggregateInput = {
   customDays?: Prisma.SortOrder
 }
 
-export type PmScheduleCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput> | Prisma.PmScheduleCreateWithoutTenantInput[] | Prisma.PmScheduleUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutTenantInput | Prisma.PmScheduleCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.PmScheduleCreateManyTenantInputEnvelope
-  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-}
-
-export type PmScheduleUncheckedCreateNestedManyWithoutTenantInput = {
-  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput> | Prisma.PmScheduleCreateWithoutTenantInput[] | Prisma.PmScheduleUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutTenantInput | Prisma.PmScheduleCreateOrConnectWithoutTenantInput[]
-  createMany?: Prisma.PmScheduleCreateManyTenantInputEnvelope
-  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-}
-
-export type PmScheduleUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput> | Prisma.PmScheduleCreateWithoutTenantInput[] | Prisma.PmScheduleUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutTenantInput | Prisma.PmScheduleCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.PmScheduleUpsertWithWhereUniqueWithoutTenantInput | Prisma.PmScheduleUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.PmScheduleCreateManyTenantInputEnvelope
-  set?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  disconnect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  delete?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  update?: Prisma.PmScheduleUpdateWithWhereUniqueWithoutTenantInput | Prisma.PmScheduleUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.PmScheduleUpdateManyWithWhereWithoutTenantInput | Prisma.PmScheduleUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
-}
-
-export type PmScheduleUncheckedUpdateManyWithoutTenantNestedInput = {
-  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput> | Prisma.PmScheduleCreateWithoutTenantInput[] | Prisma.PmScheduleUncheckedCreateWithoutTenantInput[]
-  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutTenantInput | Prisma.PmScheduleCreateOrConnectWithoutTenantInput[]
-  upsert?: Prisma.PmScheduleUpsertWithWhereUniqueWithoutTenantInput | Prisma.PmScheduleUpsertWithWhereUniqueWithoutTenantInput[]
-  createMany?: Prisma.PmScheduleCreateManyTenantInputEnvelope
-  set?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  disconnect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  delete?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  update?: Prisma.PmScheduleUpdateWithWhereUniqueWithoutTenantInput | Prisma.PmScheduleUpdateWithWhereUniqueWithoutTenantInput[]
-  updateMany?: Prisma.PmScheduleUpdateManyWithWhereWithoutTenantInput | Prisma.PmScheduleUpdateManyWithWhereWithoutTenantInput[]
-  deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
-}
-
-export type PmScheduleCreateNestedManyWithoutAssignedToInput = {
-  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutAssignedToInput, Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput> | Prisma.PmScheduleCreateWithoutAssignedToInput[] | Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput[]
-  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutAssignedToInput | Prisma.PmScheduleCreateOrConnectWithoutAssignedToInput[]
-  createMany?: Prisma.PmScheduleCreateManyAssignedToInputEnvelope
-  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-}
-
-export type PmScheduleUncheckedCreateNestedManyWithoutAssignedToInput = {
-  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutAssignedToInput, Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput> | Prisma.PmScheduleCreateWithoutAssignedToInput[] | Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput[]
-  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutAssignedToInput | Prisma.PmScheduleCreateOrConnectWithoutAssignedToInput[]
-  createMany?: Prisma.PmScheduleCreateManyAssignedToInputEnvelope
-  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-}
-
-export type PmScheduleUpdateManyWithoutAssignedToNestedInput = {
-  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutAssignedToInput, Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput> | Prisma.PmScheduleCreateWithoutAssignedToInput[] | Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput[]
-  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutAssignedToInput | Prisma.PmScheduleCreateOrConnectWithoutAssignedToInput[]
-  upsert?: Prisma.PmScheduleUpsertWithWhereUniqueWithoutAssignedToInput | Prisma.PmScheduleUpsertWithWhereUniqueWithoutAssignedToInput[]
-  createMany?: Prisma.PmScheduleCreateManyAssignedToInputEnvelope
-  set?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  disconnect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  delete?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  update?: Prisma.PmScheduleUpdateWithWhereUniqueWithoutAssignedToInput | Prisma.PmScheduleUpdateWithWhereUniqueWithoutAssignedToInput[]
-  updateMany?: Prisma.PmScheduleUpdateManyWithWhereWithoutAssignedToInput | Prisma.PmScheduleUpdateManyWithWhereWithoutAssignedToInput[]
-  deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
-}
-
-export type PmScheduleUncheckedUpdateManyWithoutAssignedToNestedInput = {
-  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutAssignedToInput, Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput> | Prisma.PmScheduleCreateWithoutAssignedToInput[] | Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput[]
-  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutAssignedToInput | Prisma.PmScheduleCreateOrConnectWithoutAssignedToInput[]
-  upsert?: Prisma.PmScheduleUpsertWithWhereUniqueWithoutAssignedToInput | Prisma.PmScheduleUpsertWithWhereUniqueWithoutAssignedToInput[]
-  createMany?: Prisma.PmScheduleCreateManyAssignedToInputEnvelope
-  set?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  disconnect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  delete?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
-  update?: Prisma.PmScheduleUpdateWithWhereUniqueWithoutAssignedToInput | Prisma.PmScheduleUpdateWithWhereUniqueWithoutAssignedToInput[]
-  updateMany?: Prisma.PmScheduleUpdateManyWithWhereWithoutAssignedToInput | Prisma.PmScheduleUpdateManyWithWhereWithoutAssignedToInput[]
-  deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
-}
-
 export type PmScheduleCreateNestedManyWithoutEquipmentInput = {
   create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutEquipmentInput, Prisma.PmScheduleUncheckedCreateWithoutEquipmentInput> | Prisma.PmScheduleCreateWithoutEquipmentInput[] | Prisma.PmScheduleUncheckedCreateWithoutEquipmentInput[]
   connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutEquipmentInput | Prisma.PmScheduleCreateOrConnectWithoutEquipmentInput[]
@@ -689,142 +605,92 @@ export type PmScheduleUncheckedUpdateManyWithoutEquipmentNestedInput = {
   deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
 }
 
-export type PmScheduleCreateWithoutTenantInput = {
-  id?: string
-  title: string
-  description?: string | null
-  frequency: string
-  customDays?: number | null
-  lastExecuted?: Date | string | null
-  nextDueDate: Date | string
-  status?: string
-  checklistTemplateId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  equipment: Prisma.EquipmentCreateNestedOneWithoutPmSchedulesInput
-  assignedTo?: Prisma.UserCreateNestedOneWithoutPmSchedulesInput
+export type PmScheduleCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput> | Prisma.PmScheduleCreateWithoutTenantInput[] | Prisma.PmScheduleUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutTenantInput | Prisma.PmScheduleCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.PmScheduleCreateManyTenantInputEnvelope
+  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
 }
 
-export type PmScheduleUncheckedCreateWithoutTenantInput = {
-  id?: string
-  equipmentId: string
-  title: string
-  description?: string | null
-  frequency: string
-  customDays?: number | null
-  lastExecuted?: Date | string | null
-  nextDueDate: Date | string
-  assignedToId?: string | null
-  status?: string
-  checklistTemplateId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
+export type PmScheduleUncheckedCreateNestedManyWithoutTenantInput = {
+  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput> | Prisma.PmScheduleCreateWithoutTenantInput[] | Prisma.PmScheduleUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutTenantInput | Prisma.PmScheduleCreateOrConnectWithoutTenantInput[]
+  createMany?: Prisma.PmScheduleCreateManyTenantInputEnvelope
+  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
 }
 
-export type PmScheduleCreateOrConnectWithoutTenantInput = {
-  where: Prisma.PmScheduleWhereUniqueInput
-  create: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput>
+export type PmScheduleUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput> | Prisma.PmScheduleCreateWithoutTenantInput[] | Prisma.PmScheduleUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutTenantInput | Prisma.PmScheduleCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.PmScheduleUpsertWithWhereUniqueWithoutTenantInput | Prisma.PmScheduleUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.PmScheduleCreateManyTenantInputEnvelope
+  set?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  disconnect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  delete?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  update?: Prisma.PmScheduleUpdateWithWhereUniqueWithoutTenantInput | Prisma.PmScheduleUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.PmScheduleUpdateManyWithWhereWithoutTenantInput | Prisma.PmScheduleUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
 }
 
-export type PmScheduleCreateManyTenantInputEnvelope = {
-  data: Prisma.PmScheduleCreateManyTenantInput | Prisma.PmScheduleCreateManyTenantInput[]
+export type PmScheduleUncheckedUpdateManyWithoutTenantNestedInput = {
+  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput> | Prisma.PmScheduleCreateWithoutTenantInput[] | Prisma.PmScheduleUncheckedCreateWithoutTenantInput[]
+  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutTenantInput | Prisma.PmScheduleCreateOrConnectWithoutTenantInput[]
+  upsert?: Prisma.PmScheduleUpsertWithWhereUniqueWithoutTenantInput | Prisma.PmScheduleUpsertWithWhereUniqueWithoutTenantInput[]
+  createMany?: Prisma.PmScheduleCreateManyTenantInputEnvelope
+  set?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  disconnect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  delete?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  update?: Prisma.PmScheduleUpdateWithWhereUniqueWithoutTenantInput | Prisma.PmScheduleUpdateWithWhereUniqueWithoutTenantInput[]
+  updateMany?: Prisma.PmScheduleUpdateManyWithWhereWithoutTenantInput | Prisma.PmScheduleUpdateManyWithWhereWithoutTenantInput[]
+  deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
 }
 
-export type PmScheduleUpsertWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.PmScheduleWhereUniqueInput
-  update: Prisma.XOR<Prisma.PmScheduleUpdateWithoutTenantInput, Prisma.PmScheduleUncheckedUpdateWithoutTenantInput>
-  create: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput>
+export type PmScheduleCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutUserInput, Prisma.PmScheduleUncheckedCreateWithoutUserInput> | Prisma.PmScheduleCreateWithoutUserInput[] | Prisma.PmScheduleUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutUserInput | Prisma.PmScheduleCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.PmScheduleCreateManyUserInputEnvelope
+  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
 }
 
-export type PmScheduleUpdateWithWhereUniqueWithoutTenantInput = {
-  where: Prisma.PmScheduleWhereUniqueInput
-  data: Prisma.XOR<Prisma.PmScheduleUpdateWithoutTenantInput, Prisma.PmScheduleUncheckedUpdateWithoutTenantInput>
+export type PmScheduleUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutUserInput, Prisma.PmScheduleUncheckedCreateWithoutUserInput> | Prisma.PmScheduleCreateWithoutUserInput[] | Prisma.PmScheduleUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutUserInput | Prisma.PmScheduleCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.PmScheduleCreateManyUserInputEnvelope
+  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
 }
 
-export type PmScheduleUpdateManyWithWhereWithoutTenantInput = {
-  where: Prisma.PmScheduleScalarWhereInput
-  data: Prisma.XOR<Prisma.PmScheduleUpdateManyMutationInput, Prisma.PmScheduleUncheckedUpdateManyWithoutTenantInput>
+export type PmScheduleUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutUserInput, Prisma.PmScheduleUncheckedCreateWithoutUserInput> | Prisma.PmScheduleCreateWithoutUserInput[] | Prisma.PmScheduleUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutUserInput | Prisma.PmScheduleCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.PmScheduleUpsertWithWhereUniqueWithoutUserInput | Prisma.PmScheduleUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.PmScheduleCreateManyUserInputEnvelope
+  set?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  disconnect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  delete?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  update?: Prisma.PmScheduleUpdateWithWhereUniqueWithoutUserInput | Prisma.PmScheduleUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.PmScheduleUpdateManyWithWhereWithoutUserInput | Prisma.PmScheduleUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
 }
 
-export type PmScheduleScalarWhereInput = {
-  AND?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
-  OR?: Prisma.PmScheduleScalarWhereInput[]
-  NOT?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
-  id?: Prisma.StringFilter<"PmSchedule"> | string
-  tenantId?: Prisma.StringFilter<"PmSchedule"> | string
-  equipmentId?: Prisma.StringFilter<"PmSchedule"> | string
-  title?: Prisma.StringFilter<"PmSchedule"> | string
-  description?: Prisma.StringNullableFilter<"PmSchedule"> | string | null
-  frequency?: Prisma.StringFilter<"PmSchedule"> | string
-  customDays?: Prisma.IntNullableFilter<"PmSchedule"> | number | null
-  lastExecuted?: Prisma.DateTimeNullableFilter<"PmSchedule"> | Date | string | null
-  nextDueDate?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
-  assignedToId?: Prisma.StringNullableFilter<"PmSchedule"> | string | null
-  status?: Prisma.StringFilter<"PmSchedule"> | string
-  checklistTemplateId?: Prisma.StringNullableFilter<"PmSchedule"> | string | null
-  createdAt?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
-  updatedAt?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
-}
-
-export type PmScheduleCreateWithoutAssignedToInput = {
-  id?: string
-  title: string
-  description?: string | null
-  frequency: string
-  customDays?: number | null
-  lastExecuted?: Date | string | null
-  nextDueDate: Date | string
-  status?: string
-  checklistTemplateId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutPmSchedulesInput
-  equipment: Prisma.EquipmentCreateNestedOneWithoutPmSchedulesInput
-}
-
-export type PmScheduleUncheckedCreateWithoutAssignedToInput = {
-  id?: string
-  tenantId: string
-  equipmentId: string
-  title: string
-  description?: string | null
-  frequency: string
-  customDays?: number | null
-  lastExecuted?: Date | string | null
-  nextDueDate: Date | string
-  status?: string
-  checklistTemplateId?: string | null
-  createdAt?: Date | string
-  updatedAt?: Date | string
-}
-
-export type PmScheduleCreateOrConnectWithoutAssignedToInput = {
-  where: Prisma.PmScheduleWhereUniqueInput
-  create: Prisma.XOR<Prisma.PmScheduleCreateWithoutAssignedToInput, Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput>
-}
-
-export type PmScheduleCreateManyAssignedToInputEnvelope = {
-  data: Prisma.PmScheduleCreateManyAssignedToInput | Prisma.PmScheduleCreateManyAssignedToInput[]
-}
-
-export type PmScheduleUpsertWithWhereUniqueWithoutAssignedToInput = {
-  where: Prisma.PmScheduleWhereUniqueInput
-  update: Prisma.XOR<Prisma.PmScheduleUpdateWithoutAssignedToInput, Prisma.PmScheduleUncheckedUpdateWithoutAssignedToInput>
-  create: Prisma.XOR<Prisma.PmScheduleCreateWithoutAssignedToInput, Prisma.PmScheduleUncheckedCreateWithoutAssignedToInput>
-}
-
-export type PmScheduleUpdateWithWhereUniqueWithoutAssignedToInput = {
-  where: Prisma.PmScheduleWhereUniqueInput
-  data: Prisma.XOR<Prisma.PmScheduleUpdateWithoutAssignedToInput, Prisma.PmScheduleUncheckedUpdateWithoutAssignedToInput>
-}
-
-export type PmScheduleUpdateManyWithWhereWithoutAssignedToInput = {
-  where: Prisma.PmScheduleScalarWhereInput
-  data: Prisma.XOR<Prisma.PmScheduleUpdateManyMutationInput, Prisma.PmScheduleUncheckedUpdateManyWithoutAssignedToInput>
+export type PmScheduleUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.PmScheduleCreateWithoutUserInput, Prisma.PmScheduleUncheckedCreateWithoutUserInput> | Prisma.PmScheduleCreateWithoutUserInput[] | Prisma.PmScheduleUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.PmScheduleCreateOrConnectWithoutUserInput | Prisma.PmScheduleCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.PmScheduleUpsertWithWhereUniqueWithoutUserInput | Prisma.PmScheduleUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.PmScheduleCreateManyUserInputEnvelope
+  set?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  disconnect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  delete?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  connect?: Prisma.PmScheduleWhereUniqueInput | Prisma.PmScheduleWhereUniqueInput[]
+  update?: Prisma.PmScheduleUpdateWithWhereUniqueWithoutUserInput | Prisma.PmScheduleUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.PmScheduleUpdateManyWithWhereWithoutUserInput | Prisma.PmScheduleUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
 }
 
 export type PmScheduleCreateWithoutEquipmentInput = {
-  id?: string
+  id: string
   title: string
   description?: string | null
   frequency: string
@@ -834,13 +700,13 @@ export type PmScheduleCreateWithoutEquipmentInput = {
   status?: string
   checklistTemplateId?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutPmSchedulesInput
-  assignedTo?: Prisma.UserCreateNestedOneWithoutPmSchedulesInput
+  updatedAt: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutPmScheduleInput
+  tenant: Prisma.TenantCreateNestedOneWithoutPmScheduleInput
 }
 
 export type PmScheduleUncheckedCreateWithoutEquipmentInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   description?: string | null
@@ -852,7 +718,7 @@ export type PmScheduleUncheckedCreateWithoutEquipmentInput = {
   status?: string
   checklistTemplateId?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PmScheduleCreateOrConnectWithoutEquipmentInput = {
@@ -880,8 +746,44 @@ export type PmScheduleUpdateManyWithWhereWithoutEquipmentInput = {
   data: Prisma.XOR<Prisma.PmScheduleUpdateManyMutationInput, Prisma.PmScheduleUncheckedUpdateManyWithoutEquipmentInput>
 }
 
-export type PmScheduleCreateManyTenantInput = {
-  id?: string
+export type PmScheduleScalarWhereInput = {
+  AND?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
+  OR?: Prisma.PmScheduleScalarWhereInput[]
+  NOT?: Prisma.PmScheduleScalarWhereInput | Prisma.PmScheduleScalarWhereInput[]
+  id?: Prisma.StringFilter<"PmSchedule"> | string
+  tenantId?: Prisma.StringFilter<"PmSchedule"> | string
+  equipmentId?: Prisma.StringFilter<"PmSchedule"> | string
+  title?: Prisma.StringFilter<"PmSchedule"> | string
+  description?: Prisma.StringNullableFilter<"PmSchedule"> | string | null
+  frequency?: Prisma.StringFilter<"PmSchedule"> | string
+  customDays?: Prisma.IntNullableFilter<"PmSchedule"> | number | null
+  lastExecuted?: Prisma.DateTimeNullableFilter<"PmSchedule"> | Date | string | null
+  nextDueDate?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
+  assignedToId?: Prisma.StringNullableFilter<"PmSchedule"> | string | null
+  status?: Prisma.StringFilter<"PmSchedule"> | string
+  checklistTemplateId?: Prisma.StringNullableFilter<"PmSchedule"> | string | null
+  createdAt?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"PmSchedule"> | Date | string
+}
+
+export type PmScheduleCreateWithoutTenantInput = {
+  id: string
+  title: string
+  description?: string | null
+  frequency: string
+  customDays?: number | null
+  lastExecuted?: Date | string | null
+  nextDueDate: Date | string
+  status?: string
+  checklistTemplateId?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  user?: Prisma.UserCreateNestedOneWithoutPmScheduleInput
+  equipment: Prisma.EquipmentCreateNestedOneWithoutPmScheduleInput
+}
+
+export type PmScheduleUncheckedCreateWithoutTenantInput = {
+  id: string
   equipmentId: string
   title: string
   description?: string | null
@@ -893,59 +795,52 @@ export type PmScheduleCreateManyTenantInput = {
   status?: string
   checklistTemplateId?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type PmScheduleUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  frequency?: Prisma.StringFieldUpdateOperationsInput | string
-  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutPmSchedulesNestedInput
-  assignedTo?: Prisma.UserUpdateOneWithoutPmSchedulesNestedInput
+export type PmScheduleCreateOrConnectWithoutTenantInput = {
+  where: Prisma.PmScheduleWhereUniqueInput
+  create: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput>
 }
 
-export type PmScheduleUncheckedUpdateWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  frequency?: Prisma.StringFieldUpdateOperationsInput | string
-  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type PmScheduleCreateManyTenantInputEnvelope = {
+  data: Prisma.PmScheduleCreateManyTenantInput | Prisma.PmScheduleCreateManyTenantInput[]
 }
 
-export type PmScheduleUncheckedUpdateManyWithoutTenantInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  frequency?: Prisma.StringFieldUpdateOperationsInput | string
-  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type PmScheduleUpsertWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.PmScheduleWhereUniqueInput
+  update: Prisma.XOR<Prisma.PmScheduleUpdateWithoutTenantInput, Prisma.PmScheduleUncheckedUpdateWithoutTenantInput>
+  create: Prisma.XOR<Prisma.PmScheduleCreateWithoutTenantInput, Prisma.PmScheduleUncheckedCreateWithoutTenantInput>
 }
 
-export type PmScheduleCreateManyAssignedToInput = {
-  id?: string
+export type PmScheduleUpdateWithWhereUniqueWithoutTenantInput = {
+  where: Prisma.PmScheduleWhereUniqueInput
+  data: Prisma.XOR<Prisma.PmScheduleUpdateWithoutTenantInput, Prisma.PmScheduleUncheckedUpdateWithoutTenantInput>
+}
+
+export type PmScheduleUpdateManyWithWhereWithoutTenantInput = {
+  where: Prisma.PmScheduleScalarWhereInput
+  data: Prisma.XOR<Prisma.PmScheduleUpdateManyMutationInput, Prisma.PmScheduleUncheckedUpdateManyWithoutTenantInput>
+}
+
+export type PmScheduleCreateWithoutUserInput = {
+  id: string
+  title: string
+  description?: string | null
+  frequency: string
+  customDays?: number | null
+  lastExecuted?: Date | string | null
+  nextDueDate: Date | string
+  status?: string
+  checklistTemplateId?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+  equipment: Prisma.EquipmentCreateNestedOneWithoutPmScheduleInput
+  tenant: Prisma.TenantCreateNestedOneWithoutPmScheduleInput
+}
+
+export type PmScheduleUncheckedCreateWithoutUserInput = {
+  id: string
   tenantId: string
   equipmentId: string
   title: string
@@ -957,59 +852,36 @@ export type PmScheduleCreateManyAssignedToInput = {
   status?: string
   checklistTemplateId?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
-export type PmScheduleUpdateWithoutAssignedToInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  frequency?: Prisma.StringFieldUpdateOperationsInput | string
-  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutPmSchedulesNestedInput
-  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutPmSchedulesNestedInput
+export type PmScheduleCreateOrConnectWithoutUserInput = {
+  where: Prisma.PmScheduleWhereUniqueInput
+  create: Prisma.XOR<Prisma.PmScheduleCreateWithoutUserInput, Prisma.PmScheduleUncheckedCreateWithoutUserInput>
 }
 
-export type PmScheduleUncheckedUpdateWithoutAssignedToInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  frequency?: Prisma.StringFieldUpdateOperationsInput | string
-  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type PmScheduleCreateManyUserInputEnvelope = {
+  data: Prisma.PmScheduleCreateManyUserInput | Prisma.PmScheduleCreateManyUserInput[]
 }
 
-export type PmScheduleUncheckedUpdateManyWithoutAssignedToInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
-  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
-  title?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  frequency?: Prisma.StringFieldUpdateOperationsInput | string
-  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
-  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?: Prisma.StringFieldUpdateOperationsInput | string
-  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+export type PmScheduleUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.PmScheduleWhereUniqueInput
+  update: Prisma.XOR<Prisma.PmScheduleUpdateWithoutUserInput, Prisma.PmScheduleUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.PmScheduleCreateWithoutUserInput, Prisma.PmScheduleUncheckedCreateWithoutUserInput>
+}
+
+export type PmScheduleUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.PmScheduleWhereUniqueInput
+  data: Prisma.XOR<Prisma.PmScheduleUpdateWithoutUserInput, Prisma.PmScheduleUncheckedUpdateWithoutUserInput>
+}
+
+export type PmScheduleUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.PmScheduleScalarWhereInput
+  data: Prisma.XOR<Prisma.PmScheduleUpdateManyMutationInput, Prisma.PmScheduleUncheckedUpdateManyWithoutUserInput>
 }
 
 export type PmScheduleCreateManyEquipmentInput = {
-  id?: string
+  id: string
   tenantId: string
   title: string
   description?: string | null
@@ -1021,7 +893,7 @@ export type PmScheduleCreateManyEquipmentInput = {
   status?: string
   checklistTemplateId?: string | null
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type PmScheduleUpdateWithoutEquipmentInput = {
@@ -1036,8 +908,8 @@ export type PmScheduleUpdateWithoutEquipmentInput = {
   checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutPmSchedulesNestedInput
-  assignedTo?: Prisma.UserUpdateOneWithoutPmSchedulesNestedInput
+  user?: Prisma.UserUpdateOneWithoutPmScheduleNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutPmScheduleNestedInput
 }
 
 export type PmScheduleUncheckedUpdateWithoutEquipmentInput = {
@@ -1072,6 +944,134 @@ export type PmScheduleUncheckedUpdateManyWithoutEquipmentInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
+export type PmScheduleCreateManyTenantInput = {
+  id: string
+  equipmentId: string
+  title: string
+  description?: string | null
+  frequency: string
+  customDays?: number | null
+  lastExecuted?: Date | string | null
+  nextDueDate: Date | string
+  assignedToId?: string | null
+  status?: string
+  checklistTemplateId?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+}
+
+export type PmScheduleUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  frequency?: Prisma.StringFieldUpdateOperationsInput | string
+  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneWithoutPmScheduleNestedInput
+  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutPmScheduleNestedInput
+}
+
+export type PmScheduleUncheckedUpdateWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  frequency?: Prisma.StringFieldUpdateOperationsInput | string
+  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PmScheduleUncheckedUpdateManyWithoutTenantInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  frequency?: Prisma.StringFieldUpdateOperationsInput | string
+  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  assignedToId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PmScheduleCreateManyUserInput = {
+  id: string
+  tenantId: string
+  equipmentId: string
+  title: string
+  description?: string | null
+  frequency: string
+  customDays?: number | null
+  lastExecuted?: Date | string | null
+  nextDueDate: Date | string
+  status?: string
+  checklistTemplateId?: string | null
+  createdAt?: Date | string
+  updatedAt: Date | string
+}
+
+export type PmScheduleUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  frequency?: Prisma.StringFieldUpdateOperationsInput | string
+  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  equipment?: Prisma.EquipmentUpdateOneRequiredWithoutPmScheduleNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutPmScheduleNestedInput
+}
+
+export type PmScheduleUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  frequency?: Prisma.StringFieldUpdateOperationsInput | string
+  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type PmScheduleUncheckedUpdateManyWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  equipmentId?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  frequency?: Prisma.StringFieldUpdateOperationsInput | string
+  customDays?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  lastExecuted?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  nextDueDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  checklistTemplateId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 
 
 export type PmScheduleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1089,9 +1089,9 @@ export type PmScheduleSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   checklistTemplateId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PmSchedule$userArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
-  assignedTo?: boolean | Prisma.PmSchedule$assignedToArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pmSchedule"]>
 
 export type PmScheduleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1109,9 +1109,9 @@ export type PmScheduleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   checklistTemplateId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PmSchedule$userArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
-  assignedTo?: boolean | Prisma.PmSchedule$assignedToArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pmSchedule"]>
 
 export type PmScheduleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1129,9 +1129,9 @@ export type PmScheduleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   checklistTemplateId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PmSchedule$userArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
-  assignedTo?: boolean | Prisma.PmSchedule$assignedToArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["pmSchedule"]>
 
 export type PmScheduleSelectScalar = {
@@ -1153,27 +1153,27 @@ export type PmScheduleSelectScalar = {
 
 export type PmScheduleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "equipmentId" | "title" | "description" | "frequency" | "customDays" | "lastExecuted" | "nextDueDate" | "assignedToId" | "status" | "checklistTemplateId" | "createdAt" | "updatedAt", ExtArgs["result"]["pmSchedule"]>
 export type PmScheduleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PmSchedule$userArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
-  assignedTo?: boolean | Prisma.PmSchedule$assignedToArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type PmScheduleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PmSchedule$userArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
-  assignedTo?: boolean | Prisma.PmSchedule$assignedToArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 export type PmScheduleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.PmSchedule$userArgs<ExtArgs>
   equipment?: boolean | Prisma.EquipmentDefaultArgs<ExtArgs>
-  assignedTo?: boolean | Prisma.PmSchedule$assignedToArgs<ExtArgs>
+  tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }
 
 export type $PmSchedulePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "PmSchedule"
   objects: {
-    tenant: Prisma.$TenantPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
     equipment: Prisma.$EquipmentPayload<ExtArgs>
-    assignedTo: Prisma.$UserPayload<ExtArgs> | null
+    tenant: Prisma.$TenantPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1584,9 +1584,9 @@ readonly fields: PmScheduleFieldRefs;
  */
 export interface Prisma__PmScheduleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.PmSchedule$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PmSchedule$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   equipment<T extends Prisma.EquipmentDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EquipmentDefaultArgs<ExtArgs>>): Prisma.Prisma__EquipmentClient<runtime.Types.Result.GetResult<Prisma.$EquipmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  assignedTo<T extends Prisma.PmSchedule$assignedToArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PmSchedule$assignedToArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  tenant<T extends Prisma.TenantDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.TenantDefaultArgs<ExtArgs>>): Prisma.Prisma__TenantClient<runtime.Types.Result.GetResult<Prisma.$TenantPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2029,9 +2029,9 @@ export type PmScheduleDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
 }
 
 /**
- * PmSchedule.assignedTo
+ * PmSchedule.user
  */
-export type PmSchedule$assignedToArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+export type PmSchedule$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the User
    */

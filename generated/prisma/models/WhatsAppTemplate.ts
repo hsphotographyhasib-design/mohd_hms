@@ -314,7 +314,7 @@ export type WhatsAppTemplateScalarWhereWithAggregatesInput = {
 }
 
 export type WhatsAppTemplateCreateInput = {
-  id?: string
+  id: string
   name: string
   category: string
   content: string
@@ -324,12 +324,12 @@ export type WhatsAppTemplateCreateInput = {
   isActive?: boolean
   isSystem?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
-  tenant: Prisma.TenantCreateNestedOneWithoutWhatsappTemplatesInput
+  updatedAt: Date | string
+  tenant: Prisma.TenantCreateNestedOneWithoutWhatsAppTemplateInput
 }
 
 export type WhatsAppTemplateUncheckedCreateInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   category: string
@@ -340,7 +340,7 @@ export type WhatsAppTemplateUncheckedCreateInput = {
   isActive?: boolean
   isSystem?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type WhatsAppTemplateUpdateInput = {
@@ -355,7 +355,7 @@ export type WhatsAppTemplateUpdateInput = {
   isSystem?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  tenant?: Prisma.TenantUpdateOneRequiredWithoutWhatsappTemplatesNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutWhatsAppTemplateNestedInput
 }
 
 export type WhatsAppTemplateUncheckedUpdateInput = {
@@ -374,7 +374,7 @@ export type WhatsAppTemplateUncheckedUpdateInput = {
 }
 
 export type WhatsAppTemplateCreateManyInput = {
-  id?: string
+  id: string
   tenantId: string
   name: string
   category: string
@@ -385,7 +385,7 @@ export type WhatsAppTemplateCreateManyInput = {
   isActive?: boolean
   isSystem?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type WhatsAppTemplateUpdateManyMutationInput = {
@@ -520,7 +520,7 @@ export type WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput = {
 }
 
 export type WhatsAppTemplateCreateWithoutTenantInput = {
-  id?: string
+  id: string
   name: string
   category: string
   content: string
@@ -530,11 +530,11 @@ export type WhatsAppTemplateCreateWithoutTenantInput = {
   isActive?: boolean
   isSystem?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type WhatsAppTemplateUncheckedCreateWithoutTenantInput = {
-  id?: string
+  id: string
   name: string
   category: string
   content: string
@@ -544,7 +544,7 @@ export type WhatsAppTemplateUncheckedCreateWithoutTenantInput = {
   isActive?: boolean
   isSystem?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type WhatsAppTemplateCreateOrConnectWithoutTenantInput = {
@@ -591,7 +591,7 @@ export type WhatsAppTemplateScalarWhereInput = {
 }
 
 export type WhatsAppTemplateCreateManyTenantInput = {
-  id?: string
+  id: string
   name: string
   category: string
   content: string
@@ -601,7 +601,7 @@ export type WhatsAppTemplateCreateManyTenantInput = {
   isActive?: boolean
   isSystem?: boolean
   createdAt?: Date | string
-  updatedAt?: Date | string
+  updatedAt: Date | string
 }
 
 export type WhatsAppTemplateUpdateWithoutTenantInput = {
