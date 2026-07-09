@@ -49,9 +49,27 @@ export function InventoryDashboard({ token, onNavigate }: { token: string; onNav
 
   if (loading) return <DashboardSkeleton />;
 
-  const s = stats!;
-  const maxTypeCount = Math.max(...(s.itemsByType.map(t => t.count)), 1);
-  const maxCatCount = Math.max(...(s.itemsByCategory.map(c => c.count)), 1);
+  // Defensive defaults for empty/missing data
+  const s: Stats = {
+    totalItems: stats?.totalItems ?? 0,
+    activeItems: stats?.activeItems ?? 0,
+    lowStockCount: stats?.lowStockCount ?? 0,
+    outOfStockItems: stats?.outOfStockItems ?? 0,
+    pendingApproval: stats?.pendingApproval ?? 0,
+    totalCategories: stats?.totalCategories ?? 0,
+    totalWarehouses: stats?.totalWarehouses ?? 0,
+    totalSuppliers: stats?.totalSuppliers ?? 0,
+    totalValue: stats?.totalValue ?? 0,
+    totalStock: stats?.totalStock ?? 0,
+    itemsByType: stats?.itemsByType ?? [],
+    itemsByStatus: stats?.itemsByStatus ?? [],
+    itemsByCategory: stats?.itemsByCategory ?? [],
+    recentMovements: stats?.recentMovements ?? [],
+    lowStockItems: stats?.lowStockItems ?? [],
+  };
+
+  const maxTypeCount = Math.max(...s.itemsByType.map(t => t.count), 1);
+  const maxCatCount = Math.max(...s.itemsByCategory.map(c => c.count), 1);
 
   return (
     <div className="space-y-4">
@@ -91,8 +109,8 @@ export function InventoryDashboard({ token, onNavigate }: { token: string; onNav
           <CardContent className="p-4">
             <h3 className="font-semibold text-sm mb-4">Stock Status Overview</h3>
             <div className="grid grid-cols-2 gap-3">
-              <StockStatCard label="In Stock" count={s.activeItems - s.lowStockItems - s.outOfStockItems} total={s.totalItems} color="bg-emerald-500" />
-              <StockStatCard label="Low Stock" count={s.lowStockItems} total={s.totalItems} color="bg-amber-500" />
+              <StockStatCard label="In Stock" count={Math.max(0, s.activeItems - s.lowStockCount - s.outOfStockItems)} total={s.totalItems} color="bg-emerald-500" />
+              <StockStatCard label="Low Stock" count={s.lowStockCount} total={s.totalItems} color="bg-amber-500" />
               <StockStatCard label="Out of Stock" count={s.outOfStockItems} total={s.totalItems} color="bg-rose-500" />
               <StockStatCard label="Pending Approval" count={s.pendingApproval} total={s.totalItems} color="bg-blue-500" />
             </div>

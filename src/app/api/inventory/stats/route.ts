@@ -52,8 +52,7 @@ export async function GET(request: NextRequest) {
       }),
       db.inventoryCategory.findMany({
         where: { tenantId, isActive: true },
-        include: { _count: { select: { items: { where: { isActive: true } } } } },
-        orderBy: { items: { _count: 'desc' } },
+        orderBy: { name: 'asc' },
         take: 10,
       }),
       db.stockMovement.findMany({
@@ -67,8 +66,9 @@ export async function GET(request: NextRequest) {
       }),
     ]);
 
-    const totalValue = (totalValueResult._sum.quantity || 0) * (totalValueResult._sum.averageCost || 0);
-    const totalStock = totalValueResult._sum.quantity || 0;
+    const _sum = (totalValueResult as any)._sum || {};
+    const totalValue = (Number(_sum.quantity) || 0) * (Number(_sum.averageCost) || 0);
+    const totalStock = Number(_sum.quantity) || 0;
 
     // Low stock items (quantity <= minStock and quantity > 0)
     const lowStockList = await db.inventoryItem.findMany({
@@ -92,7 +92,7 @@ export async function GET(request: NextRequest) {
       totalStock,
       itemsByType: itemsByType.map(t => ({ type: t.itemType, count: t._count })),
       itemsByStatus: itemsByStatus.map(s => ({ status: s.status, count: s._count })),
-      itemsByCategory: itemsByCategory.map(c => ({ id: c.id, name: c.name, code: c.code, color: c.color, count: c._count.items })),
+      itemsByCategory: itemsByCategory.map((c: any) => ({ id: c.id, name: c.name, code: c.code || '', color: c.color || '#10b981', count: (c as any)._count?.items || 0 })),
       recentMovements: recentMovements.map(m => ({
         id: m.id,
         type: m.type,

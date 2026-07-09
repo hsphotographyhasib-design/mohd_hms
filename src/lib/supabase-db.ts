@@ -531,12 +531,74 @@ function createTableProxy(tableName: string) {
     },
 
     async aggregate(args: { where?: Record<string, unknown>; _count?: Record<string, unknown>; _sum?: Record<string, unknown>; _avg?: Record<string, unknown>; _min?: Record<string, unknown>; _max?: Record<string, unknown> }) {
+      // Determine which columns we need to fetch for in-memory aggregation
+      const sumCols = args._sum ? Object.keys(args._sum) : [];
+      const avgCols = args._avg ? Object.keys(args._avg) : [];
+      const minCols = args._min ? Object.keys(args._min) : [];
+      const maxCols = args._max ? Object.keys(args._max) : [];
+      const neededCols = [...new Set([...sumCols, ...avgCols, ...minCols, ...maxCols])];
+
+      const result: Record<string, unknown> = {};
+
+      // If only _count is needed, use HEAD request for efficiency
+      if (neededCols.length === 0) {
+        const r = await supabaseRequest(tableName, 'GET', {
+          head: true,
+          filters: args?.where ? whereToFilters(args.where as any) : undefined,
+        });
+        if (r.error) throw new Error(`[Supabase] ${tableName}.aggregate: ${r.error.message}`);
+        return { _count: { _all: r.count ?? 0 } };
+      }
+
+      // Fetch rows and compute aggregates in-memory
+      const selectCols = neededCols.join(',');
       const r = await supabaseRequest(tableName, 'GET', {
-        head: true,
+        select: selectCols || '*',
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
       });
       if (r.error) throw new Error(`[Supabase] ${tableName}.aggregate: ${r.error.message}`);
-      return { _count: { _all: r.count ?? 0 } };
+      const rows: Record<string, unknown>[] = (r.data ?? []) as any[];
+
+      if (args._count) {
+        result._count = { _all: rows.length };
+      }
+
+      if (args._sum && sumCols.length > 0) {
+        const _sum: Record<string, unknown> = {};
+        for (const col of sumCols) {
+          _sum[col] = rows.reduce((s: number, row) => s + (Number(row[col]) || 0), 0);
+        }
+        result._sum = _sum;
+      }
+
+      if (args._avg && avgCols.length > 0) {
+        const _avg: Record<string, unknown> = {};
+        for (const col of avgCols) {
+          const vals = rows.map(r => Number(r[col])).filter(v => !isNaN(v));
+          _avg[col] = vals.length > 0 ? vals.reduce((s, v) => s + v, 0) / vals.length : 0;
+        }
+        result._avg = _avg;
+      }
+
+      if (args._min && minCols.length > 0) {
+        const _min: Record<string, unknown> = {};
+        for (const col of minCols) {
+          const vals = rows.map(r => Number(r[col])).filter(v => !isNaN(v));
+          _min[col] = vals.length > 0 ? Math.min(...vals) : null;
+        }
+        result._min = _min;
+      }
+
+      if (args._max && maxCols.length > 0) {
+        const _max: Record<string, unknown> = {};
+        for (const col of maxCols) {
+          const vals = rows.map(r => Number(r[col])).filter(v => !isNaN(v));
+          _max[col] = vals.length > 0 ? Math.max(...vals) : null;
+        }
+        result._max = _max;
+      }
+
+      return result;
     },
 
     async groupBy(args: { by: string[]; where?: Record<string, unknown>; _count?: Record<string, unknown>; _sum?: Record<string, unknown>; _avg?: Record<string, unknown>; _min?: Record<string, unknown>; _max?: Record<string, unknown>; orderBy?: unknown; take?: number; skip?: number; having?: unknown }) {

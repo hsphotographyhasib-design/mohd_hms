@@ -264,3 +264,75 @@ Stage Summary:
 - Health endpoint now correctly reports: type=supabase, status=connected, latencyMs=~200-400ms
 - Three critical fixes applied: health check, groupBy, db-sync
 - For Render/Vercel: Must set USE_SUPABASE=true, NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+---
+Task ID: 9
+Agent: Main Agent
+Task: Check and update Vercel env vars with Supabase configuration
+
+Work Log:
+- Authenticated with Vercel API using vcp_ token
+- Found project: mohd-hms (prj_ldAQBelQwhUFqvFO7y8deJPjCKBG), account: team_G4OuIZavuAsT6hK92Ujjav4U
+- Latest deployment (dpl_CxvcegJgrvzx21KUSbsPuoi2hQap) was READY, from "feat: connect Supabase as primary database" commit
+- Discovered 4 old Supabase env vars with WRONG key names and EMPTY values:
+  - SUPABASE_URL (should be NEXT_PUBLIC_SUPABASE_URL)
+  - SUPABASE_PUBLISHABLE_KEY (should be NEXT_PUBLIC_SUPABASE_ANON_KEY)
+  - SUPABASE_SECRET_KEY (should be SUPABASE_SERVICE_ROLE_KEY)
+  - SUPABASE_JWKS_URL (correct name but empty)
+- Deleted all 4 old wrong-named vars via DELETE /v9/projects/{id}/env/{envId}
+- Created 5 correct env vars:
+  - USE_SUPABASE=true (plain)
+  - NEXT_PUBLIC_SUPABASE_URL=https://sbcqgsbdaerdoladmbcc.supabase.co (plain)
+  - NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_... (plain)
+  - SUPABASE_SERVICE_ROLE_KEY=sb_secret_... (sensitive)
+  - SUPABASE_JWKS_URL=https://sbcqgsbdaerdoladmbcc.supabase.co/auth/v1/.well-known/jwks.json (plain)
+- vcp_ token cannot trigger redeploy (project-scoped limitation)
+- Pushed clean commit to GitHub to trigger auto-deploy (had to reset 2 commits that re-committed .env and db/custom.db)
+- New deployment dpl_FaHgNnCPDDjNpK9u built and reached READY state
+- Verified: Frontend at mohd-hms.vercel.app returns HTTP 200, 25KB
+- Health check still shows sqlite because /api/* is proxied to Render backend — Render also needs Supabase vars
+- Custom domain mohdhms.com returns connection refused (DNS/SSL issue, not related to this change)
+
+Stage Summary:
+- Vercel Supabase env vars: FIXED (5 correct vars, all with values)
+- Vercel deployment: READY (dpl_FaHgNnCPDDjNpK9u)
+- CRITICAL: Render backend also needs USE_SUPABASE=true + Supabase credentials — API calls proxy there
+- BLOCKED: Need Render API key to update Render env vars and complete the migration
+- Custom domain mohdhms.com may need DNS/SSL reconfiguration separately
+---
+Task ID: 10
+Agent: Main Agent
+Task: Check and fix Render backend env vars for Supabase
+
+Work Log:
+- Authenticated with Render API using rnd_ token
+- Service: mohd_hms (srv-d968og9kh4rs73de2cr0), URL: https://mohd-hms.onrender.com, plan: starter
+- Found 19 env vars including Supabase vars with wrong values
+- Backend code only reads SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (no USE_SUPABASE toggle)
+- SUPABASE_SERVICE_ROLE_KEY had a JWT token value instead of the actual service role key (sb_secret_...)
+- ACCIDENTAL: PUT /env-vars API replaced all 19 vars with just 1 — immediately restored all 19 vars with correct SUPABASE_SERVICE_ROLE_KEY
+- Triggered deploy dep-d97ggufaqgkc73efu260 — went live in ~35 seconds
+- Verified: Login via Render direct → 200, returns JWT token with Supabase user data
+- Verified: Login via Vercel proxy → 200, full Vercel→Render→Supabase flow works
+- Verified: /api/complaints → 200, returns empty list (no data seeded yet in Supabase)
+
+Stage Summary:
+- Render Supabase connection: WORKING ✅
+- Full production chain: Vercel (frontend) → Render (backend API) → Supabase (database) ✅
+- Login, complaints API verified end-to-end through the proxy
+- All 19 Render env vars restored and verified
+- SUPABASE_SERVICE_ROLE_KEY fixed from JWT to sb_secret_... format
+---
+Task ID: 11
+Agent: Main Agent
+Task: Persist all API keys for future sessions
+
+Work Log:
+- Created /home/z/my-project/.api-keys with all platform credentials
+- Added .api-keys to .gitignore (never commit secrets)
+- Keys stored: Supabase (URL, publishable, secret, service role JWT, JWKS), Render (API token, service ID, URL), Vercel (project token, project ID, account ID, URLs)
+- Future sessions should read .api-keys first before asking user for keys
+
+Stage Summary:
+- All API keys persisted to .api-keys (gitignored)
+- File location: /home/z/my-project/.api-keys
+- Reference this file at the start of any new session to avoid asking user for keys again

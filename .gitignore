@@ -72,3 +72,4 @@ server.log
 generated/prisma/
 tool-results/
 upload/
+.api-keys
