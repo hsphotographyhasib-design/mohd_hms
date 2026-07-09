@@ -4,13 +4,9 @@
  * Uses @prisma/adapter-libsql for local SQLite file access.
  * Reads DATABASE_URL from .env (format: file:/path/to/db.sqlite).
  *
- * IMPORTANT: The client is lazily initialized on first actual use,
- * NOT at module load time. This prevents a SQLite connection attempt
- * when USE_SUPABASE=true (the Supabase REST adapter is used instead).
+ * When USE_SUPABASE=true, exports a no-op placeholder so that
+ * importing this module never triggers a database connection.
  */
-
-import { PrismaClient } from "../../generated/prisma/client";
-import { PrismaLibSql } from "@prisma/adapter-libsql";
 
 // ---------------------------------------------------------------------------
 // 1. Find database URL
@@ -29,25 +25,22 @@ export function findDatabaseUrl(): { url: string; source: string } {
     }
   }
 
-  console.error(
-    "[Prisma] ERROR: No DATABASE_URL found in environment. " +
-    "Set DATABASE_URL to a SQLite path, e.g. file:/path/to/db.sqlite"
-  );
-
   return { url: "", source: "" };
 }
 
 // ---------------------------------------------------------------------------
-// 2. Lazy PrismaClient singleton
+// 2. Lazy PrismaClient singleton (only created when actually used)
 // ---------------------------------------------------------------------------
 
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+let _cachedClient: any = undefined;
 
-let _cachedClient: PrismaClient | undefined;
+function _createClient(): any {
+  // Dynamic imports to avoid loading SQLite adapter at module level
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PrismaClient } = require("../../generated/prisma/client");
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { PrismaLibSql } = require("@prisma/adapter-libsql");
 
-function _createClient(): PrismaClient {
   const { url: dbUrl, source: dbSource } = findDatabaseUrl();
 
   if (!dbUrl) {
@@ -55,55 +48,36 @@ function _createClient(): PrismaClient {
   }
 
   const adapter = new PrismaLibSql({ url: dbUrl });
-
-  console.log(
-    `[Prisma] Init using ${dbSource || "none"} [sqlite/libsql]`
-  );
+  console.log(`[Prisma] Init using ${dbSource || "none"} [sqlite/libsql]`);
 
   const client = new PrismaClient({
     adapter,
-    log:
-      process.env.NODE_ENV === "development"
-        ? [
-            { emit: "event", level: "query" },
-            { emit: "stdout", level: "warn" },
-            { emit: "stdout", level: "error" },
-          ]
-        : [{ emit: "stdout", level: "warn" }, { emit: "stdout", level: "error" }],
+    log: process.env.NODE_ENV === "development"
+      ? [{ emit: "event", level: "query" }, { emit: "stdout", level: "warn" }, { emit: "stdout", level: "error" }]
+      : [{ emit: "stdout", level: "warn" }, { emit: "stdout", level: "error" }],
   });
-
-  if (process.env.NODE_ENV !== "production") {
-    globalForPrisma.prisma = client;
-    try {
-      // @ts-expect-error – Prisma 7 event listener
-      client.on("query", (e: { duration: number; query: string }) => {
-        if (e.duration > 500) {
-          console.warn(`[Prisma Slow Query] ${e.duration}ms\n${e.query.slice(0, 200)}`);
-        }
-      });
-    } catch {
-      // Event listener not available in this Prisma version
-    }
-  }
 
   return client;
 }
 
 /**
- * Lazily created Prisma client singleton.
- *
- * The factory function is NOT called at import time — only when
- * `prisma()` is first invoked.  This means importing this module
- * (via `import { prisma } from './prisma'`) never opens a DB
- * connection, which is critical when USE_SUPABASE=true.
+ * Returns the Prisma client, creating it lazily on first call.
+ * This function is the ONLY way to get the client — it is never
+ * instantiated at module load time.
  */
-export function prisma(): PrismaClient {
+export function prisma(): any {
   if (_cachedClient) return _cachedClient;
+
+  const globalForPrisma = globalThis as unknown as { prisma: any };
   if (globalForPrisma.prisma) {
     _cachedClient = globalForPrisma.prisma;
     return _cachedClient;
   }
+
   _cachedClient = _createClient();
+  if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = _cachedClient;
+  }
   return _cachedClient;
 }
 
@@ -115,10 +89,8 @@ export function isPrismaTimeout(error: unknown): boolean {
   if (error && typeof error === "object") {
     const msg = (error as Error).message ?? "";
     return (
-      msg.includes("timed out") ||
-      msg.includes("timeout") ||
-      msg.includes("ETIMEDOUT") ||
-      msg.includes("Connection terminated") ||
+      msg.includes("timed out") || msg.includes("timeout") ||
+      msg.includes("ETIMEDOUT") || msg.includes("Connection terminated") ||
       msg.includes("connect timeout")
     );
   }
@@ -130,16 +102,10 @@ export function isPrismaTransient(error: unknown): boolean {
     const msg = (error as Error).message ?? "";
     const code = (error as { code?: string })?.code ?? "";
     return (
-      isPrismaTimeout(error) ||
-      code === "P2024" ||
-      code === "P1001" ||
-      code === "P1008" ||
-      msg.includes("Connection refused") ||
-      msg.includes("ECONNREFUSED") ||
-      msg.includes("ECONNRESET") ||
-      msg.includes("Too many connections") ||
-      msg.includes("Connection pool exhausted") ||
-      msg.includes("database is locked") ||
+      isPrismaTimeout(error) || code === "P2024" || code === "P1001" || code === "P1008" ||
+      msg.includes("Connection refused") || msg.includes("ECONNREFUSED") ||
+      msg.includes("ECONNRESET") || msg.includes("Too many connections") ||
+      msg.includes("Connection pool exhausted") || msg.includes("database is locked") ||
       msg.includes("SQLITE_BUSY")
     );
   }
