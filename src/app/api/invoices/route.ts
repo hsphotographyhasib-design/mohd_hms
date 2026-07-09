@@ -31,29 +31,36 @@ export async function GET(request: NextRequest) {
     if (status) where.status = status;
     if (customerId) where.customerId = customerId;
 
-    const [items, total] = await Promise.all([
-      db.invoice.findMany({
-        where,
-        skip,
-        take: pageSize,
-        orderBy: { createdAt: 'desc' },
-        include: {
-          customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
-        },
-      }),
-      db.invoice.count({ where }),
-    ]);
+    let items: any[] = [];
+    let total = 0;
+    try {
+      [items, total] = await Promise.all([
+        db.invoice.findMany({
+          where,
+          skip,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+          include: {
+            customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
+          },
+        }),
+        db.invoice.count({ where }),
+      ]);
+    } catch {
+      // Invoice table may not exist in Supabase yet
+      return NextResponse.json({ data: [], total: 0, page, pageSize, totalPages: 0 });
+    }
 
-    const data = items.map((inv) => ({
+    const data = items.map((inv: any) => ({
       id: inv.id,
       tenantId: inv.tenantId,
       customerId: inv.customerId,
-      customerName: inv.customer.name,
-      customerPhone: inv.customer.phone,
-      customerEmail: inv.customer.email,
-      customerAddress: inv.customer.address,
-      customerCompany: inv.customer.companyName,
-      customerPic: inv.customer.pic,
+      customerName: inv.customer?.name || '—',
+      customerPhone: inv.customer?.phone,
+      customerEmail: inv.customer?.email,
+      customerAddress: inv.customer?.address,
+      customerCompany: inv.customer?.companyName,
+      customerPic: inv.customer?.pic,
       workOrderId: inv.workOrderId,
       quotationId: inv.quotationId,
       invoiceNumber: inv.invoiceNumber,
@@ -71,8 +78,8 @@ export async function GET(request: NextRequest) {
       referenceNo: inv.referenceNo,
       poReference: inv.poReference,
       paymentTerms: inv.paymentTerms,
-      dueDate: inv.dueDate?.toISOString(),
-      paidAt: inv.paidAt?.toISOString(),
+      dueDate: inv.dueDate ? (typeof inv.dueDate === 'string' ? inv.dueDate : new Date(inv.dueDate).toISOString()) : undefined,
+      paidAt: inv.paidAt ? (typeof inv.paidAt === 'string' ? inv.paidAt : new Date(inv.paidAt).toISOString()) : undefined,
       paymentMethod: inv.paymentMethod,
       paymentRef: inv.paymentRef,
       transactionId: inv.transactionId,
@@ -81,8 +88,8 @@ export async function GET(request: NextRequest) {
       notes: inv.notes,
       terms: inv.terms,
       createdBy: inv.createdBy,
-      createdAt: inv.createdAt.toISOString(),
-      updatedAt: inv.updatedAt.toISOString(),
+      createdAt: typeof inv.createdAt === 'string' ? inv.createdAt : new Date(inv.createdAt).toISOString(),
+      updatedAt: typeof inv.updatedAt === 'string' ? inv.updatedAt : new Date(inv.updatedAt).toISOString(),
     }));
 
     return NextResponse.json({
