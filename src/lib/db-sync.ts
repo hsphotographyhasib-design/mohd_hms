@@ -150,6 +150,10 @@ async function syncTableColumns(
  * @param tableName The Prisma model name (e.g. "Complaint")
  */
 export async function ensureTableSync(tableName: string): Promise<void> {
+  // No-op when using Supabase — schema is managed via Supabase migrations
+  if (process.env.USE_SUPABASE === 'true' ||
+      (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NODE_ENV === 'production')) return;
+
   // Check local cache
   const cached = _synced.get(tableName.toLowerCase());
   if (cached) return; // Already synced at least once

@@ -60,8 +60,8 @@ export async function GET(request: NextRequest) {
       district: c.district,
       taxRate: c.taxRate,
       isActive: c.isActive,
-      createdAt: c.createdAt.toISOString(),
-      updatedAt: c.updatedAt.toISOString(),
+      createdAt: c.createdAt ? (typeof c.createdAt === 'string' ? c.createdAt : c.createdAt.toISOString()) : null,
+      updatedAt: c.updatedAt ? (typeof c.updatedAt === 'string' ? c.updatedAt : c.updatedAt.toISOString()) : null,
       _count: c._count,
     }));
 
