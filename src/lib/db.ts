@@ -7,13 +7,29 @@
  * All 100+ API routes import { db } from '@/lib/db' — no changes needed.
  */
 
-import { prisma as prismaInstance } from './prisma';
+import { prisma as prismaFactory } from './prisma';
 import { supabaseDb } from './supabase-db';
+
+/**
+ * Lazy Prisma proxy — only calls prismaFactory() on first property access.
+ * This ensures importing db.ts never triggers a SQLite connection when
+ * USE_SUPABASE=true.
+ */
+const _lazyPrisma = new Proxy({} as any, {
+  get(_target, prop, receiver) {
+    const client = prismaFactory();
+    const value = Reflect.get(client, prop, receiver);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+  has(_target, prop) {
+    return prop in prismaFactory();
+  },
+});
 
 export const db: any =
   process.env.USE_SUPABASE === 'true'
     ? supabaseDb
-    : prismaInstance;
+    : _lazyPrisma;
 
 // Lazy type re-export (never evaluated at runtime)
 export type { PrismaClient } from "../../generated/prisma/client";

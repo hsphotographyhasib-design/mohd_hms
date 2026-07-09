@@ -4,9 +4,9 @@
  * Uses @prisma/adapter-libsql for local SQLite file access.
  * Reads DATABASE_URL from .env (format: file:/path/to/db.sqlite).
  *
- * IMPORTANT: The client is lazily initialized on first access so that
- * importing this module does NOT trigger a database connection when
- * USE_SUPABASE=true (the Supabase REST adapter is used instead).
+ * IMPORTANT: The client is lazily initialized on first actual use,
+ * NOT at module load time. This prevents a SQLite connection attempt
+ * when USE_SUPABASE=true (the Supabase REST adapter is used instead).
  */
 
 import { PrismaClient } from "../../generated/prisma/client";
@@ -45,7 +45,9 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-function createPrismaClient(): PrismaClient {
+let _cachedClient: PrismaClient | undefined;
+
+function _createClient(): PrismaClient {
   const { url: dbUrl, source: dbSource } = findDatabaseUrl();
 
   if (!dbUrl) {
@@ -71,6 +73,7 @@ function createPrismaClient(): PrismaClient {
   });
 
   if (process.env.NODE_ENV !== "production") {
+    globalForPrisma.prisma = client;
     try {
       // @ts-expect-error – Prisma 7 event listener
       client.on("query", (e: { duration: number; query: string }) => {
@@ -87,14 +90,21 @@ function createPrismaClient(): PrismaClient {
 }
 
 /**
- * Lazy Prisma client — only initialized on first access.
- * This prevents a SQLite connection attempt when USE_SUPABASE=true.
+ * Lazily created Prisma client singleton.
+ *
+ * The factory function is NOT called at import time — only when
+ * `prisma()` is first invoked.  This means importing this module
+ * (via `import { prisma } from './prisma'`) never opens a DB
+ * connection, which is critical when USE_SUPABASE=true.
  */
-export const prisma: PrismaClient =
-  globalForPrisma.prisma ?? createPrismaClient();
-
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
+export function prisma(): PrismaClient {
+  if (_cachedClient) return _cachedClient;
+  if (globalForPrisma.prisma) {
+    _cachedClient = globalForPrisma.prisma;
+    return _cachedClient;
+  }
+  _cachedClient = _createClient();
+  return _cachedClient;
 }
 
 // ---------------------------------------------------------------------------
