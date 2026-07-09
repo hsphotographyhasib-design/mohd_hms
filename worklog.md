@@ -336,3 +336,26 @@ Stage Summary:
 - All API keys persisted to .api-keys (gitignored)
 - File location: /home/z/my-project/.api-keys
 - Reference this file at the start of any new session to avoid asking user for keys again
+
+---
+Task ID: 2
+Agent: Main
+Task: Check Vercel & Render deployment logs, fix errors
+
+Work Log:
+- Discovered Vercel production deployment was in ERROR state (readyState: ERROR)
+- Render deployment was live and working fine
+- Root cause of Vercel build failure: `.env` and `db/custom.db` were deleted from git repo in previous session. The `prisma.config.ts` uses `findDatabaseUrl()` which returned empty string `""` when no DATABASE_URL was found. This caused `prisma generate` to crash on Vercel.
+- Fix 1: Set `DATABASE_URL=file:./dev.db` on Vercel env vars
+- Fix 2: Updated `prisma.config.ts` to return `file:./placeholder.db` fallback instead of empty string
+- Fix 3: Changed `next.config.ts` rewrites from `beforeFiles` (array) to `afterFiles` (object) — this ensures Next.js API route handlers are checked FIRST, and only unmatched routes fall through to the Render Express backend proxy
+- Fix 4: Set `NEXT_PUBLIC_API_URL=https://mohd-hms.onrender.com` on Vercel so Next.js auth/dashboard/notification routes can proxy to Express when needed
+- Verified Vercel build now succeeds (READY state)
+- Verified production endpoints work: frontend (200), login (401 correct), complaints (401 correct), inventory stats (401 correct — no longer 404)
+
+Stage Summary:
+- Vercel build: ERROR → READY ✅
+- API routing: blanket proxy → afterFiles (Next.js handlers take priority) ✅
+- Inventory routes: 404 → 401 (handled by Next.js, requires auth) ✅
+- Render backend: was already live and working ✅
+- Key insight: The `beforeFiles` rewrite was proxying ALL /api/* to Express, including routes that only existed in Next.js (inventory, services, vehicles, technicians, etc.)
