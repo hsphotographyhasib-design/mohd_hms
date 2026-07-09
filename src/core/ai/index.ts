@@ -7,13 +7,13 @@ export {
   parseActions,
   executeAction,
   executeActions,
-} from './ai/actions';
+} from './actions';
 
 // AI service (GLM-powered NLU via z-ai-web-dev-sdk)
-export * from './ai/ai-service';
+export * from './ai-service';
 
 // Customer memory (builds context about a customer for AI conversations)
-export * from './ai/customer-memory';
+export * from './customer-memory';
 
 // AI system prompts
 export {
@@ -21,4 +21,4 @@ export {
   INTENT_DETECTION_PROMPT,
   MAIN_SYSTEM_PROMPT,
   PAYMENT_ANALYSIS_PROMPT,
-} from './ai/prompts';
+} from './prompts';

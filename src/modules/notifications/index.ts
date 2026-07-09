@@ -21,17 +21,17 @@ export {
   type RealtimeNotification,
   realtimeNotificationStore,
   useNotificationRealtime,
-} from './services/notifications/realtime';
+} from './services/realtime';
 export {
   type FcmPayload,
   type DeviceInfo,
-} from './services/notifications/fcm-types';
+} from './services/fcm-types';
 export {
   type NotificationItem,
   type ClientToast,
   type NotificationSettings as NotificationStoreSettings,
   useNotificationStore,
-} from './services/notifications/store';
+} from './services/store';
 export {
   type NotificationType as ServiceNotificationType,
   type NotificationPriority,
@@ -44,7 +44,7 @@ export {
   notifyWorkOrderCreated,
   notifyInvoiceCreated,
   notifyLowStock,
-} from './services/notifications/notification-service';
+} from './services/notification-service';
 export {
   type NotificationType,
   type NotificationModule,
@@ -53,4 +53,4 @@ export {
   type NotificationSettings as AppNotificationSettings,
   type NotificationLogEntry,
   NOTIFICATION_CONFIG,
-} from './services/notifications/types';
+} from './services/types';

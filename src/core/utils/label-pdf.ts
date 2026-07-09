@@ -1,4 +1,4 @@
-import type { LabelTemplate } from './label-templates';
+import type { LabelTemplate } from '../constants/label-templates';
 
 export interface EquipmentLabelData {
   name: string;

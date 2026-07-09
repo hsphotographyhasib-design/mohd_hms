@@ -4,11 +4,11 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { usePageBuilderStore } from '@/modules/cms/page-builder/store';
 import { useAppStore } from '@/app-shell/store';
 import type { PageData } from '@/modules/cms/page-builder/types';
-import { BuilderToolbar } from './page-builder/builder-toolbar';
-import { LeftPanel } from './page-builder/builder-left-panel';
-import { BuilderCanvas } from './page-builder/builder-canvas';
-import { RightPanel } from './page-builder/builder-right-panel';
-import { WidgetRenderer } from './page-builder/widget-renderer';
+import { BuilderToolbar } from '../page-builder/builder-toolbar';
+import { LeftPanel } from '../page-builder/builder-left-panel';
+import { BuilderCanvas } from '../page-builder/builder-canvas';
+import { RightPanel } from '../page-builder/builder-right-panel';
+import { WidgetRenderer } from '../page-builder/widget-renderer';
 import { toast } from 'sonner';
 import {
   PanelLeftClose, PanelLeftOpen, PanelRightClose, PanelRightOpen,

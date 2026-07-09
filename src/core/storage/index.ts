@@ -8,8 +8,8 @@ export {
   formatFileSize,
   getFileExtension,
   isFileTypeAllowed,
-} from './storage/provider';
-export type { StorageProvider } from './storage/provider';
+} from './provider';
+export type { StorageProvider } from './provider';
 
 // Uploads (re-exports from the storage/provider above for backward compat)
 export {

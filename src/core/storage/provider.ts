@@ -5,5 +5,5 @@ export {
   formatFileSize,
   getFileExtension,
   isFileTypeAllowed,
-} from '@/core/uploads';
-export type { StorageProvider } from '@/core/uploads';
+} from '@/core/storage/uploads';
+export type { StorageProvider } from '@/core/storage/uploads';

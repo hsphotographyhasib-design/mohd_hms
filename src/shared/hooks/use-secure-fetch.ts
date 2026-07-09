@@ -64,6 +64,20 @@ export function useSecureFetch() {
   return { secureFetch };
 }
 
+// ── Login grace period ───────────────────────────────────────────
+let _loginTime = 0;
+const GRACE_PERIOD_MS = 5000; // 5 seconds after login
+
+/** Call after successful login to suppress 401 during page refresh. */
+export function markLoginTime() {
+  _loginTime = Date.now();
+}
+
+/** Returns true if we're still in the grace period after a fresh login. */
+export function isWithinGracePeriod(): boolean {
+  return Date.now() - _loginTime < GRACE_PERIOD_MS;
+}
+
 /**
  * Global fetch interceptor — patches global fetch to handle 401/403.
  * Call once at app initialization.
@@ -86,6 +100,9 @@ export function setupFetchInterceptor() {
 
     // Handle 401/403
     if ((res.status === 401 || res.status === 403) && urlStr.includes('/api/') && !urlStr.includes('/api/auth/login') && !urlStr.includes('/api/auth/register')) {
+      // Skip cleanup during login grace period
+      if (isWithinGracePeriod()) return res;
+
       // Schedule cleanup for next tick (don't block the current response)
       setTimeout(() => {
         const currentState = useAuthStore.getState();

@@ -1,10 +1,10 @@
 // Workflow barrel export
 
 // Escalation rules engine
-export * from './workflow/escalation-rules';
+export * from './escalation-rules';
 
 // Notification engine (complaint lifecycle notifications)
-export * from './workflow/notification-engine';
+export * from './notification-engine';
 
 // Complaint state machine
-export * from './workflow/state-machine';
+export * from './state-machine';

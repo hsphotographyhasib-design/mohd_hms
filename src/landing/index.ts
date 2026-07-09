@@ -69,7 +69,7 @@ export {
   PageWrapper,
   ThemeLink,
 } from './website/theme';
-export { THEME, T, CLASSES, type ThemeKey } from './website/theme';
+export { THEME, T, CLASSES, type ThemeKey } from './website/theme-config';
 export { SiteHeader } from './website/site-header';
 export { SiteFooter } from './website/site-footer';
 export { PublicWebsite, type PageId } from './website/public-website';
