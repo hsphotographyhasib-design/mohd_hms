@@ -67,8 +67,36 @@ app.get('/', (_req, res) => {
     status: 'ok',
     timestamp: new Date().toISOString(),
     service: 'MOHD.HMS Enterprise',
-    version: '1.0.0',
+    version: '1.0.1',
     environment: process.env.NODE_ENV || 'development',
+  });
+});
+
+app.get('/api/health', async (_req, res) => {
+  const { getConnectionInfo, getMetrics } = await import('./cache/redis.client.js');
+  const redisInfo = getConnectionInfo();
+  let redisTest = 'not_tested';
+  if (redisInfo.available) {
+    try {
+      const { getRedis } = await import('./cache/redis.client.js');
+      const redis = getRedis();
+      if (redis) {
+        // Test the exact zrange call used by the queue
+        const testKey = 'hms:test:health';
+        const result = await redis.zrange(testKey, 0, Date.now(), { byScore: true });
+        redisTest = `zrange_ok (returned ${result.length} items)`;
+      }
+    } catch (err) {
+      redisTest = `zrange_error: ${err instanceof Error ? err.message : String(err)}`;
+    }
+  }
+  res.json({
+    status: 'ok',
+    version: '1.0.1',
+    redis: redisInfo,
+    redisZrangeTest: redisTest,
+    supabaseConfigured: !!(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY),
+    env: { NODE_ENV: process.env.NODE_ENV || 'not set', PORT: process.env.PORT || 'not set' },
   });
 });
 
