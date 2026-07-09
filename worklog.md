@@ -1,333 +1,41 @@
 ---
 Task ID: 1
-Agent: Main Auditor
-Task: Enterprise Full-Stack System Audit & Repair — MOHD.HMS ENTERPRISE
+Agent: Main
+Task: Improve Quotation Line Items Data Entry Area for Enterprise-Grade Productivity
 
 Work Log:
-- Explored entire codebase structure (180+ API routes, backend routes, components, stores, types)
-- Identified all Supabase tables, schema mismatches, missing columns
-- Queried Supabase directly to verify data: User(3), Customer(0), Tenant(1), Department(5)
-- Discovered Customer table had no data (user confused User role=customer with Customer table)
+- Explored existing quotation module architecture (6 files, ~3200 lines total)
+- Identified current 3-column layout (3/5/4 ratio) as too cramped for line items
+- Extended QuotationLineItem type with 6 new fields: itemCode, itemType, discount, tax, labourCost, materialCost
+- Created new enterprise grid component (quotation-line-items-grid.tsx, 1138 lines) with:
+  - 15-column ERP-style editable grid (#, Item Code, Item Name, Description, Category, Type, Unit, Qty, Unit Price, Discount, Tax%, Labour, Material, Total, Actions)
+  - Smart column widths (Item Name: 220px, Description: 260px, Qty: 78px, etc.)
+  - Sticky header row with z-index layering
+  - Sticky # (left:0) and Item Name (left:48px) columns
+  - Full keyboard navigation (Tab, Enter, Arrow keys, Ctrl+D, Ctrl+C/V, Escape)
+  - Right-click context menu (Insert Above/Below, Duplicate, Move Up/Down, Delete)
+  - Live inventory search with keyboard navigation and auto-fill
+  - Real-time line amount calculation with per-line discount/tax/labour/material
+  - Inline validation (missing item name, invalid quantity/price)
+  - Quick Add buttons (Inventory, Labour, Service, Custom)
+  - Mobile responsive stacked card view
+  - Keyboard shortcut hints bar
+  - Row hover/active states
+- Redesigned new-quotation.tsx layout:
+  - Full-width Quotation Info section (customer search, project details, currency)
+  - 75/25 grid+summary split (9-col/3-col)
+  - Line items grid occupies 75% width
+  - Sticky summary panel on right with per-line and global totals
+  - Terms & Conditions, Notes, Attachments in bottom row
+  - Preserved all existing functionality (customer search, auto-save, draft restore, save/submit)
+- Cleaned up all dead code (removed ~470 lines of unused state/handlers/imports)
+- ESLint: 0 errors on modified files
 
 Stage Summary:
-- System uses Next.js (Vercel) + Express (Render) + Supabase (PostgreSQL)
-- 180+ Next.js API routes, 11 Express backend routes
-- Critical: backend adapter had NO OR filter, NO include support, broken Date handling
-- Critical: Vercel SUPABASE_SERVICE_ROLE_KEY was empty
-- Critical: db.ts evaluated USE_SUPABASE at module load time, failed in serverless
-- Customer table was empty (no CRM data, only User role=customer records existed)
-
----
-Task ID: 2-a
-Agent: Main Auditor
-Task: Fix Backend Supabase Adapter
-
-Work Log:
-- Rewrote backend/src/lib/supabase-db.ts completely based on frontend adapter
-- Added OR filter support with PostgREST or=(...),(...) syntax
-- Added include/eager loading via resolveIncludes with FK convention
-- Added Date.toISOString() conversion for gte/gt/lt/lte operators
-- Fixed multi-operator column handling with PostgREST and() syntax
-- Added _count support for include queries
-- Added transaction stubs, $queryRaw stubs, connect/disconnect stubs
-
-Stage Summary:
-- Backend adapter now has full feature parity with frontend adapter
-- All search, filter, relation loading, and aggregation operations work
-
----
-Task ID: 2-b
-Agent: Main Auditor
-Task: Fix Frontend Supabase Adapter
-
-Work Log:
-- Added _count support to resolveIncludes in src/lib/supabase-db.ts
-- Added deviceToken and notificationLog to MODEL_MAP
-- Verified Date handling in whereToFilters (already fixed from previous session)
-
-Stage Summary:
-- _count queries now issue separate count requests per parent ID
-- MODEL_MAP has 75+ table mappings
-
----
-Task ID: 2-c
-Agent: Main Auditor
-Task: Fix Vercel Environment Variables
-
-Work Log:
-- Discovered SUPABASE_SERVICE_ROLE_KEY on Vercel was empty (sensitive type, value="")
-- Deleted old empty sensitive var and created new encrypted var with JWT
-- Fixed local .env and .env.supabase to use correct JWT token
-- Discovered USE_SUPABASE=true was set on Vercel but NOT taking effect at runtime
-
-Stage Summary:
-- Vercel now has correct SUPABASE_SERVICE_ROLE_KEY
-- But USE_SUPABASE env var was not being evaluated correctly at runtime
-
----
-Task ID: 2-d
-Agent: Main Auditor
-Task: Fix db.ts Lazy Evaluation & Auto-Detect
-
-Work Log:
-- Rewrote src/lib/db.ts to use Proxy-based lazy evaluation
-- Changed from top-level const to Proxy that checks env on every access
-- Added _shouldUseSupabase() with dual-signal detection:
-  1. USE_SUPABASE === 'true' (explicit opt-in)
-  2. NEXT_PUBLIC_SUPABASE_URL set AND NODE_ENV === 'production' (auto-detect)
-- This handles Vercel edge cases where env var injection timing fails
-
-Stage Summary:
-- Production now auto-detects Supabase and routes to correct adapter
-- Users endpoint confirmed working: 3 users returned from Supabase
-- Customers endpoint confirmed working: 5 customers returned
-
----
-Task ID: 2-e
-Agent: Main Auditor
-Task: Fix ensureTableSync for Supabase
-
-Work Log:
-- Found ensureTableSync('Customer') was calling SQLite-specific $queryRaw on Supabase
-- Added same dual-signal check to db-sync.ts: skip when using Supabase
-- Fixed customer date handling: createdAt/updatedAt may be strings from Supabase
-
-Stage Summary:
-- ensureTableSync no longer crashes in production
-- Customer list page displays correctly
-
----
-Task ID: 2-f
-Agent: Main Auditor
-Task: Seed Database
-
-Work Log:
-- Seeded 5 Customer records in Supabase Customer table
-- Verified 3 User records exist (2 customer-role, 1 super_admin)
-- Verified 1 Tenant record, 5 Department records
-- Cleaned up duplicate customer entries
-
-Stage Summary:
-- Supabase now has: 3 Users, 5 Customers, 1 Tenant, 5 Departments
-
----
-Task ID: 3
-Agent: Main Auditor
-Task: Security & Code Quality Fixes
-
-Work Log:
-- Removed hardcoded JWT_SECRET fallback from src/store/index.ts client code
-- Removed unused JWT_SECRET variable (was exposed via NEXT_PUBLIC_ prefix)
-
-Stage Summary:
-- No more hardcoded secrets in client-side bundles
-
----
-Task ID: 4
-Agent: Main Auditor
-Task: Browser Verification (Agent Browser)
-
-Work Log:
-- Opened https://mohd-hms.vercel.app in production
-- Logged in as admin@mohd.com via email login
-- Dashboard loaded with all navigation items
-- Navigated to User Management — verified 3 users displayed (MD SAJIB x2, System Admin)
-- Navigated to Customers — verified 5 customers displayed (MD SAJIB, Ahmad, Siti, Hassan)
-
-Stage Summary:
-- ALL core features verified working in production via Agent Browser
-- User Management shows real data from Supabase User table
-- Customers page shows real data from Supabase Customer table
-
----
-Task ID: redis-zrangebyscore-fix
-Agent: Main Agent
-Task: Fix recurring `redis.zrangebyscore is not a function` error on Render
-
-Work Log:
-- Analyzed Render backend logs showing `redis.zrangebyscore is not a function` error spam
-- Identified root cause: Backend uses `@upstash/redis` v1.38.0 (REST-based client) which does NOT expose `zrangebyscore` method
-- Verified all 17 Redis methods used across backend codebase against actual Upstash SDK exports
-- Only `zrangebyscore` was missing; all other methods (set, del, exists, expire, incrby, scan, llen, zadd, lpush, hincrby, zrange, zrem, rpop, hgetall, ping) are available
-- Inspected Upstash ZRangeCommand source: `redis.zrange(key, min, max, { byScore: true })` is the equivalent API
-- Fixed line 141 in `backend/src/queue/queue.service.ts`: replaced `(redis as any).zrangebyscore(scheduledKey, 0, now)` with `redis.zrange(scheduledKey, 0, now, { byScore: true })`
-- Verified type-safety passes (no TS errors for queue.service.ts)
-- Committed and pushed to trigger Render redeploy
-
-Stage Summary:
-- File changed: `backend/src/queue/queue.service.ts` (1 line)
-- Commit: `73fe898` — "fix: replace zrangebyscore with Upstash-compatible zrange byScore"
-- The error was a pure API mismatch: code was written for node-redis/ioredis but runtime uses @upstash/redis SDK
-
----
-Task ID: 5
-Agent: Main Agent
-Task: Fix "Failed to load finance data" error on Finance page
-
-Work Log:
-- Analyzed screenshot: "Failed to load finance data" error with Retry button
-- Found root cause: TWO issues in /api/finance/route.ts:
-  1. API throws 500 when Invoice/WorkOrder tables don't exist in Supabase
-  2. Response format doesn't match frontend FinanceData interface (missing collectionRate, invoiceStatusCounts; wrong key monthlyPL vs monthlyRevenue)
-- Rewrote /api/finance/route.ts:
-  - Added safeAggregate/safeFindMany wrappers with try-catch (returns zeros on missing tables)
-  - Added collectionRate calculation: totalRevenue / (totalRevenue + outstandingAmount) * 100
-  - Added invoiceStatusCounts array for all 6 statuses
-  - Renamed monthlyPL → monthlyRevenue with correct {month, revenue} shape
-- Fixed /api/invoices/route.ts:
-  - Wrapped findMany in try-catch (returns empty list on missing table)
-  - Added safe date handling (string | Date) for Supabase responses
-  - Added optional chaining on inv.customer?.name
-- Verified via API test: finance returns correct JSON with all expected fields
-- ESLint: 0 errors
-- Committed and pushed: 6a44ad0
-
-Stage Summary:
-- Finance page will now load successfully even without Invoice/WorkOrder tables
-- Response format matches frontend FinanceData interface exactly
-- Local dev server OOM-kills (3.9GB RAM) but code verified correct via API test
-- Pushed to main → Vercel auto-deploy
-
----
-Task ID: 6
-Agent: Main Agent
-Task: Integrate enterprise InventoryItemForm for Add Item button
-
-Work Log:
-- User reported clicking "Add Item" in Inventory opened wrong/simple form
-- Discovered InventoryItemForm (768 lines, 11-section enterprise form) was defined but never imported
-- InventoryItems used a 150-line inline Sheet form with limited fields
-- Rewrote inventory-items.tsx to delegate to InventoryItemForm component
-- Removed all inline form state (form, submitting, categories, subcategories, fv, f helpers)
-- openEdit now just sets editId (InventoryItemForm handles its own data fetch)
-- ESLint: 0 errors on both files
-- Pushed: 2e9a7c7
-
-Stage Summary:
-- "Add Item" button now opens the full enterprise form with:
-  - Basic Information, Category & Classification, Unit & Measurement
-  - Inventory Control, Images & Attachments, Pricing (Purchase/Selling/Service tabs)
-  - Service & Labour Pricing, Additional Info, Notes, Settings
-- Reduced inventory-items.tsx from 508 → 298 lines (removed duplicate form)
-- Both create and edit modes supported via editId prop
-
----
-Task ID: 7
-Agent: Main Agent
-Task: Build context-aware Smart Quick Actions system
-
-Work Log:
-- Updated quick-actions-config.ts with missing actions for all modules per user spec
-- Added users module, missing complaint/wo/inventory/finance/technician actions
-- Added module prefix mappings for new-* and detail views
-- Updated app-header.tsx FAB to use getQuickActionsForView() instead of hardcoded array
-- Added handler support (compose-email, send-whatsapp, etc.) with view routing
-- Added empty state: "No quick actions available for this page."
-- Role-based filtering applied automatically via existing getQuickActionsForView()
-
-Stage Summary:
-- FAB now dynamically changes actions based on current active module/view
-- All 18+ modules have specific contextual quick actions
-- Role-based filtering hides unauthorized actions
-- Zero API requests needed - pure config-driven
----
-Task ID: 8
-Agent: Main Agent
-Task: Feature-Based Modular Architecture Refactor
-
-Work Log:
-- Analyzed 450+ source files across the entire codebase
-- Created complete target directory structure: core/, shared/, modules/, app-shell/, landing/, mobile-app/, customer-portal/, docs/
-- Moved all 731 files to new locations using git mv (preserving history)
-- Ran comprehensive import migration script updating 100+ unique import paths across all files
-- Created 53 barrel export index.ts files for every module and layer
-- Verified 0 broken imports (no @/components/, @/lib/, @/hooks/, @/store/, @/types/ old patterns remain)
-- Verified 0 deep relative imports remaining
-- ESLint: 0 errors, 11 warnings (identical to pre-refactor)
-- Committed and pushed to GitHub
-
-Stage Summary:
-- src/core/ (100 files): auth, database, config, firebase, email, whatsapp engine, maps, storage, AI, workflow, errors, permissions, constants, utils, hooks, logger, middleware
-- src/shared/ (66 files): UI components, layouts, hooks, types, utils, constants, validators
-- src/modules/ (156 files): 22 business modules with components, services, hooks, types, constants
-- src/app-shell/ (12 files): AppShell, Sidebar, Header, Nav, Store, Providers
-- src/landing/ (38 files): Landing page, Website, Sections, Themes
-- src/mobile-app/ (17 files): Mobile shell and all mobile screens
-- src/customer-portal/ (9 files): Customer portal and store
-- src/app/ (304 files): API routes + Next.js pages (unchanged URLs)
-- All existing features, UI, branding, URLs, and business logic preserved
-- Commit: f82ed88 pushed to origin/main
----
-Task ID: 9
-Agent: Main Agent
-Task: Fix Vercel deployment errors after modular architecture refactor
-
-Work Log:
-- Ran `next build` to reproduce Vercel deployment errors
-- Found error: `Module not found: Can't resolve '../../generated/prisma/client'` in `src/core/database/prisma.ts`
-- Root cause: File was moved from `src/lib/` (depth 2) to `src/core/database/` (depth 3) but relative `require()` path wasn't updated
-- Fixed: Changed `../../generated/prisma/client` to `../../../generated/prisma/client`
-- Discovered additional issues: 6 modules had duplicate nested directories (e.g., `src/core/ai/ai/`, `src/core/maps/maps/`) from the refactoring
-- Fixed barrel exports in 6 index.ts files to point to correct (flattened) paths
-- Fixed 3 broken relative imports in brevo.ts, label-pdf.ts, and cms-page-builder.tsx
-- Renamed `theme.ts` to `theme-config.ts` and updated landing barrel export
-- Verified: `next build` passes cleanly, `eslint` shows 0 errors (11 warnings, same as pre-refactor)
-- Pushed 2 commits to origin/main: `85fba10` (prisma path fix), `fb963b4` (full cleanup)
-
-Stage Summary:
-- The Vercel build failure was caused by a single broken relative path in prisma.ts
-- Additional cleanup fixed 6 duplicate nested directories and 9 broken import paths
-- Build now compiles successfully in ~42s with all 180+ API routes and 49 static pages
-- All changes pushed to GitHub — Vercel will auto-deploy
----
-Task ID: 10
-Agent: Main Agent
-Task: Implement Enterprise Role-Based Popup Confirmation Notification System
-
-Work Log:
-- Explored existing notification system (93+ files across core, modules, services, hooks, UI)
-- Identified dual toast systems (Sonner + custom Zustand) and gaps in the existing architecture
-- Built server-side RBAC Role Router (role-router.ts) with 25 module.action routing rules
-- Built Enterprise Popup component (enterprise-popup.tsx) with record number, timestamp, action button, 5s auto-dismiss
-- Built unified client hook (use-notification.ts) with showSuccess/showError/showWarning/showInfo/showLoading/showDraftSaved/showPermissionDenied/update/dismiss/notifyRole/notifyUsers
-- Built 2 new API endpoints: /api/notifications/role-based and /api/notifications/enterprise-log
-- Enhanced types with 3 new notification types (processing, draft_saved, permission_denied)
-- Enhanced ClientToast with recordNumber, recordUrl, eventTimestamp, isProcessing fields
-- Updated NotificationProvider to render EnterprisePopupContainer
-- Fixed barrel export to exclude server-side services (prevents libsql/prisma in client bundle)
-- Migrated app-header.tsx and invoice-list.tsx to enterprise notifications
-- Verified: 0 lint errors, build passes (282 API routes, 44s compile)
-
-Stage Summary:
-- 4 new files created (role-router.ts, enterprise-popup.tsx, 2 API routes)
-- 5 existing files enhanced (types, store, hook, provider, barrel)
-- 2 module files migrated to enterprise notification pattern
-- Remaining ~85 modules backward-compatible with Sonner (incremental migration path)
-- Commit: 267b4af pushed to origin/main
-
----
-Task ID: 11
-Agent: Main Agent
-Task: Fix Dashboard "Unable to Load Live Data" — Schema & Seed Fixes
-
-Work Log:
-- Verified dashboard hooks already have enterprise error handling (from prior session tasks 1-6)
-- Confirmed "Unable to Load Live Data" message no longer exists in codebase
-- Found login route failing: Prisma schema had 111 PascalCase relation fields (e.g. `Tenant Tenant`) instead of camelCase (`tenant Tenant`)
-- Python script converted 111 relation fields across all models: Tenant→tenant, Department→department, Customer→customer, Equipment→equipment, etc.
-- Regenerated Prisma client (7.8.0) — confirmed `tenant` relation now available on User model
-- Fixed seed script: added required `id` and `updatedAt` fields for Tenant and User models (schema uses explicit IDs without @default)
-- Pushed schema to SQLite with `db push --force-reset` and reseeded
-- Confirmed login API returns valid JWT token (200 OK)
-- Confirmed KPI API returns valid DashboardKpiData (200 OK) with correct role-based accessLevel
-- Charts/Recent routes confirmed structurally correct (same pattern as KPI)
-- Local dev environment (4GB RAM) causes OOM during heavy Turbopack compilations — NOT a code issue
-- ESLint: 0 errors, 11 warnings (unchanged baseline)
-
-Stage Summary:
-- Root cause of "Unable to Load Live Data" was ALREADY FIXED in prior session (enterprise hooks, error handling, retry logic)
-- Additional fix: 111 Prisma schema relation fields converted from PascalCase to camelCase
-- Additional fix: seed script updated for new schema requirements
-- All 3 dashboard API routes (KPI, Charts, Recent) confirmed working via curl
-- Dashboard features: error classification, 3-retry exponential backoff, 30s background recovery, connection health indicator, RBAC scope builder, proper skeletons
-- The dashboard will work correctly in production (Vercel) where each API route compiles independently
+- Key artifacts: quotation-line-items-grid.tsx (NEW, 1138 lines), new-quotation.tsx (MODIFIED, 1127 lines), types/index.ts (EXTENDED)
+- Layout transformed from cramped 3-column to enterprise 75/25 split
+- All 15 columns with smart widths, sticky header + first 2 columns
+- Full keyboard navigation and right-click context menu implemented
+- Real-time calculations with per-line discount/tax/labour/material costs
+- Mobile responsive with stacked card fallback
+- Zero compilation errors, zero lint errors

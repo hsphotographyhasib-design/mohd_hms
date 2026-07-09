@@ -357,6 +357,7 @@ export type QuotationStatus = 'DRAFT' | 'REVIEW' | 'APPROVED' | 'SENT' | 'ACCEPT
 
 export interface QuotationLineItem {
   id?: string;
+  itemCode?: string;
   title: string;
   description?: string;
   unit: string;
@@ -365,6 +366,11 @@ export interface QuotationLineItem {
   amount: number;
   category?: string;
   warranty?: string;
+  itemType?: string;
+  discount?: number;
+  tax?: number;
+  labourCost?: number;
+  materialCost?: number;
 }
 
 export interface QuotationItem {
