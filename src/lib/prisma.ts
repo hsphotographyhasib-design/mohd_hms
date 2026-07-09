@@ -3,6 +3,10 @@
  *
  * Uses @prisma/adapter-libsql for local SQLite file access.
  * Reads DATABASE_URL from .env (format: file:/path/to/db.sqlite).
+ *
+ * IMPORTANT: The client is lazily initialized on first access so that
+ * importing this module does NOT trigger a database connection when
+ * USE_SUPABASE=true (the Supabase REST adapter is used instead).
  */
 
 import { PrismaClient } from "../../generated/prisma/client";
@@ -34,32 +38,27 @@ export function findDatabaseUrl(): { url: string; source: string } {
 }
 
 // ---------------------------------------------------------------------------
-// 2. Create adapter and PrismaClient
-// ---------------------------------------------------------------------------
-
-const { url: dbUrl, source: dbSource } = findDatabaseUrl();
-
-if (!dbUrl) {
-  console.error("[Prisma] FATAL: No DATABASE_URL set.");
-}
-
-const adapter = new PrismaLibSql({ url: dbUrl });
-
-console.log(
-  `[Prisma] Init using ${dbSource || "none"} [sqlite/libsql]`
-);
-
-// ---------------------------------------------------------------------------
-// 3. PrismaClient singleton (survives HMR in development)
+// 2. Lazy PrismaClient singleton
 // ---------------------------------------------------------------------------
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+function createPrismaClient(): PrismaClient {
+  const { url: dbUrl, source: dbSource } = findDatabaseUrl();
+
+  if (!dbUrl) {
+    console.error("[Prisma] FATAL: No DATABASE_URL set.");
+  }
+
+  const adapter = new PrismaLibSql({ url: dbUrl });
+
+  console.log(
+    `[Prisma] Init using ${dbSource || "none"} [sqlite/libsql]`
+  );
+
+  const client = new PrismaClient({
     adapter,
     log:
       process.env.NODE_ENV === "development"
@@ -71,23 +70,35 @@ export const prisma =
         : [{ emit: "stdout", level: "warn" }, { emit: "stdout", level: "error" }],
   });
 
+  if (process.env.NODE_ENV !== "production") {
+    try {
+      // @ts-expect-error – Prisma 7 event listener
+      client.on("query", (e: { duration: number; query: string }) => {
+        if (e.duration > 500) {
+          console.warn(`[Prisma Slow Query] ${e.duration}ms\n${e.query.slice(0, 200)}`);
+        }
+      });
+    } catch {
+      // Event listener not available in this Prisma version
+    }
+  }
+
+  return client;
+}
+
+/**
+ * Lazy Prisma client — only initialized on first access.
+ * This prevents a SQLite connection attempt when USE_SUPABASE=true.
+ */
+export const prisma: PrismaClient =
+  globalForPrisma.prisma ?? createPrismaClient();
+
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
-
-  try {
-    // @ts-expect-error – Prisma 7 event listener
-    prisma.on("query", (e: { duration: number; query: string }) => {
-      if (e.duration > 500) {
-        console.warn(`[Prisma Slow Query] ${e.duration}ms\n${e.query.slice(0, 200)}`);
-      }
-    });
-  } catch {
-    // Event listener not available in this Prisma version
-  }
 }
 
 // ---------------------------------------------------------------------------
-// 4. Utility: classify a Prisma error for friendly messages
+// 3. Utility: classify a Prisma error for friendly messages
 // ---------------------------------------------------------------------------
 
 export function isPrismaTimeout(error: unknown): boolean {
