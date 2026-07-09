@@ -201,13 +201,13 @@ function whereToFilters(where: Record<string, unknown>, prefix = ''): Record<str
         } else if (op === 'endsWith') {
           filters[col] = `ilike.%${opVal}`;
         } else if (op === 'gt') {
-          filters[col] = `gt.${opVal}`;
+          filters[col] = `gt.${opVal instanceof Date ? opVal.toISOString() : opVal}`;
         } else if (op === 'gte') {
-          filters[col] = `gte.${opVal}`;
+          filters[col] = `gte.${opVal instanceof Date ? opVal.toISOString() : opVal}`;
         } else if (op === 'lt') {
-          filters[col] = `lt.${opVal}`;
+          filters[col] = `lt.${opVal instanceof Date ? opVal.toISOString() : opVal}`;
         } else if (op === 'lte') {
-          filters[col] = `lte.${opVal}`;
+          filters[col] = `lte.${opVal instanceof Date ? opVal.toISOString() : opVal}`;
         } else if (op === 'ne' || op === 'not') {
           if (opVal === null) filters[col] = 'not.is.null';
           else filters[col] = `neq.${opVal}`;
@@ -315,6 +315,59 @@ async function resolveIncludes(
   if (!rows.length || !includes || !Object.keys(includes).length) return;
 
   for (const [relName, relOpts] of Object.entries(includes)) {
+    // Handle _count — resolve by counting related records
+    if (relName === '_count' && relOpts && typeof relOpts === 'object' && relOpts.select) {
+      const countFields = Object.entries(relOpts.select)
+        .filter(([, v]) => v === true)
+        .map(([k]) => k);
+
+      for (const countField of countFields) {
+        const countFkCol = `${countField}Id`;
+        const countTable = MODEL_MAP[countField] || countField;
+
+        // Collect unique parent IDs
+        const parentIds = [...new Set(rows.map(r => r.id).filter(Boolean))];
+
+        if (parentIds.length === 0) continue;
+
+        // Build or-filter for all parent IDs
+        const orParts = parentIds.map(id => `${countFkCol}.eq.${id}`);
+        const filterStr = `or=(${orParts.join(',')})`;
+
+        // Fetch all related records (just the FK column)
+        const r = await supabaseRequest(countTable, 'GET', {
+          select: countFkCol,
+          filters: { 'or': orParts.join(',') },
+        });
+
+        if (!r.error && r.data) {
+          // Count per parent ID
+          const countMap = new Map<string, number>();
+          for (const rel of r.data as any[]) {
+            const pid = rel[countFkCol];
+            if (pid) countMap.set(String(pid), (countMap.get(String(pid)) || 0) + 1);
+          }
+          // Initialize _count on all rows if not yet present
+          if (!rows[0]._count) {
+            for (const row of rows) row._count = {};
+          }
+          for (const row of rows) {
+            row._count[countField] = countMap.get(String(row.id)) || 0;
+          }
+        }
+      }
+      continue;
+    }
+
+    // Skip _count if it's just `true` (count all)
+    if (relName === '_count') {
+      if (relOpts === true) {
+        // Total count not meaningful without a specific relation
+        for (const row of rows) row._count = { _all: 0 };
+      }
+      continue;
+    }
+
     // Determine the FK column name: "tenant" → "tenantId"
     const fkCol = `${relName}Id`;
 
@@ -680,7 +733,8 @@ const MODEL_MAP: Record<string, string> = {
   conversationThread: 'ConversationThread', customerFeedback: 'CustomerFeedback',
   customerReport: 'CustomerReport', broadcastLog: 'BroadcastLog',
   whatsAppDeliveryLog: 'WhatsAppDeliveryLog', otpCode: 'OtpCode',
-  loginSession: 'LoginSession', device: 'Device',
+  loginSession: 'LoginSession', deviceToken: 'DeviceToken', notificationLog: 'NotificationLog',
+  device: 'Device',
   passwordResetToken: 'PasswordResetToken', passwordResetOtp: 'PasswordResetOtp',
   authAuditLog: 'AuthAuditLog', termsAcceptance: 'TermsAcceptance',
   emailLog: 'EmailLog', emailTemplate: 'EmailTemplate',

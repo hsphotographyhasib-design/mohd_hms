@@ -2,7 +2,8 @@ import { create } from 'zustand';
 import type { AuthUser, UserRole, AppView } from '@/types';
 import { markLoginTime } from '@/hooks/use-secure-fetch';
 
-const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || 'cmms-secret-key';
+// NOTE: JWT operations are server-only in @/lib/auth.ts.
+// This constant is NOT used for actual token verification.
 
 /** Normalize user role to lowercase to match UserRole type union */
 function normalizeUser(raw: AuthUser): AuthUser {
