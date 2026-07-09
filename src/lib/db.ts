@@ -8,36 +8,11 @@
  */
 
 import { prisma as prismaInstance } from './prisma';
-
-// Lazy-loaded Supabase DB (only initialized if USE_SUPABASE=true)
-let _supabaseDb: any = null;
-
-function getSupabaseDb() {
-  if (!_supabaseDb) {
-    try {
-      // Dynamic import cached — only called when USE_SUPABASE=true
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const mod = require('./supabase-db');
-      _supabaseDb = mod?.supabaseDb ?? mod?.default?.supabaseDb ?? null;
-      if (!_supabaseDb) {
-        console.error('[DB] Failed to resolve supabaseDb from supabase-db module.');
-      }
-    } catch {
-      console.error('[DB] Failed to load supabase-db module.');
-    }
-  }
-  return _supabaseDb;
-}
+import { supabaseDb } from './supabase-db';
 
 export const db: any =
   process.env.USE_SUPABASE === 'true'
-    ? new Proxy({} as any, {
-        get(_target, prop: string) {
-          const client = getSupabaseDb();
-          if (!client) throw new Error(`[DB] Supabase DB client not initialized. Cannot access '${prop}'.`);
-          return client[prop];
-        },
-      })
+    ? supabaseDb
     : prismaInstance;
 
 // Lazy type re-export (never evaluated at runtime)

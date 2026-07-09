@@ -187,3 +187,56 @@ Stage Summary:
 - Prisma client resolves correctly via ESM import instead of broken require()
 - Login → AuthGuard → SessionHeartbeat flow all work correctly
 - Dashboard renders with KPI data, complaints table, and charts
+---
+Task ID: 1
+Agent: full-stack-developer
+Task: Create Supabase proxy mini-service
+
+Work Log:
+- Created mini-service at /home/z/my-project/mini-services/supabase-service/
+- Implemented HTTP server on port 3001 using only Node.js built-in `http` module (zero npm dependencies)
+- Implemented Prisma-to-PostgREST query translation for all 11 operations: findFirst, findMany, findUnique, create, update, updateMany, delete, deleteMany, count, aggregate, groupBy
+- Built where clause → PostgREST filter conversion supporting: eq, neq, in, notIn, contains, startsWith, endsWith, gte, lte, gt, lt, is (null/boolean), not (with nested operator negation)
+- Built select builder that strips nested relations and resolves them via separate batched queries
+- Implemented embedded resource resolution using known FK relationship map (tenantId, departmentId, customerId, assignedToId, supervisorId, createdBy, complaintId, workOrderId, equipmentId, invoiceId, quotationId)
+- Added model name → Supabase table name mapping for all domain models
+- Added request logging: `[Supabase] User.findFirst where={email:...} → 200 45ms`
+- Added /health endpoint for service discovery
+- Verified service starts correctly and handles queries (health check, count, findMany all respond)
+- Used `[string, string][]` tuple arrays for query params to properly support PostgREST multi-value params via URLSearchParams.append
+
+Stage Summary:
+- Service created at mini-services/supabase-service/index.ts (zero external dependencies)
+- Handles all common Prisma operations via Supabase REST API
+- Runs on port 3001, start with `bun --hot index.ts`
+- Properly handles combined comparison operators (gte + lte on same field)
+- Nested select/include resolved via batched separate queries using FK map
+---
+Task ID: 8
+Agent: Main
+Task: Connect Supabase as the primary database
+
+Work Log:
+- Replaced `db.ts` lazy `require('./supabase-db')` with static ESM `import { supabaseDb } from './supabase-db'` — fixes Turbopack returning {} for require() of ESM modules
+- Replaced `supabase-db.ts` (thin proxy to port 3001 mini-service) with full native fetch() Supabase PostgREST adapter (~700 lines, zero runtime dependencies)
+- Implemented Prisma-compatible interface: findFirst, findMany, findUnique, findFirstOrThrow, create, update, delete, count, upsert, createMany, updateMany, deleteMany, aggregate, groupBy
+- Added `$queryRaw` support (returns `[{ok:1}]` for `SELECT 1` health checks)
+- Added `$transaction` support (callback and array styles, runs sequentially since PostgREST has no multi-statement tx)
+- Added `$connect`, `$disconnect`, `$on` no-ops for Prisma compatibility
+- Implemented `parseSelectAndInclude()` to extract relation selects from `select` objects (Prisma nests `tenant: { select: {...} }` inside `select`, not `include`)
+- Implemented `resolveIncludes()` for manual eager loading — fetches related records in separate requests using `{relationName}Id` FK convention. Handles tables WITHOUT foreign key constraints in Supabase
+- Added OR/AND filter support in `whereToFilters()` — converts Prisma `OR: [...]` to PostgREST `or=(...),(...),...` syntax, handles null checks, comparison operators, and date serialization
+- Verified `.env` has `USE_SUPABASE=true` and all Supabase credentials
+- Confirmed Supabase tables exist (User, Tenant, etc.) with data via direct REST API test
+- Health check: returns `{"status":"ok","latencyMs":430}` — database connected
+- Login: authenticates against Supabase User table, returns JWT with tenant data eagerly loaded (`tenantName: "MOHD HMS Enterprise"`)
+- CMS landing: returns 200 (OR filter fix), no more 500 errors
+- Browser verification: landing page renders correctly with all CMS sections
+- Lint: 0 errors, 11 pre-existing warnings
+
+Stage Summary:
+- Supabase is now the active database for all 100+ API routes
+- Zero code changes needed in API routes — `import { db } from '@/lib/db'` works identically
+- Tables don't need FK constraints — eager loading handles includes
+- MODEL_MAP maps 80+ Prisma model names (camelCase) to Supabase table names (PascalCase)
+- Files modified: `src/lib/db.ts` (ESM import), `src/lib/supabase-db.ts` (complete rewrite)

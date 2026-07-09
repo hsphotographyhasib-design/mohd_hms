@@ -10,7 +10,7 @@ import {
   Wrench, AlertTriangle, ClipboardList, DollarSign,
   TrendingUp, TrendingDown, Clock, Users, Package,
   Activity, CheckCircle2, Star, Calendar, ArrowRight,
-  RefreshCw, ShieldCheck, Filter, X,
+  RefreshCw, ShieldCheck, Filter, X, LogOut,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -316,6 +316,7 @@ const KpiCardsSection = memo(function KpiCardsSection({
   // On error, show cards with default 0 values instead of an error banner
   const effectiveData = data ?? DEFAULT_KPI;
   const hasError = !!error && !data;
+  const isAuthError = hasError && (error?.message?.includes('Authentication') || error?.message?.includes('auth') || (error as any)?.isAuthError);
 
   if (isLoading && !hasError) {
     return (
@@ -340,7 +341,13 @@ const KpiCardsSection = memo(function KpiCardsSection({
 
   return (
     <>
-      {hasError && (
+      {hasError && isAuthError && (
+        <div className="flex items-center gap-2 p-2.5 rounded-lg bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs mb-2">
+          <LogOut className="h-3.5 w-3.5 shrink-0" />
+          <span className="flex-1">Session expired — redirecting to login…</span>
+        </div>
+      )}
+      {hasError && !isAuthError && (
         <div className="flex items-center gap-2 p-2.5 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs mb-2">
           <RefreshCw className="h-3.5 w-3.5 shrink-0" />
           <span className="flex-1">Unable to load live data — showing offline values</span>

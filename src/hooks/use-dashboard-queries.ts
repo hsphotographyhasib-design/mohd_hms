@@ -1,6 +1,7 @@
 'use client';
 
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuthStore } from '@/store';
 import type { ComplaintItem, WorkOrderItem, PmScheduleItem } from '@/types';
 
 // ─── Types for split endpoints ───────────────────────────────────
@@ -75,30 +76,56 @@ function filtersToQuery(filters?: DashboardFilters): string {
   return qs ? `?${qs}` : '';
 }
 
+/**
+ * Smart fetch for dashboard APIs — distinguishes auth errors from server errors.
+ *
+ * - 401/403: Returns a structured auth error (the fetch interceptor will
+ *   re-validate the session and trigger logout if needed)
+ * - 5xx: Returns a structured server error (the query will retry)
+ * - Network error: Throws for retry
+ */
+async function dashboardFetch<T>(url: string, label: string): Promise<T> {
+  const res = await fetch(url, { headers: getAuthHeaders() });
+
+  if (res.status === 401 || res.status === 403) {
+    // Auth error — the fetch interceptor handles session re-validation.
+    // Throw a specific error so the UI can show a clear message.
+    const err = new Error(`Authentication error — ${label}`) as Error & { isAuthError: true };
+    err.isAuthError = true;
+    throw err;
+  }
+
+  if (!res.ok) {
+    let detail = `Failed to load ${label}`;
+    try {
+      const body = await res.json();
+      if (body.error) detail = body.error;
+    } catch { /* use default */ }
+    throw new Error(detail);
+  }
+
+  return res.json();
+}
+
 // ─── KPI Query — 30s stale time, highest priority ────────────────
 
 export function useDashboardKpi(role?: string, filters?: DashboardFilters) {
   const isEnabled = !!role && !BLOCKED_ROLES.has(role);
+  // Disable queries if user is not authenticated (prevents firing with stale token)
+  const { isAuthenticated } = useAuthStore();
 
   return useQuery<DashboardKpiData>({
     queryKey: ['dashboard', 'kpi', filters],
-    queryFn: async () => {
-      const qs = filtersToQuery(filters);
-      const res = await fetch(`/api/dashboard/kpi${qs}`, { headers: getAuthHeaders() });
-      if (!res.ok) {
-        let detail = 'Failed to load KPI data';
-        try {
-          const body = await res.json();
-          if (body.error) detail = body.error;
-        } catch {}
-        throw new Error(detail);
-      }
-      return res.json();
-    },
-    enabled: isEnabled,
+    queryFn: () => dashboardFetch<DashboardKpiData>(`/api/dashboard/kpi${filtersToQuery(filters)}`, 'KPI data'),
+    enabled: isEnabled && isAuthenticated,
     staleTime: 30_000,
     gcTime: 5 * 60_000,
     refetchInterval: 60_000,
+    retry: (failureCount, error) => {
+      // Don't retry auth errors — the interceptor will handle session recovery
+      if ((error as Error & { isAuthError?: boolean }).isAuthError) return false;
+      return failureCount < 2;
+    },
   });
 }
 
@@ -107,19 +134,19 @@ export function useDashboardKpi(role?: string, filters?: DashboardFilters) {
 export function useDashboardCharts(role?: string, filters?: DashboardFilters) {
   // Finance sees only revenue charts; HR sees nothing; customer sees complaint charts only
   const isEnabled = !!role && !BLOCKED_ROLES.has(role) && role !== 'hr';
+  const { isAuthenticated } = useAuthStore();
 
   return useQuery<DashboardChartsData>({
     queryKey: ['dashboard', 'charts', filters],
-    queryFn: async () => {
-      const qs = filtersToQuery(filters);
-      const res = await fetch(`/api/dashboard/charts${qs}`, { headers: getAuthHeaders() });
-      if (!res.ok) throw new Error('Failed to load chart data');
-      return res.json();
-    },
-    enabled: isEnabled,
+    queryFn: () => dashboardFetch<DashboardChartsData>(`/api/dashboard/charts${filtersToQuery(filters)}`, 'chart data'),
+    enabled: isEnabled && isAuthenticated,
     staleTime: 2 * 60_000,
     gcTime: 10 * 60_000,
     refetchInterval: 2 * 60_000,
+    retry: (failureCount, error) => {
+      if ((error as Error & { isAuthError?: boolean }).isAuthError) return false;
+      return failureCount < 2;
+    },
   });
 }
 
@@ -128,19 +155,19 @@ export function useDashboardCharts(role?: string, filters?: DashboardFilters) {
 export function useDashboardRecent(role?: string, filters?: DashboardFilters) {
   // Finance and HR don't see operational recent activity
   const isEnabled = !!role && !BLOCKED_ROLES.has(role) && role !== 'hr' && role !== 'finance';
+  const { isAuthenticated } = useAuthStore();
 
   return useQuery<DashboardRecentData>({
     queryKey: ['dashboard', 'recent', filters],
-    queryFn: async () => {
-      const qs = filtersToQuery(filters);
-      const res = await fetch(`/api/dashboard/recent${qs}`, { headers: getAuthHeaders() });
-      if (!res.ok) throw new Error('Failed to load recent activity');
-      return res.json();
-    },
-    enabled: isEnabled,
+    queryFn: () => dashboardFetch<DashboardRecentData>(`/api/dashboard/recent${filtersToQuery(filters)}`, 'recent activity'),
+    enabled: isEnabled && isAuthenticated,
     staleTime: 1 * 60_000,
     gcTime: 5 * 60_000,
     refetchInterval: 60_000,
+    retry: (failureCount, error) => {
+      if ((error as Error & { isAuthError?: boolean }).isAuthError) return false;
+      return failureCount < 2;
+    },
   });
 }
 

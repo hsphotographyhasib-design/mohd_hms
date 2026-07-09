@@ -11,17 +11,90 @@ const AUTH_ENDPOINTS = ['/api/auth/login', '/api/auth/register', '/api/auth/forg
 // from concurrent API calls that race with the auth state update)
 const LOGIN_GRACE_MS = 5000;
 
+// Cooldown to prevent multiple concurrent session re-validations
+let lastSessionRevalidation = 0;
+const SESSION_REVALIDATION_COOLDOWN_MS = 10_000;
+
 let lastLoginTime = 0;
 export function markLoginTime() {
   lastLoginTime = Date.now();
 }
 
 /**
+ * Perform full session cleanup — used by interceptor and heartbeat.
+ */
+function handleSessionExpired(reason?: string) {
+  const currentState = useAuthStore.getState();
+  if (!currentState.isAuthenticated) return; // Already logged out
+
+  broadcastLogoutEvent(reason || 'Session expired. Please sign in again.');
+  localStorage.clear();
+  sessionStorage.clear();
+
+  const { logout } = useAuthStore.getState();
+  const { setView } = useAppStore.getState();
+  logout();
+  setView('dashboard');
+  window.history.replaceState(null, '', '/');
+
+  window.dispatchEvent(
+    new CustomEvent('cmms:toast', {
+      detail: { type: 'warning', message: reason || 'Session expired. Please sign in again.' },
+    })
+  );
+}
+
+/**
+ * Re-validate the session by calling /api/auth/me.
+ * If the session is genuinely expired, triggers logout.
+ * Returns true if session is valid, false if expired.
+ */
+async function revalidateSession(): Promise<boolean> {
+  const now = Date.now();
+  if (now - lastSessionRevalidation < SESSION_REVALIDATION_COOLDOWN_MS) {
+    // Another revalidation is in progress or just finished — skip
+    return false;
+  }
+  lastSessionRevalidation = now;
+
+  const { token } = useAuthStore.getState();
+  if (!token) {
+    handleSessionExpired('No authentication token found. Please sign in again.');
+    return false;
+  }
+
+  try {
+    const meRes = await window.fetch('/api/auth/me', {
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    });
+
+    if (meRes.ok) {
+      // Session is valid — update user data from server
+      try {
+        const userData = await meRes.json();
+        useAuthStore.setState({ user: userData });
+      } catch { /* ignore parse errors */ }
+      return true;
+    }
+
+    if (meRes.status === 401 || meRes.status === 403) {
+      // Confirmed session expiry — force logout
+      handleSessionExpired('Your session has expired. Please sign in again.');
+      return false;
+    }
+
+    // Server error (500, 502, etc.) — session might be valid, don't logout
+    return true;
+  } catch {
+    // Network error — can't verify, assume session is still valid
+    return true;
+  }
+}
+
+/**
  * A secure fetch wrapper that:
  * - Automatically adds Authorization header
- * - Handles 401/403 only from /api/auth/me (canonical session check)
- * - Does NOT rewrite URLs — all /api/... requests go through the
- *   Vercel server-side proxy (which forwards to the Render backend).
+ * - Handles 401/403 from any endpoint by re-validating session
  */
 export function useSecureFetch() {
   const secureFetch = useCallback(async (url: string, options: RequestInit = {}): Promise<Response> => {
@@ -38,9 +111,14 @@ export function useSecureFetch() {
 
     const res = await fetch(url, { ...options, headers });
 
-    // Only handle auth errors from the canonical session endpoint
-    if ((res.status === 401 || res.status === 403) && url.includes('/api/auth/me')) {
-      handleSessionExpired();
+    // Handle auth errors from any endpoint
+    if (res.status === 401 || res.status === 403) {
+      const isAuthEndpoint = AUTH_ENDPOINTS.some(ep => url.includes(ep));
+      const inGracePeriod = (Date.now() - lastLoginTime) < LOGIN_GRACE_MS;
+      if (!isAuthEndpoint && !inGracePeriod) {
+        // Re-validate session in background
+        setTimeout(() => revalidateSession(), 0);
+      }
     }
 
     return res;
@@ -50,42 +128,18 @@ export function useSecureFetch() {
 }
 
 /**
- * Perform full session cleanup — used by interceptor and heartbeat.
- */
-function handleSessionExpired() {
-  const currentState = useAuthStore.getState();
-  if (!currentState.isAuthenticated) return; // Already logged out
-
-  broadcastLogoutEvent('Session expired. Please sign in again.');
-  localStorage.clear();
-  sessionStorage.clear();
-
-  const { logout } = useAuthStore.getState();
-  const { setView } = useAppStore.getState();
-  logout();
-  setView('dashboard');
-  window.history.replaceState(null, '', '/');
-
-  window.dispatchEvent(
-    new CustomEvent('cmms:toast', {
-      detail: { type: 'warning', message: 'Session expired. Please sign in again.' },
-    })
-  );
-}
-
-/**
  * Global fetch interceptor — patches global fetch to:
  * - Add auth headers automatically for /api/ calls
- * - Handle 401/403 ONLY from /api/auth/me (the canonical session check)
+ * - Handle 401/403 from ANY authenticated endpoint by re-validating via /api/auth/me
+ * - Only trigger logout if /api/auth/me also confirms the session is expired
  * - Retry on network errors (server might be restarting/cold-starting)
  *
- * CRITICAL DESIGN DECISION:
- *   We do NOT logout on 401 from arbitrary endpoints (notifications, dashboard,
- *   etc.) because:
- *   1. A cold-start on Render can cause brief 401s
- *   2. A 403 might mean "insufficient permissions", not "session expired"
- *   3. Network hiccups can cause gateway timeouts that return 401
- *   Only /api/auth/me is the authoritative session validator.
+ * DESIGN:
+ *   When any authenticated endpoint returns 401/403, we immediately re-validate
+ *   the session by calling /api/auth/me. This prevents:
+ *   1. Stale tokens leaving the user stuck with "offline values" banners
+ *   2. False logouts from transient Render cold-start 401s (auth/me would succeed)
+ *   3. Permission errors (403) being treated as session expiry
  */
 export function setupFetchInterceptor() {
   const originalFetch = window.fetch;
@@ -119,9 +173,7 @@ export function setupFetchInterceptor() {
 
     const res = await fetchWithRetry(url, { ...options, headers });
 
-    // Only trigger logout on 401/403 from the canonical session check endpoint
-    // AND only if we're outside the login grace period
-    const isAuthMe = urlStr.includes('/api/auth/me');
+    // Handle 401/403 from any authenticated endpoint
     const isApiCall = urlStr.includes('/api/');
     const isAuthEndpoint = AUTH_ENDPOINTS.some(ep => urlStr.includes(ep));
     const inGracePeriod = (Date.now() - lastLoginTime) < LOGIN_GRACE_MS;
@@ -132,12 +184,9 @@ export function setupFetchInterceptor() {
       !isAuthEndpoint &&
       !inGracePeriod
     ) {
-      if (isAuthMe) {
-        // Canonical session check failed — confirmed logout
-        setTimeout(() => handleSessionExpired(), 0);
-      }
-      // For all other endpoints: silently ignore 401/403.
-      // The SessionHeartbeat will catch genuine session expiry via /api/auth/me.
+      // Re-validate the session via /api/auth/me (with cooldown to prevent flooding)
+      // This is async and non-blocking — the response is still returned to the caller
+      setTimeout(() => revalidateSession(), 0);
     }
 
     return res;
