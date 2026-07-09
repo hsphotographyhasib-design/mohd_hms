@@ -138,3 +138,23 @@ Stage Summary:
 - ALL core features verified working in production via Agent Browser
 - User Management shows real data from Supabase User table
 - Customers page shows real data from Supabase Customer table
+
+---
+Task ID: redis-zrangebyscore-fix
+Agent: Main Agent
+Task: Fix recurring `redis.zrangebyscore is not a function` error on Render
+
+Work Log:
+- Analyzed Render backend logs showing `redis.zrangebyscore is not a function` error spam
+- Identified root cause: Backend uses `@upstash/redis` v1.38.0 (REST-based client) which does NOT expose `zrangebyscore` method
+- Verified all 17 Redis methods used across backend codebase against actual Upstash SDK exports
+- Only `zrangebyscore` was missing; all other methods (set, del, exists, expire, incrby, scan, llen, zadd, lpush, hincrby, zrange, zrem, rpop, hgetall, ping) are available
+- Inspected Upstash ZRangeCommand source: `redis.zrange(key, min, max, { byScore: true })` is the equivalent API
+- Fixed line 141 in `backend/src/queue/queue.service.ts`: replaced `(redis as any).zrangebyscore(scheduledKey, 0, now)` with `redis.zrange(scheduledKey, 0, now, { byScore: true })`
+- Verified type-safety passes (no TS errors for queue.service.ts)
+- Committed and pushed to trigger Render redeploy
+
+Stage Summary:
+- File changed: `backend/src/queue/queue.service.ts` (1 line)
+- Commit: `73fe898` — "fix: replace zrangebyscore with Upstash-compatible zrange byScore"
+- The error was a pure API mismatch: code was written for node-redis/ioredis but runtime uses @upstash/redis SDK
