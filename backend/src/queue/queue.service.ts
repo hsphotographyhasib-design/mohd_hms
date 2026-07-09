@@ -138,7 +138,7 @@ export async function dequeue(
       // Check for scheduled jobs first
       const scheduledKey = `${queueKey}:scheduled`;
       const now = Date.now();
-      const readyJobs = await (redis as any).zrangebyscore(scheduledKey, 0, now);
+      const readyJobs = await redis.zrange(scheduledKey, 0, now, { byScore: true });
       if (readyJobs.length > 0) {
         // Process the earliest scheduled job
         const jobJson = readyJobs[0] as string;
