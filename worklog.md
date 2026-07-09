@@ -257,3 +257,25 @@ Stage Summary:
 - src/app/ (304 files): API routes + Next.js pages (unchanged URLs)
 - All existing features, UI, branding, URLs, and business logic preserved
 - Commit: f82ed88 pushed to origin/main
+---
+Task ID: 9
+Agent: Main Agent
+Task: Fix Vercel deployment errors after modular architecture refactor
+
+Work Log:
+- Ran `next build` to reproduce Vercel deployment errors
+- Found error: `Module not found: Can't resolve '../../generated/prisma/client'` in `src/core/database/prisma.ts`
+- Root cause: File was moved from `src/lib/` (depth 2) to `src/core/database/` (depth 3) but relative `require()` path wasn't updated
+- Fixed: Changed `../../generated/prisma/client` to `../../../generated/prisma/client`
+- Discovered additional issues: 6 modules had duplicate nested directories (e.g., `src/core/ai/ai/`, `src/core/maps/maps/`) from the refactoring
+- Fixed barrel exports in 6 index.ts files to point to correct (flattened) paths
+- Fixed 3 broken relative imports in brevo.ts, label-pdf.ts, and cms-page-builder.tsx
+- Renamed `theme.ts` to `theme-config.ts` and updated landing barrel export
+- Verified: `next build` passes cleanly, `eslint` shows 0 errors (11 warnings, same as pre-refactor)
+- Pushed 2 commits to origin/main: `85fba10` (prisma path fix), `fb963b4` (full cleanup)
+
+Stage Summary:
+- The Vercel build failure was caused by a single broken relative path in prisma.ts
+- Additional cleanup fixed 6 duplicate nested directories and 9 broken import paths
+- Build now compiles successfully in ~42s with all 180+ API routes and 49 static pages
+- All changes pushed to GitHub — Vercel will auto-deploy
