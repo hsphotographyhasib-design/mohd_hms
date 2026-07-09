@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db, withRetry } from '@/lib/db';
+import { db, withRetry } from '@/core/database/db';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyAuth } from '@/lib/auth';
-import { getDbFriendlyMessage } from '@/lib/db';
+import { db } from '@/core/database/db';
+import { verifyAuth } from '@/core/auth/auth-lib';
+import { getDbFriendlyMessage } from '@/core/database/db';
 
 export async function GET(request: NextRequest) {
   try {

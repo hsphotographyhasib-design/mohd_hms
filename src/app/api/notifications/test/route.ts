@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { sendFcmToUser, isFcmAdminConfigured, logFcmDelivery } from '@/lib/fcm-admin';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { db } from '@/core/database/db';
+import { sendFcmToUser, isFcmAdminConfigured, logFcmDelivery } from '@/core/firebase/fcm-admin';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,8 +1,8 @@
 'use client';
 
 import { useCallback } from 'react';
-import { useAuthStore, useAppStore } from '@/store';
-import { broadcastLogoutEvent } from '@/components/session/broadcast-logout';
+import { useAuthStore, useAppStore } from '@/app-shell/store';
+import { broadcastLogoutEvent } from '@/core/auth/session/broadcast-logout';
 
 /**
  * A secure fetch wrapper that:

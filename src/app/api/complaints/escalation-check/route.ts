@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
-import { checkEscalations } from '@/lib/workflow/escalation-rules';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { checkEscalations } from '@/core/workflow/escalation-rules';
 export const dynamic = 'force-dynamic';
 
 // ── POST: Trigger escalation checks ────────────────────────────────────────
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     }
 
     // 3. Import rules and return with human-readable thresholds
-    const { ESCALATION_RULES } = await import('@/lib/workflow/escalation-rules');
+    const { ESCALATION_RULES } = await import('@/core/workflow/escalation-rules');
 
     const rulesWithReadableThresholds = ESCALATION_RULES.map((rule) => ({
       status: rule.status,

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, getDbFriendlyMessage } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
+import { db, getDbFriendlyMessage } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

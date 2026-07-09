@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { buildAuthContext } from '@/lib/rbac';
-import { notifyWorkOrderCreated, createNotification } from '@/lib/notifications/notification-service';
+import { db } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { buildAuthContext } from '@/core/permissions/rbac';
+import { notifyWorkOrderCreated, createNotification } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 

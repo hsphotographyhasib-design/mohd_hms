@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { verifyToken } from '@/core/auth/auth-lib';
 
 const BREVO_API_URL = 'https://api.brevo.com/v3';
 

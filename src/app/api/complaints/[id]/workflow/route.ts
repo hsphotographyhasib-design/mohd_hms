@@ -1,22 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken, generateInvoiceNumber } from '@/lib/auth';
-import { ensureTableSync } from '@/lib/db-sync';
+import { db } from '@/core/database/db';
+import { verifyToken, generateInvoiceNumber } from '@/core/auth/auth-lib';
+import { ensureTableSync } from '@/core/database/db-sync';
 import {
   recordWorkflowTransition,
   getComplaintTimeline,
-} from '@/lib/workflow/notification-engine';
+} from '@/core/workflow/notification-engine';
 import {
   validateTransition,
   getAvailableActions,
   type ComplaintStatus,
-} from '@/lib/workflow/state-machine';
+} from '@/core/workflow/state-machine';
 import {
   buildAuthContext,
   buildComplaintWhereClause,
   canAccessComplaint,
   logComplaintAccessDenied,
-} from '@/lib/rbac';
+} from '@/core/permissions/rbac';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
-import { generateOtpCode } from '@/lib/auth';
-import { normalizePhone, normalizeDialCode, hashOtp, getFriendlyPhoneError } from '@/lib/phone';
+import { db, withRetry, getDbFriendlyMessage } from '@/core/database/db';
+import { generateOtpCode } from '@/core/auth/auth-lib';
+import { normalizePhone, normalizeDialCode, hashOtp, getFriendlyPhoneError } from '@/core/utils/phone';
 
 export const dynamic = 'force-dynamic';
 

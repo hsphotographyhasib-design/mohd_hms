@@ -1,0 +1,23 @@
+// ─── Components ───────────────────────────────────────────────────────────────
+export { HrDashboard } from './components/hr-dashboard';
+export { HrEmployees } from './components/hr-employees';
+export { EmployeeList } from './components/employee-list';
+export { HrAttendance } from './components/hr-attendance';
+export { HrLeave } from './components/hr-leave';
+export { HrPayroll } from './components/hr-payroll';
+export { HrDepartments } from './components/hr-departments';
+export { HrShifts } from './components/hr-shifts';
+export { HrOvertime } from './components/hr-overtime';
+export { HrRecruitment } from './components/hr-recruitment';
+export { HrTraining } from './components/hr-training';
+export { HrPerformance } from './components/hr-performance';
+export { HrDocuments } from './components/hr-documents';
+export { HrAssets } from './components/hr-assets';
+export { HrExpenses } from './components/hr-expenses';
+export { HrTravel } from './components/hr-travel';
+export { HrMedical } from './components/hr-medical';
+export { HrDisciplinary } from './components/hr-disciplinary';
+export { HrAnnouncements } from './components/hr-announcements';
+export { HrVisitors } from './components/hr-visitors';
+export { HrReports } from './components/hr-reports';
+export { HrSettings } from './components/hr-settings';

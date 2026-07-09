@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyAuth } from '@/lib/auth';
+import { db } from '@/core/database/db';
+import { verifyAuth } from '@/core/auth/auth-lib';
 
 function formatTemplate(t: {
   id: string;

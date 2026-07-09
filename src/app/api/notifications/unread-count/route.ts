@@ -25,8 +25,8 @@ export async function GET(request: NextRequest) {
 
   // Local dev fallback
   try {
-    const { db } = await import('@/lib/db');
-    const { verifyToken } = await import('@/lib/auth');
+    const { db } = await import('@/core/database/db');
+    const { verifyToken } = await import('@/core/auth/auth-lib');
     const token = request.headers.get('authorization')?.replace('Bearer ', '');
     if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     const payload = verifyToken(token);

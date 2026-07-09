@@ -1,2 +1,10 @@
 // Shared components barrel export
-// Will re-export commonly reused UI components (e.g. from @/components/ui/*) as needed.
+
+export {
+  BrandLogo,
+  HeaderBrandLogo,
+  LoginBrandLogo,
+  FooterBrandLogo,
+  type BrandLogoVariant,
+  type BrandLogoSize,
+} from './brand/brand-logo';

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { ensureTableSync } from '@/lib/db-sync';
+import { db } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { ensureTableSync } from '@/core/database/db-sync';
 import {
   getComplaintTimeline,
-} from '@/lib/workflow/notification-engine';
-import { createNotification, notifyComplaintAssigned } from '@/lib/notifications/notification-service';
+} from '@/core/workflow/notification-engine';
+import { createNotification, notifyComplaintAssigned } from '@/modules/notifications/services/notification-service';
 
 export const dynamic = 'force-dynamic';
 

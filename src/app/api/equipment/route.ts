@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken, generateAssetNumber } from '@/lib/auth';
-import { ensureTableSync } from '@/lib/db-sync';
+import { db } from '@/core/database/db';
+import { verifyToken, generateAssetNumber } from '@/core/auth/auth-lib';
+import { ensureTableSync } from '@/core/database/db-sync';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
 
     const assetNumber = generateAssetNumber(category);
     const qrCode = `QR-${assetNumber}`;
-    const { generateQrId, buildQrUrl } = await import('@/lib/qr-utils');
+    const { generateQrId, buildQrUrl } = await import('@/core/utils/qr-utils');
     const qrId = generateQrId(category);
     const domain = request.headers.get('host') || 'smartms.com';
     const qrUrl = buildQrUrl(domain, qrId);

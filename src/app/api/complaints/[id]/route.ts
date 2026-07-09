@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { ensureTableSync } from '@/lib/db-sync';
+import { db } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { ensureTableSync } from '@/core/database/db-sync';
 import {
   buildAuthContext,
   buildComplaintWhereClause,
@@ -10,7 +10,7 @@ import {
   isFieldVisibleToRole,
   logComplaintAccessDenied,
   logComplaintAccessAllowed,
-} from '@/lib/rbac';
+} from '@/core/permissions/rbac';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 

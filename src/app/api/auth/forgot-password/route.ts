@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry } from '@/lib/db';
+import { db, withRetry } from '@/core/database/db';
 import {
   OTP_TTL_MINUTES,
   OTP_MAX_ATTEMPTS,
@@ -12,9 +12,9 @@ import {
   cleanupExpiredOtps,
   getRequestMeta,
   maskEmail,
-} from '@/lib/password-reset';
-import { ensureTableSync } from '@/lib/db-sync';
-import { renderOtpEmail, sendEmail } from '@/lib/email';
+} from '@/core/auth/password-reset';
+import { ensureTableSync } from '@/core/database/db-sync';
+import { renderOtpEmail, sendEmail } from '@/core/email/email';
 
 export const dynamic = 'force-dynamic';
 

@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { Building2, ArrowLeft } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
+import { Button } from '@/shared/ui/button';
+import { Separator } from '@/shared/ui/separator';
 
 export default function TermsAndConditionsPage() {
   return (

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyAuth } from '@/lib/auth';
-import { sendViaProvider, getActiveProvider } from '@/lib/email-service/providers';
-import { isBrevoConfigured, isSmtpConfigured } from '@/lib/email-service/providers';
-import { MAX_RETRIES } from '@/lib/email-service/types';
-import * as templates from '@/lib/email-service/templates';
+import { db } from '@/core/database/db';
+import { verifyAuth } from '@/core/auth/auth-lib';
+import { sendViaProvider, getActiveProvider } from '@/core/email/service/providers';
+import { isBrevoConfigured, isSmtpConfigured } from '@/core/email/service/providers';
+import { MAX_RETRIES } from '@/core/email/service/types';
+import * as templates from '@/core/email/service/templates';
 
 export const dynamic = 'force-dynamic';
 

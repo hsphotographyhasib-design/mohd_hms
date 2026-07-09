@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { sendEmail as emailServiceSend } from '@/lib/email-service';
-import * as templates from '@/lib/email-service/templates';
-import { verifyToken } from '@/lib/auth';
+import { sendEmail as emailServiceSend } from '@/core/email/service';
+import * as templates from '@/core/email/service/templates';
+import { verifyToken } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 

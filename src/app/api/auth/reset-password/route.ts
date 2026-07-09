@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry } from '@/lib/db';
-import { hashPassword } from '@/lib/auth';
+import { db, withRetry } from '@/core/database/db';
+import { hashPassword } from '@/core/auth/auth-lib';
 import {
   auditAuth,
   validatePassword,
   getRequestMeta,
   verifyResetToken,
-} from '@/lib/password-reset';
-import { renderPasswordChangedEmail, sendEmail } from '@/lib/email';
-import { ensureTableSync } from '@/lib/db-sync';
+} from '@/core/auth/password-reset';
+import { renderPasswordChangedEmail, sendEmail } from '@/core/email/email';
+import { ensureTableSync } from '@/core/database/db-sync';
 
 export const dynamic = 'force-dynamic';
 

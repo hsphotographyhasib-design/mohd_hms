@@ -8,7 +8,7 @@
 import { NextResponse } from 'next/server';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
-import { getSupabaseAdmin } from '@/lib/supabase';
+import { getSupabaseAdmin } from '@/core/database/supabase';
 
 export const dynamic = 'force-dynamic';
 

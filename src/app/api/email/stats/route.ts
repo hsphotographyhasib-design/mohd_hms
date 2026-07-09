@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getEmailStats, getQueueStatus } from '@/lib/email-service';
-import { verifyToken } from '@/lib/auth';
+import { getEmailStats, getQueueStatus } from '@/core/email/service';
+import { verifyToken } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 

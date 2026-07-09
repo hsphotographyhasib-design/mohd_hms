@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { buildAuthContext, canAccessComplaint, logComplaintAccessDenied } from '@/lib/rbac';
+import { db } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { buildAuthContext, canAccessComplaint, logComplaintAccessDenied } from '@/core/permissions/rbac';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getActiveProvider, isBrevoConfigured } from '@/lib/email-service/providers';
-import { verifyToken } from '@/lib/auth';
+import { getActiveProvider, isBrevoConfigured } from '@/core/email/service/providers';
+import { verifyToken } from '@/core/auth/auth-lib';
 export const dynamic = 'force-dynamic';
 
 interface SmtpCheckResult {
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
     // Get queue status
     let queueSize = 0;
     try {
-      const { getQueueStatus } = await import('@/lib/email-service');
+      const { getQueueStatus } = await import('@/core/email/service');
       const qs = getQueueStatus();
       queueSize = qs.size;
     } catch {}
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
     let lastEmailSent: string | null;
     let avgDeliveryMs = 0;
     try {
-      const { getEmailStats } = await import('@/lib/email-service');
+      const { getEmailStats } = await import('@/core/email/service');
       const stats = await getEmailStats('default');
       lastEmailSent = stats.totalSent > 0 ? 'Recently delivered' : 'Never';
       avgDeliveryMs = 0;

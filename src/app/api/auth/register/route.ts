@@ -25,8 +25,8 @@ export async function POST(request: NextRequest) {
   }
 
   // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
-  const { db, withRetry, getDbFriendlyMessage } = await import('@/lib/db');
-  const { hashPassword, generateToken } = await import('@/lib/auth');
+  const { db, withRetry, getDbFriendlyMessage } = await import('@/core/database/db');
+  const { hashPassword, generateToken } = await import('@/core/auth/auth-lib');
 
   let name: string; let email: string; let password: string; let role: string;
   try {

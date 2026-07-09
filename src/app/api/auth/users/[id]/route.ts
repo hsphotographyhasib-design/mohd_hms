@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
+import { db, withRetry, getDbFriendlyMessage } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 

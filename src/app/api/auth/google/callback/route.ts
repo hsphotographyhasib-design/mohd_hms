@@ -116,8 +116,8 @@ export async function GET(request: NextRequest) {
 
   // ── Local dev: handle token exchange locally ───────────────────────────
   try {
-    const { db, withRetry, getDbFriendlyMessage } = await import('@/lib/db');
-    const { generateToken } = await import('@/lib/auth');
+    const { db, withRetry, getDbFriendlyMessage } = await import('@/core/database/db');
+    const { generateToken } = await import('@/core/auth/auth-lib');
 
     const clientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
 
@@ -327,7 +327,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('[Google OAuth Callback] Unexpected error:', error);
-    const { getDbFriendlyMessage: gfm } = await import('@/lib/db');
+    const { getDbFriendlyMessage: gfm } = await import('@/core/database/db');
     return redirectToAppWithError(origin, gfm(error));
   }
 }

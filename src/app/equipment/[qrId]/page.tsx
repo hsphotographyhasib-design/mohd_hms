@@ -14,15 +14,15 @@ import {
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Separator } from '@/components/ui/separator';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
+import { Badge } from '@/shared/ui/badge';
+import { Skeleton } from '@/shared/ui/skeleton';
+import { Separator } from '@/shared/ui/separator';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import { Textarea } from '@/shared/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 

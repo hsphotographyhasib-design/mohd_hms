@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { hashPassword, generateAssetNumber, generateInvoiceNumber, generatePONumber, generateCustomerNumber, verifyToken } from '@/lib/auth';
+import { db } from '@/core/database/db';
+import { hashPassword, generateAssetNumber, generateInvoiceNumber, generatePONumber, generateCustomerNumber, verifyToken } from '@/core/auth/auth-lib';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {

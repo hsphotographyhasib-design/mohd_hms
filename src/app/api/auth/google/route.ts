@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { OAuth2Client } from 'google-auth-library';
-import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
-import { generateToken } from '@/lib/auth';
+import { db, withRetry, getDbFriendlyMessage } from '@/core/database/db';
+import { generateToken } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 

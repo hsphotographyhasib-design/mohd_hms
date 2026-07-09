@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAuth } from '@/lib/auth';
-import { setRuntimeApiKey, getBrevoApiKey, isRuntimeKeyConfigured } from '@/lib/email-service/providers/brevo';
-import { refreshProviderCache, getActiveProvider } from '@/lib/email-service/providers';
+import { verifyAuth } from '@/core/auth/auth-lib';
+import { setRuntimeApiKey, getBrevoApiKey, isRuntimeKeyConfigured } from '@/core/email/service/providers/brevo';
+import { refreshProviderCache, getActiveProvider } from '@/core/email/service/providers';
 
 export const dynamic = 'force-dynamic';
 

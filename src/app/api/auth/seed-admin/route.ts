@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { verifyToken } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,7 +13,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
  */
 export async function POST(request: Request) {
   // In dev, still require auth unless there are zero super_admins
-  const { db, withRetry } = await import('@/lib/db');
+  const { db, withRetry } = await import('@/core/database/db');
   try {
     const existing = await withRetry(() => db.user.findFirst({ where: { role: 'super_admin' } }), { label: 'seed-check' });
     if (existing) {
@@ -63,7 +63,7 @@ export async function POST(request: Request) {
 
   // Local dev
   try {
-    const { hashPassword } = await import('@/lib/auth');
+    const { hashPassword } = await import('@/core/auth/auth-lib');
     const adminEmail = process.env.SEED_ADMIN_EMAIL || 'admin@mohd.com';
     const adminPassword = process.env.SEED_ADMIN_PASSWORD || ('seed_' + Math.random().toString(36).slice(2, 10));
 

@@ -3,7 +3,7 @@
 import { useRef, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2, Mail, ShieldCheck } from 'lucide-react';
-import { AuthShell } from '@/components/auth/auth-shell';
+import { AuthShell } from '@/core/auth/components/auth-shell';
 
 type State = 'idle' | 'sending' | 'sent' | 'oauth' | 'error';
 

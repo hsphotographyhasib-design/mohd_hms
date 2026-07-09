@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const { supabaseDb } = await import('@/lib/supabase-db');
+    const { supabaseDb } = await import('@/core/database/supabase-db');
     const users = await supabaseDb.user.findMany({
       where: { tenantId: 'tenant_default_001' },
       take: 3,

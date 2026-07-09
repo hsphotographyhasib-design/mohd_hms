@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { updateEmailStatus } from '@/lib/email-service';
+import { updateEmailStatus } from '@/core/email/service';
 
 export const dynamic = 'force-dynamic';
 

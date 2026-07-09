@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db, getDbFriendlyMessage } from '@/lib/db';
+import { db, getDbFriendlyMessage } from '@/core/database/db';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 export const dynamic = 'force-dynamic';

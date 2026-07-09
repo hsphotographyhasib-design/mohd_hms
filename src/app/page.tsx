@@ -3,21 +3,21 @@
 import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import dynamic from 'next/dynamic';
 import { Building2 } from 'lucide-react';
-import { useAuthStore } from '@/store';
-import type { AuthUser } from '@/types';
-import { useNotificationStore } from '@/lib/notifications/store';
-import { LoginView } from '@/components/app/login-view';
-import { AppShell } from '@/components/app/app-shell';
-import { AuthGuard } from '@/components/session/auth-guard';
-import { IdleTimerProvider } from '@/components/session/idle-timer';
-import { SessionProvider } from '@/components/session/session-provider';
-import { NotificationProvider } from '@/components/notifications/notification-provider';
-import { ConfirmProvider } from '@/components/ui/confirm-provider';
-import { QueryProvider } from '@/components/providers/query-provider';
-import { setupFetchInterceptor } from '@/hooks/use-secure-fetch';
-import { useNotificationPolling } from '@/hooks/use-notification-polling';
-import { useFcm } from '@/hooks/use-fcm';
-import { NotificationPermissionBanner } from '@/components/notifications/notification-permission';
+import { useAuthStore } from '@/app-shell/store';
+import type { AuthUser } from '@/core/types';
+import { useNotificationStore } from '@/modules/notifications/services/store';
+import { LoginView } from '@/app-shell/login-view';
+import { AppShell } from '@/app-shell/app-shell';
+import { AuthGuard } from '@/core/auth/session/auth-guard';
+import { IdleTimerProvider } from '@/core/auth/session/idle-timer';
+import { SessionProvider } from '@/core/auth/session/session-provider';
+import { NotificationProvider } from '@/modules/notifications/components/ui/notification-provider';
+import { ConfirmProvider } from '@/shared/ui/confirm-provider';
+import { QueryProvider } from '@/app-shell/providers/query-provider';
+import { setupFetchInterceptor } from '@/shared/hooks/use-secure-fetch';
+import { useNotificationPolling } from '@/modules/notifications/hooks/use-notification-polling';
+import { useFcm } from '@/core/firebase/hooks/use-fcm';
+import { NotificationPermissionBanner } from '@/modules/notifications/components/ui/notification-permission';
 
 const emptySubscribe = () => () => {};
 
@@ -72,7 +72,7 @@ function ProtectedApp() {
 
 // Dynamic import — landing CSS/JS only loaded when user is NOT authenticated
 const LandingHome = dynamic(
-  () => import('@/components/landing/landing-home').then(mod => ({ default: mod.LandingHome })),
+  () => import('@/landing/components/landing-home').then(mod => ({ default: mod.LandingHome })),
   { ssr: false }
 );
 

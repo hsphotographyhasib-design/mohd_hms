@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry } from '@/lib/db';
+import { db, withRetry } from '@/core/database/db';
 import {
   OTP_MAX_ATTEMPTS,
   RESET_TOKEN_TTL_SECONDS,
@@ -8,8 +8,8 @@ import {
   getRequestMeta,
   signResetToken,
   verifyOtp,
-} from '@/lib/password-reset';
-import { ensureTableSync } from '@/lib/db-sync';
+} from '@/core/auth/password-reset';
+import { ensureTableSync } from '@/core/database/db-sync';
 
 export const dynamic = 'force-dynamic';
 

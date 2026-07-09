@@ -25,8 +25,8 @@ export async function PUT(request: NextRequest) {
 
   // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
   try {
-    const { db } = await import('@/lib/db');
-    const { verifyToken } = await import('@/lib/auth');
+    const { db } = await import('@/core/database/db');
+    const { verifyToken } = await import('@/core/auth/auth-lib');
 
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');

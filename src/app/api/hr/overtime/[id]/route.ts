@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyAuth } from '@/lib/auth';
-import { getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
+import { db } from '@/core/database/db';
+import { verifyAuth } from '@/core/auth/auth-lib';
+import { getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
 export const dynamic = 'force-dynamic';
 
 export async function PUT(

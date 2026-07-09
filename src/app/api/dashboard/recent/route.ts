@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { buildDashboardScope } from '@/lib/dashboard-scope';
+import { db, getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { buildDashboardScope } from '@/modules/dashboard/services/dashboard-scope';
 
 export const dynamic = 'force-dynamic';
 

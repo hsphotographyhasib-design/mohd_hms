@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { generateToken } from '@/lib/auth';
+import { db } from '@/core/database/db';
+import { generateToken } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 

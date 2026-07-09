@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry } from '@/lib/db';
-import { auditAuth, getRequestMeta, hashResetToken } from '@/lib/password-reset';
+import { db, withRetry } from '@/core/database/db';
+import { auditAuth, getRequestMeta, hashResetToken } from '@/core/auth/password-reset';
 
 export const dynamic = 'force-dynamic';
 

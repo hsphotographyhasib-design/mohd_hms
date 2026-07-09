@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
+import { verifyToken } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,7 +31,7 @@ export async function GET(request: Request) {
   let dbStatus = 'not attempted';
   let dbError: string | null = null;
   try {
-    const { db } = await import('@/lib/db');
+    const { db } = await import('@/core/database/db');
     await db.$queryRaw`SELECT 1 as ok`;
     dbStatus = 'connected';
   } catch (err) {

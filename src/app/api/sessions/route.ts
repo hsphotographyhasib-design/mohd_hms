@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/lib/db';
-import { verifyAuth, generateSessionToken, generateRefreshToken } from '@/lib/auth';
+import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
+import { verifyAuth, generateSessionToken, generateRefreshToken } from '@/core/auth/auth-lib';
 import { randomUUID } from 'node:crypto';
 
 export const dynamic = 'force-dynamic';

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { hashPassword, generateToken } from '@/lib/auth';
-import { sendEmail, renderWelcomeEmail } from '@/lib/email';
+import { db, withRetry, getDbFriendlyMessage } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { hashPassword, generateToken } from '@/core/auth/auth-lib';
+import { sendEmail, renderWelcomeEmail } from '@/core/email/email';
 
 export const dynamic = 'force-dynamic';
 

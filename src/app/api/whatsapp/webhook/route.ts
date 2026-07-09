@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { processIncomingMessage } from '@/lib/whatsapp/conversation-engine';
+import { db } from '@/core/database/db';
+import { processIncomingMessage } from '@/core/whatsapp/engine/conversation-engine';
 export const dynamic = 'force-dynamic';
 
 // POST — Receive incoming WhatsApp message (no auth — external callback)

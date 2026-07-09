@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import * as T from '@/lib/email-service/templates';
-import { verifyToken } from '@/lib/auth';
+import * as T from '@/core/email/service/templates';
+import { verifyToken } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 

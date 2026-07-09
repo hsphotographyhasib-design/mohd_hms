@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
-import { ESCALATION_RULES } from '@/lib/workflow/escalation-rules';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { ESCALATION_RULES } from '@/core/workflow/escalation-rules';
 export const dynamic = 'force-dynamic';
 
 // ── GET: Return configured escalation rules (read-only) ───────────────────

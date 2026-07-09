@@ -27,8 +27,8 @@ export async function POST(request: NextRequest) {
 
   // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
   try {
-    const { db, withRetry, getDbFriendlyMessage, getErrorHeaders } = await import('@/lib/db');
-    const { verifyPassword, generateToken } = await import('@/lib/auth');
+    const { db, withRetry, getDbFriendlyMessage, getErrorHeaders } = await import('@/core/database/db');
+    const { verifyPassword, generateToken } = await import('@/core/auth/auth-lib');
 
     const { email, password } = await request.json();
 
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       },
     });
   } catch (error) {
-    const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/lib/db');
+    const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/core/database/db');
     return NextResponse.json({ error: gfm(error) }, { status: 500, headers: geh(error) });
   }
 }

@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { ensureTableSync } from '@/lib/db-sync';
+import { db } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { ensureTableSync } from '@/core/database/db-sync';
 export const dynamic = 'force-dynamic';
 
 /**

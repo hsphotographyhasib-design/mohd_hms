@@ -1,0 +1,246 @@
+import { create } from 'zustand';
+import type { AuthUser, UserRole, AppView } from '@/core/types';
+import { markLoginTime } from '@/shared/hooks/use-secure-fetch';
+
+// NOTE: JWT operations are server-only in @/core/auth/auth-lib.ts.
+// This constant is NOT used for actual token verification.
+
+/** Normalize user role to lowercase to match UserRole type union */
+function normalizeUser(raw: AuthUser): AuthUser {
+  return { ...raw, role: (raw.role as string).toLowerCase() as UserRole };
+}
+
+interface AuthState {
+  user: AuthUser | null;
+  token: string | null;
+  isAuthenticated: boolean;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  register: (data: { name: string; email: string; password: string; role: string }) => Promise<void>;
+  loginWithGoogle: (googleToken: string) => Promise<void>;
+  loginWithWhatsApp: (user: AuthUser, accessToken: string, refreshToken: string) => void;
+  logout: () => void;
+  secureLogout: (reason?: string) => void;
+  updateProfile: (data: Partial<AuthUser>) => void;
+  loadFromStorage: () => void;
+}
+
+export const useAuthStore = create<AuthState>((set, get) => ({
+  user: null,
+  token: null,
+  isAuthenticated: false,
+  isLoading: false,
+
+  login: async (email: string, password: string) => {
+    set({ isLoading: true });
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Login failed');
+      localStorage.setItem('cmms_token', data.token);
+      localStorage.setItem('cmms_user', JSON.stringify(data.user));
+      set({ user: normalizeUser(data.user), token: data.token, isAuthenticated: true, isLoading: false });
+      markLoginTime(); // Start grace period — ignore 401s for 5s
+      // Push history state for back button protection
+      window.history.pushState(null, '', '/');
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+  register: async (data: { name: string; email: string; password: string; role: string }) => {
+    set({ isLoading: true });
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Registration failed');
+      localStorage.setItem('cmms_token', result.token);
+      localStorage.setItem('cmms_user', JSON.stringify(result.user));
+      set({ user: normalizeUser(result.user), token: result.token, isAuthenticated: true, isLoading: false });
+      markLoginTime();
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+  loginWithGoogle: async (googleToken: string) => {
+    set({ isLoading: true });
+    try {
+      const res = await fetch('/api/auth/google', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: googleToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Google sign-in failed');
+      localStorage.setItem('cmms_token', data.token);
+      localStorage.setItem('cmms_user', JSON.stringify(data.user));
+      set({ user: normalizeUser(data.user), token: data.token, isAuthenticated: true, isLoading: false });
+      markLoginTime();
+      window.history.pushState(null, '', '/');
+      window.dispatchEvent(
+        new CustomEvent('cmms:toast', { detail: { type: 'success', message: `Welcome, ${data.user.name}!` } }),
+      );
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
+  },
+
+  logout: () => {
+    // Clear ALL storage (tokens, cache, role info, notification cache)
+    localStorage.clear();
+    sessionStorage.clear();
+    // Reset auth state
+    set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+    // Reset app view to landing page
+    useAppStore.getState().setView('dashboard');
+  },
+
+  /** Secure logout with broadcast + history protection */
+  secureLogout: (reason?: string) => {
+    // Broadcast to other tabs
+    try {
+      const channel = new BroadcastChannel('cmms-logout');
+      channel.postMessage({ type: 'LOGOUT', reason });
+      channel.close();
+    } catch {
+      // Fallback
+      localStorage.setItem('cmms_logout_broadcast', JSON.stringify({ type: 'LOGOUT', reason, timestamp: Date.now() }));
+      setTimeout(() => localStorage.removeItem('cmms_logout_broadcast'), 100);
+    }
+    // Clear everything
+    localStorage.clear();
+    sessionStorage.clear();
+    set({ user: null, token: null, isAuthenticated: false, isLoading: false });
+    useAppStore.getState().setView('dashboard');
+    // Prevent back button
+    window.history.replaceState(null, '', '/');
+    // Toast notification
+    if (reason) {
+      window.dispatchEvent(new CustomEvent('cmms:toast', { detail: { type: 'info', message: reason } }));
+    }
+  },
+
+  updateProfile: (data: Partial<AuthUser>) => {
+    const currentUser = get().user;
+    if (currentUser) {
+      const updated = normalizeUser({ ...currentUser, ...data });
+      localStorage.setItem('cmms_user', JSON.stringify(updated));
+      set({ user: updated });
+    }
+  },
+
+  loginWithWhatsApp: (user: AuthUser, accessToken: string, refreshToken: string) => {
+    localStorage.setItem('cmms_token', accessToken);
+    localStorage.setItem('cmms_refresh_token', refreshToken);
+    localStorage.setItem('cmms_user', JSON.stringify(user));
+    set({ user: normalizeUser(user), token: accessToken, isAuthenticated: true, isLoading: false });
+    markLoginTime();
+    window.history.pushState(null, '', '/');
+    window.dispatchEvent(
+      new CustomEvent('cmms:toast', { detail: { type: 'success', message: 'Welcome back!' } }),
+    );
+  },
+
+  loadFromStorage: () => {
+    const token = localStorage.getItem('cmms_token');
+    const userStr = localStorage.getItem('cmms_user');
+    if (token && userStr) {
+      try {
+        const user = normalizeUser(JSON.parse(userStr) as AuthUser);
+        set({ user, token, isAuthenticated: true });
+      } catch {
+        localStorage.removeItem('cmms_token');
+        localStorage.removeItem('cmms_user');
+      }
+    }
+  },
+}));
+
+// ============ APP STATE ============
+
+interface AppState {
+  currentView: AppView;
+  viewParams: Record<string, string>;
+  searchOpen: boolean;
+  quickActionsOpen: boolean;
+  notificationPanelOpen: boolean;
+  setView: (view: AppView, params?: Record<string, string>) => void;
+  setSearchOpen: (open: boolean) => void;
+  setQuickActionsOpen: (open: boolean) => void;
+  setNotificationPanelOpen: (open: boolean) => void;
+}
+
+export const useAppStore = create<AppState>((set) => ({
+  currentView: 'dashboard',
+  viewParams: {},
+  searchOpen: false,
+  quickActionsOpen: false,
+  notificationPanelOpen: false,
+  setView: (view, params = {}) => set({ currentView: view, viewParams: params }),
+  setSearchOpen: (open) => set({ searchOpen: open }),
+  setQuickActionsOpen: (open) => set({ quickActionsOpen: open }),
+  setNotificationPanelOpen: (open) => set({ notificationPanelOpen: open }),
+}));
+
+// ============ PERMISSIONS HELPER ============
+
+const ROLE_HIERARCHY: Record<UserRole, number> = {
+  super_admin: 100,
+  admin: 90,
+  manager: 80,
+  supervisor: 70,
+  finance: 60,
+  technician: 50,
+  vendor: 30,
+  customer: 10,
+  guest: 5,
+};
+
+export function hasPermission(userRole: UserRole, requiredRoles: UserRole[]): boolean {
+  if (requiredRoles.length === 0) return true;
+  return requiredRoles.includes(userRole);
+}
+
+export function hasMinRole(userRole: UserRole, minRole: UserRole): boolean {
+  return ROLE_HIERARCHY[userRole] >= ROLE_HIERARCHY[minRole];
+}
+
+export function canAccess(userRole: UserRole, feature: string): boolean {
+  const permissions: Record<string, UserRole[]> = {
+    dashboard: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
+    equipment: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
+    complaints: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
+    'work-orders': ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
+    invoices: ['super_admin', 'admin', 'manager', 'finance', 'customer'],
+    pm: ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
+    quotations: ['super_admin', 'admin', 'manager', 'customer'],
+    inventory: ['super_admin', 'admin', 'manager', 'supervisor'],
+    customers: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
+    employees: ['super_admin', 'admin', 'manager'],
+    technicians: ['super_admin', 'admin', 'manager', 'supervisor'],
+    purchases: ['super_admin', 'admin', 'manager'],
+    vehicles: ['super_admin', 'admin', 'manager'],
+    finance: ['super_admin', 'admin', 'manager', 'finance'],
+    reports: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
+    notifications: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
+    settings: ['super_admin', 'admin'],
+    'user-management': ['super_admin', 'admin'],
+    cms: ['super_admin', 'admin'],
+    whatsapp: ['super_admin', 'admin', 'manager', 'supervisor'],
+    email: ['super_admin', 'admin'],
+    hr: ['super_admin', 'admin', 'manager', 'supervisor'],
+  };
+  return (permissions[feature] || []).includes(userRole);
+}

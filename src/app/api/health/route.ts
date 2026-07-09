@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { env } from '@/lib/env';
-import { isFcmAdminConfigured } from '@/lib/fcm-admin';
-import { db } from '@/lib/db';
+import { env } from '@/core/config/env-lib';
+import { isFcmAdminConfigured } from '@/core/firebase/fcm-admin';
+import { db } from '@/core/database/db';
 
 export const dynamic = 'force-dynamic';
 

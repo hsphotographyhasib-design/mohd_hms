@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/lib/auth';
-import { waManager } from '@/lib/whatsapp-service/manager';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { waManager } from '@/core/whatsapp/service/manager';
 export const dynamic = 'force-dynamic';
 
 // POST - Connect/Disconnect/Reconnect/GetQR/SendTest
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const action = body.action as string || 'connect';
 
-    const { db } = await import('@/lib/db');
+    const { db } = await import('@/core/database/db');
 
     switch (action) {
       case 'connect': {
@@ -137,7 +137,7 @@ export async function GET(req: NextRequest) {
                             'DISCONNECTED';
 
     // Get DB config
-    const { db } = await import('@/lib/db');
+    const { db } = await import('@/core/database/db');
     const config = await db.whatsAppConfig.findUnique({ where: { tenantId } });
 
     // Get today's message stats

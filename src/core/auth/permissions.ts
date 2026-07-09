@@ -1,4 +1,4 @@
-import type { UserRole } from '@/types';
+import type { UserRole } from '@/core/types';
 
 /**
  * Feature-level permission map.

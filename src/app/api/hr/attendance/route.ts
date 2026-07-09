@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAuth } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { verifyAuth } from '@/core/auth/auth-lib';
+import { db } from '@/core/database/db';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 

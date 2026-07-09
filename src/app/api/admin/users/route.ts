@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
+import { db } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
 
 /** Verify admin access from Authorization header */
 async function verifyAdmin(request: NextRequest) {

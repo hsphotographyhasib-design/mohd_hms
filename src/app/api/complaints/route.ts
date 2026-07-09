@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { ensureTableSync } from '@/lib/db-sync';
-import { buildAuthContext, buildComplaintWhereClause, canPerformAction, logComplaintAccessAllowed } from '@/lib/rbac';
-import { createNotification } from '@/lib/notifications/notification-service';
+import { db } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { ensureTableSync } from '@/core/database/db-sync';
+import { buildAuthContext, buildComplaintWhereClause, canPerformAction, logComplaintAccessAllowed } from '@/core/permissions/rbac';
+import { createNotification } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 

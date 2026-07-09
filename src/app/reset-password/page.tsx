@@ -3,8 +3,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Check, CheckCircle2, Eye, EyeOff, Loader2, X } from 'lucide-react';
-import { AuthShell } from '@/components/auth/auth-shell';
-import type { PasswordRule } from '@/lib/password-reset';
+import { AuthShell } from '@/core/auth/components/auth-shell';
+import type { PasswordRule } from '@/core/auth/password-reset';
 
 const RULES: PasswordRule[] = [
   { label: 'At least 12 characters', test: (p) => p.length >= 12 },

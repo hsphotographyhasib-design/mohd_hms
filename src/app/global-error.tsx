@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
-import { FullPageError } from '@/components/error/error-ui';
-import { logErrorToServer } from '@/lib/error-utils';
+import { FullPageError } from '@/core/errors/components/error-ui';
+import { logErrorToServer } from '@/core/errors/error-utils';
 
 /**
  * Next.js Global Error Boundary (app/global-error.tsx).

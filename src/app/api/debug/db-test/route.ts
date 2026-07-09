@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { findDatabaseUrl } from '@/lib/prisma';
+import { findDatabaseUrl } from '@/core/database/prisma';
 export const dynamic = 'force-dynamic';
 
 /**
@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
  * USAGE: Visit /api/debug/db-test on your deployment to diagnose DB issues.
  * No authentication required — intended for debugging only.
  *
- * IMPORTANT: This endpoint does NOT import `db` from '@/lib/db' to avoid
+ * IMPORTANT: This endpoint does NOT import `db` from '@/core/database/db' to avoid
  * triggering PrismaClient initialization. Instead, it creates a minimal
  * test connection directly.
  */
@@ -70,7 +70,7 @@ export async function GET() {
   const startTime = performance.now();
   try {
     // Dynamic import to avoid issues with module-level initialization
-    const { db } = await import('@/lib/db');
+    const { db } = await import('@/core/database/db');
     const testResult = await db.$queryRaw<{ one: number }[]>`SELECT 1 AS one`;
     const latency = Math.round(performance.now() - startTime);
 
@@ -103,7 +103,7 @@ export async function GET() {
   // --- Step 6: If query failed, try schema test with raw error ---
   if (queryError) {
     try {
-      const { db } = await import('@/lib/db');
+      const { db } = await import('@/core/database/db');
       const count = await db.tenant.count();
       result.schemaTest = {
         success: true,
@@ -124,7 +124,7 @@ export async function GET() {
   } else {
     // Query succeeded, test schema
     try {
-      const { db } = await import('@/lib/db');
+      const { db } = await import('@/core/database/db');
       const count = await db.tenant.count();
       result.schemaTest = {
         success: true,

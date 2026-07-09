@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken, generateInvoiceNumber } from '@/lib/auth';
-import { notifyInvoiceCreated } from '@/lib/notifications/notification-service';
+import { db } from '@/core/database/db';
+import { verifyToken, generateInvoiceNumber } from '@/core/auth/auth-lib';
+import { notifyInvoiceCreated } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 

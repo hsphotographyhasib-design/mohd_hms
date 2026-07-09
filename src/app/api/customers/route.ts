@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken, generateCustomerNumber } from '@/lib/auth';
-import { ensureTableSync } from '@/lib/db-sync';
+import { db } from '@/core/database/db';
+import { verifyToken, generateCustomerNumber } from '@/core/auth/auth-lib';
+import { ensureTableSync } from '@/core/database/db-sync';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 

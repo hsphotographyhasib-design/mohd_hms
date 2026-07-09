@@ -22,10 +22,10 @@ export async function GET(request: NextRequest) {
 
   // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
   try {
-    const { db, getDbFriendlyMessage, getErrorHeaders } = await import('@/lib/db');
-    const { verifyToken } = await import('@/lib/auth');
-    const { buildAuthContext, buildComplaintWhereClause } = await import('@/lib/rbac');
-    const { ensureAllTablesSynced } = await import('@/lib/db-sync');
+    const { db, getDbFriendlyMessage, getErrorHeaders } = await import('@/core/database/db');
+    const { verifyToken } = await import('@/core/auth/auth-lib');
+    const { buildAuthContext, buildComplaintWhereClause } = await import('@/core/permissions/rbac');
+    const { ensureAllTablesSynced } = await import('@/core/database/db-sync');
 
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
@@ -193,7 +193,7 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Dashboard DB error:', error);
-    const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/lib/db');
+    const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/core/database/db');
     return NextResponse.json({ error: gfm(error) }, { status: 500, headers: geh(error) });
   }
 }

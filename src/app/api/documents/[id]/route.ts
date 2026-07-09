@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
-import { verifyToken } from '@/lib/auth';
-import { getStorageProvider, formatFileSize } from '@/lib/storage/provider';
+import { db } from '@/core/database/db';
+import { verifyToken } from '@/core/auth/auth-lib';
+import { getStorageProvider, formatFileSize } from '@/core/storage/provider';
 
 function createAuditEntry(data: {
   tenantId: string; documentId: string; action: string; fileName: string;

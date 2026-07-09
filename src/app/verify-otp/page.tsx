@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2, RefreshCw, ShieldCheck, Clock, XCircle } from 'lucide-react';
-import { AuthShell } from '@/components/auth/auth-shell';
+import { AuthShell } from '@/core/auth/components/auth-shell';
 
 type Phase = 'entering' | 'verifying' | 'verified' | 'expired' | 'locked' | 'error';
 

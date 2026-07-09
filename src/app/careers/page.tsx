@@ -1,7 +1,7 @@
 'use client'
-import { PublicLayout } from '@/components/landing/public-layout'
-import { CareersSection } from '@/components/landing/sections'
-import { useAuthStore } from '@/store'
+import { PublicLayout } from '@/landing/components/public-layout'
+import { CareersSection } from '@/landing/components/sections'
+import { useAuthStore } from '@/app-shell/store'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 

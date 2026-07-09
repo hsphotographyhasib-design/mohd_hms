@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db, getDbFriendlyMessage } from '@/lib/db';
+import { db, getDbFriendlyMessage } from '@/core/database/db';
 export const dynamic = 'force-dynamic';
 
 /**
