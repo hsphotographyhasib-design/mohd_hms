@@ -279,3 +279,28 @@ Stage Summary:
 - Additional cleanup fixed 6 duplicate nested directories and 9 broken import paths
 - Build now compiles successfully in ~42s with all 180+ API routes and 49 static pages
 - All changes pushed to GitHub — Vercel will auto-deploy
+---
+Task ID: 10
+Agent: Main Agent
+Task: Implement Enterprise Role-Based Popup Confirmation Notification System
+
+Work Log:
+- Explored existing notification system (93+ files across core, modules, services, hooks, UI)
+- Identified dual toast systems (Sonner + custom Zustand) and gaps in the existing architecture
+- Built server-side RBAC Role Router (role-router.ts) with 25 module.action routing rules
+- Built Enterprise Popup component (enterprise-popup.tsx) with record number, timestamp, action button, 5s auto-dismiss
+- Built unified client hook (use-notification.ts) with showSuccess/showError/showWarning/showInfo/showLoading/showDraftSaved/showPermissionDenied/update/dismiss/notifyRole/notifyUsers
+- Built 2 new API endpoints: /api/notifications/role-based and /api/notifications/enterprise-log
+- Enhanced types with 3 new notification types (processing, draft_saved, permission_denied)
+- Enhanced ClientToast with recordNumber, recordUrl, eventTimestamp, isProcessing fields
+- Updated NotificationProvider to render EnterprisePopupContainer
+- Fixed barrel export to exclude server-side services (prevents libsql/prisma in client bundle)
+- Migrated app-header.tsx and invoice-list.tsx to enterprise notifications
+- Verified: 0 lint errors, build passes (282 API routes, 44s compile)
+
+Stage Summary:
+- 4 new files created (role-router.ts, enterprise-popup.tsx, 2 API routes)
+- 5 existing files enhanced (types, store, hook, provider, barrel)
+- 2 module files migrated to enterprise notification pattern
+- Remaining ~85 modules backward-compatible with Sonner (incremental migration path)
+- Commit: 267b4af pushed to origin/main
