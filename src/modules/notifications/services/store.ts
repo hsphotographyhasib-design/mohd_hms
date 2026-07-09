@@ -42,11 +42,20 @@ export interface ClientToast {
   type: 'success' | 'error' | 'warning' | 'info';
   title: string;
   description?: string;
-  duration?: number; // ms, default 4500
+  duration?: number; // ms, default 5000
   actionLabel?: string;
   actionUrl?: string;
   persistent?: boolean;
   createdAt: number;
+  // ── Enterprise notification extensions ──
+  /** Record identifier, e.g. "CMP-2026-00125", "INV-2026-0025" */
+  recordNumber?: string;
+  /** Navigation path for the record detail page */
+  recordUrl?: string;
+  /** Timestamp of the underlying event (may differ from toast createdAt) */
+  eventTimestamp?: number;
+  /** Show a processing spinner instead of the type icon */
+  isProcessing?: boolean;
 }
 
 // Re-export NotificationSettings for provider compatibility
@@ -62,7 +71,7 @@ export interface NotificationSettings {
 // ============================================================
 
 const MAX_VISIBLE = 5;
-const DEFAULT_DURATION = 4500;
+const DEFAULT_DURATION = 5000;
 const SETTINGS_KEY = 'mohd-hms-notification-settings';
 
 let idCounter = 0;

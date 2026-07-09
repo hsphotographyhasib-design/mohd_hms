@@ -9,7 +9,7 @@ import { useFcm } from '@/core/firebase/hooks/use-fcm';
 import type { AppView, UserRole } from '@/core/types';
 import { cn } from '@/core/utils/utils';
 import { useTheme } from 'next-themes';
-import { toast } from 'sonner';
+import { useNotification } from '@/modules/notifications';
 import { getQuickActionsForView } from '@/core/constants/quick-actions-config';
 import {
   Building2,
@@ -118,6 +118,7 @@ export function AppHeader() {
   const { setView } = useAppStore();
   const { user, secureLogout } = useAuthStore();
   const currentView = useAppStore((s) => s.currentView);
+  const notify = useNotification();
   const { unreadCount, dbNotifications, markAllAsRead } = useNotificationStore();
   const { theme, setTheme } = useTheme();
   const fcm = useFcm();
@@ -247,8 +248,8 @@ export function AppHeader() {
   const handleLanguageToggle = useCallback(() => {
     const next = lang === 'EN' ? 'MS' : 'EN';
     setLang(next);
-    toast.info(`Language switched to ${next === 'EN' ? 'English' : 'Bahasa Melayu'}`);
-  }, [lang]);
+    notify.showInfo(`Language switched to ${next === 'EN' ? 'English' : 'Bahasa Melayu'}`);
+  }, [lang, notify]);
 
   // ---- Don't render if no user ----
   if (!user) return null;
@@ -374,7 +375,7 @@ export function AppHeader() {
               variant="ghost"
               size="icon"
               className="h-9 w-9 text-muted-foreground hover:text-emerald-600 dark:hover:text-emerald-400"
-              onClick={() => toast.info('QR Scanner opened')}
+              onClick={() => notify.showInfo('QR Scanner opened')}
               aria-label="QR Scanner"
             >
               <QrCode className="h-[18px] w-[18px]" />

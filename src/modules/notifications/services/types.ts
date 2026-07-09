@@ -2,7 +2,9 @@
  * Enterprise Notification System — Types
  */
 
-export type NotificationType = 'success' | 'error' | 'warning' | 'info' | 'loading' | 'progress';
+export type NotificationType =
+  | 'success' | 'error' | 'warning' | 'info' | 'loading' | 'progress'
+  | 'processing' | 'draft_saved' | 'permission_denied';
 
 export type NotificationModule =
   | 'auth' | 'dashboard' | 'complaints' | 'work-orders' | 'pm'
@@ -116,5 +118,29 @@ export const NOTIFICATION_CONFIG: Record<NotificationType, {
     textClass: 'text-blue-800 dark:text-blue-200',
     iconBgClass: 'bg-blue-100 dark:bg-blue-900/60',
     ariaLabel: 'Progress',
+  },
+  processing: {
+    icon: 'Loader2',
+    bgClass: 'bg-blue-50 dark:bg-blue-950/40',
+    borderClass: 'border-blue-200 dark:border-blue-800',
+    textClass: 'text-blue-800 dark:text-blue-200',
+    iconBgClass: 'bg-blue-100 dark:bg-blue-900/60',
+    ariaLabel: 'Processing',
+  },
+  draft_saved: {
+    icon: 'BookmarkCheck',
+    bgClass: 'bg-blue-50 dark:bg-blue-950/40',
+    borderClass: 'border-blue-200 dark:border-blue-800',
+    textClass: 'text-blue-800 dark:text-blue-200',
+    iconBgClass: 'bg-blue-100 dark:bg-blue-900/60',
+    ariaLabel: 'Draft Saved',
+  },
+  permission_denied: {
+    icon: 'ShieldX',
+    bgClass: 'bg-red-50 dark:bg-red-950/40',
+    borderClass: 'border-red-200 dark:border-red-800',
+    textClass: 'text-red-800 dark:text-red-200',
+    iconBgClass: 'bg-red-100 dark:bg-red-900/60',
+    ariaLabel: 'Permission Denied',
   },
 };

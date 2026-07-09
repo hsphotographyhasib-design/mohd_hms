@@ -10,13 +10,22 @@ export {
   NotificationToast,
   NotificationContainer,
 } from './components/ui/notification-toast';
+export {
+  EnterprisePopup,
+  EnterprisePopupContainer,
+  isEnterpriseToast,
+} from './components/ui/enterprise-popup';
+export type { EnterpriseToast } from './components/ui/enterprise-popup';
 export { NotificationProvider } from './components/ui/notification-provider';
 
 // ─── Hooks ────────────────────────────────────────────────────────────────────
 export { useNotification } from './hooks/use-notification';
 export { useNotificationPolling } from './hooks/use-notification-polling';
 
-// ─── Services ─────────────────────────────────────────────────────────────────
+// ─── Services (client-safe only) ──────────────────────────────────────────
+// NOTE: Server-side services (notification-service, role-router) are imported
+// directly by API routes — NOT re-exported here to prevent native modules
+// (libsql, prisma) from leaking into the client bundle.
 export {
   type RealtimeNotification,
   realtimeNotificationStore,
@@ -32,19 +41,20 @@ export {
   type NotificationSettings as NotificationStoreSettings,
   useNotificationStore,
 } from './services/store';
-export {
-  type NotificationType as ServiceNotificationType,
-  type NotificationPriority,
-  type CreateNotificationInput,
-  type NotificationRecord,
-  createNotification,
-  createNotifications,
-  notifyComplaintAssigned,
-  notifyComplaintStatusChange,
-  notifyWorkOrderCreated,
-  notifyInvoiceCreated,
-  notifyLowStock,
+// Server-side types (safe to re-export as type-only)
+export type {
+  NotificationType as ServiceNotificationType,
+  NotificationPriority,
+  CreateNotificationInput,
+  NotificationRecord,
 } from './services/notification-service';
+export type {
+  NotificationEventKey,
+  RecipientContext,
+  ResolveRecipientsParams,
+  SendRoleBasedNotificationParams,
+  LogNotificationEventParams,
+} from './services/role-router';
 export {
   type NotificationType,
   type NotificationModule,

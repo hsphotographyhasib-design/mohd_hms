@@ -1,13 +1,13 @@
 'use client';
 
 import React from 'react';
-import { NotificationContainer } from './notification-toast';
+import { EnterprisePopupContainer } from './enterprise-popup';
 import { useNotificationStore } from '@/modules/notifications/services/store';
 
 /**
  * Global Notification Provider.
  * Place this once in the app tree (inside page.tsx, above AppShell).
- * Renders the floating notification container (toast popups).
+ * Renders the floating enterprise notification container (popup toasts).
  *
  * The notification bell/dropdown is now rendered in the Header component directly.
  */
@@ -26,7 +26,7 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
   return (
     <>
       {children}
-      <NotificationContainer />
+      <EnterprisePopupContainer />
     </>
   );
 }

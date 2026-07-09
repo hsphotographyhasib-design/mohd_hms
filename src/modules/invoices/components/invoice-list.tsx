@@ -20,11 +20,12 @@ import { Textarea } from '@/shared/ui/textarea';
 import {
   Plus, Search, Receipt, Eye, Loader2, ChevronLeft, ChevronRight, Trash2,
 } from 'lucide-react';
-import { toast } from 'sonner';
+import { useNotification } from '@/modules/notifications';
 import { useAppStore } from '@/app-shell/store';
 import type { InvoiceItem, PaginatedResponse, SelectOption } from '@/core/types';
 
 function StatusBadge({ status }: { status: string }) {
+const notify = useNotification();
   const v: Record<string, string> = {
     OPEN: 'bg-amber-100 text-amber-800', ASSIGNED: 'bg-sky-100 text-sky-800',
     IN_PROGRESS: 'bg-purple-100 text-purple-800', RESOLVED: 'bg-emerald-100 text-emerald-800',
@@ -65,7 +66,7 @@ export function InvoiceList() {
       const res = await fetch(`/api/invoices?${params}`, { headers: { Authorization: `Bearer ${token()}` } });
       const json = await res.json();
       setData(json);
-    } catch { toast.error('Failed to load invoices'); }
+    } catch { notify.showError('Failed to load invoices'); }
     finally { setLoading(false); }
   }, [page, search, statusFilter]);
 
@@ -90,9 +91,9 @@ export function InvoiceList() {
   };
 
   const handleSubmit = async () => {
-    if (!form.title || !form.customerId) { toast.error('Title and customer are required'); return; }
+    if (!form.title || !form.customerId) { notify.showError('Title and customer are required'); return; }
     const validItems = form.items.filter((it) => it.description && it.amount);
-    if (validItems.length === 0) { toast.error('Add at least one line item'); return; }
+    if (validItems.length === 0) { notify.showError('Add at least one line item'); return; }
     setSubmitting(true);
     try {
       const subtotal = validItems.reduce((s, it) => s + parseFloat(it.amount || '0'), 0);
@@ -104,11 +105,11 @@ export function InvoiceList() {
         body: JSON.stringify({ ...form, items: JSON.stringify(validItems), subtotal, tax, total }),
       });
       if (!res.ok) throw new Error();
-      toast.success('Invoice created');
+      notify.showSuccess('Invoice created');
       setDialogOpen(false);
       setForm({ customerId: '', title: '', description: '', dueDate: '', items: [{ description: '', amount: '' }] });
       fetchData();
-    } catch { toast.error('Failed to create invoice'); }
+    } catch { notify.showError('Failed to create invoice'); }
     finally { setSubmitting(false); }
   };
 
