@@ -32,11 +32,16 @@ function findDatabaseUrl(): string {
     }
   }
 
-  console.error(
-    "[prisma.config] FATAL: No DATABASE_URL found. " +
-    "Set DATABASE_URL to a SQLite path (file:/path/db.sqlite) or PostgreSQL URL."
+  // Vercel encrypted env vars (mohd_hms_DATABASE_URL etc.) don't match the
+  // patterns above.  Fall back to a dummy SQLite URL so that `prisma generate`
+  // can still succeed — the actual DB is accessed at runtime via the Supabase
+  // REST adapter, not through Prisma's generated client.
+  console.warn(
+    "[prisma.config] WARNING: No standard DATABASE_URL found. " +
+    "Using a placeholder so prisma generate can proceed. " +
+    "Runtime DB access uses the Supabase REST adapter."
   );
-  return "";
+  return "file:./placeholder.db";
 }
 
 export default defineConfig({
