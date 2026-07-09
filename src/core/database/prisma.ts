@@ -37,7 +37,7 @@ let _cachedClient: any = undefined;
 function _createClient(): any {
   // Dynamic imports to avoid loading SQLite adapter at module level
   // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { PrismaClient } = require("../../generated/prisma/client");
+  const { PrismaClient } = require("../../../generated/prisma/client");
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const { PrismaLibSql } = require("@prisma/adapter-libsql");
 
