@@ -79,22 +79,29 @@ const nextConfig: NextConfig = {
   }),
 
   // ============================================================
-  // API PROXY — Forward /api/* to Render backend in production
+  // API PROXY — Forward unmatched /api/* to Render backend
   // ============================================================
   // In development, API routes run locally via Next.js.
-  // In production (Vercel), ALL /api/ requests are proxied to the
-  // Render Express backend which has the real database connection.
+  // In production (Vercel), /api/ requests are FIRST checked against
+  // Next.js API route handlers. Only UNMATCHED routes are proxied
+  // to the Render Express backend (e.g. /api/complaints, /api/work-orders).
+  //
+  // Routes with Next.js handlers (e.g. /api/inventory/*, /api/auth/login,
+  // /api/service-items/*) are handled directly by Next.js using the
+  // Supabase REST adapter or by proxying to the backend explicitly.
   async rewrites() {
-    // Only proxy in production or when BACKEND_URL is explicitly set
     const backendUrl = process.env.BACKEND_URL;
     if (process.env.NODE_ENV === 'production' || backendUrl) {
       const target = backendUrl || 'https://mohd-hms.onrender.com';
-      return [
-        {
-          source: '/api/:path*',
-          destination: `${target}/api/:path*`,
-        },
-      ];
+      return {
+        // afterFiles: proxy only routes NOT handled by Next.js route handlers
+        afterFiles: [
+          {
+            source: '/api/:path*',
+            destination: `${target}/api/:path*`,
+          },
+        ],
+      };
     }
     return [];
   },
