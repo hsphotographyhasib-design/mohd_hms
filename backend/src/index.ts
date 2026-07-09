@@ -127,7 +127,7 @@ process.on('SIGINT', () => {
 
 // ─── Start Server ─────────────────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`[MOHD.HMS Backend] Running on port ${PORT}`);
+  console.log(`[MOHD.HMS Backend] v2-fix (zrange byScore) — Running on port ${PORT}`);
   console.log(`[MOHD.HMS Backend] Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`[MOHD.HMS Backend] Frontend URL: ${FRONTEND_URL}`);
   console.log(`[MOHD.HMS Backend] Supabase URL: ${process.env.SUPABASE_URL || 'not configured'}`);
