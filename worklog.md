@@ -130,3 +130,31 @@ Stage Summary:
 - 4 files modified, 93 insertions, 137 deletions (net reduction - cleaner pattern)
 - Dashboard will now always work using local data when external backend has schema issues
 - Pushed to GitHub: 8741935
+---
+Task ID: 1
+Agent: Main Agent
+Task: Make Settings > System tab show real data (DB status, version, environment, record counts)
+
+Work Log:
+- Analyzed uploaded screenshot showing Settings > System tab with hardcoded values
+- Discovered SystemTab was fully hardcoded: version '1.0.0', env from process.env (unavailable client-side), DB status 'Connected', last backup as today's date
+- Created new API endpoint `/api/settings/system-info` that returns real data:
+  - Version from package.json (v0.2.0)
+  - Environment from process.env.NODE_ENV
+  - Database connectivity test via `SELECT 1` with latency measurement
+  - Database type detection (sqlite/supabase)
+  - Real record counts (customers, equipment, complaints, work orders, invoices, employees, PM schedules, inventory items)
+  - Last backup from DB file mtime (parsed from DATABASE_URL)
+- Fixed Prisma query field mismatches (Equipment/PmSchedule/InventoryItem don't have `isActive`)
+- Rewrote SystemTab component with:
+  - Fetches real data from API with auth headers
+  - Loading skeletons during fetch
+  - Database status shows green "Connected" or red "Disconnected" with latency
+  - Error message with retry button on failure
+  - New "Database Details" card with type badge and 8-column record count grid
+- Verified: ESLint clean (0 errors), API returns 401 (auth working, no 500), all Prisma queries tested with real DB
+
+Stage Summary:
+- Created: `/src/app/api/settings/system-info/route.ts`
+- Modified: `/src/modules/settings/components/settings-view.tsx` (SystemTab rewrite)
+- All values now reflect real system state instead of hardcoded placeholders

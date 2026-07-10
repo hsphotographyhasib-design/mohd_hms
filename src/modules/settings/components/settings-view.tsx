@@ -413,27 +413,185 @@ function RolesTab() {
   );
 }
 
+interface SystemInfo {
+  version: string;
+  environment: string;
+  database: {
+    status: 'Connected' | 'Disconnected';
+    type: string;
+    latencyMs: number | null;
+    error: string | null;
+  };
+  recordCounts: Record<string, number> | null;
+  lastBackup: string | null;
+  responseTime: number;
+}
+
 function SystemTab() {
+  const [info, setInfo] = useState<SystemInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchSystemInfo = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/settings/system-info', {
+        headers: { Authorization: `Bearer ${token()}` },
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data: SystemInfo = await res.json();
+      setInfo(data);
+    } catch (err: any) {
+      setError(err?.message || 'Failed to load system info');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSystemInfo();
+  }, [fetchSystemInfo]);
+
+  const dbConnected = info?.database.status === 'Connected';
+  const envLabel = info?.environment === 'production' ? 'Production' : 'Development';
+  const backupLabel = info?.lastBackup
+    ? format(new Date(info.lastBackup), 'MMM d, yyyy HH:mm')
+    : 'N/A';
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {[
-        { icon: Server, label: 'Platform Version', value: '1.0.0', color: 'text-emerald-600' },
-        { icon: Globe, label: 'Environment', value: process.env.NODE_ENV === 'production' ? 'Production' : 'Development', color: 'text-sky-600' },
-        { icon: Database, label: 'Database Status', value: 'Connected', color: 'text-emerald-600' },
-        { icon: HardDrive, label: 'Last Backup', value: format(new Date(), 'MMM d, yyyy'), color: 'text-amber-600' },
-      ].map((item) => (
-        <Card key={item.label}>
+    <div className="space-y-4">
+      {/* Core System Info Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Platform Version */}
+        <Card>
           <CardContent className="p-4 flex items-center gap-4">
             <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
-              <item.icon className={`h-5 w-5 ${item.color}`} />
+              <Server className="h-5 w-5 text-emerald-600" />
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground">{item.label}</p>
-              <p className="font-semibold">{item.value}</p>
+            <div className="min-w-0">
+              <p className="text-sm text-muted-foreground">Platform Version</p>
+              {loading && !info ? (
+                <Skeleton className="h-5 w-16 mt-0.5" />
+              ) : (
+                <p className="font-semibold">v{info?.version ?? '—'}</p>
+              )}
             </div>
           </CardContent>
         </Card>
-      ))}
+
+        {/* Environment */}
+        <Card>
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+              <Globe className="h-5 w-5 text-sky-600" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm text-muted-foreground">Environment</p>
+              {loading && !info ? (
+                <Skeleton className="h-5 w-24 mt-0.5" />
+              ) : (
+                <p className="font-semibold">{info ? envLabel : '—'}</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Database Status */}
+        <Card>
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${dbConnected ? 'bg-emerald-100' : 'bg-rose-100'}`}>
+              <Database className={`h-5 w-5 ${dbConnected ? 'text-emerald-600' : 'text-rose-600'}`} />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm text-muted-foreground">Database Status</p>
+              {loading && !info ? (
+                <Skeleton className="h-5 w-24 mt-0.5" />
+              ) : info ? (
+                <div className="flex items-center gap-2">
+                  <span className={`font-semibold ${dbConnected ? 'text-emerald-600' : 'text-rose-600'}`}>
+                    {info.database.status}
+                  </span>
+                  {info.database.latencyMs != null && dbConnected && (
+                    <span className="text-xs text-muted-foreground">({info.database.latencyMs}ms)</span>
+                  )}
+                  {info.database.error && (
+                    <span className="text-xs text-rose-500 truncate max-w-[160px]" title={info.database.error}>
+                      — {info.database.error}
+                    </span>
+                  )}
+                </div>
+              ) : (
+                <p className="font-semibold">—</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Last Backup */}
+        <Card>
+          <CardContent className="p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-xl bg-gray-100 flex items-center justify-center shrink-0">
+              <HardDrive className="h-5 w-5 text-amber-600" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm text-muted-foreground">Last Backup</p>
+              {loading && !info ? (
+                <Skeleton className="h-5 w-28 mt-0.5" />
+              ) : (
+                <p className="font-semibold">{info ? backupLabel : '—'}</p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Database Type & Record Counts */}
+      {info && !loading && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Database className="h-4 w-4 text-muted-foreground" />
+              Database Details
+              {info.database.type && (
+                <Badge variant="outline" className="text-xs font-normal">
+                  {info.database.type}
+                </Badge>
+              )}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {error ? (
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-rose-50 text-rose-700 text-sm">
+                <span>Failed to load system information.</span>
+                <Button variant="outline" size="sm" className="ml-auto h-7 text-xs" onClick={fetchSystemInfo}>
+                  Retry
+                </Button>
+              </div>
+            ) : info.recordCounts ? (
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[
+                  { label: 'Customers', value: info.recordCounts.customers },
+                  { label: 'Equipment', value: info.recordCounts.equipment },
+                  { label: 'Complaints', value: info.recordCounts.complaints },
+                  { label: 'Work Orders', value: info.recordCounts.workOrders },
+                  { label: 'Invoices', value: info.recordCounts.invoices },
+                  { label: 'Employees', value: info.recordCounts.employees },
+                  { label: 'PM Schedules', value: info.recordCounts.pmSchedules },
+                  { label: 'Inventory Items', value: info.recordCounts.inventoryItems },
+                ].map((item) => (
+                  <div key={item.label} className="rounded-lg bg-gray-50 p-3 text-center">
+                    <p className="text-2xl font-bold">{item.value ?? 0}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{item.label}</p>
+                  </div>
+                ))}
+              </div>
+            ) : !dbConnected ? (
+              <p className="text-sm text-muted-foreground">Database not connected — record counts unavailable.</p>
+            ) : null}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
