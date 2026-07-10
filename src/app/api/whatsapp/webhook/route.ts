@@ -8,23 +8,48 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
 
-    // === OpenWA format ===
-    if (body.event === 'message' || body.type === 'message') {
+    // === OpenWA v0.8+ format (event: "message.received") ===
+    // === OpenWA legacy format (event: "message" or type: "message") ===
+    if (body.event === 'message.received' || body.event === 'message' || body.type === 'message') {
       const msg = body.data || body;
       const from = msg.from || msg.chatId || '';
       const phoneNumber = from.replace(/@s\.whatsapp\.net/, '').replace(/@g\.us/, '').replace(/[^0-9+]/g, '');
       const content = msg.body || msg.text || '';
       const messageType = msg.type || 'text';
-      const mediaUrl = msg.mediaUrl || msg.fileUrl || null;
-      const mediaType = msg.mimetype || null;
+      const mediaUrl = msg.mediaUrl || msg.fileUrl || msg.url || null;
+      const mediaType = msg.mimetype || msg.mimeType || null;
       const caption = msg.caption || null;
       const providerMessageId = msg.id || msg.messageId || null;
 
-      if (!phoneNumber || !content) {
-        return NextResponse.json({ error: 'Missing from or content' }, { status: 400 });
+      // Handle media messages (image, video, audio, document, sticker)
+      const hasMedia = ['image', 'video', 'audio', 'document', 'sticker'].includes(messageType);
+      const finalContent = hasMedia && !content ? `[${messageType} message]` : content;
+
+      if (!phoneNumber) {
+        return NextResponse.json({ error: 'Missing sender' }, { status: 400 });
       }
 
-      await handleIncoming(phoneNumber, content, messageType, mediaUrl, mediaType, caption, providerMessageId, 'openwa');
+      // Skip empty text messages (e.g., reactions only)
+      if (!finalContent && !mediaUrl) {
+        return NextResponse.json({ success: true });
+      }
+
+      await handleIncoming(phoneNumber, finalContent, messageType, mediaUrl, mediaType, caption, providerMessageId, 'openwa');
+      return NextResponse.json({ success: true });
+    }
+
+    // === OpenWA v0.8+ session status events ===
+    if (body.event === 'session.status') {
+      const sessionData = body.data || body;
+      const status = sessionData.status || sessionData.state || '';
+      console.log(`[WA Webhook] Session status: ${status}`);
+      return NextResponse.json({ success: true });
+    }
+
+    // === OpenWA v0.8+ message.ack events ===
+    if (body.event === 'message.ack') {
+      const ackData = body.data || body;
+      await handleDeliveryStatus(ackData.id, ackData.ack === 2 ? 'read' : ackData.ack >= 1 ? 'delivered' : 'sent');
       return NextResponse.json({ success: true });
     }
 

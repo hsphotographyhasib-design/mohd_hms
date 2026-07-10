@@ -114,7 +114,7 @@ export function WhatsAppSettings() {
   const [activeTab, setActiveTab] = useState<'connection' | 'settings' | 'logs'>('connection');
 
   // Settings form
-  const [openwaBaseUrl, setOpenwaBaseUrl] = useState('http://localhost:3001');
+  const [openwaBaseUrl, setOpenwaBaseUrl] = useState('http://localhost:3002');
   const [openwaApiKey, setOpenwaApiKey] = useState('');
   const [openwaSession, setOpenwaSession] = useState('MOHDHMS');
   const [metaAccessToken, setMetaAccessToken] = useState('');
@@ -227,7 +227,7 @@ export function WhatsAppSettings() {
         if (res.ok) {
           const d = await res.json();
           setSelectedProvider(d.provider || 'openwa');
-          setOpenwaBaseUrl(d.openwaBaseUrl || 'http://localhost:3001');
+          setOpenwaBaseUrl(d.openwaBaseUrl || 'http://localhost:3002');
           setOpenwaApiKey(d.openwaApiKey || '');
           setOpenwaSession(d.openwaSession || 'MOHDHMS');
           setMetaAccessToken(d.metaAccessToken || '');
@@ -606,7 +606,7 @@ export function WhatsAppSettings() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label>Service URL</Label>
-                    <Input className="mt-1" value={openwaBaseUrl} onChange={(e) => setOpenwaBaseUrl(e.target.value)} placeholder="http://localhost:3001" />
+                    <Input className="mt-1" value={openwaBaseUrl} onChange={(e) => setOpenwaBaseUrl(e.target.value)} placeholder="http://localhost:3002" />
                   </div>
                   <div>
                     <Label>Session Name</Label>

@@ -512,3 +512,34 @@ Stage Summary:
 - Demo login buttons are now enabled with 5 working accounts
 - Users can log in via email/password or demo quick-login while Google OAuth is unconfigured
 - To enable Google: add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to environment variables
+---
+Task ID: 2-b
+Agent: openwa-setup
+Task: Set up OpenWA as a mini-service with baileys engine
+
+Work Log:
+- Read worklog.md and understood project context (Next.js project with mini-services architecture)
+- Explored OpenWA repo at /tmp/openwa-repo — NestJS v11 project with baileys + whatsapp-web.js engines, TypeORM, SQLite/Postgres support
+- Copied server-side source (src/, config files) to /home/z/my-project/mini-services/openwa/ using rsync, excluding dashboard, sdk, test, docker, and docs
+- Cleaned up unnecessary files (.github, docs, .dockerignore, .env.example, .nvmrc, etc.)
+- Modified package.json: removed postinstall script (dashboard install), dashboard-related scripts, jest config, and non-essential devDependencies (jest, eslint, prettier, etc.) to reduce install footprint
+- Ran `npm install` — 865 packages installed successfully (Node v24.18.0, npm 11.16.0)
+- Created `data/` directory for SQLite databases and media storage
+- Created `.env` with: PORT=3002, ENGINE_TYPE=baileys, DATABASE_TYPE=sqlite, ALLOW_DEV_API_KEY=true, AUTO_START_SESSIONS=true, CORS_ORIGINS=*, ENABLE_SWAGGER=true, SERVE_DASHBOARD=false
+- Created `start.sh` script (executable) that ensures data dir exists and runs `node dist/main.js`
+- Ran `npm run build` (nest build) — compiled successfully to dist/
+- Tested service startup: all NestJS modules initialized, baileys engine plugin loaded, SQLite databases created (main.sqlite, openwa.sqlite)
+- Verified API endpoints respond correctly:
+  - GET /api/health → {"status":"ok","version":"0.8.14"}
+  - GET /api/health/live → {"status":"ok"}
+  - GET /api/sessions (with dev-admin-key) → [] (empty, correct)
+
+Stage Summary:
+- OpenWA v0.8.14 mini-service fully operational at /home/z/my-project/mini-services/openwa/
+- Running on port 3002 with baileys engine (no Chrome/Puppeteer needed)
+- SQLite database in ./data/ (zero external dependencies)
+- Dev API key `dev-admin-key` auto-created for development
+- CORS wildcard enabled for development
+- Swagger docs at http://localhost:3002/api/docs
+- Startable via `npm run start:prod` or `./start.sh`
+- Auto-start sessions on boot enabled

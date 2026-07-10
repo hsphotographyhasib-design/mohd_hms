@@ -50,6 +50,8 @@ backend/.env
 # mini-services runtime data
 mini-services/*/storage/
 mini-services/*/node_modules/
+mini-services/*/dist/
+mini-services/*/data/
 
 # typescript
 *.tsbuildinfo
