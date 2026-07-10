@@ -762,3 +762,85 @@ Stage Summary:
 - Page-level 403 protection prevents rendering unauthorized views
 - Action-level permissions defined for 16 entity types
 - Audit logging for unauthorized access attempts
+
+---
+Task ID: rbac-final-audit-report
+Agent: Main Agent
+Task: Generate final RBAC audit report
+
+Stage Summary:
+## ENTERPRISE RBAC AUDIT REPORT — MOHD.HMS ENTERPRISE
+
+### 1. Modules Inspected (25 modules, 200+ API routes)
+- Dashboard (4 routes)
+- Complaints (9 routes)
+- Work Orders (5 routes)
+- Equipment (5 routes)
+- Preventive Maintenance (2 routes)
+- Inventory (16 routes)
+- Customers (2 routes)
+- Invoices (11 routes)
+- Quotations (12 routes)
+- Finance (1 route)
+- Employees (2 routes)
+- Technicians (4 routes)
+- HR (41 routes)
+- Purchases (1 route)
+- Vehicles (2 routes)
+- Reports (1 route)
+- Notifications (11 routes)
+- WhatsApp (20 routes)
+- Email (13 routes)
+- CMS (47 routes)
+- Documents (7 routes)
+- Sessions (8 routes)
+- Settings (2 routes)
+- Admin/Users (1 route)
+- Error Logs (2 routes)
+
+### 2. Broken Permissions Found
+- 3 separate, out-of-sync permission maps (permissions.ts, store.ts, rbac.ts)
+- ROLE_HIERARCHY missing 'hr' role in store.ts, different vendor/guest values
+- ~170 of 200+ API routes had NO role-based access control (only JWT verification)
+- Supervisor denied quotations and equipment access (data-scope.ts bug)
+- No page-level protection — any auth'd user could navigate to any view via URL
+- No centralized API middleware — every route did manual inline verification
+
+### 3. Permissions Corrected
+- Unified all 3 permission maps into SINGLE SOURCE OF TRUTH (permissions-matrix.ts)
+- Fixed ROLE_HIERARCHY: added hr=55, corrected vendor=5, guest=0
+- Fixed supervisor data-scope: can now see quotations, invoices, equipment
+- Technician data-scope: can now see equipment (previously denied)
+- Fixed navigation: store.ts now delegates to unified RBAC
+- Core auth files (permissions.ts, rbac.ts) now delegate to unified source
+
+### 4. APIs Secured
+- 193 route files converted from verifyToken() to verifyRouteAuth() with feature checks
+- ~50 core routes already had enterprise RBAC engine (data-level security)
+- 12 auth/system routes legitimately excluded (login, seed, debug, health)
+- 3 public routes preserved (QR endpoints, webhooks, landing page)
+- Total: 243 routes now have some form of RBAC protection
+
+### 5. Pages Protected
+- Created view-feature-map.ts: maps 60+ AppViews to RBAC features
+- ViewRouter in app-shell.tsx checks permissions before rendering
+- AccessDenied component shows 403 with feature name for debugging
+- MobileViewRouter inherits same protection via app-shell
+
+### 6. Data Filters Added
+- buildDataScope enhanced: supervisor gets quotations/invoices/equipment
+- Technician gets equipment access (read-only)
+- Finance gets customer access
+- HR gets DENIED for all operational entities
+- Customer/technician: own/assigned data only (existing, verified correct)
+
+### 7. Remaining Recommendations
+- Core module routes (complaints, invoices, quotations, etc.) use data-level security
+  (return empty results) instead of explicit 403. buildAuthContextFromRequest now
+  supports optional feature param for future 403 migration.
+- DB role column is plain String (no enum constraint). Consider adding CHECK constraint.
+- Audit logging only covers complaints and unauthorized access attempts.
+  Extend to all entity types for full audit trail.
+- Consider caching permissions in JWT to avoid repeated lookups.
+- Test suite for RBAC not yet implemented (as requested, no test code written).
+- Google SSO always creates 'customer' role — no promotion path via SSO.
