@@ -51,6 +51,8 @@ export type AppView =
   | 'new-work-order'
   | 'invoices'
   | 'invoice-detail'
+  | 'invoice-edit'
+  | 'new-invoice'
   | 'pm'
   | 'quotations'
   | 'quotation-detail'
@@ -288,9 +290,11 @@ export interface WorkOrderMaterialItem {
 
 // ============ INVOICES ============
 
-export type InvoiceStatus = 'DRAFT' | 'PENDING' | 'APPROVED' | 'PAID' | 'CANCELLED' | 'OVERDUE';
+export type InvoiceStatus = 'DRAFT' | 'REVIEW' | 'APPROVED' | 'SENT' | 'VIEWED' | 'PARTIALLY_PAID' | 'PAID' | 'OVERDUE' | 'CANCELLED' | 'CLOSED';
 
 export interface InvoiceLineItem {
+  id?: string;
+  itemCode?: string;
   title: string;
   description?: string;
   unit: string;
@@ -299,6 +303,28 @@ export interface InvoiceLineItem {
   amount: number;
   category?: string;
   warranty?: string;
+  itemType?: string;  // 'inventory' | 'labour' | 'service' | 'custom'
+  discount?: number;
+  tax?: number;
+  labourCost?: number;
+  materialCost?: number;
+}
+
+export interface InvoicePaymentItem {
+  id: string;
+  tenantId: string;
+  invoiceId: string;
+  amount: number;
+  method: string;
+  referenceNo?: string;
+  transactionId?: string;
+  receiptUrl?: string;
+  notes?: string;
+  paidAt: string;
+  createdBy?: string;
+  createdByName?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface InvoiceItem {
@@ -312,7 +338,9 @@ export interface InvoiceItem {
   customerCompany?: string;
   customerPic?: string;
   workOrderId?: string;
+  workOrderTitle?: string;
   quotationId?: string;
+  quotationNo?: string;
   invoiceNumber: string;
   title: string;
   description?: string;
@@ -337,6 +365,7 @@ export interface InvoiceItem {
   bankAccountName?: string;
   bankAccountNo?: string;
   sentVia?: string;
+  pdfUrl?: string;
   notes?: string;
   terms?: string;
   shipToName?: string;
@@ -345,8 +374,17 @@ export interface InvoiceItem {
   shipToContact?: string;
   preparedBy?: string;
   preparedByName?: string;
+  createdBy?: string;
   creatorName?: string;
-  quotationNo?: string;
+  approvedBy?: string;
+  approvedByName?: string;
+  approvedAt?: string;
+  sentAt?: string;
+  viewedAt?: string;
+  closedAt?: string;
+  amountPaid?: number;
+  balanceDue?: number;
+  payments?: InvoicePaymentItem[];
   createdAt: string;
   updatedAt: string;
 }

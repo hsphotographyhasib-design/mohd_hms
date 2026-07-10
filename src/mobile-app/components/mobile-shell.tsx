@@ -299,6 +299,8 @@ const VIEWS_WITH_OWN_BOTTOM_BAR: string[] = [
   'new-quotation',
   'quotation-edit',
   'new-work-order',
+  'new-invoice',
+  'invoice-edit',
 ];
 
 function FloatingBottomNav() {

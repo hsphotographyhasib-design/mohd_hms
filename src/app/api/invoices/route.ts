@@ -31,6 +31,31 @@ export async function GET(request: NextRequest) {
     if (status) where.status = status;
     if (customerId) where.customerId = customerId;
 
+    const wantStats = request.nextUrl.searchParams.get('stats') === 'true';
+
+    if (wantStats) {
+      const [totalCount, totalValue, draftCount, reviewCount, sentCount, paidCount, overdueCount] = await Promise.all([
+        db.invoice.count({ where: { tenantId } }),
+        db.invoice.aggregate({ where: { tenantId }, _sum: { total: true } }),
+        db.invoice.count({ where: { tenantId, status: 'DRAFT' } }),
+        db.invoice.count({ where: { tenantId, status: 'REVIEW' } }),
+        db.invoice.count({ where: { tenantId, status: { in: ['SENT', 'VIEWED', 'APPROVED'] } } }),
+        db.invoice.count({ where: { tenantId, status: 'PAID' } }),
+        db.invoice.count({ where: { tenantId, status: 'OVERDUE' } }),
+      ]);
+      return NextResponse.json({
+        stats: {
+          totalCount,
+          totalValue: Number(totalValue._sum.total || 0),
+          draftCount,
+          reviewCount,
+          sentCount,
+          paidCount,
+          overdueCount,
+        },
+      });
+    }
+
     let items: any[] = [];
     let total = 0;
     try {
@@ -42,6 +67,11 @@ export async function GET(request: NextRequest) {
           orderBy: { createdAt: 'desc' },
           include: {
             customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
+            quotation: { select: { quotationNo: true } },
+            workOrder: { select: { id: true, title: true } },
+            preparedByUser: { select: { name: true } },
+            createdByUser: { select: { name: true } },
+            payments: { orderBy: { paidAt: 'desc' } },
           },
         }),
         db.invoice.count({ where }),
@@ -51,7 +81,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ data: [], total: 0, page, pageSize, totalPages: 0 });
     }
 
-    const data = items.map((inv: any) => ({
+    const data = items.map((inv: any) => {
+      const amountPaid = inv.payments?.reduce((s: number, p: any) => s + Number(p.amount), 0) || 0;
+      return {
       id: inv.id,
       tenantId: inv.tenantId,
       customerId: inv.customerId,
@@ -62,17 +94,19 @@ export async function GET(request: NextRequest) {
       customerCompany: inv.customer?.companyName,
       customerPic: inv.customer?.pic,
       workOrderId: inv.workOrderId,
+      workOrderTitle: inv.workOrder?.title,
       quotationId: inv.quotationId,
+      quotationNo: inv.quotation?.quotationNo,
       invoiceNumber: inv.invoiceNumber,
       title: inv.title,
       description: inv.description,
       items: inv.items,
-      subtotal: inv.subtotal,
-      taxRate: inv.taxRate ?? 0,
-      tax: inv.tax,
-      discount: inv.discount,
-      shipping: inv.shipping ?? 0,
-      total: inv.total,
+      subtotal: Number(inv.subtotal),
+      taxRate: Number(inv.taxRate ?? 0),
+      tax: Number(inv.tax),
+      discount: Number(inv.discount),
+      shipping: Number(inv.shipping ?? 0),
+      total: Number(inv.total),
       status: inv.status,
       currency: inv.currency ?? 'BND',
       referenceNo: inv.referenceNo,
@@ -87,10 +121,27 @@ export async function GET(request: NextRequest) {
       pdfUrl: inv.pdfUrl,
       notes: inv.notes,
       terms: inv.terms,
+      preparedBy: inv.preparedBy,
+      preparedByName: inv.preparedByUser?.name,
       createdBy: inv.createdBy,
+      creatorName: inv.createdByUser?.name,
+      approvedAt: inv.approvedAt ? new Date(inv.approvedAt).toISOString() : undefined,
+      sentAt: inv.sentAt ? new Date(inv.sentAt).toISOString() : undefined,
+      amountPaid,
+      balanceDue: Number(inv.total) - amountPaid,
+      payments: inv.payments?.map((p: any) => ({
+        id: p.id,
+        amount: Number(p.amount),
+        method: p.method,
+        referenceNo: p.referenceNo,
+        transactionId: p.transactionId,
+        notes: p.notes,
+        paidAt: new Date(p.paidAt).toISOString(),
+        createdByName: null,
+      })),
       createdAt: typeof inv.createdAt === 'string' ? inv.createdAt : new Date(inv.createdAt).toISOString(),
       updatedAt: typeof inv.updatedAt === 'string' ? inv.updatedAt : new Date(inv.updatedAt).toISOString(),
-    }));
+    }});
 
     return NextResponse.json({
       data,

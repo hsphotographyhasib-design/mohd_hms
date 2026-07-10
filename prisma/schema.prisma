@@ -1494,16 +1494,45 @@ model Invoice {
   shipToContact                 String?
   preparedBy                    String?
   createdBy                     String?
+  approvedBy                    String?
+  approvedAt                    DateTime?
+  sentAt                        DateTime?
+  viewedAt                      DateTime?
+  closedAt                      DateTime?
   createdAt                     DateTime   @default(now())
   updatedAt                     DateTime
+  payments                      InvoicePayment[]
   User_Invoice_preparedByToUser User?      @relation("Invoice_preparedByToUser", fields: [preparedBy], references: [id])
   User_Invoice_createdByToUser  User?      @relation("Invoice_createdByToUser", fields: [createdBy], references: [id])
+  User_Invoice_approvedByToUser User?      @relation("Invoice_approvedByToUser", fields: [approvedBy], references: [id])
   quotation                     Quotation? @relation(fields: [quotationId], references: [id])
   workOrder                     WorkOrder? @relation(fields: [workOrderId], references: [id])
   customer                      Customer   @relation(fields: [customerId], references: [id])
   tenant                        Tenant     @relation(fields: [tenantId], references: [id])
 
   @@index([tenantId, status])
+}
+
+model InvoicePayment {
+  id              String   @id
+  tenantId        String
+  invoiceId       String
+  amount          Float
+  method          String                 // cash, bank_transfer, cheque, online, card
+  referenceNo     String?
+  transactionId   String?
+  receiptUrl      String?
+  notes           String?
+  paidAt          DateTime @default(now())
+  createdBy       String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  User_InvoicePayment_createdByToUser User? @relation("InvoicePayment_createdByToUser", fields: [createdBy], references: [id])
+  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@index([invoiceId])
+  @@index([tenantId])
 }
 
 model ItemSupplier {
@@ -1919,6 +1948,7 @@ model Tenant {
   InventoryItem        InventoryItem[]
   InventorySubcategory InventorySubcategory[]
   Invoice              Invoice[]
+  InvoicePayment       InvoicePayment[]
   ItemSupplier         ItemSupplier[]
   LoginSession         LoginSession[]
   Notification         Notification[]
@@ -1987,6 +2017,8 @@ model User {
   DeviceToken                            DeviceToken[]
   Invoice_Invoice_preparedByToUser       Invoice[]            @relation("Invoice_preparedByToUser")
   Invoice_Invoice_createdByToUser        Invoice[]            @relation("Invoice_createdByToUser")
+  Invoice_Invoice_approvedByToUser       Invoice[]            @relation("Invoice_approvedByToUser")
+  InvoicePayment_InvoicePayment_createdByToUser InvoicePayment[] @relation("InvoicePayment_createdByToUser")
   LoginSession                           LoginSession[]
   NotificationLog                        NotificationLog[]
   PasswordResetOtp                       PasswordResetOtp[]

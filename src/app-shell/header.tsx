@@ -42,6 +42,8 @@ const viewLabels: Record<AppView, string> = {
   'work-order-detail': 'Work Order Detail',
   invoices: 'Invoices',
   'invoice-detail': 'Invoice Detail',
+  'invoice-edit': 'Edit Invoice',
+  'new-invoice': 'New Invoice',
   pm: 'PM Schedules',
   quotations: 'Quotations',
   inventory: 'Inventory',

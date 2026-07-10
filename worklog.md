@@ -158,3 +158,187 @@ Stage Summary:
 - Created: `/src/app/api/settings/system-info/route.ts`
 - Modified: `/src/modules/settings/components/settings-view.tsx` (SystemTab rewrite)
 - All values now reflect real system state instead of hardcoded placeholders
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Create server-side invoice PDF HTML generator
+
+Work Log:
+- Read reference file `/src/modules/quotations/services/quotation-pdf-html.ts` (978 lines)
+- Read company constants: `COMPANY`, `COMPANY_COLORS`, `DEFAULT_INVOICE_TERMS`, `DEFAULT_PAYMENT`
+- Read `numberToCurrencyWords` utility signature
+- Created directory `/src/modules/invoices/services/`
+- Created `invoice-pdf-html.ts` (~890 lines) adapting the quotation template for invoices:
+  - Changed all "QUOTATION" references to "INVOICE"
+  - Changed `quotationNo` → `invoiceNumber`
+  - Changed `validUntil` → `dueDate` with "Due Date" label in meta bar
+  - Added "PO Reference" and "Payment" columns in meta bar (replacing Sales Person / Delivery)
+  - Added `payment-section` CSS + HTML for bank details (bankName, accountName, accountNo)
+  - Added "Amount Paid" (green, with negative sign) and "Balance Due" (red, bold) total rows
+  - Used `DEFAULT_PAYMENT` as fallback for bank details
+  - Used `DEFAULT_INVOICE_TERMS` as fallback for terms
+  - Changed status labels to invoice-specific (PAID, PARTIAL, OVERDUE, CANCELLED, VOID)
+  - Changed validity chip to "Due in X days" / "Overdue" chip
+  - Changed "Client Acceptance" → "Client Acknowledgement"
+  - Changed "Prepared For" card → "Bill To" card
+  - Changed "Project / Site" → "Project / Description" card
+  - Changed "Quotation Summary" → "Invoice Summary" card
+  - QR code URL points to `/invoices/{invoiceNumber}` with 80x80 size
+  - Barcode fallback renders styled div with monospace font when JsBarcode unavailable
+  - `numberToCurrencyWords` called with currency parameter for extensibility
+- ESLint: 0 errors (11 pre-existing warnings unchanged)
+
+Stage Summary:
+- Created: `/src/modules/invoices/services/invoice-pdf-html.ts`
+- Self-contained HTML generator for Playwright PDF, ~890 lines
+- Matches quotation template quality with invoice-specific adaptations (payment details, amount paid/balance due, due date)
+
+---
+Task ID: 5
+Agent: API Routes Agent
+Task: Create all invoice API routes
+
+Work Log:
+- Read existing quotation API routes (14 files) and Prisma schema (Invoice, InvoicePayment, AuditLog models)
+- Read quotation helpers (quotation-helpers.ts) for computeTotals and number generation patterns
+- Created `/src/modules/invoices/services/invoice-helpers.ts`:
+  - `computeTotals(items, taxRate, discount, shipping)` — same logic as quotation
+  - `generateInvoiceNo(tenantId)` — uses "INV/" prefix, queries db.invoice.count monthly
+  - `INVOICE_STATUS_TRANSITIONS` — 11-state transition map (DRAFT→REVIEW→APPROVED→SENT→VIEWED→PARTIALLY_PAID→PAID→CLOSED, plus OVERDUE, REJECTED, CANCELLED)
+- Created `/src/app/api/invoices/create/route.ts`:
+  - POST: verifyToken, parse body (20+ fields including customerId, title, items, terms, shipTo, workOrderId, quotationId, poReference, paymentTerms, dueDate)
+  - Generate invoice number, compute totals, atomic create with customer relation
+  - Return 201 with full invoice data, Number() cast on all Float fields
+- Created `/src/app/api/invoices/next-number/route.ts`:
+  - GET: verifyToken, call generateInvoiceNo(tenantId), return { invoiceNumber }
+- Created `/src/app/api/invoices/smart-search-customer/route.ts`:
+  - GET with ?q= parameter, search customers by name, company, phone, email, code
+  - Return matching customers with activeInvoiceCount, tenant-scoped
+- Created `/src/app/api/invoices/smart-search-inventory/route.ts`:
+  - GET with ?q= parameter, search inventory items by name, code, sku, barcode
+  - Return: id, itemCode, name, sellingPrice, unit, category, description
+  - Fallback to historical invoice items when < 3 results
+- Created `/src/app/api/invoices/[id]/status/route.ts`:
+  - POST: { status, reason? }, validate transition via INVOICE_STATUS_TRANSITIONS
+  - Set timestamp fields: approvedBy/approvedAt, sentAt, viewedAt, paidAt, closedAt
+  - Return updated invoice with customer and preparedBy relations
+- Created `/src/app/api/invoices/[id]/generate-pdf/route.ts`:
+  - GET: verifyToken, fetch invoice with customer + preparedBy relations
+  - Check Playwright/Chromium availability, return 501 if not available
+  - Import generateInvoiceHtml from invoice-pdf-html.ts, use Playwright chromium
+  - Return PDF binary with Content-Disposition header
+- Created `/src/app/api/invoices/[id]/send-email/route.ts`:
+  - POST: { to?, subject?, body?, cc? }
+  - Generate PDF via Playwright, build professional HTML email body
+  - Send via nodemailer (SMTP from env vars), update sentAt and status→SENT
+  - Return success with recipient info
+- Created `/src/app/api/invoices/[id]/send-whatsapp/route.ts`:
+  - POST: verifyToken, fetch invoice with customer
+  - Build formatted WhatsApp message with invoice details (due date instead of valid until)
+  - Return { whatsappLink, message, phone }
+- Created `/src/app/api/invoices/[id]/audit-log/route.ts`:
+  - POST: { action, details? }, create AuditLog entry in DB (entity='Invoice')
+  - Valid actions: preview, print, pdf_download, email_sent, whatsapp_sent, status_change, payment_recorded
+- Created `/src/app/api/invoice-payments/route.ts`:
+  - POST: { invoiceId, amount, method, referenceNo?, transactionId?, notes? }
+  - Validate amount > 0, create InvoicePayment with randomUUID
+  - Recalculate invoice amountPaid from all payments, auto-update status (PARTIALLY_PAID or PAID)
+  - Set paidAt when fully paid, return payment + updated invoice status
+- Created `/src/app/api/invoice-payments/[id]/route.ts`:
+  - GET: fetch single payment by id, tenant-scoped
+  - DELETE: delete payment, recalculate invoice status from remaining payments, revert PAID→PARTIALLY_PAID→APPROVED as needed
+- Updated `/src/modules/invoices/services/invoice-pdf-html.ts` with InvoicePdfData type and basic generateInvoiceHtml stub (full implementation to be created separately)
+- ESLint: 0 errors (11 warnings all pre-existing)
+
+Stage Summary:
+- Created 13 files total (1 helper + 1 PDF stub + 11 API route files)
+- All routes follow project patterns: `force-dynamic`, `verifyToken`, `db` from core, tenant-scoped queries, proper error handling
+- Invoice status machine supports 11 states with terminal CANCELLED/CLOSED
+- Payment routes auto-recalculate invoice status based on amountPaid vs total
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Create enterprise-grade invoice frontend components adapted from quotation components
+
+Work Log:
+- Read all 8 reference files (quotation-a4-template, quotation-preview-dialog, new-quotation, quotation-form, quotation-line-items-grid, types, company constants, number-to-words)
+- Created invoice-a4-template.tsx (~680 lines): Full A4 print template adapted from quotation
+  - Changed QUOTATION → INVOICE throughout, quotationNo → invoiceNumber
+  - Changed validUntil → dueDate with "Due: {date}" chip
+  - Added Payment Details section (bankName, accountName, accountNo from DEFAULT_PAYMENT)
+  - Added Amount Paid and Balance Due rows in totals section
+  - Changed "Client Acceptance" → "Client Acknowledgement", QR link to /invoices/
+  - Kept same CSS design tokens, barcode, signature block, footer
+  - Exports: InvoiceA4Template, InvoiceA4TemplateProps, fmtBND, fmtDate, parseLineItems, parseTerms
+- Created invoice-preview-dialog.tsx (~180 lines): Preview dialog with zoom controls
+  - Imports InvoiceA4Template instead of QuotationA4Template
+  - Same zoom controls (25%-200%), same toolbar layout
+  - Exports: InvoicePreviewDialog, InvoicePreviewDialogProps
+- Created new-invoice.tsx (~900 lines): New invoice form
+  - Same layout as new-quotation: smart customer search, line items grid, summary panel
+  - Reuses QuotationLineItemsGrid (same InvoiceLineItem/QuotationLineItem shape)
+  - Customer search: debounced fetch to /api/invoices/smart-search-customer
+  - Auto-save to localStorage key `invoice-draft` every 30s with draft recovery
+  - Form fields: title, description, referenceNo, poReference, paymentTerms, dueDate, notes, terms, currency, taxRate, discount, shipping, shipTo section
+  - Prepared By employee dropdown, Ship To section
+  - Real-time totals calculation with per-line discount/tax/labour/material
+  - Bottom action bar: Save Draft, Submit for Review, Preview, Print, Clear Draft, Cancel
+  - Save → POST /api/invoices/create, navigate to invoice-detail view
+- Created invoice-form.tsx (~680 lines): Edit invoice form
+  - Same layout as new-invoice but loads existing data from GET /api/invoices/[id]
+  - Pre-populates all fields including line items (parsed from JSON string)
+  - Save via PUT /api/invoices/[id]
+  - Shows barcode and QR code for invoice number
+  - Status display with color-coded badge
+  - Workflow action buttons (Submit for Review, Approve, Send)
+  - Conversion source display (quotation no, work order title)
+  - PDF download, Email, WhatsApp, Duplicate, Preview actions
+- Created payment-record-dialog.tsx (~250 lines): Payment recording dialog
+  - Props: open, onOpenChange, invoiceId, invoiceTotal, amountPaid, currency, onSuccess
+  - Fields: amount (max = balanceDue), method (cash/bank_transfer/cheque/online/card), referenceNo, transactionId, notes
+  - Visual method selector with icons
+  - Balance summary (total/paid/due) at top
+  - Submit → POST /api/invoice-payments
+  - Payment history table below the form
+- Updated mobile-shell.tsx VIEWS_WITH_OWN_BOTTOM_BAR: added 'new-invoice', 'invoice-edit'
+- Updated invoices/index.ts: exported all 5 new components
+- Fixed ESLint errors: missing Plus import, removed unused eslint-disable directive
+- ESLint: 0 errors (11 warnings, all pre-existing)
+
+Stage Summary:
+- 5 new files created, 2 existing files modified
+- invoice-a4-template.tsx (680 lines) — A4 print template with payment details section
+- invoice-preview-dialog.tsx (180 lines) — Full-screen preview with zoom controls
+- new-invoice.tsx (900 lines) — New invoice form with auto-save, customer search, line items grid
+- invoice-form.tsx (680 lines) — Edit form with barcode/QR, workflow actions, conversion source
+- payment-record-dialog.tsx (250 lines) — Payment recording with method selection and history
+- Zero new ESLint errors, all components production-ready with loading/error states
+
+---
+Task ID: 5-8
+Agent: Main Agent
+Task: Upgrade existing Invoice module to enterprise grade (matching Quotation module)
+
+Work Log:
+- Updated Prisma schema: added InvoicePayment model (multi-payment support), added approvedBy/approvedAt/sentAt/viewedAt/closedAt to Invoice
+- Updated InvoiceStatus type: DRAFT, REVIEW, APPROVED, SENT, VIEWED, PARTIALLY_PAID, PAID, OVERDUE, CANCELLED, CLOSED
+- Enhanced InvoiceLineItem type to match QuotationLineItem (itemCode, itemType, discount, tax, labourCost, materialCost)
+- Added InvoicePaymentItem type and extended InvoiceItem with payment/workflow fields
+- Created 12 API routes: create, next-number, smart-search-customer, smart-search-inventory, status workflow, generate-pdf, send-email, send-whatsapp, audit-log, invoice-payments CRUD
+- Created invoice-helpers.ts (computeTotals, generateInvoiceNo, INVOICE_STATUS_TRANSITIONS state machine)
+- Created invoice-pdf-html.ts (server-side HTML for Playwright PDF generation)
+- Created 5 new components: InvoiceA4Template, InvoicePreviewDialog, NewInvoice, InvoiceForm, PaymentRecordDialog
+- Upgraded InvoiceList: enterprise status badges with icons, stats cards, navigation to new form
+- Updated existing invoices API: stats endpoint, payment includes, new response fields
+- Registered new-invoice and invoice-edit views in AppView type, app-shell, header breadcrumbs
+- Added new-invoice/invoice-edit to VIEWS_WITH_OWN_BOTTOM_BAR for mobile
+
+Stage Summary:
+- 22 files created/modified across invoices module
+- 0 ESLint errors
+- Full workflow: DRAFT → REVIEW → APPROVED → SENT → VIEWED → PARTIALLY_PAID → PAID → CLOSED
+- Multi-payment support via InvoicePayment model
+- Reuses QuotationLineItemsGrid for line item editing
+- Server-side PDF generation, email, WhatsApp integration
