@@ -5,18 +5,24 @@ export const dynamic = 'force-dynamic';
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export async function GET(request: NextRequest) {
-  // ── Production: proxy to Render backend ────────────────────────────────
+  const startTime = Date.now();
+
+  // ── Try proxy to external backend first ─────────────────────────────────
   if (BACKEND_URL) {
     try {
       const authHeader = request.headers.get('authorization') || '';
       const res = await fetch(`${BACKEND_URL}/api/dashboard`, {
         headers: { Authorization: authHeader, 'Content-Type': 'application/json' },
       });
-      const data = await res.json();
-      return NextResponse.json(data, { status: res.status });
+      if (res.ok) {
+        const data = await res.json();
+        console.log(`[Dashboard] Proxy 200 in ${Date.now() - startTime}ms`);
+        return NextResponse.json(data);
+      }
+      console.warn(`[Dashboard] Backend returned ${res.status}, falling back to local DB`);
     } catch (error) {
-      console.error('Dashboard proxy error:', error);
-      return NextResponse.json({ error: 'Backend service unavailable' }, { status: 502 });
+      const msg = error instanceof Error ? error.message : String(error);
+      console.warn(`[Dashboard] Proxy failed (${msg}), falling back to local DB`);
     }
   }
 

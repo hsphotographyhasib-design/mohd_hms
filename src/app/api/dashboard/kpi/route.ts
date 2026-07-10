@@ -10,23 +10,24 @@ const PROXY_TIMEOUT_MS = 12_000;
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
+  const authHeader = request.headers.get('authorization') || '';
+  const token = authHeader.replace('Bearer ', '');
+  let payload = verifyToken(token);
+  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  // ── Production: proxy to Render backend ────────────────────────────────
+  const tenantId = payload.tenantId as string;
+  const role = (payload.role as string).toLowerCase();
+  const logPrefix = `[Dashboard/KPI/${role}]`;
+
+  // ── Try proxy to external backend first ─────────────────────────────────
   if (BACKEND_URL) {
-    const authHeader = request.headers.get('authorization') || '';
-    const searchParams = request.nextUrl.searchParams.toString();
-    const url = searchParams
-      ? `${BACKEND_URL}/api/dashboard/kpi?${searchParams}`
-      : `${BACKEND_URL}/api/dashboard/kpi`;
-
-    // Audit log
-    const token = authHeader.replace('Bearer ', '');
-    const payload = verifyToken(token);
-    if (payload) {
-      console.log(`[Dashboard/${payload.role}] GET /api/dashboard/kpi userId=${payload.userId}`);
-    }
-
+    console.log(`${logPrefix} GET /api/dashboard/kpi userId=${payload.userId}`);
     try {
+      const searchParams = request.nextUrl.searchParams.toString();
+      const url = searchParams
+        ? `${BACKEND_URL}/api/dashboard/kpi?${searchParams}`
+        : `${BACKEND_URL}/api/dashboard/kpi`;
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
 
@@ -34,36 +35,22 @@ export async function GET(request: NextRequest) {
         headers: { Authorization: authHeader, 'Content-Type': 'application/json' },
         signal: controller.signal,
       });
-
       clearTimeout(timeoutId);
 
-      const data = await res.json();
-      console.log(`[Dashboard/KPI] Proxy ${res.status} in ${Date.now() - startTime}ms`);
-      return NextResponse.json(data, { status: res.status });
+      if (res.ok) {
+        const data = await res.json();
+        console.log(`${logPrefix} Proxy 200 in ${Date.now() - startTime}ms`);
+        return NextResponse.json(data);
+      }
+      console.warn(`${logPrefix} Backend returned ${res.status}, falling back to local DB`);
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
-      const isTimeout = error instanceof DOMException && error.name === 'AbortError';
-      console.error(`[Dashboard/KPI] Proxy error (${isTimeout ? 'timeout' : 'network'}): ${msg}`);
-      return NextResponse.json(
-        { error: isTimeout ? 'Backend request timed out' : 'Backend service unavailable' },
-        { status: 502 },
-      );
+      console.warn(`${logPrefix} Proxy failed (${msg}), falling back to local DB`);
     }
   }
 
-  // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
+  // ── Local Prisma/SQLite (primary or fallback) ───────────────────────────
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) {
-      console.log('[Dashboard/KPI] 401 — invalid or missing token');
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const tenantId = payload.tenantId as string;
-    const role = (payload.role as string).toLowerCase();
-
     const scope = await buildDashboardScope({
       userId: payload.userId as string,
       tenantId,
@@ -71,11 +58,8 @@ export async function GET(request: NextRequest) {
       email: payload.email as string | undefined,
     });
     if (!scope) {
-      console.log(`[Dashboard/KPI] 401 — buildDashboardScope returned null for userId=${payload.userId} role=${role}`);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
-    console.log(`[Dashboard/${role}] GET /api/dashboard/kpi userId=${payload.userId}`);
 
     const [
       complaintStatusCounts,
@@ -137,7 +121,7 @@ export async function GET(request: NextRequest) {
         : Promise.resolve([]),
     ]);
 
-    // ── Complaint status breakdown ───────────────────────────────────────
+    // Complaint status breakdown
     const statusMap: Record<string, number> = {};
     complaintStatusCounts.forEach((c: any) => {
       statusMap[c.status] = c._count.id;
@@ -145,7 +129,7 @@ export async function GET(request: NextRequest) {
     const openComplaints = statusMap['OPEN'] || statusMap['NEW'] || 0;
     const inProgressComplaints = statusMap['IN_PROGRESS'] || statusMap['ACCEPTED'] || 0;
 
-    // ── Work-order status breakdown ──────────────────────────────────────
+    // Work-order status breakdown
     const woStatusMap: Record<string, number> = {};
     workOrderStatusCounts.forEach((c: any) => {
       woStatusMap[c.status] = c._count.id;
@@ -157,17 +141,17 @@ export async function GET(request: NextRequest) {
     const pendingWorkOrders = woStatusMap['PENDING'] || 0;
     const completedWorkOrders = woStatusMap['COMPLETED'] || 0;
 
-    // ── Low stock ────────────────────────────────────────────────────────
+    // Low stock
     const lowStockItems = (lowStockItemsRaw as any[]).filter(
       (i: any) => i.quantity <= i.minStock,
     ).length;
 
-    // ── PM compliance ────────────────────────────────────────────────────
+    // PM compliance
     const pmTotal = pmAll.length;
     const pmCompleted = pmAll.filter((pm: any) => pm.status === 'completed').length;
     const pmCompliance = pmTotal > 0 ? Math.round((pmCompleted / pmTotal) * 100) : 0;
 
-    console.log(`[Dashboard/KPI] 200 in ${Date.now() - startTime}ms`);
+    console.log(`${logPrefix} ${BACKEND_URL ? 'Fallback' : 'Local'} 200 in ${Date.now() - startTime}ms`);
 
     return NextResponse.json({
       totalEquipment,
@@ -187,8 +171,7 @@ export async function GET(request: NextRequest) {
       accessLevel: role,
     });
   } catch (error) {
-    const duration = Date.now() - startTime;
-    console.error(`[Dashboard/KPI] 500 in ${duration}ms:`, error);
+    console.error(`${logPrefix} 500 in ${Date.now() - startTime}ms:`, error);
     return NextResponse.json(
       { error: getDbFriendlyMessage(error) },
       { status: 500, headers: getErrorHeaders(error) },

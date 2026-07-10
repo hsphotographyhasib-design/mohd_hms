@@ -10,22 +10,24 @@ const PROXY_TIMEOUT_MS = 12_000;
 
 export async function GET(request: NextRequest) {
   const startTime = Date.now();
+  const authHeader = request.headers.get('authorization') || '';
+  const token = authHeader.replace('Bearer ', '');
+  let payload = verifyToken(token);
+  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  // ── Production: proxy to Render backend ────────────────────────────────
+  const tenantId = payload.tenantId as string;
+  const role = (payload.role as string).toLowerCase();
+  const logPrefix = `[Dashboard/Charts/${role}]`;
+
+  // ── Try proxy to external backend first ─────────────────────────────────
   if (BACKEND_URL) {
-    const authHeader = request.headers.get('authorization') || '';
-    const searchParams = request.nextUrl.searchParams.toString();
-    const url = searchParams
-      ? `${BACKEND_URL}/api/dashboard/charts?${searchParams}`
-      : `${BACKEND_URL}/api/dashboard/charts`;
-
-    const token = authHeader.replace('Bearer ', '');
-    const payload = verifyToken(token);
-    if (payload) {
-      console.log(`[Dashboard/${payload.role}] GET /api/dashboard/charts userId=${payload.userId}`);
-    }
-
+    console.log(`${logPrefix} GET /api/dashboard/charts userId=${payload.userId}`);
     try {
+      const searchParams = request.nextUrl.searchParams.toString();
+      const url = searchParams
+        ? `${BACKEND_URL}/api/dashboard/charts?${searchParams}`
+        : `${BACKEND_URL}/api/dashboard/charts`;
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
 
@@ -33,36 +35,23 @@ export async function GET(request: NextRequest) {
         headers: { Authorization: authHeader, 'Content-Type': 'application/json' },
         signal: controller.signal,
       });
-
       clearTimeout(timeoutId);
 
-      const data = await res.json();
-      console.log(`[Dashboard/Charts] Proxy ${res.status} in ${Date.now() - startTime}ms`);
-      return NextResponse.json(data, { status: res.status });
+      if (res.ok) {
+        const data = await res.json();
+        console.log(`${logPrefix} Proxy 200 in ${Date.now() - startTime}ms`);
+        return NextResponse.json(data);
+      }
+      // Non-2xx from backend → fall through to local Prisma
+      console.warn(`${logPrefix} Backend returned ${res.status}, falling back to local DB`);
     } catch (error: unknown) {
       const msg = error instanceof Error ? error.message : String(error);
-      const isTimeout = error instanceof DOMException && error.name === 'AbortError';
-      console.error(`[Dashboard/Charts] Proxy error (${isTimeout ? 'timeout' : 'network'}): ${msg}`);
-      return NextResponse.json(
-        { error: isTimeout ? 'Backend request timed out' : 'Backend service unavailable' },
-        { status: 502 },
-      );
+      console.warn(`${logPrefix} Proxy failed (${msg}), falling back to local DB`);
     }
   }
 
-  // ── Local dev: use Prisma/SQLite ───────────────────────────────────────
+  // ── Local Prisma/SQLite (primary or fallback) ───────────────────────────
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) {
-      console.log('[Dashboard/Charts] 401 — invalid or missing token');
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const tenantId = payload.tenantId as string;
-    const role = (payload.role as string).toLowerCase();
-
     const scope = await buildDashboardScope({
       userId: payload.userId as string,
       tenantId,
@@ -70,13 +59,9 @@ export async function GET(request: NextRequest) {
       email: payload.email as string | undefined,
     });
     if (!scope) {
-      console.log(`[Dashboard/Charts] 401 — buildDashboardScope returned null for userId=${payload.userId} role=${role}`);
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log(`[Dashboard/${role}] GET /api/dashboard/charts userId=${payload.userId}`);
-
-    // ── Determine which data sets to fetch ───────────────────────────────
     const fetchComplaints = role !== 'finance' && role !== 'hr';
     const fetchRevenue = scope.canSeeRevenue;
     const fetchPm = scope.canSeePm;
@@ -112,7 +97,7 @@ export async function GET(request: NextRequest) {
         : Promise.resolve([]),
     ]);
 
-    // ── Monthly revenue (last 6 months) ──────────────────────────────────
+    // Monthly revenue (last 6 months)
     const now = new Date();
     const monthlyRevenue: { month: string; revenue: number }[] = [];
     for (let i = 5; i >= 0; i--) {
@@ -128,7 +113,7 @@ export async function GET(request: NextRequest) {
       monthlyRevenue.push({ month: monthName, revenue: Math.round(rev * 100) / 100 });
     }
 
-    // ── PM compliance ────────────────────────────────────────────────────
+    // PM compliance
     const upcomingPmCounts = {
       completed: pmAll.filter((pm: any) => pm.status === 'completed').length,
       overdue: pmAll.filter((pm: any) => pm.status === 'overdue').length,
@@ -141,7 +126,7 @@ export async function GET(request: NextRequest) {
     const pmCompleted = upcomingPmCounts.completed;
     const pmCompliance = pmTotal > 0 ? Math.round((pmCompleted / pmTotal) * 100) : 0;
 
-    console.log(`[Dashboard/Charts] 200 in ${Date.now() - startTime}ms`);
+    console.log(`${logPrefix} ${BACKEND_URL ? 'Fallback' : 'Local'} 200 in ${Date.now() - startTime}ms`);
 
     return NextResponse.json({
       monthlyRevenue,
@@ -157,8 +142,7 @@ export async function GET(request: NextRequest) {
       upcomingPmCounts,
     });
   } catch (error) {
-    const duration = Date.now() - startTime;
-    console.error(`[Dashboard/Charts] 500 in ${duration}ms:`, error);
+    console.error(`${logPrefix} 500 in ${Date.now() - startTime}ms:`, error);
     return NextResponse.json(
       { error: getDbFriendlyMessage(error) },
       { status: 500, headers: getErrorHeaders(error) },
