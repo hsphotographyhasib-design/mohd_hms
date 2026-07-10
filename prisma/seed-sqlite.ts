@@ -36,27 +36,7 @@ async function main() {
   });
   console.log(`[Seed] Tenant: ${tenant.id} (${tenant.name})`);
 
-  // 2. Create admin user with known password: Admin@123
-  const passwordHash = await bcrypt.hash("Admin@123", 12);
-  const admin = await prisma.user.upsert({
-    where: { tenantId_email: { tenantId: tenant.id, email: "admin@facilitypro.com" } },
-    update: { passwordHash },
-    create: {
-      id: "user-admin",
-      email: "admin@facilitypro.com",
-      name: "Admin User",
-      role: "super_admin",
-      tenantId: tenant.id,
-      passwordHash,
-      isActive: true,
-      profileCompleted: true,
-      createdAt: NOW,
-      updatedAt: NOW,
-    },
-  });
-  console.log(`[Seed] Admin: ${admin.id} (${admin.email})`);
-
-  // 3. Create departments
+  // 2. Create departments FIRST (foreign key for users)
   const deptNames = [
     "General Operations",
     "Maintenance",
@@ -77,6 +57,38 @@ async function main() {
     });
   }
   console.log(`[Seed] Created ${deptNames.length} departments`);
+
+  // 3. Create demo users with known password: Admin@123
+  const passwordHash = await bcrypt.hash("Admin@123", 12);
+
+  const demoUsers = [
+    { id: "user-admin",      email: "admin@facilitypro.com",      name: "Admin User",       role: "super_admin", deptId: "dept-general-operations" },
+    { id: "user-manager",    email: "manager@facilitypro.com",    name: "Manager User",     role: "manager",     deptId: "dept-general-operations" },
+    { id: "user-supervisor", email: "supervisor@facilitypro.com", name: "Supervisor User",   role: "supervisor",  deptId: "dept-maintenance" },
+    { id: "user-tech1",      email: "tech1@facilitypro.com",      name: "Technician One",    role: "technician",  deptId: "dept-maintenance" },
+    { id: "user-finance",    email: "finance@facilitypro.com",    name: "Finance User",      role: "finance",     deptId: "dept-general-operations" },
+  ];
+
+  for (const u of demoUsers) {
+    await prisma.user.upsert({
+      where: { tenantId_email: { tenantId: tenant.id, email: u.email } },
+      update: { passwordHash, departmentId: u.deptId, updatedAt: NOW },
+      create: {
+        id: u.id,
+        email: u.email,
+        name: u.name,
+        role: u.role,
+        tenantId: tenant.id,
+        departmentId: u.deptId,
+        passwordHash,
+        isActive: true,
+        profileCompleted: true,
+        createdAt: NOW,
+        updatedAt: NOW,
+      },
+    });
+    console.log(`[Seed] User: ${u.id} (${u.email}) — ${u.role}`);
+  }
 
   // 4. Create inventory categories
   const invCategories = [
@@ -116,7 +128,12 @@ async function main() {
   });
   console.log(`[Seed] Created 1 warehouse`);
 
-  console.log("\n✅ Seed complete — login with admin@facilitypro.com / Admin@123");
+  console.log("\n✅ Seed complete — demo accounts (password: Admin@123):");
+  console.log("   admin@facilitypro.com     — Super Admin");
+  console.log("   manager@facilitypro.com   — Manager");
+  console.log("   supervisor@facilitypro.com— Supervisor");
+  console.log("   tech1@facilitypro.com     — Technician");
+  console.log("   finance@facilitypro.com   — Finance");
 }
 
 main()

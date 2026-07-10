@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import {
   Eye,
   EyeOff,
@@ -13,6 +14,7 @@ import {
   ArrowLeft,
   Loader2,
   CheckCircle2,
+  Info,
 } from 'lucide-react';
 import { useAuthStore } from '@/app-shell/store';
 import { toast } from 'sonner';
@@ -94,11 +96,11 @@ interface DemoAccount {
 }
 
 const demoAccounts: DemoAccount[] = ENABLE_DEMO ? [
-  { label: 'Admin', email: 'admin@facilitypro.com', password: 'password123', icon: <Shield className="h-3.5 w-3.5" /> },
-  { label: 'Manager', email: 'manager@facilitypro.com', password: 'password123', icon: <UserCog className="h-3.5 w-3.5" /> },
-  { label: 'Supervisor', email: 'supervisor@facilitypro.com', password: 'password123', icon: <HardHat className="h-3.5 w-3.5" /> },
-  { label: 'Technician', email: 'tech1@facilitypro.com', password: 'password123', icon: <Wrench className="h-3.5 w-3.5" /> },
-  { label: 'Finance', email: 'finance@facilitypro.com', password: 'password123', icon: <DollarSign className="h-3.5 w-3.5" /> },
+  { label: 'Admin', email: 'admin@facilitypro.com', password: 'Admin@123', icon: <Shield className="h-3.5 w-3.5" /> },
+  { label: 'Manager', email: 'manager@facilitypro.com', password: 'Admin@123', icon: <UserCog className="h-3.5 w-3.5" /> },
+  { label: 'Supervisor', email: 'supervisor@facilitypro.com', password: 'Admin@123', icon: <HardHat className="h-3.5 w-3.5" /> },
+  { label: 'Technician', email: 'tech1@facilitypro.com', password: 'Admin@123', icon: <Wrench className="h-3.5 w-3.5" /> },
+  { label: 'Finance', email: 'finance@facilitypro.com', password: 'Admin@123', icon: <DollarSign className="h-3.5 w-3.5" /> },
 ] : [];
 
 /* ------------------------------------------------------------------ */
@@ -156,14 +158,47 @@ function WhatsAppIcon({ className }: { className?: string }) {
 /*  Main Login View                                                    */
 /* ------------------------------------------------------------------ */
 
-export function LoginView() {
+function LoginViewInner() {
   const { login, loginWithWhatsApp, isLoading } = useAuthStore();
+  const searchParams = useSearchParams();
 
   /* ---- Panel navigation ---- */
   const [panel, setPanel] = useState<Panel>('choices');
   const [waStep, setWaStep] = useState<WaStep>('phone');
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   // isGoogleLoading kept for button UI but redirect is instant so it rarely shows
+
+  /* ---- Google Sign-In config check ---- */
+  const [googleConfigured, setGoogleConfigured] = useState<boolean | null>(null);
+  const [googleMessage, setGoogleMessage] = useState('');
+  const [authError, setAuthError] = useState('');
+
+  // Check if Google OAuth is configured on the server
+  useEffect(() => {
+    fetch('/api/auth/google/status')
+      .then((r) => r.json())
+      .then((data) => {
+        setGoogleConfigured(!!data.configured);
+        if (!data.configured) {
+          setGoogleMessage(data.message || 'Google Sign-In is not configured.');
+        }
+      })
+      .catch(() => setGoogleConfigured(false));
+  }, []);
+
+  // Handle auth_error / auth_message from redirect (e.g. Google not configured)
+  useEffect(() => {
+    const err = searchParams.get('auth_error');
+    const msg = searchParams.get('auth_message');
+    if (err) {
+      setAuthError(msg || 'Authentication error occurred.');
+      // Clean up URL without reload
+      const url = new URL(window.location.href);
+      url.searchParams.delete('auth_error');
+      url.searchParams.delete('auth_message');
+      window.history.replaceState({}, '', url.toString());
+    }
+  }, [searchParams]);
 
   /* ---- Terms & Conditions acceptance ---- */
   const [tcAccepted, setTcAccepted] = useState(isTermsAccepted);
@@ -571,11 +606,15 @@ export function LoginView() {
   /* ---- Google Sign-In (server-side OAuth redirect flow) ---- */
   const handleGoogleSignIn = useCallback(() => {
     if (isGoogleLoading || isLoading) return;
+    if (googleConfigured === false) {
+      toast.error('Google Sign-In is not configured on this server. Please use email/password or contact the administrator.');
+      return;
+    }
     if (!requireTc()) return;
     saveTermsAcceptance();
     // Redirect to server endpoint which handles PKCE + Google redirect
     window.location.href = '/api/auth/google/authorize';
-  }, [isGoogleLoading, isLoading, requireTc]);
+  }, [isGoogleLoading, isLoading, googleConfigured, requireTc]);
 
   /* ================================================================ */
   /*  RENDER                                                           */
@@ -606,6 +645,18 @@ export function LoginView() {
           </p>
         </div>
 
+        {/* ---- Auth error banner (from redirect) ---- */}
+        {authError && (
+          <div
+            role="alert"
+            aria-live="assertive"
+            className="flex items-start gap-2 p-3 text-sm rounded-lg bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-800 mb-1"
+          >
+            <Info className="w-4 h-4 mt-0.5 shrink-0" />
+            <span>{authError}</span>
+          </div>
+        )}
+
         {/* ============================================================ */}
         {/*  PANEL: Choices (Google / Email / WhatsApp)                   */}
         {/* ============================================================ */}
@@ -616,17 +667,34 @@ export function LoginView() {
           {/* Google */}
           <button
             type="button"
-            disabled={isGoogleLoading || isLoading}
+            disabled={isGoogleLoading || isLoading || googleConfigured === false}
             onClick={handleGoogleSignIn}
-            className="flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-60 disabled:cursor-not-allowed text-white font-medium text-base transition-colors duration-120 cursor-pointer border-none"
+            title={googleConfigured === false ? googleMessage : undefined}
+            className={cn(
+              'flex items-center justify-center gap-2.5 w-full min-h-[48px] px-4 rounded-lg font-medium text-base transition-colors duration-120 cursor-pointer border-none',
+              googleConfigured === false
+                ? 'bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed'
+                : 'bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white disabled:opacity-60 disabled:cursor-not-allowed',
+            )}
           >
             {isGoogleLoading ? (
               <Loader2 className="w-5 h-5 shrink-0 animate-spin" />
             ) : (
               <GoogleIcon className="w-5 h-5 shrink-0" />
             )}
-            <span>{isGoogleLoading ? 'Signing in...' : 'Continue with Google'}</span>
+            <span>
+              {isGoogleLoading
+                ? 'Signing in...'
+                : googleConfigured === false
+                  ? 'Google Sign-In Unavailable'
+                  : 'Continue with Google'}
+            </span>
           </button>
+          {googleConfigured === false && googleMessage && (
+            <p className="text-xs text-amber-600 dark:text-amber-400 text-center -mt-1">
+              {googleMessage}
+            </p>
+          )}
 
           {/* Divider */}
           <div className="flex items-center gap-3 my-2 text-gray-500 dark:text-gray-400 text-sm font-medium">
@@ -1334,6 +1402,35 @@ export function LoginView() {
 
         {/* Screen-reader live region */}
         <p className="sr-only" role="status" aria-live="polite" />
+      </main>
+    </div>
+  );
+}
+
+/** Wrapped export with Suspense boundary for useSearchParams() */
+export function LoginView() {
+  return (
+    <Suspense fallback={<LoginSkeleton />}>
+      <LoginViewInner />
+    </Suspense>
+  );
+}
+
+/** Minimal skeleton shown while Suspense resolves useSearchParams */
+function LoginSkeleton() {
+  return (
+    <div className="min-h-dvh flex items-center justify-center bg-gray-100 dark:bg-gray-950 p-6">
+      <main className="w-full max-w-[420px] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-[20px] shadow-[0_1px_2px_rgba(16,24,40,0.04),0_12px_32px_rgba(16,24,40,0.08)] p-8 pb-6">
+        <div className="flex flex-col items-center text-center gap-3 mb-6">
+          <div className="w-16 h-16 bg-gray-200 dark:bg-gray-800 rounded-full animate-pulse" />
+          <div className="h-7 w-40 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+          <div className="h-4 w-64 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
+        </div>
+        <div className="flex flex-col gap-3">
+          <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
+          <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
+          <div className="h-12 bg-gray-200 dark:bg-gray-800 rounded-lg animate-pulse" />
+        </div>
       </main>
     </div>
   );

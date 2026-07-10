@@ -57,18 +57,12 @@ export async function GET(request: NextRequest) {
 
   const clientId = getClientId();
   if (!clientId) {
-    const html = `<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>Google Sign-In Not Configured</title></head><body>
-<script>
-  alert('Google Sign-In is not configured. Please contact the administrator to set up GOOGLE_CLIENT_ID.');
-  window.location.replace('${origin}/');
-</script>
-<noscript><p style="padding:40px;color:red;font-family:sans-serif">Google Sign-In is not configured. Please contact the administrator.</p></noscript>
-</body></html>`;
-    return new NextResponse(html, {
-      status: 200,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    });
+    // Redirect back to login with an error query param so the UI can show
+    // a proper in-app message instead of a browser alert()
+    const loginUrl = new URL('/', origin);
+    loginUrl.searchParams.set('auth_error', 'google_not_configured');
+    loginUrl.searchParams.set('auth_message', 'Google Sign-In is not configured. Please use email/password to sign in, or ask the administrator to set up GOOGLE_CLIENT_ID.');
+    return NextResponse.redirect(loginUrl.toString());
   }
 
   // Build redirect_uri from the request
