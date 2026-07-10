@@ -368,10 +368,11 @@ export async function buildAuthContext(
 
 /**
  * Build AuthContext from a NextRequest (extracts JWT automatically).
+ * Optionally checks feature-level access and returns null (403) if unauthorized.
  */
 export async function buildAuthContextFromRequest(
   request: Request,
-  options?: { resolveCustomer?: boolean }
+  options?: { resolveCustomer?: boolean; feature?: string }
 ): Promise<AuthContext | null> {
   const authHeader = request.headers.get('authorization');
   const token = authHeader?.replace('Bearer ', '');
@@ -380,6 +381,13 @@ export async function buildAuthContextFromRequest(
   const { verifyToken } = await import('@/core/auth/auth-lib');
   const payload = verifyToken(token);
   if (!payload) return null;
+
+  // Feature-level access check (returns null → caller returns 401, but data is still protected)
+  if (options?.feature) {
+    const { canAccessFeature } = await import('./permissions-matrix');
+    const role = (payload.role as string).toLowerCase() as UserRole;
+    if (!canAccessFeature(role, options.feature)) return null;
+  }
 
   return buildAuthContext(payload, options);
 }
