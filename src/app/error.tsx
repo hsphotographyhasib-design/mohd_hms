@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { ErrorModal, FullPageError } from '@/core/errors/components/error-ui';
+import { ErrorModal } from '@/core/errors/components/error-ui';
 import { logErrorToServer, sanitizeError } from '@/core/errors/error-utils';
 
 /**
@@ -17,7 +17,6 @@ export default function RouteError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  // Log error to console for debugging (always)
   useEffect(() => {
     console.error('[RouteError]', error);
   }, [error]);
@@ -31,15 +30,33 @@ export default function RouteError({
     });
   }, [error]);
 
-  // Always show the actual error (remove once root cause is fixed)
-  const displayMessage = sanitizeError(error);
+  // Production: show sanitized, user-friendly message
+  // Development: show the actual error for debugging
+  if (process.env.NODE_ENV === 'production') {
+    return (
+      <ErrorModal
+        error={{
+          message: sanitizeError(error),
+          category: 'frontend',
+          stackTrace: error.stack,
+          retry: reset,
+          debug: {
+            errorType: error.name || 'Error',
+            stackTrace: error.stack,
+          },
+        }}
+        onDismiss={reset}
+      />
+    );
+  }
 
+  // Development: show full error details
   return (
     <div className="flex min-h-[400px] items-center justify-center p-4">
       <ErrorModal
         error={{
-          title: process.env.NODE_ENV === 'development' ? 'Development Error' : 'Something Went Wrong',
-          message: displayMessage,
+          title: 'Development Error',
+          message: sanitizeError(error),
           category: 'frontend',
           stackTrace: error.stack,
           retry: reset,

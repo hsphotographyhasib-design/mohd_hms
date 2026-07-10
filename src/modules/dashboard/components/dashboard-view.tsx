@@ -22,6 +22,7 @@ import {
 } from '@/shared/ui/table';
 import { Progress } from '@/shared/ui/progress';
 import { Skeleton } from '@/shared/ui/skeleton';
+import { cn } from '@/core/utils/utils';
 import { useAuthStore, useAppStore, canAccess } from '@/app-shell/store';
 import type { ComplaintItem, WorkOrderItem, PmScheduleItem, UserRole } from '@/core/types';
 import {
