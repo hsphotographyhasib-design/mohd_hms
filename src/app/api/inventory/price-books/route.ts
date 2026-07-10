@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
 // ─── GET: List price books with entry count ────────────────────────────────────
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'inventory' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const sp = request.nextUrl.searchParams;
     const includeInactive = sp.get('includeInactive') === 'true';
 
@@ -49,12 +46,9 @@ export async function GET(request: NextRequest) {
 // ─── POST: Create price book ───────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'inventory' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
 
     if (!body.name) {

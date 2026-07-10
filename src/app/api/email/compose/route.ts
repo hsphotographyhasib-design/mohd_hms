@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { sendViaProvider, getActiveProvider } from '@/core/email/service/providers';
 import { isBrevoConfigured, isSmtpConfigured } from '@/core/email/service/providers';
 import { MAX_RETRIES } from '@/core/email/service/types';
@@ -26,13 +26,10 @@ function hasComposeAccess(role: string): { allowed: boolean; isFinanceOnly: bool
  */
 export async function POST(req: NextRequest) {
   try {
-    const auth = await verifyAuth(req);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    const { user } = auth;
-    const tenantId = user.tenantId as string;
-    const userRole = user.role as string;
+    const auth = verifyRouteAuth(req, { feature: 'email' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
+    const userRole = role as string;
 
     // RBAC check
     const { allowed, isFinanceOnly } = hasComposeAccess(userRole);

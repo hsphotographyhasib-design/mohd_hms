@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { getStorageProvider, formatFileSize } from '@/core/storage/provider';
 
 function createAuditEntry(data: {
@@ -27,12 +27,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'documents' });
+    if (auth.error) return auth.error;
+    const { tenantId } = auth;
     const { id } = await params;
 
     const doc = await db.document.findUnique({
@@ -93,20 +90,14 @@ export async function GET(
   }
 }
 
-// PATCH: Update document metadata
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
-    const userRole = payload.role as string;
+    const auth = verifyRouteAuth(request, { feature: 'documents' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
 
     const doc = await db.document.findUnique({ where: { id } });
@@ -155,7 +146,7 @@ export async function PATCH(
     await db.documentAuditLog.create({
       data: createAuditEntry({
         tenantId, documentId: id, action, fileName: doc.originalName,
-        performedBy: userId, performedByRole: userRole, request, metadata: auditMeta,
+        performedBy: userId, performedByRole: role, request, metadata: auditMeta,
       }),
     });
 
@@ -171,20 +162,14 @@ export async function PATCH(
   }
 }
 
-// DELETE: Soft delete document
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
-    const userRole = payload.role as string;
+    const auth = verifyRouteAuth(request, { feature: 'documents' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
 
     const doc = await db.document.findUnique({ where: { id } });
@@ -200,7 +185,7 @@ export async function DELETE(
     await db.documentAuditLog.create({
       data: createAuditEntry({
         tenantId, documentId: id, action: 'delete', fileName: doc.originalName,
-        performedBy: userId, performedByRole: userRole, request,
+        performedBy: userId, performedByRole: role, request,
         metadata: { size: doc.size, mimeType: doc.mimeType },
       }),
     });

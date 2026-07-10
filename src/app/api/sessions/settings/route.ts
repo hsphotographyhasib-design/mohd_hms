@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth, verifyAuthOnly } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,15 +23,10 @@ const DEFAULT_CONFIG = {
 // GET: Retrieve session config for the tenant (any role can read)
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = verifyAuthOnly(request);
+    if (auth.error) return auth.error;
 
-    const { tenantId } = auth.user;
-    if (!tenantId) {
-      return NextResponse.json({ error: 'Invalid token payload' }, { status: 401 });
-    }
+    const { tenantId } = auth;
 
     const config = await withRetry(
       () =>
@@ -53,23 +48,10 @@ export async function GET(request: NextRequest) {
 // PUT: Update session config (admin/super_admin only)
 export async function PUT(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = verifyRouteAuth(request, { feature: 'sessions' });
+    if (auth.error) return auth.error;
 
-    const { userId, tenantId, role } = auth.user;
-    if (!tenantId) {
-      return NextResponse.json({ error: 'Invalid token payload' }, { status: 401 });
-    }
-
-    const userRole = (role as string).toLowerCase();
-    if (!['admin', 'super_admin'].includes(userRole)) {
-      return NextResponse.json(
-        { error: 'Only admins can update session settings' },
-        { status: 403 }
-      );
-    }
+    const { userId, tenantId } = auth;
 
     const body = await request.json();
 

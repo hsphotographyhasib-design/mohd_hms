@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, getDbFriendlyMessage } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const items = await db.hrPerformanceReview.findMany({
       where: { tenantId }, orderBy: { createdAt: 'desc' },
       include: { employee: { select: { employeeId: true, status: true, user: { select: { name: true, id: true } } } } },
@@ -26,10 +25,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
     const { employeeName, period, type, kpiScore, goalsScore, overallScore, rating, employeeComments, managerComments, status, reviewerId } = body;
     if (!period) return NextResponse.json({ error: 'Period is required' }, { status: 400 });
@@ -44,7 +42,7 @@ export async function POST(request: NextRequest) {
     const finalOverall = overallScore || ((kpiScore && goalsScore) ? (kpiScore + goalsScore) / 2 : null);
 
     const item = await db.hrPerformanceReview.create({
-      data: { tenantId, employeeId: employeeId || '', period, type: type || 'quarterly', kpiScore: kpiScore ?? null, goalsScore: goalsScore ?? null, overallScore: finalOverall, rating: rating || null, employeeComments, managerComments, status: status || 'draft', reviewerId: reviewerId || payload.userId || null },
+      data: { tenantId, employeeId: employeeId || '', period, type: type || 'quarterly', kpiScore: kpiScore ?? null, goalsScore: goalsScore ?? null, overallScore: finalOverall, rating: rating || null, employeeComments, managerComments, status: status || 'draft', reviewerId: reviewerId || userId || null },
     });
     return NextResponse.json({ id: item.id, message: 'Review created' }, { status: 201 });
   } catch (error) { console.error('HR performance create error:', error); return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 }); }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,11 +16,9 @@ export async function GET(
 ) {
   try {
     // --- Auth ---
-    const token = request.headers.get('authorization')?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'technicians' });
+    if (auth.error) return auth.error;
+    const { tenantId } = auth;
     const { id } = await params;
 
     // Verify technician exists

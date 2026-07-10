@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import {
   getStorageProvider,
   calculateFileChecksum,
@@ -16,12 +16,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'documents' });
+    if (auth.error) return auth.error;
+    const { tenantId } = auth;
     const { id } = await params;
 
     const doc = await db.document.findUnique({ where: { id } });
@@ -61,14 +58,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
-    const userRole = payload.role as string;
+    const auth = verifyRouteAuth(request, { feature: 'documents' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
 
     const doc = await db.document.findUnique({ where: { id } });
@@ -150,7 +142,7 @@ export async function POST(
           size: fileBuffer.length,
         }),
         performedBy: userId,
-        performedByRole: userRole,
+        performedByRole: role,
         ipAddress: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || null,
         userAgent: request.headers.get('user-agent') || null,
       },

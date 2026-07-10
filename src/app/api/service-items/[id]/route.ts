@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'inventory' });
+    if (auth.error) return auth.error;
+    const { tenantId } = auth;
     const { id } = await params;
 
     const item = await db.serviceItem.findFirst({
@@ -78,12 +75,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'inventory' });
+    if (auth.error) return auth.error;
+    const { tenantId } = auth;
     const { id } = await params;
     const body = await request.json();
 
@@ -208,12 +202,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'inventory' });
+    if (auth.error) return auth.error;
+    const { tenantId } = auth;
     const { id } = await params;
 
     const existing = await db.serviceItem.findFirst({ where: { id, tenantId } });

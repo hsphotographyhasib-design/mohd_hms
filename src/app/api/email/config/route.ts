@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { setRuntimeApiKey, getBrevoApiKey, isRuntimeKeyConfigured } from '@/core/email/service/providers/brevo';
 import { refreshProviderCache, getActiveProvider } from '@/core/email/service/providers';
 
@@ -10,11 +10,11 @@ export const dynamic = 'force-dynamic';
  * POST /api/email/config — Set the Brevo API key at runtime.
  */
 export async function GET(req: NextRequest) {
-  const auth = await verifyAuth(req);
-  if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = verifyRouteAuth(req, { feature: 'email' });
+  if (auth.error) return auth.error;
+  const { role } = auth;
 
-  const { user } = auth;
-  if (user.role !== 'super_admin' && user.role !== 'admin') {
+  if (role !== 'super_admin' && role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 
@@ -34,11 +34,11 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  const auth = await verifyAuth(req);
-  if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = verifyRouteAuth(req, { feature: 'email' });
+  if (auth.error) return auth.error;
+  const { role } = auth;
 
-  const { user } = auth;
-  if (user.role !== 'super_admin' && user.role !== 'admin') {
+  if (role !== 'super_admin' && role !== 'admin') {
     return NextResponse.json({ error: 'Forbidden: only administrators can configure email' }, { status: 403 });
   }
 

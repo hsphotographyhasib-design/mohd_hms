@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyAuthOnly } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,15 +23,10 @@ const DEFAULT_MAX_SESSIONS = 5;
 // GET: Public session config — returns only timeout values for the user's role
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = verifyAuthOnly(request);
+    if (auth.error) return auth.error;
 
-    const { tenantId, role } = auth.user;
-    if (!tenantId) {
-      return NextResponse.json({ error: 'Invalid token payload' }, { status: 401 });
-    }
+    const { tenantId, role } = auth;
 
     const config = await withRetry(
       () =>

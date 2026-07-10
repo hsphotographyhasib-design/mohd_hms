@@ -1,28 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
-
-/** Verify admin access from Authorization header */
-async function verifyAdmin(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.replace('Bearer ', '');
-  const payload = verifyToken(token || '');
-  if (!payload) return null;
-
-  const userId = payload.userId as string;
-  const user = await db.user.findUnique({ where: { id: userId } });
-  if (!user || !user.isActive) return null;
-  if (user.role !== 'super_admin' && user.role !== 'admin') return null;
-  return user;
-}
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 /** GET /api/admin/users — List all users (admin only) */
 export async function GET(request: NextRequest) {
   try {
-    const admin = await verifyAdmin(request);
-    if (!admin) {
-      return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
-    }
+    const auth = verifyRouteAuth(request, { feature: 'user-management' });
+    if (auth.error) return auth.error;
 
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -31,7 +15,7 @@ export async function GET(request: NextRequest) {
     const roleFilter = searchParams.get('role') || '';
 
     // Build where clause safely
-    const where: any = { tenantId: admin.tenantId };
+    const where: any = { tenantId: auth.tenantId };
 
     if (search) {
       where.OR = [
@@ -86,10 +70,8 @@ export async function GET(request: NextRequest) {
 /** PATCH /api/admin/users — Update user role (admin only) */
 export async function PATCH(request: NextRequest) {
   try {
-    const admin = await verifyAdmin(request);
-    if (!admin) {
-      return NextResponse.json({ error: 'Unauthorized. Admin access required.' }, { status: 403 });
-    }
+    const auth = verifyRouteAuth(request, { feature: 'user-management' });
+    if (auth.error) return auth.error;
 
     const { userId, role, isActive } = await request.json();
 
@@ -102,11 +84,11 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: `Invalid role. Must be one of: ${validRoles.join(', ')}` }, { status: 400 });
     }
 
-    if (admin.role !== 'super_admin' && role === 'super_admin') {
+    if (auth.role !== 'super_admin' && role === 'super_admin') {
       return NextResponse.json({ error: 'Only super_admin can assign super_admin role' }, { status: 403 });
     }
 
-    if (userId === admin.id && role && role !== admin.role) {
+    if (userId === auth.userId && role && role !== auth.role) {
       return NextResponse.json({ error: 'Cannot change your own role' }, { status: 400 });
     }
 
@@ -119,7 +101,7 @@ export async function PATCH(request: NextRequest) {
     }
 
     const updatedUser = await db.user.update({
-      where: { id: userId, tenantId: admin.tenantId },
+      where: { id: userId, tenantId: auth.tenantId },
       data: updateData,
       select: {
         id: true,

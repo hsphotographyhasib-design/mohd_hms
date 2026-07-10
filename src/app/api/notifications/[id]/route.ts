@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,14 +13,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
-    const role = payload.role as string;
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const isAdmin = role === 'admin' || role === 'super_admin';
     const { id } = await params;
 
@@ -89,14 +84,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
-    const role = payload.role as string;
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const isAdmin = role === 'admin' || role === 'super_admin';
     const { id } = await params;
 
@@ -164,14 +154,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
-    const role = payload.role as string;
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const isAdmin = role === 'admin' || role === 'super_admin';
     const { id } = await params;
 

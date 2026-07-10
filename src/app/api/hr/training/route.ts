@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, getDbFriendlyMessage } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const view = request.nextUrl.searchParams.get('view');
 
     if (view === 'records') {
@@ -25,10 +24,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
     if (!body.title || !body.startDate) return NextResponse.json({ error: 'Title and start date required' }, { status: 400 });
     const item = await db.hrTraining.create({

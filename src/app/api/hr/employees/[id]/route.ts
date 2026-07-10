@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth, sanitizeInput } from '@/core/auth/auth-lib';
+import { sanitizeInput } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { getDbFriendlyMessage } from '@/core/database/db';
 
 export async function GET(
@@ -8,14 +9,12 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { id } = await params;
-    const employee = await db.hrEmployee.findFirst({
-      where: { id, tenantId: auth.user.tenantId },
+    const employee = await db.hrEmployee.findFirst({ where: { id, tenantId },
       include: {
         user: { select: { id: true, name: true, email: true, phone: true, avatar: true } },
         department: { select: { id: true, name: true } },
@@ -78,16 +77,15 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { id } = await params;
     const body = await request.json();
 
     const existing = await db.hrEmployee.findFirst({
-      where: { id, tenantId: auth.user.tenantId },
+      where: { id, tenantId: tenantId },
     });
     if (!existing) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
@@ -148,14 +146,13 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { id } = await params;
     const existing = await db.hrEmployee.findFirst({
-      where: { id, tenantId: auth.user.tenantId },
+      where: { id, tenantId },
     });
     if (!existing) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });

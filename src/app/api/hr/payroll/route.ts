@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const month = parseInt(request.nextUrl.searchParams.get('month') || String(new Date().getMonth() + 1));
     const year = parseInt(request.nextUrl.searchParams.get('year') || String(new Date().getFullYear()));
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
@@ -82,10 +81,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
     const { month, year, action } = body;
 
@@ -102,7 +100,6 @@ export async function POST(request: NextRequest) {
 
       const m = month ?? new Date().getMonth() + 1;
       const y = year ?? new Date().getFullYear();
-      const userId = auth.user.id as string;
 
       let created = 0;
       let skipped = 0;
@@ -173,7 +170,7 @@ export async function POST(request: NextRequest) {
         netPay: netPay || 0,
         notes,
         status: 'DRAFT',
-        processedBy: auth.user.id as string,
+        processedBy: userId,
         processedAt: new Date(),
       },
     });

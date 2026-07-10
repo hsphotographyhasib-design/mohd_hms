@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth, sanitizeInput } from '@/core/auth/auth-lib';
+import { sanitizeInput } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { getDbFriendlyMessage } from '@/core/database/db';
 
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const tenantId = auth.user.tenantId;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { searchParams } = new URL(request.url);
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
     const pageSize = Math.min(100, Math.max(1, parseInt(searchParams.get('pageSize') || '20', 10)));
@@ -111,12 +109,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const tenantId = auth.user.tenantId;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
 
     const userId = sanitizeInput(body.userId || '');

@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { waManager } from '@/core/whatsapp/service/manager';
 export const dynamic = 'force-dynamic';
 
 // POST - Connect/Disconnect/Reconnect/GetQR/SendTest
 export async function POST(req: NextRequest) {
   try {
-    const token = req.headers.get('authorization')?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(req, { feature: 'whatsapp' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await req.json().catch(() => ({}));
     const action = body.action as string || 'connect';
 
@@ -117,11 +115,9 @@ export async function POST(req: NextRequest) {
 // GET - Get connection status
 export async function GET(req: NextRequest) {
   try {
-    const token = req.headers.get('authorization')?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(req, { feature: 'whatsapp' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     // Get manager status (always available since it's in-process)
     const managerStatus = waManager.getStatus();

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,13 +12,10 @@ const ALLOWED_ROLES = ['super_admin', 'admin', 'supervisor', 'manager'] as const
  */
 export async function GET(req: NextRequest) {
   try {
-    const auth = await verifyAuth(req);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    const { user } = auth;
-    const tenantId = user.tenantId as string;
-    const userRole = user.role as string;
+    const auth = verifyRouteAuth(req, { feature: 'email' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
+    const userRole = role as string;
 
     // RBAC check
     if (!ALLOWED_ROLES.includes(userRole as (typeof ALLOWED_ROLES)[number])) {

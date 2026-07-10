@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,19 +20,12 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: NextRequest) {
   try {
-    // 1. Auth (JWT-only, no DB)
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // 1. Auth + RBAC (dashboard feature includes customer role)
+    const auth = verifyRouteAuth(request, { feature: 'dashboard' });
+    if (auth.error) return auth.error;
 
-    const userId = payload.userId as string;
-    const tenantId = payload.tenantId as string;
-    const role = (payload.role as string)?.toLowerCase();
-
-    if (role !== 'customer' || !userId || !tenantId) {
-      return NextResponse.json({ error: 'Customer access required' }, { status: 403 });
-    }
+    const userId = auth.userId;
+    const tenantId = auth.tenantId;
 
     // 2. Resolve customer ID + profile in a single transaction-like sequence
     //    All queries use the same Prisma client (same pool connection).

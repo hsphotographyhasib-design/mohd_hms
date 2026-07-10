@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, withRetry, getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,17 +36,15 @@ async function resolveCustomerId(tenantId: string, userId: string): Promise<stri
 // ─── GET: List saved locations for the current customer ───
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const { user } = auth;
-    const tenantId = user.tenantId as string;
-    const role = (user.role as string)?.toLowerCase();
+    const auth = verifyRouteAuth(request, { feature: 'equipment' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     if (role !== 'customer') {
       return NextResponse.json({ error: 'Only customers can manage saved locations' }, { status: 403 });
     }
 
-    const customerId = await resolveCustomerId(tenantId, user.userId as string);
+    const customerId = await resolveCustomerId(tenantId, userId);
     if (!customerId) {
       return NextResponse.json({ error: 'Customer profile not found' }, { status: 404 });
     }
@@ -73,17 +71,15 @@ export async function GET(request: NextRequest) {
 // ─── POST: Create a saved location ───
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const { user } = auth;
-    const tenantId = user.tenantId as string;
-    const role = (user.role as string)?.toLowerCase();
+    const auth = verifyRouteAuth(request, { feature: 'equipment' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     if (role !== 'customer') {
       return NextResponse.json({ error: 'Only customers can manage saved locations' }, { status: 403 });
     }
 
-    const customerId = await resolveCustomerId(tenantId, user.userId as string);
+    const customerId = await resolveCustomerId(tenantId, userId);
     if (!customerId) {
       return NextResponse.json({ error: 'Customer profile not found' }, { status: 404 });
     }
@@ -144,17 +140,15 @@ export async function POST(request: NextRequest) {
 // ─── PUT: Update a saved location ───
 export async function PUT(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const { user } = auth;
-    const tenantId = user.tenantId as string;
-    const role = (user.role as string)?.toLowerCase();
+    const auth = verifyRouteAuth(request, { feature: 'equipment' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     if (role !== 'customer') {
       return NextResponse.json({ error: 'Only customers can manage saved locations' }, { status: 403 });
     }
 
-    const customerId = await resolveCustomerId(tenantId, user.userId as string);
+    const customerId = await resolveCustomerId(tenantId, userId);
     if (!customerId) {
       return NextResponse.json({ error: 'Customer profile not found' }, { status: 404 });
     }
@@ -223,17 +217,15 @@ export async function PUT(request: NextRequest) {
 // ─── DELETE: Remove a saved location ───
 export async function DELETE(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const { user } = auth;
-    const tenantId = user.tenantId as string;
-    const role = (user.role as string)?.toLowerCase();
+    const auth = verifyRouteAuth(request, { feature: 'equipment' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     if (role !== 'customer') {
       return NextResponse.json({ error: 'Only customers can manage saved locations' }, { status: 403 });
     }
 
-    const customerId = await resolveCustomerId(tenantId, user.userId as string);
+    const customerId = await resolveCustomerId(tenantId, userId);
     if (!customerId) {
       return NextResponse.json({ error: 'Customer profile not found' }, { status: 404 });
     }

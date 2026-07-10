@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, getDbFriendlyMessage } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 /**
@@ -13,9 +13,8 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
 
     const body = await request.json();
     const { type, title, message, module: notifModule, action, result, referenceId, relatedEntityType, relatedEntityId } = body;
@@ -32,8 +31,8 @@ export async function POST(request: NextRequest) {
 
     await db.notification.create({
       data: {
-        tenantId: payload?.tenantId || 'default',
-        userId: payload?.userId || null,
+        tenantId: auth.tenantId,
+        userId: auth.userId,
         type: type.toUpperCase(),
         title,
         message: message || '',
@@ -52,10 +51,8 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
 
     const { searchParams } = new URL(request.url);
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100);

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,15 +27,12 @@ export async function PATCH(request: NextRequest) {
 
   // Local dev fallback
   try {
-    const { db } = await import('@/core/database/db');
-    const { verifyToken } = await import('@/core/auth/auth-lib');
-    const token = request.headers.get('authorization')?.replace('Bearer ', '');
-    if (!token) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    const payload = verifyToken(token);
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
 
+    const { db } = await import('@/core/database/db');
     const result = await db.notification.updateMany({
-      where: { tenantId: payload.tenantId, userId: payload.userId, isRead: false },
+      where: { tenantId: auth.tenantId, userId: auth.userId, isRead: false },
       data: { isRead: true, readAt: new Date() },
     });
     return NextResponse.json({ markedRead: result.count });

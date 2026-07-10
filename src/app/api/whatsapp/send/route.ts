@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { db } from '@/core/database/db';
 import { v4 as uuidv4 } from 'uuid';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
-    const token = req.headers.get('authorization')?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(req, { feature: 'whatsapp' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await req.json();
 
     const { phone, message, attachments, template, priority = 'normal' } = body as {

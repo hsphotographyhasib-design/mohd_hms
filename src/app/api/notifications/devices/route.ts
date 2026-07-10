@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,17 +31,15 @@ export async function GET(request: NextRequest) {
 
   // ── Local dev: query Prisma ──
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) {
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) {
       return NextResponse.json({ devices: [] });
     }
 
     const devices = await db.deviceToken.findMany({
       where: {
-        userId: payload.userId as string,
-        tenantId: payload.tenantId as string,
+        userId: auth.userId,
+        tenantId: auth.tenantId,
       },
       select: {
         id: true,

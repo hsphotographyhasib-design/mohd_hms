@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, getDbFriendlyMessage } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
-    const tenantId = payload.tenantId as string;
     // Try all three tables
     const leaveType = await db.hrLeaveType.findUnique({ where: { id } });
     if (leaveType && leaveType.tenantId === tenantId) return NextResponse.json({ ...leaveType, section: 'leave_types' });
@@ -23,11 +22,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
-    const tenantId = payload.tenantId as string;
     const body = await request.json();
     const section = body.section;
 
@@ -61,11 +59,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
-    const tenantId = payload.tenantId as string;
     // Try deleting from all three tables
     const leaveType = await db.hrLeaveType.findUnique({ where: { id } });
     if (leaveType && leaveType.tenantId === tenantId) { await db.hrLeaveType.delete({ where: { id } }); return NextResponse.json({ message: 'Deleted' }); }

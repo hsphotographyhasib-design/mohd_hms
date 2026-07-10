@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { db } from '@/core/database/db';
 export const dynamic = 'force-dynamic';
 
@@ -8,12 +8,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { id } = await params;
-    const tenantId = auth.user.tenantId as string;
-    const currentUserId = auth.user.userId as string;
+    const currentUserId = userId;
     const body = await request.json();
     const { action, reason } = body;
 

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,10 +34,8 @@ export async function POST(request: NextRequest) {
 
   // ── Local dev: store directly in Prisma ──
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) {
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -48,8 +46,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'FCM token is required' }, { status: 400 });
     }
 
-    const userId = payload.userId as string;
-    const tenantId = payload.tenantId as string;
+    const userId = auth.userId;
+    const tenantId = auth.tenantId;
 
     // Get client IP (best effort)
     const forwarded = request.headers.get('x-forwarded-for');

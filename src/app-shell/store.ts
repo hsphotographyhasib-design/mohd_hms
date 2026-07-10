@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import type { AuthUser, UserRole, AppView } from '@/core/types';
 import { markLoginTime } from '@/shared/hooks/use-secure-fetch';
+import { canAccessFeature, hasMinRole, hasPermission, ROLE_HIERARCHY } from '@/core/permissions/rbac';
 
 // NOTE: JWT operations are server-only in @/core/auth/auth-lib.ts.
 // This constant is NOT used for actual token verification.
@@ -194,53 +195,7 @@ export const useAppStore = create<AppState>((set) => ({
   setNotificationPanelOpen: (open) => set({ notificationPanelOpen: open }),
 }));
 
-// ============ PERMISSIONS HELPER ============
+// ============ PERMISSIONS HELPER (delegates to unified RBAC) ============
 
-const ROLE_HIERARCHY: Record<UserRole, number> = {
-  super_admin: 100,
-  admin: 90,
-  manager: 80,
-  supervisor: 70,
-  finance: 60,
-  technician: 50,
-  vendor: 30,
-  customer: 10,
-  guest: 5,
-};
-
-export function hasPermission(userRole: UserRole, requiredRoles: UserRole[]): boolean {
-  if (requiredRoles.length === 0) return true;
-  return requiredRoles.includes(userRole);
-}
-
-export function hasMinRole(userRole: UserRole, minRole: UserRole): boolean {
-  return ROLE_HIERARCHY[userRole] >= ROLE_HIERARCHY[minRole];
-}
-
-export function canAccess(userRole: UserRole, feature: string): boolean {
-  const permissions: Record<string, UserRole[]> = {
-    dashboard: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
-    equipment: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
-    complaints: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
-    'work-orders': ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
-    invoices: ['super_admin', 'admin', 'manager', 'finance', 'customer'],
-    pm: ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
-    quotations: ['super_admin', 'admin', 'manager', 'customer'],
-    inventory: ['super_admin', 'admin', 'manager', 'supervisor'],
-    customers: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
-    employees: ['super_admin', 'admin', 'manager'],
-    technicians: ['super_admin', 'admin', 'manager', 'supervisor'],
-    purchases: ['super_admin', 'admin', 'manager'],
-    vehicles: ['super_admin', 'admin', 'manager'],
-    finance: ['super_admin', 'admin', 'manager', 'finance'],
-    reports: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
-    notifications: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
-    settings: ['super_admin', 'admin'],
-    'user-management': ['super_admin', 'admin'],
-    cms: ['super_admin', 'admin'],
-    whatsapp: ['super_admin', 'admin', 'manager', 'supervisor'],
-    email: ['super_admin', 'admin'],
-    hr: ['super_admin', 'admin', 'manager', 'supervisor'],
-  };
-  return (permissions[feature] || []).includes(userRole);
-}
+/** @deprecated Use canAccessFeature from '@/core/permissions/rbac' instead */
+export const canAccess = canAccessFeature;

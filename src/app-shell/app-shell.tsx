@@ -1,7 +1,10 @@
 'use client';
 
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useMemo } from 'react';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
+import { canAccessFeature } from '@/core/permissions/rbac';
+import { getViewFeature } from '@/core/permissions/view-feature-map';
+import { AccessDenied } from '@/shared/components/access-denied';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { AppHeader } from '@/app-shell/nav/app-header';
 import { FloatingNavBar } from '@/app-shell/nav/floating-nav-bar';
@@ -201,6 +204,20 @@ function ViewLoader() {
 
 function ViewRouter() {
   const { currentView } = useAppStore();
+  const user = useAuthStore(s => s.user);
+
+  // Page-level permission check
+  const accessDenied = useMemo(() => {
+    if (!user) return false;
+    const feature = getViewFeature(currentView);
+    if (!feature) return false; // No feature required — always accessible
+    return !canAccessFeature(user.role, feature);
+  }, [user, currentView]);
+
+  if (accessDenied) {
+    const feature = getViewFeature(currentView);
+    return <AccessDenied feature={feature || undefined} />;
+  }
 
   return (
     <Suspense fallback={<ViewLoader />}>

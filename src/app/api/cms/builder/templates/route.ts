@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 function formatTemplate(t: {
   id: string;
@@ -30,12 +30,9 @@ function formatTemplate(t: {
 
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!['super_admin', 'admin'].includes(auth.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') || '';
@@ -72,12 +69,9 @@ async function fetchTemplates(whereConditions: Record<string, unknown>[], tenant
 
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!['super_admin', 'admin'].includes(auth.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const body = await request.json();
     const { name, description, thumbnail, category, pageData } = body;

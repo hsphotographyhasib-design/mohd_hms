@@ -1,32 +1,13 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
-import { headers } from 'next/headers';
-import type { JwtPayload } from 'jsonwebtoken';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
-async function getAuthUser() {
-  const headersList = await headers();
-  const auth = headersList.get('authorization');
-  if (!auth?.startsWith('Bearer ')) return null;
+export async function GET(request: NextRequest) {
   try {
-    return verifyToken(auth.slice(7));
-  } catch {
-    return null;
-  }
-}
-
-function isAuth(user: JwtPayload | null): user is JwtPayload {
-  return !!user;
-}
-
-export async function GET() {
-  try {
-    const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!isAuth(user)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-
-    const tenantId = user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const [
       publishedBlogs,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { db, getDbFriendlyMessage } from '@/core/database/db';
 import type { Prisma } from '@prisma/client';
 
@@ -15,23 +15,10 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    // ── 1. Authenticate ──────────────────────────────────────────────────
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const userId = payload.userId as string;
-    const tenantId = payload.tenantId as string;
-
-    if (!userId || !tenantId) {
-      return NextResponse.json(
-        { error: 'Invalid token: missing userId or tenantId' },
-        { status: 401 },
-      );
-    }
+    // ── 1. Authenticate & Authorize ──────────────────────────────────────
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId } = auth;
 
     // ── 2. Parse & validate request body ─────────────────────────────────
     const body = await request.json();
@@ -118,31 +105,10 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    // ── 1. Authenticate & authorize ──────────────────────────────────────
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const role = payload.role as string;
-    const tenantId = payload.tenantId as string;
-
-    if (!tenantId) {
-      return NextResponse.json(
-        { error: 'Invalid token: missing tenantId' },
-        { status: 401 },
-      );
-    }
-
-    // Only admin or super_admin may list logs
-    if (role !== 'admin' && role !== 'super_admin') {
-      return NextResponse.json(
-        { error: 'Forbidden: admin or super_admin role required' },
-        { status: 403 },
-      );
-    }
+    // ── 1. Authenticate & Authorize (feature check covers role gate) ─────
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     // ── 2. Parse query parameters ────────────────────────────────────────
     const { searchParams } = new URL(request.url);

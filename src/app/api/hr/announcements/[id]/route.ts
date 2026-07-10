@@ -1,33 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, getDbFriendlyMessage } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
     const item = await db.hrAnnouncement.findUnique({ where: { id } });
-    if (!item || item.tenantId !== payload.tenantId) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    if (!item || item.tenantId !== tenantId) return NextResponse.json({ error: 'Not found' }, { status: 404 });
     return NextResponse.json(item);
   } catch (error) { return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 }); }
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
     const existing = await db.hrAnnouncement.findUnique({ where: { id } });
-    if (!existing || existing.tenantId !== payload.tenantId) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    if (!existing || existing.tenantId !== tenantId) return NextResponse.json({ error: 'Not found' }, { status: 404 });
     const body = await request.json();
     const updateData: Record<string, unknown> = {};
     for (const key of ['title', 'content', 'type', 'priority', 'status']) { if (body[key] !== undefined) updateData[key] = body[key]; }
     if (body.status === 'published' && !existing.publishedAt) {
-      updateData.publishedBy = payload.userId || payload.sub;
+      updateData.publishedBy = userId || userId;
       updateData.publishedAt = new Date();
     }
     await db.hrAnnouncement.update({ where: { id }, data: updateData });
@@ -37,12 +37,12 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const payload = verifyToken(authHeader?.replace('Bearer ', '') || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
     const existing = await db.hrAnnouncement.findUnique({ where: { id } });
-    if (!existing || existing.tenantId !== payload.tenantId) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    if (!existing || existing.tenantId !== tenantId) return NextResponse.json({ error: 'Not found' }, { status: 404 });
     await db.hrAnnouncement.delete({ where: { id } });
     return NextResponse.json({ message: 'Deleted' });
   } catch (error) { return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 }); }

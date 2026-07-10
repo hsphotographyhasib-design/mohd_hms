@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 function formatRevision(r: {
   id: string;
@@ -26,12 +26,9 @@ function formatRevision(r: {
 
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!['super_admin', 'admin'].includes(auth.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { searchParams } = new URL(request.url);
     const pageId = searchParams.get('pageId');
@@ -65,12 +62,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!['super_admin', 'admin'].includes(auth.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const body = await request.json();
     const { action, pageId, revisionId, pageData, label } = body;
@@ -121,7 +115,7 @@ export async function POST(request: NextRequest) {
           pageData: revision.pageData,
           version: newVersion,
           label: `Restored from v${revision.version}`,
-          createdBy: auth.user.id as string,
+          createdBy: userId,
         },
       });
 
@@ -163,7 +157,7 @@ export async function POST(request: NextRequest) {
         pageData: typeof revisionPageData === 'string' ? revisionPageData : JSON.stringify(revisionPageData),
         version: newVersion,
         label: label || 'Manual save',
-        createdBy: auth.user.id as string,
+        createdBy: userId,
       },
     });
 

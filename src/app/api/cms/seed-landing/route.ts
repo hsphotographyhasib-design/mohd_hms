@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 async function upsertByFind<T extends { id: string }>(
@@ -18,11 +18,10 @@ async function upsertByFind<T extends { id: string }>(
 export async function POST(request: NextRequest) {
   try {
     // Auth: only super_admin can seed landing content
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (payload.role !== 'super_admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
+    if (role !== 'super_admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
     const result = await db.$transaction(async (tx) => {
       // ── Tenant ──────────────────────────────────────────────────────

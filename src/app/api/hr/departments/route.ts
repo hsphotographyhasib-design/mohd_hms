@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth, sanitizeInput } from '@/core/auth/auth-lib';
+import { sanitizeInput } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { getDbFriendlyMessage } from '@/core/database/db';
 
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const tenantId = auth.user.tenantId;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const departments = await db.department.findMany({
       where: { tenantId },
@@ -49,10 +47,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const body = await request.json();
     const name = sanitizeInput(body.name || '');
@@ -63,7 +60,7 @@ export async function POST(request: NextRequest) {
 
     const department = await db.department.create({
       data: {
-        tenantId: auth.user.tenantId,
+        tenantId: tenantId,
         name,
         description: sanitizeInput(body.description || ''),
         headId: body.headId || null,

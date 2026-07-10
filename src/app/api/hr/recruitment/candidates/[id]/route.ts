@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { getDbFriendlyMessage, getErrorHeaders } from '@/core/database/db';
 export const dynamic = 'force-dynamic';
 
@@ -9,11 +9,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { id } = await params;
-    const tenantId = auth.user.tenantId as string;
 
     const record = await db.hrCandidate.findFirst({
       where: { id, tenantId },
@@ -59,11 +59,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { id } = await params;
-    const tenantId = auth.user.tenantId as string;
     const body = await request.json();
 
     const existing = await db.hrCandidate.findFirst({ where: { id, tenantId } });

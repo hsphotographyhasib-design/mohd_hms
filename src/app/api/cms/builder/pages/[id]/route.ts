@@ -1,24 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
-import { headers } from 'next/headers';
-import type { JwtPayload } from 'jsonwebtoken';
-
-async function getAuthUser() {
-  const headersList = await headers();
-  const auth = headersList.get('authorization');
-  if (!auth?.startsWith('Bearer ')) return null;
-  try {
-    return verifyToken(auth.slice(7));
-  } catch {
-    return null;
-  }
-}
-
-function isAdmin(user: JwtPayload | null): user is JwtPayload {
-  if (!user) return false;
-  return user.role === 'super_admin' || user.role === 'admin';
-}
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 function formatPage(page: {
   id: string;
@@ -64,12 +46,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!isAdmin(user)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
 
     const { id } = await params;
-    const tenantId = user.tenantId as string;
 
     const page = await db.cmsPage.findFirst({
       where: { id, tenantId },
@@ -92,12 +72,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!isAdmin(user)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
 
     const { id } = await params;
-    const tenantId = user.tenantId as string;
     const body = await request.json();
 
     const existing = await db.cmsPage.findFirst({
@@ -165,12 +143,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!isAdmin(user)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
 
     const { id } = await params;
-    const tenantId = user.tenantId as string;
 
     const existing = await db.cmsPage.findFirst({
       where: { id, tenantId },

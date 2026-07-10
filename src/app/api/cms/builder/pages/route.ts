@@ -1,24 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
-import { headers } from 'next/headers';
-import type { JwtPayload } from 'jsonwebtoken';
-
-async function getAuthUser() {
-  const headersList = await headers();
-  const auth = headersList.get('authorization');
-  if (!auth?.startsWith('Bearer ')) return null;
-  try {
-    return verifyToken(auth.slice(7));
-  } catch {
-    return null;
-  }
-}
-
-function isAdmin(user: JwtPayload | null): user is JwtPayload {
-  if (!user) return false;
-  return user.role === 'super_admin' || user.role === 'admin';
-}
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 function generateSlug(title: string): string {
   return title
@@ -85,11 +67,9 @@ function formatPage(page: {
 // GET /api/cms/builder/pages — List all pages for tenant
 export async function GET(request: NextRequest) {
   try {
-    const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!isAdmin(user)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
 
-    const tenantId = user.tenantId as string;
     const { searchParams } = request.nextUrl;
     const status = searchParams.get('status') || '';
     const search = searchParams.get('search') || '';
@@ -140,11 +120,9 @@ export async function GET(request: NextRequest) {
 // POST /api/cms/builder/pages — Create new page
 export async function POST(request: NextRequest) {
   try {
-    const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!isAdmin(user)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
 
-    const tenantId = user.tenantId as string;
     const body = await request.json();
     const {
       title,

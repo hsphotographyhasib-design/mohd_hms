@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,16 +9,8 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload)
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const role = (payload.role as string)?.toLowerCase();
-    if (role !== 'super_admin') {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
+    const auth = verifyRouteAuth(request, { feature: 'error-logs' });
+    if (auth.error) return auth.error;
 
     const { id } = await params;
     const item = await db.errorLog.findUnique({

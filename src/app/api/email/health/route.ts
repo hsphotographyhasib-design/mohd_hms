@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getActiveProvider, isBrevoConfigured } from '@/core/email/service/providers';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 interface SmtpCheckResult {
@@ -39,10 +39,9 @@ async function checkBrevo(): Promise<Partial<SmtpCheckResult>> {
 }
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'email' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const [brevoCheck, queueStatus] = await Promise.all([checkBrevo()]);
 

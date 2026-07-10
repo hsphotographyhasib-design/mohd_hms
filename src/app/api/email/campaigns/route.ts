@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 const BREVO_API_URL = 'https://api.brevo.com/v3';
 
@@ -9,10 +9,8 @@ function getApiKey(): string | null {
 
 // ============ GET: List campaigns ============
 export async function GET(req: NextRequest) {
-  const authHeader = req.headers.get('authorization');
-  const token = authHeader?.replace('Bearer ', '');
-  const payload = verifyToken(token || '');
-  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = verifyRouteAuth(req, { feature: 'email' });
+  if (auth.error) return auth.error;
 
   const apiKey = getApiKey();
   if (!apiKey) {
@@ -60,10 +58,8 @@ export async function GET(req: NextRequest) {
 
 // ============ POST: Create a new campaign ============
 export async function POST(req: NextRequest) {
-  const authHeader = req.headers.get('authorization');
-  const token = authHeader?.replace('Bearer ', '');
-  const payload = verifyToken(token || '');
-  if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const auth = verifyRouteAuth(req, { feature: 'email' });
+  if (auth.error) return auth.error;
 
   const apiKey = getApiKey();
   if (!apiKey) {

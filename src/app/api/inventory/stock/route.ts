@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,13 +13,9 @@ function logAudit(tenantId: string, userId: string, action: string, entityId: st
 // ─── POST: Record stock movement ───────────────────────────────────────────────
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
+    const auth = verifyRouteAuth(request, { feature: 'inventory' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
 
     const { itemId, warehouseId, type, quantity, reason, referenceNo, referenceType, fromWarehouseId, batchNo, lotNumber, expiryDate, unitCost, notes } = body;
@@ -227,12 +223,9 @@ export async function POST(request: NextRequest) {
 // ─── GET: List stock movements with pagination and filters ─────────────────────
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'inventory' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const sp = request.nextUrl.searchParams;
 
     const page = parseInt(sp.get('page') || '1');

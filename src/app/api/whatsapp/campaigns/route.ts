@@ -1,16 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.headers.get('authorization')?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
+    const auth = verifyRouteAuth(req, { feature: 'whatsapp' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const page = parseInt(req.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(req.nextUrl.searchParams.get('pageSize') || '20');
     const status = req.nextUrl.searchParams.get('status') || '';
@@ -69,12 +67,10 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
   try {
-    const token = req.headers.get('authorization')?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
+    const auth = verifyRouteAuth(req, { feature: 'whatsapp' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
+    const userId = userId as string;
     const body = await req.json();
     const { title, content, templateId, recipientCount, scheduledAt } = body;
 

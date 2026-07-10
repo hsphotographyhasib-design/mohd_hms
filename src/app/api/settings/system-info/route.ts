@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { db } from '@/core/database/db';
 import { readFileSync, statSync } from 'fs';
 import { join } from 'path';
@@ -34,18 +34,13 @@ function maskSupabaseUrl(url: string): string {
 }
 
 export async function GET(request: NextRequest) {
-  // Auth check
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.replace('Bearer ', '');
-  const payload = verifyToken(token || '');
-  if (!payload) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
+  // Auth check + RBAC
+  const auth = verifyRouteAuth(request, { feature: 'settings' });
+  if (auth.error) return auth.error;
 
-  // Role-based access control
-  const role = (payload.role as string)?.toLowerCase();
-  // Only super_admin and admin can see full system info (record counts)
-  const isFullAccess = role === 'super_admin' || role === 'admin';
+  const role = auth.role;
+  // Only super_admin can access settings (feature check already gates this)
+  const isFullAccess = true;
 
   const startTime = Date.now();
 

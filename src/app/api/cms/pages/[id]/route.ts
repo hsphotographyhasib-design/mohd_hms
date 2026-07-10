@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 function generateSlug(title: string): string {
   return title
@@ -52,12 +52,9 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!['super_admin', 'admin'].includes(auth.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
 
     const page = await db.cmsPage.findFirst({
@@ -83,12 +80,9 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!['super_admin', 'admin'].includes(auth.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
 
     const existing = await db.cmsPage.findFirst({
@@ -128,7 +122,7 @@ export async function PUT(
       // Handle publish metadata
       if (status === 'published' && existing.status !== 'published') {
         updateData.publishedAt = new Date();
-        updateData.publishedBy = auth.user.id as string;
+        updateData.publishedBy = userId;
       } else if (status !== 'published') {
         updateData.publishedAt = null;
         updateData.publishedBy = null;
@@ -154,7 +148,7 @@ export async function PUT(
           pageData: typeof pageData === 'string' ? pageData : JSON.stringify(pageData),
           version: newVersion,
           label: 'Auto-save',
-          createdBy: auth.user.id as string,
+          createdBy: userId,
         },
       });
       // Update page version
@@ -177,12 +171,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!['super_admin', 'admin'].includes(auth.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
 
     const existing = await db.cmsPage.findFirst({
@@ -207,12 +198,9 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!['super_admin', 'admin'].includes(auth.user.role)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    }
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { id } = await params;
 
     const existing = await db.cmsPage.findFirst({
@@ -260,7 +248,7 @@ export async function POST(
         pageData: duplicated.pageData,
         version: 1,
         label: 'Duplicated from ' + existing.title,
-        createdBy: auth.user.id as string,
+        createdBy: userId,
       },
     });
 

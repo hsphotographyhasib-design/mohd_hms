@@ -1,21 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.headers.get('authorization')?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(req, { feature: 'whatsapp' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     // Only admin/super_admin can view WhatsApp config (contains secrets)
-    const role = (payload as any).role;
     if (!['admin', 'super_admin'].includes(role)) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
-
-    const tenantId = payload.tenantId as string;
 
     let config = await db.whatsAppConfig.findUnique({ where: { tenantId } });
 
@@ -72,17 +69,14 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const token = req.headers.get('authorization')?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(req, { feature: 'whatsapp' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     // Only admin/super_admin can modify WhatsApp config
-    const role = (payload as any).role;
     if (!['admin', 'super_admin'].includes(role)) {
       return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
     }
-
-    const tenantId = payload.tenantId as string;
     const body = await req.json();
 
     const existing = await db.whatsAppConfig.findUnique({ where: { tenantId } });

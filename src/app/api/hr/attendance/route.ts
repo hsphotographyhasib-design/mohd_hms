@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { db } from '@/core/database/db';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { searchParams } = request.nextUrl;
     const view = searchParams.get('view') || '';
 
@@ -22,7 +21,7 @@ export async function GET(request: NextRequest) {
       const endDate = new Date(year, month, 0, 23, 59, 59, 999);
 
       // Get current user's attendance for the month
-      const currentUserId = auth.user.userId as string;
+      const currentUserId = userId as string;
       const records = await db.attendance.findMany({
         where: {
           tenantId,
@@ -149,10 +148,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
     const { action, userId, notes, gps } = body;
 

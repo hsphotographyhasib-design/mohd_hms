@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,12 +11,9 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(req: NextRequest) {
   try {
-    const auth = await verifyAuth(req);
-    if (!auth) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    const { user } = auth;
-    const tenantId = user.tenantId as string;
+    const auth = verifyRouteAuth(req, { feature: 'email' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
 
     const { searchParams } = new URL(req.url);
     const q = searchParams.get('q')?.trim();

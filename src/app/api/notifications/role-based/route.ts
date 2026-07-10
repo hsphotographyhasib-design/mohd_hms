@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import {
   sendRoleBasedNotification,
   logNotificationEvent,
@@ -17,24 +17,10 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
   try {
-    // ── 1. Authenticate ──────────────────────────────────────────────────
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const userId = payload.userId as string;
-    const role = payload.role as string;
-    const tenantId = payload.tenantId as string;
-
-    if (!userId || !tenantId) {
-      return NextResponse.json(
-        { error: 'Invalid token: missing userId or tenantId' },
-        { status: 401 },
-      );
-    }
+    // ── 1. Authenticate & Authorize ──────────────────────────────────────
+    const auth = verifyRouteAuth(request, { feature: 'notifications' });
+    if (auth.error) return auth.error;
+    const { userId, role, tenantId } = auth;
 
     // ── 2. Parse & validate request body ─────────────────────────────────
     const body = await request.json();

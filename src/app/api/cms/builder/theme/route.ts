@@ -1,24 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
-import { headers } from 'next/headers';
-import type { JwtPayload } from 'jsonwebtoken';
-
-async function getAuthUser() {
-  const headersList = await headers();
-  const auth = headersList.get('authorization');
-  if (!auth?.startsWith('Bearer ')) return null;
-  try {
-    return verifyToken(auth.slice(7));
-  } catch {
-    return null;
-  }
-}
-
-function isAdmin(user: JwtPayload | null): user is JwtPayload {
-  if (!user) return false;
-  return user.role === 'super_admin' || user.role === 'admin';
-}
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 function formatTheme(t: {
   id: string;
@@ -55,11 +37,9 @@ function formatTheme(t: {
 // GET /api/cms/builder/theme — Get theme settings for tenant
 export async function GET() {
   try {
-    const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!isAdmin(user)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
 
-    const tenantId = user.tenantId as string;
 
     let theme = await db.cmsThemeSetting.findUnique({
       where: { tenantId },
@@ -94,11 +74,9 @@ export async function GET() {
 // PUT /api/cms/builder/theme — Update theme settings (upsert)
 export async function PUT(request: NextRequest) {
   try {
-    const user = await getAuthUser();
-    if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    if (!isAdmin(user)) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    const auth = verifyRouteAuth(request, { feature: 'cms' });
+    if (auth.error) return auth.error;
 
-    const tenantId = user.tenantId as string;
     const body = await request.json();
 
     const jsonFields = ['colors', 'typography', 'borderRadius', 'shadows', 'spacing', 'buttons', 'cards'];

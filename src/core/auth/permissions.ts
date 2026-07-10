@@ -1,27 +1,9 @@
-import type { UserRole } from '@/core/types';
-
 /**
- * Feature-level permission map.
- * Each key is a feature/section name; the value is the list of roles allowed to access it.
+ * Feature-level permission map — DELEGATED to unified RBAC.
+ *
+ * @deprecated Import from '@/core/permissions/rbac' instead.
+ * This file is kept for backward compatibility only.
  */
-export const PERMISSIONS: Record<string, UserRole[]> = {
-  dashboard: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'customer'],
-  equipment: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
-  complaints: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
-  'work-orders': ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
-  invoices: ['super_admin', 'admin', 'manager', 'finance', 'customer'],
-  pm: ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
-  quotations: ['super_admin', 'admin', 'manager', 'customer'],
-  inventory: ['super_admin', 'admin', 'manager', 'supervisor'],
-  customers: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
-  employees: ['super_admin', 'admin', 'manager', 'hr'],
-  purchases: ['super_admin', 'admin', 'manager'],
-  vehicles: ['super_admin', 'admin', 'manager'],
-  finance: ['super_admin', 'admin', 'manager', 'finance'],
-  reports: ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
-  notifications: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'customer'],
-  settings: ['super_admin', 'admin'],
-  cms: ['super_admin', 'admin'],
-  whatsapp: ['super_admin', 'admin', 'manager', 'supervisor'],
-  hr: ['super_admin', 'admin', 'manager', 'hr'],
-};
+
+// Re-export everything from the unified source
+export { FEATURE_PERMISSIONS as PERMISSIONS, canAccessFeature as canAccess, hasPermission, hasMinRole } from '@/core/permissions/rbac/permissions-matrix';

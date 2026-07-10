@@ -171,10 +171,10 @@ export async function buildDataScope(payload: {
       };
     }
 
-    // Invoices / Quotations / Equipment: DENIED
-    invoiceWhere = DENIED_INVOICE;
-    quotationWhere = DENIED_QUOTATION;
-    equipmentWhere = DENIED_EQUIPMENT;
+    // Invoices / Quotations / Equipment: tenant access
+    invoiceWhere = { tenantId };
+    quotationWhere = { tenantId };
+    equipmentWhere = { tenantId };
     customerWhere = { tenantId };
 
     return { complaint: complaintWhere, workOrder: workOrderWhere, invoice: invoiceWhere, quotation: quotationWhere, equipment: equipmentWhere, customer: customerWhere };
@@ -183,10 +183,12 @@ export async function buildDataScope(payload: {
   // ─── technician: assigned complaints + own work orders, denied for invoicing ─
   if (role === 'technician') {
     workOrderWhere = { tenantId, assignedToId: userId };
+    // Technicians can view assigned equipment
+    equipmentWhere = { tenantId };
+    // Invoices / Quotations / Customers: DENIED
     invoiceWhere = DENIED_INVOICE;
     quotationWhere = DENIED_QUOTATION;
-    equipmentWhere = DENIED_EQUIPMENT;
-    customerWhere = { tenantId };
+    customerWhere = DENIED_CUSTOMER;
 
     return { complaint: complaintWhere, workOrder: workOrderWhere, invoice: invoiceWhere, quotation: quotationWhere, equipment: equipmentWhere, customer: customerWhere };
   }

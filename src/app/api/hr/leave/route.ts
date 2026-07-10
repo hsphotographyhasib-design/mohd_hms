@@ -1,15 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyAuth } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { db } from '@/core/database/db';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const { searchParams } = request.nextUrl;
     const view = searchParams.get('view') || '';
 
@@ -17,7 +16,7 @@ export async function GET(request: NextRequest) {
     if (view === 'meta') {
       // Find HrEmployee for the current user
       const hrEmp = await db.hrEmployee.findUnique({
-        where: { userId: auth.user.userId as string },
+        where: { userId: userId as string },
         select: { id: true },
       });
 
@@ -135,10 +134,9 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const auth = await verifyAuth(request);
-    if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    const tenantId = auth.user.tenantId as string;
+    const auth = verifyRouteAuth(request, { feature: 'hr' });
+    if (auth.error) return auth.error;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
     const { employeeId, leaveTypeId, startDate, endDate, reason, attachment } = body;
 
