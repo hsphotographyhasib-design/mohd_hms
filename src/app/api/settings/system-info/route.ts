@@ -1,10 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyToken } from '@/core/auth/auth-lib';
 import { db } from '@/core/database/db';
-import { readFileSync } from 'fs';
+import { readFileSync, statSync } from 'fs';
 import { join } from 'path';
 
 export const dynamic = 'force-dynamic';
+
+/**
+ * Mirror the same detection logic as src/core/database/db.ts
+ * to ensure the reported type matches the actual DB in use.
+ */
+function isUsingSupabase(): boolean {
+  if (process.env.USE_SUPABASE === 'true') return true;
+  if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NODE_ENV === 'production') return true;
+  return false;
+}
+
+/** Mask a Supabase project URL for display (only show project ref) */
+function maskSupabaseUrl(url: string): string {
+  try {
+    const parsed = new URL(url);
+    // https://xxxxx.supabase.co → https://xxxxx.supabase.co
+    // Show the project ref but mask part of it for security
+    const ref = parsed.hostname.replace('.supabase.co', '');
+    if (ref.length > 6) {
+      const visible = ref.slice(0, 3) + '•••' + ref.slice(-3);
+      return `https://${visible}.supabase.co`;
+    }
+    return url;
+  } catch {
+    return url;
+  }
+}
 
 export async function GET(request: NextRequest) {
   // Auth check
@@ -29,19 +56,19 @@ export async function GET(request: NextRequest) {
   // Real environment
   const environment = process.env.NODE_ENV || 'development';
 
-  // Database connectivity check
+  // Database connectivity check — uses same detection as db.ts
+  const useSupabase = isUsingSupabase();
   let dbStatus: 'Connected' | 'Disconnected' = 'Disconnected';
   let dbLatencyMs: number | null = null;
-  let dbType = 'sqlite';
   let dbError: string | null = null;
-  let isSupabase = process.env.USE_SUPABASE === 'true';
-  dbType = isSupabase ? 'supabase' : 'sqlite';
 
   try {
     const start = performance.now();
-    if (isSupabase) {
+    if (useSupabase) {
+      // Supabase REST — lightweight count query
       await db.user.count();
     } else {
+      // Prisma / SQLite — raw SQL ping
       await db.$queryRaw`SELECT 1 as ok`;
     }
     dbLatencyMs = Math.round(performance.now() - start);
@@ -85,25 +112,28 @@ export async function GET(request: NextRequest) {
     }
   }
 
-  // Last backup — check for SQLite DB file modification time (local dev)
+  // Last backup — only meaningful for local SQLite
   let lastBackup: string | null = null;
-  if (!isSupabase && dbStatus === 'Connected') {
+  if (!useSupabase && dbStatus === 'Connected') {
     try {
-      // Derive file path from DATABASE_URL (e.g. "file:/app/db/custom.db" → "/app/db/custom.db")
       const dbUrl = process.env.DATABASE_URL || '';
       let dbPath = join(process.cwd(), 'db', 'dev.db');
       if (dbUrl.startsWith('file:')) {
         const parsed = dbUrl.replace(/^file:/, '');
-        // Handle both absolute and relative paths
         dbPath = parsed.startsWith('/') ? parsed : join(process.cwd(), parsed);
       }
-      const { statSync } = await import('fs');
       const stats = statSync(dbPath);
       lastBackup = stats.mtime.toISOString();
     } catch {
       // Can't determine last backup time
     }
   }
+
+  // Build database type label
+  const dbType = useSupabase ? 'Supabase (PostgreSQL)' : 'SQLite';
+  const supabaseUrl = useSupabase && process.env.NEXT_PUBLIC_SUPABASE_URL
+    ? maskSupabaseUrl(process.env.NEXT_PUBLIC_SUPABASE_URL)
+    : undefined;
 
   return NextResponse.json({
     version,
@@ -113,6 +143,7 @@ export async function GET(request: NextRequest) {
       type: dbType,
       latencyMs: dbLatencyMs,
       error: dbError,
+      ...(supabaseUrl && { supabaseUrl }),
     },
     recordCounts,
     lastBackup,

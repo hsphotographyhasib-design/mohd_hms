@@ -421,6 +421,7 @@ interface SystemInfo {
     type: string;
     latencyMs: number | null;
     error: string | null;
+    supabaseUrl?: string;
   };
   recordCounts: Record<string, number> | null;
   lastBackup: string | null;
@@ -554,9 +555,17 @@ function SystemTab() {
               <Database className="h-4 w-4 text-muted-foreground" />
               Database Details
               {info.database.type && (
-                <Badge variant="outline" className="text-xs font-normal">
-                  {info.database.type}
+                <Badge
+                  variant="outline"
+                  className={`text-xs font-normal ${info.database.type.includes('Supabase') ? 'border-emerald-300 text-emerald-700 bg-emerald-50' : 'border-blue-300 text-blue-700 bg-blue-50'}`}
+                >
+                  {info.database.type.includes('Supabase') ? '⚡ ' : '📁 '}{info.database.type}
                 </Badge>
+              )}
+              {info.database.supabaseUrl && (
+                <span className="text-[11px] text-muted-foreground ml-1 font-mono">
+                  {info.database.supabaseUrl}
+                </span>
               )}
             </CardTitle>
           </CardHeader>
