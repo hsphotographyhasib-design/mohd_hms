@@ -342,3 +342,22 @@ Stage Summary:
 - Multi-payment support via InvoicePayment model
 - Reuses QuotationLineItemsGrid for line item editing
 - Server-side PDF generation, email, WhatsApp integration
+
+---
+Task ID: fix-notifications-todatestring
+Agent: Main
+Task: Fix "TypeError: e.createdAt.toISOString is not a function" in notifications API (and all other APIs) when using Supabase
+
+Work Log:
+- Identified root cause: Supabase REST adapter returns DateTime fields as ISO strings via `res.json()`, not as `Date` objects like Prisma does
+- All 168 API routes call `.toISOString()` on date fields, assuming they are `Date` objects
+- Added `DATE_TIME_FIELDS` Set containing all 93 DateTime column names from Prisma schema
+- Added `deserializeDates()` recursive function that converts known date string fields back to `Date` objects
+- Applied `deserializeDates()` in `supabaseRequest()` after `res.json()` parsing
+- Applied same fix in `$queryRaw()` function
+- Verified with `bun run lint` — 0 errors
+
+Stage Summary:
+- Fixed: `src/core/database/supabase-db.ts` — added date deserialization layer
+- This is a systemic fix that resolves `.toISOString()` errors across ALL 168+ API routes when using Supabase
+- No changes needed to individual API route files

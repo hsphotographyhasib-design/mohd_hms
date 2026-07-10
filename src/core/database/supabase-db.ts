@@ -98,7 +98,8 @@ async function supabaseRequest<T = any>(
 
   let data: T | null = null;
   try {
-    data = await res.json();
+    const raw = await res.json();
+    data = deserializeDates(raw);
     if (single && Array.isArray(data)) {
       data = (data as any[]).length > 0 ? (data as any[])[0] : null;
     }
@@ -127,7 +128,49 @@ function serializeData(data: any): any {
 }
 
 // ---------------------------------------------------------------------------
-// 3. Where Clause → PostgREST Filters
+// 3. Date deserialization — converts ISO date strings back to Date objects
+// ---------------------------------------------------------------------------
+// All DateTime column names from Prisma schema (must stay in sync).
+const DATE_TIME_FIELDS = new Set([
+  'acceptedAt','applicationDeadline','appliedAt','approvedAt','archivedAt',
+  'assignedAt','assignedDate','bouncedAt','certificateExpiry','checkIn',
+  'checkOut','clickedAt','clientConfirmedAt','closedAt','closingDate',
+  'completedAt','contractEnd','createdAt','date','dateOfBirth','deliveredAt',
+  'drivingLicenseExpiry','dueDate','effectiveFrom','effectiveTo','endDate',
+  'expectedDate','expenseDate','expiresAt','expiryDate','generatedAt',
+  'hrApprovedAt','incidentDate','installDate','interviewDate','joiningDate',
+  'lastActivity','lastExecuted','lastLogin','lastMessageAt','lastReassignedAt',
+  'lastRegeneratedAt','lastScannedAt','lastSeen','lastUsedAt',
+  'lastWhatsappActivity','nextDueDate','nextRetryAt','nextServiceDate',
+  'offerDate','openedAt','paidAt','passportExpiry','popupExpiry','postedDate',
+  'probationEnds','processedAt','publishedAt','readAt','receivedAt',
+  'rejectedAt','replyAt','resolvedAt','returnDate','scheduledAt',
+  'scheduledDate','scheduledFor','scheduledFrom','scheduledTo','sentAt',
+  'slaResponseDeadline','startDate','startedAt','supervisorApprovedAt',
+  'timestamp','updatedAt','uploadedAt','usedAt','validUntil','verifiedAt',
+  'viewedAt','visaExpiry','warrantyExpiry',
+]);
+
+/** Convert ISO date strings back to Date objects for known DateTime columns. */
+function deserializeDates(data: any): any {
+  if (data === null || data === undefined) return data;
+  if (Array.isArray(data)) return data.map(deserializeDates);
+  if (typeof data === 'object') {
+    const out: Record<string, unknown> = { ...data };
+    for (const k of Object.keys(out)) {
+      if (DATE_TIME_FIELDS.has(k) && typeof out[k] === 'string' && out[k]) {
+        out[k] = new Date(out[k] as string);
+      } else if (typeof out[k] === 'object' && out[k] !== null) {
+        out[k] = deserializeDates(out[k]);
+      }
+    }
+    return out;
+  }
+  return data;
+}
+
+// ---------------------------------------------------------------------------
+// 4. Where Clause → PostgREST Filters
 // ---------------------------------------------------------------------------
 
 function whereToFilters(where: Record<string, unknown>, prefix = ''): Record<string, string> {
@@ -815,7 +858,7 @@ async function $queryRaw(strings: TemplateStringsArray, ...values: any[]): Promi
   }
 
   try {
-    return await res.json();
+    return deserializeDates(await res.json());
   } catch {
     return [];
   }
