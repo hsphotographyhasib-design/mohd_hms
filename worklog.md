@@ -481,3 +481,34 @@ Stage Summary:
   may not be the root cause of the page crash. The actual error will now be visible
   in the error modal for the user to report.
 - Dev server cannot run in sandbox (OOM) — cannot verify with browser agent
+
+---
+Task ID: 2
+Agent: Main
+Task: Fix Google Sign-In not configured — graceful handling + demo login
+
+Work Log:
+- Investigated auth architecture: found 3 parallel Google auth systems (NextAuth, custom PKCE, direct ID token). Only custom PKCE (`/api/auth/google/authorize`) is used by login page.
+- Root cause: `.env` has no `GOOGLE_CLIENT_ID` or `GOOGLE_CLIENT_SECRET`. Only `DATABASE_URL` was set.
+- Created `/api/auth/google/status` endpoint — returns `{ configured: boolean, message: string }` for frontend detection
+- Updated `/api/auth/google/authorize` — replaced `alert()` HTML with proper redirect to `/?auth_error=google_not_configured&auth_message=...`
+- Updated `login-view.tsx`:
+  - Added `useSearchParams` to read `auth_error`/`auth_message` from redirect
+  - Added `Suspense` wrapper (required by Next.js for `useSearchParams`)
+  - Added `/api/auth/google/status` fetch on mount to detect Google config
+  - Google button shows as grayed out "Google Sign-In Unavailable" when not configured
+  - Shows amber info banner if redirected back from unconfigured Google
+  - Added `LoginSkeleton` loading state
+- Fixed demo password mismatch: login page had `password123`, seed used `Admin@123`. Aligned to `Admin@123`.
+- Updated `seed-sqlite.ts` to create all 5 demo users (was only creating admin)
+- Fixed seed order: departments must be created before users (FK constraint)
+- Added `NEXT_PUBLIC_ENABLE_DEMO_LOGIN=true` to `.env`
+- Ran seed successfully — all 5 users created in database
+- ESLint: 0 errors, 11 warnings (all pre-existing)
+- Pushed to GitHub (commit 8aa8394)
+
+Stage Summary:
+- Google Sign-In now shows a proper disabled state with message when not configured (no more ugly alert)
+- Demo login buttons are now enabled with 5 working accounts
+- Users can log in via email/password or demo quick-login while Google OAuth is unconfigured
+- To enable Google: add `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` to environment variables
