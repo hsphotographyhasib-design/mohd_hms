@@ -543,3 +543,42 @@ Stage Summary:
 - Swagger docs at http://localhost:3002/api/docs
 - Startable via `npm run start:prod` or `./start.sh`
 - Auto-start sessions on boot enabled
+
+---
+Task ID: 3
+Agent: Main
+Task: Install and implement OpenWA v0.8.14 from GitHub
+
+Work Log:
+- Cloned https://github.com/rmyndharis/OpenWA.git and explored full codebase
+- Explored existing WhatsApp module (20 API routes, 8 UI components, 3-provider architecture)
+- Set up OpenWA as mini-service at mini-services/openwa/ on port 3002
+  - Used baileys engine (no Chrome/Puppeteer needed)
+  - SQLite database, dev API key enabled
+  - Built with nest build (NestJS), verified startup
+- Installed @rmyndharis/openwa SDK in main project
+- Rewrote src/core/whatsapp/service/manager.ts:
+  - Changed from old @open-wa/wa-automate API to new OpenWA v0.8 REST API
+  - Session CRUD via /api/sessions, QR via /api/sessions/{id}/qr
+  - Auto-starts OpenWA service, webhook registration
+  - Health check at /api/health (was /health)
+- Rewrote src/core/whatsapp/engine/provider.ts (OpenWAProvider):
+  - New API endpoints: /messages/send-text, /messages/send-image, etc.
+  - X-API-Key header auth (was 'apikey' header)
+  - Session ID resolution by name with caching
+- Updated src/app/api/whatsapp/webhook/route.ts:
+  - Handle message.received, session.status, message.ack events (v0.8 format)
+  - Media message support (image, video, audio, document, sticker)
+- Updated whatsapp-settings.tsx default port 3001 → 3002
+- Added OPENWA_SERVICE_URL, OPENWA_SESSION_NAME, OPENWA_API_KEY to .env
+- Updated .env.example with OpenWA configuration section
+- Updated .gitignore for openwa dist/ and data/
+- ESLint: 0 errors
+- Pushed to GitHub (commit c893871)
+
+Stage Summary:
+- OpenWA v0.8.14 installed and running on port 3002 (verified: /api/health returns ok)
+- Full WhatsApp gateway with REST API, WebSocket events, webhooks
+- Old @open-wa/wa-automate integration completely replaced
+- To connect: WhatsApp Settings → OpenWA provider → Connect (QR code scan)
+- No Chrome needed — uses baileys engine (WebSocket-based)
