@@ -294,6 +294,13 @@ function MoreMenuSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o
 }
 
 // ─── Floating Glassmorphism Bottom Navigation (Role-Adaptive) ─
+// Views that render their own sticky bottom action bar — hide floating nav to avoid overlap
+const VIEWS_WITH_OWN_BOTTOM_BAR: string[] = [
+  'new-quotation',
+  'quotation-edit',
+  'new-work-order',
+];
+
 function FloatingBottomNav() {
   const { currentView, setView } = useAppStore();
   const { user } = useAuthStore();
@@ -304,6 +311,9 @@ function FloatingBottomNav() {
   const lastY = useRef(0);
 
   const role = user?.role || 'customer';
+
+  // Hide nav entirely when the current view has its own bottom action bar
+  const hiddenByView = VIEWS_WITH_OWN_BOTTOM_BAR.includes(currentView);
 
   // Auto-hide on scroll down, show on scroll up
   useMotionValueEvent(scrollY, 'change', (y) => {
@@ -348,6 +358,8 @@ function FloatingBottomNav() {
       return canAccess(role, tab.feature);
     });
   }, [role, rightTabs]);
+
+  if (hiddenByView) return null;
 
   return (
     <>
@@ -423,10 +435,16 @@ function FloatingBottomNav() {
 
 // ─── Mobile Shell (Main Export) ────────────────────────────────
 export function MobileShell({ children }: { children: React.ReactNode }) {
+  const { currentView } = useAppStore();
+  const navHidden = VIEWS_WITH_OWN_BOTTOM_BAR.includes(currentView);
+  const paddingBottom = navHidden
+    ? 'calc(16px + env(safe-area-inset-bottom, 0px))'
+    : 'calc(100px + env(safe-area-inset-bottom, 0px))';
+
   return (
     <div className="fixed inset-0 flex flex-col bg-gray-50">
       <MobileHeader />
-      <main className="flex-1 overflow-y-auto" style={{ paddingBottom: 'calc(100px + env(safe-area-inset-bottom, 0px))' }}>
+      <main className="flex-1 overflow-y-auto" style={{ paddingBottom }}>
         {children}
       </main>
       <FloatingBottomNav />

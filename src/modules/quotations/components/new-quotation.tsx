@@ -410,11 +410,17 @@ export function NewQuotation() {
         attachments: formData.attachments.length > 0 ? JSON.stringify(formData.attachments) : null,
       };
 
-      const res = await fetch('/api/quotations/create', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...authHeaders() },
-        body: JSON.stringify(payload),
-      });
+      const res = savedQuotationId
+        ? await fetch(`/api/quotations/${savedQuotationId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', ...authHeaders() },
+            body: JSON.stringify(payload),
+          })
+        : await fetch('/api/quotations/create', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', ...authHeaders() },
+            body: JSON.stringify(payload),
+          });
 
       if (!res.ok) {
         const err = await res.json();
