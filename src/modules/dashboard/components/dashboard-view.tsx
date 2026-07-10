@@ -12,6 +12,7 @@ import {
   Activity, CheckCircle2, Star, Calendar, ArrowRight,
   RefreshCw, ShieldCheck, Filter, X, LogOut,
   WifiOff, ServerCrash, Loader2, Wifi,
+  HeartHandshake, MessageCircle, Globe,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
@@ -21,7 +22,7 @@ import {
 } from '@/shared/ui/table';
 import { Progress } from '@/shared/ui/progress';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { useAuthStore, useAppStore } from '@/app-shell/store';
+import { useAuthStore, useAppStore, canAccess } from '@/app-shell/store';
 import type { ComplaintItem, WorkOrderItem, PmScheduleItem, UserRole } from '@/core/types';
 import {
   useDashboardKpi, useDashboardCharts, useDashboardRecent,
@@ -1468,6 +1469,154 @@ const DashboardFilterBar = memo(function DashboardFilterBar({
   );
 });
 
+// ============ QUICK ACCESS SECTION ============
+
+const HR_ITEMS = [
+  { id: 'hr-dashboard', label: 'Dashboard', emoji: '📊' },
+  { id: 'hr-employees', label: 'Employees', emoji: '👥' },
+  { id: 'hr-departments', label: 'Departments', emoji: '🏢' },
+  { id: 'hr-attendance', label: 'Attendance', emoji: '📋' },
+  { id: 'hr-leave', label: 'Leave Mgmt', emoji: '🏖️' },
+  { id: 'hr-shifts', label: 'Shifts', emoji: '🕐' },
+  { id: 'hr-payroll', label: 'Payroll', emoji: '💰' },
+  { id: 'hr-overtime', label: 'Overtime', emoji: '⏰' },
+  { id: 'hr-recruitment', label: 'Recruitment', emoji: '🎯' },
+  { id: 'hr-performance', label: 'Performance', emoji: '📈' },
+  { id: 'hr-training', label: 'Training', emoji: '🎓' },
+  { id: 'hr-assets', label: 'Assets', emoji: '🏷️' },
+  { id: 'hr-documents', label: 'Documents', emoji: '📄' },
+  { id: 'hr-visitors', label: 'Visitors', emoji: '🪪' },
+  { id: 'hr-medical', label: 'Medical', emoji: '🏥' },
+  { id: 'hr-travel', label: 'Travel', emoji: '✈️' },
+  { id: 'hr-expenses', label: 'Expenses', emoji: '🧾' },
+  { id: 'hr-disciplinary', label: 'Disciplinary', emoji: '⚠️' },
+  { id: 'hr-announcements', label: 'Announcements', emoji: '📢' },
+  { id: 'hr-reports', label: 'Reports', emoji: '📉' },
+  { id: 'hr-settings', label: 'Settings', emoji: '⚙️' },
+];
+
+const WHATSAPP_ITEMS = [
+  { id: 'whatsapp', label: 'Dashboard', emoji: '💬' },
+  { id: 'whatsapp-chats', label: 'Live Chats', emoji: '🗨️' },
+  { id: 'whatsapp-templates', label: 'Templates', emoji: '📝' },
+  { id: 'whatsapp-campaigns', label: 'Campaigns', emoji: '📣' },
+  { id: 'whatsapp-settings', label: 'Settings', emoji: '⚙️' },
+];
+
+const CMS_ITEMS = [
+  { id: 'cms-dashboard', label: 'Dashboard', emoji: '🌐' },
+  { id: 'cms-hero', label: 'Hero Section', emoji: '🖼️' },
+  { id: 'cms-about', label: 'About Us', emoji: 'ℹ️' },
+  { id: 'cms-services', label: 'Services', emoji: '🔧' },
+  { id: 'cms-industries', label: 'Industries', emoji: '🏭' },
+  { id: 'cms-projects', label: 'Projects', emoji: '🏗️' },
+  { id: 'cms-blogs', label: 'Blog', emoji: '📝' },
+  { id: 'cms-testimonials', label: 'Testimonials', emoji: '⭐' },
+  { id: 'cms-careers', label: 'Careers', emoji: '💼' },
+  { id: 'cms-contact', label: 'Contact Inbox', emoji: '📧' },
+  { id: 'cms-media', label: 'Media Library', emoji: '🎞️' },
+  { id: 'cms-seo', label: 'SEO', emoji: '🔍' },
+  { id: 'cms-header', label: 'Header', emoji: '📌' },
+  { id: 'cms-footer', label: 'Footer', emoji: '🔻' },
+  { id: 'cms-announcements', label: 'Announcements', emoji: '📢' },
+  { id: 'cms-popups', label: 'Popups', emoji: '💥' },
+  { id: 'cms-forms', label: 'Form Builder', emoji: '📄' },
+  { id: 'cms-activity', label: 'Activity Log', emoji: '📋' },
+];
+
+function QuickAccessCard({
+  title,
+  icon: Icon,
+  color,
+  items,
+}: {
+  title: string;
+  icon: typeof HeartHandshake;
+  color: string;
+  items: { id: string; label: string; emoji: string }[];
+}) {
+  const { setView } = useAppStore();
+
+  return (
+    <Card className="overflow-hidden">
+      <CardHeader className="pb-3 pt-4 px-4">
+        <div className="flex items-center gap-2">
+          <div className={cn('p-2 rounded-lg', color)}>
+            <Icon className="h-4 w-4 text-white" />
+          </div>
+          <CardTitle className="text-sm font-semibold">{title}</CardTitle>
+          <Badge variant="outline" className="ml-auto text-[10px] font-normal">
+            {items.length} modules
+          </Badge>
+        </div>
+      </CardHeader>
+      <CardContent className="px-4 pb-4 pt-0">
+        <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5">
+          {items.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => setView(item.id as any)}
+              className="flex flex-col items-center gap-1 p-2 rounded-lg text-center
+                hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-150
+                group cursor-pointer"
+            >
+              <span className="text-base group-hover:scale-110 transition-transform duration-150">
+                {item.emoji}
+              </span>
+              <span className="text-[11px] leading-tight text-gray-600 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-gray-100 font-medium truncate w-full">
+                {item.label}
+              </span>
+            </button>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function QuickAccessSection({ role }: { role: UserRole }) {
+  const showHr = canAccess(role, 'hr');
+  const showWhatsapp = canAccess(role, 'whatsapp');
+  const showCms = canAccess(role, 'cms');
+
+  if (!showHr && !showWhatsapp && !showCms) return null;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-2">
+        <ArrowRight className="h-4 w-4 text-emerald-600" />
+        <h2 className="text-base font-semibold tracking-tight">Quick Access</h2>
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+        {showHr && (
+          <QuickAccessCard
+            title="Human Resources"
+            icon={HeartHandshake}
+            color="bg-violet-500"
+            items={HR_ITEMS}
+          />
+        )}
+        {showWhatsapp && (
+          <QuickAccessCard
+            title="WhatsApp"
+            icon={MessageCircle}
+            color="bg-emerald-500"
+            items={WHATSAPP_ITEMS}
+          />
+        )}
+        {showCms && (
+          <QuickAccessCard
+            title="Website CMS"
+            icon={Globe}
+            color="bg-sky-500"
+            items={CMS_ITEMS}
+          />
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ============ MAIN DASHBOARD VIEW ============
 
 export function DashboardView() {
@@ -1632,6 +1781,9 @@ export function DashboardView() {
           error={recent.error}
         />
       )}
+
+      {/* ============ 7. QUICK ACCESS: HR / WhatsApp / CMS ============ */}
+      <QuickAccessSection role={role} />
     </div>
   );
 }

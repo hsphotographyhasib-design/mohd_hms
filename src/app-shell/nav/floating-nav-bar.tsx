@@ -37,22 +37,16 @@ import {
 // TYPES
 // ============================================================
 
-interface SubItem {
-  id: string;
-  label: string;
-}
-
 interface NavItemConfig {
   id: string;
   label: string;
   icon: LucideIcon;
   feature: string;
-  subItems?: SubItem[];
   isCms?: boolean;
 }
 
 // ============================================================
-// NAVIGATION CONFIGURATION
+// NAVIGATION CONFIGURATION (all flat — no sub-menus)
 // ============================================================
 
 const NAV_ITEMS: NavItemConfig[] = [
@@ -71,51 +65,11 @@ const NAV_ITEMS: NavItemConfig[] = [
   { id: 'purchases', label: 'Purchases', icon: ShoppingCart, feature: 'purchases' },
   { id: 'vehicles', label: 'Vehicles', icon: Truck, feature: 'vehicles' },
   { id: 'reports', label: 'Reports', icon: BarChart3, feature: 'reports' },
-  {
-    id: 'hr-dashboard',
-    label: 'Human Resources',
-    icon: HeartHandshake,
-    feature: 'hr',
-    subItems: [
-      { id: 'hr-dashboard', label: 'Dashboard' },
-      { id: 'hr-employees', label: 'Employees' },
-      { id: 'hr-departments', label: 'Departments' },
-      { id: 'hr-attendance', label: 'Attendance' },
-      { id: 'hr-leave', label: 'Leave Management' },
-      { id: 'hr-shifts', label: 'Shift Management' },
-      { id: 'hr-payroll', label: 'Payroll' },
-      { id: 'hr-overtime', label: 'Overtime' },
-      { id: 'hr-recruitment', label: 'Recruitment' },
-      { id: 'hr-performance', label: 'Performance' },
-      { id: 'hr-training', label: 'Training' },
-      { id: 'hr-assets', label: 'Assets' },
-      { id: 'hr-documents', label: 'Documents' },
-      { id: 'hr-visitors', label: 'Visitors' },
-      { id: 'hr-medical', label: 'Medical Records' },
-      { id: 'hr-travel', label: 'Travel' },
-      { id: 'hr-expenses', label: 'Expenses' },
-      { id: 'hr-disciplinary', label: 'Disciplinary' },
-      { id: 'hr-announcements', label: 'Announcements' },
-      { id: 'hr-reports', label: 'Reports' },
-      { id: 'hr-settings', label: 'Settings' },
-    ],
-  },
+  { id: 'hr-dashboard', label: 'HR', icon: HeartHandshake, feature: 'hr' },
   { id: 'user-management', label: 'Users', icon: Shield, feature: 'user-management' },
   { id: 'notifications', label: 'Notifications', icon: Bell, feature: 'notifications' },
   { id: 'email-management', label: 'Email', icon: Mail, feature: 'email' },
-  {
-    id: 'whatsapp',
-    label: 'WhatsApp',
-    icon: MessageCircle,
-    feature: 'whatsapp',
-    subItems: [
-      { id: 'whatsapp', label: 'WhatsApp Dashboard' },
-      { id: 'whatsapp-chats', label: 'Live Chats' },
-      { id: 'whatsapp-templates', label: 'Templates' },
-      { id: 'whatsapp-campaigns', label: 'Campaigns' },
-      { id: 'whatsapp-settings', label: 'Settings' },
-    ],
-  },
+  { id: 'whatsapp', label: 'WhatsApp', icon: MessageCircle, feature: 'whatsapp' },
   { id: 'settings', label: 'Settings', icon: Settings, feature: 'settings' },
 ];
 
@@ -125,26 +79,6 @@ const CMS_ITEM: NavItemConfig = {
   icon: Globe,
   feature: 'cms',
   isCms: true,
-  subItems: [
-    { id: 'cms-dashboard', label: 'CMS Dashboard' },
-    { id: 'cms-hero', label: 'Hero Section' },
-    { id: 'cms-about', label: 'About Us' },
-    { id: 'cms-services', label: 'Services' },
-    { id: 'cms-industries', label: 'Industries' },
-    { id: 'cms-projects', label: 'Projects' },
-    { id: 'cms-blogs', label: 'Blog' },
-    { id: 'cms-testimonials', label: 'Testimonials' },
-    { id: 'cms-careers', label: 'Careers' },
-    { id: 'cms-contact', label: 'Contact Inbox' },
-    { id: 'cms-media', label: 'Media Library' },
-    { id: 'cms-seo', label: 'SEO' },
-    { id: 'cms-header', label: 'Header' },
-    { id: 'cms-footer', label: 'Footer' },
-    { id: 'cms-announcements', label: 'Announcements' },
-    { id: 'cms-popups', label: 'Popups' },
-    { id: 'cms-forms', label: 'Form Builder' },
-    { id: 'cms-activity', label: 'Activity Log' },
-  ],
 };
 
 const SCROLL_AMOUNT = 200;
@@ -197,25 +131,19 @@ export function FloatingNavBar() {
   const { user } = useAuthStore();
 
   // ---- Local State ----
-  const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
-  const [dropdownRect, setDropdownRect] = useState<{ top: number; left: number } | null>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
-  const [focusedSubIndex, setFocusedSubIndex] = useState(-1);
 
   // ---- Refs ----
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const navItemRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // ============================================================
   // FILTERED NAV ITEMS BY ROLE
   // ============================================================
 
   const filteredItems = useMemo(() => {
-    if (!user) return [];
+    if (!user) return { mainItems: [], showCms: false };
     const role = user.role;
     const mainItems = NAV_ITEMS.filter((item) => canAccess(role, item.feature));
     const showCms = canAccess(role, 'cms');
@@ -249,7 +177,6 @@ export function FloatingNavBar() {
 
   useEffect(() => {
     if (!currentView || currentView === 'login') return;
-    // Small delay to ensure DOM is ready
     const timer = setTimeout(() => {
       const btn = navItemRefs.current.get(currentView);
       if (btn) {
@@ -277,7 +204,6 @@ export function FloatingNavBar() {
     el.scrollBy({ left: amount, behavior: 'smooth' });
   }, []);
 
-  // Attach/detach wheel listener with passive:false
   useEffect(() => {
     const el = scrollContainerRef.current;
     if (!el) return;
@@ -286,158 +212,15 @@ export function FloatingNavBar() {
   }, [handleWheel]);
 
   // ============================================================
-  // DROPDOWN LOGIC
+  // NAV ITEM CLICK
   // ============================================================
-
-  const clearHoverTimeout = useCallback(() => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current);
-      hoverTimeoutRef.current = null;
-    }
-  }, []);
-
-  const clearCloseTimeout = useCallback(() => {
-    if (closeTimeoutRef.current) {
-      clearTimeout(closeTimeoutRef.current);
-      closeTimeoutRef.current = null;
-    }
-  }, []);
-
-  // Calculate dropdown position from button rect (declared early for dependency order)
-  const updateDropdownPosition = useCallback((itemId: string) => {
-    const btn = navItemRefs.current.get(itemId);
-    if (btn) {
-      const rect = btn.getBoundingClientRect();
-      setDropdownRect({ top: rect.bottom + 4, left: rect.left + rect.width / 2 - 90 });
-    }
-  }, []);
-
-  // Update dropdown position when nav scrolls
-  useEffect(() => {
-    const el = scrollContainerRef.current;
-    if (!el || !openDropdownId) return;
-    const onScroll = () => updateDropdownPosition(openDropdownId);
-    el.addEventListener('scroll', onScroll, { passive: true });
-    return () => el.removeEventListener('scroll', onScroll);
-  }, [openDropdownId, updateDropdownPosition]);
-
-  const closeDropdown = useCallback(() => {
-    clearCloseTimeout();
-    setOpenDropdownId(null);
-    setDropdownRect(null);
-    setFocusedSubIndex(-1);
-  }, [clearCloseTimeout]);
-
-  const handleItemMouseEnter = useCallback(
-    (itemId: string) => {
-      clearHoverTimeout();
-      clearCloseTimeout();
-      hoverTimeoutRef.current = setTimeout(() => {
-        setOpenDropdownId(itemId);
-        setFocusedSubIndex(-1);
-        updateDropdownPosition(itemId);
-      }, 200);
-    },
-    [clearHoverTimeout, clearCloseTimeout, updateDropdownPosition]
-  );
-
-  const handleItemMouseLeave = useCallback(() => {
-    clearHoverTimeout();
-  }, [clearHoverTimeout]);
-
-  const handleDropdownMouseEnter = useCallback(() => {
-    clearCloseTimeout();
-  }, [clearCloseTimeout]);
-
-  const handleDropdownMouseLeave = useCallback(() => {
-    clearHoverTimeout();
-    closeTimeoutRef.current = setTimeout(() => {
-      setOpenDropdownId(null);
-      setDropdownRect(null);
-      setFocusedSubIndex(-1);
-    }, 500);
-  }, [clearHoverTimeout]);
 
   const handleItemClick = useCallback(
     (item: NavItemConfig) => {
-      if (item.subItems && item.subItems.length > 0) {
-        // Toggle dropdown
-        if (openDropdownId === item.id) {
-          closeDropdown();
-        } else {
-          clearHoverTimeout();
-          clearCloseTimeout();
-          setOpenDropdownId(item.id);
-          setFocusedSubIndex(-1);
-          updateDropdownPosition(item.id);
-        }
-      } else {
-        closeDropdown();
-        setView(item.id as AppView);
-      }
+      setView(item.id as AppView);
     },
-    [openDropdownId, closeDropdown, clearHoverTimeout, clearCloseTimeout, setView, updateDropdownPosition]
+    [setView]
   );
-
-  const handleSubItemClick = useCallback(
-    (subId: string) => {
-      closeDropdown();
-      setView(subId as AppView);
-    },
-    [closeDropdown, setView]
-  );
-
-  // ============================================================
-  // KEYBOARD NAVIGATION
-  // ============================================================
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && openDropdownId) {
-        e.preventDefault();
-        closeDropdown();
-        // Return focus to the nav item that opened the dropdown
-        const btn = navItemRefs.current.get(openDropdownId);
-        btn?.focus();
-        return;
-      }
-
-      // Arrow key navigation within dropdown
-      if (!openDropdownId) return;
-      const allItems = [
-        ...filteredItems.mainItems,
-        ...(filteredItems.showCms ? [CMS_ITEM] : []),
-      ];
-      const activeItem = allItems.find((i) => i.id === openDropdownId);
-      if (!activeItem?.subItems) return;
-      const subCount = activeItem.subItems.length;
-
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        setFocusedSubIndex((prev) => (prev < subCount - 1 ? prev + 1 : 0));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        setFocusedSubIndex((prev) => (prev > 0 ? prev - 1 : subCount - 1));
-      } else if (e.key === 'Enter' && focusedSubIndex >= 0) {
-        e.preventDefault();
-        const sub = activeItem.subItems[focusedSubIndex];
-        if (sub) {
-          handleSubItemClick(sub.id);
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [openDropdownId, focusedSubIndex, filteredItems, closeDropdown, handleSubItemClick]);
-
-  // Cleanup timeouts on unmount
-  useEffect(() => {
-    return () => {
-      if (hoverTimeoutRef.current) clearTimeout(hoverTimeoutRef.current);
-      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
-    };
-  }, []);
 
   // ============================================================
   // HELPER: CHECK IF NAV ITEM IS ACTIVE
@@ -446,71 +229,16 @@ export function FloatingNavBar() {
   const isActive = useCallback(
     (item: NavItemConfig) => {
       if (currentView === item.id) return true;
-      if (item.subItems) {
-        return item.subItems.some((sub) => currentView === sub.id);
-      }
+      // HR sub-views should highlight the HR nav item
+      if (item.id === 'hr-dashboard' && currentView?.startsWith('hr-')) return true;
+      // CMS sub-views should highlight the CMS nav item
+      if (item.id === 'cms-dashboard' && currentView?.startsWith('cms-')) return true;
+      // WhatsApp sub-views should highlight the WhatsApp nav item
+      if (item.id === 'whatsapp' && currentView?.startsWith('whatsapp')) return true;
       return false;
     },
     [currentView]
   );
-
-
-
-  // ============================================================
-  // RENDER: DROPDOWN SUBMENU (fixed position to escape overflow)
-  // ============================================================
-
-  const renderDropdown = (item: NavItemConfig) => {
-    if (!item.subItems || openDropdownId !== item.id || !dropdownRect) return null;
-
-    return (
-      <motion.div
-        ref={dropdownRef}
-        initial={{ opacity: 0, y: -4, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.15, ease: 'easeOut' }}
-        onMouseEnter={handleDropdownMouseEnter}
-        onMouseLeave={handleDropdownMouseLeave}
-        className={cn(
-          'fixed z-[100]',
-          'bg-white dark:bg-gray-900/95 backdrop-blur-xl rounded-xl',
-          'border border-gray-200/80 dark:border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.08)]',
-          'py-1 min-w-[180px] max-h-80 overflow-y-auto',
-          'scrollbar-thin'
-        )}
-        style={{ top: dropdownRect.top, left: dropdownRect.left }}
-        role="menu"
-        aria-label={`${item.label} submenu`}
-      >
-          {item.subItems.map((sub, idx) => {
-            const isSubActive = currentView === sub.id;
-            return (
-              <button
-                key={`${sub.id}-${idx}`}
-                role="menuitem"
-                tabIndex={focusedSubIndex === idx ? 0 : -1}
-                ref={(el) => {
-                  if (focusedSubIndex === idx && el) {
-                    el.focus();
-                  }
-                }}
-                onClick={() => handleSubItemClick(sub.id)}
-                className={cn(
-                  'w-full text-left px-4 py-2 text-sm transition-colors duration-150',
-                  'flex items-center gap-2',
-                  'hover:bg-emerald-50 dark:hover:bg-emerald-900/20',
-                  'text-gray-700 dark:text-gray-300',
-                  isSubActive &&
-                    'bg-emerald-50 dark:bg-emerald-900/20 border-l-2 border-emerald-500 text-emerald-700 dark:text-emerald-400 font-medium'
-                )}
-              >
-                {sub.label}
-              </button>
-            );
-          })}
-        </motion.div>
-    );
-  };
 
   // ============================================================
   // RENDER: NAV ITEM BUTTON
@@ -519,8 +247,6 @@ export function FloatingNavBar() {
   const renderNavItem = (item: NavItemConfig) => {
     const Icon = item.icon;
     const active = isActive(item);
-    const hasSub = !!item.subItems && item.subItems.length > 0;
-    const isOpen = openDropdownId === item.id;
 
     return (
       <motion.button
@@ -530,19 +256,14 @@ export function FloatingNavBar() {
         }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onMouseEnter={() => hasSub && handleItemMouseEnter(item.id)}
-        onMouseLeave={() => hasSub && handleItemMouseLeave()}
         onClick={() => handleItemClick(item)}
-        aria-expanded={hasSub ? isOpen : undefined}
-        aria-haspopup={hasSub ? 'true' : undefined}
         className={cn(
           'relative flex items-center gap-1.5 px-3 py-2 rounded-xl text-sm font-medium whitespace-nowrap',
           'transition-colors duration-200 select-none',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 focus-visible:ring-offset-1',
           active
             ? 'text-emerald-700 dark:text-emerald-400'
-            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',
-          isOpen && 'bg-emerald-50/80 dark:bg-emerald-900/20'
+            : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100'
         )}
       >
         <Icon className="h-4 w-4 shrink-0" />
@@ -556,23 +277,6 @@ export function FloatingNavBar() {
             transition={{ type: 'spring', stiffness: 400, damping: 30 }}
           />
         )}
-
-        {/* Dropdown arrow for items with subItems */}
-        {hasSub && (
-          <svg
-            className={cn(
-              'h-3 w-3 ml-0.5 transition-transform duration-200',
-              isOpen && 'rotate-180'
-            )}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-          </svg>
-        )}
-
       </motion.button>
     );
   };
@@ -588,7 +292,6 @@ export function FloatingNavBar() {
   // ============================================================
 
   return (
-    <>
     <motion.nav
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -641,16 +344,5 @@ export function FloatingNavBar() {
         </AnimatePresence>
       </div>
     </motion.nav>
-
-    {/* Portal dropdown - rendered outside overflow container */}
-    {openDropdownId && (() => {
-      const allItems = [
-        ...filteredItems.mainItems,
-        ...(filteredItems.showCms ? [CMS_ITEM] : []),
-      ];
-      const activeItem = allItems.find((i) => i.id === openDropdownId);
-      return activeItem ? renderDropdown(activeItem) : null;
-    })()}
-    </>
   );
 }
