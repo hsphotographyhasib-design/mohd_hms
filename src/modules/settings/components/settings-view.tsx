@@ -25,7 +25,7 @@ import { toast } from 'sonner';
 import { useAuthStore } from '@/app-shell/store';
 import { canAccess } from '@/app-shell/store';
 import { format } from 'date-fns';
-import type { UserRole, EmployeeData } from '@/core/types';
+import type { UserRole } from '@/core/types';
 
 const token = () => localStorage.getItem('cmms_token') || '';
 
@@ -196,26 +196,38 @@ function GeneralTab({ user }: { user: { tenantName?: string; tenantDomain?: stri
 }
 
 function UsersTab() {
-  const [users, setUsers] = useState<EmployeeData[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [roleFilter, setRoleFilter] = useState('all');
   const [form, setForm] = useState({ name: '', email: '', role: '' as UserRole | '' });
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/employees?pageSize=50', {
+      const params = new URLSearchParams({ pageSize: '100' });
+      if (roleFilter && roleFilter !== 'all') params.set('role', roleFilter);
+      const res = await fetch(`/api/admin/users?${params}`, {
         headers: { Authorization: `Bearer ${token()}` },
       });
-      const json = await res.json();
-      setUsers(json.data || []);
+      if (res.status === 403) {
+        // Fallback to employees endpoint for non-admin roles
+        const fallback = await fetch('/api/employees?pageSize=100', {
+          headers: { Authorization: `Bearer ${token()}` },
+        });
+        const fallbackJson = await fallback.json();
+        setUsers(fallbackJson.data || []);
+      } else {
+        const json = await res.json();
+        setUsers(json.data || []);
+      }
     } catch {
       toast.error('Failed to load users');
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [roleFilter]);
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
 
@@ -245,7 +257,27 @@ function UsersTab() {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm text-muted-foreground">Filter:</span>
+          <select
+            value={roleFilter}
+            onChange={(e) => setRoleFilter(e.target.value)}
+            className="h-9 rounded-md border border-input bg-background px-3 text-sm"
+          >
+            <option value="all">All Roles</option>
+            <option value="super_admin">Super Admin</option>
+            <option value="admin">Admin</option>
+            <option value="manager">Manager</option>
+            <option value="supervisor">Supervisor</option>
+            <option value="technician">Technician</option>
+            <option value="finance">Finance</option>
+            <option value="customer">Customer</option>
+          </select>
+          {!loading && (
+            <span className="text-xs text-muted-foreground">{users.length} user{users.length !== 1 ? 's' : ''}</span>
+          )}
+        </div>
         <Button onClick={() => setDialogOpen(true)} className="bg-emerald-600 hover:bg-emerald-700 text-white">
           <Plus className="h-4 w-4 mr-2" /> Invite User
         </Button>
@@ -260,7 +292,9 @@ function UsersTab() {
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Role</TableHead>
+                  <TableHead>Provider</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Registered</TableHead>
                   <TableHead className="w-20">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -268,27 +302,40 @@ function UsersTab() {
                 {loading ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <TableRow key={i}>
-                      <TableCell colSpan={5}><Skeleton className="h-10 w-full" /></TableCell>
+                      <TableCell colSpan={7}><Skeleton className="h-10 w-full" /></TableCell>
                     </TableRow>
                   ))
                 ) : users.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                       No users found
                     </TableCell>
                   </TableRow>
                 ) : (
-                  users.map((u) => (
+                  users.map((u: any) => (
                     <TableRow key={u.id}>
-                      <TableCell className="font-medium">{u.name}</TableCell>
-                      <TableCell className="text-sm">{u.email}</TableCell>
+                      <TableCell className="font-medium">{u.name || '—'}</TableCell>
+                      <TableCell className="text-sm">{u.email || '—'}</TableCell>
                       <TableCell>
                         <Badge variant="outline" className="capitalize">
-                          {u.role.replace(/_/g, ' ')}
+                          {u.role?.replace(/_/g, ' ')}
                         </Badge>
                       </TableCell>
                       <TableCell>
+                        {u.googleId ? (
+                          <Badge variant="outline" className="text-rose-600 border-rose-200 bg-rose-50 text-[11px]">Google</Badge>
+                        ) : (
+                          <Badge variant="outline" className="text-blue-600 border-blue-200 bg-blue-50 text-[11px]">Email</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
                         <StatusBadge status={u.isActive ? 'active' : 'inactive'} />
+                        {u.isOnline && (
+                          <span className="ml-1 inline-block h-2 w-2 rounded-full bg-emerald-500" title="Online" />
+                        )}
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground">
+                        {u.createdAt ? format(new Date(u.createdAt), 'dd MMM yyyy') : '—'}
                       </TableCell>
                       <TableCell>
                         <Button variant="ghost" size="sm" className="text-xs">
