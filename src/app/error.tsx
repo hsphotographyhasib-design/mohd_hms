@@ -17,6 +17,11 @@ export default function RouteError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
+  // Log error to console for debugging (always)
+  useEffect(() => {
+    console.error('[RouteError]', error);
+  }, [error]);
+
   useEffect(() => {
     logErrorToServer({
       category: 'frontend',
@@ -26,30 +31,22 @@ export default function RouteError({
     });
   }, [error]);
 
-  // In production, show the user-friendly modal.
-  // In development, Next.js shows its own overlay — but we also render ours.
-  if (process.env.NODE_ENV === 'production') {
-    return (
-      <ErrorModal
-        error={{
-          message: "We couldn't complete your request right now.\nPlease try again in a few moments.",
-          category: 'frontend',
-          retry: reset,
-        }}
-        onDismiss={reset}
-      />
-    );
-  }
+  // Always show the actual error (remove once root cause is fixed)
+  const displayMessage = sanitizeError(error);
 
-  // Development: still show a clean error (Next.js dev overlay will also appear)
   return (
     <div className="flex min-h-[400px] items-center justify-center p-4">
       <ErrorModal
         error={{
-          title: 'Development Error',
-          message: sanitizeError(error),
+          title: process.env.NODE_ENV === 'development' ? 'Development Error' : 'Something Went Wrong',
+          message: displayMessage,
           category: 'frontend',
+          stackTrace: error.stack,
           retry: reset,
+          debug: {
+            errorType: error.name || 'Error',
+            stackTrace: error.stack,
+          },
         }}
         onDismiss={reset}
       />

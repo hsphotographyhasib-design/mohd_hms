@@ -11,6 +11,15 @@ declare global {
   }
 }
 
+/**
+ * ErrorOverlayProvider wraps the app and provides a global error modal.
+ *
+ * Components can call `window.__showAppError(errorInfo)` to display
+ * the branded error popup from anywhere (even outside React trees).
+ *
+ * This is the "API Error Boundary" — it catches errors from API calls,
+ * form submissions, uploads, etc. that don't go through a React Error Boundary.
+ */
 export function ErrorOverlayProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<ErrorInfo | null>(null);
 
