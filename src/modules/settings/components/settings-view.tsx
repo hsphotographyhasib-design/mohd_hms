@@ -19,13 +19,14 @@ import {
 } from '@/shared/ui/select';
 import { Badge } from '@/shared/ui/badge';
 import {
-  Settings, Plus, Loader2, Shield, Database, Globe, Server, HardDrive,
+  Settings, Plus, Loader2, Shield, Database, Globe, Server, HardDrive, Bug,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/app-shell/store';
 import { canAccess } from '@/app-shell/store';
 import { format } from 'date-fns';
 import type { UserRole } from '@/core/types';
+import { ErrorHistoryView } from './error-history-view';
 
 const token = () => localStorage.getItem('cmms_token') || '';
 
@@ -74,6 +75,12 @@ export function SettingsView() {
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="roles">Roles &amp; Permissions</TabsTrigger>
           <TabsTrigger value="system">System</TabsTrigger>
+          {user?.role === 'super_admin' && (
+            <TabsTrigger value="errors">
+              <Bug className="h-3.5 w-3.5 mr-1" />
+              Errors
+            </TabsTrigger>
+          )}
         </TabsList>
 
         {/* General Tab */}
@@ -95,6 +102,13 @@ export function SettingsView() {
         <TabsContent value="system" className="mt-4">
           <SystemTab />
         </TabsContent>
+
+        {/* Error History Tab (Super Admin only) */}
+        {user?.role === 'super_admin' && (
+          <TabsContent value="errors" className="mt-4">
+            <ErrorHistoryTab />
+          </TabsContent>
+        )}
       </Tabs>
     </div>
   );
@@ -650,4 +664,9 @@ function SystemTab() {
       )}
     </div>
   );
+}
+
+// Wrapper so the tab has a consistent component name
+function ErrorHistoryTab() {
+  return <ErrorHistoryView />;
 }

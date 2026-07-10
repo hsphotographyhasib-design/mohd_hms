@@ -2334,3 +2334,46 @@ model WorkOrderMaterial {
   inventoryItem   InventoryItem @relation(fields: [inventoryItemId], references: [id])
   workOrder       WorkOrder     @relation(fields: [workOrderId], references: [id], onDelete: Cascade)
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Error Log — Enterprise error tracking
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ErrorLog {
+  id          String   @id
+  errorRef    String   @unique                    // ERR-20260710-ABCD
+  userId      String?
+  userName    String?
+  userRole    String?
+  tenantId    String?
+
+  category    String   @default("unknown")         // database, api, auth, permission, validation, network, timeout, firebase, brevo, redis, supabase, prisma, unknown, frontend, upload
+  errorType   String?                              // Exception class name
+  errorCode   String?                              // P2002, 401, ECONNREFUSED, etc.
+  message     String                               // Technical message
+  userMessage String?                              // Friendly message shown to user
+
+  module      String?                              // complaints, work-orders, dashboard, etc.
+  apiEndpoint String?                              // POST /api/complaints
+  httpMethod  String?                              // GET, POST, PATCH, DELETE
+  httpStatus  Int?
+  duration    Int?                                 // Request duration in ms
+
+  requestBody String?                              // Sanitized request body
+  responseBody String?                             // API response body
+  headers     String?                              // Sanitized headers JSON
+  stackTrace  String?                              // Stack trace (dev/super_admin only)
+
+  browser     String?
+  device      String?
+  ip          String?
+  pageUrl     String?
+
+  createdAt   DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([category])
+  @@index([errorRef])
+  @@index([createdAt])
+  @@index([userId])
+}

@@ -1,42 +1,92 @@
 'use client';
 
-import { useState, useCallback } from 'react';
-import { type ErrorInfo, type ErrorCategory } from '@/core/errors/components/error-ui';
-import { logErrorToServer } from '@/core/errors/error-utils';
+import { useState, useCallback, useRef } from 'react';
+import { 
+  type ErrorInfo, type ErrorCategory,
+  type DebugInfo 
+} from '@/core/errors/components/error-ui';
+import { logErrorToServer, type LogErrorOptions } from '@/core/errors/error-utils';
+import { 
+  categorizeError, 
+  extractErrorCode, 
+  extractHttpStatus,
+  getFriendlyMessage,
+  generateRequestId,
+  generateErrorRef,
+  detectModule,
+  type ErrorCategoryType 
+} from '@/core/errors/error-service';
 
-// ============================================================
-// HOOK: useErrorHandler
-// ============================================================
+export interface ApiCallOptions {
+  category?: ErrorCategory;
+  module?: string;
+  endpoint?: string;
+  method?: string;
+  title?: string;
+  retry?: () => void;
+  requestBody?: unknown;
+}
 
-/**
- * Provides `showError()` and `clearError()` for imperative error display.
- *
- * Usage:
- *   const { showError, clearError, error } = useErrorHandler();
- *
- *   try { await apiCall(); } catch (e) { showError(e); }
- */
 export function useErrorHandler() {
   const [error, setError] = useState<ErrorInfo | null>(null);
 
   const showError = useCallback(
-    (err: unknown, opts?: { category?: ErrorCategory; retry?: () => void; title?: string }) => {
-      const category = opts?.category || guessCategory(err);
-      const message = getUserMessage(err, category);
+    (err: unknown, opts?: ApiCallOptions) => {
+      const category = (opts?.category || categorizeError(err, { endpoint: opts?.endpoint })) as ErrorCategory;
+      const errorCode = extractErrorCode(err);
+      const httpStatus = opts?.endpoint ? extractHttpStatus(err) : undefined;
+      const moduleName = opts?.module || detectModule(opts?.endpoint);
+      const userMessage = getFriendlyMessage(category, errorCode);
 
-      // Log to server
+      // Extract validation errors if present
+      let validationErrors: Record<string, string> | undefined;
+      if (err && typeof err === 'object') {
+        const obj = err as Record<string, unknown>;
+        if (obj.validationErrors && typeof obj.validationErrors === 'object') {
+          validationErrors = obj.validationErrors as Record<string, string>;
+        } else if (obj.errors && typeof obj.errors === 'object' && !Array.isArray(obj.errors)) {
+          validationErrors = obj.errors as Record<string, string>;
+        }
+      }
+
+      const errorRef = generateErrorRef();
+      const requestId = generateRequestId();
+
+      // Log to server (returns errorRef)
       logErrorToServer({
+        error: err,
         category,
         message: err instanceof Error ? err.message : String(err),
         stackTrace: err instanceof Error ? err.stack : undefined,
-        statusCode: extractStatus(err),
+        statusCode: httpStatus,
+        pageUrl: typeof window !== 'undefined' ? window.location.href : undefined,
+        module: moduleName,
+        apiEndpoint: opts?.endpoint,
+        httpMethod: opts?.method,
+        requestBody: opts?.requestBody,
       });
 
       setError({
         title: opts?.title,
-        message,
+        message: err instanceof Error ? err.message : String(err),
+        userMessage,
         category,
+        statusCode: httpStatus,
         retry: opts?.retry,
+        errorRef,
+        validationErrors,
+        debug: {
+          requestId,
+          errorRef,
+          module: moduleName || undefined,
+          apiEndpoint: opts?.endpoint,
+          httpMethod: opts?.method,
+          httpStatus,
+          errorCode,
+          errorType: err instanceof Error ? err.constructor.name : undefined,
+          stackTrace: process.env.NODE_ENV === 'development' && err instanceof Error ? err.stack : undefined,
+          dbType: (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SUPABASE_URL) ? 'Supabase PostgreSQL' : undefined,
+        },
       });
     },
     [],
@@ -49,27 +99,31 @@ export function useErrorHandler() {
   return { showError, clearError, error };
 }
 
-// ============================================================
-// HELPER: WRAP API CALL
-// ============================================================
-
 /**
- * Wraps an async function with error handling — shows the error modal on failure.
- *
+ * Wraps an async function with error handling, timing, and retry.
+ * 
  * Usage:
- *   const { wrapApi } = useErrorHandler();
- *   const data = await wrapApi(fetch('/api/...'));
+ *   const { wrapApi } = useApiHandler();
+ *   const data = await wrapApi(
+ *     fetch('/api/complaints', { method: 'POST', body: ... }),
+ *     { module: 'Complaints', endpoint: '/api/complaints', method: 'POST', retry: () => refetch() }
+ *   );
  */
 export function useApiHandler() {
   const { showError, clearError, error } = useErrorHandler();
 
   const wrapApi = useCallback(
-    async <T>(promise: Promise<T>, opts?: { category?: ErrorCategory; retry?: () => void }): Promise<T | null> => {
+    async <T>(
+      promise: Promise<T>, 
+      opts?: ApiCallOptions
+    ): Promise<T | null> => {
+      const startTime = Date.now();
       try {
         const result = await promise;
         return result;
       } catch (err) {
-        showError(err, opts);
+        const duration = Date.now() - startTime;
+        showError(err, { ...opts, title: opts?.title || 'Request Failed' });
         return null;
       }
     },
@@ -77,45 +131,4 @@ export function useApiHandler() {
   );
 
   return { wrapApi, showError, clearError, error };
-}
-
-// ============================================================
-// INTERNAL HELPERS
-// ============================================================
-
-function guessCategory(err: unknown): ErrorCategory {
-  if (err instanceof TypeError && (err.message.includes('fetch') || err.message.includes('network') || err.message.includes('Failed to fetch'))) {
-    return 'network';
-  }
-  const msg = String(err).toLowerCase();
-  if (msg.includes('upload') || msg.includes('file') || msg.includes('multipart')) return 'upload';
-  if (msg.includes('network') || msg.includes('timeout') || msg.includes('abort')) return 'network';
-  return 'backend';
-}
-
-function extractStatus(err: unknown): number | undefined {
-  if (err && typeof err === 'object') {
-    const obj = err as Record<string, unknown>;
-    if (typeof obj.status === 'number') return obj.status;
-    // Some fetch wrappers put statusCode
-    if (typeof obj.statusCode === 'number') return obj.statusCode;
-  }
-  return undefined;
-}
-
-const CATEGORY_MESSAGES: Record<ErrorCategory, string> = {
-  frontend: "We couldn't complete your request right now.\nPlease try again in a few moments.",
-  backend: "We couldn't complete your request right now.\nPlease try again in a few moments.",
-  network: 'Unable to connect to the server.\nPlease check your internet connection and try again.',
-  upload: 'File upload failed. Please try again or use a different file.',
-};
-
-function getUserMessage(err: unknown, category: ErrorCategory): string {
-  // Check for a user-friendly message in common API error shapes
-  if (err && typeof err === 'object') {
-    const obj = err as Record<string, unknown>;
-    if (typeof obj.userMessage === 'string') return obj.userMessage;
-    if (typeof obj.error === 'string' && obj.error.length < 100) return obj.error;
-  }
-  return CATEGORY_MESSAGES[category];
 }

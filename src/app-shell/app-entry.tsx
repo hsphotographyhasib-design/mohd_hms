@@ -10,6 +10,7 @@ import { IdleTimerProvider } from '@/core/auth/session/idle-timer';
 import { SessionProvider } from '@/core/auth/session/session-provider';
 import { NotificationProvider } from '@/modules/notifications/components/ui/notification-provider';
 import { ConfirmProvider } from '@/shared/ui/confirm-provider';
+import { ErrorOverlayProvider } from '@/core/errors';
 import { QueryProvider } from '@/app-shell/providers/query-provider';
 import { MapsProvider } from '@/core/maps/maps-context';
 import { setupFetchInterceptor, markLoginTime } from '@/shared/hooks/use-secure-fetch';
@@ -93,7 +94,8 @@ export default function AppEntry() {
 
   return (
     <SessionProvider>
-      <ConfirmProvider>
+      <ErrorOverlayProvider>
+        <ConfirmProvider>
         <NotificationProvider>
           <SetupHelpers />
           <ToastListener />
@@ -106,6 +108,7 @@ export default function AppEntry() {
           )}
         </NotificationProvider>
       </ConfirmProvider>
+      </ErrorOverlayProvider>
     </SessionProvider>
   );
 }
