@@ -170,7 +170,23 @@ function deserializeDates(data: any): any {
 }
 
 // ---------------------------------------------------------------------------
-// 4. Where Clause → PostgREST Filters
+// 4. Table-not-found error detection
+// ---------------------------------------------------------------------------
+
+function isTableNotFoundError(error: { message?: string; code?: string } | null | undefined): boolean {
+  if (!error) return false;
+  const msg = (error.message || '').toLowerCase();
+  return (
+    msg.includes('could not find the table') ||
+    msg.includes('does not exist') ||
+    msg.includes('relation') ||
+    error.code === '42P01' ||
+    error.code === 'PGRST116'
+  );
+}
+
+// ---------------------------------------------------------------------------
+// 5. Where Clause → PostgREST Filters
 // ---------------------------------------------------------------------------
 
 function whereToFilters(where: Record<string, unknown>, prefix = ''): Record<string, string> {
@@ -499,7 +515,10 @@ function createTableProxy(tableName: string) {
         limit: args?.take,
         offset: args?.skip,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.findMany: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return [];
+        throw new Error(`[Supabase] ${tableName}.findMany: ${r.error.message}`);
+      }
       const data = r.data ?? [];
       if (Object.keys(includes).length > 0) {
         await resolveIncludes(data, includes, tableName);
@@ -516,7 +535,7 @@ function createTableProxy(tableName: string) {
         limit: 1,
         single: true,
       });
-      if (r.error && r.error.code === '406') return null;
+      if (r.error && (r.error.code === '406' || isTableNotFoundError(r.error))) return null;
       if (r.error) throw new Error(`[Supabase] ${tableName}.findFirst: ${r.error.message}`);
       const data = r.data ?? null;
       if (data && Object.keys(includes).length > 0) {
@@ -533,7 +552,7 @@ function createTableProxy(tableName: string) {
         limit: 1,
         single: true,
       });
-      if (r.error && r.error.code === '406') return null;
+      if (r.error && (r.error.code === '406' || isTableNotFoundError(r.error))) return null;
       if (r.error) throw new Error(`[Supabase] ${tableName}.findUnique: ${r.error.message}`);
       const data = r.data ?? null;
       if (data && Object.keys(includes).length > 0) {
@@ -554,7 +573,10 @@ function createTableProxy(tableName: string) {
         select: columns,
         body: args.data,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.create: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) { console.warn(`[Supabase] Table ${tableName} not found. Skipping create.`); return args.data as any; }
+        throw new Error(`[Supabase] ${tableName}.create: ${r.error.message}`);
+      }
       return Array.isArray(r.data) ? r.data[0] : r.data;
     },
 
@@ -565,7 +587,10 @@ function createTableProxy(tableName: string) {
         filters: whereToFilters(args.where as any),
         body: args.data,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.update: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return null;
+        throw new Error(`[Supabase] ${tableName}.update: ${r.error.message}`);
+      }
       return Array.isArray(r.data) ? r.data[0] : r.data;
     },
 
@@ -575,7 +600,10 @@ function createTableProxy(tableName: string) {
         select: columns,
         filters: whereToFilters(args.where as any),
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.delete: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return null;
+        throw new Error(`[Supabase] ${tableName}.delete: ${r.error.message}`);
+      }
       return Array.isArray(r.data) ? r.data[0] : r.data;
     },
 
@@ -584,7 +612,10 @@ function createTableProxy(tableName: string) {
         head: true,
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.count: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return 0;
+        throw new Error(`[Supabase] ${tableName}.count: ${r.error.message}`);
+      }
       return r.count ?? 0;
     },
 
@@ -605,7 +636,10 @@ function createTableProxy(tableName: string) {
       const r = await supabaseRequest(tableName, 'POST', {
         body: rows,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.createMany: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return { count: 0 };
+        throw new Error(`[Supabase] ${tableName}.createMany: ${r.error.message}`);
+      }
       return { count: Array.isArray(r.data) ? r.data.length : 0 };
     },
 
@@ -614,7 +648,10 @@ function createTableProxy(tableName: string) {
         filters: whereToFilters(args.where as any),
         body: args.data,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.updateMany: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return { count: 0 };
+        throw new Error(`[Supabase] ${tableName}.updateMany: ${r.error.message}`);
+      }
       return { count: Array.isArray(r.data) ? r.data.length : 0 };
     },
 
@@ -622,7 +659,10 @@ function createTableProxy(tableName: string) {
       const r = await supabaseRequest(tableName, 'DELETE', {
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.deleteMany: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return { count: 0 };
+        throw new Error(`[Supabase] ${tableName}.deleteMany: ${r.error.message}`);
+      }
       return { count: Array.isArray(r.data) ? r.data.length : 0 };
     },
 

@@ -361,3 +361,26 @@ Stage Summary:
 - Fixed: `src/core/database/supabase-db.ts` — added date deserialization layer
 - This is a systemic fix that resolves `.toISOString()` errors across ALL 168+ API routes when using Supabase
 - No changes needed to individual API route files
+
+---
+Task ID: fix-devicetoken-missing-table
+Agent: Main
+Task: Fix "Could not find the table 'public.DeviceToken' in the schema cache" error from Render backend
+
+Work Log:
+- Root cause: DeviceToken table (and potentially other tables) don't exist in Supabase, only in SQLite
+- The backend's supabase-db.ts only caught HTTP 406 for findUnique, but "table not found" returns HTTP 500
+- Added `isTableNotFoundError()` helper to both backend and Next.js supabase-db.ts
+- Added graceful error handling for ALL 11 CRUD methods in both adapters:
+  - findMany → [], findFirst → null, findUnique → null, count → 0
+  - create → return data (with console.warn), update → null, delete → null
+  - createMany/updateMany/deleteMany → { count: 0 }
+- Added `deserializeDates()` to backend's supabase-db.ts (same fix as Next.js app)
+- Created `/api/db/supabase-sync-tables` endpoint that generates CREATE TABLE IF NOT EXISTS SQL from Prisma schema
+- This endpoint parses the schema, maps Prisma types → PostgreSQL types, generates DDL
+
+Stage Summary:
+- Fixed: `backend/src/lib/supabase-db.ts` — table-not-found graceful handling + date deserialization
+- Fixed: `src/core/database/supabase-db.ts` — table-not-found graceful handling (Next.js app)
+- Created: `src/app/api/db/supabase-sync-tables/route.ts` — SQL generation endpoint
+- Note: The DeviceToken table still needs to be created in Supabase. User should run the SQL from the sync endpoint in Supabase Dashboard > SQL Editor

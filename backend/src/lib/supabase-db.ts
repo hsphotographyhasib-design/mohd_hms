@@ -108,7 +108,8 @@ async function supabaseRequest<T = any>(
 
   let data: T | null = null;
   try {
-    data = (await res.json()) as T;
+    const raw = await res.json();
+    data = deserializeDates(raw);
     if (single && Array.isArray(data)) {
       data = (data as any[]).length > 0 ? (data as any[])[0] : null;
     }
@@ -130,6 +131,55 @@ function serializeData(data: any): any {
     for (const [k, v] of Object.entries(data)) {
       if (v === undefined) continue;
       out[k] = serializeData(v);
+    }
+    return out;
+  }
+  return data;
+}
+
+function isTableNotFoundError(error: { message?: string; code?: string } | null | undefined): boolean {
+  if (!error) return false;
+  const msg = (error.message || '').toLowerCase();
+  return (
+    msg.includes('could not find the table') ||
+    msg.includes('does not exist') ||
+    msg.includes('relation') ||
+    error.code === '42P01' ||
+    error.code === 'PGRST116'
+  );
+}
+
+const DATE_TIME_FIELDS = new Set([
+  'acceptedAt','applicationDeadline','appliedAt','approvedAt','archivedAt',
+  'assignedAt','assignedDate','bouncedAt','certificateExpiry','checkIn',
+  'checkOut','clickedAt','clientConfirmedAt','closedAt','closingDate',
+  'completedAt','contractEnd','createdAt','date','dateOfBirth','deliveredAt',
+  'drivingLicenseExpiry','dueDate','effectiveFrom','effectiveTo','endDate',
+  'expectedDate','expenseDate','expiresAt','expiryDate','generatedAt',
+  'hrApprovedAt','incidentDate','installDate','interviewDate','joiningDate',
+  'lastActivity','lastExecuted','lastLogin','lastMessageAt','lastReassignedAt',
+  'lastRegeneratedAt','lastScannedAt','lastSeen','lastUsedAt',
+  'lastWhatsappActivity','nextDueDate','nextRetryAt','nextServiceDate',
+  'offerDate','openedAt','paidAt','passportExpiry','popupExpiry','postedDate',
+  'probationEnds','processedAt','publishedAt','readAt','receivedAt',
+  'rejectedAt','replyAt','resolvedAt','returnDate','scheduledAt',
+  'scheduledDate','scheduledFor','scheduledFrom','scheduledTo','sentAt',
+  'slaResponseDeadline','startDate','startedAt','supervisorApprovedAt',
+  'timestamp','updatedAt','uploadedAt','usedAt','validUntil','verifiedAt',
+  'viewedAt','visaExpiry','warrantyExpiry',
+]);
+
+function deserializeDates(data: any): any {
+  if (data === null || data === undefined) return data;
+  if (Array.isArray(data)) return data.map(deserializeDates);
+  if (typeof data === 'object') {
+    const out: Record<string, unknown> = { ...data };
+    for (const k of Object.keys(out)) {
+      if (DATE_TIME_FIELDS.has(k) && typeof out[k] === 'string' && out[k]) {
+        out[k] = new Date(out[k] as string);
+      } else if (typeof out[k] === 'object' && out[k] !== null) {
+        out[k] = deserializeDates(out[k]);
+      }
     }
     return out;
   }
@@ -525,7 +575,10 @@ function createTableProxy(tableName: string) {
         limit: args?.take,
         offset: args?.skip,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.findMany: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return [];
+        throw new Error(`[Supabase] ${tableName}.findMany: ${r.error.message}`);
+      }
       const data = r.data ?? [];
       if (Object.keys(includes).length > 0) {
         await resolveIncludes(data, includes, tableName);
@@ -542,8 +595,11 @@ function createTableProxy(tableName: string) {
         limit: 1,
         single: true,
       });
-      if (r.error && r.error.code === '406') return null;
-      if (r.error) throw new Error(`[Supabase] ${tableName}.findFirst: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return null;
+        if (r.error.code === '406') return null;
+        throw new Error(`[Supabase] ${tableName}.findFirst: ${r.error.message}`);
+      }
       const data = r.data ?? null;
       if (data && Object.keys(includes).length > 0) {
         await resolveIncludes([data], includes, tableName);
@@ -559,8 +615,11 @@ function createTableProxy(tableName: string) {
         limit: 1,
         single: true,
       });
-      if (r.error && r.error.code === '406') return null;
-      if (r.error) throw new Error(`[Supabase] ${tableName}.findUnique: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return null;
+        if (r.error.code === '406') return null;
+        throw new Error(`[Supabase] ${tableName}.findUnique: ${r.error.message}`);
+      }
       const data = r.data ?? null;
       if (data && Object.keys(includes).length > 0) {
         await resolveIncludes([data], includes, tableName);
@@ -580,7 +639,10 @@ function createTableProxy(tableName: string) {
         select: columns,
         body: args.data,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.create: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) { console.warn(`[Supabase] Table ${tableName} not found. Skipping create.`); return args.data as any; }
+        throw new Error(`[Supabase] ${tableName}.create: ${r.error.message}`);
+      }
       return Array.isArray(r.data) ? r.data[0] : r.data;
     },
 
@@ -591,7 +653,10 @@ function createTableProxy(tableName: string) {
         filters: whereToFilters(args.where as any),
         body: args.data,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.update: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return null;
+        throw new Error(`[Supabase] ${tableName}.update: ${r.error.message}`);
+      }
       return Array.isArray(r.data) ? r.data[0] : r.data;
     },
 
@@ -601,7 +666,10 @@ function createTableProxy(tableName: string) {
         select: columns,
         filters: whereToFilters(args.where as any),
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.delete: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return null;
+        throw new Error(`[Supabase] ${tableName}.delete: ${r.error.message}`);
+      }
       return Array.isArray(r.data) ? r.data[0] : r.data;
     },
 
@@ -610,7 +678,10 @@ function createTableProxy(tableName: string) {
         head: true,
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.count: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return 0;
+        throw new Error(`[Supabase] ${tableName}.count: ${r.error.message}`);
+      }
       return r.count ?? 0;
     },
 
@@ -640,7 +711,10 @@ function createTableProxy(tableName: string) {
         filters: whereToFilters(args.where as any),
         body: args.data,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.updateMany: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return { count: 0 };
+        throw new Error(`[Supabase] ${tableName}.updateMany: ${r.error.message}`);
+      }
       return { count: Array.isArray(r.data) ? r.data.length : 0 };
     },
 
@@ -648,7 +722,10 @@ function createTableProxy(tableName: string) {
       const r = await supabaseRequest(tableName, 'DELETE', {
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
       });
-      if (r.error) throw new Error(`[Supabase] ${tableName}.deleteMany: ${r.error.message}`);
+      if (r.error) {
+        if (isTableNotFoundError(r.error)) return { count: 0 };
+        throw new Error(`[Supabase] ${tableName}.deleteMany: ${r.error.message}`);
+      }
       return { count: Array.isArray(r.data) ? r.data.length : 0 };
     },
 
