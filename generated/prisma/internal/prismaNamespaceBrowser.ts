@@ -142,7 +142,8 @@ export const ModelName = {
   WhatsAppSession: 'WhatsAppSession',
   WhatsAppTemplate: 'WhatsAppTemplate',
   WorkOrder: 'WorkOrder',
-  WorkOrderMaterial: 'WorkOrderMaterial'
+  WorkOrderMaterial: 'WorkOrderMaterial',
+  ErrorLog: 'ErrorLog'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2174,6 +2175,37 @@ export const WorkOrderMaterialScalarFieldEnum = {
 } as const
 
 export type WorkOrderMaterialScalarFieldEnum = (typeof WorkOrderMaterialScalarFieldEnum)[keyof typeof WorkOrderMaterialScalarFieldEnum]
+
+
+export const ErrorLogScalarFieldEnum = {
+  id: 'id',
+  errorRef: 'errorRef',
+  userId: 'userId',
+  userName: 'userName',
+  userRole: 'userRole',
+  tenantId: 'tenantId',
+  category: 'category',
+  errorType: 'errorType',
+  errorCode: 'errorCode',
+  message: 'message',
+  userMessage: 'userMessage',
+  module: 'module',
+  apiEndpoint: 'apiEndpoint',
+  httpMethod: 'httpMethod',
+  httpStatus: 'httpStatus',
+  duration: 'duration',
+  requestBody: 'requestBody',
+  responseBody: 'responseBody',
+  headers: 'headers',
+  stackTrace: 'stackTrace',
+  browser: 'browser',
+  device: 'device',
+  ip: 'ip',
+  pageUrl: 'pageUrl',
+  createdAt: 'createdAt'
+} as const
+
+export type ErrorLogScalarFieldEnum = (typeof ErrorLogScalarFieldEnum)[keyof typeof ErrorLogScalarFieldEnum]
 
 
 export const SortOrder = {

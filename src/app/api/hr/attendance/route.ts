@@ -152,9 +152,9 @@ export async function POST(request: NextRequest) {
     if (auth.error) return auth.error;
     const { userId, tenantId, role } = auth;
     const body = await request.json();
-    const { action, userId, notes, gps } = body;
+    const { action, userId: targetUserId, notes, gps } = body;
 
-    if (!userId || !action) {
+    if (!targetUserId || !action) {
       return NextResponse.json({ error: 'userId and action are required' }, { status: 400 });
     }
 
@@ -166,7 +166,7 @@ export async function POST(request: NextRequest) {
     if (action === 'checkIn') {
       // Find or create today's attendance record
       const existing = await db.attendance.findUnique({
-        where: { tenantId_userId_date: { tenantId, userId, date: today } },
+        where: { tenantId_userId_date: { tenantId, userId: targetUserId, date: today } },
       });
 
       if (existing) {
@@ -200,7 +200,7 @@ export async function POST(request: NextRequest) {
       const record = await db.attendance.create({
         data: {
           tenantId,
-          userId,
+          userId: targetUserId,
           date: today,
           checkIn: now,
           checkInGps: gps || null,
@@ -213,7 +213,7 @@ export async function POST(request: NextRequest) {
 
     if (action === 'checkOut') {
       const existing = await db.attendance.findUnique({
-        where: { tenantId_userId_date: { tenantId, userId, date: today } },
+        where: { tenantId_userId_date: { tenantId, userId: targetUserId, date: today } },
       });
 
       if (!existing || !existing.checkIn) {

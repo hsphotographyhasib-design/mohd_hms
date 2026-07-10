@@ -477,3 +477,8 @@ export type WorkOrder = Prisma.WorkOrderModel
  * 
  */
 export type WorkOrderMaterial = Prisma.WorkOrderMaterialModel
+/**
+ * Model ErrorLog
+ * 
+ */
+export type ErrorLog = Prisma.ErrorLogModel

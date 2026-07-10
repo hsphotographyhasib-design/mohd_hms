@@ -88,7 +88,6 @@ export async function POST(
     const auth = verifyRouteAuth(req, { feature: 'whatsapp' });
     if (auth.error) return auth.error;
     const { userId, tenantId, role } = auth;
-    const userId = userId as string;
     const { id } = await params;
     const body = await req.json();
     const { content, messageType, threadId } = body;

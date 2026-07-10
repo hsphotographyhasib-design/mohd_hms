@@ -114,17 +114,17 @@ export async function POST(request: NextRequest) {
     const { userId, tenantId, role } = auth;
     const body = await request.json();
 
-    const userId = sanitizeInput(body.userId || '');
+    const targetUserId = sanitizeInput(body.userId || '');
     const employeeId = sanitizeInput(body.employeeId || `EMP-${Date.now().toString(36).toUpperCase()}`);
 
-    if (!userId) {
+    if (!targetUserId) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
     const employee = await db.hrEmployee.create({
       data: {
         tenantId,
-        userId,
+        userId: targetUserId,
         employeeId,
         departmentId: body.departmentId || null,
         designation: sanitizeInput(body.designation || ''),
