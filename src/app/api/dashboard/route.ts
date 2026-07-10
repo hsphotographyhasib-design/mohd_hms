@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
   try {
     const { db, getDbFriendlyMessage, getErrorHeaders } = await import('@/core/database/db');
     const { verifyToken } = await import('@/core/auth/auth-lib');
-    const { buildAuthContext, buildComplaintWhereClause } = await import('@/core/permissions/rbac');
+    const { buildAuthContext, buildComplaintWhereClause, buildDataScope } = await import('@/core/permissions/rbac');
     const { ensureAllTablesSynced } = await import('@/core/database/db-sync');
 
     const authHeader = request.headers.get('authorization');
@@ -44,15 +44,11 @@ export async function GET(request: NextRequest) {
     const ctx = await buildAuthContext(payload, { resolveCustomer: true });
     if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+    const scope = await buildDataScope(payload);
+    if (!scope) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+
     await ensureAllTablesSynced();
     const { where: complaintRbacWhere } = await buildComplaintWhereClause(ctx);
-
-    let workOrderWhere: Record<string, unknown> = { tenantId };
-    if (role === 'technician') {
-      workOrderWhere = { tenantId, assignedToId: ctx.userId };
-    } else if (role === 'customer') {
-      workOrderWhere = { tenantId, id: '__NEVER_MATCH__' };
-    }
 
     const [
       totalEquipment, activeEquipment, complaintStatusCounts,
@@ -61,20 +57,22 @@ export async function GET(request: NextRequest) {
       pmAll, monthlyRevenueRaw, complaintsByCategoryRaw, recentComplaints,
       recentWorkOrders, upcomingPm,
     ] = await Promise.all([
-      db.equipment.count({ where: { tenantId } }),
-      db.equipment.count({ where: { tenantId, status: 'active' } }),
+      db.equipment.count({ where: scope.equipment }),
+      db.equipment.count({ where: { ...scope.equipment, status: 'active' } }),
       db.complaint.groupBy({ by: ['status'], where: complaintRbacWhere, _count: { id: true } }),
-      db.workOrder.groupBy({ by: ['status'], where: workOrderWhere, _count: { id: true } }),
+      db.workOrder.groupBy({ by: ['status'], where: scope.workOrder, _count: { id: true } }),
       (['super_admin', 'admin', 'manager', 'finance'].includes(role))
-        ? db.invoice.aggregate({ where: { tenantId, status: 'PAID' }, _sum: { total: true } })
+        ? db.invoice.aggregate({ where: { ...scope.invoice, status: 'PAID' }, _sum: { total: true } })
         : Promise.resolve({ _sum: { total: 0 } }),
       (['super_admin', 'admin', 'manager', 'finance'].includes(role))
-        ? db.invoice.count({ where: { tenantId, status: 'PENDING' } })
+        ? db.invoice.count({ where: { ...scope.invoice, status: 'PENDING' } })
         : Promise.resolve(0),
       (['super_admin', 'admin', 'manager', 'finance'].includes(role))
-        ? db.invoice.count({ where: { tenantId, status: 'OVERDUE' } })
+        ? db.invoice.count({ where: { ...scope.invoice, status: 'OVERDUE' } })
         : Promise.resolve(0),
-      (role === 'customer') ? Promise.resolve(1) : db.customer.count({ where: { tenantId, isActive: true } }),
+      (['super_admin', 'admin', 'manager', 'finance'].includes(role) || role === 'supervisor')
+        ? db.customer.count({ where: { tenantId, isActive: true } })
+        : (role === 'customer' ? Promise.resolve(1) : Promise.resolve(0)),
       (role === 'customer') ? Promise.resolve(0) : db.user.count({ where: { tenantId, isActive: true } }),
       (['super_admin', 'admin', 'manager'].includes(role))
         ? db.inventoryItem.findMany({ where: { tenantId, isActive: true }, select: { id: true, quantity: true, minStock: true } })
@@ -83,7 +81,7 @@ export async function GET(request: NextRequest) {
         ? db.pmSchedule.findMany({ where: { tenantId } })
         : Promise.resolve([]),
       (['super_admin', 'admin', 'manager', 'finance'].includes(role))
-        ? db.invoice.findMany({ where: { tenantId, status: 'PAID', paidAt: { not: null } }, select: { total: true, paidAt: true } })
+        ? db.invoice.findMany({ where: { ...scope.invoice, status: 'PAID', paidAt: { not: null } }, select: { total: true, paidAt: true } })
         : Promise.resolve([]),
       db.complaint.groupBy({ by: ['category'], where: { ...complaintRbacWhere, category: { not: null } }, _count: { id: true } }),
       db.complaint.findMany({
@@ -98,7 +96,7 @@ export async function GET(request: NextRequest) {
         },
       }),
       db.workOrder.findMany({
-        where: workOrderWhere,
+        where: scope.workOrder,
         take: 5,
         orderBy: { createdAt: 'desc' },
         include: {

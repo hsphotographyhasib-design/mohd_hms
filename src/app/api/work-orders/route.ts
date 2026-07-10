@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken } from '@/core/auth/auth-lib';
-import { buildAuthContext } from '@/core/permissions/rbac';
+import { buildAuthContext, resolveDepartmentTechnicianIds } from '@/core/permissions/rbac';
 import { notifyWorkOrderCreated, createNotification } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
@@ -68,9 +68,11 @@ export async function GET(request: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
-    const role = (payload.role as string).toLowerCase();
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { role, userId: uid, departmentId, customerId: custId } = ctx;
+    const tenantId = ctx.tenantId;
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const search = request.nextUrl.searchParams.get('search') || '';
@@ -78,28 +80,46 @@ export async function GET(request: NextRequest) {
     const type = request.nextUrl.searchParams.get('type') || '';
     const skip = (page - 1) * pageSize;
 
-    // ─── RBAC: Customers cannot access work orders ───
-    if (role === 'customer') {
-      return NextResponse.json({ data: [], total: 0, page, pageSize, totalPages: 0 });
-    }
-
     const where: Prisma.WorkOrderWhereInput = { tenantId };
 
-    // ─── RBAC: Technicians only see their own work orders ───
+    // ─── RBAC: Role-based scoping ───
     if (role === 'technician') {
-      where.assignedToId = userId;
-    }
-
-    // ─── RBAC: Supervisors see their supervised work orders ───
-    if (role === 'supervisor') {
-      where.supervisorId = userId;
-    }
-    if (search) {
+      where.assignedToId = uid;
+    } else if (role === 'supervisor') {
+      // See work orders supervised by self OR assigned to department technicians
+      const deptTechIds = departmentId
+        ? await resolveDepartmentTechnicianIds(tenantId, departmentId)
+        : [];
       where.OR = [
+        { complaint: { supervisorId: uid } },
+        { assignedToId: { in: deptTechIds } },
+      ];
+    } else if (role === 'customer') {
+      // Customers can see work orders linked to their complaints
+      where.complaint = { customerId: custId };
+      if (!custId) {
+        return NextResponse.json({ data: [], total: 0, page, pageSize, totalPages: 0 });
+      }
+    } else if (role === 'hr' || role === 'finance' || role === 'vendor' || role === 'guest') {
+      return NextResponse.json({ data: [], total: 0, page, pageSize, totalPages: 0 });
+    }
+    // super_admin, admin, manager: full tenant access (no additional filter)
+    if (search) {
+      const searchOr: Prisma.WorkOrderWhereInput[] = [
         { title: { contains: search } },
         { description: { contains: search } },
         { workOrderNumber: { contains: search } },
       ];
+      // If RBAC already set OR (e.g. supervisor), wrap both under AND
+      if (where.OR && !Array.isArray(where.AND)) {
+        where.AND = [
+          { OR: where.OR },
+          { OR: searchOr },
+        ];
+        delete (where as Record<string, unknown>).OR;
+      } else {
+        where.OR = searchOr;
+      }
     }
     if (status) where.status = status;
     if (type) where.type = type;

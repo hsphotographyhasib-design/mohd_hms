@@ -384,3 +384,71 @@ Stage Summary:
 - Fixed: `src/core/database/supabase-db.ts` — table-not-found graceful handling (Next.js app)
 - Created: `src/app/api/db/supabase-sync-tables/route.ts` — SQL generation endpoint
 - Note: The DeviceToken table still needs to be created in Supabase. User should run the SQL from the sync endpoint in Supabase Dashboard > SQL Editor
+
+---
+Task ID: enterprise-error-handling
+Agent: Main + subagents
+Task: Implement Enterprise Role-Based Error Handling & Debug System
+
+Work Log:
+- Investigated existing error infrastructure (ErrorBoundary, ErrorModal, useErrorHandler, error-logs API)
+- Added ErrorLog Prisma model (20+ fields) and pushed to SQLite
+- Created error-service.ts: 15 error categories, smart categorization, request IDs, error refs, 50+ friendly messages
+- Enhanced error-utils.ts: auto-categorize, extract codes, sanitize for non-admin, returns errorRef
+- Redesigned ErrorModal with role-based display (super_admin sees debug panel, others see friendly messages)
+- Added collapsible Technical Details panel with Copy Debug & Report Bug buttons
+- Enhanced useErrorHandler hook with API call wrapping, timing, module tracking
+- Rewrote error-overlay-provider with proper Window type augmentation and cleanup
+- Enhanced error-logs API: POST with full payload, GET listing (super_admin) with filters/pagination
+- Created error-logs/[id] GET endpoint for full error details including stack trace
+- Built Error History UI: searchable table, category badges, detail dialog, relative timestamps
+- Added Errors tab to Settings view (super_admin only with Bug icon)
+- Integrated ErrorOverlayProvider into app-entry.tsx for global error catching
+- Fixed DeviceToken missing table: graceful handling in both Next.js and backend supabase-db.ts
+- Fixed .toISOString() error: added deserializeDates to Supabase REST response parsing
+
+Stage Summary:
+- 12 files changed, 2530 insertions, 169 deletions
+- Pushed to GitHub: commit cbd8bca
+- All lint checks pass (0 errors)
+- Files created: error-service.ts, error-logs/[id]/route.ts, error-history-view.tsx
+- Files modified: prisma/schema.prisma, error-ui.tsx, error-utils.ts, use-error-handler.ts, error-overlay-provider.tsx, index.ts, settings-view.tsx, app-entry.tsx, error-logs/route.ts
+---
+Task ID: fix-role-wise-data-sharing
+Agent: Main + subagents (5 parallel)
+Task: Fix role-wise data sharing — enterprise RBAC scoping for all major API routes
+
+Work Log:
+- Investigated entire RBAC system: 11 roles, complaint-access engine, dashboard-scope builder, 168+ API routes
+- Found 6 critical inconsistencies:
+  1. Invoices API: ZERO role-based filtering (any user sees ALL invoices)
+  2. Quotations API: ZERO role-based filtering
+  3. Equipment API: ZERO role-based filtering
+  4. Customers API: ZERO role-based filtering
+  5. Work Orders API: returns empty for customers (dashboard shows linked WOs)
+  6. Main dashboard route: inline RBAC doesn't match centralized dashboard-scope
+  7. `hr` role missing from UserRole type and ROLE_HIERARCHY
+  8. Settings system-info: record counts visible to all roles
+- Fixed `hr` role: added to UserRole type, ROLE_HIERARCHY (55), PERMISSIONS (dashboard, notifications, employees, hr features)
+- Added `vendor` (5) and `guest` (0) to ROLE_HIERARCHY for completeness
+- Created generalized RBAC data-scope builder (src/core/permissions/rbac/data-scope.ts, 358 lines):
+  - buildDataScope(payload) → DataScope with WHERE clauses for 6 entities
+  - buildDataScopeFromRequest(request) → convenience wrapper
+  - Per-entity convenience functions: scopeInvoice, scopeWorkOrder, scopeQuotation, scopeEquipment, scopeCustomer
+  - Handles all 10 roles with correct scoping rules
+  - Updated rbac/index.ts to export new module
+- Fixed invoices list API: customer→own invoices, super_admin/admin/manager/finance→tenant, others→denied
+- Fixed work orders list API: customer→complaint-linked WOs, supervisor→dept techs+supervised, hr/finance/vendor/guest→denied
+- Fixed quotations list API: customer→own quotations, super_admin/admin/manager/finance→tenant, others→denied
+- Fixed equipment list API: customer→own equipment, super_admin/admin/manager/technician→tenant, others→denied
+- Fixed customers list API: customer/vendor/guest/hr/technician→denied, super_admin/admin/manager/supervisor/finance→tenant
+- Fixed main dashboard route: replaced inline RBAC with buildDataScope for workOrder, invoice, equipment WHERE clauses
+- Fixed settings system-info API: record counts now only visible to super_admin/admin roles
+- Verified: bun run lint → 0 errors (11 pre-existing warnings)
+
+Stage Summary:
+- 1 new file created: src/core/permissions/rbac/data-scope.ts (358 lines)
+- 8 existing files modified: rbac.ts, permissions.ts, types/index.ts, rbac/index.ts, invoices/route.ts, work-orders/route.ts, quotations/route.ts, equipment/route.ts, customers/route.ts, dashboard/route.ts, settings/system-info/route.ts
+- Security: 5 API routes that previously had ZERO RBAC now properly scope data by role
+- Consistency: Main dashboard route now uses same scope builder as KPI/Charts/Recent routes
+- All 10 roles now have correct hierarchy values and permission mappings

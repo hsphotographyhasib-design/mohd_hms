@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken, generateInvoiceNumber } from '@/core/auth/auth-lib';
+import { buildAuthContext } from '@/core/permissions/rbac';
 import { notifyInvoiceCreated } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
@@ -12,36 +13,44 @@ export async function GET(request: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const tenantId = payload.tenantId as string;
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { role, tenantId: tid, userId, customerId: authCustomerId } = ctx;
+
+    // Build RBAC WHERE clause for invoices
+    let where: Prisma.InvoiceWhereInput = { tenantId: tid };
+
+    if (role === 'customer') {
+      where = authCustomerId
+        ? { tenantId: tid, customerId: authCustomerId }
+        : ({ tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.InvoiceWhereInput);
+    } else if (!['super_admin', 'admin', 'manager', 'finance'].includes(role)) {
+      // technician, supervisor, hr, vendor, guest cannot see invoices
+      where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.InvoiceWhereInput;
+    }
+
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const search = request.nextUrl.searchParams.get('search') || '';
     const status = request.nextUrl.searchParams.get('status') || '';
-    const customerId = request.nextUrl.searchParams.get('customerId') || '';
+    const queryCustomerId = request.nextUrl.searchParams.get('customerId') || '';
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.InvoiceWhereInput = { tenantId };
-    if (search) {
-      where.OR = [
-        { title: { contains: search } },
-        { invoiceNumber: { contains: search } },
-        { description: { contains: search } },
-      ];
-    }
-    if (status) where.status = status;
-    if (customerId) where.customerId = customerId;
+    // Save RBAC base (before query param filters) for stats queries
+    const rbacWhere: Prisma.InvoiceWhereInput = { ...where };
 
     const wantStats = request.nextUrl.searchParams.get('stats') === 'true';
 
     if (wantStats) {
       const [totalCount, totalValue, draftCount, reviewCount, sentCount, paidCount, overdueCount] = await Promise.all([
-        db.invoice.count({ where: { tenantId } }),
-        db.invoice.aggregate({ where: { tenantId }, _sum: { total: true } }),
-        db.invoice.count({ where: { tenantId, status: 'DRAFT' } }),
-        db.invoice.count({ where: { tenantId, status: 'REVIEW' } }),
-        db.invoice.count({ where: { tenantId, status: { in: ['SENT', 'VIEWED', 'APPROVED'] } } }),
-        db.invoice.count({ where: { tenantId, status: 'PAID' } }),
-        db.invoice.count({ where: { tenantId, status: 'OVERDUE' } }),
+        db.invoice.count({ where: rbacWhere }),
+        db.invoice.aggregate({ where: rbacWhere, _sum: { total: true } }),
+        db.invoice.count({ where: { ...rbacWhere, status: 'DRAFT' } as Prisma.InvoiceWhereInput }),
+        db.invoice.count({ where: { ...rbacWhere, status: 'REVIEW' } as Prisma.InvoiceWhereInput }),
+        db.invoice.count({ where: { ...rbacWhere, status: { in: ['SENT', 'VIEWED', 'APPROVED'] } } as Prisma.InvoiceWhereInput }),
+        db.invoice.count({ where: { ...rbacWhere, status: 'PAID' } as Prisma.InvoiceWhereInput }),
+        db.invoice.count({ where: { ...rbacWhere, status: 'OVERDUE' } as Prisma.InvoiceWhereInput }),
       ]);
       return NextResponse.json({
         stats: {
@@ -55,6 +64,17 @@ export async function GET(request: NextRequest) {
         },
       });
     }
+
+    // Apply search, status, and customerId query param filters on top of RBAC (for list queries)
+    if (search) {
+      where.OR = [
+        { title: { contains: search } },
+        { invoiceNumber: { contains: search } },
+        { description: { contains: search } },
+      ];
+    }
+    if (status) where.status = status;
+    if (queryCustomerId) where.customerId = queryCustomerId;
 
     let items: any[] = [];
     let total = 0;

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken, generateAssetNumber } from '@/core/auth/auth-lib';
+import { buildAuthContext } from '@/core/permissions/rbac';
 import { ensureTableSync } from '@/core/database/db-sync';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
@@ -12,9 +13,13 @@ export async function GET(request: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { role, tenantId: tid, customerId: authCustomerId } = ctx;
+
     await ensureTableSync('Equipment');
 
-    const tenantId = payload.tenantId as string;
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const search = request.nextUrl.searchParams.get('search') || '';
@@ -23,7 +28,17 @@ export async function GET(request: NextRequest) {
     const customerId = request.nextUrl.searchParams.get('customerId') || '';
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.EquipmentWhereInput = { tenantId };
+    let where: Prisma.EquipmentWhereInput = { tenantId: tid };
+
+    // RBAC: Role-based scoping for equipment
+    if (role === 'customer') {
+      where = authCustomerId
+        ? { tenantId: tid, customerId: authCustomerId }
+        : ({ tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.EquipmentWhereInput);
+    } else if (!['super_admin', 'admin', 'manager', 'technician'].includes(role)) {
+      // supervisor, finance, hr, vendor, guest cannot see equipment
+      where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.EquipmentWhereInput;
+    }
     if (search) {
       where.OR = [
         { name: { contains: search } },

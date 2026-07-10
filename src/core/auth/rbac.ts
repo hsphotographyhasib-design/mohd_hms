@@ -10,8 +10,11 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
   manager: 80,
   supervisor: 70,
   finance: 60,
+  hr: 55,
   technician: 50,
   customer: 10,
+  vendor: 5,
+  guest: 0,
 };
 
 /**

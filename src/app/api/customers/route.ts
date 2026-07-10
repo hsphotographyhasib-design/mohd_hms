@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken, generateCustomerNumber } from '@/core/auth/auth-lib';
 import { ensureTableSync } from '@/core/database/db-sync';
+import { buildAuthContext } from '@/core/permissions/rbac';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -14,13 +15,24 @@ export async function GET(request: NextRequest) {
 
     await ensureTableSync('Customer');
 
-    const tenantId = payload.tenantId as string;
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const { role, tenantId: tid, customerId: authCustomerId } = ctx;
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const search = request.nextUrl.searchParams.get('search') || '';
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.CustomerWhereInput = { tenantId };
+    // RBAC: Role-based scoping for customers
+    let where: Prisma.CustomerWhereInput = { tenantId: tid };
+    if (role === 'customer') {
+      // Customers cannot list other customers
+      where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.CustomerWhereInput;
+    } else if (!['super_admin', 'admin', 'manager', 'supervisor', 'finance'].includes(role)) {
+      // technician, hr, vendor, guest cannot see customer list
+      where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.CustomerWhereInput;
+    }
     if (search) {
       where.OR = [
         { name: { contains: search } },

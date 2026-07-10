@@ -42,6 +42,11 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // Role-based access control
+  const role = (payload.role as string)?.toLowerCase();
+  // Only super_admin and admin can see full system info (record counts)
+  const isFullAccess = role === 'super_admin' || role === 'admin';
+
   const startTime = Date.now();
 
   // Real version from package.json
@@ -78,9 +83,9 @@ export async function GET(request: NextRequest) {
     dbError = err?.message || 'Database unreachable';
   }
 
-  // Real record counts (only if DB is connected)
+  // Real record counts — only for super_admin and admin roles
   let recordCounts: Record<string, number> | null = null;
-  if (dbStatus === 'Connected') {
+  if (isFullAccess && dbStatus === 'Connected') {
     try {
       const [customers, equipment, complaints, workOrders, invoices, employees, pmSchedules, inventoryItems] =
         await Promise.allSettled([
@@ -145,8 +150,8 @@ export async function GET(request: NextRequest) {
       error: dbError,
       ...(supabaseUrl && { supabaseUrl }),
     },
-    recordCounts,
     lastBackup,
+    recordCounts: isFullAccess ? recordCounts : null,
     responseTime: Date.now() - startTime,
   });
 }
