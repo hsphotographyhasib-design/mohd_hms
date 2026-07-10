@@ -302,6 +302,8 @@ export type UserWhereInput = {
   DeviceToken?: Prisma.DeviceTokenListRelationFilter
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceListRelationFilter
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceListRelationFilter
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceListRelationFilter
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentListRelationFilter
   LoginSession?: Prisma.LoginSessionListRelationFilter
   NotificationLog?: Prisma.NotificationLogListRelationFilter
   PasswordResetOtp?: Prisma.PasswordResetOtpListRelationFilter
@@ -345,6 +347,8 @@ export type UserOrderByWithRelationInput = {
   DeviceToken?: Prisma.DeviceTokenOrderByRelationAggregateInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceOrderByRelationAggregateInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceOrderByRelationAggregateInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceOrderByRelationAggregateInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentOrderByRelationAggregateInput
   LoginSession?: Prisma.LoginSessionOrderByRelationAggregateInput
   NotificationLog?: Prisma.NotificationLogOrderByRelationAggregateInput
   PasswordResetOtp?: Prisma.PasswordResetOtpOrderByRelationAggregateInput
@@ -392,6 +396,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   DeviceToken?: Prisma.DeviceTokenListRelationFilter
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceListRelationFilter
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceListRelationFilter
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceListRelationFilter
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentListRelationFilter
   LoginSession?: Prisma.LoginSessionListRelationFilter
   NotificationLog?: Prisma.NotificationLogListRelationFilter
   PasswordResetOtp?: Prisma.PasswordResetOtpListRelationFilter
@@ -483,6 +489,8 @@ export type UserCreateInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -526,6 +534,8 @@ export type UserUncheckedCreateInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -565,6 +575,8 @@ export type UserUpdateInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -608,6 +620,8 @@ export type UserUncheckedUpdateInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -920,6 +934,12 @@ export type UserCreateNestedOneWithoutInvoice_Invoice_createdByToUserInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutInvoice_Invoice_approvedByToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_approvedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_approvedByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoice_Invoice_approvedByToUserInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneWithoutInvoice_Invoice_preparedByToUserNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_preparedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_preparedByToUserInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoice_Invoice_preparedByToUserInput
@@ -938,6 +958,32 @@ export type UserUpdateOneWithoutInvoice_Invoice_createdByToUserNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUpdateWithoutInvoice_Invoice_createdByToUserInput>, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_createdByToUserInput>
+}
+
+export type UserUpdateOneWithoutInvoice_Invoice_approvedByToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_approvedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_approvedByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoice_Invoice_approvedByToUserInput
+  upsert?: Prisma.UserUpsertWithoutInvoice_Invoice_approvedByToUserInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoice_Invoice_approvedByToUserInput, Prisma.UserUpdateWithoutInvoice_Invoice_approvedByToUserInput>, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_approvedByToUserInput>
+}
+
+export type UserCreateNestedOneWithoutInvoicePayment_InvoicePayment_createdByToUserInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoicePayment_InvoicePayment_createdByToUserInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutInvoicePayment_InvoicePayment_createdByToUserNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutInvoicePayment_InvoicePayment_createdByToUserInput
+  upsert?: Prisma.UserUpsertWithoutInvoicePayment_InvoicePayment_createdByToUserInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutInvoicePayment_InvoicePayment_createdByToUserInput, Prisma.UserUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput>, Prisma.UserUncheckedUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput>
 }
 
 export type UserCreateNestedOneWithoutLoginSessionInput = {
@@ -1173,6 +1219,8 @@ export type UserCreateWithoutAuditLogInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -1215,6 +1263,8 @@ export type UserUncheckedCreateWithoutAuditLogInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -1269,6 +1319,8 @@ export type UserUpdateWithoutAuditLogInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -1311,6 +1363,8 @@ export type UserUncheckedUpdateWithoutAuditLogInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -1349,6 +1403,8 @@ export type UserCreateWithoutAuthAuditLogInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -1391,6 +1447,8 @@ export type UserUncheckedCreateWithoutAuthAuditLogInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -1445,6 +1503,8 @@ export type UserUpdateWithoutAuthAuditLogInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -1487,6 +1547,8 @@ export type UserUncheckedUpdateWithoutAuthAuditLogInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -1525,6 +1587,8 @@ export type UserCreateWithoutComplaint_Complaint_supervisorIdToUserInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -1567,6 +1631,8 @@ export type UserUncheckedCreateWithoutComplaint_Complaint_supervisorIdToUserInpu
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -1610,6 +1676,8 @@ export type UserCreateWithoutComplaint_Complaint_assignedToIdToUserInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -1652,6 +1720,8 @@ export type UserUncheckedCreateWithoutComplaint_Complaint_assignedToIdToUserInpu
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -1706,6 +1776,8 @@ export type UserUpdateWithoutComplaint_Complaint_supervisorIdToUserInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -1748,6 +1820,8 @@ export type UserUncheckedUpdateWithoutComplaint_Complaint_supervisorIdToUserInpu
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -1797,6 +1871,8 @@ export type UserUpdateWithoutComplaint_Complaint_assignedToIdToUserInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -1839,6 +1915,8 @@ export type UserUncheckedUpdateWithoutComplaint_Complaint_assignedToIdToUserInpu
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -1878,6 +1956,8 @@ export type UserCreateWithoutDepartmentInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -1919,6 +1999,8 @@ export type UserUncheckedCreateWithoutDepartmentInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -2007,6 +2089,8 @@ export type UserCreateWithoutDeviceInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -2049,6 +2133,8 @@ export type UserUncheckedCreateWithoutDeviceInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -2103,6 +2189,8 @@ export type UserUpdateWithoutDeviceInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -2145,6 +2233,8 @@ export type UserUncheckedUpdateWithoutDeviceInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -2183,6 +2273,8 @@ export type UserCreateWithoutDeviceTokenInput = {
   Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -2225,6 +2317,8 @@ export type UserUncheckedCreateWithoutDeviceTokenInput = {
   Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -2279,6 +2373,8 @@ export type UserUpdateWithoutDeviceTokenInput = {
   Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -2321,6 +2417,8 @@ export type UserUncheckedUpdateWithoutDeviceTokenInput = {
   Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -2359,6 +2457,8 @@ export type UserCreateWithoutInvoice_Invoice_preparedByToUserInput = {
   Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -2401,6 +2501,8 @@ export type UserUncheckedCreateWithoutInvoice_Invoice_preparedByToUserInput = {
   Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -2444,6 +2546,8 @@ export type UserCreateWithoutInvoice_Invoice_createdByToUserInput = {
   Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -2486,6 +2590,8 @@ export type UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput = {
   Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -2502,6 +2608,95 @@ export type UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput = {
 export type UserCreateOrConnectWithoutInvoice_Invoice_createdByToUserInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput>
+}
+
+export type UserCreateWithoutInvoice_Invoice_approvedByToUserInput = {
+  id: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserUncheckedCreateWithoutInvoice_Invoice_approvedByToUserInput = {
+  id: string
+  tenantId: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserCreateOrConnectWithoutInvoice_Invoice_approvedByToUserInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_approvedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_approvedByToUserInput>
 }
 
 export type UserUpsertWithoutInvoice_Invoice_preparedByToUserInput = {
@@ -2540,6 +2735,8 @@ export type UserUpdateWithoutInvoice_Invoice_preparedByToUserInput = {
   Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -2582,6 +2779,8 @@ export type UserUncheckedUpdateWithoutInvoice_Invoice_preparedByToUserInput = {
   Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -2631,6 +2830,8 @@ export type UserUpdateWithoutInvoice_Invoice_createdByToUserInput = {
   Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -2673,6 +2874,287 @@ export type UserUncheckedUpdateWithoutInvoice_Invoice_createdByToUserInput = {
   Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUpsertWithoutInvoice_Invoice_approvedByToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvoice_Invoice_approvedByToUserInput, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_approvedByToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoice_Invoice_approvedByToUserInput, Prisma.UserUncheckedCreateWithoutInvoice_Invoice_approvedByToUserInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInvoice_Invoice_approvedByToUserInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvoice_Invoice_approvedByToUserInput, Prisma.UserUncheckedUpdateWithoutInvoice_Invoice_approvedByToUserInput>
+}
+
+export type UserUpdateWithoutInvoice_Invoice_approvedByToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInvoice_Invoice_approvedByToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedUpdateManyWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUncheckedUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput = {
+  id: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceCreateNestedManyWithoutUserInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutUserInput
+  tenant: Prisma.TenantCreateNestedOneWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserUncheckedCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput = {
+  id: string
+  tenantId: string
+  email: string
+  passwordHash?: string | null
+  name: string
+  phone?: string | null
+  avatar?: string | null
+  role?: string
+  employeeNumber?: string | null
+  departmentId?: string | null
+  authProvider?: string | null
+  googleId?: string | null
+  isActive?: boolean
+  isOnline?: boolean
+  lastLogin?: Date | string | null
+  gpsLocation?: string | null
+  profileCompleted?: boolean
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutUserInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_supervisorIdToUserInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedCreateNestedManyWithoutUser_Complaint_assignedToIdToUserInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutUserInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutUserInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutUserInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUncheckedCreateNestedManyWithoutUserInput
+  VehicleLog?: Prisma.VehicleLogUncheckedCreateNestedManyWithoutUserInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_createdByToUserInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_supervisorIdToUserInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutUser_WorkOrder_assignedToIdToUserInput
+}
+
+export type UserCreateOrConnectWithoutInvoicePayment_InvoicePayment_createdByToUserInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput>
+}
+
+export type UserUpsertWithoutInvoicePayment_InvoicePayment_createdByToUserInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput, Prisma.UserUncheckedUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput, Prisma.UserUncheckedCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutInvoicePayment_InvoicePayment_createdByToUserInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput, Prisma.UserUncheckedUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput>
+}
+
+export type UserUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutUserNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutUserNestedInput
+  TermsAcceptance?: Prisma.TermsAcceptanceUpdateManyWithoutUserNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutUserNestedInput
+  tenant?: Prisma.TenantUpdateOneRequiredWithoutUserNestedInput
+  VehicleLog?: Prisma.VehicleLogUpdateManyWithoutUserNestedInput
+  WorkOrder_WorkOrder_createdByToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_createdByToUserNestedInput
+  WorkOrder_WorkOrder_supervisorIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_supervisorIdToUserNestedInput
+  WorkOrder_WorkOrder_assignedToIdToUser?: Prisma.WorkOrderUpdateManyWithoutUser_WorkOrder_assignedToIdToUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  tenantId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.StringFieldUpdateOperationsInput | string
+  employeeNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authProvider?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  googleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutUserNestedInput
+  Complaint_Complaint_supervisorIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUserNestedInput
+  Complaint_Complaint_assignedToIdToUser?: Prisma.ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUserNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutUserNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
+  Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
+  Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -2712,6 +3194,8 @@ export type UserCreateWithoutLoginSessionInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
   PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
@@ -2754,6 +3238,8 @@ export type UserUncheckedCreateWithoutLoginSessionInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
   PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
@@ -2808,6 +3294,8 @@ export type UserUpdateWithoutLoginSessionInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
   PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
@@ -2850,6 +3338,8 @@ export type UserUncheckedUpdateWithoutLoginSessionInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -2888,6 +3378,8 @@ export type UserCreateWithoutNotificationLogInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
   PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
@@ -2930,6 +3422,8 @@ export type UserUncheckedCreateWithoutNotificationLogInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
   PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
@@ -2984,6 +3478,8 @@ export type UserUpdateWithoutNotificationLogInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
   PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
@@ -3026,6 +3522,8 @@ export type UserUncheckedUpdateWithoutNotificationLogInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -3064,6 +3562,8 @@ export type UserCreateWithoutPasswordResetOtpInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
@@ -3106,6 +3606,8 @@ export type UserUncheckedCreateWithoutPasswordResetOtpInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
@@ -3160,6 +3662,8 @@ export type UserUpdateWithoutPasswordResetOtpInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
@@ -3202,6 +3706,8 @@ export type UserUncheckedUpdateWithoutPasswordResetOtpInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
@@ -3240,6 +3746,8 @@ export type UserCreateWithoutPasswordResetTokenInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -3282,6 +3790,8 @@ export type UserUncheckedCreateWithoutPasswordResetTokenInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -3336,6 +3846,8 @@ export type UserUpdateWithoutPasswordResetTokenInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -3378,6 +3890,8 @@ export type UserUncheckedUpdateWithoutPasswordResetTokenInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -3416,6 +3930,8 @@ export type UserCreateWithoutPmScheduleInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -3458,6 +3974,8 @@ export type UserUncheckedCreateWithoutPmScheduleInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -3512,6 +4030,8 @@ export type UserUpdateWithoutPmScheduleInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -3554,6 +4074,8 @@ export type UserUncheckedUpdateWithoutPmScheduleInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -3592,6 +4114,8 @@ export type UserCreateWithoutQuotationInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -3634,6 +4158,8 @@ export type UserUncheckedCreateWithoutQuotationInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -3688,6 +4214,8 @@ export type UserUpdateWithoutQuotationInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -3730,6 +4258,8 @@ export type UserUncheckedUpdateWithoutQuotationInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -3768,6 +4298,8 @@ export type UserCreateWithoutTenantInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -3809,6 +4341,8 @@ export type UserUncheckedCreateWithoutTenantInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -3873,6 +4407,8 @@ export type UserCreateWithoutTermsAcceptanceInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -3915,6 +4451,8 @@ export type UserUncheckedCreateWithoutTermsAcceptanceInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -3969,6 +4507,8 @@ export type UserUpdateWithoutTermsAcceptanceInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -4011,6 +4551,8 @@ export type UserUncheckedUpdateWithoutTermsAcceptanceInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -4049,6 +4591,8 @@ export type UserCreateWithoutVehicleLogInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -4091,6 +4635,8 @@ export type UserUncheckedCreateWithoutVehicleLogInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -4145,6 +4691,8 @@ export type UserUpdateWithoutVehicleLogInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -4187,6 +4735,8 @@ export type UserUncheckedUpdateWithoutVehicleLogInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -4225,6 +4775,8 @@ export type UserCreateWithoutWorkOrder_WorkOrder_createdByToUserInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -4267,6 +4819,8 @@ export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_createdByToUserInput =
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -4310,6 +4864,8 @@ export type UserCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -4352,6 +4908,8 @@ export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInpu
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -4395,6 +4953,8 @@ export type UserCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
   DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutUserInput
@@ -4437,6 +4997,8 @@ export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInpu
   DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutUserInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_preparedByToUserInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_createdByToUserInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedCreateNestedManyWithoutUser_Invoice_approvedByToUserInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutUser_InvoicePayment_createdByToUserInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutUserInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutUserInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutUserInput
@@ -4491,6 +5053,8 @@ export type UserUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -4533,6 +5097,8 @@ export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput =
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -4582,6 +5148,8 @@ export type UserUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -4624,6 +5192,8 @@ export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInpu
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -4673,6 +5243,8 @@ export type UserUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -4715,6 +5287,8 @@ export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInpu
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -4774,6 +5348,8 @@ export type UserUpdateWithoutDepartmentInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -4815,6 +5391,8 @@ export type UserUncheckedUpdateWithoutDepartmentInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -4896,6 +5474,8 @@ export type UserUpdateWithoutTenantInput = {
   DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutUserNestedInput
@@ -4937,6 +5517,8 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutUserNestedInput
   Invoice_Invoice_preparedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_preparedByToUserNestedInput
   Invoice_Invoice_createdByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_createdByToUserNestedInput
+  Invoice_Invoice_approvedByToUser?: Prisma.InvoiceUncheckedUpdateManyWithoutUser_Invoice_approvedByToUserNestedInput
+  InvoicePayment_InvoicePayment_createdByToUser?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutUser_InvoicePayment_createdByToUserNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutUserNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutUserNestedInput
   PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutUserNestedInput
@@ -4985,6 +5567,8 @@ export type UserCountOutputType = {
   DeviceToken: number
   Invoice_Invoice_preparedByToUser: number
   Invoice_Invoice_createdByToUser: number
+  Invoice_Invoice_approvedByToUser: number
+  InvoicePayment_InvoicePayment_createdByToUser: number
   LoginSession: number
   NotificationLog: number
   PasswordResetOtp: number
@@ -5007,6 +5591,8 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   DeviceToken?: boolean | UserCountOutputTypeCountDeviceTokenArgs
   Invoice_Invoice_preparedByToUser?: boolean | UserCountOutputTypeCountInvoice_Invoice_preparedByToUserArgs
   Invoice_Invoice_createdByToUser?: boolean | UserCountOutputTypeCountInvoice_Invoice_createdByToUserArgs
+  Invoice_Invoice_approvedByToUser?: boolean | UserCountOutputTypeCountInvoice_Invoice_approvedByToUserArgs
+  InvoicePayment_InvoicePayment_createdByToUser?: boolean | UserCountOutputTypeCountInvoicePayment_InvoicePayment_createdByToUserArgs
   LoginSession?: boolean | UserCountOutputTypeCountLoginSessionArgs
   NotificationLog?: boolean | UserCountOutputTypeCountNotificationLogArgs
   PasswordResetOtp?: boolean | UserCountOutputTypeCountPasswordResetOtpArgs
@@ -5084,6 +5670,20 @@ export type UserCountOutputTypeCountInvoice_Invoice_preparedByToUserArgs<ExtArgs
  */
 export type UserCountOutputTypeCountInvoice_Invoice_createdByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInvoice_Invoice_approvedByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoiceWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountInvoicePayment_InvoicePayment_createdByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoicePaymentWhereInput
 }
 
 /**
@@ -5192,6 +5792,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   DeviceToken?: boolean | Prisma.User$DeviceTokenArgs<ExtArgs>
   Invoice_Invoice_preparedByToUser?: boolean | Prisma.User$Invoice_Invoice_preparedByToUserArgs<ExtArgs>
   Invoice_Invoice_createdByToUser?: boolean | Prisma.User$Invoice_Invoice_createdByToUserArgs<ExtArgs>
+  Invoice_Invoice_approvedByToUser?: boolean | Prisma.User$Invoice_Invoice_approvedByToUserArgs<ExtArgs>
+  InvoicePayment_InvoicePayment_createdByToUser?: boolean | Prisma.User$InvoicePayment_InvoicePayment_createdByToUserArgs<ExtArgs>
   LoginSession?: boolean | Prisma.User$LoginSessionArgs<ExtArgs>
   NotificationLog?: boolean | Prisma.User$NotificationLogArgs<ExtArgs>
   PasswordResetOtp?: boolean | Prisma.User$PasswordResetOtpArgs<ExtArgs>
@@ -5288,6 +5890,8 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   DeviceToken?: boolean | Prisma.User$DeviceTokenArgs<ExtArgs>
   Invoice_Invoice_preparedByToUser?: boolean | Prisma.User$Invoice_Invoice_preparedByToUserArgs<ExtArgs>
   Invoice_Invoice_createdByToUser?: boolean | Prisma.User$Invoice_Invoice_createdByToUserArgs<ExtArgs>
+  Invoice_Invoice_approvedByToUser?: boolean | Prisma.User$Invoice_Invoice_approvedByToUserArgs<ExtArgs>
+  InvoicePayment_InvoicePayment_createdByToUser?: boolean | Prisma.User$InvoicePayment_InvoicePayment_createdByToUserArgs<ExtArgs>
   LoginSession?: boolean | Prisma.User$LoginSessionArgs<ExtArgs>
   NotificationLog?: boolean | Prisma.User$NotificationLogArgs<ExtArgs>
   PasswordResetOtp?: boolean | Prisma.User$PasswordResetOtpArgs<ExtArgs>
@@ -5323,6 +5927,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     DeviceToken: Prisma.$DeviceTokenPayload<ExtArgs>[]
     Invoice_Invoice_preparedByToUser: Prisma.$InvoicePayload<ExtArgs>[]
     Invoice_Invoice_createdByToUser: Prisma.$InvoicePayload<ExtArgs>[]
+    Invoice_Invoice_approvedByToUser: Prisma.$InvoicePayload<ExtArgs>[]
+    InvoicePayment_InvoicePayment_createdByToUser: Prisma.$InvoicePaymentPayload<ExtArgs>[]
     LoginSession: Prisma.$LoginSessionPayload<ExtArgs>[]
     NotificationLog: Prisma.$NotificationLogPayload<ExtArgs>[]
     PasswordResetOtp: Prisma.$PasswordResetOtpPayload<ExtArgs>[]
@@ -5759,6 +6365,8 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   DeviceToken<T extends Prisma.User$DeviceTokenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$DeviceTokenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DeviceTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Invoice_Invoice_preparedByToUser<T extends Prisma.User$Invoice_Invoice_preparedByToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$Invoice_Invoice_preparedByToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Invoice_Invoice_createdByToUser<T extends Prisma.User$Invoice_Invoice_createdByToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$Invoice_Invoice_createdByToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Invoice_Invoice_approvedByToUser<T extends Prisma.User$Invoice_Invoice_approvedByToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$Invoice_Invoice_approvedByToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  InvoicePayment_InvoicePayment_createdByToUser<T extends Prisma.User$InvoicePayment_InvoicePayment_createdByToUserArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$InvoicePayment_InvoicePayment_createdByToUserArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   LoginSession<T extends Prisma.User$LoginSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$LoginSessionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   NotificationLog<T extends Prisma.User$NotificationLogArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$NotificationLogArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   PasswordResetOtp<T extends Prisma.User$PasswordResetOtpArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$PasswordResetOtpArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetOtpPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -6408,6 +7016,54 @@ export type User$Invoice_Invoice_createdByToUserArgs<ExtArgs extends runtime.Typ
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * User.Invoice_Invoice_approvedByToUser
+ */
+export type User$Invoice_Invoice_approvedByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Invoice
+   */
+  select?: Prisma.InvoiceSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Invoice
+   */
+  omit?: Prisma.InvoiceOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoiceInclude<ExtArgs> | null
+  where?: Prisma.InvoiceWhereInput
+  orderBy?: Prisma.InvoiceOrderByWithRelationInput | Prisma.InvoiceOrderByWithRelationInput[]
+  cursor?: Prisma.InvoiceWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * User.InvoicePayment_InvoicePayment_createdByToUser
+ */
+export type User$InvoicePayment_InvoicePayment_createdByToUserArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoicePayment
+   */
+  select?: Prisma.InvoicePaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoicePayment
+   */
+  omit?: Prisma.InvoicePaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoicePaymentInclude<ExtArgs> | null
+  where?: Prisma.InvoicePaymentWhereInput
+  orderBy?: Prisma.InvoicePaymentOrderByWithRelationInput | Prisma.InvoicePaymentOrderByWithRelationInput[]
+  cursor?: Prisma.InvoicePaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoicePaymentScalarFieldEnum | Prisma.InvoicePaymentScalarFieldEnum[]
 }
 
 /**

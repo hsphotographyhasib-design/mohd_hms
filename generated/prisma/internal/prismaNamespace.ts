@@ -446,6 +446,7 @@ export const ModelName = {
   InventoryItem: 'InventoryItem',
   InventorySubcategory: 'InventorySubcategory',
   Invoice: 'Invoice',
+  InvoicePayment: 'InvoicePayment',
   ItemSupplier: 'ItemSupplier',
   LeaveRequest: 'LeaveRequest',
   LoginSession: 'LoginSession',
@@ -490,7 +491,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "attendance" | "auditLog" | "authAuditLog" | "broadcastLog" | "checklistTemplate" | "cmsActivityLog" | "cmsAnnouncement" | "cmsBlog" | "cmsBlogCategory" | "cmsCareerApplication" | "cmsCareerJob" | "cmsContactMessage" | "cmsFooter" | "cmsForm" | "cmsHero" | "cmsIndustry" | "cmsMedia" | "cmsPopup" | "cmsProject" | "cmsSeo" | "cmsService" | "cmsSetting" | "cmsTestimonial" | "complaint" | "complaintTimeline" | "conversationThread" | "customer" | "customerFeedback" | "customerReport" | "department" | "device" | "deviceToken" | "emailLog" | "emailTemplate" | "equipment" | "equipmentQrCode" | "hrAnnouncement" | "hrAssetAssignment" | "hrCandidate" | "hrDisciplinaryAction" | "hrEmployee" | "hrEmployeeDocument" | "hrExpenseClaim" | "hrHoliday" | "hrJobPosition" | "hrLeaveBalance" | "hrLeaveRequest" | "hrLeaveType" | "hrMedicalRecord" | "hrOvertimeRequest" | "hrPayroll" | "hrPerformanceReview" | "hrShift" | "hrShiftSchedule" | "hrTraining" | "hrTrainingRecord" | "hrTravelRequest" | "hrVisitor" | "inventoryCategory" | "inventoryItem" | "inventorySubcategory" | "invoice" | "itemSupplier" | "leaveRequest" | "loginSession" | "notification" | "notificationLog" | "otpCode" | "passwordResetOtp" | "passwordResetToken" | "pmSchedule" | "priceBook" | "priceBookEntry" | "purchaseOrder" | "quotation" | "scanLog" | "stockMovement" | "tenant" | "termsAcceptance" | "user" | "vehicle" | "vehicleLog" | "warehouse" | "warehouseStock" | "whatsAppConfig" | "whatsAppDeliveryLog" | "whatsAppMessage" | "whatsAppSession" | "whatsAppTemplate" | "workOrder" | "workOrderMaterial"
+    modelProps: "attendance" | "auditLog" | "authAuditLog" | "broadcastLog" | "checklistTemplate" | "cmsActivityLog" | "cmsAnnouncement" | "cmsBlog" | "cmsBlogCategory" | "cmsCareerApplication" | "cmsCareerJob" | "cmsContactMessage" | "cmsFooter" | "cmsForm" | "cmsHero" | "cmsIndustry" | "cmsMedia" | "cmsPopup" | "cmsProject" | "cmsSeo" | "cmsService" | "cmsSetting" | "cmsTestimonial" | "complaint" | "complaintTimeline" | "conversationThread" | "customer" | "customerFeedback" | "customerReport" | "department" | "device" | "deviceToken" | "emailLog" | "emailTemplate" | "equipment" | "equipmentQrCode" | "hrAnnouncement" | "hrAssetAssignment" | "hrCandidate" | "hrDisciplinaryAction" | "hrEmployee" | "hrEmployeeDocument" | "hrExpenseClaim" | "hrHoliday" | "hrJobPosition" | "hrLeaveBalance" | "hrLeaveRequest" | "hrLeaveType" | "hrMedicalRecord" | "hrOvertimeRequest" | "hrPayroll" | "hrPerformanceReview" | "hrShift" | "hrShiftSchedule" | "hrTraining" | "hrTrainingRecord" | "hrTravelRequest" | "hrVisitor" | "inventoryCategory" | "inventoryItem" | "inventorySubcategory" | "invoice" | "invoicePayment" | "itemSupplier" | "leaveRequest" | "loginSession" | "notification" | "notificationLog" | "otpCode" | "passwordResetOtp" | "passwordResetToken" | "pmSchedule" | "priceBook" | "priceBookEntry" | "purchaseOrder" | "quotation" | "scanLog" | "stockMovement" | "tenant" | "termsAcceptance" | "user" | "vehicle" | "vehicleLog" | "warehouse" | "warehouseStock" | "whatsAppConfig" | "whatsAppDeliveryLog" | "whatsAppMessage" | "whatsAppSession" | "whatsAppTemplate" | "workOrder" | "workOrderMaterial"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -5082,6 +5083,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    InvoicePayment: {
+      payload: Prisma.$InvoicePaymentPayload<ExtArgs>
+      fields: Prisma.InvoicePaymentFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InvoicePaymentFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InvoicePaymentFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>
+        }
+        findFirst: {
+          args: Prisma.InvoicePaymentFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InvoicePaymentFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>
+        }
+        findMany: {
+          args: Prisma.InvoicePaymentFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>[]
+        }
+        create: {
+          args: Prisma.InvoicePaymentCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>
+        }
+        createMany: {
+          args: Prisma.InvoicePaymentCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InvoicePaymentCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>[]
+        }
+        delete: {
+          args: Prisma.InvoicePaymentDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>
+        }
+        update: {
+          args: Prisma.InvoicePaymentUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>
+        }
+        deleteMany: {
+          args: Prisma.InvoicePaymentDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InvoicePaymentUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InvoicePaymentUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>[]
+        }
+        upsert: {
+          args: Prisma.InvoicePaymentUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InvoicePaymentPayload>
+        }
+        aggregate: {
+          args: Prisma.InvoicePaymentAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInvoicePayment>
+        }
+        groupBy: {
+          args: Prisma.InvoicePaymentGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoicePaymentGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InvoicePaymentCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InvoicePaymentCountAggregateOutputType> | number
+        }
+      }
+    }
     ItemSupplier: {
       payload: Prisma.$ItemSupplierPayload<ExtArgs>
       fields: Prisma.ItemSupplierFieldRefs
@@ -8617,11 +8692,35 @@ export const InvoiceScalarFieldEnum = {
   shipToContact: 'shipToContact',
   preparedBy: 'preparedBy',
   createdBy: 'createdBy',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  sentAt: 'sentAt',
+  viewedAt: 'viewedAt',
+  closedAt: 'closedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const InvoicePaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  invoiceId: 'invoiceId',
+  amount: 'amount',
+  method: 'method',
+  referenceNo: 'referenceNo',
+  transactionId: 'transactionId',
+  receiptUrl: 'receiptUrl',
+  notes: 'notes',
+  paidAt: 'paidAt',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvoicePaymentScalarFieldEnum = (typeof InvoicePaymentScalarFieldEnum)[keyof typeof InvoicePaymentScalarFieldEnum]
 
 
 export const ItemSupplierScalarFieldEnum = {
@@ -9486,6 +9585,7 @@ export type GlobalOmitConfig = {
   inventoryItem?: Prisma.InventoryItemOmit
   inventorySubcategory?: Prisma.InventorySubcategoryOmit
   invoice?: Prisma.InvoiceOmit
+  invoicePayment?: Prisma.InvoicePaymentOmit
   itemSupplier?: Prisma.ItemSupplierOmit
   leaveRequest?: Prisma.LeaveRequestOmit
   loginSession?: Prisma.LoginSessionOmit

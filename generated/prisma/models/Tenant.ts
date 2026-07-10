@@ -315,6 +315,7 @@ export type TenantWhereInput = {
   InventoryItem?: Prisma.InventoryItemListRelationFilter
   InventorySubcategory?: Prisma.InventorySubcategoryListRelationFilter
   Invoice?: Prisma.InvoiceListRelationFilter
+  InvoicePayment?: Prisma.InvoicePaymentListRelationFilter
   ItemSupplier?: Prisma.ItemSupplierListRelationFilter
   LoginSession?: Prisma.LoginSessionListRelationFilter
   Notification?: Prisma.NotificationListRelationFilter
@@ -397,6 +398,7 @@ export type TenantOrderByWithRelationInput = {
   InventoryItem?: Prisma.InventoryItemOrderByRelationAggregateInput
   InventorySubcategory?: Prisma.InventorySubcategoryOrderByRelationAggregateInput
   Invoice?: Prisma.InvoiceOrderByRelationAggregateInput
+  InvoicePayment?: Prisma.InvoicePaymentOrderByRelationAggregateInput
   ItemSupplier?: Prisma.ItemSupplierOrderByRelationAggregateInput
   LoginSession?: Prisma.LoginSessionOrderByRelationAggregateInput
   Notification?: Prisma.NotificationOrderByRelationAggregateInput
@@ -482,6 +484,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   InventoryItem?: Prisma.InventoryItemListRelationFilter
   InventorySubcategory?: Prisma.InventorySubcategoryListRelationFilter
   Invoice?: Prisma.InvoiceListRelationFilter
+  InvoicePayment?: Prisma.InvoicePaymentListRelationFilter
   ItemSupplier?: Prisma.ItemSupplierListRelationFilter
   LoginSession?: Prisma.LoginSessionListRelationFilter
   Notification?: Prisma.NotificationListRelationFilter
@@ -602,6 +605,7 @@ export type TenantCreateInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -684,6 +688,7 @@ export type TenantUncheckedCreateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -766,6 +771,7 @@ export type TenantUpdateInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -848,6 +854,7 @@ export type TenantUncheckedUpdateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -1586,6 +1593,20 @@ export type TenantUpdateOneRequiredWithoutInvoiceNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInvoiceInput, Prisma.TenantUpdateWithoutInvoiceInput>, Prisma.TenantUncheckedUpdateWithoutInvoiceInput>
 }
 
+export type TenantCreateNestedOneWithoutInvoicePaymentInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInvoicePaymentInput, Prisma.TenantUncheckedCreateWithoutInvoicePaymentInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInvoicePaymentInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInvoicePaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInvoicePaymentInput, Prisma.TenantUncheckedCreateWithoutInvoicePaymentInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInvoicePaymentInput
+  upsert?: Prisma.TenantUpsertWithoutInvoicePaymentInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInvoicePaymentInput, Prisma.TenantUpdateWithoutInvoicePaymentInput>, Prisma.TenantUncheckedUpdateWithoutInvoicePaymentInput>
+}
+
 export type TenantCreateNestedOneWithoutItemSupplierInput = {
   create?: Prisma.XOR<Prisma.TenantCreateWithoutItemSupplierInput, Prisma.TenantUncheckedCreateWithoutItemSupplierInput>
   connectOrCreate?: Prisma.TenantCreateOrConnectWithoutItemSupplierInput
@@ -1977,6 +1998,7 @@ export type TenantCreateWithoutAuditLogInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -2058,6 +2080,7 @@ export type TenantUncheckedCreateWithoutAuditLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -2155,6 +2178,7 @@ export type TenantUpdateWithoutAuditLogInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -2236,6 +2260,7 @@ export type TenantUncheckedUpdateWithoutAuditLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -2317,6 +2342,7 @@ export type TenantCreateWithoutAuthAuditLogInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -2398,6 +2424,7 @@ export type TenantUncheckedCreateWithoutAuthAuditLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -2495,6 +2522,7 @@ export type TenantUpdateWithoutAuthAuditLogInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -2576,6 +2604,7 @@ export type TenantUncheckedUpdateWithoutAuthAuditLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -2657,6 +2686,7 @@ export type TenantCreateWithoutBroadcastLogInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -2738,6 +2768,7 @@ export type TenantUncheckedCreateWithoutBroadcastLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -2835,6 +2866,7 @@ export type TenantUpdateWithoutBroadcastLogInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -2916,6 +2948,7 @@ export type TenantUncheckedUpdateWithoutBroadcastLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -2997,6 +3030,7 @@ export type TenantCreateWithoutChecklistTemplateInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -3078,6 +3112,7 @@ export type TenantUncheckedCreateWithoutChecklistTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -3175,6 +3210,7 @@ export type TenantUpdateWithoutChecklistTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -3256,6 +3292,7 @@ export type TenantUncheckedUpdateWithoutChecklistTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -3337,6 +3374,7 @@ export type TenantCreateWithoutComplaintInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -3418,6 +3456,7 @@ export type TenantUncheckedCreateWithoutComplaintInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -3515,6 +3554,7 @@ export type TenantUpdateWithoutComplaintInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -3596,6 +3636,7 @@ export type TenantUncheckedUpdateWithoutComplaintInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -3677,6 +3718,7 @@ export type TenantCreateWithoutComplaintTimelineInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -3758,6 +3800,7 @@ export type TenantUncheckedCreateWithoutComplaintTimelineInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -3855,6 +3898,7 @@ export type TenantUpdateWithoutComplaintTimelineInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -3936,6 +3980,7 @@ export type TenantUncheckedUpdateWithoutComplaintTimelineInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -4017,6 +4062,7 @@ export type TenantCreateWithoutConversationThreadInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -4098,6 +4144,7 @@ export type TenantUncheckedCreateWithoutConversationThreadInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -4195,6 +4242,7 @@ export type TenantUpdateWithoutConversationThreadInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -4276,6 +4324,7 @@ export type TenantUncheckedUpdateWithoutConversationThreadInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -4357,6 +4406,7 @@ export type TenantCreateWithoutCustomerInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -4438,6 +4488,7 @@ export type TenantUncheckedCreateWithoutCustomerInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -4535,6 +4586,7 @@ export type TenantUpdateWithoutCustomerInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -4616,6 +4668,7 @@ export type TenantUncheckedUpdateWithoutCustomerInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -4697,6 +4750,7 @@ export type TenantCreateWithoutCustomerFeedbackInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -4778,6 +4832,7 @@ export type TenantUncheckedCreateWithoutCustomerFeedbackInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -4875,6 +4930,7 @@ export type TenantUpdateWithoutCustomerFeedbackInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -4956,6 +5012,7 @@ export type TenantUncheckedUpdateWithoutCustomerFeedbackInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -5037,6 +5094,7 @@ export type TenantCreateWithoutCustomerReportInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -5118,6 +5176,7 @@ export type TenantUncheckedCreateWithoutCustomerReportInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -5215,6 +5274,7 @@ export type TenantUpdateWithoutCustomerReportInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -5296,6 +5356,7 @@ export type TenantUncheckedUpdateWithoutCustomerReportInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -5377,6 +5438,7 @@ export type TenantCreateWithoutDepartmentInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -5458,6 +5520,7 @@ export type TenantUncheckedCreateWithoutDepartmentInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -5555,6 +5618,7 @@ export type TenantUpdateWithoutDepartmentInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -5636,6 +5700,7 @@ export type TenantUncheckedUpdateWithoutDepartmentInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -5717,6 +5782,7 @@ export type TenantCreateWithoutDeviceInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -5798,6 +5864,7 @@ export type TenantUncheckedCreateWithoutDeviceInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -5895,6 +5962,7 @@ export type TenantUpdateWithoutDeviceInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -5976,6 +6044,7 @@ export type TenantUncheckedUpdateWithoutDeviceInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -6057,6 +6126,7 @@ export type TenantCreateWithoutDeviceTokenInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -6138,6 +6208,7 @@ export type TenantUncheckedCreateWithoutDeviceTokenInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -6235,6 +6306,7 @@ export type TenantUpdateWithoutDeviceTokenInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -6316,6 +6388,7 @@ export type TenantUncheckedUpdateWithoutDeviceTokenInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -6397,6 +6470,7 @@ export type TenantCreateWithoutEmailLogInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -6478,6 +6552,7 @@ export type TenantUncheckedCreateWithoutEmailLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -6575,6 +6650,7 @@ export type TenantUpdateWithoutEmailLogInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -6656,6 +6732,7 @@ export type TenantUncheckedUpdateWithoutEmailLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -6737,6 +6814,7 @@ export type TenantCreateWithoutEmailTemplateInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -6818,6 +6896,7 @@ export type TenantUncheckedCreateWithoutEmailTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -6915,6 +6994,7 @@ export type TenantUpdateWithoutEmailTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -6996,6 +7076,7 @@ export type TenantUncheckedUpdateWithoutEmailTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -7077,6 +7158,7 @@ export type TenantCreateWithoutEquipmentInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -7158,6 +7240,7 @@ export type TenantUncheckedCreateWithoutEquipmentInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -7255,6 +7338,7 @@ export type TenantUpdateWithoutEquipmentInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -7336,6 +7420,7 @@ export type TenantUncheckedUpdateWithoutEquipmentInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -7417,6 +7502,7 @@ export type TenantCreateWithoutEquipmentQrCodeInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -7498,6 +7584,7 @@ export type TenantUncheckedCreateWithoutEquipmentQrCodeInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -7595,6 +7682,7 @@ export type TenantUpdateWithoutEquipmentQrCodeInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -7676,6 +7764,7 @@ export type TenantUncheckedUpdateWithoutEquipmentQrCodeInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -7757,6 +7846,7 @@ export type TenantCreateWithoutHrAnnouncementInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -7838,6 +7928,7 @@ export type TenantUncheckedCreateWithoutHrAnnouncementInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -7935,6 +8026,7 @@ export type TenantUpdateWithoutHrAnnouncementInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -8016,6 +8108,7 @@ export type TenantUncheckedUpdateWithoutHrAnnouncementInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -8097,6 +8190,7 @@ export type TenantCreateWithoutHrAssetAssignmentInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -8178,6 +8272,7 @@ export type TenantUncheckedCreateWithoutHrAssetAssignmentInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -8275,6 +8370,7 @@ export type TenantUpdateWithoutHrAssetAssignmentInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -8356,6 +8452,7 @@ export type TenantUncheckedUpdateWithoutHrAssetAssignmentInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -8437,6 +8534,7 @@ export type TenantCreateWithoutHrCandidateInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -8518,6 +8616,7 @@ export type TenantUncheckedCreateWithoutHrCandidateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -8615,6 +8714,7 @@ export type TenantUpdateWithoutHrCandidateInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -8696,6 +8796,7 @@ export type TenantUncheckedUpdateWithoutHrCandidateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -8777,6 +8878,7 @@ export type TenantCreateWithoutHrDisciplinaryActionInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -8858,6 +8960,7 @@ export type TenantUncheckedCreateWithoutHrDisciplinaryActionInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -8955,6 +9058,7 @@ export type TenantUpdateWithoutHrDisciplinaryActionInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -9036,6 +9140,7 @@ export type TenantUncheckedUpdateWithoutHrDisciplinaryActionInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -9117,6 +9222,7 @@ export type TenantCreateWithoutHrEmployeeInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -9198,6 +9304,7 @@ export type TenantUncheckedCreateWithoutHrEmployeeInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -9295,6 +9402,7 @@ export type TenantUpdateWithoutHrEmployeeInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -9376,6 +9484,7 @@ export type TenantUncheckedUpdateWithoutHrEmployeeInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -9457,6 +9566,7 @@ export type TenantCreateWithoutHrEmployeeDocumentInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -9538,6 +9648,7 @@ export type TenantUncheckedCreateWithoutHrEmployeeDocumentInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -9635,6 +9746,7 @@ export type TenantUpdateWithoutHrEmployeeDocumentInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -9716,6 +9828,7 @@ export type TenantUncheckedUpdateWithoutHrEmployeeDocumentInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -9797,6 +9910,7 @@ export type TenantCreateWithoutHrExpenseClaimInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -9878,6 +9992,7 @@ export type TenantUncheckedCreateWithoutHrExpenseClaimInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -9975,6 +10090,7 @@ export type TenantUpdateWithoutHrExpenseClaimInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -10056,6 +10172,7 @@ export type TenantUncheckedUpdateWithoutHrExpenseClaimInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -10137,6 +10254,7 @@ export type TenantCreateWithoutHrHolidayInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -10218,6 +10336,7 @@ export type TenantUncheckedCreateWithoutHrHolidayInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -10315,6 +10434,7 @@ export type TenantUpdateWithoutHrHolidayInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -10396,6 +10516,7 @@ export type TenantUncheckedUpdateWithoutHrHolidayInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -10477,6 +10598,7 @@ export type TenantCreateWithoutHrJobPositionInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -10558,6 +10680,7 @@ export type TenantUncheckedCreateWithoutHrJobPositionInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -10655,6 +10778,7 @@ export type TenantUpdateWithoutHrJobPositionInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -10736,6 +10860,7 @@ export type TenantUncheckedUpdateWithoutHrJobPositionInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -10817,6 +10942,7 @@ export type TenantCreateWithoutHrLeaveBalanceInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -10898,6 +11024,7 @@ export type TenantUncheckedCreateWithoutHrLeaveBalanceInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -10995,6 +11122,7 @@ export type TenantUpdateWithoutHrLeaveBalanceInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -11076,6 +11204,7 @@ export type TenantUncheckedUpdateWithoutHrLeaveBalanceInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -11157,6 +11286,7 @@ export type TenantCreateWithoutHrLeaveRequestInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -11238,6 +11368,7 @@ export type TenantUncheckedCreateWithoutHrLeaveRequestInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -11335,6 +11466,7 @@ export type TenantUpdateWithoutHrLeaveRequestInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -11416,6 +11548,7 @@ export type TenantUncheckedUpdateWithoutHrLeaveRequestInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -11497,6 +11630,7 @@ export type TenantCreateWithoutHrLeaveTypeInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -11578,6 +11712,7 @@ export type TenantUncheckedCreateWithoutHrLeaveTypeInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -11675,6 +11810,7 @@ export type TenantUpdateWithoutHrLeaveTypeInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -11756,6 +11892,7 @@ export type TenantUncheckedUpdateWithoutHrLeaveTypeInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -11837,6 +11974,7 @@ export type TenantCreateWithoutHrMedicalRecordInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -11918,6 +12056,7 @@ export type TenantUncheckedCreateWithoutHrMedicalRecordInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -12015,6 +12154,7 @@ export type TenantUpdateWithoutHrMedicalRecordInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -12096,6 +12236,7 @@ export type TenantUncheckedUpdateWithoutHrMedicalRecordInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -12177,6 +12318,7 @@ export type TenantCreateWithoutHrOvertimeRequestInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -12258,6 +12400,7 @@ export type TenantUncheckedCreateWithoutHrOvertimeRequestInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -12355,6 +12498,7 @@ export type TenantUpdateWithoutHrOvertimeRequestInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -12436,6 +12580,7 @@ export type TenantUncheckedUpdateWithoutHrOvertimeRequestInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -12517,6 +12662,7 @@ export type TenantCreateWithoutHrPayrollInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -12598,6 +12744,7 @@ export type TenantUncheckedCreateWithoutHrPayrollInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -12695,6 +12842,7 @@ export type TenantUpdateWithoutHrPayrollInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -12776,6 +12924,7 @@ export type TenantUncheckedUpdateWithoutHrPayrollInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -12857,6 +13006,7 @@ export type TenantCreateWithoutHrPerformanceReviewInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -12938,6 +13088,7 @@ export type TenantUncheckedCreateWithoutHrPerformanceReviewInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -13035,6 +13186,7 @@ export type TenantUpdateWithoutHrPerformanceReviewInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -13116,6 +13268,7 @@ export type TenantUncheckedUpdateWithoutHrPerformanceReviewInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -13197,6 +13350,7 @@ export type TenantCreateWithoutHrShiftInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -13278,6 +13432,7 @@ export type TenantUncheckedCreateWithoutHrShiftInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -13375,6 +13530,7 @@ export type TenantUpdateWithoutHrShiftInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -13456,6 +13612,7 @@ export type TenantUncheckedUpdateWithoutHrShiftInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -13537,6 +13694,7 @@ export type TenantCreateWithoutHrShiftScheduleInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -13618,6 +13776,7 @@ export type TenantUncheckedCreateWithoutHrShiftScheduleInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -13715,6 +13874,7 @@ export type TenantUpdateWithoutHrShiftScheduleInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -13796,6 +13956,7 @@ export type TenantUncheckedUpdateWithoutHrShiftScheduleInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -13877,6 +14038,7 @@ export type TenantCreateWithoutHrTrainingInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -13958,6 +14120,7 @@ export type TenantUncheckedCreateWithoutHrTrainingInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -14055,6 +14218,7 @@ export type TenantUpdateWithoutHrTrainingInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -14136,6 +14300,7 @@ export type TenantUncheckedUpdateWithoutHrTrainingInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -14217,6 +14382,7 @@ export type TenantCreateWithoutHrTrainingRecordInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -14298,6 +14464,7 @@ export type TenantUncheckedCreateWithoutHrTrainingRecordInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -14395,6 +14562,7 @@ export type TenantUpdateWithoutHrTrainingRecordInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -14476,6 +14644,7 @@ export type TenantUncheckedUpdateWithoutHrTrainingRecordInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -14557,6 +14726,7 @@ export type TenantCreateWithoutHrTravelRequestInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -14638,6 +14808,7 @@ export type TenantUncheckedCreateWithoutHrTravelRequestInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -14735,6 +14906,7 @@ export type TenantUpdateWithoutHrTravelRequestInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -14816,6 +14988,7 @@ export type TenantUncheckedUpdateWithoutHrTravelRequestInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -14897,6 +15070,7 @@ export type TenantCreateWithoutHrVisitorInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -14978,6 +15152,7 @@ export type TenantUncheckedCreateWithoutHrVisitorInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -15075,6 +15250,7 @@ export type TenantUpdateWithoutHrVisitorInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -15156,6 +15332,7 @@ export type TenantUncheckedUpdateWithoutHrVisitorInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -15237,6 +15414,7 @@ export type TenantCreateWithoutInventoryCategoryInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -15318,6 +15496,7 @@ export type TenantUncheckedCreateWithoutInventoryCategoryInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -15415,6 +15594,7 @@ export type TenantUpdateWithoutInventoryCategoryInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -15496,6 +15676,7 @@ export type TenantUncheckedUpdateWithoutInventoryCategoryInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -15577,6 +15758,7 @@ export type TenantCreateWithoutInventoryItemInput = {
   InventoryCategory?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -15658,6 +15840,7 @@ export type TenantUncheckedCreateWithoutInventoryItemInput = {
   InventoryCategory?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -15755,6 +15938,7 @@ export type TenantUpdateWithoutInventoryItemInput = {
   InventoryCategory?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -15836,6 +16020,7 @@ export type TenantUncheckedUpdateWithoutInventoryItemInput = {
   InventoryCategory?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -15917,6 +16102,7 @@ export type TenantCreateWithoutInventorySubcategoryInput = {
   InventoryCategory?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -15998,6 +16184,7 @@ export type TenantUncheckedCreateWithoutInventorySubcategoryInput = {
   InventoryCategory?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -16095,6 +16282,7 @@ export type TenantUpdateWithoutInventorySubcategoryInput = {
   InventoryCategory?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -16176,6 +16364,7 @@ export type TenantUncheckedUpdateWithoutInventorySubcategoryInput = {
   InventoryCategory?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -16257,6 +16446,7 @@ export type TenantCreateWithoutInvoiceInput = {
   InventoryCategory?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -16338,6 +16528,7 @@ export type TenantUncheckedCreateWithoutInvoiceInput = {
   InventoryCategory?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -16435,6 +16626,7 @@ export type TenantUpdateWithoutInvoiceInput = {
   InventoryCategory?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -16516,6 +16708,351 @@ export type TenantUncheckedUpdateWithoutInvoiceInput = {
   InventoryCategory?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
+  OtpCode?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  PriceBook?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  PurchaseOrder?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  User?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  Vehicle?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  Warehouse?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  WhatsAppConfig?: Prisma.WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  WhatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInvoicePaymentInput = {
+  id: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  BroadcastLog?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  ChecklistTemplate?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  ComplaintTimeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  Customer?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  Department?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  EmailLog?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  EmailTemplate?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  HrAnnouncement?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+  HrAssetAssignment?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  HrCandidate?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  HrDisciplinaryAction?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  HrEmployee?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  HrEmployeeDocument?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  HrExpenseClaim?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  HrHoliday?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  HrJobPosition?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  HrLeaveBalance?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  HrLeaveRequest?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  HrLeaveType?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  HrMedicalRecord?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  HrOvertimeRequest?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  HrPayroll?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  HrPerformanceReview?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  HrShift?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  HrShiftSchedule?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  HrTraining?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  HrTrainingRecord?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  HrTravelRequest?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  HrVisitor?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  InventoryCategory?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
+  OtpCode?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  PriceBook?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  PurchaseOrder?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  User?: Prisma.UserCreateNestedManyWithoutTenantInput
+  Vehicle?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  Warehouse?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  WhatsAppConfig?: Prisma.WhatsAppConfigCreateNestedOneWithoutTenantInput
+  WhatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInvoicePaymentInput = {
+  id: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  BroadcastLog?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  ChecklistTemplate?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  ComplaintTimeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  Customer?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  Department?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  EmailLog?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  EmailTemplate?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  HrAnnouncement?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+  HrAssetAssignment?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  HrCandidate?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  HrDisciplinaryAction?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  HrEmployee?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  HrEmployeeDocument?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  HrExpenseClaim?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  HrHoliday?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  HrJobPosition?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  HrLeaveBalance?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  HrLeaveRequest?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  HrLeaveType?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  HrMedicalRecord?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  HrOvertimeRequest?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  HrPayroll?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  HrPerformanceReview?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  HrShift?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  HrShiftSchedule?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  HrTraining?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  HrTrainingRecord?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  HrTravelRequest?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  HrVisitor?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  InventoryCategory?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
+  OtpCode?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  PriceBook?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  PurchaseOrder?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  User?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  Vehicle?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  Warehouse?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  WhatsAppConfig?: Prisma.WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  WhatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInvoicePaymentInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInvoicePaymentInput, Prisma.TenantUncheckedCreateWithoutInvoicePaymentInput>
+}
+
+export type TenantUpsertWithoutInvoicePaymentInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInvoicePaymentInput, Prisma.TenantUncheckedUpdateWithoutInvoicePaymentInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInvoicePaymentInput, Prisma.TenantUncheckedCreateWithoutInvoicePaymentInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInvoicePaymentInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInvoicePaymentInput, Prisma.TenantUncheckedUpdateWithoutInvoicePaymentInput>
+}
+
+export type TenantUpdateWithoutInvoicePaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  BroadcastLog?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  ChecklistTemplate?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  Complaint?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  ComplaintTimeline?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  Customer?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  Department?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  EmailLog?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  EmailTemplate?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  HrAnnouncement?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+  HrAssetAssignment?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  HrCandidate?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  HrDisciplinaryAction?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  HrEmployee?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  HrEmployeeDocument?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  HrExpenseClaim?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  HrHoliday?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  HrJobPosition?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  HrLeaveBalance?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  HrLeaveRequest?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  HrLeaveType?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  HrMedicalRecord?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  HrOvertimeRequest?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  HrPayroll?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  HrPerformanceReview?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  HrShift?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  HrShiftSchedule?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  HrTraining?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  HrTrainingRecord?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  HrTravelRequest?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  HrVisitor?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  InventoryCategory?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
+  OtpCode?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  PriceBook?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  PurchaseOrder?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  User?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  Vehicle?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  Warehouse?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  WhatsAppConfig?: Prisma.WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  WhatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInvoicePaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  BroadcastLog?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  ChecklistTemplate?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  ComplaintTimeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  Customer?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  Department?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  EmailLog?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  EmailTemplate?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  HrAnnouncement?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+  HrAssetAssignment?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  HrCandidate?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  HrDisciplinaryAction?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  HrEmployee?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  HrEmployeeDocument?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  HrExpenseClaim?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  HrHoliday?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  HrJobPosition?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  HrLeaveBalance?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  HrLeaveRequest?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  HrLeaveType?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  HrMedicalRecord?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  HrOvertimeRequest?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  HrPayroll?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  HrPerformanceReview?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  HrShift?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  HrShiftSchedule?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  HrTraining?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  HrTrainingRecord?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  HrTravelRequest?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  HrVisitor?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  InventoryCategory?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -16598,6 +17135,7 @@ export type TenantCreateWithoutItemSupplierInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
@@ -16679,6 +17217,7 @@ export type TenantUncheckedCreateWithoutItemSupplierInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
@@ -16776,6 +17315,7 @@ export type TenantUpdateWithoutItemSupplierInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
@@ -16857,6 +17397,7 @@ export type TenantUncheckedUpdateWithoutItemSupplierInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
@@ -16938,6 +17479,7 @@ export type TenantCreateWithoutLoginSessionInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
@@ -17019,6 +17561,7 @@ export type TenantUncheckedCreateWithoutLoginSessionInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
@@ -17116,6 +17659,7 @@ export type TenantUpdateWithoutLoginSessionInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
@@ -17197,6 +17741,7 @@ export type TenantUncheckedUpdateWithoutLoginSessionInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
@@ -17278,6 +17823,7 @@ export type TenantCreateWithoutNotificationInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
@@ -17359,6 +17905,7 @@ export type TenantUncheckedCreateWithoutNotificationInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
@@ -17456,6 +18003,7 @@ export type TenantUpdateWithoutNotificationInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   NotificationLog?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
@@ -17537,6 +18085,7 @@ export type TenantUncheckedUpdateWithoutNotificationInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
@@ -17618,6 +18167,7 @@ export type TenantCreateWithoutNotificationLogInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -17699,6 +18249,7 @@ export type TenantUncheckedCreateWithoutNotificationLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -17796,6 +18347,7 @@ export type TenantUpdateWithoutNotificationLogInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -17877,6 +18429,7 @@ export type TenantUncheckedUpdateWithoutNotificationLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -17958,6 +18511,7 @@ export type TenantCreateWithoutOtpCodeInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -18039,6 +18593,7 @@ export type TenantUncheckedCreateWithoutOtpCodeInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -18136,6 +18691,7 @@ export type TenantUpdateWithoutOtpCodeInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -18217,6 +18773,7 @@ export type TenantUncheckedUpdateWithoutOtpCodeInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -18298,6 +18855,7 @@ export type TenantCreateWithoutPasswordResetOtpInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -18379,6 +18937,7 @@ export type TenantUncheckedCreateWithoutPasswordResetOtpInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -18476,6 +19035,7 @@ export type TenantUpdateWithoutPasswordResetOtpInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -18557,6 +19117,7 @@ export type TenantUncheckedUpdateWithoutPasswordResetOtpInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -18638,6 +19199,7 @@ export type TenantCreateWithoutPasswordResetTokenInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -18719,6 +19281,7 @@ export type TenantUncheckedCreateWithoutPasswordResetTokenInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -18816,6 +19379,7 @@ export type TenantUpdateWithoutPasswordResetTokenInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -18897,6 +19461,7 @@ export type TenantUncheckedUpdateWithoutPasswordResetTokenInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -18978,6 +19543,7 @@ export type TenantCreateWithoutPmScheduleInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -19059,6 +19625,7 @@ export type TenantUncheckedCreateWithoutPmScheduleInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -19156,6 +19723,7 @@ export type TenantUpdateWithoutPmScheduleInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -19237,6 +19805,7 @@ export type TenantUncheckedUpdateWithoutPmScheduleInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -19318,6 +19887,7 @@ export type TenantCreateWithoutPriceBookInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -19399,6 +19969,7 @@ export type TenantUncheckedCreateWithoutPriceBookInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -19496,6 +20067,7 @@ export type TenantUpdateWithoutPriceBookInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -19577,6 +20149,7 @@ export type TenantUncheckedUpdateWithoutPriceBookInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -19658,6 +20231,7 @@ export type TenantCreateWithoutPriceBookEntryInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -19739,6 +20313,7 @@ export type TenantUncheckedCreateWithoutPriceBookEntryInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -19836,6 +20411,7 @@ export type TenantUpdateWithoutPriceBookEntryInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -19917,6 +20493,7 @@ export type TenantUncheckedUpdateWithoutPriceBookEntryInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -19998,6 +20575,7 @@ export type TenantCreateWithoutPurchaseOrderInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -20079,6 +20657,7 @@ export type TenantUncheckedCreateWithoutPurchaseOrderInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -20176,6 +20755,7 @@ export type TenantUpdateWithoutPurchaseOrderInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -20257,6 +20837,7 @@ export type TenantUncheckedUpdateWithoutPurchaseOrderInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -20338,6 +20919,7 @@ export type TenantCreateWithoutQuotationInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -20419,6 +21001,7 @@ export type TenantUncheckedCreateWithoutQuotationInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -20516,6 +21099,7 @@ export type TenantUpdateWithoutQuotationInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -20597,6 +21181,7 @@ export type TenantUncheckedUpdateWithoutQuotationInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -20678,6 +21263,7 @@ export type TenantCreateWithoutScanLogInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -20759,6 +21345,7 @@ export type TenantUncheckedCreateWithoutScanLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -20856,6 +21443,7 @@ export type TenantUpdateWithoutScanLogInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -20937,6 +21525,7 @@ export type TenantUncheckedUpdateWithoutScanLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -21018,6 +21607,7 @@ export type TenantCreateWithoutStockMovementInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -21099,6 +21689,7 @@ export type TenantUncheckedCreateWithoutStockMovementInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -21196,6 +21787,7 @@ export type TenantUpdateWithoutStockMovementInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -21277,6 +21869,7 @@ export type TenantUncheckedUpdateWithoutStockMovementInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -21358,6 +21951,7 @@ export type TenantCreateWithoutUserInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -21439,6 +22033,7 @@ export type TenantUncheckedCreateWithoutUserInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -21536,6 +22131,7 @@ export type TenantUpdateWithoutUserInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -21617,6 +22213,7 @@ export type TenantUncheckedUpdateWithoutUserInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -21698,6 +22295,7 @@ export type TenantCreateWithoutVehicleInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -21779,6 +22377,7 @@ export type TenantUncheckedCreateWithoutVehicleInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -21876,6 +22475,7 @@ export type TenantUpdateWithoutVehicleInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -21957,6 +22557,7 @@ export type TenantUncheckedUpdateWithoutVehicleInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -22038,6 +22639,7 @@ export type TenantCreateWithoutWarehouseInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -22119,6 +22721,7 @@ export type TenantUncheckedCreateWithoutWarehouseInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -22216,6 +22819,7 @@ export type TenantUpdateWithoutWarehouseInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -22297,6 +22901,7 @@ export type TenantUncheckedUpdateWithoutWarehouseInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -22378,6 +22983,7 @@ export type TenantCreateWithoutWarehouseStockInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -22459,6 +23065,7 @@ export type TenantUncheckedCreateWithoutWarehouseStockInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -22556,6 +23163,7 @@ export type TenantUpdateWithoutWarehouseStockInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -22637,6 +23245,7 @@ export type TenantUncheckedUpdateWithoutWarehouseStockInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -22718,6 +23327,7 @@ export type TenantCreateWithoutWhatsAppConfigInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -22799,6 +23409,7 @@ export type TenantUncheckedCreateWithoutWhatsAppConfigInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -22896,6 +23507,7 @@ export type TenantUpdateWithoutWhatsAppConfigInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -22977,6 +23589,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppConfigInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -23058,6 +23671,7 @@ export type TenantCreateWithoutWhatsAppDeliveryLogInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -23139,6 +23753,7 @@ export type TenantUncheckedCreateWithoutWhatsAppDeliveryLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -23236,6 +23851,7 @@ export type TenantUpdateWithoutWhatsAppDeliveryLogInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -23317,6 +23933,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppDeliveryLogInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -23398,6 +24015,7 @@ export type TenantCreateWithoutWhatsAppMessageInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -23479,6 +24097,7 @@ export type TenantUncheckedCreateWithoutWhatsAppMessageInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -23576,6 +24195,7 @@ export type TenantUpdateWithoutWhatsAppMessageInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -23657,6 +24277,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppMessageInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -23738,6 +24359,7 @@ export type TenantCreateWithoutWhatsAppSessionInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -23819,6 +24441,7 @@ export type TenantUncheckedCreateWithoutWhatsAppSessionInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -23916,6 +24539,7 @@ export type TenantUpdateWithoutWhatsAppSessionInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -23997,6 +24621,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppSessionInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -24078,6 +24703,7 @@ export type TenantCreateWithoutWhatsAppTemplateInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -24159,6 +24785,7 @@ export type TenantUncheckedCreateWithoutWhatsAppTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -24256,6 +24883,7 @@ export type TenantUpdateWithoutWhatsAppTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -24337,6 +24965,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppTemplateInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -24418,6 +25047,7 @@ export type TenantCreateWithoutWorkOrderInput = {
   InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
@@ -24499,6 +25129,7 @@ export type TenantUncheckedCreateWithoutWorkOrderInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
   Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
   LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
   Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
@@ -24596,6 +25227,7 @@ export type TenantUpdateWithoutWorkOrderInput = {
   InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
@@ -24677,6 +25309,7 @@ export type TenantUncheckedUpdateWithoutWorkOrderInput = {
   InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
   InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
   Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
   ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
   LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
   Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
@@ -24751,6 +25384,7 @@ export type TenantCountOutputType = {
   InventoryItem: number
   InventorySubcategory: number
   Invoice: number
+  InvoicePayment: number
   ItemSupplier: number
   LoginSession: number
   Notification: number
@@ -24820,6 +25454,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   InventoryItem?: boolean | TenantCountOutputTypeCountInventoryItemArgs
   InventorySubcategory?: boolean | TenantCountOutputTypeCountInventorySubcategoryArgs
   Invoice?: boolean | TenantCountOutputTypeCountInvoiceArgs
+  InvoicePayment?: boolean | TenantCountOutputTypeCountInvoicePaymentArgs
   ItemSupplier?: boolean | TenantCountOutputTypeCountItemSupplierArgs
   LoginSession?: boolean | TenantCountOutputTypeCountLoginSessionArgs
   Notification?: boolean | TenantCountOutputTypeCountNotificationArgs
@@ -25159,6 +25794,13 @@ export type TenantCountOutputTypeCountInvoiceArgs<ExtArgs extends runtime.Types.
 /**
  * TenantCountOutputType without action
  */
+export type TenantCountOutputTypeCountInvoicePaymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InvoicePaymentWhereInput
+}
+
+/**
+ * TenantCountOutputType without action
+ */
 export type TenantCountOutputTypeCountItemSupplierArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ItemSupplierWhereInput
 }
@@ -25374,6 +26016,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   InventoryItem?: boolean | Prisma.Tenant$InventoryItemArgs<ExtArgs>
   InventorySubcategory?: boolean | Prisma.Tenant$InventorySubcategoryArgs<ExtArgs>
   Invoice?: boolean | Prisma.Tenant$InvoiceArgs<ExtArgs>
+  InvoicePayment?: boolean | Prisma.Tenant$InvoicePaymentArgs<ExtArgs>
   ItemSupplier?: boolean | Prisma.Tenant$ItemSupplierArgs<ExtArgs>
   LoginSession?: boolean | Prisma.Tenant$LoginSessionArgs<ExtArgs>
   Notification?: boolean | Prisma.Tenant$NotificationArgs<ExtArgs>
@@ -25491,6 +26134,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   InventoryItem?: boolean | Prisma.Tenant$InventoryItemArgs<ExtArgs>
   InventorySubcategory?: boolean | Prisma.Tenant$InventorySubcategoryArgs<ExtArgs>
   Invoice?: boolean | Prisma.Tenant$InvoiceArgs<ExtArgs>
+  InvoicePayment?: boolean | Prisma.Tenant$InvoicePaymentArgs<ExtArgs>
   ItemSupplier?: boolean | Prisma.Tenant$ItemSupplierArgs<ExtArgs>
   LoginSession?: boolean | Prisma.Tenant$LoginSessionArgs<ExtArgs>
   Notification?: boolean | Prisma.Tenant$NotificationArgs<ExtArgs>
@@ -25566,6 +26210,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     InventoryItem: Prisma.$InventoryItemPayload<ExtArgs>[]
     InventorySubcategory: Prisma.$InventorySubcategoryPayload<ExtArgs>[]
     Invoice: Prisma.$InvoicePayload<ExtArgs>[]
+    InvoicePayment: Prisma.$InvoicePaymentPayload<ExtArgs>[]
     ItemSupplier: Prisma.$ItemSupplierPayload<ExtArgs>[]
     LoginSession: Prisma.$LoginSessionPayload<ExtArgs>[]
     Notification: Prisma.$NotificationPayload<ExtArgs>[]
@@ -26041,6 +26686,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   InventoryItem<T extends Prisma.Tenant$InventoryItemArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$InventoryItemArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventoryItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   InventorySubcategory<T extends Prisma.Tenant$InventorySubcategoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$InventorySubcategoryArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InventorySubcategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Invoice<T extends Prisma.Tenant$InvoiceArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$InvoiceArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  InvoicePayment<T extends Prisma.Tenant$InvoicePaymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$InvoicePaymentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InvoicePaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ItemSupplier<T extends Prisma.Tenant$ItemSupplierArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$ItemSupplierArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ItemSupplierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   LoginSession<T extends Prisma.Tenant$LoginSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$LoginSessionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$LoginSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   Notification<T extends Prisma.Tenant$NotificationArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$NotificationArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -27526,6 +28172,30 @@ export type Tenant$InvoiceArgs<ExtArgs extends runtime.Types.Extensions.Internal
   take?: number
   skip?: number
   distinct?: Prisma.InvoiceScalarFieldEnum | Prisma.InvoiceScalarFieldEnum[]
+}
+
+/**
+ * Tenant.InvoicePayment
+ */
+export type Tenant$InvoicePaymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the InvoicePayment
+   */
+  select?: Prisma.InvoicePaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the InvoicePayment
+   */
+  omit?: Prisma.InvoicePaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InvoicePaymentInclude<ExtArgs> | null
+  where?: Prisma.InvoicePaymentWhereInput
+  orderBy?: Prisma.InvoicePaymentOrderByWithRelationInput | Prisma.InvoicePaymentOrderByWithRelationInput[]
+  cursor?: Prisma.InvoicePaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InvoicePaymentScalarFieldEnum | Prisma.InvoicePaymentScalarFieldEnum[]
 }
 
 /**

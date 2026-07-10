@@ -113,6 +113,7 @@ export const ModelName = {
   InventoryItem: 'InventoryItem',
   InventorySubcategory: 'InventorySubcategory',
   Invoice: 'Invoice',
+  InvoicePayment: 'InvoicePayment',
   ItemSupplier: 'ItemSupplier',
   LeaveRequest: 'LeaveRequest',
   LoginSession: 'LoginSession',
@@ -1510,11 +1511,35 @@ export const InvoiceScalarFieldEnum = {
   shipToContact: 'shipToContact',
   preparedBy: 'preparedBy',
   createdBy: 'createdBy',
+  approvedBy: 'approvedBy',
+  approvedAt: 'approvedAt',
+  sentAt: 'sentAt',
+  viewedAt: 'viewedAt',
+  closedAt: 'closedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const InvoicePaymentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  invoiceId: 'invoiceId',
+  amount: 'amount',
+  method: 'method',
+  referenceNo: 'referenceNo',
+  transactionId: 'transactionId',
+  receiptUrl: 'receiptUrl',
+  notes: 'notes',
+  paidAt: 'paidAt',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvoicePaymentScalarFieldEnum = (typeof InvoicePaymentScalarFieldEnum)[keyof typeof InvoicePaymentScalarFieldEnum]
 
 
 export const ItemSupplierScalarFieldEnum = {

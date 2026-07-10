@@ -352,6 +352,11 @@ export type InventorySubcategory = Prisma.InventorySubcategoryModel
  */
 export type Invoice = Prisma.InvoiceModel
 /**
+ * Model InvoicePayment
+ * 
+ */
+export type InvoicePayment = Prisma.InvoicePaymentModel
+/**
  * Model ItemSupplier
  * 
  */
