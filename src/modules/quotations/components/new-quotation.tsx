@@ -428,19 +428,20 @@ export function NewQuotation() {
       }
 
       const result = await res.json();
+      const id = result.id || savedQuotationId;
 
       // Clear draft
       localStorage.removeItem(DRAFT_KEY);
 
       toast.success(status === 'DRAFT' ? 'Quotation saved as draft' : 'Quotation submitted for review');
-      setView('quotation-detail', { id: result.id });
+      setView('quotation-detail', { id });
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to save quotation');
     } finally {
       setSaving(false);
       setSubmitting(false);
     }
-  }, [selectedCustomer, lineItems, formData, quotationNo, subtotal, taxAmount, grandTotal, setView]);
+  }, [selectedCustomer, lineItems, formData, quotationNo, subtotal, taxAmount, grandTotal, savedQuotationId, setView]);
 
   // --- Preview / PDF / Email / WhatsApp helpers ---
   const buildPreviewData = () => ({

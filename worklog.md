@@ -92,3 +92,22 @@ Stage Summary:
 - Server-side PDF via Playwright (selectable text, A4, professional)
 - All action buttons fully functional (were non-functional stubs before)
 - Company name bug fixed (was "SMART MAINTENANCE SERVICES SDN BHD", now uses COMPANY constant)
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix quotation form buttons not working properly on mobile
+
+Work Log:
+- Analyzed screenshot: buttons are from new-quotation.tsx (Preview, PDF, Print, Email, WhatsApp, Clear Draft, Cancel, Save Draft, Submit for Review)
+- Identified root cause: Mobile FloatingBottomNav (z-40, fixed bottom ~16px, 68px tall) overlaps with form's sticky action footer (z-40, fixed bottom 0). Since FloatingBottomNav is rendered after children in DOM, it sits on top and intercepts all click events.
+- Fixed mobile-shell.tsx: Added VIEWS_WITH_OWN_BOTTOM_BAR list to hide FloatingBottomNav when on new-quotation, quotation-edit, or new-work-order views
+- Adjusted MobileShell paddingBottom dynamically: 16px when nav is hidden (form has own footer), 100px when nav is visible
+- Fixed new-quotation.tsx handleSave: was always POST /api/quotations/create, now uses PUT /api/quotations/{id} when savedQuotationId exists (prevents duplicate creation)
+- Fixed quotation-form.tsx Duplicate button: had no onClick handler, now clears savedQuotationId so next save creates a new quotation
+- Verified: ESLint 0 errors, 11 warnings (all pre-existing)
+
+Stage Summary:
+- 3 files modified: mobile-shell.tsx, new-quotation.tsx, quotation-form.tsx
+- Key fix: Mobile bottom nav no longer blocks form action buttons
+- Secondary fix: Save Draft / Submit for Review no longer create duplicates
+- Tertiary fix: Duplicate button now has working onClick

@@ -1499,7 +1499,11 @@ export function QuotationForm({ quotationId }: { quotationId?: string }) {
                 <MessageCircle className="h-4 w-4 mr-1.5" /> WhatsApp
               </Button>
               <Separator orientation="vertical" className="h-6 mx-1 hidden sm:block" />
-              <Button variant="outline" size="sm" className="h-9 text-sm">
+              <Button variant="outline" size="sm" className="h-9 text-sm" onClick={() => {
+                // Reset saved ID so next save creates a new quotation (duplicate)
+                setSavedQuotationId(null);
+                toast.success('Draft ID cleared — next save will create a new quotation');
+              }}>
                 <Copy className="h-4 w-4 mr-1.5" /> Duplicate
               </Button>
             </div>
