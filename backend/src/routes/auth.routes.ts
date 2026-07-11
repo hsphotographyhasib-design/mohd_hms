@@ -78,13 +78,11 @@ router.route('/register').post(async (req: Request, res: Response) => {
   let name: string;
   let email: string;
   let password: string;
-  let role: string;
   try {
     const body = req.body;
     name = body.name;
     email = body.email;
     password = body.password;
-    role = body.role;
   } catch {
     res.status(400).json({ error: 'Invalid request data. Please check your input.' });
     return;
@@ -94,6 +92,10 @@ router.route('/register').post(async (req: Request, res: Response) => {
     res.status(400).json({ error: 'Name, email, and password are required' });
     return;
   }
+
+  // SECURITY: never trust a client-supplied role on public self-registration.
+  // Elevated roles are only assignable by an admin via the user-management API.
+  const role = 'customer';
 
   try {
     // Use provided tenantId or find default tenant
@@ -125,7 +127,7 @@ router.route('/register').post(async (req: Request, res: Response) => {
         email,
         passwordHash,
         name,
-        role: role || 'customer',
+        role,
         authProvider: 'email',
         profileCompleted: false,
       },

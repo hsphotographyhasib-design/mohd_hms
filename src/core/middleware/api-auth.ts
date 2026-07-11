@@ -32,6 +32,8 @@ export interface AuthSuccess {
   tenantId: string;
   role: string;
   email?: string;
+  /** Always absent on success — lets `if (auth.error)` narrow the union. */
+  error?: undefined;
 }
 
 export interface AuthFailure {

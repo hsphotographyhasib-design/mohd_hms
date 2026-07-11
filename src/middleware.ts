@@ -15,7 +15,10 @@ export function middleware(request: NextRequest) {
 
   // Security headers
   response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('X-Frame-Options', 'ALLOWALL');
+  // 'ALLOWALL' is not a valid value (browsers ignore it → no clickjacking
+  // protection). Use SAMEORIGIN so the app can still frame its own pages
+  // (e.g. the landing/page-builder preview) but external sites cannot.
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { sanitizeInput } from '@/core/auth/auth-lib';
+import { generateUniqueComplaintNumber } from '@/core/utils/complaint-number';
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
@@ -39,7 +40,11 @@ export async function POST(request: NextRequest) {
 
     // Generate a complaint number
     const count = await db.complaint.count({ where: { tenantId: equipment.tenantId } });
-    const complaintNumber = `CMP-${String(count + 1).padStart(4, '0')}`;
+    const complaintNumber = await generateUniqueComplaintNumber(
+      equipment.tenantId,
+      (seq) => `CMP-${String(seq).padStart(4, '0')}`,
+      count,
+    );
 
     // Create the complaint
     const complaint = await db.complaint.create({

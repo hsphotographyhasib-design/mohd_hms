@@ -28,13 +28,17 @@ export async function POST(request: NextRequest) {
   const { db, withRetry, getDbFriendlyMessage } = await import('@/core/database/db');
   const { hashPassword, generateToken } = await import('@/core/auth/auth-lib');
 
-  let name: string; let email: string; let password: string; let role: string;
+  let name: string; let email: string; let password: string;
   try {
     const body = await request.json();
-    name = body.name; email = body.email; password = body.password; role = body.role;
+    name = body.name; email = body.email; password = body.password;
   } catch {
     return NextResponse.json({ error: 'Invalid request data.' }, { status: 400 });
   }
+
+  // SECURITY: never trust a client-supplied role on public self-registration.
+  // Elevated roles are only assignable by an admin via the user-management API.
+  const role = 'customer';
 
   if (!name || !email || !password) {
     return NextResponse.json({ error: 'Name, email, and password are required' }, { status: 400 });
@@ -51,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     const passwordHash = await hashPassword(password);
     const user = await withRetry(() => db.user.create({
-      data: { tenantId: tenant.id, email, passwordHash, name, role: role || 'customer', authProvider: 'email', profileCompleted: false },
+      data: { tenantId: tenant.id, email, passwordHash, name, role, authProvider: 'email', profileCompleted: false },
       include: { tenant: { select: { id: true, name: true, domain: true } } },
     }), { label: 'register-createUser' });
 
