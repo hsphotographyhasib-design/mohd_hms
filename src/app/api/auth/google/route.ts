@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { OAuth2Client } from 'google-auth-library';
 import { db, withRetry, getDbFriendlyMessage } from '@/core/database/db';
 import { generateToken } from '@/core/auth/auth-lib';
+import { withErrorLogging } from '@/core/errors/with-error-logging';
 
 export const dynamic = 'force-dynamic';
 
@@ -89,7 +90,7 @@ function getGoogleClient(): OAuth2Client | null {
  * Body: { token: string }
  * Returns: { token: string, user: AuthUser }
  */
-export async function POST(request: NextRequest) {
+export const POST = withErrorLogging(async function POST(request: NextRequest) {
   try {
     const { token: googleToken } = await request.json();
 
@@ -328,7 +329,7 @@ export async function POST(request: NextRequest) {
     const message = getDbFriendlyMessage(error);
     return NextResponse.json({ error: message }, { status: 500 });
   }
-}
+});
 
 // ──────────────────────────────────────────────
 // GOOGLE TOKEN VERIFICATION (google-auth-library)

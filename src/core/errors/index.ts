@@ -1,6 +1,10 @@
 // Error utilities
 export { logErrorToServer, sanitizeError, type LogErrorOptions } from './error-utils';
 
+// Server-side error logging (for API routes)
+export { logServerError, extractAuthFromRequest, type ServerLogErrorOptions } from './server-error-logger';
+export { withErrorLogging, type WithErrorLoggingOptions } from './with-error-logging';
+
 // Error service
 export {
   categorizeError,

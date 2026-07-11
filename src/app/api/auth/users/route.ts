@@ -3,12 +3,13 @@ import { db, withRetry, getDbFriendlyMessage } from '@/core/database/db';
 import { verifyToken } from '@/core/auth/auth-lib';
 import { hashPassword, generateToken } from '@/core/auth/auth-lib';
 import { sendEmail, renderWelcomeEmail } from '@/core/email/email';
+import { withErrorLogging } from '@/core/errors/with-error-logging';
 
 export const dynamic = 'force-dynamic';
 
 // ============ GET: List users (admin/super_admin only) ============
 
-export async function GET(request: NextRequest) {
+export const GET = withErrorLogging(async function GET(request: NextRequest) {
   try {
     // Authenticate
     const authHeader = request.headers.get('authorization');
@@ -114,11 +115,11 @@ export async function GET(request: NextRequest) {
     console.error('List users error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
-}
+});
 
 // ============ POST: Invite a new user (admin/super_admin only) ============
 
-export async function POST(request: NextRequest) {
+export const POST = withErrorLogging(async function POST(request: NextRequest) {
   try {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
@@ -233,4 +234,4 @@ export async function POST(request: NextRequest) {
     console.error('Invite user error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
-}
+});

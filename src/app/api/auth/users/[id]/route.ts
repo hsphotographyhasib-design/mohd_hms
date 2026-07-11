@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db, withRetry, getDbFriendlyMessage } from '@/core/database/db';
 import { verifyToken } from '@/core/auth/auth-lib';
+import { withErrorLogging } from '@/core/errors/with-error-logging';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,7 +35,7 @@ async function authenticateRequest(
 
 // ============ GET: Single user details ============
 
-export async function GET(
+export const GET = withErrorLogging(async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -127,11 +128,11 @@ export async function GET(
     console.error('Get user error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
-}
+});
 
 // ============ PUT: Update user ============
 
-export async function PUT(
+export const PUT = withErrorLogging(async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -278,11 +279,11 @@ export async function PUT(
     console.error('Update user error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
-}
+});
 
 // ============ DELETE: Soft delete user ============
 
-export async function DELETE(
+export const DELETE = withErrorLogging(async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
@@ -387,4 +388,4 @@ export async function DELETE(
     console.error('Delete user error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
   }
-}
+});

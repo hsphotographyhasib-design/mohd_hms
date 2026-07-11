@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withErrorLogging } from '@/core/errors/with-error-logging';
 
 export const dynamic = 'force-dynamic';
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
 
-export async function GET(request: NextRequest) {
+export const GET = withErrorLogging(async function GET(request: NextRequest) {
   // ── Production: proxy to Render backend ────────────────────────────────
   if (BACKEND_URL) {
     try {
@@ -76,4 +77,4 @@ export async function GET(request: NextRequest) {
     const { getDbFriendlyMessage: gfm, getErrorHeaders: geh } = await import('@/core/database/db');
     return NextResponse.json({ error: gfm(error) }, { status: 500, headers: geh(error) });
   }
-}
+});

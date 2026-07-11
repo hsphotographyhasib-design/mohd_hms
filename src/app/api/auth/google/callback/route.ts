@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { withErrorLogging } from '@/core/errors/with-error-logging';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,7 +36,7 @@ function decodeBase64url(str: string): string {
  *    which handles token exchange + user creation, then render HTML with localStorage.
  * 2. On local dev: handle everything locally with Prisma/SQLite.
  */
-export async function GET(request: NextRequest) {
+export const GET = withErrorLogging(async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const state = searchParams.get('state');
@@ -330,7 +331,7 @@ export async function GET(request: NextRequest) {
     const { getDbFriendlyMessage: gfm } = await import('@/core/database/db');
     return redirectToAppWithError(origin, gfm(error));
   }
-}
+});
 
 function redirectToAppWithError(origin: string, message: string) {
   const safeMsg = message.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/</g, '\\x3c').replace(/\n/g, ' ');

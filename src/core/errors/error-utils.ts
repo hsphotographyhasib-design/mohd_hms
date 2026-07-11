@@ -135,12 +135,13 @@ export function logErrorToServer(opts: LogErrorOptions): string {
       : {}),
   });
 
+  // Always log to console in development for visibility
   if (process.env.NODE_ENV === 'development') {
     console.error(`[${errorRef}]`, category, opts.message);
-    return errorRef;
   }
 
   // Fire-and-forget POST to /api/error-logs — never block the UI
+  // Works in BOTH development and production so the Errors tab always has data
   try {
     fetch('/api/error-logs', {
       method: 'POST',
