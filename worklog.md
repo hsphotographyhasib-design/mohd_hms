@@ -1153,3 +1153,25 @@ Stage Summary:
 - Root cause was response format mismatch causing silent TypeError in frontend
 - 3 files changed, 48 insertions, 8 deletions
 - Pushed to GitHub, Vercel/Render will auto-deploy
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix Errors tab still empty after first fix — tenantId mismatch
+
+Work Log:
+- Screenshot still showed "No errors found" after deployment of first fix
+- Investigated the full error logging pipeline end-to-end
+- Found the REAL root cause: tenantId mismatch
+  - Client-side `logErrorToServer()` never included `tenantId` in payload
+  - `sanitizeForNonAdmin()` would strip it anyway (not in SAFE_FIELDS)
+  - POST /api/error-logs stored all client errors with `tenantId: null`
+  - GET /api/error-logs filtered by `auth.tenantId` → no matches
+- Fix 1: POST endpoint now extracts tenantId from JWT Authorization header
+- Fix 2: GET endpoint now queries `OR: [{ tenantId }, { tenantId: null }]`
+- Fix 3: `logErrorToServer()` now sends Authorization header with the JWT
+- Pushed commit cb9327c to GitHub
+
+Stage Summary:
+- Two-part bug: (1) response format mismatch (previous fix), (2) tenantId mismatch (this fix)
+- Future errors will now be logged with correct tenantId via JWT
+- Existing errors with tenantId=null will also show due to OR query
