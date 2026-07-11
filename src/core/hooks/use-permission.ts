@@ -2,8 +2,8 @@
 
 import { useMemo } from 'react';
 import { useAuthStore } from '@/app-shell/store';
-import { canAccessFeature, canPerformAction as checkAction, hasMinRole, hasPermission } from '@/core/permissions/rbac';
-import type { UserRole } from '@/core/permissions/rbac/types';
+import { canAccessFeature, canPerformAction as checkAction, hasMinRole, hasPermission } from '@/core/permissions/rbac/permissions-matrix';
+import type { UserRole } from '@/core/types';
 
 /**
  * Hook to check if the current user can access a feature.

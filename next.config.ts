@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
     '@prisma/adapter-pg',
     '@prisma/adapter-libsql',
     '@prisma/client',
+    '@libsql/client',
+    '@neondatabase/serverless',
     
     'google-auth-library',
     // Firebase Admin SDK — very large, must not be bundled by Turbopack

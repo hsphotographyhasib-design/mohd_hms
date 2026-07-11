@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { AuthUser, UserRole, AppView } from '@/core/types';
 import { markLoginTime } from '@/shared/hooks/use-secure-fetch';
-import { canAccessFeature, hasMinRole, hasPermission, ROLE_HIERARCHY } from '@/core/permissions/rbac';
+import { canAccessFeature, hasMinRole, hasPermission, ROLE_HIERARCHY } from '@/core/permissions/rbac/permissions-matrix';
 
 // NOTE: JWT operations are server-only in @/core/auth/auth-lib.ts.
 // This constant is NOT used for actual token verification.
@@ -195,7 +195,10 @@ export const useAppStore = create<AppState>((set) => ({
   setNotificationPanelOpen: (open) => set({ notificationPanelOpen: open }),
 }));
 
-// ============ PERMISSIONS HELPER (delegates to unified RBAC) ============
+// ============ PERMISSIONS HELPERS (delegates to unified RBAC) ============
 
-/** @deprecated Use canAccessFeature from '@/core/permissions/rbac' instead */
+/** @deprecated Use canAccessFeature from '@/core/permissions/rbac/permissions-matrix' instead */
 export const canAccess = canAccessFeature;
+
+/** Re-export for client components — avoids importing the full RBAC barrel */
+export { hasMinRole, hasPermission, ROLE_HIERARCHY } from '@/core/permissions/rbac/permissions-matrix';

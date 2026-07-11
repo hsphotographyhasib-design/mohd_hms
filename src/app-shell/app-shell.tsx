@@ -2,7 +2,7 @@
 
 import { lazy, Suspense, useMemo } from 'react';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
-import { canAccessFeature } from '@/core/permissions/rbac';
+import { canAccessFeature } from '@/core/permissions/rbac/permissions-matrix';
 import { getViewFeature } from '@/core/permissions/view-feature-map';
 import { AccessDenied } from '@/shared/components/access-denied';
 import { Skeleton } from '@/shared/ui/skeleton';
