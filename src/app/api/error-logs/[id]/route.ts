@@ -24,30 +24,34 @@ export async function GET(
       );
     }
 
+    // Map DB field names to frontend-expected names
+    const raw = item as Record<string, unknown>;
     return NextResponse.json({
-      id: item.id,
-      errorRef: item.errorRef,
-      category: item.category,
-      message: item.message,
-      stack: item.stackTrace,
-      statusCode: item.httpStatus,
-      errorCode: item.errorCode,
-      errorType: item.errorType,
-      userMessage: item.userMessage,
-      module: item.module,
-      apiEndpoint: item.apiEndpoint,
-      method: item.httpMethod,
-      userId: item.userId,
-      userName: item.userName,
-      userRole: item.userRole,
-      duration: item.duration,
-      ip: item.ip,
-      userAgent: item.browser,
-      device: item.device,
-      pageUrl: item.pageUrl,
-      createdAt: item.createdAt.toISOString(),
-      requestBody: item.requestBody,
-      responseBody: item.responseBody,
+      id: raw.id,
+      errorRef: raw.errorRef,
+      category: raw.category,
+      message: raw.message,
+      stack: raw.stackTrace,
+      statusCode: raw.httpStatus,
+      errorCode: raw.errorCode,
+      errorType: raw.errorType,
+      userMessage: raw.userMessage,
+      module: raw.module,
+      apiEndpoint: raw.apiEndpoint,
+      method: raw.httpMethod,
+      userId: raw.userId,
+      userName: raw.userName,
+      userRole: raw.userRole,
+      duration: raw.duration,
+      ip: raw.ip,
+      userAgent: raw.browser,
+      device: raw.device,
+      pageUrl: raw.pageUrl,
+      createdAt: raw.createdAt instanceof Date
+        ? raw.createdAt.toISOString()
+        : raw.createdAt,
+      requestBody: raw.requestBody,
+      responseBody: raw.responseBody,
     });
   } catch (error) {
     console.error('[ErrorLogs] Detail error:', error);

@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { verifyToken } from '@/core/auth/auth-lib';
-import type { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,7 +29,7 @@ export async function POST(req: NextRequest) {
         const payload = verifyToken(authHeader.replace('Bearer ', ''));
         if (payload) {
           // JWT provides authoritative tenantId (client-side may not send it)
-          tenantId = (payload.tenantId as string) || tenantId;
+          if (!tenantId) tenantId = (payload.tenantId as string) || null;
           if (!userId) userId = (payload.userId as string) || null;
           if (!userName) userName = (payload.name as string) || null;
           if (!userRole) userRole = (payload.role as string) || null;
@@ -100,46 +99,27 @@ export async function GET(request: NextRequest) {
     const endDate = searchParams.get('endDate') || '';
     const skip = (page - 1) * pageSize;
 
-    // Show errors for this tenant AND errors with no tenant (system/unauthenticated errors)
-    const where: Prisma.ErrorLogWhereInput = {
-      OR: [
-        { tenantId },
-        { tenantId: null },
-      ],
-    };
+    // Build simple where clause — compatible with both Prisma and Supabase adapter
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const where: Record<string, any> = { tenantId };
 
-    if (category) {
-      // When filtering by category, apply it inside the OR
-      where.OR = [
-        { tenantId, category },
-        { tenantId: null, category },
-      ];
-    }
-    if (userId) {
-      const userIdFilter = { userId };
-      where.OR = (where.OR as Prisma.ErrorLogWhereInput[]).map(
-        (cond) => ({ ...cond, ...userIdFilter }),
-      );
-    }
+    if (category) where.category = category;
+    if (userId) where.userId = userId;
     if (search) {
-      const searchOr = [
+      where.OR = [
         { message: { contains: search } },
         { module: { contains: search } },
         { apiEndpoint: { contains: search } },
         { errorRef: { contains: search } },
         { errorCode: { contains: search } },
       ];
-      where.OR = (where.OR as Prisma.ErrorLogWhereInput[]).map(
-        (cond) => ({ ...cond, OR: searchOr }),
-      );
     }
     if (startDate || endDate) {
-      const dateFilter: Prisma.DateTimeNullableFilter = {};
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dateFilter: Record<string, any> = {};
       if (startDate) dateFilter.gte = new Date(startDate);
       if (endDate) dateFilter.lte = new Date(endDate);
-      where.OR = (where.OR as Prisma.ErrorLogWhereInput[]).map(
-        (cond) => ({ ...cond, createdAt: dateFilter }),
-      );
+      where.createdAt = dateFilter;
     }
 
     const [items, total] = await Promise.all([
@@ -174,7 +154,7 @@ export async function GET(request: NextRequest) {
     ]);
 
     // Format dates and map field names to match frontend expectations
-    const data = items.map((item) => ({
+    const data = items.map((item: Record<string, unknown>) => ({
       id: item.id,
       errorRef: item.errorRef,
       category: item.category,
@@ -191,7 +171,9 @@ export async function GET(request: NextRequest) {
       duration: item.duration,
       ip: null,
       userAgent: item.browser,
-      createdAt: item.createdAt.toISOString(),
+      createdAt: item.createdAt instanceof Date
+        ? item.createdAt.toISOString()
+        : item.createdAt,
     }));
 
     return NextResponse.json({
