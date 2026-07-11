@@ -391,7 +391,8 @@ export function UserManagement() {
 
   const openUserDetail = async (userId: string) => {
     setDetailLoading(true);
-    setDetailOpen(true);
+    // Delay dialog open to avoid Radix UI portal conflict with DropdownMenu
+    setTimeout(() => setDetailOpen(true), 50);
     try {
       const res = await fetch(`/api/auth/users/${userId}`, {
         headers: { Authorization: `Bearer ${token()}` },
@@ -460,7 +461,8 @@ export function UserManagement() {
     if (e) e.stopPropagation();
     setRoleChangeTarget(user);
     setNewRole(user.role);
-    setRoleDialogOpen(true);
+    // Delay dialog open to avoid Radix UI portal conflict with DropdownMenu
+    setTimeout(() => setRoleDialogOpen(true), 50);
   };
 
   const handleToggleActive = async () => {
@@ -744,8 +746,8 @@ export function UserManagement() {
                               <MoreHorizontal className="h-4 w-4" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); openUserDetail(u.id); }}>
+                          <DropdownMenuContent align="end" onCloseAutoFocus={(e) => e.preventDefault()}>
+                            <DropdownMenuItem onSelect={() => openUserDetail(u.id)}>
                               <Eye className="h-4 w-4 mr-2" /> View Details
                             </DropdownMenuItem>
                             {u.authProvider === 'google' && u.role === 'customer' && u.id !== currentUser?.id && (
@@ -753,7 +755,7 @@ export function UserManagement() {
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
                                   className="text-amber-600 dark:text-amber-400"
-                                  onClick={(e) => openQuickRoleChange(u, e)}
+                                  onSelect={() => openQuickRoleChange(u)}
                                 >
                                   <ArrowUpRight className="h-4 w-4 mr-2" /> Upgrade Role
                                 </DropdownMenuItem>
