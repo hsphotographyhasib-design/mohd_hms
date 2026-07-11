@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { randomUUID } from 'node:crypto';
 import { db } from '@/core/database/db';
 import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { scopeQuotation } from '@/core/permissions/rbac/data-scope';
@@ -202,7 +203,7 @@ export async function POST(request: NextRequest) {
     console.log('[QUOTATION]: Creating', quotationNo, 'for', customerId);
     const q = await db.quotation.create({
       data: {
-        id: qId,
+        id: randomUUID(),
         tenantId,
         customerId,
         complaintId: complaintId || null,

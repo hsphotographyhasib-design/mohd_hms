@@ -86,7 +86,7 @@ export function isWithinGracePeriod(): boolean {
 export function setupFetchInterceptor() {
   const originalFetch = window.fetch;
 
-  window.fetch = async function (url: string | URL | Request, options?: RequestInit): Promise<Response> {
+  window.fetch = (async function (url: RequestInfo | URL, options?: RequestInit): Promise<Response> {
     const urlStr = typeof url === 'string' ? url : url instanceof URL ? url.href : (url as Request).url;
 
     // Add auth header for API calls
@@ -125,5 +125,5 @@ export function setupFetchInterceptor() {
     }
 
     return res;
-  };
+  }) as typeof fetch;
 }

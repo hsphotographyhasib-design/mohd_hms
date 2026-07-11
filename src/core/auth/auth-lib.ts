@@ -81,16 +81,24 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
   return bcrypt.compare(password, hash);
 }
 
-export function generateToken(payload: object): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
+export function generateToken(payload: object, expiresIn?: string | number): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: expiresIn ?? JWT_EXPIRES_IN } as jwt.SignOptions);
 }
 
 /** Alias used by session routes */
 export const generateSessionToken = generateToken;
 
-export function verifyToken(token: string): jwt.JwtPayload | null {
+/** JWT claims issued by this app (see login/session routes). */
+export interface AppJwtPayload extends jwt.JwtPayload {
+  userId?: string;
+  tenantId?: string;
+  role?: string;
+  email?: string;
+}
+
+export function verifyToken(token: string): AppJwtPayload | null {
   try {
-    return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+    return jwt.verify(token, JWT_SECRET) as AppJwtPayload;
   } catch {
     return null;
   }
@@ -147,7 +155,7 @@ export function generateOtpCode(): string {
 }
 
 export function generateRefreshToken(): string {
-  return crypto.randomBytes(16).toString('hex');
+  return randomBytes(16).toString('hex');
 }
 
 const TEMP_TOKEN_EXPIRES_IN = '30m';

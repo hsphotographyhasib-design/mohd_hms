@@ -27,6 +27,18 @@ export interface AuthUser {
   profileCompleted: boolean;
 }
 
+// ============ DOCUMENTS ============
+
+/** Chunk size (bytes) for chunked document uploads. */
+export const CHUNK_SIZE = 5 * 1024 * 1024;
+
+/** Role -> allowed document actions (UI gate; API enforces RBAC server-side). */
+export const DOCUMENT_PERMISSIONS: Record<string, string[]> = {
+  super_admin: ['view', 'upload', 'download', 'delete', 'version_restore'],
+  admin: ['view', 'upload', 'download', 'delete', 'version_restore'],
+  hr: ['view', 'upload', 'download'],
+};
+
 // ============ NAVIGATION ============
 
 export interface NavItem {
@@ -87,6 +99,8 @@ export type AppView =
   | 'cms-popups'
   | 'cms-forms'
   | 'cms-activity'
+  | 'cms-page-list'
+  | 'cms-page-builder'
   | 'system-health'
   // WhatsApp views
   | 'whatsapp'
@@ -110,6 +124,7 @@ export type AppView =
   | 'rate-feedback'
   | 'help'
   | 'documents'
+  | 'document-detail'
   // HR views
   | 'hr-dashboard'
   | 'hr-employees'
@@ -435,6 +450,7 @@ export interface QuotationItem {
   total: number;
   status: QuotationStatus;
   validUntil?: string;
+  notes?: string;
   sentAt?: string;
   acceptedAt?: string;
   approvedAt?: string;

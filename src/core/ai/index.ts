@@ -4,9 +4,8 @@
 export {
   type ActionData,
   type ActionResult,
-  parseActions,
+  parseActionTag,
   executeAction,
-  executeActions,
 } from './actions';
 
 // AI service (GLM-powered NLU via z-ai-web-dev-sdk)

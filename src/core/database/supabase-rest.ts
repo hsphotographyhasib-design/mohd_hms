@@ -91,10 +91,10 @@ function buildFilters(
 }
 
 function applyFilters(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   query: any,
   filters: FilterTuple[]
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
 ): any {
   for (const [col, op, val] of filters) {
     if (col === '__or__') {
@@ -147,7 +147,7 @@ function serialize(data: Record<string, unknown>): Record<string, unknown> {
 
 // ─── Query builder (returned by db.tableName) ───────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 type PrismaOptions = Record<string, any>
 
 class TableProxy {
@@ -251,7 +251,7 @@ class TableProxy {
     q = applyFilters(q, buildFilters(opts.where))
     const { data, error } = await q
     if (error) throw dbError(this.table, 'deleteMany', error)
-    return { count: Array.isArray(data) ? data.length : 0 }
+    return { count: Array.isArray(data) ? (data as unknown[]).length : 0 }
   }
 
   async updateMany(opts: PrismaOptions) {
@@ -260,7 +260,7 @@ class TableProxy {
     q = applyFilters(q, buildFilters(opts.where))
     const { data, error } = await q
     if (error) throw dbError(this.table, 'updateMany', error)
-    return { count: Array.isArray(data) ? data.length : 0 }
+    return { count: Array.isArray(data) ? (data as unknown[]).length : 0 }
   }
 
   async createMany(opts: PrismaOptions) {
@@ -324,7 +324,7 @@ function buildSelect(
 function dbError(
   table: string,
   operation: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   error: any
 ): Error {
   const msg = error?.message || String(error)
@@ -334,9 +334,9 @@ function dbError(
   const prismaCode = mapErrorCode(code, msg)
 
   const err = new Error(msg)
-  ;(err as Record<string, unknown>).code = prismaCode
-  ;(err as Record<string, unknown>).table = table
-  ;(err as Record<string, unknown>).operation = operation
+  ;(err as unknown as Record<string, unknown>).code = prismaCode
+  ;(err as unknown as Record<string, unknown>).table = table
+  ;(err as unknown as Record<string, unknown>).operation = operation
   return err
 }
 
@@ -365,9 +365,9 @@ function mapErrorCode(code: string, msg: string): string {
  */
 const tableCache = new Map<string, TableProxy>()
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 export const db = new Proxy({} as any, {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   get(_target, prop: string | symbol, _receiver: any) {
     if (typeof prop === 'string' && prop !== 'then' && prop !== 'toJSON' && prop !== 'Symbol(Symbol.toPrimitive)') {
       if (!tableCache.has(prop)) {

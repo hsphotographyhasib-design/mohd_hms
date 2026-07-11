@@ -17,7 +17,7 @@ import {
   ChevronUp, ChevronDown, Copy, Trash2, LayoutTemplate,
   Monitor, Smartphone, Tablet, Wrench, Briefcase, HardHat,
   Shield, Award, Users, MessageSquare, BarChart3, MapPin,
-  Footprints, Star, Grid3X3, Image, Type, FileText, Video,
+  Footprints, Star, Grid3X3, Image as ImageIcon, Type, FileText, Video,
   Minus, Code, Mail, Clock, HelpCircle, Quote, Hash,
   MousePointerClick, Square, QrCode, GalleryHorizontal,
 } from 'lucide-react';
@@ -26,7 +26,7 @@ import {
 const catIcons: Record<string, React.ReactNode> = {
   basic: <Type className="h-4 w-4" />,
   content: <FileText className="h-4 w-4" />,
-  media: <Image className="h-4 w-4" />,
+  media: <ImageIcon className="h-4 w-4" />,
   interactive: <MousePointerClick className="h-4 w-4" />,
   advanced: <Code className="h-4 w-4" />,
 };
@@ -35,7 +35,7 @@ const widgetIconMap: Record<string, React.ReactNode> = {
   Type: <Type className="h-5 w-5" />,
   AlignLeft: <FileText className="h-5 w-5" />,
   MousePointerClick: <MousePointerClick className="h-5 w-5" />,
-  Image: <Image className="h-5 w-5" />,
+  Image: <ImageIcon className="h-5 w-5" />,
   Video: <Video className="h-5 w-5" />,
   Minus: <Minus className="h-5 w-5" />,
   Star: <Star className="h-5 w-5" />,

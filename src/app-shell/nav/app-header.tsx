@@ -60,7 +60,7 @@ const glassDropdownVariants = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { type: 'spring', stiffness: 400, damping: 30 },
+    transition: { type: 'spring' as const, stiffness: 400, damping: 30 },
   },
   exit: {
     opacity: 0,
@@ -76,7 +76,7 @@ const panelVariants = {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { type: 'spring', stiffness: 350, damping: 28 },
+    transition: { type: 'spring' as const, stiffness: 350, damping: 28 },
   },
   exit: {
     opacity: 0,
@@ -91,7 +91,7 @@ const fabVariants = {
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { type: 'spring', stiffness: 400, damping: 25 },
+    transition: { type: 'spring' as const, stiffness: 400, damping: 25 },
   },
   exit: {
     opacity: 0,
@@ -100,7 +100,7 @@ const fabVariants = {
   },
 };
 
-const iconTransition = { type: 'spring', stiffness: 500, damping: 30 };
+const iconTransition = { type: 'spring' as const, stiffness: 500, damping: 30 };
 
 // ============================================================
 // GLASS DROPDOWN STYLES
@@ -710,7 +710,7 @@ export function AppHeader() {
               animate="visible"
               exit="exit"
               className={cn('absolute bottom-16 right-0 w-56 mb-2', glassStyles, 'overflow-hidden p-2')}
-              style={{ origin: 'bottom right' }}
+              style={{ transformOrigin: 'bottom right' }}
             >
               <p className="text-xs font-medium text-muted-foreground/70 uppercase tracking-wider px-2 py-1.5">
                 Quick Actions

@@ -28,10 +28,11 @@ function formatSetting(s: { id: string; key: string; value: string; category: st
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
 
     const where: Prisma.CmsSettingWhereInput = {
@@ -73,6 +74,7 @@ export async function PUT(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const body = await request.json();
 

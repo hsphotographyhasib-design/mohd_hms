@@ -45,7 +45,7 @@ export async function GET(
     // Determine content disposition filename encoding
     const encodedName = encodeURIComponent(doc.originalName).replace(/'/g, '%27');
 
-    return new NextResponse(fileBuffer, {
+    return new NextResponse(new Uint8Array(fileBuffer), {
       headers: {
         'Content-Type': doc.mimeType || 'application/octet-stream',
         'Content-Disposition': `attachment; filename="${encodedName}"; filename*=UTF-8''${encodedName}`,

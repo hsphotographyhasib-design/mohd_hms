@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
 
     const categories = await db.cmsBlogCategory.findMany({
@@ -54,6 +55,7 @@ export async function POST(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const body = await request.json();
     const { name, description, slug: customSlug } = body;

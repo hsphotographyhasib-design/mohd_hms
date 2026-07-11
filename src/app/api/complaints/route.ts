@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken } from '@/core/auth/auth-lib';
 import { ensureTableSync } from '@/core/database/db-sync';
-import { buildAuthContext, buildComplaintWhereClause, canPerformAction, logComplaintAccessAllowed } from '@/core/permissions/rbac';
+import { buildAuthContext, buildComplaintWhereClause, canPerformComplaintAction, logComplaintAccessAllowed } from '@/core/permissions/rbac';
 import { createNotification } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
     const role = (payload.role as string).toLowerCase();
 
     // ─── RBAC: Check if role can create complaints ───
-    if (!canPerformAction(role, 'create')) {
+    if (!canPerformComplaintAction(role, 'create')) {
       return NextResponse.json({ error: 'Insufficient permissions to create complaints' }, { status: 403 });
     }
 

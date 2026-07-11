@@ -177,10 +177,15 @@ interface AppState {
   searchOpen: boolean;
   quickActionsOpen: boolean;
   notificationPanelOpen: boolean;
+  sidebarOpen: boolean;
+  mobileNavOpen: boolean;
   setView: (view: AppView, params?: Record<string, string>) => void;
   setSearchOpen: (open: boolean) => void;
   setQuickActionsOpen: (open: boolean) => void;
   setNotificationPanelOpen: (open: boolean) => void;
+  setSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
+  setMobileNavOpen: (open: boolean) => void;
 }
 
 export const useAppStore = create<AppState>((set) => ({
@@ -189,10 +194,15 @@ export const useAppStore = create<AppState>((set) => ({
   searchOpen: false,
   quickActionsOpen: false,
   notificationPanelOpen: false,
+  sidebarOpen: true,
+  mobileNavOpen: false,
   setView: (view, params = {}) => set({ currentView: view, viewParams: params }),
   setSearchOpen: (open) => set({ searchOpen: open }),
   setQuickActionsOpen: (open) => set({ quickActionsOpen: open }),
   setNotificationPanelOpen: (open) => set({ notificationPanelOpen: open }),
+  setSidebarOpen: (open) => set({ sidebarOpen: open }),
+  toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
+  setMobileNavOpen: (open) => set({ mobileNavOpen: open }),
 }));
 
 // ============ PERMISSIONS HELPERS (delegates to unified RBAC) ============

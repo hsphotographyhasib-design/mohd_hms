@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
     let resolvedTemplateName: string | null = null;
 
     if (templateId && templates[templateId as keyof typeof templates]) {
-      const tplFn = templates[templateId as keyof typeof templates] as (
+      const tplFn = templates[templateId as keyof typeof templates] as unknown as (
         data: Record<string, unknown>
       ) => { subject: string; html: string; text: string; templateName: string };
       try {
@@ -152,7 +152,7 @@ export async function POST(req: NextRequest) {
         provider: getActiveProvider(),
         maxRetries: MAX_RETRIES,
         scheduledFor: isScheduled ? scheduledDate : null,
-        createdById: user.id as string,
+        createdById: userId,
         customerId: customerId || null,
         attachmentCount: attachments?.length || 0,
         metadata: enrichedMetadata,

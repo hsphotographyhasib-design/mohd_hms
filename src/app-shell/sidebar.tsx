@@ -90,6 +90,7 @@ const navItems: NavItemConfig[] = [
 
 const cmsNavItems: NavItemConfig[] = [
   { id: 'cms-dashboard', label: 'CMS Dashboard', icon: Globe, feature: 'cms' },
+  { id: 'cms-page-list', label: 'Pages', icon: FileText, feature: 'cms' },
   { id: 'cms-hero', label: 'Hero Section', icon: Paintbrush, feature: 'cms' },
   { id: 'cms-about', label: 'About Us', icon: Building2, feature: 'cms' },
   { id: 'cms-services', label: 'Services', icon: Wrench, feature: 'cms' },

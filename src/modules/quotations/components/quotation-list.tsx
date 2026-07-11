@@ -24,7 +24,7 @@ import {
 import { toast } from 'sonner';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
 import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
-import type { QuotationItem, QuotationStatus, PaginatedResponse } from '@/core/types';
+import type { QuotationItem, QuotationStatus, PaginatedResponse, UserRole } from '@/core/types';
 import { cn } from '@/core/utils/utils';
 import { format } from 'date-fns';
 
@@ -95,7 +95,8 @@ interface QuotationStats {
 export function QuotationList() {
   const setView = useAppStore((s) => s.setView);
   const user = useAuthStore(s => s.user);
-  const role = user?.role;
+  // Fall back to 'guest' (no permissions) until the auth store hydrates
+  const role: UserRole = user?.role ?? 'guest';
 
   const [data, setData] = useState<PaginatedResponse<QuotationItem> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -478,7 +479,7 @@ export function QuotationList() {
                       onClick={() => setView('quotation-detail', { id: q.id })}
                     >
                       <TableCell className="text-muted-foreground text-xs font-mono">
-                        {(data.page - 1) * data.pageSize + index + 1}
+                        {((data?.page ?? 1) - 1) * (data?.pageSize ?? 0) + index + 1}
                       </TableCell>
                       <TableCell>
                         <span className="font-mono text-sm font-semibold text-emerald-700">

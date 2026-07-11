@@ -2,7 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   typescript: {
-    ignoreBuildErrors: true,
+    // Type errors fail the build again — the codebase is type-clean as of the
+    // 2026-07 enterprise inspection (was 12,013 errors hidden by `true`).
+    ignoreBuildErrors: false,
   },
   reactStrictMode: false,
 

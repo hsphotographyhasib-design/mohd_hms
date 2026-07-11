@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.PriceBookEntryWhereInput = { tenantId, isActive: true };
+    const where: Record<string, any> = { tenantId, isActive: true };
     if (pricingType) where.pricingType = pricingType;
     if (serviceItemId) where.serviceItemId = serviceItemId;
 

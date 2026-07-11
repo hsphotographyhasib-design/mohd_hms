@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 /**
  * Push schema to Supabase via the session-mode pooler (port 6543).
  *

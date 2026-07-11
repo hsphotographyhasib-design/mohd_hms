@@ -42,6 +42,8 @@ const FinanceView = lazy(() => import('@/modules/finance/components/finance-view
 const ReportView = lazy(() => import('@/modules/reports/components/report-view').then(m => ({ default: m.ReportView })));
 const NotificationList = lazy(() => import('@/modules/notifications/components/notification-list').then(m => ({ default: m.NotificationList })));
 const SettingsView = lazy(() => import('@/modules/settings/components/settings-view').then(m => ({ default: m.SettingsView })));
+const DocumentList = lazy(() => import('@/modules/documents/components/document-list').then(m => ({ default: m.DocumentList })));
+const DocumentDetail = lazy(() => import('@/modules/documents/components/document-detail').then(m => ({ default: m.DocumentDetail })));
 
 // CMS views
 const CmsDashboard = lazy(() => import('@/modules/cms/components/cms-dashboard').then(m => ({ default: m.CmsDashboard })));
@@ -62,6 +64,8 @@ const CmsAnnouncements = lazy(() => import('@/modules/cms/components/cms-announc
 const CmsPopups = lazy(() => import('@/modules/cms/components/cms-popups').then(m => ({ default: m.CmsPopups })));
 const CmsForms = lazy(() => import('@/modules/cms/components/cms-forms').then(m => ({ default: m.CmsForms })));
 const CmsActivity = lazy(() => import('@/modules/cms/components/cms-activity').then(m => ({ default: m.CmsActivity })));
+const CmsPageList = lazy(() => import('@/modules/cms/components/cms-page-list').then(m => ({ default: m.CmsPageList })));
+const CmsPageBuilder = lazy(() => import('@/modules/cms/components/cms-page-builder').then(m => ({ default: m.CmsPageBuilder })));
 const SystemHealth = lazy(() => import('@/modules/settings/components/health-dashboard').then(m => ({ default: m.HealthDashboard })));
 
 // WhatsApp views
@@ -232,7 +236,7 @@ function ViewRouter() {
       {currentView === 'new-work-order' && <NewWorkOrder />}
       {currentView === 'invoices' && <InvoiceList />}
       {currentView === 'invoice-detail' && <InvoiceDetail />}
-      {currentView === 'invoice-edit' && <InvoiceForm />}
+      {currentView === 'invoice-edit' && <InvoiceForm invoiceId={useAppStore.getState().viewParams?.id ?? ''} />}
       {currentView === 'new-invoice' && <NewInvoice />}
       {currentView === 'pm' && <PmList />}
       {currentView === 'quotations' && <QuotationList />}
@@ -268,6 +272,10 @@ function ViewRouter() {
       {currentView === 'cms-popups' && <CmsPopups />}
       {currentView === 'cms-forms' && <CmsForms />}
       {currentView === 'cms-activity' && <CmsActivity />}
+      {currentView === 'cms-page-list' && <CmsPageList />}
+      {currentView === 'cms-page-builder' && <CmsPageBuilder pageId={useAppStore.getState().viewParams?.id} />}
+      {currentView === 'documents' && <DocumentList />}
+      {currentView === 'document-detail' && <DocumentDetail documentId={useAppStore.getState().viewParams?.id ?? ''} />}
       {currentView === 'system-health' && <SystemHealth />}
       {currentView === 'whatsapp' && <WhatsAppDashboard />}
       {currentView === 'whatsapp-chats' && <WhatsAppChats />}

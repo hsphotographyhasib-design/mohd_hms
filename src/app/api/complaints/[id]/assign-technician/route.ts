@@ -149,7 +149,7 @@ export async function GET(
       db.complaint.findMany({
         where: {
           assignedToId: { in: techIds },
-          category: { not: null, not: '' },
+          category: { not: '' },
         },
         select: { assignedToId: true, category: true },
         distinct: ['assignedToId', 'category'],
@@ -534,7 +534,7 @@ export async function POST(
         createdBy: userId,
         roles: ['admin', 'super_admin'],
         excludeUserIds: [userId],
-        data: { complaintId: complaint.id, action, isReassignment },
+        data: { complaintId: complaint.id, action: isReassignment ? 'reassigned' : 'assigned', isReassignment },
       });
 
       // Notify previous technician if reassigning

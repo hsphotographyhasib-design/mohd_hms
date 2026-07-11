@@ -147,7 +147,7 @@ export function RichTextEditor({
   // Sync external content changes
   React.useEffect(() => {
     if (editor && content !== editor.getHTML()) {
-      editor.commands.setContent(content, false)
+      editor.commands.setContent(content, { emitUpdate: false })
     }
     // Only run when content prop changes
   }, [content])

@@ -277,7 +277,7 @@ export async function POST(
           const subtotal = laborCost + materialCost;
           const invoiceNumber = generateInvoiceNumber();
 
-          const items = [];
+          const items: Array<{ description: string; quantity: number; unitPrice: number; total: number }> = [];
           if (laborCost > 0) {
             items.push({
               description: 'Labor',
@@ -380,33 +380,33 @@ export async function POST(
         data: updateData,
       });
 
-      // Record timeline entry + notifications + audit
-      await recordWorkflowTransition(
-        tx,
-        {
-          complaintId: complaint.id,
-          tenantId,
-          fromStatus: currentStatus,
-          toStatus: targetStatus,
-          action,
-          performedBy: userId,
-          performedByRole: userRole,
-          metadata: {
-            assignedToId: body.assignedToId,
-            supervisorId: body.supervisorId,
-            eta: body.eta,
-            rejectionReason: body.rejectionReason,
-            reworkReason: body.reworkReason,
-            laborCost: body.laborCost,
-            materialCost: body.materialCost,
-            notes: body.notes,
-            workOrderId: updateData.workOrderId,
-            invoiceId: updateData.invoiceId,
-          },
-        }
-      );
-
       return updatedComplaint;
+    });
+
+    // Record timeline entry + notifications + audit — runs after the
+    // transaction commits (it manages its own transaction internally).
+    await recordWorkflowTransition({
+      complaintId: complaint.id,
+      tenantId,
+      customerId: complaint.customerId,
+      fromStatus: currentStatus,
+      toStatus: targetStatus,
+      action,
+      performedBy: userId,
+      performedByRole: userRole,
+      description: `${action} by ${userRole}`,
+      assignedToId: body.assignedToId ?? complaint.assignedToId ?? undefined,
+      supervisorId: body.supervisorId ?? undefined,
+      metadata: {
+        assignedToId: body.assignedToId,
+        supervisorId: body.supervisorId,
+        eta: body.eta,
+        rejectionReason: body.rejectionReason,
+        reworkReason: body.reworkReason,
+        laborCost: body.laborCost,
+        materialCost: body.materialCost,
+        notes: body.notes,
+      },
     });
 
     // 6. Return updated complaint with timeline
@@ -506,7 +506,7 @@ export async function GET(
     const currentStatus = complaint.status as ComplaintStatus;
     const availableActions = getAvailableActions(
       currentStatus,
-      userRole
+      userRole as Parameters<typeof getAvailableActions>[1]
     );
 
     const timeline = await getComplaintTimeline(tenantId, complaint.id);

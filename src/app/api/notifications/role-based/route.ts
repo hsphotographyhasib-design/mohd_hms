@@ -77,13 +77,11 @@ export async function POST(request: NextRequest) {
       priority,
       relatedEntityType: relatedEntityType || undefined,
       relatedEntityId: relatedEntityId || undefined,
-      recordNumber: recordNumber || undefined,
       actionUrl: actionUrl || undefined,
       actionLabel: actionLabel || undefined,
       context: context || undefined,
-      data: data || undefined,
+      data: recordNumber ? { ...(data || {}), recordNumber } : (data || undefined),
       createdBy: userId,
-      actorRole: role,
     });
 
     // ── 4. Log the notification event ────────────────────────────────────
@@ -91,17 +89,12 @@ export async function POST(request: NextRequest) {
       await logNotificationEvent({
         tenantId,
         userId,
-        eventKey: eventKey.trim(),
-        title: title.trim(),
-        message: message.trim(),
-        module: relatedEntityType || undefined,
+        notificationType: type,
+        module: relatedEntityType || 'general',
         action: 'send_role_based',
-        relatedEntityType,
-        relatedEntityId,
-        recordNumber,
-        notificationId,
-        context: context || undefined,
-        data: data || undefined,
+        relatedRecordId: relatedEntityId || undefined,
+        deliveryStatus: 'sent',
+        recipientCount: 0,
       });
     } catch (logErr) {
       // Logging failure should not break the response

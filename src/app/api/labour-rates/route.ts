@@ -14,7 +14,8 @@ export async function GET(request: NextRequest) {
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.LabourRateWhereInput = { tenantId };
+    // LabourRate model is not in prisma/schema.prisma (runtime-only table)
+    const where: Record<string, any> = { tenantId };
     if (status) where.status = status;
     if (grade) where.technicianGrade = grade;
 

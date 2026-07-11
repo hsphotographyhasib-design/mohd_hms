@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
     const search = request.nextUrl.searchParams.get('search') || '';
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.ServicePackageWhereInput = { tenantId };
+    // ServicePackage model is not in prisma/schema.prisma (runtime-only table)
+    const where: Record<string, any> = { tenantId };
     if (search) {
       where.OR = [
         { name: { contains: search } },

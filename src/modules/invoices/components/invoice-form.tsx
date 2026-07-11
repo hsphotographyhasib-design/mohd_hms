@@ -140,7 +140,7 @@ export function InvoiceForm({ invoiceId }: { invoiceId: string }) {
   const [customerSearch, setCustomerSearch] = useState('');
   const [customerResultsOpen, setCustomerResultsOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerData | null>(null);
-  const customerSearchTimer = useRef<ReturnType<typeof setTimeout>>();
+  const customerSearchTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Line items
   const [lineItems, setLineItems] = useState<InvoiceLineItem[]>([{

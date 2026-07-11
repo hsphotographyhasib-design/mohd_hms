@@ -35,10 +35,11 @@ function formatTheme(t: {
 }
 
 // GET /api/cms/builder/theme — Get theme settings for tenant
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
 
     let theme = await db.cmsThemeSetting.findUnique({
@@ -76,6 +77,7 @@ export async function PUT(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const body = await request.json();
 

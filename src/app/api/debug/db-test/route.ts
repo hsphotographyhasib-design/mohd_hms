@@ -145,7 +145,7 @@ export async function GET() {
   try {
     const pkg = await import('../../../../../package.json', { with: { type: 'json' } });
     result.dependencies = {
-      prisma: pkg.default?.dependencies?.prisma || pkg.default?.devDependencies?.prisma || 'unknown',
+      prisma: pkg.default?.dependencies?.prisma || (pkg.default?.devDependencies as Record<string, string> | undefined)?.prisma || 'unknown',
       '@prisma/client': pkg.default?.dependencies?.['@prisma/client'] || 'unknown',
       '@prisma/adapter-pg': pkg.default?.dependencies?.['@prisma/adapter-pg'] || 'unknown',
       '@prisma/adapter-libsql': pkg.default?.dependencies?.['@prisma/adapter-libsql'] || 'unknown',

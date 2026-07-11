@@ -173,7 +173,7 @@ export function QuotationLineItemsGrid({
 
   // --- Refs ---
   const cellRefs = useRef<Map<string, HTMLInputElement | HTMLTextAreaElement>>(new Map());
-  const searchTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // --- Validation ---

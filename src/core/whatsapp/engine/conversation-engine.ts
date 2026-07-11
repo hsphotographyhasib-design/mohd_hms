@@ -88,7 +88,7 @@ function matchCommand(text: string): string | null {
   return null;
 }
 
-function handleCommand(cmd: string, ctx: StateContext): ResponseItem[] {
+function handleCommand(cmd: string, ctx: StateContext): ResponseItem[] | Promise<ResponseItem[]> {
   switch (cmd) {
     case 'hi':
       return showWelcome(ctx);

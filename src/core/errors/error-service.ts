@@ -25,6 +25,7 @@ export const ERROR_CATEGORIES = {
   prisma: { label: 'Prisma Error', icon: 'Database', color: 'purple' },
   unknown: { label: 'Unknown Error', icon: 'HelpCircle', color: 'gray' },
   frontend: { label: 'Frontend Error', icon: 'Monitor', color: 'red' },
+  backend: { label: 'Backend Error', icon: 'Server', color: 'red' },
   upload: { label: 'Upload Error', icon: 'Upload', color: 'orange' },
 } as const;
 
@@ -543,6 +544,7 @@ const CATEGORY_DEFAULT_MESSAGES: Record<ErrorCategoryType, string> = {
   prisma: 'A database error occurred. Please try again.',
   unknown: "We couldn't complete your request. Please try again.",
   frontend: "We couldn't complete your request. Please try again.",
+  backend: 'A server error occurred. Please try again.',
   upload: 'File upload failed. Please try again or use a different file.',
 };
 

@@ -868,7 +868,7 @@ export function AiWhatsAppDashboard() {
       {/* Recent AI Conversations Table */}
       <RecentConversationsTable
         conversations={data.recentConversations}
-        onViewConversations={() => setView('whatsapp-ai-conversations')}
+        onViewConversations={() => setView('whatsapp-chats')}
       />
 
       {/* Payment Verifications */}

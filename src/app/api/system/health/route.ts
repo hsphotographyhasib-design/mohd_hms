@@ -75,7 +75,7 @@ async function checkEmailService() {
   try {
     const configured = !!process.env.BREVO_API_KEY;
     return {
-      status: (configured ? 'healthy' : 'degraded') as const,
+      status: configured ? ('healthy' as const) : ('degraded' as const),
       responseTime: Date.now() - start,
       message: configured ? 'Brevo API configured' : 'Brevo API key not set',
     };

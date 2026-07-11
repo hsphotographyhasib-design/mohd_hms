@@ -57,7 +57,7 @@ export function InventoryModule() {
 
       {/* Tab Content */}
       <div>
-        {activeTab === 'dashboard' && <InventoryDashboard />}
+        {activeTab === 'dashboard' && <InventoryDashboard token={typeof window !== 'undefined' ? localStorage.getItem('cmms_token') || '' : ''} onNavigate={(tab) => setActiveTab(tab as TabId)} />}
         {activeTab === 'materials' && <InventoryList />}
         {activeTab === 'service-items' && <ServiceItems />}
         {activeTab === 'service-packages' && <ServicePackages />}

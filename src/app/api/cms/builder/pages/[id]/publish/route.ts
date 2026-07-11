@@ -10,9 +10,10 @@ export async function POST(
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const { id } = await params;
-    const userId = user.id as string;
+    const userId = auth.userId;
 
     const page = await db.cmsPage.findFirst({
       where: { id, tenantId },

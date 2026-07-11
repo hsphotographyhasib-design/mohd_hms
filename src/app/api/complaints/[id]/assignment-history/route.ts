@@ -97,7 +97,7 @@ export async function GET(
         })
       : [];
 
-    const userMap = new Map(users.map(u => [u.id, u]));
+    const userMap = new Map<string, any>(users.map((u: any) => [u.id, u]));
 
     // Parse metadata and build enriched entries
     const entries = timelineEntries.map(entry => {

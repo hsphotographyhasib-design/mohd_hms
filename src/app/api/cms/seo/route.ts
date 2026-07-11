@@ -39,6 +39,7 @@ export async function GET(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
 
     const items = await db.cmsSeo.findMany({
@@ -57,6 +58,7 @@ export async function PUT(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const body = await request.json();
     const settings: Array<{

@@ -20,7 +20,8 @@ export async function GET(request: NextRequest) {
     const sortBy = searchParams.get('sortBy') || 'createdAt';
     const sortOrder = (searchParams.get('sortOrder') || 'desc').toLowerCase();
 
-    const where: Prisma.DocumentWhereInput = { tenantId, isActive: true };
+    // Document model is not in prisma/schema.prisma (runtime-only table) — no generated type
+    const where: Record<string, any> = { tenantId, isActive: true };
 
     if (modFilter) where.module = modFilter;
     if (referenceId) where.referenceId = referenceId;

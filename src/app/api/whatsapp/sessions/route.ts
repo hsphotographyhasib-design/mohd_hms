@@ -61,7 +61,7 @@ export async function GET(req: NextRequest) {
         })
       : [];
 
-    const lastMessageMap = new Map(lastMessages.map((m) => [m.sessionId, m]));
+    const lastMessageMap = new Map<string, any>(lastMessages.map((m: any) => [m.sessionId, m]));
 
     const data = items.map((s) => {
       const lastMsg = lastMessageMap.get(s.id);

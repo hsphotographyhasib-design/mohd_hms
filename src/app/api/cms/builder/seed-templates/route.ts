@@ -1281,6 +1281,7 @@ export async function POST(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const created: string[] = [];
     const skipped: string[] = [];

@@ -52,6 +52,7 @@ interface DashboardStats {
 interface QuickStats {
   draftBlogs: number;
   totalBlogs: number;
+  publishedBlogs?: number;
   totalProjects: number;
   totalMedia: number;
   activeCareers: number;
@@ -258,7 +259,7 @@ export function CmsDashboard() {
               <Card
                 key={key}
                 className={`${color} border cursor-pointer transition-all hover:shadow-md hover:scale-[1.02]`}
-                onClick={() => setView(viewKey)}
+                onClick={() => setView(viewKey as Parameters<typeof setView>[0])}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
@@ -266,7 +267,7 @@ export function CmsDashboard() {
                     <span className="text-xs font-medium opacity-75">{label}</span>
                   </div>
                   <p className="text-2xl font-bold">
-                    {(overview as Record<string, number>)?.[key] ?? 0}
+                    {(overview as unknown as Record<string, number> | undefined)?.[key] ?? 0}
                   </p>
                 </CardContent>
               </Card>

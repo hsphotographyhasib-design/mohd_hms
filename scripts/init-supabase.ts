@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 /**
  * Standalone script to push the Prisma schema to a fresh Supabase database.
  *

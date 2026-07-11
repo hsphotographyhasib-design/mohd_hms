@@ -39,7 +39,7 @@ export interface NotificationItem {
 
 export interface ClientToast {
   id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
+  type: import('./types').NotificationType;
   title: string;
   description?: string;
   duration?: number; // ms, default 5000

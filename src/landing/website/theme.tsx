@@ -74,9 +74,13 @@ export function SectionHeader({
 export function IconBox({
   children,
   size = 'md',
+  className = '',
+  style,
 }: {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  style?: React.CSSProperties;
 }) {
   const sizeMap = {
     sm: { w: 30, h: 30, r: 8 },
@@ -86,12 +90,13 @@ export function IconBox({
   const s = sizeMap[size];
   return (
     <div
-      className="grid place-items-center shrink-0"
+      className={`grid place-items-center shrink-0 ${className}`}
       style={{
         width: s.w,
         height: s.h,
         borderRadius: s.r,
         background: 'var(--hm-stone)',
+        ...style,
       }}
     >
       {children}
@@ -104,10 +109,12 @@ export function ThemeSection({
   children,
   variant = 'default',
   className = '',
+  style,
 }: {
   children: React.ReactNode;
   variant?: 'default' | 'stone' | 'forest';
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const bgMap = {
     default: 'var(--hm-paper)',
@@ -122,6 +129,7 @@ export function ThemeSection({
         padding: 'clamp(56px, 8vw, 104px) 0',
         background: bgMap[variant],
         color: isForest ? 'var(--hm-paper)' : undefined,
+        ...style,
       }}
     >
       <div
@@ -140,15 +148,20 @@ export function ThemeCard({
   className = '',
   hover = true,
   large = false,
+  onClick,
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
   hover?: boolean;
   large?: boolean;
+  onClick?: () => void;
+  style?: React.CSSProperties;
 }) {
   return (
     <div
       className={className}
+      onClick={onClick}
       style={{
         background: 'var(--hm-paper-2)',
         border: '1px solid var(--hm-line)',
@@ -158,6 +171,7 @@ export function ThemeCard({
           ? 'transform 0.28s var(--hm-ease), border-color 0.28s var(--hm-ease)'
           : undefined,
         cursor: hover ? 'pointer' : undefined,
+        ...style,
       }}
       onMouseEnter={(e) => {
         if (!hover) return;
@@ -184,11 +198,13 @@ export function ThemeButton({
   variant = 'fill',
   className = '',
   onClick,
+  style,
 }: {
   children: React.ReactNode;
   variant?: 'fill' | 'green' | 'outline';
   className?: string;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }) {
   const variants: Record<string, React.CSSProperties> = {
     fill: {
@@ -217,6 +233,7 @@ export function ThemeButton({
         border: variant === 'outline' ? '1px solid' : '1px solid transparent',
         transition: 'transform 0.25s var(--hm-ease), background 0.25s var(--hm-ease)',
         ...variants[variant],
+        ...style,
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget as HTMLElement;
@@ -249,9 +266,11 @@ export function ThemeButton({
 export function MonoLabel({
   children,
   className = '',
+  style,
 }: {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <span
@@ -262,6 +281,7 @@ export function MonoLabel({
         letterSpacing: '0.1em',
         textTransform: 'uppercase' as const,
         color: 'var(--hm-green)',
+        ...style,
       }}
     >
       {children}
@@ -275,11 +295,13 @@ export function DisplayHeading({
   as: Tag = 'h3',
   className = '',
   size,
+  style,
 }: {
   children: React.ReactNode;
   as?: 'h1' | 'h2' | 'h3' | 'h4';
   className?: string;
   size?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <Tag
@@ -291,6 +313,7 @@ export function DisplayHeading({
         letterSpacing: '-0.02em',
         color: 'var(--hm-forest)',
         fontSize: size || undefined,
+        ...style,
       }}
     >
       {children}
@@ -437,11 +460,13 @@ export function ThemeLink({
   variant = 'fill',
   className = '',
   onClick,
+  style,
 }: {
   children: React.ReactNode;
   variant?: 'fill' | 'green' | 'outline';
   className?: string;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }) {
   const variants: Record<string, React.CSSProperties> = {
     fill: {
@@ -470,6 +495,7 @@ export function ThemeLink({
         border: variant === 'outline' ? '1px solid' : '1px solid transparent',
         transition: 'transform 0.25s var(--hm-ease), background 0.25s var(--hm-ease)',
         ...variants[variant],
+        ...style,
       }}
       onMouseEnter={(e) => {
         const el = e.currentTarget as HTMLElement;

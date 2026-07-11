@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
           }),
           // Average resolution time
           db.complaint.findMany({
-            where: { ...complaintRbacWhere, resolvedAt: { not: null }, createdAt: { not: null } } as Prisma.ComplaintWhereInput,
+            where: { ...complaintRbacWhere, resolvedAt: { not: null }, createdAt: { not: null } } as unknown as Prisma.ComplaintWhereInput,
             select: { createdAt: true, resolvedAt: true },
           }),
           // Monthly complaint counts for last 6 months
@@ -77,7 +77,7 @@ export async function GET(request: NextRequest) {
           : 0;
 
         const now = new Date();
-        const monthlyData = [];
+        const monthlyData: any[] = [];
         for (let i = 5; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
           const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999);
@@ -135,7 +135,7 @@ export async function GET(request: NextRequest) {
         ]);
 
         const now = new Date();
-        const monthlyData = [];
+        const monthlyData: any[] = [];
         for (let i = 5; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
           const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999);
@@ -244,7 +244,7 @@ export async function GET(request: NextRequest) {
         ]);
 
         const now = new Date();
-        const monthlyData = [];
+        const monthlyData: any[] = [];
         for (let i = 5; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
           const end = new Date(now.getFullYear(), now.getMonth() - i + 1, 0, 23, 59, 59, 999);

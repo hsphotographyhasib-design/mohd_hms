@@ -27,6 +27,9 @@ const TYPE_ICON: Record<NotificationType, React.ComponentType<{ className?: stri
   info: Info,
   loading: Clock,
   progress: Clock,
+  processing: Clock,
+  draft_saved: CheckCircle2,
+  permission_denied: XCircle,
 };
 
 export function NotificationHistoryPanel() {
