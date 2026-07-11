@@ -985,3 +985,26 @@ Stage Summary:
   3. "Upgrade Role" button on mobile cards
   4. Prominent amber banner in user detail dialog with explanation text and CTA
 - Role change dialog contextualized: shows "Upgrade User Role" with sign-up date for Google customers
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix View button and Assign Role crashes in user management
+
+Work Log:
+- Pulled latest from GitHub (already up to date)
+- Analyzed user-management.tsx (1385 lines) for crash causes
+- Found missing `authProvider` field in GET /api/auth/users/[id] API response
+- Found Radix UI portal conflict between DropdownMenu close and Dialog open (50ms delay too short)
+- Found missing DialogDescription in user detail dialog
+- Fixed API: added `authProvider: true` to Prisma select in user detail endpoint
+- Fixed frontend: increased setTimeout delay from 50ms to 150ms for Dialog opens
+- Fixed frontend: added `setSelectedUser(null)` before opening detail dialog to prevent stale state
+- Fixed frontend: added DialogDescription to user detail dialog
+- Ran ESLint: 0 errors, 11 pre-existing warnings
+- Could not browser-test due to environment OOM constraints (4GB RAM, Next.js Turbopack needs >4GB)
+- Pushed fix commit 615874d to GitHub main branch
+
+Stage Summary:
+- 2 files changed: src/app/api/auth/users/[id]/route.ts, user-management.tsx
+- Root causes: (1) Missing authProvider in API caused undefined values, (2) 50ms delay insufficient for Radix portal conflict, (3) Missing DialogDescription
+- All fixes pushed to GitHub
