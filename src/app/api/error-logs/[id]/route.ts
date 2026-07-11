@@ -25,8 +25,29 @@ export async function GET(
     }
 
     return NextResponse.json({
-      ...item,
+      id: item.id,
+      errorRef: item.errorRef,
+      category: item.category,
+      message: item.message,
+      stack: item.stackTrace,
+      statusCode: item.httpStatus,
+      errorCode: item.errorCode,
+      errorType: item.errorType,
+      userMessage: item.userMessage,
+      module: item.module,
+      apiEndpoint: item.apiEndpoint,
+      method: item.httpMethod,
+      userId: item.userId,
+      userName: item.userName,
+      userRole: item.userRole,
+      duration: item.duration,
+      ip: item.ip,
+      userAgent: item.browser,
+      device: item.device,
+      pageUrl: item.pageUrl,
       createdAt: item.createdAt.toISOString(),
+      requestBody: item.requestBody,
+      responseBody: item.responseBody,
     });
   } catch (error) {
     console.error('[ErrorLogs] Detail error:', error);

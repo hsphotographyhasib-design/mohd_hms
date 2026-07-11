@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
     const pageSize = Math.min(
       200,
-      Math.max(1, parseInt(searchParams.get('pageSize') || '50', 10)),
+      Math.max(1, parseInt(searchParams.get('pageSize') || searchParams.get('limit') || '50', 10)),
     );
     const category = searchParams.get('category') || '';
     const search = searchParams.get('search') || '';
@@ -132,18 +132,35 @@ export async function GET(request: NextRequest) {
       db.errorLog.count({ where }),
     ]);
 
-    // Format dates
+    // Format dates and map field names to match frontend expectations
     const data = items.map((item) => ({
-      ...item,
+      id: item.id,
+      errorRef: item.errorRef,
+      category: item.category,
+      message: item.message,
+      stack: item.stackTrace,
+      statusCode: item.httpStatus,
+      errorCode: item.errorCode,
+      module: item.module,
+      apiEndpoint: item.apiEndpoint,
+      method: item.httpMethod,
+      userId: item.userId,
+      userName: item.userName,
+      userRole: item.userRole,
+      duration: item.duration,
+      ip: null,
+      userAgent: item.browser,
       createdAt: item.createdAt.toISOString(),
     }));
 
     return NextResponse.json({
       data,
-      total,
-      page,
-      pageSize,
-      totalPages: Math.ceil(total / pageSize),
+      pagination: {
+        page,
+        limit: pageSize,
+        total,
+        totalPages: Math.ceil(total / pageSize),
+      },
     });
   } catch (error) {
     console.error('[ErrorLogs] List error:', error);

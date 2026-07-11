@@ -99,6 +99,7 @@ const ERROR_CATEGORIES = {
   unknown: { label: 'Unknown', color: 'gray' },
   frontend: { label: 'Frontend', color: 'red' },
   upload: { label: 'Upload', color: 'orange' },
+  authentication: { label: 'Authentication', color: 'red' },
 } as const;
 
 const CATEGORY_OPTIONS = [
@@ -131,6 +132,7 @@ const CATEGORY_BADGE_CLASSES: Record<string, string> = {
   supabase: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
   prisma: 'bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300 border-purple-200 dark:border-purple-800',
   brevo: 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300 border-blue-200 dark:border-blue-800',
+  authentication: 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300 border-red-200 dark:border-red-800',
 };
 
 function getCategoryBadgeClass(category: string): string {
