@@ -5,7 +5,7 @@ import {
   Users, Search, Filter, MoreHorizontal, Shield, UserCog, Lock, Unlock,
   Trash2, History, LogOut, RefreshCw, ChevronLeft, ChevronRight,
   Loader2, Eye, AlertTriangle, CheckCircle2, XCircle,
-  Mail, MessageCircle, Globe,
+  Mail, MessageCircle, Globe, ArrowUpRight, UserPlus,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
@@ -220,6 +220,20 @@ function AuthProviderBadge({ provider }: { provider: string | null }) {
   );
 }
 
+/** Badge highlighting Google-signed-in users still on the default customer role */
+function GoogleCustomerBadge({ provider, role }: { provider: string | null; role: string }) {
+  if (provider !== 'google' || role !== 'customer') return null;
+  return (
+    <Badge
+      variant="outline"
+      className="bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/50 dark:text-amber-400 dark:border-amber-800 text-[10px] leading-tight"
+    >
+      <Globe className="h-2.5 w-2.5 mr-0.5" />
+      Google Sign-up
+    </Badge>
+  );
+}
+
 function OnlineStatusIndicator({ isOnline }: { isOnline: boolean }) {
   return (
     <span className="inline-flex items-center gap-1.5 text-xs font-medium">
@@ -324,6 +338,7 @@ export function UserManagement() {
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [roleDialogOpen, setRoleDialogOpen] = useState(false);
   const [newRole, setNewRole] = useState('');
+  const [roleChangeTarget, setRoleChangeTarget] = useState<UserListItem | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // Audit log view state
@@ -412,10 +427,12 @@ export function UserManagement() {
   // ============ ACTIONS ============
 
   const handleChangeRole = async () => {
-    if (!selectedUser || !newRole) return;
+    // Support both detail dialog and inline table role changes
+    const targetUser = selectedUser || roleChangeTarget;
+    if (!targetUser || !newRole) return;
     setActionLoading('change-role');
     try {
-      const res = await fetch(`/api/auth/users/${selectedUser.id}`, {
+      const res = await fetch(`/api/auth/users/${targetUser.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
         body: JSON.stringify({ role: newRole }),
@@ -425,12 +442,25 @@ export function UserManagement() {
       toast.success(`Role changed to ${ROLE_LABELS[newRole]}`);
       setRoleDialogOpen(false);
       setNewRole('');
-      refreshDetail();
+      setRoleChangeTarget(null);
+      if (selectedUser) {
+        refreshDetail();
+      } else {
+        fetchUsers();
+      }
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Failed to change role');
     } finally {
       setActionLoading(null);
     }
+  };
+
+  // Quick role change from table row (without opening detail dialog)
+  const openQuickRoleChange = (user: UserListItem, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setRoleChangeTarget(user);
+    setNewRole(user.role);
+    setRoleDialogOpen(true);
   };
 
   const handleToggleActive = async () => {
@@ -679,6 +709,7 @@ export function UserManagement() {
                           <div className="min-w-0">
                             <div className="flex items-center gap-2">
                               <p className="font-medium truncate">{u.name}</p>
+                              <GoogleCustomerBadge provider={u.authProvider} role={u.role} />
                               <span
                                 className={`h-2 w-2 rounded-full shrink-0 ${
                                   u.isOnline
@@ -717,6 +748,17 @@ export function UserManagement() {
                             <DropdownMenuItem onClick={(e) => { e.stopPropagation(); openUserDetail(u.id); }}>
                               <Eye className="h-4 w-4 mr-2" /> View Details
                             </DropdownMenuItem>
+                            {u.authProvider === 'google' && u.role === 'customer' && u.id !== currentUser?.id && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  className="text-amber-600 dark:text-amber-400"
+                                  onClick={(e) => openQuickRoleChange(u, e)}
+                                >
+                                  <ArrowUpRight className="h-4 w-4 mr-2" /> Upgrade Role
+                                </DropdownMenuItem>
+                              </>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>
@@ -818,9 +860,19 @@ export function UserManagement() {
                 <div className="mt-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <AuthProviderBadge provider={u.authProvider} />
+                    <GoogleCustomerBadge provider={u.authProvider} role={u.role} />
                     <OnlineStatusIndicator isOnline={u.isOnline} />
                   </div>
-                  <span className="text-xs text-muted-foreground">{formatDate(u.lastLogin)}</span>
+                  {u.authProvider === 'google' && u.role === 'customer' && u.id !== currentUser?.id && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-amber-600 border-amber-200 hover:bg-amber-50 dark:text-amber-400 dark:border-amber-800 dark:hover:bg-amber-950/50 h-7 text-xs"
+                      onClick={(e) => openQuickRoleChange(u, e)}
+                    >
+                      <ArrowUpRight className="h-3 w-3 mr-1" /> Upgrade Role
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -885,6 +937,40 @@ export function UserManagement() {
               </DialogHeader>
 
               <div className="space-y-4 mt-4">
+                {/* Google Customer Upgrade Banner */}
+                {selectedUser.authProvider === 'google' && selectedUser.role === 'customer' && selectedUser.id !== currentUser?.id && (
+                  <Card className="border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-950/30">
+                    <CardContent className="p-4 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center shrink-0">
+                          <UserPlus className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-amber-800 dark:text-amber-300">
+                            Google Sign-up — Default Customer Role
+                          </p>
+                          <p className="text-xs text-amber-600 dark:text-amber-500">
+                            This user signed in with Google and was automatically assigned the Customer role. Upgrade their role to grant access.
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        className="bg-amber-600 hover:bg-amber-700 text-white shrink-0"
+                        size="sm"
+                        onClick={openRoleChange}
+                        disabled={actionLoading !== null}
+                      >
+                        {actionLoading === 'change-role' ? (
+                          <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />
+                        ) : (
+                          <ArrowUpRight className="h-4 w-4 mr-1.5" />
+                        )}
+                        Upgrade Role
+                      </Button>
+                    </CardContent>
+                  </Card>
+                )}
+
                 {/* Quick info row */}
                 <div className="flex flex-wrap gap-2">
                   <RoleBadge role={selectedUser.role} />
@@ -1124,12 +1210,32 @@ export function UserManagement() {
       </Dialog>
 
       {/* ============ CHANGE ROLE DIALOG ============ */}
-      <Dialog open={roleDialogOpen} onOpenChange={setRoleDialogOpen}>
+      <Dialog open={roleDialogOpen} onOpenChange={(open) => { if (!open) { setRoleDialogOpen(false); setRoleChangeTarget(null); setNewRole(''); } }}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Change User Role</DialogTitle>
+            <DialogTitle className="flex items-center gap-2">
+              {roleChangeTarget?.authProvider === 'google' && roleChangeTarget?.role === 'customer' ? (
+                <>
+                  <ArrowUpRight className="h-5 w-5 text-amber-500" />
+                  Upgrade User Role
+                </>
+              ) : (
+                <>
+                  <UserCog className="h-5 w-5 text-emerald-600" />
+                  Change User Role
+                </>
+              )}
+            </DialogTitle>
             <DialogDescription>
-              Change role for <span className="font-medium text-foreground">{selectedUser?.name}</span>
+              {roleChangeTarget ? (
+                <>
+                  Change role for <span className="font-medium text-foreground">{roleChangeTarget.name}</span>
+                  <br />
+                  <span className="text-xs text-muted-foreground">Signed up via Google on {formatDate(roleChangeTarget.createdAt)}</span>
+                </>
+              ) : (
+                <>Change role for <span className="font-medium text-foreground">{selectedUser?.name}</span></>
+              )}
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
@@ -1155,14 +1261,14 @@ export function UserManagement() {
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRoleDialogOpen(false)}>Cancel</Button>
+            <Button variant="outline" onClick={() => { setRoleDialogOpen(false); setRoleChangeTarget(null); setNewRole(''); }}>Cancel</Button>
             <Button
               className="bg-emerald-600 hover:bg-emerald-700 text-white"
               onClick={handleChangeRole}
-              disabled={actionLoading !== null || newRole === selectedUser?.role}
+              disabled={actionLoading !== null || newRole === (selectedUser?.role || roleChangeTarget?.role)}
             >
               {actionLoading === 'change-role' && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              Change Role
+              {roleChangeTarget?.authProvider === 'google' && roleChangeTarget?.role === 'customer' ? 'Upgrade Role' : 'Change Role'}
             </Button>
           </DialogFooter>
         </DialogContent>

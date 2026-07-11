@@ -958,3 +958,30 @@ Work Log:
 - All 14 files pass ESLint (0 errors, 0 new warnings).
 - No business logic, error handling, or response formatting was changed — only the auth layer was upgraded.
 - Zero remaining references to `verifyToken` in `src/app/api/quotations/`.
+
+---
+Task ID: google-signup-customer-role
+Agent: Main
+Task: After first Google sign-in, count user as customer. Then admin can change their role.
+
+Work Log:
+- Verified existing backend: Google OAuth callback (/api/auth/google/callback/route.ts) already creates new users with `role: 'customer'`
+- Verified admin role change API: PUT /api/auth/users/[id] with role validation and audit logging
+- Verified user management UI had role change dialog but lacked quick-access for Google customers
+- Added `GoogleCustomerBadge` component (amber badge) to highlight Google-signed-in users still on default customer role
+- Added quick "Upgrade Role" option in desktop table row dropdown menu (visible only for Google customer users)
+- Added "Upgrade Role" button on mobile cards for Google customer users
+- Added prominent amber "Upgrade Role" banner in user detail dialog for Google customer accounts
+- Enhanced role change dialog to show "Upgrade User Role" title with Google sign-up date when upgrading a Google customer
+- Updated `handleChangeRole` to support both detail-dialog and inline table-row role changes
+- Updated role change dialog submit button text ("Upgrade Role" vs "Change Role") based on context
+- All changes pass ESLint (0 errors, 11 pre-existing warnings)
+
+Stage Summary:
+- Backend flow already complete: Google sign-in → customer role → admin changes role via PUT API
+- Enhanced UI for admin efficiency: 4 new visual touchpoints for managing Google customer role upgrades
+  1. Amber "Google Sign-up" badge in table rows and mobile cards
+  2. Quick "Upgrade Role" dropdown option in table row (no need to open detail dialog)
+  3. "Upgrade Role" button on mobile cards
+  4. Prominent amber banner in user detail dialog with explanation text and CTA
+- Role change dialog contextualized: shows "Upgrade User Role" with sign-up date for Google customers
