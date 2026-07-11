@@ -539,21 +539,30 @@ export function UserManagement() {
   // ============ REAL-TIME PRESENCE ============
 
   const onlineStatus = usePresenceStore((s) => s.onlineStatus);
+  const isPresenceConnected = usePresenceStore((s) => s.isConnected);
 
-  // Optimistically update the users list when a real-time status change arrives
+  // Merge real-time presence data into the users list.
+  // When the WebSocket is connected, the presence map is the source of truth:
+  //   - Users in the map → use their presence status
+  //   - Users NOT in the map → they are offline (no active WebSocket connection)
+  // When the WebSocket is NOT connected, fall back to the DB isOnline value.
   useEffect(() => {
-    const presenceEntries = Object.entries(onlineStatus);
-    if (presenceEntries.length === 0) return;
+    if (!isPresenceConnected) return; // No WS → keep DB values
 
     setUsers((prev) =>
       prev.map((u) => {
         const realtimeStatus = onlineStatus[u.id];
-        if (realtimeStatus === undefined) return u; // No update for this user
-        if (u.isOnline === realtimeStatus) return u; // No change needed
-        return { ...u, isOnline: realtimeStatus };
+        // User has a presence entry → use it
+        if (realtimeStatus !== undefined) {
+          if (u.isOnline === realtimeStatus) return u; // No change needed
+          return { ...u, isOnline: realtimeStatus };
+        }
+        // User has NO presence entry but WS is connected → they are offline
+        if (u.isOnline === false) return u; // Already offline
+        return { ...u, isOnline: false };
       })
     );
-  }, [onlineStatus]);
+  }, [onlineStatus, isPresenceConnected]);
 
   // ============ STATS ============
 

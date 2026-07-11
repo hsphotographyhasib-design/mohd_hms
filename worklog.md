@@ -1085,3 +1085,28 @@ Stage Summary:
 - usePresenceStore for real-time status tracking
 - useUserPresence hook manages Socket.IO connection
 - Both logout() and secureLogout() now notify server
+---
+Task ID: 1
+Agent: main
+Task: Fix user online status bug - all users showing online when they're offline
+
+Work Log:
+- Analyzed screenshot showing all users marked "Online" with green dots
+- Identified root cause: login (email, Google) sets `isOnline: true` in DB, but closing browser without logout leaves it stuck at `true`
+- Found the user-presence mini-service existed at `mini-services/user-presence/` but was NOT running (port 3004 not in use)
+- The frontend `useUserPresence` hook connected to port 3004 but got no data, falling back to stale DB values
+- Fixed the presence service with 3 key improvements:
+  1. **Startup cleanup**: Resets ALL `isOnline` to `false` on service start, preventing stale data
+  2. **Multi-tab support**: Tracks connections per user (Map<userId, Set<socketId>>), only sets offline when ALL connections close
+  3. **Initial snapshot**: Sends `presence:snapshot` event to newly connected clients with the true list of online users
+- Fixed PrismaClient initialization (Prisma 7 requires libsql adapter, not bare `new PrismaClient()`)
+- Added dotenv loading for DATABASE_URL and JWT_SECRET env vars
+- Enhanced the presence store with: `isConnected` flag, `setFromSnapshot()` method, `setConnected()` method
+- Updated `useUserPresence` hook to handle `presence:snapshot` events and track connection state
+- Fixed the user-management component's presence merging logic: when WS is connected, users NOT in the presence map are now treated as offline (not falling back to stale DB values)
+
+Stage Summary:
+- Changed files: `mini-services/user-presence/index.ts`, `mini-services/user-presence/package.json`, `src/core/presence/presence-store.ts`, `src/core/presence/use-user-presence.ts`, `src/modules/settings/components/admin/user-management.tsx`
+- Code verified: `tsc --noEmit` 0 errors in changed files, `bun run lint` 0 errors
+- Presence service runs successfully on port 3004
+- Next.js dev server OOM-killed (known 4GB RAM sandbox limitation with Turbopack)

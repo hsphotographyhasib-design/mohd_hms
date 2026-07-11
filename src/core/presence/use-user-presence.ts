@@ -16,14 +16,18 @@ export function useUserPresence(): React.MutableRefObject<Socket | null> {
   const socketRef = useRef<Socket | null>(null);
   const token = useAuthStore((s) => s.token);
   const setStatus = usePresenceStore((s) => s.setStatus);
+  const setFromSnapshot = usePresenceStore((s) => s.setFromSnapshot);
+  const setConnected = usePresenceStore((s) => s.setConnected);
+  const clearAll = usePresenceStore((s) => s.clearAll);
 
   useEffect(() => {
     if (!token) {
-      // Disconnect if we were connected
       if (socketRef.current) {
         socketRef.current.disconnect();
         socketRef.current = null;
       }
+      setConnected(false);
+      clearAll();
       return;
     }
 
@@ -37,19 +41,29 @@ export function useUserPresence(): React.MutableRefObject<Socket | null> {
     });
 
     socket.on('connect', () => {
-      console.log('[Presence] Connected');
+      console.log('[Presence] Connected to presence service');
+      setConnected(true);
     });
 
+    // Handle initial snapshot of all online users
+    socket.on('presence:snapshot', (data: { users: { userId: string; name: string; isOnline: boolean }[] }) => {
+      console.log('[Presence] Received snapshot:', data.users.length, 'users online');
+      setFromSnapshot(data.users);
+    });
+
+    // Handle individual status changes
     socket.on('user:status-change', (data: { userId: string; isOnline: boolean; name: string }) => {
       setStatus(data.userId, data.isOnline);
     });
 
     socket.on('disconnect', (reason) => {
       console.log('[Presence] Disconnected:', reason);
+      setConnected(false);
     });
 
     socket.on('connect_error', (err) => {
       console.warn('[Presence] Connection error:', err.message);
+      setConnected(false);
     });
 
     socketRef.current = socket;
@@ -57,8 +71,9 @@ export function useUserPresence(): React.MutableRefObject<Socket | null> {
     return () => {
       socket.disconnect();
       socketRef.current = null;
+      setConnected(false);
     };
-  }, [token, setStatus]);
+  }, [token, setStatus, setFromSnapshot, setConnected, clearAll]);
 
   return socketRef;
 }
