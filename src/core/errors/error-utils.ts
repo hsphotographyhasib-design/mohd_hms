@@ -85,6 +85,7 @@ export function logErrorToServer(opts: LogErrorOptions): string {
   let userId: string | undefined;
   let userName: string | undefined;
   let userRole: string | undefined;
+  let authToken: string | undefined;
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     const { useAuthStore } = require('@/app-shell/store');
@@ -93,6 +94,9 @@ export function logErrorToServer(opts: LogErrorOptions): string {
       userId = state.user.id;
       userName = state.user.name;
       userRole = state.user.role;
+    }
+    if (state?.token) {
+      authToken = state.token;
     }
   } catch {
     /* auth store not available */
@@ -142,10 +146,15 @@ export function logErrorToServer(opts: LogErrorOptions): string {
 
   // Fire-and-forget POST to /api/error-logs — never block the UI
   // Works in BOTH development and production so the Errors tab always has data
+  // Includes Authorization header so the server can extract tenantId from JWT
   try {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (authToken) {
+      headers['Authorization'] = `Bearer ${authToken}`;
+    }
     fetch('/api/error-logs', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(payload),
       keepalive: true, // survives page unload
     }).catch(() => {

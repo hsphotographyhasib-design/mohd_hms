@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyRouteAuth } from '@/core/middleware/api-auth';
+import { verifyToken } from '@/core/auth/auth-lib';
 import type { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
@@ -16,14 +17,37 @@ export async function POST(req: NextRequest) {
     const truncate = (val: unknown, max: number) =>
       typeof val === 'string' ? val.substring(0, max) : val;
 
+    // Extract tenantId from JWT if available (client-side logErrorToServer
+    // doesn't send tenantId, so we get it from the auth token)
+    let tenantId = body.tenantId || null;
+    let userId = body.userId || null;
+    let userName = body.userName || null;
+    let userRole = body.userRole || null;
+
+    try {
+      const authHeader = req.headers.get('authorization');
+      if (authHeader?.startsWith('Bearer ')) {
+        const payload = verifyToken(authHeader.replace('Bearer ', ''));
+        if (payload) {
+          // JWT provides authoritative tenantId (client-side may not send it)
+          tenantId = (payload.tenantId as string) || tenantId;
+          if (!userId) userId = (payload.userId as string) || null;
+          if (!userName) userName = (payload.name as string) || null;
+          if (!userRole) userRole = (payload.role as string) || null;
+        }
+      }
+    } catch {
+      // Token verification failed — use body values as fallback
+    }
+
     await db.errorLog.create({
       data: {
         id,
         errorRef: truncate(body.errorRef, 50),
-        userId: body.userId || null,
-        userName: truncate(body.userName, 200) || null,
-        userRole: truncate(body.userRole, 50) || null,
-        tenantId: body.tenantId || null,
+        userId,
+        userName: truncate(userName, 200) || null,
+        userRole: truncate(userRole, 50) || null,
+        tenantId,
         category: truncate(body.category, 50) || 'unknown',
         errorType: truncate(body.errorType, 100) || null,
         errorCode: truncate(body.errorCode, 50) || null,
@@ -76,29 +100,46 @@ export async function GET(request: NextRequest) {
     const endDate = searchParams.get('endDate') || '';
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.ErrorLogWhereInput = { tenantId };
+    // Show errors for this tenant AND errors with no tenant (system/unauthenticated errors)
+    const where: Prisma.ErrorLogWhereInput = {
+      OR: [
+        { tenantId },
+        { tenantId: null },
+      ],
+    };
 
-    if (category) where.category = category;
-    if (userId) where.userId = userId;
-    if (search) {
+    if (category) {
+      // When filtering by category, apply it inside the OR
       where.OR = [
+        { tenantId, category },
+        { tenantId: null, category },
+      ];
+    }
+    if (userId) {
+      const userIdFilter = { userId };
+      where.OR = (where.OR as Prisma.ErrorLogWhereInput[]).map(
+        (cond) => ({ ...cond, ...userIdFilter }),
+      );
+    }
+    if (search) {
+      const searchOr = [
         { message: { contains: search } },
         { module: { contains: search } },
         { apiEndpoint: { contains: search } },
         { errorRef: { contains: search } },
         { errorCode: { contains: search } },
       ];
+      where.OR = (where.OR as Prisma.ErrorLogWhereInput[]).map(
+        (cond) => ({ ...cond, OR: searchOr }),
+      );
     }
     if (startDate || endDate) {
-      where.createdAt = {};
-      if (startDate)
-        (where.createdAt as Prisma.DateTimeNullableFilter).gte = new Date(
-          startDate,
-        );
-      if (endDate)
-        (where.createdAt as Prisma.DateTimeNullableFilter).lte = new Date(
-          endDate,
-        );
+      const dateFilter: Prisma.DateTimeNullableFilter = {};
+      if (startDate) dateFilter.gte = new Date(startDate);
+      if (endDate) dateFilter.lte = new Date(endDate);
+      where.OR = (where.OR as Prisma.ErrorLogWhereInput[]).map(
+        (cond) => ({ ...cond, createdAt: dateFilter }),
+      );
     }
 
     const [items, total] = await Promise.all([
