@@ -165,24 +165,19 @@ export function NewComplaint() {
   }, []);
 
   // Auto-link customer for customer role on mount
+  // Uses /api/customers/self which finds or auto-creates the Customer record
   useEffect(() => {
     if (!isCustomer || !user) return;
 
     const findLinkedCustomer = async () => {
       setLinkingCustomer(true);
       try {
-        const queries = [];
-        if (user.email) queries.push(`email=${encodeURIComponent(user.email)}`);
-        if (user.phone) queries.push(`phone=${encodeURIComponent(user.phone)}`);
-        const res = await fetch(`/api/customers?${queries.join('&')}&pageSize=1`, {
+        const res = await fetch('/api/customers/self', {
           headers: { Authorization: `Bearer ${getToken()}` },
         });
         if (res.ok) {
-          const json = await res.json();
-          const data = json.data ?? json.items ?? json;
-          const customers = Array.isArray(data) ? data : [];
-          if (customers.length > 0) {
-            const c = customers[0];
+          const c = await res.json();
+          if (c?.id) {
             setSelectedCustomer(c);
             updateField('customerId', c.id);
             // Auto-fill location from customer
