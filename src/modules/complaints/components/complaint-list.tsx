@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
   Plus, Search, X, Eye, AlertTriangle, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight,
-  MessageSquare, CircleDot, UserCheck, Play, CheckCircle2, XCircle, Circle,
+  MessageSquare, CircleDot, UserCheck, Play, CheckCircle2, XCircle, Circle, PauseCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore, useAppStore } from '@/app-shell/store';
@@ -27,7 +27,7 @@ import { ScrollArea, ScrollBar } from '@/shared/ui/scroll-area';
 // ============ HELPERS ============
 
 const STATUS_PIPELINE: ComplaintStatus[] = [
-  'NEW', 'ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS',
+  'NEW', 'ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS', 'PAUSED',
   'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED', 'DRAFT_INVOICE',
   'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED', 'REWORK_REQUIRED',
 ];
@@ -51,6 +51,7 @@ function getStatusColor(status: ComplaintStatus) {
     ACCEPTED: 'bg-cyan-100 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800',
     WORK_ORDER_CREATED: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
     IN_PROGRESS: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
+    PAUSED: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300 border-amber-200 dark:border-amber-800',
     WAITING_CLIENT_CONFIRMATION: 'bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300 border-orange-200 dark:border-orange-800',
     CLIENT_CONFIRMED: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
     DRAFT_INVOICE: 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300 border-violet-200 dark:border-violet-800',
@@ -70,6 +71,7 @@ function getStatusIcon(status: ComplaintStatus) {
     ACCEPTED: CheckCircle2,
     WORK_ORDER_CREATED: Circle,
     IN_PROGRESS: Play,
+    PAUSED: PauseCircle,
     WAITING_CLIENT_CONFIRMATION: Circle,
     CLIENT_CONFIRMED: CheckCircle2,
     DRAFT_INVOICE: Circle,
@@ -84,7 +86,7 @@ function getStatusIcon(status: ComplaintStatus) {
 
 const SHORT_STATUS: Record<string, string> = {
   NEW: 'New', ASSIGNED: 'Assigned', ACCEPTED: 'Accepted',
-  WORK_ORDER_CREATED: 'WO Created', IN_PROGRESS: 'In Progress',
+  WORK_ORDER_CREATED: 'WO Created', IN_PROGRESS: 'In Progress', PAUSED: 'Paused',
   WAITING_CLIENT_CONFIRMATION: 'Confirmation', CLIENT_CONFIRMED: 'Confirmed',
   DRAFT_INVOICE: 'Draft Inv.', INVOICE_APPROVED: 'Inv. Approved',
   INVOICE_SENT: 'Inv. Sent', PAID: 'Paid', CLOSED: 'Closed',
@@ -98,6 +100,7 @@ function getStatusBgColor(status: string) {
     ACCEPTED: 'bg-cyan-50 dark:bg-cyan-950/50 border-cyan-200 dark:border-cyan-800',
     WORK_ORDER_CREATED: 'bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800',
     IN_PROGRESS: 'bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
+    PAUSED: 'bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800',
     WAITING_CLIENT_CONFIRMATION: 'bg-orange-50 dark:bg-orange-950/50 border-orange-200 dark:border-orange-800',
     CLIENT_CONFIRMED: 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800',
     DRAFT_INVOICE: 'bg-violet-50 dark:bg-violet-950/50 border-violet-200 dark:border-violet-800',
@@ -215,15 +218,13 @@ export function ComplaintList() {
   const fetchStatusCounts = useCallback(async () => {
     if (!token) return;
     try {
-      const counts: Record<string, number> = {};
-      for (const status of STATUS_PIPELINE) {
-        const res = await fetch(`/api/complaints?status=${status}&pageSize=1`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      const res = await fetch('/api/complaints/counts', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
         const data = await res.json();
-        counts[status] = data.total || 0;
+        setStatusCounts(data.counts || {});
       }
-      setStatusCounts(counts);
     } catch {
       // ignore
     }

@@ -5,6 +5,7 @@ import { ensureTableSync } from '@/core/database/db-sync';
 import { getComplaintTimeline } from '@/core/workflow/notification-engine';
 import { buildAuthContext, logComplaintAccessDenied } from '@/core/permissions/rbac';
 import { createNotification } from '@/modules/notifications/services/notification-service';
+import { validateTransition } from '@/core/workflow/state-machine';
 
 export const dynamic = 'force-dynamic';
 
@@ -88,9 +89,19 @@ export async function POST(
     // SLA check (warning only, don't block after deadline)
     const slaExceeded = complaint.slaResponseDeadline && new Date() > new Date(complaint.slaResponseDeadline);
 
-    if (acceptAction === 'reject') {
+    // ─── State Machine Validation ───
+    if (acceptAction === 'accept') {
+      const validation = validateTransition('ASSIGNED', 'ACCEPTED', userRole as any);
+      if (!validation.success) {
+        return NextResponse.json({ error: validation.error }, { status: 400 });
+      }
+    } else {
       if (!rejectionReason?.trim()) {
         return NextResponse.json({ error: 'Rejection reason is required' }, { status: 400 });
+      }
+      const validation = validateTransition('ASSIGNED', 'NEW', userRole as any);
+      if (!validation.success) {
+        return NextResponse.json({ error: validation.error }, { status: 400 });
       }
     }
 

@@ -188,6 +188,7 @@ export interface EquipmentItem {
 export type ComplaintPriority = 'low' | 'medium' | 'high' | 'critical';
 export type ComplaintStatus =
   | 'NEW' | 'ASSIGNED' | 'ACCEPTED' | 'WORK_ORDER_CREATED' | 'IN_PROGRESS'
+  | 'PAUSED'
   | 'WAITING_CLIENT_CONFIRMATION' | 'CLIENT_CONFIRMED' | 'DRAFT_INVOICE'
   | 'INVOICE_APPROVED' | 'INVOICE_SENT' | 'PAID' | 'CLOSED' | 'REWORK_REQUIRED';
 

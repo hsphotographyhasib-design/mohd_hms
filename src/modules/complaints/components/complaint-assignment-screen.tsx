@@ -654,13 +654,13 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
     }, 200);
 
     return () => clearTimeout(timer);
-  }, [complaintId, search, statusFilter, departmentFilter, sortBy, canAssign, selectedId]);
+  }, [complaintId, search, statusFilter, departmentFilter, sortBy, canAssign]);
 
   // Reset on complaintId change
   useEffect(() => {
     setSearch('');
     setStatusFilter('');
-    setDepartmentFilter('');
+    setDepartmentFilter('__all__');
     setSortBy('availability');
     setSelectedId(null);
     setSelectedTech(null);

@@ -51,11 +51,16 @@ const STATUS_COLORS: Record<string, string> = {
   NEW: '#6b7280',
   ASSIGNED: '#3b82f6',
   ACCEPTED: '#8b5cf6',
+  WORK_ORDER_CREATED: '#6366f1',
   IN_PROGRESS: '#f97316',
-  COMPLETED: '#22c55e',
+  WAITING_CLIENT_CONFIRMATION: '#eab308',
   CLIENT_CONFIRMED: '#14b8a6',
+  DRAFT_INVOICE: '#a855f7',
+  INVOICE_APPROVED: '#22c55e',
+  INVOICE_SENT: '#0ea5e9',
+  PAID: '#22c55e',
   CLOSED: '#6b7280',
-  REJECTED: '#ef4444',
+  REWORK_REQUIRED: '#ef4444',
 }
 
 const FILTER_OPTIONS: Array<{ value: FilterType; label: string }> = [

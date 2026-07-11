@@ -45,6 +45,7 @@ export type ComplaintMinAggregateOutputType = {
   description: string | null
   priority: string | null
   status: string | null
+  complaintNumber: string | null
   source: string | null
   category: string | null
   photos: string | null
@@ -88,6 +89,7 @@ export type ComplaintMaxAggregateOutputType = {
   description: string | null
   priority: string | null
   status: string | null
+  complaintNumber: string | null
   source: string | null
   category: string | null
   photos: string | null
@@ -131,6 +133,7 @@ export type ComplaintCountAggregateOutputType = {
   description: number
   priority: number
   status: number
+  complaintNumber: number
   source: number
   category: number
   photos: number
@@ -186,6 +189,7 @@ export type ComplaintMinAggregateInputType = {
   description?: true
   priority?: true
   status?: true
+  complaintNumber?: true
   source?: true
   category?: true
   photos?: true
@@ -229,6 +233,7 @@ export type ComplaintMaxAggregateInputType = {
   description?: true
   priority?: true
   status?: true
+  complaintNumber?: true
   source?: true
   category?: true
   photos?: true
@@ -272,6 +277,7 @@ export type ComplaintCountAggregateInputType = {
   description?: true
   priority?: true
   status?: true
+  complaintNumber?: true
   source?: true
   category?: true
   photos?: true
@@ -402,6 +408,7 @@ export type ComplaintGroupByOutputType = {
   description: string
   priority: string
   status: string
+  complaintNumber: string | null
   source: string
   category: string | null
   photos: string | null
@@ -468,6 +475,7 @@ export type ComplaintWhereInput = {
   description?: Prisma.StringFilter<"Complaint"> | string
   priority?: Prisma.StringFilter<"Complaint"> | string
   status?: Prisma.StringFilter<"Complaint"> | string
+  complaintNumber?: Prisma.StringNullableFilter<"Complaint"> | string | null
   source?: Prisma.StringFilter<"Complaint"> | string
   category?: Prisma.StringNullableFilter<"Complaint"> | string | null
   photos?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -518,6 +526,7 @@ export type ComplaintOrderByWithRelationInput = {
   description?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  complaintNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
   photos?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -571,6 +580,7 @@ export type ComplaintWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringFilter<"Complaint"> | string
   priority?: Prisma.StringFilter<"Complaint"> | string
   status?: Prisma.StringFilter<"Complaint"> | string
+  complaintNumber?: Prisma.StringNullableFilter<"Complaint"> | string | null
   source?: Prisma.StringFilter<"Complaint"> | string
   category?: Prisma.StringNullableFilter<"Complaint"> | string | null
   photos?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -621,6 +631,7 @@ export type ComplaintOrderByWithAggregationInput = {
   description?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  complaintNumber?: Prisma.SortOrderInput | Prisma.SortOrder
   source?: Prisma.SortOrder
   category?: Prisma.SortOrderInput | Prisma.SortOrder
   photos?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -672,6 +683,7 @@ export type ComplaintScalarWhereWithAggregatesInput = {
   description?: Prisma.StringWithAggregatesFilter<"Complaint"> | string
   priority?: Prisma.StringWithAggregatesFilter<"Complaint"> | string
   status?: Prisma.StringWithAggregatesFilter<"Complaint"> | string
+  complaintNumber?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   source?: Prisma.StringWithAggregatesFilter<"Complaint"> | string
   category?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
   photos?: Prisma.StringNullableWithAggregatesFilter<"Complaint"> | string | null
@@ -712,6 +724,7 @@ export type ComplaintCreateInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -760,6 +773,7 @@ export type ComplaintUncheckedCreateInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -802,6 +816,7 @@ export type ComplaintUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -850,6 +865,7 @@ export type ComplaintUncheckedUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -895,6 +911,7 @@ export type ComplaintCreateManyInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -935,6 +952,7 @@ export type ComplaintUpdateManyMutationInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -976,6 +994,7 @@ export type ComplaintUncheckedUpdateManyInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1019,6 +1038,7 @@ export type ComplaintCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  complaintNumber?: Prisma.SortOrder
   source?: Prisma.SortOrder
   category?: Prisma.SortOrder
   photos?: Prisma.SortOrder
@@ -1067,6 +1087,7 @@ export type ComplaintMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  complaintNumber?: Prisma.SortOrder
   source?: Prisma.SortOrder
   category?: Prisma.SortOrder
   photos?: Prisma.SortOrder
@@ -1110,6 +1131,7 @@ export type ComplaintMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   priority?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  complaintNumber?: Prisma.SortOrder
   source?: Prisma.SortOrder
   category?: Prisma.SortOrder
   photos?: Prisma.SortOrder
@@ -1415,6 +1437,7 @@ export type ComplaintCreateWithoutComplaintTimelineInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -1462,6 +1485,7 @@ export type ComplaintUncheckedCreateWithoutComplaintTimelineInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -1519,6 +1543,7 @@ export type ComplaintUpdateWithoutComplaintTimelineInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1566,6 +1591,7 @@ export type ComplaintUncheckedUpdateWithoutComplaintTimelineInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1607,6 +1633,7 @@ export type ComplaintCreateWithoutCustomerInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -1653,6 +1680,7 @@ export type ComplaintUncheckedCreateWithoutCustomerInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -1726,6 +1754,7 @@ export type ComplaintScalarWhereInput = {
   description?: Prisma.StringFilter<"Complaint"> | string
   priority?: Prisma.StringFilter<"Complaint"> | string
   status?: Prisma.StringFilter<"Complaint"> | string
+  complaintNumber?: Prisma.StringNullableFilter<"Complaint"> | string | null
   source?: Prisma.StringFilter<"Complaint"> | string
   category?: Prisma.StringNullableFilter<"Complaint"> | string | null
   photos?: Prisma.StringNullableFilter<"Complaint"> | string | null
@@ -1766,6 +1795,7 @@ export type ComplaintCreateWithoutEquipmentInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -1812,6 +1842,7 @@ export type ComplaintUncheckedCreateWithoutEquipmentInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -1879,6 +1910,7 @@ export type ComplaintCreateWithoutTenantInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -1925,6 +1957,7 @@ export type ComplaintUncheckedCreateWithoutTenantInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -1992,6 +2025,7 @@ export type ComplaintCreateWithoutUser_Complaint_supervisorIdToUserInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2039,6 +2073,7 @@ export type ComplaintUncheckedCreateWithoutUser_Complaint_supervisorIdToUserInpu
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2089,6 +2124,7 @@ export type ComplaintCreateWithoutUser_Complaint_assignedToIdToUserInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2136,6 +2172,7 @@ export type ComplaintUncheckedCreateWithoutUser_Complaint_assignedToIdToUserInpu
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2218,6 +2255,7 @@ export type ComplaintCreateWithoutWorkOrderInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2265,6 +2303,7 @@ export type ComplaintUncheckedCreateWithoutWorkOrderInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2322,6 +2361,7 @@ export type ComplaintUpdateWithoutWorkOrderInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2369,6 +2409,7 @@ export type ComplaintUncheckedUpdateWithoutWorkOrderInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2412,6 +2453,7 @@ export type ComplaintCreateManyCustomerInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2452,6 +2494,7 @@ export type ComplaintUpdateWithoutCustomerInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2498,6 +2541,7 @@ export type ComplaintUncheckedUpdateWithoutCustomerInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2542,6 +2586,7 @@ export type ComplaintUncheckedUpdateManyWithoutCustomerInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2584,6 +2629,7 @@ export type ComplaintCreateManyEquipmentInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2624,6 +2670,7 @@ export type ComplaintUpdateWithoutEquipmentInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2670,6 +2717,7 @@ export type ComplaintUncheckedUpdateWithoutEquipmentInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2714,6 +2762,7 @@ export type ComplaintUncheckedUpdateManyWithoutEquipmentInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2756,6 +2805,7 @@ export type ComplaintCreateManyTenantInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2796,6 +2846,7 @@ export type ComplaintUpdateWithoutTenantInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2842,6 +2893,7 @@ export type ComplaintUncheckedUpdateWithoutTenantInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2886,6 +2938,7 @@ export type ComplaintUncheckedUpdateManyWithoutTenantInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -2929,6 +2982,7 @@ export type ComplaintCreateManyUser_Complaint_supervisorIdToUserInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -2971,6 +3025,7 @@ export type ComplaintCreateManyUser_Complaint_assignedToIdToUserInput = {
   description: string
   priority?: string
   status?: string
+  complaintNumber?: string | null
   source?: string
   category?: string | null
   photos?: string | null
@@ -3010,6 +3065,7 @@ export type ComplaintUpdateWithoutUser_Complaint_supervisorIdToUserInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3057,6 +3113,7 @@ export type ComplaintUncheckedUpdateWithoutUser_Complaint_supervisorIdToUserInpu
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3101,6 +3158,7 @@ export type ComplaintUncheckedUpdateManyWithoutUser_Complaint_supervisorIdToUser
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3140,6 +3198,7 @@ export type ComplaintUpdateWithoutUser_Complaint_assignedToIdToUserInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3187,6 +3246,7 @@ export type ComplaintUncheckedUpdateWithoutUser_Complaint_assignedToIdToUserInpu
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3231,6 +3291,7 @@ export type ComplaintUncheckedUpdateManyWithoutUser_Complaint_assignedToIdToUser
   description?: Prisma.StringFieldUpdateOperationsInput | string
   priority?: Prisma.StringFieldUpdateOperationsInput | string
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  complaintNumber?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   source?: Prisma.StringFieldUpdateOperationsInput | string
   category?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photos?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -3313,6 +3374,7 @@ export type ComplaintSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   description?: boolean
   priority?: boolean
   status?: boolean
+  complaintNumber?: boolean
   source?: boolean
   category?: boolean
   photos?: boolean
@@ -3364,6 +3426,7 @@ export type ComplaintSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   description?: boolean
   priority?: boolean
   status?: boolean
+  complaintNumber?: boolean
   source?: boolean
   category?: boolean
   photos?: boolean
@@ -3412,6 +3475,7 @@ export type ComplaintSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   description?: boolean
   priority?: boolean
   status?: boolean
+  complaintNumber?: boolean
   source?: boolean
   category?: boolean
   photos?: boolean
@@ -3460,6 +3524,7 @@ export type ComplaintSelectScalar = {
   description?: boolean
   priority?: boolean
   status?: boolean
+  complaintNumber?: boolean
   source?: boolean
   category?: boolean
   photos?: boolean
@@ -3494,7 +3559,7 @@ export type ComplaintSelectScalar = {
   updatedAt?: boolean
 }
 
-export type ComplaintOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "equipmentId" | "title" | "description" | "priority" | "status" | "source" | "category" | "photos" | "gpsLocation" | "assignedToId" | "supervisorId" | "assignedBy" | "assignedByRole" | "assignedAt" | "lastReassignedAt" | "assignmentReason" | "assignmentStatus" | "reassignmentCount" | "slaResponseDeadline" | "workOrderId" | "invoiceId" | "eta" | "rejectionReason" | "reworkReason" | "customerSnapshot" | "locationInfo" | "resolutionNotes" | "customerRating" | "customerFeedback" | "acceptedAt" | "startedAt" | "completedAt" | "clientConfirmedAt" | "resolvedAt" | "closedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["complaint"]>
+export type ComplaintOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "customerId" | "equipmentId" | "title" | "description" | "priority" | "status" | "complaintNumber" | "source" | "category" | "photos" | "gpsLocation" | "assignedToId" | "supervisorId" | "assignedBy" | "assignedByRole" | "assignedAt" | "lastReassignedAt" | "assignmentReason" | "assignmentStatus" | "reassignmentCount" | "slaResponseDeadline" | "workOrderId" | "invoiceId" | "eta" | "rejectionReason" | "reworkReason" | "customerSnapshot" | "locationInfo" | "resolutionNotes" | "customerRating" | "customerFeedback" | "acceptedAt" | "startedAt" | "completedAt" | "clientConfirmedAt" | "resolvedAt" | "closedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["complaint"]>
 export type ComplaintInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   User_Complaint_supervisorIdToUser?: boolean | Prisma.Complaint$User_Complaint_supervisorIdToUserArgs<ExtArgs>
   User_Complaint_assignedToIdToUser?: boolean | Prisma.Complaint$User_Complaint_assignedToIdToUserArgs<ExtArgs>
@@ -3540,6 +3605,7 @@ export type $ComplaintPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     description: string
     priority: string
     status: string
+    complaintNumber: string | null
     source: string
     category: string | null
     photos: string | null
@@ -4010,6 +4076,7 @@ export interface ComplaintFieldRefs {
   readonly description: Prisma.FieldRef<"Complaint", 'String'>
   readonly priority: Prisma.FieldRef<"Complaint", 'String'>
   readonly status: Prisma.FieldRef<"Complaint", 'String'>
+  readonly complaintNumber: Prisma.FieldRef<"Complaint", 'String'>
   readonly source: Prisma.FieldRef<"Complaint", 'String'>
   readonly category: Prisma.FieldRef<"Complaint", 'String'>
   readonly photos: Prisma.FieldRef<"Complaint", 'String'>

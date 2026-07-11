@@ -21,6 +21,7 @@ export type ComplaintStatus =
   | 'ACCEPTED'
   | 'WORK_ORDER_CREATED'
   | 'IN_PROGRESS'
+  | 'PAUSED'
   | 'WAITING_CLIENT_CONFIRMATION'
   | 'CLIENT_CONFIRMED'
   | 'DRAFT_INVOICE'
@@ -76,6 +77,7 @@ export interface StatusDisplayConfig {
   color: string;
   bgColor: string;
   borderColor: string;
+  textColor?: string;
   icon: string;
 }
 
@@ -167,6 +169,28 @@ export const WORKFLOW_TRANSITIONS: TransitionRule[] = [
     action: 'work_completed',
     description:
       'The technician marks the job as completed. Records completedAt, checklist data, photos, and other completion details.',
+  },
+
+  // ── IN_PROGRESS → PAUSED (technician pauses work) ──────────────────────
+  {
+    from: 'IN_PROGRESS',
+    to: 'PAUSED',
+    allowedRoles: ['technician'],
+    isAutomatic: false,
+    action: 'work_paused',
+    description:
+      'The technician pauses work on the complaint. Records the pause reason.',
+  },
+
+  // ── PAUSED → IN_PROGRESS (technician resumes work) ────────────────────
+  {
+    from: 'PAUSED',
+    to: 'IN_PROGRESS',
+    allowedRoles: ['technician'],
+    isAutomatic: false,
+    action: 'work_resumed',
+    description:
+      'The technician resumes work on a paused complaint.',
   },
 
   // ── WAITING_CLIENT_CONFIRMATION → CLIENT_CONFIRMED (customer approves) ─
@@ -279,6 +303,7 @@ const ALL_STATUSES_SET = new Set<string>([
   'ACCEPTED',
   'WORK_ORDER_CREATED',
   'IN_PROGRESS',
+  'PAUSED',
   'WAITING_CLIENT_CONFIRMATION',
   'CLIENT_CONFIRMED',
   'DRAFT_INVOICE',
@@ -649,6 +674,14 @@ export const STATUS_CONFIG: Record<ComplaintStatus, StatusDisplayConfig> = {
     borderColor: 'border-amber-300',
     icon: 'Wrench',
   },
+  PAUSED: {
+    label: 'Paused',
+    color: '#f59e0b',
+    bgColor: 'bg-amber-100 dark:bg-amber-950',
+    borderColor: 'border-amber-200 dark:border-amber-800',
+    textColor: 'text-amber-700 dark:text-amber-300',
+    icon: 'PauseCircle',
+  },
   WAITING_CLIENT_CONFIRMATION: {
     label: 'Pending Confirmation',
     color: 'text-orange-700',
@@ -723,6 +756,8 @@ function getActionLabel(action: string, _targetStatus: ComplaintStatus): string 
     work_order_created: 'Create Work Order',
     work_started: 'Start Work',
     work_completed: 'Complete Work',
+    work_paused: 'Pause Work',
+    work_resumed: 'Resume Work',
     client_confirmed: 'Confirm Completion',
     rework_requested: 'Request Rework',
     rework_started: 'Start Rework',

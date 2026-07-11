@@ -218,6 +218,20 @@ export async function PUT(
 
     // Build update data with timestamp logic
     const updateData: Record<string, unknown> = {};
+
+    // Validate customerRating and customerFeedback before building update data
+    if (body.customerRating !== undefined) {
+      const rating = Number(body.customerRating);
+      if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+        return NextResponse.json({ error: 'Customer rating must be an integer between 1 and 5' }, { status: 400 });
+      }
+    }
+    if (body.customerFeedback !== undefined) {
+      if (typeof body.customerFeedback === 'string' && body.customerFeedback.trim().length > 1000) {
+        return NextResponse.json({ error: 'Customer feedback must be 1000 characters or less' }, { status: 400 });
+      }
+    }
+
     if (body.title !== undefined) updateData.title = body.title;
     if (body.description !== undefined) updateData.description = body.description;
     if (body.priority !== undefined) updateData.priority = body.priority;

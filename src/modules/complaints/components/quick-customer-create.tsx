@@ -138,6 +138,7 @@ export function QuickCustomerCreate({
             building: form.building.trim() || undefined,
             city: form.city.trim() || undefined,
             postalCode: form.postalCode.trim() || undefined,
+            tenantId,
           }),
         });
 
@@ -165,7 +166,7 @@ export function QuickCustomerCreate({
         setSubmitting(false);
       }
     },
-    [form, validate, onCustomerCreated, onOpenChange],
+    [form, validate, onCustomerCreated, onOpenChange, tenantId],
   );
 
   return (

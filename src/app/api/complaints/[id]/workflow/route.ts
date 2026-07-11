@@ -28,6 +28,8 @@ const ACTION_STATUS_MAP: Record<string, ComplaintStatus> = {
   reject: 'NEW',
   start: 'IN_PROGRESS',
   complete: 'WAITING_CLIENT_CONFIRMATION',
+  pause: 'PAUSED',
+  resume: 'IN_PROGRESS',
   client_confirm: 'CLIENT_CONFIRMED',
   client_reject: 'REWORK_REQUIRED',
   rework: 'IN_PROGRESS',

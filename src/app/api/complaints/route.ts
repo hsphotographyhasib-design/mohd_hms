@@ -196,48 +196,48 @@ export async function POST(request: NextRequest) {
     const yearStart = new Date(year, 0, 1);
     const yearEnd = new Date(year + 1, 0, 1);
 
-    const countThisYear = await db.complaint.count({
-      where: {
+    const complaint = await db.$transaction(async (tx) => {
+      const countThisYear = await tx.complaint.count({
+        where: {
+          tenantId,
+          createdAt: { gte: yearStart, lt: yearEnd },
+        },
+      });
+      const complaintNumber = `CMP/${year}/${String(countThisYear + 1).padStart(6, '0')}`;
+
+      const createData: Record<string, unknown> = {
         tenantId,
-        createdAt: { gte: yearStart, lt: yearEnd },
-      },
-    });
-    const complaintNumber = `CMP/${year}/${String(countThisYear + 1).padStart(6, '0')}`;
+        customerId,
+        equipmentId: equipmentId || null,
+        title: title.trim(),
+        description: description.trim(),
+        priority: priority || 'medium',
+        status: 'NEW',
+        source: source || 'admin',
+        category: category || null,
+        complaintNumber,
+        photos: photos ? JSON.stringify(photos) : null,
+        gpsLocation: gpsLocation ? JSON.stringify(gpsLocation) : null,
+        assignedToId: role === 'technician' ? userId : (assignedToId || null),
+        supervisorId: supervisorId || null,
+      };
 
-    // Build creation data
-    const createData: Record<string, unknown> = {
-      tenantId,
-      customerId,
-      equipmentId: equipmentId || null,
-      title: title.trim(),
-      description: description.trim(),
-      priority: priority || 'medium',
-      status: 'NEW',
-      source: source || 'admin',
-      category: category || null,
-      photos: photos ? JSON.stringify(photos) : null,
-      gpsLocation: gpsLocation ? JSON.stringify(gpsLocation) : null,
-      assignedToId: role === 'technician' ? userId : (assignedToId || null),
-      supervisorId: supervisorId || null,
-    };
+      if (customerSnapshot) {
+        createData.customerSnapshot = JSON.stringify(customerSnapshot);
+      }
+      if (locationInfo) {
+        createData.locationInfo = JSON.stringify(locationInfo);
+      }
 
-    // Store customer snapshot for historical accuracy
-    if (customerSnapshot) {
-      createData.customerSnapshot = JSON.stringify(customerSnapshot);
-    }
-    // Store location info (building, floor, unit, room, etc.)
-    if (locationInfo) {
-      createData.locationInfo = JSON.stringify(locationInfo);
-    }
-
-    const complaint = await db.complaint.create({
-      data: createData,
-      include: {
-        customer: { select: { name: true } },
-        equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
-      },
+      return tx.complaint.create({
+        data: createData,
+        include: {
+          customer: { select: { name: true } },
+          equipment: { select: { name: true } },
+          assignedTo: { select: { name: true } },
+          supervisor: { select: { name: true } },
+        },
+      });
     });
 
     // Notify admins/managers/supervisors about the new complaint (fire-and-forget)
@@ -262,7 +262,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       id: complaint.id,
-      complaintNumber,
+      complaintNumber: complaint.complaintNumber,
       tenantId: complaint.tenantId,
       customerId: complaint.customerId,
       customerName: complaint.customer?.name,

@@ -451,6 +451,7 @@ model Complaint {
   description                       String
   priority                          String              @default("medium")
   status                            String              @default("NEW")
+  complaintNumber                   String?
   source                            String              @default("admin")
   category                          String?
   photos                            String?

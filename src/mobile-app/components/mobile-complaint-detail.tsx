@@ -61,18 +61,18 @@ const STATUS_STEPS = [
   { key: 'NEW', label: 'Complaint Created' },
   { key: 'ASSIGNED', label: 'Technician Assigned' },
   { key: 'ACCEPTED', label: 'Accepted' },
+  { key: 'WORK_ORDER_CREATED', label: 'Work Order' },
   { key: 'IN_PROGRESS', label: 'In Progress' },
-  { key: 'COMPLETED', label: 'Completed' },
-  { key: 'FEEDBACK', label: 'Feedback Pending' },
+  { key: 'WAITING_CLIENT_CONFIRMATION', label: 'Pending Review' },
 ] as const;
 
 const STATUS_ORDER = ['NEW', 'ASSIGNED', 'ACCEPTED', 'IN_PROGRESS', 'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED', 'DRAFT_INVOICE', 'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED'];
 
 function getStepStatus(stepKey: string, complaintStatus: string): 'completed' | 'current' | 'pending' {
   const stepIdx = STATUS_STEPS.findIndex(s => s.key === stepKey);
-  let currentIdx = STATUS_ORDER.indexOf(complaintStatus);
-  if (complaintStatus === 'PAID' || complaintStatus === 'CLOSED') currentIdx = 4;
-  if (complaintStatus === 'WORK_ORDER_CREATED') currentIdx = Math.max(currentIdx, 2);
+  const currentIdx = STATUS_ORDER.indexOf(complaintStatus);
+  if (stepIdx < 0) return 'pending';
+  if (currentIdx < 0) return 'pending';
   if (stepIdx < currentIdx) return 'completed';
   if (stepIdx === currentIdx) return 'current';
   return 'pending';
