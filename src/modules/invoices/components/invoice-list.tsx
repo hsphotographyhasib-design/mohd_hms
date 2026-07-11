@@ -17,7 +17,8 @@ import {
   FileText, FileClock, FileCheck2, Send, CircleCheck, AlertTriangle, Ban, XCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAppStore } from '@/app-shell/store';
+import { useAppStore, useAuthStore } from '@/app-shell/store';
+import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
 import type { InvoiceItem, InvoiceStatus, PaginatedResponse } from '@/core/types';
 
 const STATUS_CONFIG: Record<string, { label: string; className: string; icon: React.ElementType }> = {
@@ -54,6 +55,8 @@ const ALL_STATUSES: InvoiceStatus[] = ['DRAFT', 'REVIEW', 'APPROVED', 'SENT', 'V
 
 export function InvoiceList() {
   const setView = useAppStore((s) => s.setView);
+  const user = useAuthStore(s => s.user);
+  const role = user?.role;
   const [data, setData] = useState<PaginatedResponse<InvoiceItem> | null>(null);
   const [stats, setStats] = useState<Record<string, number> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -101,9 +104,11 @@ export function InvoiceList() {
             <p className="text-sm text-muted-foreground">{data?.total ?? 0} total invoices</p>
           </div>
         </div>
-        <Button onClick={() => setView('new-invoice')} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-          <Plus className="h-4 w-4 mr-2" /> New Invoice
-        </Button>
+        {canPerformAction(role, 'invoice', 'create') && (
+          <Button onClick={() => setView('new-invoice')} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+            <Plus className="h-4 w-4 mr-2" /> New Invoice
+          </Button>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -170,9 +175,11 @@ export function InvoiceList() {
                   <TableRow><TableCell colSpan={7} className="text-center py-12 text-muted-foreground">
                     <Receipt className="h-10 w-10 mx-auto mb-2 opacity-30" />
                     <p>No invoices found</p>
-                    <Button variant="outline" size="sm" className="mt-3" onClick={() => setView('new-invoice')}>
-                      <Plus className="h-4 w-4 mr-1" /> Create your first invoice
-                    </Button>
+                    {canPerformAction(role, 'invoice', 'create') && (
+                      <Button variant="outline" size="sm" className="mt-3" onClick={() => setView('new-invoice')}>
+                        <Plus className="h-4 w-4 mr-1" /> Create your first invoice
+                      </Button>
+                    )}
                   </TableCell></TableRow>
                 ) : invoices.map((inv) => (
                   <TableRow key={inv.id} className="cursor-pointer hover:bg-muted/50" onClick={() => setView('invoice-detail', { id: inv.id })}>

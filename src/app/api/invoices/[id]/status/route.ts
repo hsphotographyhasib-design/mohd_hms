@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { INVOICE_STATUS_TRANSITIONS } from '@/modules/invoices/services/invoice-helpers';
 
 export const dynamic = 'force-dynamic';
@@ -10,13 +10,11 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'approve' });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
+    const tenantId = auth.tenantId;
+    const userId = auth.userId;
     const { id } = await params;
     const body = await request.json();
 

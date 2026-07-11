@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { COMPANY } from '@/core/constants/company';
 
 // ============ Types ============
@@ -94,15 +94,11 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> },
 ) {
   try {
-    // 1. Verify JWT
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
-    }
+    // 1. Verify JWT + RBAC
+    const auth = verifyRouteAuth(request, { feature: 'quotations', entity: 'quotation', action: 'send_whatsapp' });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
+    const tenantId = auth.tenantId;
     const { id } = await params;
 
     // 2. Fetch quotation with customer

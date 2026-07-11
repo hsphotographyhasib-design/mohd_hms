@@ -22,7 +22,8 @@ import {
   DollarSign, TrendingUp, CalendarClock, CheckCircle2,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useAppStore } from '@/app-shell/store';
+import { useAppStore, useAuthStore } from '@/app-shell/store';
+import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
 import type { QuotationItem, QuotationStatus, PaginatedResponse } from '@/core/types';
 import { cn } from '@/core/utils/utils';
 import { format } from 'date-fns';
@@ -93,6 +94,8 @@ interface QuotationStats {
 
 export function QuotationList() {
   const setView = useAppStore((s) => s.setView);
+  const user = useAuthStore(s => s.user);
+  const role = user?.role;
 
   const [data, setData] = useState<PaginatedResponse<QuotationItem> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -229,12 +232,14 @@ export function QuotationList() {
             <p className="text-sm text-muted-foreground">Manage and track all customer quotations</p>
           </div>
         </div>
-        <Button
-          onClick={() => setView('new-quotation')}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
-        >
-          <Plus className="h-4 w-4 mr-2" /> New Quotation
-        </Button>
+        {canPerformAction(role, 'quotation', 'create') && (
+          <Button
+            onClick={() => setView('new-quotation')}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm"
+          >
+            <Plus className="h-4 w-4 mr-2" /> New Quotation
+          </Button>
+        )}
       </div>
 
       {/* Stats Cards */}
@@ -453,7 +458,7 @@ export function QuotationList() {
                               : 'Create your first quotation to get started'}
                           </p>
                         </div>
-                        {!search && !statusFilter && (
+                        {!search && !statusFilter && canPerformAction(role, 'quotation', 'create') && (
                           <Button
                             size="sm"
                             onClick={() => setView('new-quotation')}
@@ -531,25 +536,33 @@ export function QuotationList() {
                             <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setView('quotation-detail', { id: q.id }); }}>
                               <Eye className="h-4 w-4 mr-2" /> View Details
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setView('quotation-edit', { id: q.id }); }}>
-                              <FileText className="h-4 w-4 mr-2" /> Edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={(e) => handleDuplicate(q, e)}>
-                              <Copy className="h-4 w-4 mr-2" /> Duplicate
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              onClick={(e) => handleDelete(q.id, e)}
-                              className="text-rose-600 focus:text-rose-600"
-                              disabled={deletingId === q.id}
-                            >
-                              {deletingId === q.id ? (
-                                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                              ) : (
-                                <Trash2 className="h-4 w-4 mr-2" />
-                              )}
-                              Delete
-                            </DropdownMenuItem>
+                            {canPerformAction(role, 'quotation', 'update') && (
+                              <DropdownMenuItem onClick={(e) => { e.stopPropagation(); setView('quotation-edit', { id: q.id }); }}>
+                                <FileText className="h-4 w-4 mr-2" /> Edit
+                              </DropdownMenuItem>
+                            )}
+                            {canPerformAction(role, 'quotation', 'create') && (
+                              <DropdownMenuItem onClick={(e) => handleDuplicate(q, e)}>
+                                <Copy className="h-4 w-4 mr-2" /> Duplicate
+                              </DropdownMenuItem>
+                            )}
+                            {canPerformAction(role, 'quotation', 'delete') && (
+                              <>
+                                <DropdownMenuSeparator />
+                                <DropdownMenuItem
+                                  onClick={(e) => handleDelete(q.id, e)}
+                                  className="text-rose-600 focus:text-rose-600"
+                                  disabled={deletingId === q.id}
+                                >
+                                  {deletingId === q.id ? (
+                                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="h-4 w-4 mr-2" />
+                                  )}
+                                  Delete
+                                </DropdownMenuItem>
+                              </>
+                            )}
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </TableCell>

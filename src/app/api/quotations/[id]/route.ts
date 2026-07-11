@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 interface QuotationItem {
@@ -23,12 +23,10 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'quotations', entity: 'quotation', action: 'view' });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
+    const tenantId = auth.tenantId;
     const { id } = await params;
 
     const quotation = await db.quotation.findFirst({
@@ -97,12 +95,10 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'quotations', entity: 'quotation', action: 'update' });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
+    const tenantId = auth.tenantId;
     const { id } = await params;
     const body = await request.json();
 
@@ -213,12 +209,10 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'quotations', entity: 'quotation', action: 'delete' });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
+    const tenantId = auth.tenantId;
     const { id } = await params;
 
     const existing = await db.quotation.findFirst({ where: { id, tenantId } });

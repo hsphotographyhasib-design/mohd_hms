@@ -844,3 +844,117 @@ Stage Summary:
 - Consider caching permissions in JWT to avoid repeated lookups.
 - Test suite for RBAC not yet implemented (as requested, no test code written).
 - Google SSO always creates 'customer' role — no promotion path via SSO.
+
+---
+Task ID: 5+6
+Agent: Main
+Task: Fix role-based button visibility in invoice and quotation UI components
+
+Work Log:
+- Read worklog.md to understand existing RBAC system (permissions-matrix, feature-level gating already in place)
+- Fixed `src/modules/invoices/components/invoice-list.tsx`:
+  - Added imports: `useAuthStore` and `canPerformAction`
+  - Added `role` variable from auth store
+  - Gated "New Invoice" button in header with `canPerformAction(role, 'invoice', 'create')`
+  - Gated "Create your first invoice" button in empty state with same check
+- Fixed `src/modules/invoices/components/invoice-detail.tsx`:
+  - Added import: `canPerformAction`
+  - Replaced `isAdmin`/`isFinance`/`canManage` variables with `role` and `canManage = canPerformAction(role, 'invoice', 'delete')`
+  - Removed unused `hasMinRole` import
+  - Gated Print button: `canPerformAction(role, 'invoice', 'print')`
+  - Gated Email button: `canPerformAction(role, 'invoice', 'send_email')`
+  - Gated WhatsApp button: `canPerformAction(role, 'invoice', 'send_whatsapp')`
+  - Gated Download PDF dropdown item: `canPerformAction(role, 'invoice', 'download')`
+  - Replaced Record Payment check: `canPerformAction(role, 'invoice', 'record_payment')` (both desktop dropdown and mobile action bar)
+  - Kept Cancel Invoice with `canManage` (maps to delete-level access)
+- Fixed `src/modules/quotations/components/quotation-list.tsx`:
+  - Added imports: `useAuthStore` and `canPerformAction`
+  - Added `role` variable from auth store
+  - Gated "New Quotation" button in header with `canPerformAction(role, 'quotation', 'create')`
+  - Gated "Create Quotation" button in empty state with same check
+  - Gated per-row Edit: `canPerformAction(role, 'quotation', 'update')`
+  - Gated per-row Duplicate: `canPerformAction(role, 'quotation', 'create')`
+  - Gated per-row Delete (with separator): `canPerformAction(role, 'quotation', 'delete')`
+- Fixed `src/modules/quotations/components/quotation-detail.tsx`:
+  - Added import: `canPerformAction`
+  - Replaced `canManage = hasMinRole(user.role, 'admin')` with `const role = user?.role`
+  - Removed unused `hasMinRole` import
+  - Workflow transitions: gated with `canPerformAction(role, 'quotation', 'send') || canPerformAction(role, 'quotation', 'update')`
+  - Gated Print: `canPerformAction(role, 'quotation', 'print')`
+  - Gated PDF Download: `canPerformAction(role, 'quotation', 'generate_pdf')`
+  - Gated Email: `canPerformAction(role, 'quotation', 'send_email')`
+  - Gated WhatsApp: `canPerformAction(role, 'quotation', 'send_whatsapp')`
+  - Edit Quotation dropdown: `canPerformAction(role, 'quotation', 'update') && qt.status === 'DRAFT'`
+- All linting passes cleanly on the 4 modified files.
+- No business logic was changed — only conditional rendering wrappers were added around buttons.
+
+---
+Task ID: 3
+Agent: Main
+Task: Fix RBAC for ALL invoice API routes — upgrade from bare verifyToken to centralized verifyRouteAuth
+
+Work Log:
+- Read worklog.md for existing RBAC system context
+- Read verifyRouteAuth API (src/core/middleware/api-auth.ts) and scopeInvoice (src/core/permissions/rbac/data-scope.ts)
+- Fixed all 11 invoice API route files under src/app/api/invoices/:
+
+1. **route.ts** (GET list + POST create):
+   - GET: Replaced `verifyToken` + `buildAuthContext` + manual role/`__NEVER_MATCH__` logic with `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'view' })` + `scopeInvoice()`. Stats queries now also use the scoped WHERE clause.
+   - POST: Replaced `verifyToken` with `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'create' })`.
+   - Removed imports: `verifyToken` from auth-lib, `buildAuthContext` from rbac.
+   - Added imports: `verifyRouteAuth` from api-auth, `scopeInvoice` from data-scope.
+
+2. **create/route.ts** — Replaced `verifyToken` with `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'create' })`.
+
+3. **[id]/route.ts** (GET + PUT + DELETE):
+   - GET: `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'view' })`
+   - PUT: `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'update' })`
+   - DELETE: `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'delete' })`
+
+4. **[id]/status/route.ts** — `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'approve' })`.
+
+5. **[id]/send-email/route.ts** — Replaced import + inline auth with `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'send_email' })`.
+
+6. **[id]/send-whatsapp/route.ts** — Replaced inline auth with `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'send_whatsapp' })`.
+
+7. **[id]/generate-pdf/route.ts** — Replaced import + multi-step auth (manual token check, verifyToken, payload extraction) + inline `restrictedRoles` check with `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'generate_pdf' })`. The old manual role block (`['customer', 'vendor', 'guest']`) was removed since verifyRouteAuth enforces this via the permissions matrix.
+
+8. **[id]/audit-log/route.ts** — Replaced import + multi-step auth with `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'view' })`. Removed unused `userRole` variable.
+
+9. **next-number/route.ts** — `verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'create' })`.
+
+10. **smart-search-customer/route.ts** — `verifyRouteAuth(request, { feature: 'invoices' })` (feature-level only).
+
+11. **smart-search-inventory/route.ts** — `verifyRouteAuth(request, { feature: 'invoices' })` (feature-level only).
+
+- All existing business logic, error handling, response formatting, and query param processing preserved unchanged.
+- ESLint: 0 errors (11 pre-existing warnings, all unrelated).
+- Data-level scoping: GET list route now uses `scopeInvoice()` which automatically scopes customer-role users to their own invoices and denies access for unauthorized roles (manager, technician, supervisor, hr, vendor, guest) via the `__NEVER_MATCH__` sentinel in data-scope.ts.
+
+---
+Task ID: 4
+Agent: Main
+Task: Fix RBAC for ALL quotation API routes — upgrade from bare verifyToken to centralized verifyRouteAuth
+
+Work Log:
+- Replaced `import { verifyToken } from '@/core/auth/auth-lib'` with `import { verifyRouteAuth } from '@/core/middleware/api-auth'` in all 14 quotation API route files.
+- Replaced manual verifyToken + destructuring calls with `verifyRouteAuth(request, { feature, entity, action })` pattern.
+- Applied correct action-level RBAC per the permission matrix:
+  - `quotation.view`: route.ts GET, [id]/route.ts GET, [id]/audit-log POST
+  - `quotation.create`: route.ts POST, create/route.ts POST, next-number/route.ts GET
+  - `quotation.update`: [id]/route.ts PUT
+  - `quotation.delete`: [id]/route.ts DELETE
+  - `quotation.send`: [id]/status/route.ts POST
+  - `quotation.send_email`: [id]/send-email/route.ts POST
+  - `quotation.send_whatsapp`: [id]/send-whatsapp/route.ts POST
+  - `quotation.generate_pdf`: [id]/generate-pdf/route.ts GET
+  - `quotation.convert_to_invoice`: [id]/convert-invoice/route.ts POST
+  - `quotation.convert_to_wo`: [id]/convert-wo/route.ts POST
+  - Feature-level only: smart-search-customer, smart-search-inventory, item-suggestions
+- route.ts GET: Replaced manual `buildAuthContext` + inline role scoping with `scopeQuotation()` from data-scope module. Stats queries now also apply the RBAC data scope filter.
+- route.ts GET: Customer query-param filtering (WHERE customerId) preserved.
+- [id]/generate-pdf/route.ts: Removed inline restricted-roles check (customer/vendor/guest) since verifyRouteAuth handles it via permission matrix.
+- [id]/convert-invoice/route.ts: Kept `generateInvoiceNumber` import from auth-lib (still needed for business logic).
+- All 14 files pass ESLint (0 errors, 0 new warnings).
+- No business logic, error handling, or response formatting was changed — only the auth layer was upgraded.
+- Zero remaining references to `verifyToken` in `src/app/api/quotations/`.

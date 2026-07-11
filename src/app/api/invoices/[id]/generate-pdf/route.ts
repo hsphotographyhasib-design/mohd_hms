@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { generateInvoiceHtml } from '@/modules/invoices/services/invoice-pdf-html';
 
 export const dynamic = 'force-dynamic';
@@ -14,21 +14,12 @@ export async function GET(
   let browser: Awaited<ReturnType<typeof import('playwright-core').chromium.launch>> | null = null;
 
   try {
-    // ── 1. Authenticate ──────────────────────────────────────────────
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    if (!token) {
-      return NextResponse.json({ error: 'Missing authorization token' }, { status: 401 });
-    }
+    // ── 1. Authenticate + RBAC ──────────────────────────────────────
+    const auth = verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'generate_pdf' });
+    if (auth.error) return auth.error;
 
-    const payload = verifyToken(token);
-    if (!payload) {
-      return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
-    }
-
-    const userId = payload.userId as string;
-    const tenantId = payload.tenantId as string;
-    const userRole = payload.role as string;
+    const userId = auth.userId;
+    const tenantId = auth.tenantId;
 
     // ── 2. Fetch invoice with relations ──────────────────────────────
     const { id } = await params;
@@ -56,13 +47,7 @@ export async function GET(
       return NextResponse.json({ error: 'Invoice not found' }, { status: 404 });
     }
 
-    // ── 3. Access check (tenantId already enforced in query) ────────
-    const restrictedRoles = ['customer', 'vendor', 'guest'];
-    if (restrictedRoles.includes(userRole)) {
-      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
-    }
-
-    // ── 4. Check Playwright availability ─────────────────────────────
+    // ── 3. Check Playwright availability ─────────────────────────────
     const { chromium } = await import('playwright-core');
     let executablePath = CHROMIUM_PATH;
 

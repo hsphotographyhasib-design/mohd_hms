@@ -1,34 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken, generateInvoiceNumber } from '@/core/auth/auth-lib';
-import { buildAuthContext } from '@/core/permissions/rbac';
+import { generateInvoiceNumber } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
+import { scopeInvoice } from '@/core/permissions/rbac/data-scope';
 import { notifyInvoiceCreated } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'view' });
+    if (auth.error) return auth.error;
 
-    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
-    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // Build RBAC WHERE clause for invoices via data-scope
+    const invoiceWhere = await scopeInvoice({ userId: auth.userId, tenantId: auth.tenantId, role: auth.role, email: auth.email });
+    if (!invoiceWhere) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-    const { role, tenantId: tid, userId, customerId: authCustomerId } = ctx;
-
-    // Build RBAC WHERE clause for invoices
-    let where: Prisma.InvoiceWhereInput = { tenantId: tid };
-
-    if (role === 'customer') {
-      where = authCustomerId
-        ? { tenantId: tid, customerId: authCustomerId }
-        : ({ tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.InvoiceWhereInput);
-    } else if (!['super_admin', 'admin', 'manager', 'finance'].includes(role)) {
-      // technician, supervisor, hr, vendor, guest cannot see invoices
-      where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.InvoiceWhereInput;
-    }
+    let where: Prisma.InvoiceWhereInput = { ...invoiceWhere };
 
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
@@ -178,13 +166,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'create' });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
+    const tenantId = auth.tenantId;
+    const userId = auth.userId;
     const body = await request.json();
     const {
       customerId, workOrderId, quotationId, title, description, items,

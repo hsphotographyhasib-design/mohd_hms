@@ -17,7 +17,8 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { toast } from 'sonner';
-import { useAppStore, useAuthStore, hasMinRole } from '@/app-shell/store';
+import { useAppStore, useAuthStore } from '@/app-shell/store';
+import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
 import type { QuotationStatus } from '@/core/types';
 import { COMPANY } from '@/core/constants/company';
 import { QuotationA4Template, fmtBND, fmtDate } from './quotation-a4-template';
@@ -282,7 +283,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
     }
   };
 
-  const canManage = user ? hasMinRole(user.role, 'admin') : false;
+  const role = user?.role;
   const transitions = qt ? (WORKFLOW_TRANSITIONS[qt.status] || []) : [];
 
   // ============ LOADING STATE ============
@@ -328,7 +329,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          {canManage && transitions.map((t) => (
+          {(canPerformAction(role, 'quotation', 'send') || canPerformAction(role, 'quotation', 'update')) && transitions.map((t) => (
             <Button
               key={t.target}
               variant="outline"
@@ -348,23 +349,28 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
             </Button>
           ))}
 
-          <Button variant="outline" size="sm" onClick={handlePreview}>
-            <Eye className="h-4 w-4 mr-1.5" /> Preview
-          </Button>
-          <Button variant="outline" size="sm" onClick={handlePrint}>
-            <Printer className="h-4 w-4 mr-1.5" /> Print
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleDownloadPdf} disabled={pdfLoading}>
-            {pdfLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <FileDown className="h-4 w-4 mr-1.5" />}
-            PDF
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleSendEmail} disabled={emailLoading}>
-            {emailLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Mail className="h-4 w-4 mr-1.5" />}
-            Email
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
-            <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
-          </Button>
+          {canPerformAction(role, 'quotation', 'print') && (
+            <Button variant="outline" size="sm" onClick={handlePrint}>
+              <Printer className="h-4 w-4 mr-1.5" /> Print
+            </Button>
+          )}
+          {canPerformAction(role, 'quotation', 'generate_pdf') && (
+            <Button variant="outline" size="sm" onClick={handleDownloadPdf} disabled={pdfLoading}>
+              {pdfLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <FileDown className="h-4 w-4 mr-1.5" />}
+              PDF
+            </Button>
+          )}
+          {canPerformAction(role, 'quotation', 'send_email') && (
+            <Button variant="outline" size="sm" onClick={handleSendEmail} disabled={emailLoading}>
+              {emailLoading ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Mail className="h-4 w-4 mr-1.5" />}
+              Email
+            </Button>
+          )}
+          {canPerformAction(role, 'quotation', 'send_whatsapp') && (
+            <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
+              <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
+            </Button>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
@@ -375,7 +381,7 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
               <DropdownMenuItem onClick={handleCopyNumber}>
                 <Copy className="h-4 w-4 mr-2" /> Copy Quotation No.
               </DropdownMenuItem>
-              {canManage && qt.status === 'DRAFT' && (
+              {canPerformAction(role, 'quotation', 'update') && qt.status === 'DRAFT' && (
                 <DropdownMenuItem onClick={() => setView('quotation-edit', { id: qt.id })}>
                   <Pencil className="h-4 w-4 mr-2" /> Edit Quotation
                 </DropdownMenuItem>

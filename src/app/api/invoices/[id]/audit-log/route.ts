@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,21 +22,12 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // ── 1. Authenticate ──────────────────────────────────────────────
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    if (!token) {
-      return NextResponse.json({ error: 'Missing authorization token' }, { status: 401 });
-    }
+    // ── 1. Authenticate + RBAC ──────────────────────────────────────
+    const auth = verifyRouteAuth(request, { feature: 'invoices', entity: 'invoice', action: 'view' });
+    if (auth.error) return auth.error;
 
-    const payload = verifyToken(token);
-    if (!payload) {
-      return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
-    }
-
-    const userId = payload.userId as string;
-    const userRole = payload.role as string;
-    const tenantId = payload.tenantId as string;
+    const userId = auth.userId;
+    const tenantId = auth.tenantId;
 
     // ── 2. Parse & validate body ─────────────────────────────────────
     let body: { action?: string; details?: string };

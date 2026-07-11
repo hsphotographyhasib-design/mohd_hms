@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { generateQuotationHtml } from '@/modules/quotations/services/quotation-pdf-html';
 import { chromium } from 'playwright-core';
 
@@ -15,21 +15,12 @@ export async function GET(
   let browser: Awaited<ReturnType<typeof chromium.launch>> | null = null;
 
   try {
-    // ── 1. Authenticate ──────────────────────────────────────────────
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    if (!token) {
-      return NextResponse.json({ error: 'Missing authorization token' }, { status: 401 });
-    }
+    // ── 1. Authenticate + RBAC ──────────────────────────────────────
+    const auth = verifyRouteAuth(request, { feature: 'quotations', entity: 'quotation', action: 'generate_pdf' });
+    if (auth.error) return auth.error;
 
-    const payload = verifyToken(token);
-    if (!payload) {
-      return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
-    }
-
-    const userId = payload.userId as string;
-    const tenantId = payload.tenantId as string;
-    const userRole = payload.role as string;
+    const userId = auth.userId;
+    const tenantId = auth.tenantId;
 
     // ── 2. Fetch quotation with relations ────────────────────────────
     const { id } = await params;
@@ -57,14 +48,7 @@ export async function GET(
       return NextResponse.json({ error: 'Quotation not found' }, { status: 404 });
     }
 
-    // ── 3. Access check (tenantId already enforced in query) ────────
-    // Additional role-level check for restricted roles
-    const restrictedRoles = ['customer', 'vendor', 'guest'];
-    if (restrictedRoles.includes(userRole)) {
-      return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
-    }
-
-    // ── 4. Map data for PDF template ────────────────────────────────
+    // ── 3. Map data for PDF template ────────────────────────────────
     const pdfData = {
       id: quotation.id,
       quotationNo: quotation.quotationNo,

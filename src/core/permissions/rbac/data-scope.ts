@@ -125,7 +125,8 @@ export async function buildDataScope(payload: {
     return { complaint: complaintWhere, workOrder: workOrderWhere, invoice: invoiceWhere, quotation: quotationWhere, equipment: equipmentWhere, customer: customerWhere };
   }
 
-  // ─── manager: department + supervised complaints, full tenant for invoices/quotations/equipment ─
+  // ─── manager: department + supervised complaints, full tenant for equipment/customers
+  //   NO invoice or quotation access per permission spec ────────────────
   if (role === 'manager') {
     // Work orders: department technicians + supervised complaints
     if (departmentId) {
@@ -138,20 +139,21 @@ export async function buildDataScope(payload: {
         ],
       };
     } else {
-      // Manager without department = full tenant access
       workOrderWhere = { tenantId };
     }
 
-    // Invoices / Quotations / Equipment: full tenant access
-    invoiceWhere = { tenantId };
-    quotationWhere = { tenantId };
+    // Invoices / Quotations: DENIED (manager has no commercial access)
+    invoiceWhere = DENIED_INVOICE;
+    quotationWhere = DENIED_QUOTATION;
     equipmentWhere = { tenantId };
     customerWhere = { tenantId };
 
     return { complaint: complaintWhere, workOrder: workOrderWhere, invoice: invoiceWhere, quotation: quotationWhere, equipment: equipmentWhere, customer: customerWhere };
   }
 
-  // ─── supervisor: supervised complaints + department technicians for WOs, denied for invoicing ─
+  // ─── supervisor: supervised complaints + department technicians for WOs
+  //   Quotations: full tenant access (create/edit/send)
+  //   Invoices: DENIED per permission spec ─────────────────────────────
   if (role === 'supervisor') {
     // Work orders: supervised complaints + department technicians
     if (departmentId) {
@@ -164,16 +166,16 @@ export async function buildDataScope(payload: {
         ],
       };
     } else {
-      // Supervisor without department = supervised complaints only
       workOrderWhere = {
         tenantId,
         complaint: { supervisorId: userId },
       };
     }
 
-    // Invoices / Quotations / Equipment: tenant access
-    invoiceWhere = { tenantId };
+    // Quotations: full tenant access (supervisor can create/edit/send)
     quotationWhere = { tenantId };
+    // Invoices: DENIED (supervisor has no invoice access)
+    invoiceWhere = DENIED_INVOICE;
     equipmentWhere = { tenantId };
     customerWhere = { tenantId };
 
@@ -193,13 +195,15 @@ export async function buildDataScope(payload: {
     return { complaint: complaintWhere, workOrder: workOrderWhere, invoice: invoiceWhere, quotation: quotationWhere, equipment: equipmentWhere, customer: customerWhere };
   }
 
-  // ─── finance: financial complaints + full tenant invoices/quotations, denied for WOs/equipment ─
+  // ─── finance: financial complaints + full tenant invoices, denied for quotations/WOs/equipment
+  //   Quotations: DENIED per permission spec (except convert_to_invoice) ──
   if (role === 'finance') {
     // Work orders: DENIED
     workOrderWhere = DENIED_WORK_ORDER;
-    // Invoices / Quotations: full tenant access
+    // Invoices: full tenant access
     invoiceWhere = { tenantId };
-    quotationWhere = { tenantId };
+    // Quotations: DENIED (finance has no quotation access except convert)
+    quotationWhere = DENIED_QUOTATION;
     // Equipment: DENIED
     equipmentWhere = DENIED_EQUIPMENT;
     customerWhere = { tenantId };

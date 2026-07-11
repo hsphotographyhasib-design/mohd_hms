@@ -22,7 +22,8 @@ import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
 import { toast } from 'sonner';
-import { useAppStore, useAuthStore, hasMinRole } from '@/app-shell/store';
+import { useAppStore, useAuthStore } from '@/app-shell/store';
+import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
 import type { InvoiceItem, InvoiceLineItem } from '@/core/types';
 import { numberToCurrencyWords } from '@/core/utils/number-to-words';
 import { format } from 'date-fns';
@@ -221,9 +222,8 @@ export function InvoiceDetail() {
     window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
   };
 
-  const isAdmin = user ? hasMinRole(user.role, 'admin') : false;
-  const isFinance = user?.role === 'finance';
-  const canManage = isAdmin || isFinance;
+  const role = user?.role;
+  const canManage = canPerformAction(role, 'invoice', 'delete');
 
   // ============ LOADING STATE ============
   if (loading) {
@@ -270,15 +270,21 @@ export function InvoiceDetail() {
           </div>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
-          <Button variant="outline" size="sm" onClick={handlePrint}>
-            <Printer className="h-4 w-4 mr-1.5" /> Print
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleSendEmail}>
-            <Mail className="h-4 w-4 mr-1.5" /> Email
-          </Button>
-          <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
-            <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
-          </Button>
+          {canPerformAction(role, 'invoice', 'print') && (
+            <Button variant="outline" size="sm" onClick={handlePrint}>
+              <Printer className="h-4 w-4 mr-1.5" /> Print
+            </Button>
+          )}
+          {canPerformAction(role, 'invoice', 'send_email') && (
+            <Button variant="outline" size="sm" onClick={handleSendEmail}>
+              <Mail className="h-4 w-4 mr-1.5" /> Email
+            </Button>
+          )}
+          {canPerformAction(role, 'invoice', 'send_whatsapp') && (
+            <Button variant="outline" size="sm" onClick={handleSendWhatsApp}>
+              <MessageCircle className="h-4 w-4 mr-1.5 text-green-600" /> WhatsApp
+            </Button>
+          )}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
@@ -286,18 +292,20 @@ export function InvoiceDetail() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => toast.info('PDF download coming soon')}>
-                <Download className="h-4 w-4 mr-2" /> Download PDF
-              </DropdownMenuItem>
+              {canPerformAction(role, 'invoice', 'download') && (
+                <DropdownMenuItem onClick={() => toast.info('PDF download coming soon')}>
+                  <Download className="h-4 w-4 mr-2" /> Download PDF
+                </DropdownMenuItem>
+              )}
+              {canPerformAction(role, 'invoice', 'record_payment') && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
+                <DropdownMenuItem onClick={() => setShowPaymentDialog(true)} className="text-emerald-700">
+                  <CreditCard className="h-4 w-4 mr-2" /> Record Payment
+                </DropdownMenuItem>
+              )}
               {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
-                <>
-                  <DropdownMenuItem onClick={() => setShowPaymentDialog(true)} className="text-emerald-700">
-                    <CreditCard className="h-4 w-4 mr-2" /> Record Payment
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setShowCancelDialog(true)} className="text-red-600">
-                    <X className="h-4 w-4 mr-2" /> Cancel Invoice
-                  </DropdownMenuItem>
-                </>
+                <DropdownMenuItem onClick={() => setShowCancelDialog(true)} className="text-red-600">
+                  <X className="h-4 w-4 mr-2" /> Cancel Invoice
+                </DropdownMenuItem>
               )}
             </DropdownMenuContent>
           </DropdownMenu>
@@ -715,7 +723,7 @@ export function InvoiceDetail() {
 
       {/* ===== MOBILE ACTION BAR (hidden on print) ===== */}
       <div className="lg:hidden px-3 md:px-6 pb-4 print:hidden space-y-3">
-        {canManage && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
+        {canPerformAction(role, 'invoice', 'record_payment') && inv.status !== 'PAID' && inv.status !== 'CANCELLED' && (
           <Button
             onClick={() => setShowPaymentDialog(true)}
             className="w-full bg-emerald-600 hover:bg-emerald-700 text-white"

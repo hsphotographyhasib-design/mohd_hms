@@ -33,8 +33,8 @@ export const FEATURE_PERMISSIONS: Record<string, UserRole[]> = {
   pm:              ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
 
   // ─── Commercial modules ────────────────────────────────────────────────
-  invoices:        ['super_admin', 'admin', 'manager', 'finance', 'customer'],
-  quotations:      ['super_admin', 'admin', 'manager', 'supervisor', 'finance', 'customer'],
+  invoices:        ['super_admin', 'admin', 'finance', 'customer'],
+  quotations:      ['super_admin', 'admin', 'supervisor', 'customer'],
   finance:         ['super_admin', 'admin', 'finance'],
   customers:       ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
 
@@ -107,12 +107,14 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
   },
 
   // ─── Invoice actions ──────────────────────────────────────────────────
+  // Finance: Create, Edit, Approve, Record Payment
+  // Customer: View own, Download PDF, Print
   invoice: {
     create:          ['super_admin', 'admin', 'finance'],
     view:            ['super_admin', 'admin', 'finance', 'customer'],
     update:          ['super_admin', 'admin', 'finance'],
     delete:          ['super_admin', 'admin'],
-    approve:         ['super_admin', 'admin', 'finance', 'manager'],
+    approve:         ['super_admin', 'admin', 'finance'],
     send:            ['super_admin', 'admin', 'finance'],
     send_whatsapp:   ['super_admin', 'admin', 'finance'],
     send_email:      ['super_admin', 'admin', 'finance'],
@@ -123,18 +125,20 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
   },
 
   // ─── Quotation actions ────────────────────────────────────────────────
+  // Customer: View own quotations only
+  // Supervisor/Admin: Create, Edit, Send
   quotation: {
-    create:          ['super_admin', 'admin', 'manager', 'supervisor'],
-    view:            ['super_admin', 'admin', 'manager', 'supervisor', 'finance', 'customer'],
-    update:          ['super_admin', 'admin', 'manager', 'supervisor'],
+    create:          ['super_admin', 'admin', 'supervisor'],
+    view:            ['super_admin', 'admin', 'supervisor', 'customer'],
+    update:          ['super_admin', 'admin', 'supervisor'],
     delete:          ['super_admin', 'admin'],
-    send:            ['super_admin', 'admin', 'manager', 'supervisor'],
-    send_whatsapp:   ['super_admin', 'admin', 'manager', 'supervisor'],
-    send_email:      ['super_admin', 'admin', 'manager', 'supervisor'],
-    convert_to_wo:   ['super_admin', 'admin', 'manager', 'supervisor'],
+    send:            ['super_admin', 'admin', 'supervisor'],
+    send_whatsapp:   ['super_admin', 'admin', 'supervisor'],
+    send_email:      ['super_admin', 'admin', 'supervisor'],
+    convert_to_wo:   ['super_admin', 'admin', 'supervisor'],
     convert_to_invoice: ['super_admin', 'admin', 'finance'],
-    generate_pdf:    ['super_admin', 'admin', 'manager', 'supervisor', 'finance', 'customer'],
-    print:           ['super_admin', 'admin', 'manager', 'supervisor', 'finance', 'customer'],
+    generate_pdf:    ['super_admin', 'admin', 'supervisor', 'customer'],
+    print:           ['super_admin', 'admin', 'supervisor', 'customer'],
   },
 
   // ─── Equipment actions ────────────────────────────────────────────────

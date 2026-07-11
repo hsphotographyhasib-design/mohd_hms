@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken, generateInvoiceNumber } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
+import { generateInvoiceNumber } from '@/core/auth/auth-lib';
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'quotations', entity: 'quotation', action: 'convert_to_invoice' });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
+    const tenantId = auth.tenantId;
+    const userId = auth.userId;
     const { id } = await params;
 
     const quotation = await db.quotation.findFirst({

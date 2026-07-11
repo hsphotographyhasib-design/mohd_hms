@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
-import { buildAuthContext } from '@/core/permissions/rbac';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
+import { scopeQuotation } from '@/core/permissions/rbac/data-scope';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -25,15 +25,12 @@ function computeTotals(items: QuotationItem[], taxRate = 0, discount = 0, shippi
 
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'quotations', entity: 'quotation', action: 'view' });
+    if (auth.error) return auth.error;
 
-    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
-    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const quotationBase = await scopeQuotation({ userId: auth.userId, tenantId: auth.tenantId, role: auth.role, email: auth.email });
+    if (!quotationBase) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
-    const { role, tenantId: tid, customerId: authCustomerId } = ctx;
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
     const search = request.nextUrl.searchParams.get('search') || '';
@@ -41,17 +38,7 @@ export async function GET(request: NextRequest) {
     const customerId = request.nextUrl.searchParams.get('customerId') || '';
     const skip = (page - 1) * pageSize;
 
-    let where: Prisma.QuotationWhereInput = { tenantId: tid };
-
-    // RBAC: Role-based scoping for quotations
-    if (role === 'customer') {
-      where = authCustomerId
-        ? { tenantId: tid, customerId: authCustomerId }
-        : ({ tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.QuotationWhereInput);
-    } else if (!['super_admin', 'admin', 'manager', 'finance'].includes(role)) {
-      // technician, supervisor, hr, vendor, guest cannot see quotations
-      where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.QuotationWhereInput;
-    }
+    let where: Prisma.QuotationWhereInput = { ...quotationBase };
 
     if (search) {
       where.OR = [
@@ -68,13 +55,15 @@ export async function GET(request: NextRequest) {
   const statsMode = request.nextUrl.searchParams.get('stats') === 'true';
 
     if (statsMode) {
+      const statsWhere = { ...quotationBase };
+      if (customerId) statsWhere.customerId = customerId;
       const [totalCount, totalValue, draftCount, pendingCount, acceptedCount, paidCount] = await Promise.all([
-        db.quotation.count({ where: { tenantId: tid } }),
-        db.quotation.aggregate({ where: { tenantId: tid }, _sum: { total: true } }),
-        db.quotation.count({ where: { tenantId: tid, status: 'DRAFT' } }),
-        db.quotation.count({ where: { tenantId: tid, status: { in: ['REVIEW', 'SENT', 'APPROVED'] } } }),
-        db.quotation.count({ where: { tenantId: tid, status: 'ACCEPTED' } }),
-        db.quotation.count({ where: { tenantId: tid, status: 'PAID' } }),
+        db.quotation.count({ where: statsWhere }),
+        db.quotation.aggregate({ where: statsWhere, _sum: { total: true } }),
+        db.quotation.count({ where: { ...statsWhere, status: 'DRAFT' } }),
+        db.quotation.count({ where: { ...statsWhere, status: { in: ['REVIEW', 'SENT', 'APPROVED'] } } }),
+        db.quotation.count({ where: { ...statsWhere, status: 'ACCEPTED' } }),
+        db.quotation.count({ where: { ...statsWhere, status: 'PAID' } }),
       ]);
       return NextResponse.json({
         total: totalCount,
@@ -146,13 +135,11 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    const auth = verifyRouteAuth(request, { feature: 'quotations', entity: 'quotation', action: 'create' });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
+    const tenantId = auth.tenantId;
+    const userId = auth.userId;
     const body = await request.json();
 
     const {
