@@ -1129,3 +1129,27 @@ Stage Summary:
 - Changed files: error-utils.ts, server-error-logger.ts (new), with-error-logging.ts (new), errors/index.ts, 6 auth API routes
 - Errors tab will now capture: client-side errors (React errors, API failures), server-side errors (from wrapped routes)
 - 8 seed entries provide immediate data in the Errors tab
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix Errors tab showing empty when bugs exist (second attempt)
+
+Work Log:
+- Analyzed screenshot showing "No errors found" empty state in Settings > Errors tab
+- Confirmed DB has 8 error logs with correct tenantId ("tenant_01")
+- Found root cause: API response format mismatch
+  - API returned flat: `{ data, total, page, pageSize, totalPages }`
+  - Frontend expected nested: `{ data, pagination: { page, limit, total, totalPages } }`
+  - `json.pagination.totalPages` threw TypeError → caught silently → empty state
+- Also found field name mismatches: API returned `httpStatus`/`httpMethod`/`stackTrace`/`browser`, frontend expected `statusCode`/`method`/`stack`/`userAgent`
+- Also found `authentication` category missing from frontend ERROR_CATEGORIES map
+- Fixed API GET /api/error-logs to return nested pagination + mapped field names
+- Fixed API GET /api/error-logs/[id] to return mapped field names for detail view
+- Added `authentication` category to frontend category map and badge classes
+- Verified TypeScript compiles (0 new errors)
+- Pushed commit ea80cca to GitHub
+
+Stage Summary:
+- Root cause was response format mismatch causing silent TypeError in frontend
+- 3 files changed, 48 insertions, 8 deletions
+- Pushed to GitHub, Vercel/Render will auto-deploy
