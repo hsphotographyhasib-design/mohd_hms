@@ -184,10 +184,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Customer and title are required' }, { status: 400 });
     }
 
-    const invoiceNumber = generateInvoiceNumber();
-
-    const invoice = await db.invoice.create({
-      data: {
+    const buildInvoiceData = (invoiceNumber: string) => ({
         tenantId,
         customerId,
         workOrderId: workOrderId || null,
@@ -220,11 +217,30 @@ export async function POST(request: NextRequest) {
         bankAccountName: bankAccountName || null,
         bankAccountNo: bankAccountNo || null,
         createdBy: userId,
-      },
-      include: {
-        customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
-      },
     });
+
+    // invoiceNumber is @unique but generated with a random suffix, so retry on
+    // the rare collision (Prisma P2002) with a freshly generated number.
+    const createInvoiceWithUniqueNumber = async () => {
+      let lastError: unknown;
+      for (let attempt = 0; attempt < 5; attempt++) {
+        try {
+          return await db.invoice.create({
+            data: buildInvoiceData(generateInvoiceNumber()),
+            include: {
+              customer: { select: { name: true, phone: true, email: true, address: true, companyName: true, pic: true } },
+            },
+          });
+        } catch (err) {
+          lastError = err;
+          if ((err as { code?: string })?.code === 'P2002') continue;
+          throw err;
+        }
+      }
+      throw lastError;
+    };
+
+    const invoice = await createInvoiceWithUniqueNumber();
 
     // Notify customer about the new invoice (fire-and-forget)
     try {

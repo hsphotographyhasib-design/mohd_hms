@@ -4,6 +4,7 @@ import { verifyToken } from '@/core/auth/auth-lib';
 import { ensureTableSync } from '@/core/database/db-sync';
 import { buildAuthContext, buildComplaintWhereClause, canPerformAction, logComplaintAccessAllowed } from '@/core/permissions/rbac';
 import { createNotification } from '@/modules/notifications/services/notification-service';
+import { generateUniqueComplaintNumber } from '@/core/utils/complaint-number';
 import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
 
@@ -202,7 +203,11 @@ export async function POST(request: NextRequest) {
         createdAt: { gte: yearStart, lt: yearEnd },
       },
     });
-    const complaintNumber = `CMP/${year}/${String(countThisYear + 1).padStart(6, '0')}`;
+    const complaintNumber = await generateUniqueComplaintNumber(
+      tenantId,
+      (seq) => `CMP/${year}/${String(seq).padStart(6, '0')}`,
+      countThisYear,
+    );
 
     // Build creation data
     const createData: Record<string, unknown> = {
