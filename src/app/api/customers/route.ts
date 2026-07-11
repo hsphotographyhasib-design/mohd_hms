@@ -27,8 +27,12 @@ export async function GET(request: NextRequest) {
     // RBAC: Role-based scoping for customers
     let where: Prisma.CustomerWhereInput = { tenantId: tid };
     if (role === 'customer') {
-      // Customers cannot list other customers
-      where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.CustomerWhereInput;
+      // Customers can only see their own linked profile
+      if (authCustomerId) {
+        where = { tenantId: tid, id: authCustomerId };
+      } else {
+        where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.CustomerWhereInput;
+      }
     } else if (!['super_admin', 'admin', 'manager', 'supervisor', 'finance'].includes(role)) {
       // technician, hr, vendor, guest cannot see customer list
       where = { tenantId: tid, id: '__NEVER_MATCH__' } as Prisma.CustomerWhereInput;
