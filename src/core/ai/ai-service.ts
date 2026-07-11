@@ -142,7 +142,7 @@ export async function generateReply(params: ReplyParams): Promise<string> {
     const sysPrompt = systemPrompt || MAIN_SYSTEM_PROMPT + (businessInfo ? `\n\nBusiness Info: ${businessInfo}` : '') +
       `\n\nIMPORTANT: The customer is speaking in ${detectedLanguage}. You MUST reply in the same language.`;
 
-    const messages: Array<{ role: string; content: string }> = [
+    const messages: Array<{ role: 'user' | 'assistant' | 'system'; content: string }> = [
       { role: 'assistant', content: sysPrompt },
     ];
 
@@ -185,7 +185,7 @@ export async function analyzePaymentScreenshot(imageUrl: string): Promise<Paymen
       zai.chat.completions.createVision({
         messages: [
           {
-            role: 'user',
+            role: 'user' as const,
             content: [
               { type: 'text', text: PAYMENT_ANALYSIS_PROMPT },
               { type: 'image_url', image_url: { url: imageUrl } },
@@ -193,7 +193,7 @@ export async function analyzePaymentScreenshot(imageUrl: string): Promise<Paymen
           },
         ],
         thinking: { type: 'disabled' },
-      })
+      } as any)
     );
 
     const raw = completion.choices?.[0]?.message?.content || '';

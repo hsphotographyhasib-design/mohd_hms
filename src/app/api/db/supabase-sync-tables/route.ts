@@ -113,7 +113,7 @@ function parsePrismaSchema(): Map<string, TableDef> {
         currentCols.push({
           name,
           pgType: PRISMA_TO_PG[type] || 'TEXT',
-          nullable: t.includes('?') || isList,
+          nullable: t.includes('?') || !!isList,
           isId: false,
           hasDefault: false,
           defaultVal: '',
@@ -180,7 +180,7 @@ function generateCreateTableSQL(table: TableDef): string {
     } else if (!col.nullable && !col.hasDefault) {
       def += ' NOT NULL';
     }
-    if (col.hasDefault && defaultVal) {
+    if (col.hasDefault && col.defaultVal) {
       def += ` ${col.defaultVal}`;
     } else if (col.isUnique && !col.isId) {
       def += ' UNIQUE';

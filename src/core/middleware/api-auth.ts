@@ -32,11 +32,18 @@ export interface AuthSuccess {
   tenantId: string;
   role: string;
   email?: string;
+  /** Never set on success — lets `if (auth.error)` narrow the union. */
+  error?: undefined;
 }
 
 export interface AuthFailure {
   ok: false;
   error: NextResponse;
+  /** Never set on failure — lets the success branch expose these after narrowing. */
+  userId?: undefined;
+  tenantId?: undefined;
+  role?: undefined;
+  email?: undefined;
 }
 
 export type AuthResult = AuthSuccess | AuthFailure;

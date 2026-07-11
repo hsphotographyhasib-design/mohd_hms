@@ -1414,7 +1414,7 @@ export function PageList() {
                                   <div className="grid gap-4" style={{
                                     gridTemplateColumns: (section.columns || []).map((c: { width: number }) => `${c.width}%`).join(' '),
                                   }}>
-                                    {(section.columns || []).map((col: { id: string; width: number; widgets: { id: string; type: string; name: string }[] }) => (
+                                    {(section.columns || []).map((col: { id: string; width: number; widgets: any[] }) => (
                                       <div key={col.id} className="min-h-[60px]">
                                         {col.widgets.length === 0 ? (
                                           <p className="text-[11px] text-gray-300 italic">Empty column</p>

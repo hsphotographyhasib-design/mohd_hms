@@ -280,8 +280,8 @@ async function executeStatusQuery(
   customerId: string | null,
   data: Record<string, string>,
 ): Promise<ActionResult> {
-  let complaint = null;
-  let workOrder = null;
+  let complaint: any = null;
+  let workOrder: any = null;
 
   // Try to find by complaint ID
   if (data.complaint_id) {

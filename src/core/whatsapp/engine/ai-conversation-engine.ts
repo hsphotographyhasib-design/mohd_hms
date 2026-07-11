@@ -18,7 +18,7 @@ import type { WhatsAppSession } from '@prisma/client';
 import { processIncomingMessage as legacyProcessMessage } from './conversation-engine';
 import { detectLanguage, detectIntent, generateReply, analyzePaymentScreenshot } from '@/core/ai/ai-service';
 import { parseActionTag, stripActionTag, executeAction, type ActionResult } from '@/core/ai/actions';
-import { buildCustomerContext } from '@/core/ai/customer-memory';
+import { buildCustomerContext, formatContextForAI } from '@/core/ai/customer-memory';
 
 // ============ Types ============
 
@@ -72,7 +72,7 @@ export async function processIncomingAiMessage(
   // 3. Build customer context
   let customerContext = '';
   try {
-    customerContext = await buildCustomerContext(tenantId, session.customerId, session.phoneNumber);
+    customerContext = formatContextForAI(await buildCustomerContext(tenantId, session.customerId, session.phoneNumber));
   } catch (err) {
     console.error('[AI Engine] Customer context failed:', err);
     customerContext = `Customer phone: ${session.phoneNumber}`;
@@ -81,7 +81,7 @@ export async function processIncomingAiMessage(
   // 4. Get conversation history
   let history: ConversationMessage[] = [];
   try {
-    const rawHistory = session.aiConversationHistory;
+    const rawHistory = (session as any).aiConversationHistory;
     if (rawHistory) {
       history = JSON.parse(rawHistory);
     }
@@ -90,7 +90,7 @@ export async function processIncomingAiMessage(
   }
 
   // 5. Detect language
-  let detectedLang = session.aiDetectedLanguage || 'en';
+  let detectedLang = (session as any).aiDetectedLanguage || 'en';
   try {
     const langResult = await detectLanguage(message);
     detectedLang = langResult.language;
@@ -231,7 +231,7 @@ async function handleMediaMessage(
   config: any,
   startTime: number,
 ): Promise<ResponseItem[]> {
-  const lang = session.aiDetectedLanguage || 'en';
+  const lang = (session as any).aiDetectedLanguage || 'en';
 
   // Analyze the image for payment info
   const analysis = await analyzePaymentScreenshot(mediaUrl);

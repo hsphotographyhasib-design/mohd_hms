@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
 
       // Build calendar days array
       const daysInMonth = new Date(year, month, 0).getDate();
-      const calendarDays = [];
+      const calendarDays: Array<{ date: number; fullDate: string; status: string | null }> = [];
       for (let d = 1; d <= daysInMonth; d++) {
         const fullDate = `${year}-${String(month).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         const record = records.find((r) => {
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
     const users = userIds.length > 0
       ? await db.user.findMany({ where: { id: { in: userIds } }, select: { id: true, name: true } })
       : [];
-    const userMap = new Map(users.map((u) => [u.id, u.name]));
+    const userMap = new Map<string, string>(users.map((u: any) => [u.id, u.name]));
 
     // Apply search filter on user names
     const filtered = search

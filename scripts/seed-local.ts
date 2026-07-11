@@ -1,3 +1,4 @@
+/// <reference types="bun-types" />
 import { Database } from 'bun:sqlite';
 import { hash } from 'bcryptjs';
 import { resolve } from 'path';

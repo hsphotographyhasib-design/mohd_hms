@@ -11,7 +11,8 @@ export async function GET(request: NextRequest) {
     const search = request.nextUrl.searchParams.get('search') || '';
     const isActiveOnly = request.nextUrl.searchParams.get('isActive') === 'true';
 
-    const where: Prisma.ServiceCategoryWhereInput = { tenantId };
+    // ServiceCategory model is not in prisma/schema.prisma (runtime-only table)
+    const where: Record<string, any> = { tenantId };
     if (isActiveOnly) where.isActive = true;
     if (search) {
       where.OR = [

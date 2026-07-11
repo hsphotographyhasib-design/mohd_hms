@@ -23,7 +23,7 @@ async function checkBrevo(): Promise<Partial<SmtpCheckResult>> {
   try {
     const res = await fetch('https://api.brevo.com/v3/account', {
       headers: { 'api-key': apiKey, 'Content-Type': 'application/json' },
-      timeout: 10000,
+      signal: AbortSignal.timeout(10000),
     });
     if (!res.ok) {
       return { smtpConnected: false, smtpAuthenticated: false, senderVerified: false, provider: 'brevo', error: `Brevo account check failed: ${res.status}` };
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
     if (auth.error) return auth.error;
     const { userId, tenantId, role } = auth;
 
-    const [brevoCheck, queueStatus] = await Promise.all([checkBrevo()]);
+    const brevoCheck = await checkBrevo();
 
     // Get queue status
     let queueSize = 0;
@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
     } catch {}
 
     // Get last sent email
-    let lastEmailSent: string | null;
+    let lastEmailSent: string | null = null;
     let avgDeliveryMs = 0;
     try {
       const { getEmailStats } = await import('@/core/email/service');
@@ -64,9 +64,9 @@ export async function GET(request: NextRequest) {
     } catch {}
 
     const result: SmtpCheckResult = {
-    smtpConnected: brevoCheck.smtpConnected,
-    smtpAuthenticated: brevoCheck.smtpAuthenticated,
-    senderVerified: brevoCheck.senderVerified,
+    smtpConnected: brevoCheck.smtpConnected ?? false,
+    smtpAuthenticated: brevoCheck.smtpAuthenticated ?? false,
+    senderVerified: brevoCheck.senderVerified ?? false,
     queueRunning: true,
     lastEmailSent,
     avgDeliveryMs,

@@ -140,7 +140,7 @@ export async function GET(request: NextRequest) {
 
     // Date range filtering
     if (fromStr || toStr) {
-      const createdAtFilter: Prisma.DateTimeNullableFilter = {};
+      const createdAtFilter: { gte?: Date; lte?: Date } = {};
       if (fromStr) {
         const from = new Date(fromStr);
         if (!isNaN(from.getTime())) {

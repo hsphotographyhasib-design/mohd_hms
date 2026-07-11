@@ -2,7 +2,7 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuthStore, useAppStore } from '@/app-shell/store';
-import type { AppView, DocumentModule } from '@/core/types';
+import type { AppView } from '@/core/types';
 import { CHUNK_SIZE, DOCUMENT_PERMISSIONS } from '@/core/types';
 import { cn } from '@/core/utils/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -160,7 +160,7 @@ const MODULE_OPTIONS: { value: string; label: string }[] = [
 
 // ============ Auth helper ============
 function getAuthHeaders(): Record<string, string> {
-  const token = useAuthStore.getState().user?.token;
+  const token = useAuthStore.getState().token;
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 }
 

@@ -12,7 +12,7 @@ export function BrandLogo({ className }: { className?: string }) {
   );
 }
 
-interface AuthShellProps {
+export interface AuthShellProps {
   title: string;
   subtitle?: string;
   children: ReactNode;

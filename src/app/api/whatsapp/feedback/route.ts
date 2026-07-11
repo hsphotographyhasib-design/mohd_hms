@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
       const ratingNum = parseInt(rating);
       where.rating = ratingNum;
     }
-    if (startDate) where.createdAt = { ...(where.createdAt as Prisma.DateTimeNullableFilter || {}), gte: new Date(startDate) };
-    if (endDate) where.createdAt = { ...(where.createdAt as Prisma.DateTimeNullableFilter || {}), lte: new Date(endDate) };
+    if (startDate) where.createdAt = { ...((where.createdAt as object) || {}), gte: new Date(startDate) };
+    if (endDate) where.createdAt = { ...((where.createdAt as object) || {}), lte: new Date(endDate) };
     if (source) where.source = source;
 
     const [items, total, avgRating] = await Promise.all([

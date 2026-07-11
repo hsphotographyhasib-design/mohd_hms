@@ -260,8 +260,8 @@ function SimpleListView({ title, icon, apiPath }: { title: string; icon: React.R
                 <div>
                   <div className="font-medium text-sm">{item.title as string || item.invoiceNumber as string || item.name as string}</div>
                   <div className="text-xs text-muted-foreground mt-1">
-                    {item.status && <Badge variant="secondary" className="mr-2 text-xs">{item.status as string}</Badge>}
-                    {item.createdAt && new Date(item.createdAt as string).toLocaleDateString()}
+                    {item.status ? <Badge variant="secondary" className="mr-2 text-xs">{item.status as string}</Badge> : null}
+                    {item.createdAt ? new Date(item.createdAt as string).toLocaleDateString() : null}
                   </div>
                 </div>
                 <ChevronRight className="h-4 w-4 text-muted-foreground" />

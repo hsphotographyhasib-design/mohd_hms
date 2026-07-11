@@ -209,7 +209,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
       items.push({
         id: c.id,
         title: c.title,
-        subtitle: `#${c.id.slice(-6)} ${c.equipmentName || c.location || ''}`.trim(),
+        subtitle: `#${c.id.slice(-6)} ${c.equipmentName || (c as any).location || ''}`.trim(),
         priority: c.priority,
         time: format(new Date(c.createdAt), 'HH:mm'),
         iconBg: cfg.bg,

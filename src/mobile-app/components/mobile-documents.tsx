@@ -199,7 +199,7 @@ export function MobileDocuments() {
   });
 
   const handleDocTap = (doc: DocumentItem) => {
-    if (doc.type === 'invoice') {
+    if (doc.type === 'invoice' && doc.relatedId) {
       setView('invoice-detail', { id: doc.relatedId });
     } else if (doc.type === 'photo' && doc.relatedId) {
       setView('complaint-detail', { id: doc.relatedId });

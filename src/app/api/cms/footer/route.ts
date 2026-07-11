@@ -45,10 +45,11 @@ function formatFooter(f: {
   };
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
 
     const footer = await db.cmsFooter.findFirst({ where: { tenantId } });
@@ -64,6 +65,7 @@ export async function PUT(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const body = await request.json();
 

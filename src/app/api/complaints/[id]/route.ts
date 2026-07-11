@@ -6,7 +6,7 @@ import {
   buildAuthContext,
   buildComplaintWhereClause,
   canAccessComplaint,
-  canPerformAction,
+  canPerformComplaintAction,
   isFieldVisibleToRole,
   logComplaintAccessDenied,
   logComplaintAccessAllowed,
@@ -159,7 +159,7 @@ export async function PUT(
     const body = await request.json();
 
     // ─── RBAC: Check mutation permission ───
-    if (!canPerformAction(role, 'update_fields')) {
+    if (!canPerformComplaintAction(role, 'update_fields')) {
       logComplaintAccessDenied({
         userId,
         tenantId,
@@ -306,7 +306,7 @@ export async function DELETE(
     const { id } = await params;
 
     // ─── RBAC: Only super_admin and admin can delete ───
-    if (!canPerformAction(role, 'delete')) {
+    if (!canPerformComplaintAction(role, 'delete')) {
       logComplaintAccessDenied({
         userId,
         tenantId,

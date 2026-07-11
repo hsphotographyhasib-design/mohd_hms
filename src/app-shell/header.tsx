@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { NotificationHistoryPanel } from '@/modules/notifications/components/ui/notification-history';
 
-const viewLabels: Record<AppView, string> = {
+const viewLabels: Partial<Record<AppView, string>> = {
   login: 'Login',
   dashboard: 'Dashboard',
   equipment: 'Equipment',
@@ -121,7 +121,7 @@ export function Header() {
           </nav>
 
           {/* Mobile: just show current view */}
-          <span className="sm:hidden text-sm font-medium">{viewLabels[currentView]}</span>
+          <span className="sm:hidden text-sm font-medium">{viewLabels[currentView] || currentView}</span>
         </div>
 
         {/* Right: Search, Notifications, User */}

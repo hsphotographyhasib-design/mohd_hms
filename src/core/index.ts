@@ -171,9 +171,8 @@ export type { LocationData, ComplaintMapData, DashboardComplaint, MapMarker, Goo
 
 // ─── AI ──────────────────────────────────────────────────────────────
 export {
-  parseActions,
+  parseActionTag,
   executeAction,
-  executeActions,
   LANGUAGE_DETECTION_PROMPT,
   INTENT_DETECTION_PROMPT,
   MAIN_SYSTEM_PROMPT,
@@ -186,6 +185,8 @@ export * from './workflow';
 
 // ─── Types ───────────────────────────────────────────────────────────
 export * from './types';
+// Explicit re-exports resolve star-export ambiguity with ./permissions and ./workflow
+export type { UserRole, ComplaintStatus } from './types';
 
 // ─── Middleware ──────────────────────────────────────────────────────
 export {

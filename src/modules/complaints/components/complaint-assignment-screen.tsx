@@ -67,6 +67,7 @@ interface Technician {
 
 interface CurrentAssignment {
   assignedToId: string | null;
+  assignedToName?: string | null;
   supervisorId: string | null;
   category: string | null;
   assignmentStatus: string;
@@ -588,7 +589,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
   const [reason, setReason] = useState('');
   const [showHistory, setShowHistory] = useState(false);
   const [detailTab, setDetailTab] = useState<'info' | 'history'>('info');
-  const searchTimer = useRef<ReturnType<typeof setTimeout>>();
+  const searchTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const isReassignment = currentAssignment?.assignedToId !== null;
   const canAssign = ['super_admin', 'admin', 'supervisor', 'manager'].includes(user?.role || '');

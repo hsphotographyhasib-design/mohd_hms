@@ -95,6 +95,7 @@ const INITIAL_FORM_STATE = {
   shipToAddress: '',
   shipToPhone: '',
   shipToContact: '',
+  attachments: [] as string[],
 };
 
 function createEmptyItem(overrides?: Partial<InvoiceLineItem>): InvoiceLineItem {
@@ -156,7 +157,7 @@ export function NewInvoice() {
   const [customerSearching, setCustomerSearching] = useState(false);
   const [customerDropdownOpen, setCustomerDropdownOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerSearchResult | null>(null);
-  const customerSearchTimer = useRef<ReturnType<typeof setTimeout>>();
+  const customerSearchTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const customerInputRef = useRef<HTMLDivElement>(null);
 
   // Line items — reuse QuotationLineItemsGrid with InvoiceLineItem (same shape)
@@ -168,7 +169,7 @@ export function NewInvoice() {
   // Auto-save
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
-  const autoSaveTimer = useRef<ReturnType<typeof setInterval>>();
+  const autoSaveTimer = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 
   // --- Fetch initial data ---
   useEffect(() => {

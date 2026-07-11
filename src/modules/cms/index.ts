@@ -22,18 +22,12 @@ export { CmsCareers } from './components/cms-careers';
 export { CmsAnnouncements } from './components/cms-announcements';
 
 // ─── Page Builder ─────────────────────────────────────────────────────────────
-export { PageBuilderEditor } from './page-builder/page-builder-editor';
 export { LeftPanel } from './page-builder/builder-left-panel';
 export { BuilderCanvas } from './page-builder/builder-canvas';
 export { RightPanel } from './page-builder/builder-right-panel';
 export { BuilderToolbar } from './page-builder/builder-toolbar';
 export { WidgetRenderer } from './page-builder/widget-renderer';
 export { PageList } from './page-builder/page-list';
-export {
-  BuilderBreakpointContext,
-  useBuilderBreakpoint,
-  renderWidget,
-} from './page-builder/widgets';
 export { usePageBuilderStore } from './page-builder/store';
 export {
   type WidgetType,

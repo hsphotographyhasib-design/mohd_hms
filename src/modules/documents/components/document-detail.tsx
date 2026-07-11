@@ -187,7 +187,7 @@ const ACTION_COLORS: Record<string, string> = {
 };
 
 function getAuthHeaders(): Record<string, string> {
-  const token = useAuthStore.getState().user?.token;
+  const token = useAuthStore.getState().token;
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 }
 

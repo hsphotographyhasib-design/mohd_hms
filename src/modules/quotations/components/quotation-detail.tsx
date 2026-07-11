@@ -19,7 +19,7 @@ import {
 import { toast } from 'sonner';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
 import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
-import type { QuotationStatus } from '@/core/types';
+import type { QuotationStatus, UserRole } from '@/core/types';
 import { COMPANY } from '@/core/constants/company';
 import { QuotationA4Template, fmtBND, fmtDate } from './quotation-a4-template';
 import { QuotationPreviewDialog } from './quotation-preview-dialog';
@@ -283,7 +283,8 @@ export function QuotationDetail({ quotationId }: { quotationId?: string }) {
     }
   };
 
-  const role = user?.role;
+  // Fall back to 'guest' (no permissions) until the auth store hydrates
+  const role: UserRole = user?.role ?? 'guest';
   const transitions = qt ? (WORKFLOW_TRANSITIONS[qt.status] || []) : [];
 
   // ============ LOADING STATE ============

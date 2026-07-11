@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { headers } from 'next/headers';
 import { db } from '@/core/database/db';
 import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import type { Prisma } from '@prisma/client';
@@ -30,6 +31,7 @@ export async function GET(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
     const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
@@ -78,6 +80,7 @@ export async function POST(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const body = await request.json();
     const { action, section, details, userId: bodyUserId, ipAddress } = body;
@@ -92,7 +95,7 @@ export async function POST(request: NextRequest) {
     const activityLog = await db.cmsActivityLog.create({
       data: {
         tenantId,
-        userId: bodyUserId || userId || user.id || null,
+        userId: bodyUserId || auth.userId || null,
         action,
         section: section || null,
         details: details ? (typeof details === 'string' ? details : JSON.stringify(details)) : null,

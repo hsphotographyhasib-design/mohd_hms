@@ -23,7 +23,7 @@ const opsStats = [
   ['64', 'Technicians'], ['14 min', 'Median response'],
 ];
 
-const barData = [
+const barData: Array<[string, number]> = [
   ['Sep', 62], ['Oct', 74], ['Nov', 58], ['Dec', 83], ['Jan', 71], ['Feb', 92], ['Mar', 88],
 ];
 

@@ -122,7 +122,7 @@ export default function SupabaseSetupWizard({
   // --- Initial mount fetch --------------------------------------------------
   useEffect(() => {
     fetchTableStatus();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, []);
 
   // --- Verify tables (POST) ------------------------------------------------

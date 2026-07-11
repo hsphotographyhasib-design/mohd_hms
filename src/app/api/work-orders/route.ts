@@ -96,10 +96,10 @@ export async function GET(request: NextRequest) {
       ];
     } else if (role === 'customer') {
       // Customers can see work orders linked to their complaints
-      where.complaint = { customerId: custId };
       if (!custId) {
         return NextResponse.json({ data: [], total: 0, page, pageSize, totalPages: 0 });
       }
+      where.complaint = { customerId: custId };
     } else if (role === 'hr' || role === 'finance' || role === 'vendor' || role === 'guest') {
       return NextResponse.json({ data: [], total: 0, page, pageSize, totalPages: 0 });
     }

@@ -2,7 +2,7 @@
 
 // Primary database client (auto-switches Supabase / Prisma)
 export { db, withRetry, getDbFriendlyMessage, getErrorInfo, getErrorHeaders } from './db';
-export type { PrismaClient } from '../../generated/prisma/client';
+export type { PrismaClient } from '../../../generated/prisma/client';
 
 // Schema sync utilities
 export { ensureTableSync, ensureAllTablesSynced } from './db-sync';
@@ -24,7 +24,7 @@ export { supabaseDb as supabaseDbClient } from './supabase-client';
 export { supabaseDb } from './supabase-db';
 
 // Supabase DB adapter (full, direct REST — standalone, no mini-service)
-export { supabaseDb as supabaseDbFull, $transaction, $disconnect } from './supabase-db.full';
+export { supabaseDb as supabaseDbFull } from './supabase-db.full';
 
 // Supabase REST adapter (uses @supabase/supabase-js SDK)
-export { supabaseDb as supabaseRestDb, db as supabaseRestDbClient, $transaction as supabaseRestTransaction, $disconnect as supabaseRestDisconnect } from './supabase-rest';
+export { db as supabaseRestDb, $transaction as supabaseRestTransaction, $disconnect as supabaseRestDisconnect } from './supabase-rest';

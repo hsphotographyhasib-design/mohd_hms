@@ -1,5 +1,6 @@
 import { config } from "dotenv";
 config({ override: true });
+import { randomUUID } from "node:crypto";
 import { PrismaClient } from "../generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 
@@ -12,6 +13,8 @@ async function main() {
     where: { domain: "app.example.com" },
     update: {},
     create: {
+      id: randomUUID(),
+      updatedAt: new Date(),
       name: "Demo Company",
       domain: "app.example.com",
       email: "admin@example.com",
@@ -25,6 +28,8 @@ async function main() {
     where: { tenantId_email: { tenantId: tenant.id, email: "admin@example.com" } },
     update: {},
     create: {
+      id: randomUUID(),
+      updatedAt: new Date(),
       email: "admin@example.com",
       name: "Admin User",
       role: "ADMIN",
@@ -41,6 +46,7 @@ async function main() {
     update: {},
     create: {
       id: "dept-general",
+      updatedAt: new Date(),
       name: "General Operations",
       tenantId: tenant.id,
     },

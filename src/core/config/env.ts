@@ -54,8 +54,12 @@ export const env = {
   get isProd() { return this.nodeEnv === 'production'; },
 
   // ── Database ─────────────────────────────────────────────────
-  /** Prisma connection string. REQUIRED — app will not start without it. */
-  databaseUrl: required('DATABASE_URL'),
+  /**
+   * Prisma connection string. REQUIRED at runtime — but resolved lazily so
+   * that merely importing this module (e.g. during `next build` page-data
+   * collection, where env vars may be absent) never throws.
+   */
+  get databaseUrl(): string { return required('DATABASE_URL'); },
 
   // ── Authentication ───────────────────────────────────────────
   /** Secret key for signing JWT tokens. CHANGE IN PRODUCTION! */

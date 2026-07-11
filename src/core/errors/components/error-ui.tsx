@@ -156,6 +156,9 @@ function DebugPanel({
     setTimeout(() => setCopied(null), 2000);
   }, [debug, error]);
 
+  // No technical details to show — render nothing instead of crashing on debug.*
+  if (!debug) return null;
+
   return (
     <Collapsible
       open={expanded}

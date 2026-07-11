@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
     let templateName: string | undefined;
 
     if (template && templates[template as keyof typeof templates]) {
-      const tplFn = templates[template as keyof typeof templates] as (data: Record<string, unknown>) => { subject: string; html: string; text: string; templateName: string };
+      const tplFn = templates[template as keyof typeof templates] as unknown as (data: Record<string, unknown>) => { subject: string; html: string; text: string; templateName: string };
       const result = tplFn(templateData || {});
       finalSubject = finalSubject || result.subject;
       finalHtml = finalHtml || result.html;

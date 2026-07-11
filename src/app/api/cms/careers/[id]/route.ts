@@ -42,6 +42,7 @@ export async function GET(
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const { id } = await params;
 
@@ -62,6 +63,7 @@ export async function PUT(
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const { id } = await params;
     const body = await request.json();
@@ -98,6 +100,7 @@ export async function DELETE(
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const { id } = await params;
 

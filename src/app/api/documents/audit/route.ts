@@ -18,7 +18,8 @@ export async function GET(request: NextRequest) {
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
     const limit = Math.min(100, Math.max(1, parseInt(searchParams.get('limit') || '50', 10)));
 
-    const where: Prisma.DocumentAuditLogWhereInput = { tenantId };
+    // DocumentAuditLog model is not in prisma/schema.prisma (runtime-only table)
+    const where: Record<string, any> = { tenantId };
 
     if (documentId) where.documentId = documentId;
     if (action) where.action = action;

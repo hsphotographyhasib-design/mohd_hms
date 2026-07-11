@@ -38,6 +38,7 @@ export async function GET(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const isEnabled = request.nextUrl.searchParams.get('isEnabled');
     const type = request.nextUrl.searchParams.get('type') || '';
@@ -65,6 +66,7 @@ export async function POST(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'cms' });
     if (auth.error) return auth.error;
+    const { tenantId } = auth;
 
     const body = await request.json();
     const { title, content, type, imageUrl, frequency, isEnabled, scheduledFrom, scheduledTo } = body;

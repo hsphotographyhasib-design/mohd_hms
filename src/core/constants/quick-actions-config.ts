@@ -340,13 +340,13 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
 
   // ─── Session Management ─────────────────────────────────
   'session-management': [
-    { label: 'Logout All Devices', icon: LogOut, view: 'session-management', feature: 'session-management', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'] },
-    { label: 'Session Settings', icon: Settings, view: 'session-settings', feature: 'session-management', roles: ['super_admin', 'admin'] },
+    { label: 'Logout All Devices', icon: LogOut, view: 'settings', feature: 'session-management', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'] },
+    { label: 'Session Settings', icon: Settings, view: 'settings', feature: 'session-management', roles: ['super_admin', 'admin'] },
   ],
 
   // ─── Session Settings ───────────────────────────────────
   'session-settings': [
-    { label: 'Logout All Devices', icon: LogOut, view: 'session-management', feature: 'session-management', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'] },
+    { label: 'Logout All Devices', icon: LogOut, view: 'settings', feature: 'session-management', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'] },
     { label: 'View Settings', icon: Settings, view: 'settings', feature: 'session-management', roles: ['super_admin', 'admin'] },
   ],
 

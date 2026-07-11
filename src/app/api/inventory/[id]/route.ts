@@ -66,7 +66,7 @@ export async function PUT(
     if (!existing) return NextResponse.json({ error: 'Inventory item not found' }, { status: 404 });
 
     // Build update data from body — only include provided fields
-    const data: Prisma.InventoryItemUpdateInput = {};
+    const data: Record<string, any> = {};
 
     const scalarFields: (keyof Prisma.InventoryItemCreateInput)[] = [
       'name', 'sku', 'barcode', 'shortName', 'itemType', 'description', 'shortDescription',

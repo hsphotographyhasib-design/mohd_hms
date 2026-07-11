@@ -117,8 +117,8 @@ const DEFAULT_DURATION = 5000;
 /**
  * Type guard: checks whether a ClientToast carries enterprise-specific fields.
  */
-export function isEnterpriseToast(toast: ClientToast): toast is EnterpriseToast {
-  const t = toast as Record<string, unknown>;
+export function isEnterpriseToast(toast: ClientToast): boolean {
+  const t = toast as unknown as Record<string, unknown>;
   return (
     (t.recordNumber !== undefined && typeof t.recordNumber === 'string') ||
     (t.recordUrl !== undefined && typeof t.recordUrl === 'string') ||

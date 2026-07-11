@@ -31,8 +31,8 @@ export async function POST(request: NextRequest) {
     }
 
     const results = (data.results || []).map((r: Record<string, unknown>) => ({
-      lat: (r.geometry as Record<string, unknown>)?.location?.lat ?? null,
-      lng: (r.geometry as Record<string, unknown>)?.location?.lng ?? null,
+      lat: (r.geometry as { location?: { lat?: number; lng?: number } })?.location?.lat ?? null,
+      lng: (r.geometry as { location?: { lat?: number; lng?: number } })?.location?.lng ?? null,
       formatted_address: r.formatted_address ?? '',
       place_id: r.place_id ?? '',
       types: r.types ?? [],

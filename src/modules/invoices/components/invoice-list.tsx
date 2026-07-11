@@ -19,7 +19,7 @@ import {
 import { toast } from 'sonner';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
 import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
-import type { InvoiceItem, InvoiceStatus, PaginatedResponse } from '@/core/types';
+import type { InvoiceItem, InvoiceStatus, PaginatedResponse, UserRole } from '@/core/types';
 
 const STATUS_CONFIG: Record<string, { label: string; className: string; icon: React.ElementType }> = {
   DRAFT: { label: 'Draft', className: 'bg-gray-100 text-gray-700', icon: FileText },
@@ -56,7 +56,8 @@ const ALL_STATUSES: InvoiceStatus[] = ['DRAFT', 'REVIEW', 'APPROVED', 'SENT', 'V
 export function InvoiceList() {
   const setView = useAppStore((s) => s.setView);
   const user = useAuthStore(s => s.user);
-  const role = user?.role;
+  // Fall back to 'guest' (no permissions) until the auth store hydrates
+  const role: UserRole = user?.role ?? 'guest';
   const [data, setData] = useState<PaginatedResponse<InvoiceItem> | null>(null);
   const [stats, setStats] = useState<Record<string, number> | null>(null);
   const [loading, setLoading] = useState(true);

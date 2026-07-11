@@ -24,7 +24,7 @@ import {
 import { toast } from 'sonner';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
 import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
-import type { InvoiceItem, InvoiceLineItem } from '@/core/types';
+import type { InvoiceItem, InvoiceLineItem, UserRole } from '@/core/types';
 import { numberToCurrencyWords } from '@/core/utils/number-to-words';
 import { format } from 'date-fns';
 import JsBarcode from 'jsbarcode';
@@ -222,7 +222,8 @@ export function InvoiceDetail() {
     window.open(`https://wa.me/${phone}?text=${msg}`, '_blank');
   };
 
-  const role = user?.role;
+  // Fall back to 'guest' (no permissions) until the auth store hydrates
+  const role: UserRole = user?.role ?? 'guest';
   const canManage = canPerformAction(role, 'invoice', 'delete');
 
   // ============ LOADING STATE ============

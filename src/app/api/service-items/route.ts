@@ -16,7 +16,8 @@ export async function GET(request: NextRequest) {
     const pricingModel = request.nextUrl.searchParams.get('pricingModel') || '';
     const skip = (page - 1) * pageSize;
 
-    const where: Prisma.ServiceItemWhereInput = { tenantId };
+    // ServiceItem model is not in prisma/schema.prisma (runtime-only table)
+    const where: Record<string, any> = { tenantId };
 
     if (search) {
       where.OR = [

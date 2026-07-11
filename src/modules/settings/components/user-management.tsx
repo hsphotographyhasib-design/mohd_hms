@@ -63,7 +63,7 @@ interface UserItem {
 
 const ROLES: UserRole[] = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'];
 
-const ROLE_LABELS: Record<UserRole, string> = {
+const ROLE_LABELS: Partial<Record<UserRole, string>> = {
   super_admin: 'Super Admin',
   admin: 'Admin',
   manager: 'Manager',
@@ -73,7 +73,7 @@ const ROLE_LABELS: Record<UserRole, string> = {
   customer: 'Customer',
 };
 
-const ROLE_COLORS: Record<UserRole, string> = {
+const ROLE_COLORS: Partial<Record<UserRole, string>> = {
   super_admin: 'bg-purple-100 text-purple-800 border-purple-200',
   admin: 'bg-red-100 text-red-800 border-red-200',
   manager: 'bg-blue-100 text-blue-800 border-blue-200',

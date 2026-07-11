@@ -33,10 +33,10 @@ export function useErrorHandler() {
   const showError = useCallback(
     (err: unknown, opts?: ApiCallOptions) => {
       const category = (opts?.category || categorizeError(err, { endpoint: opts?.endpoint })) as ErrorCategory;
-      const errorCode = extractErrorCode(err);
-      const httpStatus = opts?.endpoint ? extractHttpStatus(err) : undefined;
-      const moduleName = opts?.module || detectModule(opts?.endpoint);
-      const userMessage = getFriendlyMessage(category, errorCode);
+      const errorCode = extractErrorCode(err) ?? undefined;
+      const httpStatus = (opts?.endpoint ? extractHttpStatus(err) : undefined) ?? undefined;
+      const moduleName = (opts?.module || detectModule(opts?.endpoint)) ?? undefined;
+      const userMessage = getFriendlyMessage(category, errorCode ?? null);
 
       // Extract validation errors if present
       let validationErrors: Record<string, string> | undefined;

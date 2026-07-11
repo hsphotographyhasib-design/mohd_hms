@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
     const ctx = await buildAuthContext(payload, { resolveCustomer: true });
     if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const scope = await buildDataScope(payload);
+    const scope = await buildDataScope({ userId: ctx.userId, tenantId: ctx.tenantId, role: ctx.role, email: ctx.email });
     if (!scope) return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
     await ensureAllTablesSynced();

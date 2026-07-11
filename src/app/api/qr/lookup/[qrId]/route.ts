@@ -115,7 +115,7 @@ export async function GET(
       })),
       ...workOrders.map((wo) => ({
         id: wo.id,
-        type: (wo.type === 'preventive' ? 'pm' : 'work_order') as const,
+        type: wo.type === 'preventive' ? ('pm' as const) : ('work_order' as const),
         title: wo.title,
         description: wo.description,
         status: wo.status,

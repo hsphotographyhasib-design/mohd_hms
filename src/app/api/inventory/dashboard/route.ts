@@ -136,7 +136,7 @@ export async function GET(request: NextRequest) {
         acc.set(key, (acc.get(key) || 0) + 1);
         return acc;
       }, new Map<string, number>());
-    const dupCount = Array.from(duplicateSkus.values()).filter(c => c > 1).length;
+    const dupCount = Array.from(duplicateSkus.values()).filter((c: any) => c > 1).length;
     if (dupCount > 0) {
       insights.push({
         type: 'duplicate', title: 'Duplicate SKUs Detected',

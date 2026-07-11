@@ -240,7 +240,7 @@ async function handleIncoming(
   // Process through conversation engine if auto-reply enabled
   if (config.autoReplyEnabled) {
     try {
-      const responses = await processIncomingMessage(session, content, tenantId, providerMessageId);
+      const responses = await processIncomingMessage(session, content, tenantId, providerMessageId ?? undefined);
       for (const response of responses) {
         await db.whatsAppMessage.create({
           data: {

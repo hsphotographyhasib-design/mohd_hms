@@ -204,8 +204,8 @@ export interface CMSData {
 }
 
 // Helper functions for getting CMS data with fallbacks
-export function getServices(cms: CMSData | null) {
-  if (!cms?.services?.length) return defaultCaps
+export function getServices(cms: CMSData | null): Array<[string, Array<[string, string, string]>]> {
+  if (!cms?.services?.length) return defaultCaps as Array<[string, Array<[string, string, string]>]>
   const grouped: Record<string, Array<[string, string, string]>> = {}
   cms.services.forEach(s => {
     const cat = s.category || 'Services'
@@ -215,8 +215,8 @@ export function getServices(cms: CMSData | null) {
   return Object.entries(grouped)
 }
 
-export function getIndustries(cms: CMSData | null) {
-  if (!cms?.industries?.length) return defaultIndustries
+export function getIndustries(cms: CMSData | null): Array<readonly [string, string]> {
+  if (!cms?.industries?.length) return defaultIndustries as unknown as Array<readonly [string, string]>
   return cms.industries.map(i => [i.name, I[(i.icon as keyof typeof I)] || I.building] as const)
 }
 
@@ -256,7 +256,7 @@ export function getBlogs(cms: CMSData | null) {
   ] as const)
 }
 
-export function getCareers(cms: CMSData | null) {
-  if (!cms?.careers?.length) return defaultVacs
+export function getCareers(cms: CMSData | null): Array<readonly [string, string]> {
+  if (!cms?.careers?.length) return defaultVacs as unknown as Array<readonly [string, string]>
   return cms.careers.map(c => [c.title, c.type === 'fulltime' ? 'Full-time · ' + (c.department || '') : c.type || ''] as const)
 }

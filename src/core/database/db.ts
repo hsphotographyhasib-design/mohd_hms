@@ -71,6 +71,11 @@ function _shouldUseSupabase(): boolean {
 /**
  * Main db proxy — lazily decides Supabase vs Prisma on each property access.
  * This guarantees process.env is evaluated at runtime, not at build time.
+ *
+ * NOTE: typed `any` intentionally — the runtime schema (Supabase) contains
+ * tables that are not present in prisma/schema.prisma (schema drift), so the
+ * generated PrismaClient type would reject model delegates that exist at
+ * runtime (e.g. cmsPage, document, serviceItem).
  */
 export const db: any = new Proxy({} as any, {
   get(_target, prop, receiver) {
@@ -89,7 +94,7 @@ export const db: any = new Proxy({} as any, {
 });
 
 // Lazy type re-export (never evaluated at runtime)
-export type { PrismaClient } from "../../generated/prisma/client";
+export type { PrismaClient } from "../../../generated/prisma/client";
 
 /** Check if an error is transient (retry-worthy) */
 function isTransientError(error: unknown): boolean {
@@ -112,7 +117,7 @@ function isTransientError(error: unknown): boolean {
 const RETRY_DELAYS = [1000, 2000, 5000, 10000];
 const MAX_RETRIES = RETRY_DELAYS.length;
 
-export async function withRetry<T>(fn: () => Promise<T>, options?: { maxRetries?: number; label?: string }): Promise<T> {
+export async function withRetry<T = any>(fn: () => Promise<T>, options?: { maxRetries?: number; label?: string }): Promise<T> {
   const max = options?.maxRetries ?? MAX_RETRIES;
   const label = options?.label ?? "db-operation";
   let lastError: unknown;

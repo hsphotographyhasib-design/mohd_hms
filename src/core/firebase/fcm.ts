@@ -121,22 +121,10 @@ export async function registerDeviceToken(): Promise<string | null> {
     // Send to backend
     await sendTokenToBackend(token);
 
-    // Listen for token refreshes
-    messaging.onTokenRefresh(async () => {
-      console.log('[FCM] Token refreshed');
-      try {
-        const newToken = await getToken(messaging, {
-          vapidKey,
-          serviceWorkerRegistration: await getSWRegistration(),
-        });
-        if (newToken && newToken !== currentToken) {
-          currentToken = newToken;
-          await sendTokenToBackend(newToken);
-        }
-      } catch (err) {
-        console.error('[FCM] Token refresh failed:', err);
-      }
-    });
+    // NOTE: onTokenRefresh() was removed in Firebase v9+ modular API.
+    // Token freshness is handled by calling getToken() on every app start
+    // (this function runs on each session), which returns a refreshed token
+    // when the previous one was invalidated.
 
     return token;
   } catch (err) {
