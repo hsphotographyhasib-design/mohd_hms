@@ -61,6 +61,7 @@ export async function GET(
             isActive: true,
             isOnline: true,
             lastLogin: true,
+            authProvider: true,
             gpsLocation: true,
             profileCompleted: true,
             tenantId: true,

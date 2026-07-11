@@ -391,8 +391,9 @@ export function UserManagement() {
 
   const openUserDetail = async (userId: string) => {
     setDetailLoading(true);
+    setSelectedUser(null);
     // Delay dialog open to avoid Radix UI portal conflict with DropdownMenu
-    setTimeout(() => setDetailOpen(true), 50);
+    setTimeout(() => setDetailOpen(true), 150);
     try {
       const res = await fetch(`/api/auth/users/${userId}`, {
         headers: { Authorization: `Bearer ${token()}` },
@@ -462,7 +463,7 @@ export function UserManagement() {
     setRoleChangeTarget(user);
     setNewRole(user.role);
     // Delay dialog open to avoid Radix UI portal conflict with DropdownMenu
-    setTimeout(() => setRoleDialogOpen(true), 50);
+    setTimeout(() => setRoleDialogOpen(true), 150);
   };
 
   const handleToggleActive = async () => {
@@ -936,6 +937,7 @@ export function UserManagement() {
                     <p className="text-sm font-normal text-muted-foreground">{selectedUser.email}</p>
                   </div>
                 </DialogTitle>
+                <DialogDescription>User account details and management actions</DialogDescription>
               </DialogHeader>
 
               <div className="space-y-4 mt-4">
