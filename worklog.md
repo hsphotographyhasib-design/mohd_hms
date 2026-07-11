@@ -1046,3 +1046,42 @@ Stage Summary:
 - 1 file changed: prisma/schema.prisma (+392 lines, 17 new models + 12 new columns on 2 existing models)
 - All 3 Prisma commands succeeded without errors
 - Database is in sync with schema
+---
+Task ID: 3
+Agent: user-presence-service
+Task: Create user-presence WebSocket mini-service
+
+Work Log:
+- Created mini-services/user-presence/package.json (socket.io ^4.8.3, jsonwebtoken ^9.0.2, @prisma/client ^7.8.0)
+- Created mini-services/user-presence/index.ts (Socket.IO server on port 3004)
+- Implemented JWT verification from handshake auth token (extracts userId, tenantId, role)
+- Implemented self-contained JWT secret resolution (env var → DATABASE_URL SHA-256 derivation → random bytes)
+- On connect: sets user isOnline=true, joins tenant:{tenantId} room, broadcasts user:status-change
+- On disconnect: sets user isOnline=false, broadcasts user:status-change to tenant room
+- Added admin:subscribe event handler (presence updates are implicit via room membership)
+- Configured CORS origin: *, pingInterval: 10000ms, pingTimeout: 5000ms
+- All async DB operations are fire-and-forget with error catching (never crash)
+- Ran bun install — 38 packages installed (socket.io 4.8.3, jsonwebtoken 9.0.3, @prisma/client 7.8.0)
+
+Stage Summary:
+- Socket.IO server on port 3004 with JWT auth
+- Sets isOnline true/false on connect/disconnect
+- Broadcasts user:status-change to tenant rooms
+- 10s heartbeat with 5s timeout
+- Admin subscription implicit via room join
+---
+Task ID: 2-a
+Agent: logout-and-presence-store
+Task: Create logout API, presence store, and presence hook
+
+Work Log:
+- Created /api/auth/logout route
+- Created presence-store.ts (Zustand)
+- Created use-user-presence.ts hook
+- Updated app-shell store logout functions
+
+Stage Summary:
+- POST /api/auth/logout sets isOnline=false + revokes sessions
+- usePresenceStore for real-time status tracking
+- useUserPresence hook manages Socket.IO connection
+- Both logout() and secureLogout() now notify server

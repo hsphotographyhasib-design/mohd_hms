@@ -3,6 +3,7 @@
 import { lazy, Suspense, useMemo } from 'react';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
 import { canAccessFeature } from '@/core/permissions/rbac/permissions-matrix';
+import { useUserPresence } from '@/core/presence/use-user-presence';
 import { getViewFeature } from '@/core/permissions/view-feature-map';
 import { AccessDenied } from '@/shared/components/access-denied';
 import { Skeleton } from '@/shared/ui/skeleton';
@@ -315,6 +316,9 @@ export function AppShell() {
   const { currentView } = useAppStore();
   const user = useAuthStore(s => s.user);
   const isMobile = useIsMobile(768);
+
+  // Connect to user-presence WebSocket for real-time online/offline tracking
+  useUserPresence();
 
   // Mobile layout: ALL roles use MobileShell on mobile (role-aware nav inside)
   if (isMobile) {

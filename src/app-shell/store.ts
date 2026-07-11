@@ -99,6 +99,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   logout: () => {
+    // Notify server to set isOnline=false and revoke sessions (fire-and-forget)
+    try {
+      const token = get().token;
+      if (token) {
+        fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        }).catch(() => {});
+      }
+    } catch { /* silent — logout must never fail */ }
     // Clear ALL storage (tokens, cache, role info, notification cache)
     localStorage.clear();
     sessionStorage.clear();
@@ -120,6 +130,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.setItem('cmms_logout_broadcast', JSON.stringify({ type: 'LOGOUT', reason, timestamp: Date.now() }));
       setTimeout(() => localStorage.removeItem('cmms_logout_broadcast'), 100);
     }
+    // Notify server to set isOnline=false and revoke sessions (fire-and-forget)
+    try {
+      const token = get().token;
+      if (token) {
+        fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        }).catch(() => {});
+      }
+    } catch { /* silent — logout must never fail */ }
     // Clear everything
     localStorage.clear();
     sessionStorage.clear();

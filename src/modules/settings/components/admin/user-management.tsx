@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { usePresenceStore } from '@/core/presence/presence-store';
 import {
   Users, Search, Filter, MoreHorizontal, Shield, UserCog, Lock, Unlock,
   Trash2, History, LogOut, RefreshCw, ChevronLeft, ChevronRight,
@@ -534,6 +535,25 @@ export function UserManagement() {
     setNewRole(selectedUser.role);
     setRoleDialogOpen(true);
   };
+
+  // ============ REAL-TIME PRESENCE ============
+
+  const onlineStatus = usePresenceStore((s) => s.onlineStatus);
+
+  // Optimistically update the users list when a real-time status change arrives
+  useEffect(() => {
+    const presenceEntries = Object.entries(onlineStatus);
+    if (presenceEntries.length === 0) return;
+
+    setUsers((prev) =>
+      prev.map((u) => {
+        const realtimeStatus = onlineStatus[u.id];
+        if (realtimeStatus === undefined) return u; // No update for this user
+        if (u.isOnline === realtimeStatus) return u; // No change needed
+        return { ...u, isOnline: realtimeStatus };
+      })
+    );
+  }, [onlineStatus]);
 
   // ============ STATS ============
 
