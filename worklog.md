@@ -1203,3 +1203,21 @@ Stage Summary:
 - Simplified error-logs routes for maximum Vercel/Supabase compatibility
 - Render backend was not redeployed (no relevant file changes)
 - User should check Vercel/Render dashboards again after this deploy completes
+---
+Task ID: location-customer-only
+Agent: Main
+Task: Restrict location sharing (GoogleMapsPicker) to customer role only in complaint system
+
+Work Log:
+- Analyzed uploaded screenshot showing location sharing UI in complaint form
+- Explored complaint system codebase to find all location-related components
+- Found GoogleMapsPicker in desktop new-complaint.tsx rendered for both customer and staff (line 1013-1017)
+- Wrapped GoogleMapsPicker in `{isCustomer && (...)}` conditional to restrict to customers only
+- Verified mobile new-complaint.tsx has no GPS picker (text inputs only), no change needed
+- Ran lint: 0 errors, only pre-existing warnings
+
+Stage Summary:
+- Changed: `src/modules/complaints/components/new-complaint.tsx` line 1013-1017
+- GoogleMapsPicker now only renders when `user.role === 'customer'`
+- Staff/admin users creating complaints will no longer see the "Share Current Location" / "Apply Coordinates" GPS section
+- Text-based location fields (Location/Area, Building, Floor, Room/Unit) remain visible for all roles

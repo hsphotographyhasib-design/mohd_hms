@@ -1010,11 +1010,13 @@ function Step2Equipment({
             </div>
           </div>
 
-          {/* ── GPS LOCATION (Both modes) ── */}
-          <GoogleMapsPicker
-            value={gpsCoords}
-            onChange={onGpsChange}
-          />
+          {/* ── GPS LOCATION (Customer only) ── */}
+          {isCustomer && (
+            <GoogleMapsPicker
+              value={gpsCoords}
+              onChange={onGpsChange}
+            />
+          )}
         </div>
       </CardContent>
     </Card>
