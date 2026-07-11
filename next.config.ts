@@ -43,14 +43,25 @@ const nextConfig: NextConfig = {
   // SECURITY HEADERS (moved from middleware.ts to fix Turbopack crash)
   // ============================================================
   async headers() {
+    const isDev = process.env.NODE_ENV !== 'production';
+    // In development, allow framing from the preview panel host.
+    // In production, restrict to SAMEORIGIN to prevent clickjacking.
+    const frameOptions = isDev ? 'ALLOWALL' : 'SAMEORIGIN';
+    // CSP frame-ancestors is the modern replacement for X-Frame-Options.
+    // In production, only allow same-origin framing.
+    const frameAncestors = isDev
+      ? "'self' https://space-z.ai https://*.space-z.ai"
+      : "'self'";
+
     return [
       {
         source: '/((?!_next/static|_next/image|favicon\\.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|css|js|woff2?|ttf|eot)$).*)',
         headers: [
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'X-Frame-Options', value: 'ALLOWALL' },
+          { key: 'X-Frame-Options', value: frameOptions },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Content-Security-Policy', value: `frame-ancestors ${frameAncestors}` },
           { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, private' },
           { key: 'Pragma', value: 'no-cache' },
           { key: 'Expires', value: '0' },

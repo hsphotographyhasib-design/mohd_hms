@@ -20,8 +20,20 @@ export type WhatsAppConfigModel = runtime.Types.Result.DefaultSelection<Prisma.$
 
 export type AggregateWhatsAppConfig = {
   _count: WhatsAppConfigCountAggregateOutputType | null
+  _avg: WhatsAppConfigAvgAggregateOutputType | null
+  _sum: WhatsAppConfigSumAggregateOutputType | null
   _min: WhatsAppConfigMinAggregateOutputType | null
   _max: WhatsAppConfigMaxAggregateOutputType | null
+}
+
+export type WhatsAppConfigAvgAggregateOutputType = {
+  aiTypingDelay: number | null
+  aiMaxContext: number | null
+}
+
+export type WhatsAppConfigSumAggregateOutputType = {
+  aiTypingDelay: number | null
+  aiMaxContext: number | null
 }
 
 export type WhatsAppConfigMinAggregateOutputType = {
@@ -50,6 +62,14 @@ export type WhatsAppConfigMinAggregateOutputType = {
   defaultPriority: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  aiEnabled: boolean | null
+  aiSystemPrompt: string | null
+  aiTypingDelay: number | null
+  aiMaxContext: number | null
+  aiBusinessHours: string | null
+  aiLanguage: string | null
+  aiEscalationRules: string | null
+  aiKnowledgeBase: string | null
 }
 
 export type WhatsAppConfigMaxAggregateOutputType = {
@@ -78,6 +98,14 @@ export type WhatsAppConfigMaxAggregateOutputType = {
   defaultPriority: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  aiEnabled: boolean | null
+  aiSystemPrompt: string | null
+  aiTypingDelay: number | null
+  aiMaxContext: number | null
+  aiBusinessHours: string | null
+  aiLanguage: string | null
+  aiEscalationRules: string | null
+  aiKnowledgeBase: string | null
 }
 
 export type WhatsAppConfigCountAggregateOutputType = {
@@ -106,9 +134,27 @@ export type WhatsAppConfigCountAggregateOutputType = {
   defaultPriority: number
   createdAt: number
   updatedAt: number
+  aiEnabled: number
+  aiSystemPrompt: number
+  aiTypingDelay: number
+  aiMaxContext: number
+  aiBusinessHours: number
+  aiLanguage: number
+  aiEscalationRules: number
+  aiKnowledgeBase: number
   _all: number
 }
 
+
+export type WhatsAppConfigAvgAggregateInputType = {
+  aiTypingDelay?: true
+  aiMaxContext?: true
+}
+
+export type WhatsAppConfigSumAggregateInputType = {
+  aiTypingDelay?: true
+  aiMaxContext?: true
+}
 
 export type WhatsAppConfigMinAggregateInputType = {
   id?: true
@@ -136,6 +182,14 @@ export type WhatsAppConfigMinAggregateInputType = {
   defaultPriority?: true
   createdAt?: true
   updatedAt?: true
+  aiEnabled?: true
+  aiSystemPrompt?: true
+  aiTypingDelay?: true
+  aiMaxContext?: true
+  aiBusinessHours?: true
+  aiLanguage?: true
+  aiEscalationRules?: true
+  aiKnowledgeBase?: true
 }
 
 export type WhatsAppConfigMaxAggregateInputType = {
@@ -164,6 +218,14 @@ export type WhatsAppConfigMaxAggregateInputType = {
   defaultPriority?: true
   createdAt?: true
   updatedAt?: true
+  aiEnabled?: true
+  aiSystemPrompt?: true
+  aiTypingDelay?: true
+  aiMaxContext?: true
+  aiBusinessHours?: true
+  aiLanguage?: true
+  aiEscalationRules?: true
+  aiKnowledgeBase?: true
 }
 
 export type WhatsAppConfigCountAggregateInputType = {
@@ -192,6 +254,14 @@ export type WhatsAppConfigCountAggregateInputType = {
   defaultPriority?: true
   createdAt?: true
   updatedAt?: true
+  aiEnabled?: true
+  aiSystemPrompt?: true
+  aiTypingDelay?: true
+  aiMaxContext?: true
+  aiBusinessHours?: true
+  aiLanguage?: true
+  aiEscalationRules?: true
+  aiKnowledgeBase?: true
   _all?: true
 }
 
@@ -233,6 +303,18 @@ export type WhatsAppConfigAggregateArgs<ExtArgs extends runtime.Types.Extensions
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: WhatsAppConfigAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: WhatsAppConfigSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: WhatsAppConfigMinAggregateInputType
@@ -263,6 +345,8 @@ export type WhatsAppConfigGroupByArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   _count?: WhatsAppConfigCountAggregateInputType | true
+  _avg?: WhatsAppConfigAvgAggregateInputType
+  _sum?: WhatsAppConfigSumAggregateInputType
   _min?: WhatsAppConfigMinAggregateInputType
   _max?: WhatsAppConfigMaxAggregateInputType
 }
@@ -293,7 +377,17 @@ export type WhatsAppConfigGroupByOutputType = {
   defaultPriority: string
   createdAt: Date
   updatedAt: Date
+  aiEnabled: boolean
+  aiSystemPrompt: string | null
+  aiTypingDelay: number | null
+  aiMaxContext: number | null
+  aiBusinessHours: string | null
+  aiLanguage: string | null
+  aiEscalationRules: string | null
+  aiKnowledgeBase: string | null
   _count: WhatsAppConfigCountAggregateOutputType | null
+  _avg: WhatsAppConfigAvgAggregateOutputType | null
+  _sum: WhatsAppConfigSumAggregateOutputType | null
   _min: WhatsAppConfigMinAggregateOutputType | null
   _max: WhatsAppConfigMaxAggregateOutputType | null
 }
@@ -342,6 +436,14 @@ export type WhatsAppConfigWhereInput = {
   defaultPriority?: Prisma.StringFilter<"WhatsAppConfig"> | string
   createdAt?: Prisma.DateTimeFilter<"WhatsAppConfig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppConfig"> | Date | string
+  aiEnabled?: Prisma.BoolFilter<"WhatsAppConfig"> | boolean
+  aiSystemPrompt?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
+  aiTypingDelay?: Prisma.IntNullableFilter<"WhatsAppConfig"> | number | null
+  aiMaxContext?: Prisma.IntNullableFilter<"WhatsAppConfig"> | number | null
+  aiBusinessHours?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
+  aiLanguage?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
+  aiEscalationRules?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
+  aiKnowledgeBase?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   WhatsAppSession?: Prisma.WhatsAppSessionListRelationFilter
 }
@@ -372,6 +474,14 @@ export type WhatsAppConfigOrderByWithRelationInput = {
   defaultPriority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiSystemPrompt?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiTypingDelay?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiMaxContext?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiBusinessHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiLanguage?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiEscalationRules?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiKnowledgeBase?: Prisma.SortOrderInput | Prisma.SortOrder
   tenant?: Prisma.TenantOrderByWithRelationInput
   WhatsAppSession?: Prisma.WhatsAppSessionOrderByRelationAggregateInput
 }
@@ -405,6 +515,14 @@ export type WhatsAppConfigWhereUniqueInput = Prisma.AtLeast<{
   defaultPriority?: Prisma.StringFilter<"WhatsAppConfig"> | string
   createdAt?: Prisma.DateTimeFilter<"WhatsAppConfig"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppConfig"> | Date | string
+  aiEnabled?: Prisma.BoolFilter<"WhatsAppConfig"> | boolean
+  aiSystemPrompt?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
+  aiTypingDelay?: Prisma.IntNullableFilter<"WhatsAppConfig"> | number | null
+  aiMaxContext?: Prisma.IntNullableFilter<"WhatsAppConfig"> | number | null
+  aiBusinessHours?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
+  aiLanguage?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
+  aiEscalationRules?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
+  aiKnowledgeBase?: Prisma.StringNullableFilter<"WhatsAppConfig"> | string | null
   tenant?: Prisma.XOR<Prisma.TenantScalarRelationFilter, Prisma.TenantWhereInput>
   WhatsAppSession?: Prisma.WhatsAppSessionListRelationFilter
 }, "id" | "tenantId">
@@ -435,9 +553,19 @@ export type WhatsAppConfigOrderByWithAggregationInput = {
   defaultPriority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiSystemPrompt?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiTypingDelay?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiMaxContext?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiBusinessHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiLanguage?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiEscalationRules?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiKnowledgeBase?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.WhatsAppConfigCountOrderByAggregateInput
+  _avg?: Prisma.WhatsAppConfigAvgOrderByAggregateInput
   _max?: Prisma.WhatsAppConfigMaxOrderByAggregateInput
   _min?: Prisma.WhatsAppConfigMinOrderByAggregateInput
+  _sum?: Prisma.WhatsAppConfigSumOrderByAggregateInput
 }
 
 export type WhatsAppConfigScalarWhereWithAggregatesInput = {
@@ -469,6 +597,14 @@ export type WhatsAppConfigScalarWhereWithAggregatesInput = {
   defaultPriority?: Prisma.StringWithAggregatesFilter<"WhatsAppConfig"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"WhatsAppConfig"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"WhatsAppConfig"> | Date | string
+  aiEnabled?: Prisma.BoolWithAggregatesFilter<"WhatsAppConfig"> | boolean
+  aiSystemPrompt?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppConfig"> | string | null
+  aiTypingDelay?: Prisma.IntNullableWithAggregatesFilter<"WhatsAppConfig"> | number | null
+  aiMaxContext?: Prisma.IntNullableWithAggregatesFilter<"WhatsAppConfig"> | number | null
+  aiBusinessHours?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppConfig"> | string | null
+  aiLanguage?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppConfig"> | string | null
+  aiEscalationRules?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppConfig"> | string | null
+  aiKnowledgeBase?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppConfig"> | string | null
 }
 
 export type WhatsAppConfigCreateInput = {
@@ -496,6 +632,14 @@ export type WhatsAppConfigCreateInput = {
   defaultPriority?: string
   createdAt?: Date | string
   updatedAt: Date | string
+  aiEnabled?: boolean
+  aiSystemPrompt?: string | null
+  aiTypingDelay?: number | null
+  aiMaxContext?: number | null
+  aiBusinessHours?: string | null
+  aiLanguage?: string | null
+  aiEscalationRules?: string | null
+  aiKnowledgeBase?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutWhatsAppConfigInput
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutWhatsAppConfigInput
 }
@@ -526,6 +670,14 @@ export type WhatsAppConfigUncheckedCreateInput = {
   defaultPriority?: string
   createdAt?: Date | string
   updatedAt: Date | string
+  aiEnabled?: boolean
+  aiSystemPrompt?: string | null
+  aiTypingDelay?: number | null
+  aiMaxContext?: number | null
+  aiBusinessHours?: string | null
+  aiLanguage?: string | null
+  aiEscalationRules?: string | null
+  aiKnowledgeBase?: string | null
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutWhatsAppConfigInput
 }
 
@@ -554,6 +706,14 @@ export type WhatsAppConfigUpdateInput = {
   defaultPriority?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSystemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiTypingDelay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxContext?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiBusinessHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEscalationRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiKnowledgeBase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutWhatsAppConfigNestedInput
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutWhatsAppConfigNestedInput
 }
@@ -584,6 +744,14 @@ export type WhatsAppConfigUncheckedUpdateInput = {
   defaultPriority?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSystemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiTypingDelay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxContext?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiBusinessHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEscalationRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiKnowledgeBase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutWhatsAppConfigNestedInput
 }
 
@@ -613,6 +781,14 @@ export type WhatsAppConfigCreateManyInput = {
   defaultPriority?: string
   createdAt?: Date | string
   updatedAt: Date | string
+  aiEnabled?: boolean
+  aiSystemPrompt?: string | null
+  aiTypingDelay?: number | null
+  aiMaxContext?: number | null
+  aiBusinessHours?: string | null
+  aiLanguage?: string | null
+  aiEscalationRules?: string | null
+  aiKnowledgeBase?: string | null
 }
 
 export type WhatsAppConfigUpdateManyMutationInput = {
@@ -640,6 +816,14 @@ export type WhatsAppConfigUpdateManyMutationInput = {
   defaultPriority?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSystemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiTypingDelay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxContext?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiBusinessHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEscalationRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiKnowledgeBase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type WhatsAppConfigUncheckedUpdateManyInput = {
@@ -668,6 +852,14 @@ export type WhatsAppConfigUncheckedUpdateManyInput = {
   defaultPriority?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSystemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiTypingDelay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxContext?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiBusinessHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEscalationRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiKnowledgeBase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type WhatsAppConfigNullableScalarRelationFilter = {
@@ -701,6 +893,19 @@ export type WhatsAppConfigCountOrderByAggregateInput = {
   defaultPriority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiSystemPrompt?: Prisma.SortOrder
+  aiTypingDelay?: Prisma.SortOrder
+  aiMaxContext?: Prisma.SortOrder
+  aiBusinessHours?: Prisma.SortOrder
+  aiLanguage?: Prisma.SortOrder
+  aiEscalationRules?: Prisma.SortOrder
+  aiKnowledgeBase?: Prisma.SortOrder
+}
+
+export type WhatsAppConfigAvgOrderByAggregateInput = {
+  aiTypingDelay?: Prisma.SortOrder
+  aiMaxContext?: Prisma.SortOrder
 }
 
 export type WhatsAppConfigMaxOrderByAggregateInput = {
@@ -729,6 +934,14 @@ export type WhatsAppConfigMaxOrderByAggregateInput = {
   defaultPriority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiSystemPrompt?: Prisma.SortOrder
+  aiTypingDelay?: Prisma.SortOrder
+  aiMaxContext?: Prisma.SortOrder
+  aiBusinessHours?: Prisma.SortOrder
+  aiLanguage?: Prisma.SortOrder
+  aiEscalationRules?: Prisma.SortOrder
+  aiKnowledgeBase?: Prisma.SortOrder
 }
 
 export type WhatsAppConfigMinOrderByAggregateInput = {
@@ -757,6 +970,19 @@ export type WhatsAppConfigMinOrderByAggregateInput = {
   defaultPriority?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiEnabled?: Prisma.SortOrder
+  aiSystemPrompt?: Prisma.SortOrder
+  aiTypingDelay?: Prisma.SortOrder
+  aiMaxContext?: Prisma.SortOrder
+  aiBusinessHours?: Prisma.SortOrder
+  aiLanguage?: Prisma.SortOrder
+  aiEscalationRules?: Prisma.SortOrder
+  aiKnowledgeBase?: Prisma.SortOrder
+}
+
+export type WhatsAppConfigSumOrderByAggregateInput = {
+  aiTypingDelay?: Prisma.SortOrder
+  aiMaxContext?: Prisma.SortOrder
 }
 
 export type WhatsAppConfigScalarRelationFilter = {
@@ -835,6 +1061,14 @@ export type WhatsAppConfigCreateWithoutTenantInput = {
   defaultPriority?: string
   createdAt?: Date | string
   updatedAt: Date | string
+  aiEnabled?: boolean
+  aiSystemPrompt?: string | null
+  aiTypingDelay?: number | null
+  aiMaxContext?: number | null
+  aiBusinessHours?: string | null
+  aiLanguage?: string | null
+  aiEscalationRules?: string | null
+  aiKnowledgeBase?: string | null
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutWhatsAppConfigInput
 }
 
@@ -863,6 +1097,14 @@ export type WhatsAppConfigUncheckedCreateWithoutTenantInput = {
   defaultPriority?: string
   createdAt?: Date | string
   updatedAt: Date | string
+  aiEnabled?: boolean
+  aiSystemPrompt?: string | null
+  aiTypingDelay?: number | null
+  aiMaxContext?: number | null
+  aiBusinessHours?: string | null
+  aiLanguage?: string | null
+  aiEscalationRules?: string | null
+  aiKnowledgeBase?: string | null
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutWhatsAppConfigInput
 }
 
@@ -907,6 +1149,14 @@ export type WhatsAppConfigUpdateWithoutTenantInput = {
   defaultPriority?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSystemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiTypingDelay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxContext?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiBusinessHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEscalationRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiKnowledgeBase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutWhatsAppConfigNestedInput
 }
 
@@ -935,6 +1185,14 @@ export type WhatsAppConfigUncheckedUpdateWithoutTenantInput = {
   defaultPriority?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSystemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiTypingDelay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxContext?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiBusinessHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEscalationRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiKnowledgeBase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutWhatsAppConfigNestedInput
 }
 
@@ -963,6 +1221,14 @@ export type WhatsAppConfigCreateWithoutWhatsAppSessionInput = {
   defaultPriority?: string
   createdAt?: Date | string
   updatedAt: Date | string
+  aiEnabled?: boolean
+  aiSystemPrompt?: string | null
+  aiTypingDelay?: number | null
+  aiMaxContext?: number | null
+  aiBusinessHours?: string | null
+  aiLanguage?: string | null
+  aiEscalationRules?: string | null
+  aiKnowledgeBase?: string | null
   tenant: Prisma.TenantCreateNestedOneWithoutWhatsAppConfigInput
 }
 
@@ -992,6 +1258,14 @@ export type WhatsAppConfigUncheckedCreateWithoutWhatsAppSessionInput = {
   defaultPriority?: string
   createdAt?: Date | string
   updatedAt: Date | string
+  aiEnabled?: boolean
+  aiSystemPrompt?: string | null
+  aiTypingDelay?: number | null
+  aiMaxContext?: number | null
+  aiBusinessHours?: string | null
+  aiLanguage?: string | null
+  aiEscalationRules?: string | null
+  aiKnowledgeBase?: string | null
 }
 
 export type WhatsAppConfigCreateOrConnectWithoutWhatsAppSessionInput = {
@@ -1035,6 +1309,14 @@ export type WhatsAppConfigUpdateWithoutWhatsAppSessionInput = {
   defaultPriority?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSystemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiTypingDelay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxContext?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiBusinessHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEscalationRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiKnowledgeBase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tenant?: Prisma.TenantUpdateOneRequiredWithoutWhatsAppConfigNestedInput
 }
 
@@ -1064,6 +1346,14 @@ export type WhatsAppConfigUncheckedUpdateWithoutWhatsAppSessionInput = {
   defaultPriority?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiEnabled?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  aiSystemPrompt?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiTypingDelay?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiMaxContext?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  aiBusinessHours?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiEscalationRules?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiKnowledgeBase?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1123,6 +1413,14 @@ export type WhatsAppConfigSelect<ExtArgs extends runtime.Types.Extensions.Intern
   defaultPriority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aiEnabled?: boolean
+  aiSystemPrompt?: boolean
+  aiTypingDelay?: boolean
+  aiMaxContext?: boolean
+  aiBusinessHours?: boolean
+  aiLanguage?: boolean
+  aiEscalationRules?: boolean
+  aiKnowledgeBase?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   WhatsAppSession?: boolean | Prisma.WhatsAppConfig$WhatsAppSessionArgs<ExtArgs>
   _count?: boolean | Prisma.WhatsAppConfigCountOutputTypeDefaultArgs<ExtArgs>
@@ -1154,6 +1452,14 @@ export type WhatsAppConfigSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   defaultPriority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aiEnabled?: boolean
+  aiSystemPrompt?: boolean
+  aiTypingDelay?: boolean
+  aiMaxContext?: boolean
+  aiBusinessHours?: boolean
+  aiLanguage?: boolean
+  aiEscalationRules?: boolean
+  aiKnowledgeBase?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["whatsAppConfig"]>
 
@@ -1183,6 +1489,14 @@ export type WhatsAppConfigSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   defaultPriority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aiEnabled?: boolean
+  aiSystemPrompt?: boolean
+  aiTypingDelay?: boolean
+  aiMaxContext?: boolean
+  aiBusinessHours?: boolean
+  aiLanguage?: boolean
+  aiEscalationRules?: boolean
+  aiKnowledgeBase?: boolean
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["whatsAppConfig"]>
 
@@ -1212,9 +1526,17 @@ export type WhatsAppConfigSelectScalar = {
   defaultPriority?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aiEnabled?: boolean
+  aiSystemPrompt?: boolean
+  aiTypingDelay?: boolean
+  aiMaxContext?: boolean
+  aiBusinessHours?: boolean
+  aiLanguage?: boolean
+  aiEscalationRules?: boolean
+  aiKnowledgeBase?: boolean
 }
 
-export type WhatsAppConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "provider" | "isEnabled" | "phoneNumber" | "businessName" | "openwaBaseUrl" | "openwaSession" | "openwaApiKey" | "openwaQrCode" | "openwaStatus" | "metaAccessToken" | "metaPhoneNumberId" | "metaVerifyToken" | "metaWebhookSecret" | "metaBusinessAccountId" | "twilioAccountSid" | "twilioAuthToken" | "twilioPhoneNumber" | "autoReplyEnabled" | "welcomeMessage" | "emergencyNumbers" | "defaultPriority" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppConfig"]>
+export type WhatsAppConfigOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "provider" | "isEnabled" | "phoneNumber" | "businessName" | "openwaBaseUrl" | "openwaSession" | "openwaApiKey" | "openwaQrCode" | "openwaStatus" | "metaAccessToken" | "metaPhoneNumberId" | "metaVerifyToken" | "metaWebhookSecret" | "metaBusinessAccountId" | "twilioAccountSid" | "twilioAuthToken" | "twilioPhoneNumber" | "autoReplyEnabled" | "welcomeMessage" | "emergencyNumbers" | "defaultPriority" | "createdAt" | "updatedAt" | "aiEnabled" | "aiSystemPrompt" | "aiTypingDelay" | "aiMaxContext" | "aiBusinessHours" | "aiLanguage" | "aiEscalationRules" | "aiKnowledgeBase", ExtArgs["result"]["whatsAppConfig"]>
 export type WhatsAppConfigInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
   WhatsAppSession?: boolean | Prisma.WhatsAppConfig$WhatsAppSessionArgs<ExtArgs>
@@ -1259,6 +1581,14 @@ export type $WhatsAppConfigPayload<ExtArgs extends runtime.Types.Extensions.Inte
     defaultPriority: string
     createdAt: Date
     updatedAt: Date
+    aiEnabled: boolean
+    aiSystemPrompt: string | null
+    aiTypingDelay: number | null
+    aiMaxContext: number | null
+    aiBusinessHours: string | null
+    aiLanguage: string | null
+    aiEscalationRules: string | null
+    aiKnowledgeBase: string | null
   }, ExtArgs["result"]["whatsAppConfig"]>
   composites: {}
 }
@@ -1709,6 +2039,14 @@ export interface WhatsAppConfigFieldRefs {
   readonly defaultPriority: Prisma.FieldRef<"WhatsAppConfig", 'String'>
   readonly createdAt: Prisma.FieldRef<"WhatsAppConfig", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"WhatsAppConfig", 'DateTime'>
+  readonly aiEnabled: Prisma.FieldRef<"WhatsAppConfig", 'Boolean'>
+  readonly aiSystemPrompt: Prisma.FieldRef<"WhatsAppConfig", 'String'>
+  readonly aiTypingDelay: Prisma.FieldRef<"WhatsAppConfig", 'Int'>
+  readonly aiMaxContext: Prisma.FieldRef<"WhatsAppConfig", 'Int'>
+  readonly aiBusinessHours: Prisma.FieldRef<"WhatsAppConfig", 'String'>
+  readonly aiLanguage: Prisma.FieldRef<"WhatsAppConfig", 'String'>
+  readonly aiEscalationRules: Prisma.FieldRef<"WhatsAppConfig", 'String'>
+  readonly aiKnowledgeBase: Prisma.FieldRef<"WhatsAppConfig", 'String'>
 }
     
 

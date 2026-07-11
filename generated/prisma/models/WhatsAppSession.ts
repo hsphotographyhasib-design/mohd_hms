@@ -28,10 +28,12 @@ export type AggregateWhatsAppSession = {
 
 export type WhatsAppSessionAvgAggregateOutputType = {
   messageCount: number | null
+  aiConfidence: number | null
 }
 
 export type WhatsAppSessionSumAggregateOutputType = {
   messageCount: number | null
+  aiConfidence: number | null
 }
 
 export type WhatsAppSessionMinAggregateOutputType = {
@@ -49,6 +51,10 @@ export type WhatsAppSessionMinAggregateOutputType = {
   isBlocked: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  aiConversationHistory: string | null
+  aiDetectedLanguage: string | null
+  aiIntent: string | null
+  aiConfidence: number | null
 }
 
 export type WhatsAppSessionMaxAggregateOutputType = {
@@ -66,6 +72,10 @@ export type WhatsAppSessionMaxAggregateOutputType = {
   isBlocked: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
+  aiConversationHistory: string | null
+  aiDetectedLanguage: string | null
+  aiIntent: string | null
+  aiConfidence: number | null
 }
 
 export type WhatsAppSessionCountAggregateOutputType = {
@@ -83,16 +93,22 @@ export type WhatsAppSessionCountAggregateOutputType = {
   isBlocked: number
   createdAt: number
   updatedAt: number
+  aiConversationHistory: number
+  aiDetectedLanguage: number
+  aiIntent: number
+  aiConfidence: number
   _all: number
 }
 
 
 export type WhatsAppSessionAvgAggregateInputType = {
   messageCount?: true
+  aiConfidence?: true
 }
 
 export type WhatsAppSessionSumAggregateInputType = {
   messageCount?: true
+  aiConfidence?: true
 }
 
 export type WhatsAppSessionMinAggregateInputType = {
@@ -110,6 +126,10 @@ export type WhatsAppSessionMinAggregateInputType = {
   isBlocked?: true
   createdAt?: true
   updatedAt?: true
+  aiConversationHistory?: true
+  aiDetectedLanguage?: true
+  aiIntent?: true
+  aiConfidence?: true
 }
 
 export type WhatsAppSessionMaxAggregateInputType = {
@@ -127,6 +147,10 @@ export type WhatsAppSessionMaxAggregateInputType = {
   isBlocked?: true
   createdAt?: true
   updatedAt?: true
+  aiConversationHistory?: true
+  aiDetectedLanguage?: true
+  aiIntent?: true
+  aiConfidence?: true
 }
 
 export type WhatsAppSessionCountAggregateInputType = {
@@ -144,6 +168,10 @@ export type WhatsAppSessionCountAggregateInputType = {
   isBlocked?: true
   createdAt?: true
   updatedAt?: true
+  aiConversationHistory?: true
+  aiDetectedLanguage?: true
+  aiIntent?: true
+  aiConfidence?: true
   _all?: true
 }
 
@@ -248,6 +276,10 @@ export type WhatsAppSessionGroupByOutputType = {
   isBlocked: boolean
   createdAt: Date
   updatedAt: Date
+  aiConversationHistory: string | null
+  aiDetectedLanguage: string | null
+  aiIntent: string | null
+  aiConfidence: number | null
   _count: WhatsAppSessionCountAggregateOutputType | null
   _avg: WhatsAppSessionAvgAggregateOutputType | null
   _sum: WhatsAppSessionSumAggregateOutputType | null
@@ -288,6 +320,10 @@ export type WhatsAppSessionWhereInput = {
   isBlocked?: Prisma.BoolFilter<"WhatsAppSession"> | boolean
   createdAt?: Prisma.DateTimeFilter<"WhatsAppSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppSession"> | Date | string
+  aiConversationHistory?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiDetectedLanguage?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiIntent?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiConfidence?: Prisma.FloatNullableFilter<"WhatsAppSession"> | number | null
   ConversationThread?: Prisma.ConversationThreadListRelationFilter
   WhatsAppMessage?: Prisma.WhatsAppMessageListRelationFilter
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
@@ -310,6 +346,10 @@ export type WhatsAppSessionOrderByWithRelationInput = {
   isBlocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiConversationHistory?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiDetectedLanguage?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiIntent?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiConfidence?: Prisma.SortOrderInput | Prisma.SortOrder
   ConversationThread?: Prisma.ConversationThreadOrderByRelationAggregateInput
   WhatsAppMessage?: Prisma.WhatsAppMessageOrderByRelationAggregateInput
   customer?: Prisma.CustomerOrderByWithRelationInput
@@ -335,6 +375,10 @@ export type WhatsAppSessionWhereUniqueInput = Prisma.AtLeast<{
   isBlocked?: Prisma.BoolFilter<"WhatsAppSession"> | boolean
   createdAt?: Prisma.DateTimeFilter<"WhatsAppSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppSession"> | Date | string
+  aiConversationHistory?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiDetectedLanguage?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiIntent?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiConfidence?: Prisma.FloatNullableFilter<"WhatsAppSession"> | number | null
   ConversationThread?: Prisma.ConversationThreadListRelationFilter
   WhatsAppMessage?: Prisma.WhatsAppMessageListRelationFilter
   customer?: Prisma.XOR<Prisma.CustomerNullableScalarRelationFilter, Prisma.CustomerWhereInput> | null
@@ -357,6 +401,10 @@ export type WhatsAppSessionOrderByWithAggregationInput = {
   isBlocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiConversationHistory?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiDetectedLanguage?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiIntent?: Prisma.SortOrderInput | Prisma.SortOrder
+  aiConfidence?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.WhatsAppSessionCountOrderByAggregateInput
   _avg?: Prisma.WhatsAppSessionAvgOrderByAggregateInput
   _max?: Prisma.WhatsAppSessionMaxOrderByAggregateInput
@@ -382,6 +430,10 @@ export type WhatsAppSessionScalarWhereWithAggregatesInput = {
   isBlocked?: Prisma.BoolWithAggregatesFilter<"WhatsAppSession"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"WhatsAppSession"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"WhatsAppSession"> | Date | string
+  aiConversationHistory?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppSession"> | string | null
+  aiDetectedLanguage?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppSession"> | string | null
+  aiIntent?: Prisma.StringNullableWithAggregatesFilter<"WhatsAppSession"> | string | null
+  aiConfidence?: Prisma.FloatNullableWithAggregatesFilter<"WhatsAppSession"> | number | null
 }
 
 export type WhatsAppSessionCreateInput = {
@@ -396,6 +448,10 @@ export type WhatsAppSessionCreateInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutWhatsAppSessionInput
   customer?: Prisma.CustomerCreateNestedOneWithoutWhatsAppSessionInput
@@ -418,6 +474,10 @@ export type WhatsAppSessionUncheckedCreateInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutWhatsAppSessionInput
 }
@@ -434,6 +494,10 @@ export type WhatsAppSessionUpdateInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutWhatsAppSessionNestedInput
   customer?: Prisma.CustomerUpdateOneWithoutWhatsAppSessionNestedInput
@@ -456,6 +520,10 @@ export type WhatsAppSessionUncheckedUpdateInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
 }
@@ -475,6 +543,10 @@ export type WhatsAppSessionCreateManyInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
 }
 
 export type WhatsAppSessionUpdateManyMutationInput = {
@@ -489,6 +561,10 @@ export type WhatsAppSessionUpdateManyMutationInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
 
 export type WhatsAppSessionUncheckedUpdateManyInput = {
@@ -506,6 +582,10 @@ export type WhatsAppSessionUncheckedUpdateManyInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
 
 export type WhatsAppSessionScalarRelationFilter = {
@@ -538,10 +618,15 @@ export type WhatsAppSessionCountOrderByAggregateInput = {
   isBlocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiConversationHistory?: Prisma.SortOrder
+  aiDetectedLanguage?: Prisma.SortOrder
+  aiIntent?: Prisma.SortOrder
+  aiConfidence?: Prisma.SortOrder
 }
 
 export type WhatsAppSessionAvgOrderByAggregateInput = {
   messageCount?: Prisma.SortOrder
+  aiConfidence?: Prisma.SortOrder
 }
 
 export type WhatsAppSessionMaxOrderByAggregateInput = {
@@ -559,6 +644,10 @@ export type WhatsAppSessionMaxOrderByAggregateInput = {
   isBlocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiConversationHistory?: Prisma.SortOrder
+  aiDetectedLanguage?: Prisma.SortOrder
+  aiIntent?: Prisma.SortOrder
+  aiConfidence?: Prisma.SortOrder
 }
 
 export type WhatsAppSessionMinOrderByAggregateInput = {
@@ -576,10 +665,15 @@ export type WhatsAppSessionMinOrderByAggregateInput = {
   isBlocked?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  aiConversationHistory?: Prisma.SortOrder
+  aiDetectedLanguage?: Prisma.SortOrder
+  aiIntent?: Prisma.SortOrder
+  aiConfidence?: Prisma.SortOrder
 }
 
 export type WhatsAppSessionSumOrderByAggregateInput = {
   messageCount?: Prisma.SortOrder
+  aiConfidence?: Prisma.SortOrder
 }
 
 export type WhatsAppSessionCreateNestedOneWithoutConversationThreadInput = {
@@ -748,6 +842,10 @@ export type WhatsAppSessionCreateWithoutConversationThreadInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutWhatsAppSessionInput
   customer?: Prisma.CustomerCreateNestedOneWithoutWhatsAppSessionInput
   WhatsAppConfig: Prisma.WhatsAppConfigCreateNestedOneWithoutWhatsAppSessionInput
@@ -769,6 +867,10 @@ export type WhatsAppSessionUncheckedCreateWithoutConversationThreadInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutWhatsAppSessionInput
 }
 
@@ -800,6 +902,10 @@ export type WhatsAppSessionUpdateWithoutConversationThreadInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutWhatsAppSessionNestedInput
   customer?: Prisma.CustomerUpdateOneWithoutWhatsAppSessionNestedInput
   WhatsAppConfig?: Prisma.WhatsAppConfigUpdateOneRequiredWithoutWhatsAppSessionNestedInput
@@ -821,6 +927,10 @@ export type WhatsAppSessionUncheckedUpdateWithoutConversationThreadInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
 }
 
@@ -836,6 +946,10 @@ export type WhatsAppSessionCreateWithoutCustomerInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppConfig: Prisma.WhatsAppConfigCreateNestedOneWithoutWhatsAppSessionInput
@@ -856,6 +970,10 @@ export type WhatsAppSessionUncheckedCreateWithoutCustomerInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutWhatsAppSessionInput
 }
@@ -903,6 +1021,10 @@ export type WhatsAppSessionScalarWhereInput = {
   isBlocked?: Prisma.BoolFilter<"WhatsAppSession"> | boolean
   createdAt?: Prisma.DateTimeFilter<"WhatsAppSession"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"WhatsAppSession"> | Date | string
+  aiConversationHistory?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiDetectedLanguage?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiIntent?: Prisma.StringNullableFilter<"WhatsAppSession"> | string | null
+  aiConfidence?: Prisma.FloatNullableFilter<"WhatsAppSession"> | number | null
 }
 
 export type WhatsAppSessionCreateWithoutTenantInput = {
@@ -917,6 +1039,10 @@ export type WhatsAppSessionCreateWithoutTenantInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutWhatsAppSessionInput
   customer?: Prisma.CustomerCreateNestedOneWithoutWhatsAppSessionInput
@@ -937,6 +1063,10 @@ export type WhatsAppSessionUncheckedCreateWithoutTenantInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutWhatsAppSessionInput
 }
@@ -978,6 +1108,10 @@ export type WhatsAppSessionCreateWithoutWhatsAppConfigInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutWhatsAppSessionInput
   customer?: Prisma.CustomerCreateNestedOneWithoutWhatsAppSessionInput
@@ -998,6 +1132,10 @@ export type WhatsAppSessionUncheckedCreateWithoutWhatsAppConfigInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutWhatsAppSessionInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutWhatsAppSessionInput
 }
@@ -1039,6 +1177,10 @@ export type WhatsAppSessionCreateWithoutWhatsAppMessageInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutWhatsAppSessionInput
   customer?: Prisma.CustomerCreateNestedOneWithoutWhatsAppSessionInput
   WhatsAppConfig: Prisma.WhatsAppConfigCreateNestedOneWithoutWhatsAppSessionInput
@@ -1060,6 +1202,10 @@ export type WhatsAppSessionUncheckedCreateWithoutWhatsAppMessageInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutWhatsAppSessionInput
 }
 
@@ -1091,6 +1237,10 @@ export type WhatsAppSessionUpdateWithoutWhatsAppMessageInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutWhatsAppSessionNestedInput
   customer?: Prisma.CustomerUpdateOneWithoutWhatsAppSessionNestedInput
   WhatsAppConfig?: Prisma.WhatsAppConfigUpdateOneRequiredWithoutWhatsAppSessionNestedInput
@@ -1112,6 +1262,10 @@ export type WhatsAppSessionUncheckedUpdateWithoutWhatsAppMessageInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
 }
 
@@ -1129,6 +1283,10 @@ export type WhatsAppSessionCreateManyCustomerInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
 }
 
 export type WhatsAppSessionUpdateWithoutCustomerInput = {
@@ -1143,6 +1301,10 @@ export type WhatsAppSessionUpdateWithoutCustomerInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppConfig?: Prisma.WhatsAppConfigUpdateOneRequiredWithoutWhatsAppSessionNestedInput
@@ -1163,6 +1325,10 @@ export type WhatsAppSessionUncheckedUpdateWithoutCustomerInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
 }
@@ -1181,6 +1347,10 @@ export type WhatsAppSessionUncheckedUpdateManyWithoutCustomerInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
 
 export type WhatsAppSessionCreateManyTenantInput = {
@@ -1197,6 +1367,10 @@ export type WhatsAppSessionCreateManyTenantInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
 }
 
 export type WhatsAppSessionUpdateWithoutTenantInput = {
@@ -1211,6 +1385,10 @@ export type WhatsAppSessionUpdateWithoutTenantInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutWhatsAppSessionNestedInput
   customer?: Prisma.CustomerUpdateOneWithoutWhatsAppSessionNestedInput
@@ -1231,6 +1409,10 @@ export type WhatsAppSessionUncheckedUpdateWithoutTenantInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
 }
@@ -1249,6 +1431,10 @@ export type WhatsAppSessionUncheckedUpdateManyWithoutTenantInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
 
 export type WhatsAppSessionCreateManyWhatsAppConfigInput = {
@@ -1265,6 +1451,10 @@ export type WhatsAppSessionCreateManyWhatsAppConfigInput = {
   isBlocked?: boolean
   createdAt?: Date | string
   updatedAt: Date | string
+  aiConversationHistory?: string | null
+  aiDetectedLanguage?: string | null
+  aiIntent?: string | null
+  aiConfidence?: number | null
 }
 
 export type WhatsAppSessionUpdateWithoutWhatsAppConfigInput = {
@@ -1279,6 +1469,10 @@ export type WhatsAppSessionUpdateWithoutWhatsAppConfigInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutWhatsAppSessionNestedInput
   customer?: Prisma.CustomerUpdateOneWithoutWhatsAppSessionNestedInput
@@ -1299,6 +1493,10 @@ export type WhatsAppSessionUncheckedUpdateWithoutWhatsAppConfigInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutWhatsAppSessionNestedInput
 }
@@ -1317,6 +1515,10 @@ export type WhatsAppSessionUncheckedUpdateManyWithoutWhatsAppConfigInput = {
   isBlocked?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  aiConversationHistory?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiDetectedLanguage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiIntent?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  aiConfidence?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
 }
 
 
@@ -1374,6 +1576,10 @@ export type WhatsAppSessionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   isBlocked?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aiConversationHistory?: boolean
+  aiDetectedLanguage?: boolean
+  aiIntent?: boolean
+  aiConfidence?: boolean
   ConversationThread?: boolean | Prisma.WhatsAppSession$ConversationThreadArgs<ExtArgs>
   WhatsAppMessage?: boolean | Prisma.WhatsAppSession$WhatsAppMessageArgs<ExtArgs>
   customer?: boolean | Prisma.WhatsAppSession$customerArgs<ExtArgs>
@@ -1397,6 +1603,10 @@ export type WhatsAppSessionSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   isBlocked?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aiConversationHistory?: boolean
+  aiDetectedLanguage?: boolean
+  aiIntent?: boolean
+  aiConfidence?: boolean
   customer?: boolean | Prisma.WhatsAppSession$customerArgs<ExtArgs>
   WhatsAppConfig?: boolean | Prisma.WhatsAppConfigDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1417,6 +1627,10 @@ export type WhatsAppSessionSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   isBlocked?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aiConversationHistory?: boolean
+  aiDetectedLanguage?: boolean
+  aiIntent?: boolean
+  aiConfidence?: boolean
   customer?: boolean | Prisma.WhatsAppSession$customerArgs<ExtArgs>
   WhatsAppConfig?: boolean | Prisma.WhatsAppConfigDefaultArgs<ExtArgs>
   tenant?: boolean | Prisma.TenantDefaultArgs<ExtArgs>
@@ -1437,9 +1651,13 @@ export type WhatsAppSessionSelectScalar = {
   isBlocked?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  aiConversationHistory?: boolean
+  aiDetectedLanguage?: boolean
+  aiIntent?: boolean
+  aiConfidence?: boolean
 }
 
-export type WhatsAppSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "configId" | "phoneNumber" | "customerId" | "sessionId" | "state" | "stateData" | "lastMessageAt" | "messageCount" | "isActive" | "isBlocked" | "createdAt" | "updatedAt", ExtArgs["result"]["whatsAppSession"]>
+export type WhatsAppSessionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "configId" | "phoneNumber" | "customerId" | "sessionId" | "state" | "stateData" | "lastMessageAt" | "messageCount" | "isActive" | "isBlocked" | "createdAt" | "updatedAt" | "aiConversationHistory" | "aiDetectedLanguage" | "aiIntent" | "aiConfidence", ExtArgs["result"]["whatsAppSession"]>
 export type WhatsAppSessionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   ConversationThread?: boolean | Prisma.WhatsAppSession$ConversationThreadArgs<ExtArgs>
   WhatsAppMessage?: boolean | Prisma.WhatsAppSession$WhatsAppMessageArgs<ExtArgs>
@@ -1483,6 +1701,10 @@ export type $WhatsAppSessionPayload<ExtArgs extends runtime.Types.Extensions.Int
     isBlocked: boolean
     createdAt: Date
     updatedAt: Date
+    aiConversationHistory: string | null
+    aiDetectedLanguage: string | null
+    aiIntent: string | null
+    aiConfidence: number | null
   }, ExtArgs["result"]["whatsAppSession"]>
   composites: {}
 }
@@ -1925,6 +2147,10 @@ export interface WhatsAppSessionFieldRefs {
   readonly isBlocked: Prisma.FieldRef<"WhatsAppSession", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"WhatsAppSession", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"WhatsAppSession", 'DateTime'>
+  readonly aiConversationHistory: Prisma.FieldRef<"WhatsAppSession", 'String'>
+  readonly aiDetectedLanguage: Prisma.FieldRef<"WhatsAppSession", 'String'>
+  readonly aiIntent: Prisma.FieldRef<"WhatsAppSession", 'String'>
+  readonly aiConfidence: Prisma.FieldRef<"WhatsAppSession", 'Float'>
 }
     
 

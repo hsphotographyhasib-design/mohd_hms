@@ -506,3 +506,88 @@ export type WorkOrderMaterial = Prisma.WorkOrderMaterialModel
  * 
  */
 export type ErrorLog = Prisma.ErrorLogModel
+/**
+ * Model CmsPage
+ * 
+ */
+export type CmsPage = Prisma.CmsPageModel
+/**
+ * Model CmsRevision
+ * 
+ */
+export type CmsRevision = Prisma.CmsRevisionModel
+/**
+ * Model CmsPageTemplate
+ * 
+ */
+export type CmsPageTemplate = Prisma.CmsPageTemplateModel
+/**
+ * Model Document
+ * 
+ */
+export type Document = Prisma.DocumentModel
+/**
+ * Model DocumentVersion
+ * 
+ */
+export type DocumentVersion = Prisma.DocumentVersionModel
+/**
+ * Model DocumentAuditLog
+ * 
+ */
+export type DocumentAuditLog = Prisma.DocumentAuditLogModel
+/**
+ * Model ServiceItem
+ * 
+ */
+export type ServiceItem = Prisma.ServiceItemModel
+/**
+ * Model ServiceCategory
+ * 
+ */
+export type ServiceCategory = Prisma.ServiceCategoryModel
+/**
+ * Model ServicePackage
+ * 
+ */
+export type ServicePackage = Prisma.ServicePackageModel
+/**
+ * Model LabourRate
+ * 
+ */
+export type LabourRate = Prisma.LabourRateModel
+/**
+ * Model AiConversationLog
+ * 
+ */
+export type AiConversationLog = Prisma.AiConversationLogModel
+/**
+ * Model PaymentVerification
+ * 
+ */
+export type PaymentVerification = Prisma.PaymentVerificationModel
+/**
+ * Model SavedLocation
+ * 
+ */
+export type SavedLocation = Prisma.SavedLocationModel
+/**
+ * Model ServiceItemMaterial
+ * 
+ */
+export type ServiceItemMaterial = Prisma.ServiceItemMaterialModel
+/**
+ * Model ServiceItemEquipment
+ * 
+ */
+export type ServiceItemEquipment = Prisma.ServiceItemEquipmentModel
+/**
+ * Model ServiceChecklistItem
+ * 
+ */
+export type ServiceChecklistItem = Prisma.ServiceChecklistItemModel
+/**
+ * Model ServicePackageItem
+ * 
+ */
+export type ServicePackageItem = Prisma.ServicePackageItemModel

@@ -9,8 +9,12 @@ import type { NextRequest } from 'next/server';
  * Priority:
  *   1. Well-known env var names (JWT_SECRET, NEXTAUTH_SECRET, etc.)
  *   2. Scan all env vars for keys containing jwt/secret/signing (Vercel mohd_hms_ convention)
- *   3. Derive a deterministic secret from the database URL (SHA-256)
+ *   3. Derive a deterministic secret from the database URL (SHA-256) — fallback only
  *   4. Last resort: random bytes (tokens invalidate on server restart)
+ *
+ * SECURITY: Always set JWT_SECRET in production environments.
+ * The derived fallback (step 3) exists solely to prevent session invalidation
+ * during development. It should NOT be relied upon in production.
  */
 function findDatabaseUrl(): string | null {
   const candidates = ['DATABASE_URL', 'PRISMA_DATABASE_URL', 'POSTGRES_URL'];
@@ -32,7 +36,7 @@ const _resolvedSecret = (() => {
   for (const name of candidates) {
     const val = process.env[name];
     if (val && val.length >= 16) {
-      console.log(`[AUTH] Found JWT secret in env: ${name}`);
+      console.log(`[AUTH] Using JWT secret from env: ${name}`);
       return { value: val, source: `env:${name}` };
     }
   }
@@ -45,33 +49,50 @@ const _resolvedSecret = (() => {
     const k = key.toLowerCase();
     if (k.includes('jwt') || k.includes('secret') || k.includes('token_key') || k.includes('signing')) {
       if (val.startsWith('postgres://') || val.startsWith('http') || val.startsWith('{')) continue;
-      console.log(`[AUTH] Found JWT secret in env (scan): ${key}`);
+      console.log(`[AUTH] Using JWT secret from env (scan): ${key}`);
       return { value: val, source: `scan:${key}` };
     }
   }
 
   // 3. Derive a deterministic secret from the database URL (SHA-256)
-  //    Same DB = same secret = tokens survive server restarts
+  //    ⚠️ FALLBACK ONLY — Set JWT_SECRET in production!
+  //    Same DB = same secret = tokens survive server restarts.
+  //    This is weaker than a proper random secret but better than
+  //    invalidating all sessions on every restart.
   const dbUrl = findDatabaseUrl();
   if (dbUrl) {
-    // Use a fixed prefix so the hash can never collide with a plaintext secret
     const derived = createHash('sha256')
       .update(`mohd-hms-jwt-derived:${dbUrl}`)
       .digest('hex');
-    console.log('[AUTH] Derived JWT secret from database URL (deterministic, tokens survive restarts)');
+    console.warn(
+      '[AUTH] ⚠️  WARNING: No JWT_SECRET env var found. Using a key derived from DATABASE_URL.\n' +
+      '       This is acceptable for development but WEAK for production.\n' +
+      '       Set JWT_SECRET (≥16 chars) in your environment to use a proper cryptographic secret.'
+    );
     return { value: derived, source: 'derived:db-url' };
   }
 
   // 4. Absolute last resort: random bytes — tokens invalidate on every server restart
-  console.warn(
-    '[AUTH] WARNING: No JWT secret found and no database URL. Using random secret. ' +
-    'Tokens will invalidate on server restart.'
+  console.error(
+    '[AUTH] 🔴 CRITICAL: No JWT secret found and no database URL available.\n' +
+    '       Using a RANDOM secret. ALL existing tokens will INVALIDATE on server restart.\n' +
+    '       Set JWT_SECRET (≥16 chars) in your environment immediately.'
   );
   return { value: randomBytes(32).toString('hex'), source: 'random-fallback' };
 })();
 
 const JWT_SECRET = _resolvedSecret.value;
 const JWT_EXPIRES_IN = '7d';
+
+// Log a one-time startup summary if not using a proper env var
+if (!_resolvedSecret.source.startsWith('env:')) {
+  console.warn(
+    `[AUTH] ═══════════════════════════════════════════════════════════════\n` +
+    `[AUTH]  JWT secret source: ${_resolvedSecret.source}\n` +
+    `[AUTH]  For production, set:  JWT_SECRET=<random-string-≥16-chars>\n` +
+    `[AUTH] ═══════════════════════════════════════════════════════════════`
+  );
+}
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 12);

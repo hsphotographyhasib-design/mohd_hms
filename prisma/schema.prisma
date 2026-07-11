@@ -1456,23 +1456,23 @@ model InventorySubcategory {
 }
 
 model Invoice {
-  id                            String     @id
+  id                            String           @id
   tenantId                      String
   customerId                    String
   workOrderId                   String?
   quotationId                   String?
-  invoiceNumber                 String     @unique
+  invoiceNumber                 String           @unique
   title                         String
   description                   String?
   items                         String
   subtotal                      Float
-  taxRate                       Float      @default(0)
-  tax                           Float      @default(0)
-  discount                      Float      @default(0)
-  shipping                      Float      @default(0)
+  taxRate                       Float            @default(0)
+  tax                           Float            @default(0)
+  discount                      Float            @default(0)
+  shipping                      Float            @default(0)
   total                         Float
-  status                        String     @default("DRAFT")
-  currency                      String     @default("BND")
+  status                        String           @default("DRAFT")
+  currency                      String           @default("BND")
   referenceNo                   String?
   poReference                   String?
   paymentTerms                  String?
@@ -1499,37 +1499,37 @@ model Invoice {
   sentAt                        DateTime?
   viewedAt                      DateTime?
   closedAt                      DateTime?
-  createdAt                     DateTime   @default(now())
+  createdAt                     DateTime         @default(now())
   updatedAt                     DateTime
   payments                      InvoicePayment[]
-  User_Invoice_preparedByToUser User?      @relation("Invoice_preparedByToUser", fields: [preparedBy], references: [id])
-  User_Invoice_createdByToUser  User?      @relation("Invoice_createdByToUser", fields: [createdBy], references: [id])
-  User_Invoice_approvedByToUser User?      @relation("Invoice_approvedByToUser", fields: [approvedBy], references: [id])
-  quotation                     Quotation? @relation(fields: [quotationId], references: [id])
-  workOrder                     WorkOrder? @relation(fields: [workOrderId], references: [id])
-  customer                      Customer   @relation(fields: [customerId], references: [id])
-  tenant                        Tenant     @relation(fields: [tenantId], references: [id])
+  User_Invoice_preparedByToUser User?            @relation("Invoice_preparedByToUser", fields: [preparedBy], references: [id])
+  User_Invoice_createdByToUser  User?            @relation("Invoice_createdByToUser", fields: [createdBy], references: [id])
+  User_Invoice_approvedByToUser User?            @relation("Invoice_approvedByToUser", fields: [approvedBy], references: [id])
+  quotation                     Quotation?       @relation(fields: [quotationId], references: [id])
+  workOrder                     WorkOrder?       @relation(fields: [workOrderId], references: [id])
+  customer                      Customer         @relation(fields: [customerId], references: [id])
+  tenant                        Tenant           @relation(fields: [tenantId], references: [id])
 
   @@index([tenantId, status])
 }
 
 model InvoicePayment {
-  id              String   @id
-  tenantId        String
-  invoiceId       String
-  amount          Float
-  method          String                 // cash, bank_transfer, cheque, online, card
-  referenceNo     String?
-  transactionId   String?
-  receiptUrl      String?
-  notes           String?
-  paidAt          DateTime @default(now())
-  createdBy       String?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime
-  invoice         Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
-  User_InvoicePayment_createdByToUser User? @relation("InvoicePayment_createdByToUser", fields: [createdBy], references: [id])
-  tenant          Tenant   @relation(fields: [tenantId], references: [id])
+  id                                  String   @id
+  tenantId                            String
+  invoiceId                           String
+  amount                              Float
+  method                              String // cash, bank_transfer, cheque, online, card
+  referenceNo                         String?
+  transactionId                       String?
+  receiptUrl                          String?
+  notes                               String?
+  paidAt                              DateTime @default(now())
+  createdBy                           String?
+  createdAt                           DateTime @default(now())
+  updatedAt                           DateTime
+  invoice                             Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  User_InvoicePayment_createdByToUser User?    @relation("InvoicePayment_createdByToUser", fields: [createdBy], references: [id])
+  tenant                              Tenant   @relation(fields: [tenantId], references: [id])
 
   @@index([invoiceId])
   @@index([tenantId])
@@ -1990,48 +1990,48 @@ model TermsAcceptance {
 }
 
 model User {
-  id                                     String               @id
-  tenantId                               String
-  email                                  String
-  passwordHash                           String?
-  name                                   String
-  phone                                  String?
-  avatar                                 String?
-  role                                   String               @default("technician")
-  employeeNumber                         String?
-  departmentId                           String?
-  authProvider                           String?
-  googleId                               String?              @unique
-  isActive                               Boolean              @default(true)
-  isOnline                               Boolean              @default(false)
-  lastLogin                              DateTime?
-  gpsLocation                            String?
-  profileCompleted                       Boolean              @default(false)
-  createdAt                              DateTime             @default(now())
-  updatedAt                              DateTime
-  AuditLog                               AuditLog[]
-  AuthAuditLog                           AuthAuditLog[]
-  Complaint_Complaint_supervisorIdToUser Complaint[]          @relation("Complaint_supervisorIdToUser")
-  Complaint_Complaint_assignedToIdToUser Complaint[]          @relation("Complaint_assignedToIdToUser")
-  Device                                 Device[]
-  DeviceToken                            DeviceToken[]
-  Invoice_Invoice_preparedByToUser       Invoice[]            @relation("Invoice_preparedByToUser")
-  Invoice_Invoice_createdByToUser        Invoice[]            @relation("Invoice_createdByToUser")
-  Invoice_Invoice_approvedByToUser       Invoice[]            @relation("Invoice_approvedByToUser")
-  InvoicePayment_InvoicePayment_createdByToUser InvoicePayment[] @relation("InvoicePayment_createdByToUser")
-  LoginSession                           LoginSession[]
-  NotificationLog                        NotificationLog[]
-  PasswordResetOtp                       PasswordResetOtp[]
-  PasswordResetToken                     PasswordResetToken[]
-  PmSchedule                             PmSchedule[]
-  Quotation                              Quotation[]
-  TermsAcceptance                        TermsAcceptance[]
-  department                             Department?          @relation(fields: [departmentId], references: [id])
-  tenant                                 Tenant               @relation(fields: [tenantId], references: [id])
-  VehicleLog                             VehicleLog[]
-  WorkOrder_WorkOrder_createdByToUser    WorkOrder[]          @relation("WorkOrder_createdByToUser")
-  WorkOrder_WorkOrder_supervisorIdToUser WorkOrder[]          @relation("WorkOrder_supervisorIdToUser")
-  WorkOrder_WorkOrder_assignedToIdToUser WorkOrder[]          @relation("WorkOrder_assignedToIdToUser")
+  id                                            String               @id
+  tenantId                                      String
+  email                                         String
+  passwordHash                                  String?
+  name                                          String
+  phone                                         String?
+  avatar                                        String?
+  role                                          String               @default("technician")
+  employeeNumber                                String?
+  departmentId                                  String?
+  authProvider                                  String?
+  googleId                                      String?              @unique
+  isActive                                      Boolean              @default(true)
+  isOnline                                      Boolean              @default(false)
+  lastLogin                                     DateTime?
+  gpsLocation                                   String?
+  profileCompleted                              Boolean              @default(false)
+  createdAt                                     DateTime             @default(now())
+  updatedAt                                     DateTime
+  AuditLog                                      AuditLog[]
+  AuthAuditLog                                  AuthAuditLog[]
+  Complaint_Complaint_supervisorIdToUser        Complaint[]          @relation("Complaint_supervisorIdToUser")
+  Complaint_Complaint_assignedToIdToUser        Complaint[]          @relation("Complaint_assignedToIdToUser")
+  Device                                        Device[]
+  DeviceToken                                   DeviceToken[]
+  Invoice_Invoice_preparedByToUser              Invoice[]            @relation("Invoice_preparedByToUser")
+  Invoice_Invoice_createdByToUser               Invoice[]            @relation("Invoice_createdByToUser")
+  Invoice_Invoice_approvedByToUser              Invoice[]            @relation("Invoice_approvedByToUser")
+  InvoicePayment_InvoicePayment_createdByToUser InvoicePayment[]     @relation("InvoicePayment_createdByToUser")
+  LoginSession                                  LoginSession[]
+  NotificationLog                               NotificationLog[]
+  PasswordResetOtp                              PasswordResetOtp[]
+  PasswordResetToken                            PasswordResetToken[]
+  PmSchedule                                    PmSchedule[]
+  Quotation                                     Quotation[]
+  TermsAcceptance                               TermsAcceptance[]
+  department                                    Department?          @relation(fields: [departmentId], references: [id])
+  tenant                                        Tenant               @relation(fields: [tenantId], references: [id])
+  VehicleLog                                    VehicleLog[]
+  WorkOrder_WorkOrder_createdByToUser           WorkOrder[]          @relation("WorkOrder_createdByToUser")
+  WorkOrder_WorkOrder_supervisorIdToUser        WorkOrder[]          @relation("WorkOrder_supervisorIdToUser")
+  WorkOrder_WorkOrder_assignedToIdToUser        WorkOrder[]          @relation("WorkOrder_assignedToIdToUser")
 
   @@unique([tenantId, email])
   @@index([phone])
@@ -2149,6 +2149,14 @@ model WhatsAppConfig {
   defaultPriority       String            @default("medium")
   createdAt             DateTime          @default(now())
   updatedAt             DateTime
+  aiEnabled             Boolean           @default(false)
+  aiSystemPrompt        String?
+  aiTypingDelay         Int?
+  aiMaxContext          Int?
+  aiBusinessHours       String?
+  aiLanguage            String?
+  aiEscalationRules     String?
+  aiKnowledgeBase       String?
   tenant                Tenant            @relation(fields: [tenantId], references: [id])
   WhatsAppSession       WhatsAppSession[]
 }
@@ -2204,25 +2212,29 @@ model WhatsAppMessage {
 }
 
 model WhatsAppSession {
-  id                 String               @id
-  tenantId           String
-  configId           String
-  phoneNumber        String
-  customerId         String?
-  sessionId          String?
-  state              String               @default("menu")
-  stateData          String?
-  lastMessageAt      DateTime             @default(now())
-  messageCount       Int                  @default(0)
-  isActive           Boolean              @default(true)
-  isBlocked          Boolean              @default(false)
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime
-  ConversationThread ConversationThread[]
-  WhatsAppMessage    WhatsAppMessage[]
-  customer           Customer?            @relation(fields: [customerId], references: [id])
-  WhatsAppConfig     WhatsAppConfig       @relation(fields: [configId], references: [id])
-  tenant             Tenant               @relation(fields: [tenantId], references: [id])
+  id                    String               @id
+  tenantId              String
+  configId              String
+  phoneNumber           String
+  customerId            String?
+  sessionId             String?
+  state                 String               @default("menu")
+  stateData             String?
+  lastMessageAt         DateTime             @default(now())
+  messageCount          Int                  @default(0)
+  isActive              Boolean              @default(true)
+  isBlocked             Boolean              @default(false)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime
+  ConversationThread    ConversationThread[]
+  WhatsAppMessage       WhatsAppMessage[]
+  customer              Customer?            @relation(fields: [customerId], references: [id])
+  WhatsAppConfig        WhatsAppConfig       @relation(fields: [configId], references: [id])
+  aiConversationHistory String?
+  aiDetectedLanguage    String?
+  aiIntent              String?
+  aiConfidence          Float?
+  tenant                Tenant               @relation(fields: [tenantId], references: [id])
 
   @@index([state])
   @@index([phoneNumber])
@@ -2340,40 +2352,430 @@ model WorkOrderMaterial {
 // ─────────────────────────────────────────────────────────────────────────────
 
 model ErrorLog {
-  id          String   @id
-  errorRef    String   @unique                    // ERR-20260710-ABCD
-  userId      String?
-  userName    String?
-  userRole    String?
-  tenantId    String?
+  id       String  @id
+  errorRef String  @unique // ERR-20260710-ABCD
+  userId   String?
+  userName String?
+  userRole String?
+  tenantId String?
 
-  category    String   @default("unknown")         // database, api, auth, permission, validation, network, timeout, firebase, brevo, redis, supabase, prisma, unknown, frontend, upload
-  errorType   String?                              // Exception class name
-  errorCode   String?                              // P2002, 401, ECONNREFUSED, etc.
-  message     String                               // Technical message
-  userMessage String?                              // Friendly message shown to user
+  category    String  @default("unknown") // database, api, auth, permission, validation, network, timeout, firebase, brevo, redis, supabase, prisma, unknown, frontend, upload
+  errorType   String? // Exception class name
+  errorCode   String? // P2002, 401, ECONNREFUSED, etc.
+  message     String // Technical message
+  userMessage String? // Friendly message shown to user
 
-  module      String?                              // complaints, work-orders, dashboard, etc.
-  apiEndpoint String?                              // POST /api/complaints
-  httpMethod  String?                              // GET, POST, PATCH, DELETE
+  module      String? // complaints, work-orders, dashboard, etc.
+  apiEndpoint String? // POST /api/complaints
+  httpMethod  String? // GET, POST, PATCH, DELETE
   httpStatus  Int?
-  duration    Int?                                 // Request duration in ms
+  duration    Int? // Request duration in ms
 
-  requestBody String?                              // Sanitized request body
-  responseBody String?                             // API response body
-  headers     String?                              // Sanitized headers JSON
-  stackTrace  String?                              // Stack trace (dev/super_admin only)
+  requestBody  String? // Sanitized request body
+  responseBody String? // API response body
+  headers      String? // Sanitized headers JSON
+  stackTrace   String? // Stack trace (dev/super_admin only)
 
-  browser     String?
-  device      String?
-  ip          String?
-  pageUrl     String?
+  browser String?
+  device  String?
+  ip      String?
+  pageUrl String?
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([tenantId])
   @@index([category])
   @@index([errorRef])
   @@index([createdAt])
   @@index([userId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CMS Page
+// ─────────────────────────────────────────────────────────────────────────────
+
+model CmsPage {
+  id           String    @id @default(cuid())
+  tenantId     String
+  title        String
+  slug         String
+  status       String    @default("draft")
+  template     String?
+  schema       String?
+  seoTitle     String?
+  seoDesc      String?
+  ogImage      String?
+  canonical    String?
+  schemaMarkup String?
+  pageData     String?
+  version      Int       @default(1)
+  publishedAt  DateTime?
+  publishedBy  String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CMS Revision
+// ─────────────────────────────────────────────────────────────────────────────
+
+model CmsRevision {
+  id        String   @id @default(cuid())
+  tenantId  String
+  pageId    String
+  pageData  String?
+  version   Int
+  label     String?
+  schema    String?
+  createdBy String?
+  createdAt DateTime @default(now())
+
+  @@index([tenantId, pageId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CMS Page Template
+// ─────────────────────────────────────────────────────────────────────────────
+
+model CmsPageTemplate {
+  id          String   @id @default(cuid())
+  tenantId    String
+  name        String
+  description String?
+  schema      String?
+  category    String?
+  thumbnail   String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Document
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Document {
+  id            String   @id @default(cuid())
+  tenantId      String
+  module        String
+  referenceId   String
+  fileName      String
+  originalName  String?
+  mimeType      String?
+  size          Int?
+  checksum      String?
+  version       Int      @default(1)
+  folder        String?
+  tags          String?
+  storagePath   String?
+  thumbnailPath String?
+  virusStatus   String?  @default("pending")
+  uploadedBy    String?
+  isActive      Boolean  @default(true)
+  isArchived    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([tenantId, module, referenceId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Document Version
+// ─────────────────────────────────────────────────────────────────────────────
+
+model DocumentVersion {
+  id           String   @id @default(cuid())
+  documentId   String
+  version      Int
+  fileName     String
+  originalName String?
+  size         Int?
+  checksum     String?
+  storagePath  String?
+  changeNote   String?
+  createdBy    String?
+  createdAt    DateTime @default(now())
+
+  @@index([documentId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Document Audit Log
+// ─────────────────────────────────────────────────────────────────────────────
+
+model DocumentAuditLog {
+  id              String   @id @default(cuid())
+  tenantId        String
+  documentId      String
+  action          String
+  fileName        String?
+  metadata        String?
+  performedBy     String?
+  performedByRole String?
+  ipAddress       String?
+  userAgent       String?
+  createdAt       DateTime @default(now())
+
+  @@index([tenantId, documentId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service Item
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ServiceItem {
+  id                  String   @id @default(cuid())
+  tenantId            String
+  serviceCode         String?
+  name                String
+  shortName           String?
+  description         String?
+  categoryId          String?
+  subcategory         String?
+  department          String?
+  unitOfMeasure       String?
+  pricingModel        String?  @default("fixed")
+  costPrice           Float?   @default(0)
+  sellingPrice        Float?   @default(0)
+  discount            Float?   @default(0)
+  taxRate             Float?   @default(0)
+  currency            String?  @default("AED")
+  standardDuration    Int?
+  labourHours         Float?
+  techniciansRequired Int?     @default(1)
+  skillLevel          String?
+  technicianGrade     String?
+  overtimeEligible    Boolean? @default(false)
+  weekendRate         Float?
+  holidayRate         Float?
+  serviceInstructions String?
+  safetyNotes         String?
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  ServiceItemMaterial  ServiceItemMaterial[]
+  ServiceItemEquipment ServiceItemEquipment[]
+  ServiceChecklistItem ServiceChecklistItem[]
+
+  @@unique([tenantId, serviceCode])
+  @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service Category
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ServiceCategory {
+  id            String   @id @default(cuid())
+  tenantId      String
+  name          String
+  description   String?
+  icon          String?
+  sortOrder     Int      @default(0)
+  subcategories String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service Package
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ServicePackage {
+  id           String   @id @default(cuid())
+  tenantId     String
+  name         String
+  description  String?
+  packageCode  String?
+  pricingModel String?  @default("fixed")
+  costPrice    Float?   @default(0)
+  sellingPrice Float?   @default(0)
+  discount     Float?   @default(0)
+  taxRate      Float?   @default(0)
+  currency     String?  @default("AED")
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  ServicePackageItem ServicePackageItem[]
+
+  @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Labour Rate
+// ─────────────────────────────────────────────────────────────────────────────
+
+model LabourRate {
+  id              String    @id @default(cuid())
+  tenantId        String
+  labourCode      String?
+  technicianGrade String?
+  skillLevel      String?
+  hourlyCost      Float?    @default(0)
+  hourlyCharge    Float?    @default(0)
+  overtimeRate    Float?    @default(0)
+  weekendRate     Float?    @default(0)
+  holidayRate     Float?    @default(0)
+  effectiveDate   DateTime?
+  status          String?   @default("active")
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([tenantId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI Conversation Log
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AiConversationLog {
+  id               String   @id @default(cuid())
+  tenantId         String
+  sessionId        String
+  customerId       String?
+  phoneNumber      String?
+  userMessage      String?
+  aiResponse       String?
+  detectedIntent   String?
+  detectedLanguage String?
+  confidence       Float?
+  actionTaken      String?
+  actionData       String?
+  responseTimeMs   Int?
+  createdAt        DateTime @default(now())
+
+  @@index([tenantId, sessionId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Payment Verification
+// ─────────────────────────────────────────────────────────────────────────────
+
+model PaymentVerification {
+  id                String    @id @default(cuid())
+  tenantId          String
+  customerId        String?
+  sessionId         String?
+  invoiceId         String?
+  imageUrl          String?
+  extractedAmount   Float?
+  extractedDate     String?
+  extractedBank     String?
+  extractedTxnId    String?
+  extractedSender   String?
+  extractedRef      String?
+  rawAiResponse     String?
+  status            String?   @default("pending")
+  verifiedById      String?
+  verifiedAt        DateTime?
+  verificationNotes String?
+  rejectionReason   String?
+  invoiceClosed     Boolean?  @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([tenantId, invoiceId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Saved Location
+// ─────────────────────────────────────────────────────────────────────────────
+
+model SavedLocation {
+  id            String   @id @default(cuid())
+  tenantId      String
+  customerId    String
+  label         String?
+  building      String?
+  floor         String?
+  unit          String?
+  address       String?
+  district      String?
+  postalCode    String?
+  latitude      Float?
+  longitude     Float?
+  accuracy      Float?
+  googlePlaceId String?
+  fullAddress   String?
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([tenantId, customerId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service Item Material (child of ServiceItem)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ServiceItemMaterial {
+  id                   String      @id @default(cuid())
+  serviceItemId        String
+  materialName         String?
+  quantity             Float?      @default(0)
+  unit                 String?
+  estimatedConsumption Float?
+  isMandatory          Boolean?    @default(false)
+  sortOrder            Int         @default(0)
+  serviceItem          ServiceItem @relation(fields: [serviceItemId], references: [id], onDelete: Cascade)
+
+  @@index([serviceItemId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service Item Equipment (child of ServiceItem)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ServiceItemEquipment {
+  id                  String      @id @default(cuid())
+  serviceItemId       String
+  equipmentName       String?
+  quantity            Int?        @default(1)
+  isMandatory         Boolean?    @default(false)
+  calibrationRequired Boolean?    @default(false)
+  sortOrder           Int         @default(0)
+  serviceItem         ServiceItem @relation(fields: [serviceItemId], references: [id], onDelete: Cascade)
+
+  @@index([serviceItemId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service Checklist Item (child of ServiceItem)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ServiceChecklistItem {
+  id            String      @id @default(cuid())
+  serviceItemId String
+  task          String?
+  description   String?
+  sortOrder     Int         @default(0)
+  serviceItem   ServiceItem @relation(fields: [serviceItemId], references: [id], onDelete: Cascade)
+
+  @@index([serviceItemId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Service Package Item (child of ServicePackage)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model ServicePackageItem {
+  id             String         @id @default(cuid())
+  packageId      String
+  serviceItemId  String
+  quantity       Int?           @default(1)
+  sortOrder      Int            @default(0)
+  servicePackage ServicePackage @relation(fields: [packageId], references: [id], onDelete: Cascade)
+
+  @@index([packageId])
 }

@@ -1008,3 +1008,41 @@ Stage Summary:
 - 2 files changed: src/app/api/auth/users/[id]/route.ts, user-management.tsx
 - Root causes: (1) Missing authProvider in API caused undefined values, (2) 50ms delay insufficient for Radix portal conflict, (3) Missing DialogDescription
 - All fixes pushed to GitHub
+
+---
+Task ID: 2
+Agent: Sub-agent (general-purpose)
+Task: Add missing Prisma models and columns to schema
+
+Work Log:
+- Read full prisma/schema.prisma (2380 lines, 65 existing models) to understand conventions
+- Added 8 AI-related columns to WhatsAppConfig model (aiEnabled, aiSystemPrompt, aiTypingDelay, aiMaxContext, aiBusinessHours, aiLanguage, aiEscalationRules, aiKnowledgeBase)
+- Added 4 AI-related columns to WhatsAppSession model (aiConversationHistory, aiDetectedLanguage, aiIntent, aiConfidence)
+- Added 17 new models at end of schema (after ErrorLog):
+  1. CmsPage — page builder with slug, SEO, schema markup, versioning
+  2. CmsRevision — page revision history with pageData and version
+  3. CmsPageTemplate — reusable page templates with schema
+  4. Document — multi-module file management with versioning, virus scanning
+  5. DocumentVersion — document version history
+  6. DocumentAuditLog — document action audit trail
+  7. ServiceItem — service catalog with pricing, labour, skill requirements
+  8. ServiceCategory — service category hierarchy
+  9. ServicePackage — bundled service packages with pricing
+  10. LabourRate — technician grade/shift-based labour rates
+  11. AiConversationLog — AI chat session logging with intent detection
+  12. PaymentVerification — payment proof verification with AI extraction
+  13. SavedLocation — customer saved addresses with GPS coordinates
+  14. ServiceItemMaterial — child of ServiceItem (materials list)
+  15. ServiceItemEquipment — child of ServiceItem (equipment list)
+  16. ServiceChecklistItem — child of ServiceItem (task checklist)
+  17. ServicePackageItem — child of ServicePackage (packaged service items)
+- All new models use @id @default(cuid()), tenantId String, createdAt/updatedAt conventions
+- Child models (14-17) include cascade delete relations to parents
+- Ran prisma format — formatted in 105ms
+- Ran prisma generate — generated Prisma Client 7.8.0 in 1.02s
+- Ran prisma db push --accept-data-loss — database synced in 81ms
+
+Stage Summary:
+- 1 file changed: prisma/schema.prisma (+392 lines, 17 new models + 12 new columns on 2 existing models)
+- All 3 Prisma commands succeeded without errors
+- Database is in sync with schema
