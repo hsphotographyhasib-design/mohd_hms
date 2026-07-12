@@ -63,10 +63,18 @@ const STATUS_STEPS = [
   { key: 'ACCEPTED', label: 'Accepted' },
   { key: 'WORK_ORDER_CREATED', label: 'Work Order' },
   { key: 'IN_PROGRESS', label: 'In Progress' },
+  { key: 'PAUSED', label: 'Paused' },
   { key: 'WAITING_CLIENT_CONFIRMATION', label: 'Pending Review' },
+  { key: 'CLIENT_CONFIRMED', label: 'Client Confirmed' },
+  { key: 'REWORK_REQUIRED', label: 'Rework Required' },
+  { key: 'DRAFT_INVOICE', label: 'Draft Invoice' },
+  { key: 'INVOICE_APPROVED', label: 'Invoice Approved' },
+  { key: 'INVOICE_SENT', label: 'Invoice Sent' },
+  { key: 'PAID', label: 'Paid' },
+  { key: 'CLOSED', label: 'Closed' },
 ] as const;
 
-const STATUS_ORDER = ['NEW', 'ASSIGNED', 'ACCEPTED', 'IN_PROGRESS', 'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED', 'DRAFT_INVOICE', 'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED'];
+const STATUS_ORDER = ['NEW', 'ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS', 'PAUSED', 'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED', 'REWORK_REQUIRED', 'DRAFT_INVOICE', 'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED'];
 
 function getStepStatus(stepKey: string, complaintStatus: string): 'completed' | 'current' | 'pending' {
   const stepIdx = STATUS_STEPS.findIndex(s => s.key === stepKey);

@@ -217,8 +217,8 @@ export async function POST(request: NextRequest) {
         category: category || null,
         photos: photos ? JSON.stringify(photos) : null,
         gpsLocation: gpsLocation ? JSON.stringify(gpsLocation) : null,
-        assignedToId: role === 'technician' ? userId : (assignedToId || null),
-        supervisorId: supervisorId || null,
+        assignedToId: role === 'customer' ? null : (role === 'technician' ? userId : (assignedToId || null)),
+        supervisorId: role === 'customer' ? null : (supervisorId || null),
       };
 
       // complaintNumber column exists in both SQLite and Supabase (added via migration)
