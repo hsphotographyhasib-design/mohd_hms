@@ -11,10 +11,15 @@ export async function GET(request: NextRequest) {
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const ctx = await buildAuthContext(payload);
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
     if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const { where: rbacWhere } = await buildComplaintWhereClause(ctx);
+    const { where: rbacWhere, accessLevel } = await buildComplaintWhereClause(ctx);
+
+    // If customer has no linked record, return zero counts (not 401)
+    if (accessLevel === 'none') {
+      return NextResponse.json({ counts: {} });
+    }
 
     // Single groupBy query to get all status counts at once
     const groups = await db.complaint.groupBy({

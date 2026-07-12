@@ -87,13 +87,37 @@ export const GET = withErrorLogging(async (request: NextRequest) => {
       action: `LIST_COMPLAINTS (${description})`,
     });
 
-    const data = items.map((c) => ({
-      id: c.id,
-      tenantId: c.tenantId,
-      customerId: c.customerId,
-      customerName: c.customer?.name,
-      equipmentId: c.equipmentId,
-      equipmentName: c.equipment?.name,
+    // Batch-resolve any missing customer/equipment names from relations
+    const missingCustomerIds = [...new Set(items.filter(c => !c.customer && c.customerId).map(c => c.customerId))];
+    const missingEquipmentIds = [...new Set(items.filter(c => !c.equipment && c.equipmentId).map(c => c.equipmentId!))];
+
+    const [resolvedCustomers, resolvedEquipment] = await Promise.all([
+      missingCustomerIds.length > 0
+        ? db.customer.findMany({ where: { id: { in: missingCustomerIds } }, select: { id: true, name: true } })
+        : [],
+      missingEquipmentIds.length > 0
+        ? db.equipment.findMany({ where: { id: { in: missingEquipmentIds } }, select: { id: true, name: true } })
+        : [],
+    ]);
+
+    const customerMap = new Map(resolvedCustomers.map(c => [c.id, c.name]));
+    const equipmentMap = new Map(resolvedEquipment.map(e => [e.id, e.name]));
+
+    const data = items.map((c) => {
+      // Resolve customer name: relation > fallback lookup > snapshot
+      let cname = c.customer?.name || customerMap.get(c.customerId) || null;
+      if (!cname && c.customerSnapshot) {
+        try { cname = JSON.parse(c.customerSnapshot).name; } catch { /* ignore */ }
+      }
+      // Resolve equipment name: relation > fallback lookup
+      let ename = c.equipment?.name || equipmentMap.get(c.equipmentId || '') || null;
+      return {
+        id: c.id,
+        tenantId: c.tenantId,
+        customerId: c.customerId,
+        customerName: cname,
+        equipmentId: c.equipmentId,
+        equipmentName: ename,
       title: c.title,
       description: c.description,
       priority: c.priority,
@@ -111,7 +135,8 @@ export const GET = withErrorLogging(async (request: NextRequest) => {
       closedAt: c.closedAt?.toISOString(),
       createdAt: c.createdAt.toISOString(),
       updatedAt: c.updatedAt.toISOString(),
-    }));
+      };
+    });
 
     return NextResponse.json({
       data,
@@ -225,7 +250,16 @@ export const POST = withErrorLogging(async (request: NextRequest) => {
       // complaintNumber column exists in both SQLite and Supabase (added via migration)
       createData.complaintNumber = complaintNumber;
 
-      if (customerSnapshot) {
+      // Always save a customer snapshot for data resilience
+      if (!customerSnapshot) {
+        const customerRecord = await tx.customer.findUnique({
+          where: { id: customerId },
+          select: { name: true, email: true, phone: true },
+        });
+        if (customerRecord) {
+          createData.customerSnapshot = JSON.stringify({ name: customerRecord.name, email: customerRecord.email, phone: customerRecord.phone });
+        }
+      } else {
         createData.customerSnapshot = JSON.stringify(customerSnapshot);
       }
       if (locationInfo) {

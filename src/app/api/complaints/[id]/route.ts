@@ -92,14 +92,29 @@ export const GET = withErrorLogging(async (
       action: 'VIEW_DETAIL',
     });
 
+    // Fallback: resolve customer/equipment name if relation returned null
+    let customerName = complaint.customer?.name;
+    let equipmentName = complaint.equipment?.name;
+    if (!customerName && complaint.customerId) {
+      const c = await db.customer.findUnique({ where: { id: complaint.customerId }, select: { name: true } });
+      customerName = c?.name || null;
+    }
+    if (!customerName && complaint.customerSnapshot) {
+      try { customerName = JSON.parse(complaint.customerSnapshot).name; } catch { /* ignore */ }
+    }
+    if (!equipmentName && complaint.equipmentId) {
+      const e = await db.equipment.findUnique({ where: { id: complaint.equipmentId }, select: { name: true } });
+      equipmentName = e?.name || null;
+    }
+
     // Redact sensitive fields for customer role
     const responseData = redactCustomerFields({
       id: complaint.id,
       tenantId: complaint.tenantId,
       customerId: complaint.customerId,
-      customerName: complaint.customer?.name,
+      customerName,
       equipmentId: complaint.equipmentId,
-      equipmentName: complaint.equipment?.name,
+      equipmentName,
       title: complaint.title,
       description: complaint.description,
       priority: complaint.priority,

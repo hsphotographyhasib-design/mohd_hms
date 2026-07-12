@@ -1527,3 +1527,21 @@ Stage Summary:
 - Root cause: `/api/employees` returns 403 for customer, and fetch interceptor incorrectly treated 403 as session expiry
 - Files changed: `src/modules/complaints/components/complaint-detail.tsx`, `src/shared/hooks/use-secure-fetch.ts`
 - Lint: 0 errors
+---
+Task ID: 3
+Agent: main
+Task: Fix KPI counts showing 0 and customer name missing in complaints
+
+Work Log:
+- Analyzed screenshots: KPI counters all 0, customer name shows "—" in list and detail
+- KPI fix: `/api/complaints/counts/route.ts` was calling `buildAuthContext(payload)` without `resolveCustomer: true`, unlike the list endpoint. For customer role, the fallback `resolveCustomerId` could fail due to stale in-memory cache. Fixed by passing `{ resolveCustomer: true }`.
+- Customer name fix (3-layer fallback):
+  1. Complaint list API: added batch fallback lookup for missing customer/equipment relations + customerSnapshot parsing
+  2. Complaint detail API: added direct fallback lookup + customerSnapshot parsing
+  3. Complaint creation: now always saves customerSnapshot (name, email, phone) for data resilience
+- Lint: 0 errors, 1657 pre-existing warnings
+
+Stage Summary:
+- Files changed: `src/app/api/complaints/counts/route.ts`, `src/app/api/complaints/route.ts`, `src/app/api/complaints/[id]/route.ts`
+- Customer name resolution order: Prisma relation → direct DB lookup → customerSnapshot JSON
+- KPI counts now use same auth context as complaint list (consistent customer resolution)
