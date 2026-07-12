@@ -1592,3 +1592,28 @@ Stage Summary:
 - QR lookup is now much more robust with 3 search strategies and diagnostic info
 - User can now see the exact QR ID that was searched when "Equipment Not Found" appears
 - If it still fails, the amber box showing the scanned ID will help diagnose the data mismatch
+
+---
+Task ID: 4
+Agent: Main
+Task: Fix equipment row click not opening detail view
+
+Work Log:
+- Investigated: row click calls setView('equipment-detail', { id: item.id })
+- EquipmentDetail component reads viewParams.id, calls GET /api/equipment/{id}
+- The fetch was failing and component silently bounced back to list
+- Found root cause: Prisma relation field name mismatch
+  - Schema defines: Complaint[], WorkOrder[], PmSchedule[] (PascalCase singular)
+  - API used: complaints, workOrders, pmSchedules (camelCase plural) in _count select
+  - Prisma threw error on unknown field "pmSchedules" → 500 → silent catch → bounce back
+- Fixed equipment detail API: _count now uses Complaint, WorkOrder, PmSchedule
+- Mapped PascalCase _count results to camelCase in response for frontend compatibility
+- Added ensureTableSync('Equipment') to detail route
+- Improved EquipmentDetail component error handling: now shows actual API error message
+- Applied same _count fix to equipment list route for consistency
+- Pushed to GitHub
+
+Stage Summary:
+- Files modified: src/app/api/equipment/[id]/route.ts, src/app/api/equipment/route.ts, src/modules/equipment/components/equipment-detail.tsx
+- Equipment detail should now open correctly when clicking a row
+- Error messages are now descriptive instead of generic
