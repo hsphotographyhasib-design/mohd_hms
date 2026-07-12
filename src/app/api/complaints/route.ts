@@ -5,9 +5,10 @@ import { ensureTableSync } from '@/core/database/db-sync';
 import { buildAuthContext, buildComplaintWhereClause, canPerformComplaintAction, logComplaintAccessAllowed } from '@/core/permissions/rbac';
 import { createNotification } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
+import { withErrorLogging } from '@/core/errors/with-error-logging';
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest) {
+export const GET = withErrorLogging(async (request: NextRequest) => {
   try {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
@@ -125,9 +126,9 @@ export async function GET(request: NextRequest) {
     const msg = error instanceof Error ? error.message : 'Internal server error';
     return NextResponse.json({ error: 'Failed to load complaints', details: msg }, { status: 500 });
   }
-}
+}, { module: 'complaints' });
 
-export async function POST(request: NextRequest) {
+export const POST = withErrorLogging(async (request: NextRequest) => {
   try {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
@@ -287,4 +288,4 @@ export async function POST(request: NextRequest) {
     const msg = error instanceof Error ? error.message : 'Internal server error';
     return NextResponse.json({ error: 'Failed to create complaint', details: msg }, { status: 500 });
   }
-}
+}, { module: 'complaints' });

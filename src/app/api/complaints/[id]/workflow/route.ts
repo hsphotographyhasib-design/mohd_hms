@@ -17,6 +17,7 @@ import {
   canAccessComplaint,
   logComplaintAccessDenied,
 } from '@/core/permissions/rbac';
+import { withErrorLogging } from '@/core/errors/with-error-logging';
 
 export const dynamic = 'force-dynamic';
 
@@ -56,10 +57,10 @@ async function generateWorkOrderNumber(tenantId: string): Promise<string> {
 
 // ── POST: Execute a workflow transition ──────────────────────────────────────
 
-export async function POST(
+export const POST = withErrorLogging(async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+) => {
   try {
     // 1. Auth check
     const authHeader = request.headers.get('authorization');
@@ -451,14 +452,14 @@ export async function POST(
       error instanceof Error ? error.message : 'Internal server error';
     return NextResponse.json({ error: message }, { status: 500 });
   }
-}
+});
 
 // ── GET: Retrieve workflow state and available actions ───────────────────────
 
-export async function GET(
+export const GET = withErrorLogging(async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+) => {
   try {
     // Auth check
     const authHeader = request.headers.get('authorization');
@@ -568,4 +569,4 @@ export async function GET(
       { status: 500 }
     );
   }
-}
+});

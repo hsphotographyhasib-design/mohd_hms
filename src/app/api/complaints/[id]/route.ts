@@ -12,6 +12,7 @@ import {
   logComplaintAccessAllowed,
 } from '@/core/permissions/rbac';
 import type { Prisma } from '@prisma/client';
+import { withErrorLogging } from '@/core/errors/with-error-logging';
 export const dynamic = 'force-dynamic';
 
 // ── Helper: redact sensitive fields for customer role ────────────────────────
@@ -27,10 +28,10 @@ function redactCustomerFields(complaint: Record<string, unknown>, role: string):
   return redacted;
 }
 
-export async function GET(
+export const GET = withErrorLogging(async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+) => {
   try {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
@@ -135,18 +136,15 @@ export async function GET(
       })),
     }, ctx.role);
 
-    return NextResponse.json(responseData);
-  } catch (error) {
-    console.error('Complaint get error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
-}
+    return NextResponse.json(responseData, { status: 200 });
+}, { module: 'complaints' });
 
-export async function PUT(
+// ── PUT: Update Complaint (Admin / Technician) ───────────────────────────────
+
+export const PUT = withErrorLogging(async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
-  try {
+) => {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
@@ -300,12 +298,12 @@ export async function PUT(
     console.error('Complaint update error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+}, { module: 'complaints' });
 
-export async function DELETE(
+export const DELETE = withErrorLogging(async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-) {
+) => {
   try {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
@@ -357,4 +355,4 @@ export async function DELETE(
     console.error('Complaint delete error:', error);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
-}
+}, { module: 'complaints' });

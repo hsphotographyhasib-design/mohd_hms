@@ -47,6 +47,10 @@ export interface ServerLogErrorOptions {
   requestBody?: unknown;
   /** Response body / error response (truncated) */
   responseBody?: unknown;
+  /** Pre-generated Error Reference ID */
+  errorRef?: string;
+  /** Pre-generated Request ID */
+  requestId?: string;
 }
 
 /**
@@ -57,7 +61,7 @@ export async function logServerError(
   error: unknown,
   opts: ServerLogErrorOptions = {},
 ): Promise<string> {
-  const errorRef = generateErrorRef();
+  const errorRef = opts.errorRef || generateErrorRef();
 
   const truncate = (val: unknown, max: number) =>
     typeof val === 'string' ? val.substring(0, max) : val;

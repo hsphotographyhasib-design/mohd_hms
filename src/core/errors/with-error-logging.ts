@@ -45,15 +45,23 @@ export function withErrorLogging(handler: any, opts: WithErrorLoggingOptions = {
     } catch (error: unknown) {
       // Extract auth context from request
       const auth = extractAuthFromRequest(req);
+      const isSuperAdmin = auth.userRole === 'super_admin';
 
       // Determine endpoint info
       const url = req.url;
       const method = req.method;
       const detectedModule = opts.module || url.split('/api/')[1]?.split('/')[0] || 'unknown';
 
+      // Import error service functions dynamically to avoid issues
+      const { generateErrorRef, generateRequestId } = require('./error-service');
+      const errorRef = generateErrorRef();
+      const requestId = generateRequestId();
+
       // Log the error (fire-and-forget — don't block the error response)
       logServerError(error, {
         ...opts,
+        errorRef,
+        requestId,
         module: detectedModule,
         endpoint: url,
         method,
@@ -69,15 +77,43 @@ export function withErrorLogging(handler: any, opts: WithErrorLoggingOptions = {
         return error;
       }
 
-      const message = error instanceof Error ? error.message : String(error);
       const status = (error as { status?: number })?.status || 500;
+      
+      if (isSuperAdmin) {
+        // Return full debug details for super admin
+        const message = error instanceof Error ? error.message : String(error);
+        const stackTrace = error instanceof Error ? error.stack : undefined;
+        // Basic parsing for Prisma/SQL errors
+        const isPrisma = message.includes('Prisma') || message.includes('prisma');
+        const prismaError = isPrisma ? message : undefined;
+        
+        return new NextResponse(
+          JSON.stringify({
+            error: 'Internal server error',
+            message,
+            referenceId: errorRef,
+            debugDetails: {
+              api: detectedModule,
+              endpoint: url,
+              statusCode: status,
+              prismaError,
+              sqlError: undefined, // Typically part of prismaError
+              stackTrace,
+              requestId,
+            }
+          }),
+          { status, headers: { 'Content-Type': 'application/json' } },
+        );
+      }
 
+      // Return sanitized, user-friendly error for regular users
       return new NextResponse(
-        JSON.stringify({ error: message || 'Internal server error' }),
-        {
-          status,
-          headers: { 'Content-Type': 'application/json' },
-        },
+        JSON.stringify({
+          error: `Unable to process your request in the ${detectedModule} module.`,
+          message: 'Please try again later.',
+          referenceId: errorRef,
+        }),
+        { status, headers: { 'Content-Type': 'application/json' } },
       );
     }
   };

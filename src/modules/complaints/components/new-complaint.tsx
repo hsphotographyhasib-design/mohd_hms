@@ -297,9 +297,29 @@ export function NewComplaint() {
   const handleSubmit = useCallback(async () => {
     setSubmitting(true);
     try {
-      const photos = form.files.length > 0
-        ? form.files.map((f) => f.name)
-        : undefined;
+      let photos: string[] | undefined = undefined;
+
+      if (form.files.length > 0) {
+        const uploadFormData = new FormData();
+        form.files.forEach(f => uploadFormData.append('files', f));
+        uploadFormData.append('module', 'complaints');
+        uploadFormData.append('folder', 'attachments');
+
+        const uploadRes = await fetch('/api/upload', {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: uploadFormData,
+        });
+
+        if (!uploadRes.ok) {
+          throw new Error('Failed to upload attachments');
+        }
+
+        const uploadResult = await uploadRes.json();
+        photos = uploadResult.files.map((f: any) => f.path);
+      }
 
       const body: Record<string, any> = {
         customerId: form.customerId,
