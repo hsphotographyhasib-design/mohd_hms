@@ -1566,3 +1566,29 @@ Work Log:
 Stage Summary:
 - File modified: `src/modules/equipment/components/equipment-list.tsx`
 - The QR dialog now renders a real, scannable QR code using `qrcode.react` library instead of a decorative icon
+
+---
+Task ID: 3
+Agent: Main
+Task: Fix QR code scan showing "Equipment Not Found" after scanning real QR code
+
+Work Log:
+- Analyzed uploaded screenshot: QR scan leads to "Equipment Not Found" page
+- Investigated full data flow: QR dialog → URL encoding → public page → lookup API → database query
+- Found architecture: Vercel (frontend + Next.js API) with afterFiles rewrite to Render backend
+- Lookup API at /api/qr/lookup/[qrId] is handled by Next.js (not proxied to Render since route exists)
+- Enhanced lookup route with 3-tier fallback search:
+  1. Direct match on Equipment.qrId or Equipment.qrCode
+  2. Fallback: Search EquipmentQrCode table (handles regenerated QRs where qrCode was overwritten with URL)
+  3. Fallback: Search by assetNumber (strips QR- prefix)
+- Added ensureTableSync('Equipment') and ensureTableSync('EquipmentQrCode') for Supabase column verification
+- Added diagnostic console logging to trace lookup failures on Vercel
+- 404 response now includes the searched QR ID value
+- Updated public equipment page to show the scanned QR ID in the error state (amber box) for debugging
+- Updated error page to show server error details from API response
+
+Stage Summary:
+- Files modified: src/app/api/qr/lookup/[qrId]/route.ts, src/app/equipment/[qrId]/page.tsx
+- QR lookup is now much more robust with 3 search strategies and diagnostic info
+- User can now see the exact QR ID that was searched when "Equipment Not Found" appears
+- If it still fails, the amber box showing the scanned ID will help diagnose the data mismatch
