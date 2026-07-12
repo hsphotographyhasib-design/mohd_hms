@@ -7,7 +7,9 @@ import { broadcastLogoutEvent } from '@/core/auth/session/broadcast-logout';
 /**
  * A secure fetch wrapper that:
  * - Automatically adds Authorization header
- * - Handles 401/403 responses with full session cleanup
+ * - Handles 401 (unauthenticated) with full session cleanup
+ * - Does NOT logout on 403 (forbidden) — that means "no permission for this
+ *   resource", NOT "session invalid". The calling code should handle 403s.
  * - Does NOT rewrite URLs — all /api/... requests go through the
  *   Vercel server-side proxy (which forwards to the Render backend).
  */
@@ -31,8 +33,10 @@ export function useSecureFetch() {
       headers,
     });
 
-    // Handle auth errors
-    if (res.status === 401 || res.status === 403) {
+    // Only 401 (not authenticated) triggers session cleanup.
+    // 403 (forbidden) means the user is authenticated but lacks permission
+    // for this specific resource — they should stay logged in.
+    if (res.status === 401) {
       // Don't redirect for login/register endpoints
       if (url.includes('/api/auth/login') || url.includes('/api/auth/register')) {
         return res;
@@ -79,9 +83,13 @@ export function isWithinGracePeriod(): boolean {
 }
 
 /**
- * Global fetch interceptor — patches global fetch to handle 401/403.
+ * Global fetch interceptor — patches global fetch to handle 401.
  * Call once at app initialization.
  * Does NOT rewrite URLs.
+ *
+ * IMPORTANT: Only 401 (unauthenticated) triggers auto-logout.
+ * 403 (forbidden) is intentionally NOT handled here — the calling
+ * component should deal with permission errors appropriately.
  */
 export function setupFetchInterceptor() {
   const originalFetch = window.fetch;
@@ -98,8 +106,8 @@ export function setupFetchInterceptor() {
 
     const res = await originalFetch(url, { ...options, headers });
 
-    // Handle 401/403
-    if ((res.status === 401 || res.status === 403) && urlStr.includes('/api/') && !urlStr.includes('/api/auth/login') && !urlStr.includes('/api/auth/register')) {
+    // Only 401 (unauthenticated) triggers session cleanup, NOT 403 (forbidden).
+    if (res.status === 401 && urlStr.includes('/api/') && !urlStr.includes('/api/auth/login') && !urlStr.includes('/api/auth/register')) {
       // Skip cleanup during login grace period
       if (isWithinGracePeriod()) return res;
 

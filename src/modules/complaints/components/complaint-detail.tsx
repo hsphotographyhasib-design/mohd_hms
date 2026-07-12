@@ -199,7 +199,9 @@ export function ComplaintDetail() {
     } catch {}
   }, []);
 
-  useEffect(() => { fetchComplaint(); fetchUsers(); }, [fetchComplaint, fetchUsers]);
+  // Customers don't need the employee list (can't assign/reassign)
+  const isCustomer = user?.role === 'customer';
+  useEffect(() => { fetchComplaint(); if (!isCustomer) fetchUsers(); }, [fetchComplaint, fetchUsers, isCustomer]);
 
   // ============ TRANSITION ============
   const executeTransition = async (action: string, body: Record<string, unknown> = {}) => {

@@ -1509,3 +1509,21 @@ Stage Summary:
 - Root cause: `Customer.phone` is required but `User.phone` is optional → null passed to required field
 - Files changed: `src/app/api/customers/self/route.ts`, `src/modules/complaints/components/new-complaint.tsx`
 - The fix ensures customer profile auto-creation always succeeds even when user has no phone number
+---
+Task ID: 2
+Agent: main
+Task: Fix customer user auto-logout when opening submitted complaint
+
+Work Log:
+- Traced the auto-logout to global fetch interceptor in `use-secure-fetch.ts`
+- Found that opening complaint detail calls `fetchUsers()` which fetches `/api/employees?role=technician&pageSize=100`
+- `/api/employees` uses `verifyRouteAuth(request, { feature: 'employees' })` which restricts to `['super_admin', 'admin', 'hr']`
+- Customer role → API returns 403 → fetch interceptor treated 403 same as 401 (session invalid) → full logout
+- Fix 1: `complaint-detail.tsx` — skip `fetchUsers()` for customer role (they can't assign/reassign)
+- Fix 2: `use-secure-fetch.ts` — changed fetch interceptor to only auto-logout on 401 (unauthenticated), NOT 403 (forbidden). 403 means "authenticated but no permission for this resource", user should stay logged in.
+- Verified no other complaint-related endpoints block customer role
+
+Stage Summary:
+- Root cause: `/api/employees` returns 403 for customer, and fetch interceptor incorrectly treated 403 as session expiry
+- Files changed: `src/modules/complaints/components/complaint-detail.tsx`, `src/shared/hooks/use-secure-fetch.ts`
+- Lint: 0 errors
