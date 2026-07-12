@@ -24,7 +24,7 @@ import { Progress } from '@/shared/ui/progress';
 import { Skeleton } from '@/shared/ui/skeleton';
 import { cn } from '@/core/utils/utils';
 import { useAuthStore, useAppStore, canAccess } from '@/app-shell/store';
-import type { ComplaintItem, WorkOrderItem, PmScheduleItem, UserRole } from '@/core/types';
+import type { ComplaintItem, WorkOrderItem, PmScheduleItem, UserRole, AppView } from '@/core/types';
 import {
   useDashboardKpi, useDashboardCharts, useDashboardRecent,
   useDashboardBackgroundRecovery, useDashboardHealth, useInvalidateDashboard,
@@ -97,6 +97,7 @@ interface KpiConfig {
   label: string;
   trend?: { value: number; label: string };
   trendType?: 'positive' | 'negative' | 'warning';
+  targetView?: AppView;
 }
 
 function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLength: number): KpiConfig[] {
@@ -109,6 +110,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'My Active Jobs',
           trend: { value: 12, label: 'vs last week' },
           trendType: 'positive',
+          targetView: 'work-orders',
         },
         {
           icon: <CheckCircle2 className="h-5 w-5 text-emerald-600" />,
@@ -116,6 +118,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Completed This Month',
           trend: { value: 8, label: 'vs last month' },
           trendType: 'positive',
+          targetView: 'work-orders',
         },
         {
           icon: <Clock className="h-5 w-5 text-amber-500" />,
@@ -123,6 +126,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'PM Due Soon',
           trend: { value: 3, label: 'next 7 days' },
           trendType: 'warning',
+          targetView: 'pm',
         },
         {
           icon: <Star className="h-5 w-5 text-amber-500" />,
@@ -140,6 +144,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Total Revenue',
           trend: { value: 15, label: 'vs last month' },
           trendType: 'positive',
+          targetView: 'invoices',
         },
         {
           icon: <ClipboardList className="h-5 w-5 text-amber-500" />,
@@ -147,6 +152,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Pending Invoices',
           trend: { value: 4, label: 'awaiting payment' },
           trendType: 'warning',
+          targetView: 'invoices',
         },
         {
           icon: <AlertTriangle className="h-5 w-5 text-rose-500" />,
@@ -154,6 +160,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Overdue Amount',
           trend: { value: data.overdueInvoices > 0 ? 2 : 0, label: data.overdueInvoices > 0 ? 'needs attention' : 'all clear' },
           trendType: data.overdueInvoices > 0 ? 'negative' : 'positive',
+          targetView: 'invoices',
         },
         {
           icon: <TrendingUp className="h-5 w-5 text-emerald-600" />,
@@ -161,6 +168,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Collection Rate',
           trend: { value: 3, label: 'vs target' },
           trendType: 'warning',
+          targetView: 'finance',
         },
       ];
     case 'customer':
@@ -171,6 +179,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'My Equipment',
           trend: { value: 2, label: 'new this month' },
           trendType: 'positive',
+          targetView: 'equipment',
         },
         {
           icon: <AlertTriangle className="h-5 w-5 text-amber-500" />,
@@ -178,6 +187,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Open Complaints',
           trend: { value: 1, label: 'vs last week' },
           trendType: 'warning',
+          targetView: 'complaints',
         },
         {
           icon: <DollarSign className="h-5 w-5 text-amber-500" />,
@@ -185,6 +195,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Pending Invoices',
           trend: { value: data.pendingInvoices > 0 ? 3 : 0, label: 'awaiting' },
           trendType: data.pendingInvoices > 0 ? 'warning' : 'positive',
+          targetView: 'invoices',
         },
         {
           icon: <ShieldCheck className="h-5 w-5 text-emerald-600" />,
@@ -192,6 +203,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'PM Compliance',
           trend: { value: data.pmCompliance, label: 'on schedule' },
           trendType: data.pmCompliance >= 80 ? 'positive' : 'warning',
+          targetView: 'pm',
         },
       ];
     default:
@@ -203,6 +215,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Active Equipment',
           trend: { value: 95, label: `${data.totalEquipment} total` },
           trendType: 'positive',
+          targetView: 'equipment',
         },
         {
           icon: <AlertTriangle className="h-5 w-5 text-amber-500" />,
@@ -210,6 +223,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Open Complaints',
           trend: { value: data.openComplaints, label: 'need attention' },
           trendType: data.openComplaints > 10 ? 'warning' : 'positive',
+          targetView: 'complaints',
         },
         {
           icon: <ClipboardList className="h-5 w-5 text-amber-500" />,
@@ -217,6 +231,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Pending Work Orders',
           trend: { value: data.totalWorkOrders, label: 'total WOs' },
           trendType: data.pendingWorkOrders > 20 ? 'warning' : 'positive',
+          targetView: 'work-orders',
         },
         {
           icon: <DollarSign className="h-5 w-5 text-emerald-600" />,
@@ -224,6 +239,7 @@ function getKpiCardsForRole(role: UserRole, data: DashboardKpiData, upcomingPmLe
           label: 'Total Revenue',
           trend: { value: 15, label: 'vs last month' },
           trendType: 'positive',
+          targetView: 'invoices',
         },
       ];
   }
@@ -518,7 +534,20 @@ const KpiCardsSection = memo(function KpiCardsSection({
       )}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       {kpiCards.map((kpi, i) => (
-        <Card key={i} className="py-0 gap-0">
+        <Card
+          key={i}
+          className={cn(
+            "py-0 gap-0 transition-all duration-150",
+            kpi.targetView
+              ? "cursor-pointer hover:shadow-md hover:border-emerald-200 dark:hover:border-emerald-800 active:scale-[0.98]"
+              : ""
+          )}
+          onClick={() => {
+            if (kpi.targetView) {
+              useAppStore.getState().setView(kpi.targetView);
+            }
+          }}
+        >
           <CardContent className="p-4">
             <div className="flex items-center justify-between mb-3">
               <div className="h-10 w-10 rounded-lg bg-emerald-50 flex items-center justify-center">

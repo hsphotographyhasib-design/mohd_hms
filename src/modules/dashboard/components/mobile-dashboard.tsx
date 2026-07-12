@@ -85,11 +85,22 @@ interface KpiCardProps {
   bgColor: string;
   iconColor: string;
   icon: React.ReactNode;
+  targetView?: string;
+  onTap?: () => void;
 }
 
-function KpiCard({ label, value, change, bgColor, iconColor, icon }: KpiCardProps) {
+function KpiCard({ label, value, change, bgColor, iconColor, icon, targetView, onTap }: KpiCardProps) {
+  const { setView } = useAppStore();
+  const handleClick = () => {
+    if (onTap) { onTap(); return; }
+    if (targetView) { setView(targetView as any); }
+  };
+  const clickable = !!targetView || !!onTap;
   return (
-    <div className={`${bgColor} rounded-lg p-2.5`}>
+    <div
+      className={`${bgColor} rounded-lg p-2.5 transition-all duration-150 ${clickable ? 'cursor-pointer active:scale-95' : ''}`}
+      onClick={handleClick}
+    >
       <div className={`${iconColor} mb-1.5`}>
         {icon}
       </div>
@@ -340,6 +351,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
               bgColor="bg-[#F0F9F5]"
               iconColor="text-[#0A6E4A]"
               icon={<AlertCircle className="w-6 h-6" />}
+              targetView="complaints"
             />
             <KpiCard
               label="Open Complaints"
@@ -348,6 +360,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
               bgColor="bg-[#FFF8F0]"
               iconColor="text-orange-500"
               icon={<Clock className="w-6 h-6" />}
+              targetView="complaints"
             />
             <KpiCard
               label="Overdue"
@@ -355,6 +368,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
               bgColor="bg-[#FFF0F0]"
               iconColor="text-red-500"
               icon={<AlertCircle className="w-6 h-6" />}
+              targetView="complaints"
             />
             <KpiCard
               label="In Progress"
@@ -363,6 +377,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
               bgColor="bg-[#F0F5FF]"
               iconColor="text-blue-500"
               icon={<Loader2 className="w-6 h-6" />}
+              targetView="work-orders"
             />
             <KpiCard
               label="Completed Today"
@@ -371,6 +386,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
               bgColor="bg-[#F5F0FF]"
               iconColor="text-purple-500"
               icon={<CheckCircle2 className="w-6 h-6" />}
+              targetView="work-orders"
             />
             <KpiCard
               label="Pending WOs"
@@ -379,6 +395,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
               bgColor="bg-[#F0FFF5]"
               iconColor="text-teal-500"
               icon={<ClipboardList className="w-6 h-6" />}
+              targetView="work-orders"
             />
           </div>
         </div>
