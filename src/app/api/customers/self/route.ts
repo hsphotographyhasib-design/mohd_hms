@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     const auth = verifyRouteAuth(request, { roles: ['customer'] });
     if (auth.error) return auth.error;
 
-    const { userId, tenantId, role } = auth;
+    const { userId, tenantId } = auth;
 
     // Look up the user to get full profile info
     const user = await db.user.findUnique({
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    // Try to find existing Customer record by email or phone
+    // Try to find existing Customer record by email, phone, or userId link
     const orConditions: Record<string, string>[] = [];
     if (user.email) orConditions.push({ email: user.email });
     if (user.phone) orConditions.push({ phone: user.phone });
@@ -48,16 +48,45 @@ export async function GET(request: NextRequest) {
 
     // Auto-create if no matching Customer record exists
     if (!customer) {
-      customer = await db.customer.create({
-        data: {
-          tenantId,
-          name: user.name || 'Customer',
-          email: user.email || null,
-          phone: user.phone || null,
-          customerNumber: generateCustomerNumber(),
-          isActive: true,
-        },
-      });
+      // Customer.phone is a required field in the schema.
+      // User.phone is optional, so we must provide a fallback.
+      const customerPhone = user.phone || 'N/A';
+
+      // Generate a unique customer number with retry on collision
+      let customerNumber = generateCustomerNumber();
+      let retries = 0;
+      const MAX_RETRIES = 5;
+
+      while (retries < MAX_RETRIES) {
+        try {
+          customer = await db.customer.create({
+            data: {
+              tenantId,
+              name: user.name || 'Customer',
+              email: user.email || null,
+              phone: customerPhone,
+              customerNumber,
+              isActive: true,
+            },
+          });
+          break;
+        } catch (createError: any) {
+          // Retry on unique constraint violation for customerNumber
+          if (createError?.code === 'P2002' && retries < MAX_RETRIES - 1) {
+            customerNumber = generateCustomerNumber();
+            retries++;
+            continue;
+          }
+          throw createError;
+        }
+      }
+
+      if (!customer) {
+        return NextResponse.json(
+          { error: 'Failed to create customer profile after retries' },
+          { status: 500 }
+        );
+      }
     }
 
     return NextResponse.json({
@@ -75,6 +104,9 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Customer self-link error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error', details: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
+    );
   }
 }

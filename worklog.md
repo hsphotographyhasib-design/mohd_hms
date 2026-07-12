@@ -1490,3 +1490,22 @@ Files changed (10):
 - `src/mobile-app/components/mobile-complaint-detail.tsx`
 - `src/core/maps/components/complaints-map-dashboard.tsx`
 - `supabase-schema.sql`
+---
+Task ID: 1
+Agent: main
+Task: Fix "Could not link your customer profile" error
+
+Work Log:
+- Investigated the error message in `src/modules/complaints/components/new-complaint.tsx` (line 893)
+- Traced the auto-link logic to `useEffect` calling `/api/customers/self` (line 175)
+- Examined `/api/customers/self/route.ts` — found root cause: `Customer.phone` is required (`String`) in Prisma schema, but `User.phone` is optional (`String?`)
+- When auto-creating a Customer for a user without phone, `user.phone || null` passes `null` → Prisma validation error → 500 response
+- Frontend `catch { /* ignore */ }` silently swallowed the error, showing only the amber warning
+- Fixed `/api/customers/self/route.ts`: fallback to `'N/A'` when user has no phone, added retry logic for `customerNumber` unique constraint
+- Fixed `new-complaint.tsx`: replaced silent catch with proper `console.error` + `toast.error`, removed references to non-existent `building`/`floor`/`unit` fields from self-link response
+- Verified lint passes (0 errors, 1657 pre-existing warnings)
+
+Stage Summary:
+- Root cause: `Customer.phone` is required but `User.phone` is optional → null passed to required field
+- Files changed: `src/app/api/customers/self/route.ts`, `src/modules/complaints/components/new-complaint.tsx`
+- The fix ensures customer profile auto-creation always succeeds even when user has no phone number

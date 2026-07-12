@@ -182,13 +182,19 @@ export function NewComplaint() {
             updateField('customerId', c.id);
             // Auto-fill location from customer
             if (c.address) updateField('location', c.address);
-            if (c.building) updateField('building', c.building);
-            if (c.floor) updateField('floor', c.floor);
-            if (c.unit) updateField('room', c.unit);
           }
+        } else {
+          // Log the error for debugging instead of silently ignoring
+          const errorBody = await res.text().catch(() => 'Unknown error');
+          console.error('[Customer Self-Link] Failed:', res.status, errorBody);
+          toast.error('Could not link your customer profile. Please try again or contact support.');
         }
-      } catch { /* ignore */ }
-      finally { setLinkingCustomer(false); }
+      } catch (err) {
+        console.error('[Customer Self-Link] Network error:', err);
+        toast.error('Network error while linking customer profile.');
+      } finally {
+        setLinkingCustomer(false);
+      }
     };
     findLinkedCustomer();
   }, [isCustomer, user?.id, updateField]);
