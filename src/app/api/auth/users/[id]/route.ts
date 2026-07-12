@@ -173,7 +173,7 @@ export const PUT = withErrorLogging(async function PUT(
           { status: 403 }
         );
       }
-      const validRoles = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer', 'vendor', 'guest'];
+      const validRoles = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer', 'vendor', 'guest'];
       if (!validRoles.includes(role)) {
         return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
       }

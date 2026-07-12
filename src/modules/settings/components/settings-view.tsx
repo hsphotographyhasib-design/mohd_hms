@@ -40,7 +40,7 @@ function StatusBadge({ status }: { status: string }) {
   return <Badge variant="outline" className={v[status] || ''}>{status.replace(/_/g, ' ')}</Badge>;
 }
 
-const ALL_ROLES: UserRole[] = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'];
+const ALL_ROLES: UserRole[] = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer'];
 
 const FEATURES = [
   'dashboard', 'equipment', 'complaints', 'work-orders', 'invoices',

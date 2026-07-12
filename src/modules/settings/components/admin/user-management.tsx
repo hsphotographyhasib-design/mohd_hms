@@ -119,7 +119,7 @@ interface PaginationInfo {
 
 const ALL_ROLES: UserRole[] = [
   'super_admin', 'admin', 'manager', 'supervisor',
-  'technician', 'finance', 'customer', 'vendor', 'guest',
+  'technician', 'finance', 'user', 'customer', 'vendor', 'guest',
 ];
 
 const ROLE_BADGE_CLASSES: Record<string, string> = {
@@ -128,6 +128,7 @@ const ROLE_BADGE_CLASSES: Record<string, string> = {
   manager: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400',
   supervisor: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-400',
   technician: 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-400',
+  user: 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-400',
   finance: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400',
   customer: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400',
   vendor: 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-400',
@@ -140,6 +141,7 @@ const ROLE_LABELS: Record<string, string> = {
   manager: 'Manager',
   supervisor: 'Supervisor',
   technician: 'Technician',
+  user: 'User',
   finance: 'Finance',
   customer: 'Customer',
   vendor: 'Vendor',

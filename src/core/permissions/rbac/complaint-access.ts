@@ -196,11 +196,11 @@ export async function buildComplaintWhereClause(
   }
 
   // ─── Technician: only assigned complaints ───
-  if (role === 'technician') {
+  if (role === 'technician' || role === 'user') {
     return {
       where: { tenantId, assignedToId: userId },
       accessLevel: 'assigned',
-      description: 'Technician: assigned complaints only',
+      description: `${role}: assigned complaints only`,
     };
   }
 
@@ -310,9 +310,9 @@ export const ROLE_REQUIRED_ACTIONS: Record<string, UserRole[]> = {
   send_invoice: ['super_admin', 'admin', 'finance'],
   close: ['super_admin', 'admin', 'supervisor', 'manager'],
   update_fields: ['super_admin', 'admin', 'supervisor', 'manager', 'technician'],
-  view: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
+  view: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer'],
   create: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
-  view_timeline: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
+  view_timeline: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer'],
   view_assignment_history: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance'],
 };
 

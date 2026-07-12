@@ -1,6 +1,6 @@
 // ============ AUTH & USER TYPES ============
 
-export type UserRole = 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'finance' | 'hr' | 'customer' | 'vendor' | 'guest';
+export type UserRole = 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'finance' | 'hr' | 'user' | 'customer' | 'vendor' | 'guest';
 
 export interface LoginRequest {
   email: string;

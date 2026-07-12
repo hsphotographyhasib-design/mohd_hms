@@ -14,6 +14,7 @@ export type UserRole =
   | 'technician'
   | 'finance'
   | 'hr'
+  | 'user'
   | 'customer'
   | 'vendor'
   | 'guest';

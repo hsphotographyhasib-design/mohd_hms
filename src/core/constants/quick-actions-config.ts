@@ -285,9 +285,9 @@ const QUICK_ACTIONS_MAP: QuickActionsMap = {
 
   // ─── Notifications ──────────────────────────────────────
   notifications: [
-    { label: 'Mark All Read', icon: CheckCircle2, view: 'notifications', feature: 'notifications', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'] },
-    { label: 'View All', icon: Eye, view: 'notifications', feature: 'notifications', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'] },
-    { label: 'Filter', icon: Filter, view: 'notifications', feature: 'notifications', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'] },
+    { label: 'Mark All Read', icon: CheckCircle2, view: 'notifications', feature: 'notifications', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user', 'customer'] },
+    { label: 'View All', icon: Eye, view: 'notifications', feature: 'notifications', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user', 'customer'] },
+    { label: 'Filter', icon: Filter, view: 'notifications', feature: 'notifications', roles: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user', 'customer'] },
   ],
 
   // ─── Settings ───────────────────────────────────────────

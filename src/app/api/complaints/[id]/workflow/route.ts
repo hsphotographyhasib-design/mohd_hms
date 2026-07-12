@@ -151,7 +151,7 @@ export const POST = withErrorLogging(async (
     const validation = validateTransition(
       currentStatus,
       targetStatus,
-      userRole as 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'finance' | 'customer' | 'vendor' | 'guest',
+      userRole as 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'finance' | 'user' | 'customer' | 'vendor' | 'guest',
       isAdminOverride
     );
 

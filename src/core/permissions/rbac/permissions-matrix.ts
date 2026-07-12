@@ -8,7 +8,7 @@
  * import from this file. Never duplicate these maps elsewhere.
  *
  * Supported roles:
- *   super_admin, admin, manager, supervisor, technician, finance, hr, customer
+ *   super_admin, admin, manager, supervisor, technician, finance, hr, user, customer
  *   (vendor and guest are deprecated but kept for backward compatibility — they
  *    receive no access to any feature)
  */
@@ -26,15 +26,15 @@ import type { UserRole } from './types';
 
 export const FEATURE_PERMISSIONS: Record<string, UserRole[]> = {
   // ─── Core operational modules ──────────────────────────────────────────
-  dashboard:       ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'customer'],
-  complaints:      ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
+  dashboard:       ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user', 'customer'],
+  complaints:      ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'user', 'customer'],
   'work-orders':   ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
-  equipment:       ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
+  equipment:       ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'user', 'customer'],
   pm:              ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
 
   // ─── Commercial modules ────────────────────────────────────────────────
-  invoices:        ['super_admin', 'admin', 'finance', 'customer'],
-  quotations:      ['super_admin', 'admin', 'supervisor', 'customer'],
+  invoices:        ['super_admin', 'admin', 'finance', 'user', 'customer'],
+  quotations:      ['super_admin', 'admin', 'supervisor', 'user', 'customer'],
   finance:         ['super_admin', 'admin', 'finance'],
   customers:       ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
 
@@ -49,7 +49,7 @@ export const FEATURE_PERMISSIONS: Record<string, UserRole[]> = {
   hr:              ['super_admin', 'admin', 'hr'],
 
   // ─── Communication ─────────────────────────────────────────────────────
-  notifications:   ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'customer'],
+  notifications:   ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user', 'customer'],
   whatsapp:        ['super_admin', 'admin', 'manager', 'supervisor'],
   email:           ['super_admin', 'admin'],
 
@@ -75,7 +75,7 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
   // ─── Complaint actions ────────────────────────────────────────────────
   complaint: {
     create:                ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
-    view:                  ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
+    view:                  ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer'],
     update_fields:         ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
     delete:                ['super_admin', 'admin'],
     assign_technician:     ['super_admin', 'admin', 'supervisor', 'manager'],
@@ -88,7 +88,7 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
     client_reject:         ['customer', 'super_admin', 'admin'],
     accept:                ['technician'],
     reject:                ['technician'],
-    view_timeline:         ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'],
+    view_timeline:         ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer'],
     view_assignment_history: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance'],
     escalate:              ['super_admin', 'admin', 'manager', 'supervisor'],
   },
@@ -337,6 +337,7 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
   finance:     60,
   hr:          55,
   technician:  50,
+  user:        40,
   customer:    10,
   vendor:      5,
   guest:       0,
