@@ -150,11 +150,18 @@ export async function POST(req: NextRequest) {
   }
 
   // OTP incorrect — atomically increment attempts and check if locked
-  const newAttempts = record.attempts + 1;
   await db.passwordResetOtp.update({
     where: { id: record.id },
-    data: { attempts: newAttempts, ...(newAttempts >= record.maxAttempts ? { status: 'locked' } : {}) },
+    data: { attempts: { increment: 1 } },
   }).catch(() => {});
+
+  // Re-read to get the new attempt count (handles concurrent requests correctly)
+  const updatedRecord = await db.passwordResetOtp.findUnique({
+    where: { id: record.id },
+    select: { attempts: true, maxAttempts: true, status: true },
+  }).catch(() => null);
+
+  const newAttempts = updatedRecord?.attempts ?? record.attempts + 1;
 
   await auditAuth({
     event: 'otp_failed',
@@ -167,6 +174,12 @@ export async function POST(req: NextRequest) {
   });
 
   if (newAttempts >= record.maxAttempts) {
+    // Lock the OTP record
+    await db.passwordResetOtp.update({
+      where: { id: record.id },
+      data: { status: 'locked' },
+    }).catch(() => {});
+
     await auditAuth({
       event: 'otp_locked',
       success: false,

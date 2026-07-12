@@ -7,6 +7,7 @@ import {
   OTP_RESEND_COOLDOWN_SECONDS,
   auditAuth,
   checkResetRateLimit,
+  classifyAccount,
   cleanupExpiredOtps,
   generateOtp,
   hashOtp,
@@ -44,8 +45,10 @@ export async function POST(req: NextRequest) {
           id: true,
           email: true,
           name: true,
+          phone: true,
           tenantId: true,
           isActive: true,
+          passwordHash: true,
         },
       }),
     { label: 'resend-reset-otp-findUser' }
@@ -56,6 +59,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       ok: true,
       message: 'If an account exists for this email, a new verification code has been sent.',
+    });
+  }
+
+  // Block OAuth-only accounts (same check as forgot-password)
+  const kind = classifyAccount(user);
+  if (kind === 'whatsapp' || kind === 'google') {
+    return NextResponse.json({
+      ok: false,
+      code: 'oauth_only',
+      message:
+        kind === 'whatsapp'
+          ? 'This account uses WhatsApp Login.\nPlease continue with WhatsApp to access your account.'
+          : 'This account uses Google Sign-In.\nPlease continue with Google to access your account.',
     });
   }
 

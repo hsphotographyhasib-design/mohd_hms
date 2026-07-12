@@ -109,39 +109,41 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: false, message: 'This account has been deactivated.' }, { status: 403 });
   }
 
-  // Hash new password and commit transaction
+  // Hash new password and commit
+  // NOTE: db.$transaction is NOT atomic on Supabase (sequential execution, no rollback).
+  // We use a compensating approach: update password FIRST (the critical operation),
+  // then mark OTP as used and revoke sessions. If later steps fail, the password
+  // is still changed (user can log in), and the OTP status is best-effort.
   const newHash = await hashPassword(password);
 
   try {
+    // Step 1: Update user password (critical — must succeed)
     await withRetry(
       () =>
-        db.$transaction([
-          // Mark OTP as used
-          db.passwordResetOtp.update({
-            where: { id: otpRecord.id },
-            data: { status: 'used', usedAt: new Date() },
-          }),
-          // Invalidate all other OTPs for this user
-          db.passwordResetOtp.updateMany({
-            where: {
-              userId: otpRecord.userId,
-              status: { in: ['active', 'verified'] },
-            },
-            data: { status: 'expired' },
-          }),
-          // Update user password
-          db.user.update({
-            where: { id: otpRecord.userId },
-            data: { passwordHash: newHash, updatedAt: new Date() },
-          }),
-          // Revoke all active login sessions
-          db.loginSession.updateMany({
-            where: { userId: otpRecord.userId, isRevoked: false },
-            data: { isRevoked: true },
-          }),
-        ]),
-      { label: 'reset-password-commit' }
+        db.user.update({
+          where: { id: otpRecord.userId },
+          data: { passwordHash: newHash, updatedAt: new Date() },
+        }),
+      { label: 'reset-password-updateUser' }
     );
+
+    // Step 2: Mark OTP as used
+    await db.passwordResetOtp.update({
+      where: { id: otpRecord.id },
+      data: { status: 'used', usedAt: new Date() },
+    }).catch(() => {});
+
+    // Step 3: Expire other active/verified OTPs for this user
+    await db.passwordResetOtp.updateMany({
+      where: { userId: otpRecord.userId, status: { in: ['active', 'verified'] } },
+      data: { status: 'expired' },
+    }).catch(() => {});
+
+    // Step 4: Revoke all active login sessions
+    await db.loginSession.updateMany({
+      where: { userId: otpRecord.userId, isRevoked: false },
+      data: { isRevoked: true },
+    }).catch(() => {});
   } catch (err) {
     console.error('[reset-password] commit error', err);
     await auditAuth({
