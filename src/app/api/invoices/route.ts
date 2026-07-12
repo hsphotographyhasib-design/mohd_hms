@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     if (wantStats) {
       const [totalCount, totalValue, draftCount, reviewCount, sentCount, paidCount, overdueCount] = await Promise.all([
         db.invoice.count({ where: rbacWhere }),
-        db.invoice.aggregate({ where: rbacWhere, _sum: { total: true } }),
+        db.invoice.aggregate({ where: rbacWhere, _sum: { total: true } }).catch(() => ({ _sum: { total: 0 } })),
         db.invoice.count({ where: { ...rbacWhere, status: 'DRAFT' } as Prisma.InvoiceWhereInput }),
         db.invoice.count({ where: { ...rbacWhere, status: 'REVIEW' } as Prisma.InvoiceWhereInput }),
         db.invoice.count({ where: { ...rbacWhere, status: { in: ['SENT', 'VIEWED', 'APPROVED'] } } as Prisma.InvoiceWhereInput }),

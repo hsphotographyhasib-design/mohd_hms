@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
       db.complaint.groupBy({ by: ['status'], where: complaintRbacWhere, _count: { id: true } }),
       db.workOrder.groupBy({ by: ['status'], where: scope.workOrder, _count: { id: true } }),
       (['super_admin', 'admin', 'manager', 'finance'].includes(role))
-        ? db.invoice.aggregate({ where: { ...scope.invoice, status: 'PAID' }, _sum: { total: true } })
+        ? db.invoice.aggregate({ where: { ...scope.invoice, status: 'PAID' }, _sum: { total: true } }).catch(() => ({ _sum: { total: 0 } }))
         : Promise.resolve({ _sum: { total: 0 } }),
       (['super_admin', 'admin', 'manager', 'finance'].includes(role))
         ? db.invoice.count({ where: { ...scope.invoice, status: 'PENDING' } })
@@ -81,7 +81,7 @@ export async function GET(request: NextRequest) {
         ? db.pmSchedule.findMany({ where: { tenantId } })
         : Promise.resolve([]),
       (['super_admin', 'admin', 'manager', 'finance'].includes(role))
-        ? db.invoice.findMany({ where: { ...scope.invoice, status: 'PAID', paidAt: { not: null } }, select: { total: true, paidAt: true } })
+        ? db.invoice.findMany({ where: { ...scope.invoice, status: 'PAID', paidAt: { not: null } }, select: { total: true, paidAt: true } }).catch(() => [])
         : Promise.resolve([]),
       db.complaint.groupBy({ by: ['category'], where: { ...complaintRbacWhere, category: { not: null } }, _count: { id: true } }),
       db.complaint.findMany({
