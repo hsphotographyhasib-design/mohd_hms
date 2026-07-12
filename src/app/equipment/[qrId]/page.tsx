@@ -266,7 +266,7 @@ function LoadingSkeleton() {
 
 // ─── 404 Page ────────────────────────────────────────────────────────────────
 
-function NotFoundPage() {
+function NotFoundPage({ searchedId }: { searchedId?: string }) {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center px-4">
       <div className="text-center max-w-md">
@@ -274,10 +274,16 @@ function NotFoundPage() {
           <QrCode className="w-10 h-10 text-gray-400" strokeWidth={1.5} />
         </div>
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Equipment Not Found</h1>
-        <p className="text-gray-500 mb-6">
+        <p className="text-gray-500 mb-4">
           This QR code doesn&apos;t match any equipment in our system.
           It may have been deactivated or the link may be incorrect.
         </p>
+        {searchedId && (
+          <div className="bg-amber-50 border border-amber-200 rounded-lg px-4 py-3 mb-4">
+            <p className="text-xs text-amber-700 font-medium">QR Code ID Scanned</p>
+            <p className="text-sm font-mono text-amber-900 break-all mt-1">{searchedId}</p>
+          </div>
+        )}
         <div className="bg-white rounded-xl p-6 border border-gray-200">
           <p className="text-sm text-gray-400">
             If you believe this is an error, please contact the property management team.
@@ -424,7 +430,13 @@ export default function EquipmentQrPage() {
           return;
         }
         if (!res.ok) {
-          throw new Error('Failed to load equipment data');
+          let msg = 'Failed to load equipment data';
+          try {
+            const errBody = await res.json();
+            if (errBody.details) msg = `${msg}: ${errBody.details}`;
+            if (errBody.error) msg = errBody.error;
+          } catch { /* ignore parse error */ }
+          throw new Error(msg);
         }
         const json = await res.json();
         setData(json);
@@ -548,7 +560,7 @@ export default function EquipmentQrPage() {
 
   // Render states
   if (loading) return <LoadingSkeleton />;
-  if (notFound) return <NotFoundPage />;
+  if (notFound) return <NotFoundPage searchedId={qrId} />;
   if (error) return <ErrorPage message={error} />;
   if (!data) return <NotFoundPage />;
 

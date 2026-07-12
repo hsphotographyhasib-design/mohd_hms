@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
+import { ensureTableSync } from '@/core/database/db-sync';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
@@ -9,8 +10,14 @@ export async function GET(
   try {
     const { qrId } = await params;
 
-    // Find the equipment by qrId (the short QR ID like QR-GEN-NFYH3RZAA)
-    const equipment = await db.equipment.findFirst({
+    // Ensure Equipment table columns are synced (critical for Supabase)
+    await ensureTableSync('Equipment');
+    await ensureTableSync('EquipmentQrCode');
+
+    console.log(`[QR Lookup] Searching for: "${qrId}"`);
+
+    // Strategy 1: Direct match on Equipment.qrId or Equipment.qrCode
+    let equipment = await db.equipment.findFirst({
       where: {
         OR: [
           { qrId: qrId },
@@ -45,9 +52,99 @@ export async function GET(
       },
     });
 
+    // Strategy 2: Fallback — look up via EquipmentQrCode table
     if (!equipment) {
-      return NextResponse.json({ error: 'Equipment not found' }, { status: 404 });
+      console.log(`[QR Lookup] Strategy 1 failed, trying EquipmentQrCode table...`);
+      const qrRecord = await db.equipmentQrCode.findFirst({
+        where: {
+          OR: [
+            { qrId: qrId },
+            { qrUrl: { contains: qrId } },
+          ],
+          isActive: true,
+        },
+      });
+
+      if (qrRecord) {
+        console.log(`[QR Lookup] Found QR record, equipmentId=${qrRecord.equipmentId}`);
+        equipment = await db.equipment.findFirst({
+          where: { id: qrRecord.equipmentId },
+          include: {
+            customer: {
+              select: {
+                id: true,
+                name: true,
+                companyName: true,
+                phone: true,
+                email: true,
+                address: true,
+              },
+            },
+            tenant: {
+              select: {
+                id: true,
+                name: true,
+                domain: true,
+                logo: true,
+                phone: true,
+                email: true,
+                address: true,
+              },
+            },
+            _count: {
+              select: { complaints: true, workOrders: true },
+            },
+          },
+        });
+      }
     }
+
+    // Strategy 3: Fallback — match by assetNumber (strip "QR-" prefix if present)
+    if (!equipment) {
+      const assetGuess = qrId.replace(/^QR-[A-Z]{3}-/, '');
+      if (assetGuess && assetGuess !== qrId) {
+        console.log(`[QR Lookup] Strategy 2 failed, trying assetNumber="${assetGuess}"`);
+        equipment = await db.equipment.findFirst({
+          where: { assetNumber: assetGuess },
+          include: {
+            customer: {
+              select: {
+                id: true,
+                name: true,
+                companyName: true,
+                phone: true,
+                email: true,
+                address: true,
+              },
+            },
+            tenant: {
+              select: {
+                id: true,
+                name: true,
+                domain: true,
+                logo: true,
+                phone: true,
+                email: true,
+                address: true,
+              },
+            },
+            _count: {
+              select: { complaints: true, workOrders: true },
+            },
+          },
+        });
+      }
+    }
+
+    if (!equipment) {
+      console.log(`[QR Lookup] Equipment NOT FOUND for "${qrId}"`);
+      return NextResponse.json(
+        { error: 'Equipment not found', searched: qrId },
+        { status: 404 }
+      );
+    }
+
+    console.log(`[QR Lookup] Found equipment: ${equipment.name} (${equipment.assetNumber}), qrId=${equipment.qrId}, qrCode=${equipment.qrCode}`);
 
     // Increment scan count
     await db.equipment.update({
@@ -159,6 +256,9 @@ export async function GET(
     });
   } catch (error) {
     console.error('QR lookup error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error', details: (error as Error).message },
+      { status: 500 }
+    );
   }
 }
