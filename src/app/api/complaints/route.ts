@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken } from '@/core/auth/auth-lib';
-import { ensureTableSync } from '@/core/database/db-sync';
+import { ensureTableSync, hasColumn } from '@/core/database/db-sync';
 import { buildAuthContext, buildComplaintWhereClause, canPerformComplaintAction, logComplaintAccessAllowed } from '@/core/permissions/rbac';
 import { createNotification } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
@@ -143,8 +143,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Insufficient permissions to create complaints' }, { status: 403 });
     }
 
-    // Auto-sync schema columns before creating
+    // Auto-sync schema columns before creating (adds missing columns to DB)
     await ensureTableSync('Complaint');
+    const complaintNumberSupported = hasColumn('Complaint', 'complaintNumber');
 
     const body = await request.json();
     const { customerId, equipmentId, title, description, priority, category, photos, gpsLocation, assignedToId, supervisorId, source, customerSnapshot, locationInfo } = body;
@@ -215,12 +216,16 @@ export async function POST(request: NextRequest) {
         status: 'NEW',
         source: source || 'admin',
         category: category || null,
-        complaintNumber,
         photos: photos ? JSON.stringify(photos) : null,
         gpsLocation: gpsLocation ? JSON.stringify(gpsLocation) : null,
         assignedToId: role === 'technician' ? userId : (assignedToId || null),
         supervisorId: supervisorId || null,
       };
+
+      // Only include complaintNumber if the column exists in the DB
+      if (complaintNumberSupported) {
+        createData.complaintNumber = complaintNumber;
+      }
 
       if (customerSnapshot) {
         createData.customerSnapshot = JSON.stringify(customerSnapshot);
