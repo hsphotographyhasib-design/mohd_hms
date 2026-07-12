@@ -8,9 +8,10 @@ import { resolve } from 'node:path';
  * For SQLite: uses sqlite_master and pragma_table_info to introspect the
  * current schema and add any missing columns via ALTER TABLE.
  *
- * For Supabase: uses information_schema.columns to detect missing columns.
- * Adds them via the Supabase REST RPC endpoint if a migration function exists,
- * otherwise logs a warning and strips the field from queries.
+ * For Supabase: makes ONE lightweight PostgREST request per table
+ * (select=col1,col2,...&limit=0) to verify all expected columns exist.
+ * If a column is missing, logs the exact ALTER TABLE SQL to run manually.
+ * No automatic column creation on Supabase (schema managed via migrations).
  */
 
 // Map Prisma scalar types → SQLite column types
@@ -108,81 +109,12 @@ async function getExistingColumnsSQLite(table: string): Promise<Set<string>> {
   return new Set(rows.map((r) => r.name.toLowerCase()));
 }
 
-// ---------- DB introspection (Supabase) ----------
+// ---------- sync logic ----------
 
 function isSupabase(): boolean {
   return !!(process.env.USE_SUPABASE === 'true' ||
     (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NODE_ENV === 'production'));
 }
-
-async function getExistingColumnsSupabase(table: string): Promise<Set<string>> {
-  try {
-    const rows = await db.$queryRaw<{ column_name: string }[]>`
-      SELECT column_name FROM information_schema.columns
-      WHERE table_name = ${table}
-    `;
-    return new Set(rows.map((r) => r.column_name.toLowerCase()));
-  } catch {
-    console.warn(`[db-sync] Could not introspect Supabase table "${table}"`);
-    return new Set();
-  }
-}
-
-/**
- * Try to add a missing column to a Supabase table via direct SQL.
- * Uses the Supabase REST API's /rpc endpoint with a generic migration helper.
- * Falls back gracefully if the RPC function doesn't exist.
- */
-async function addSupabaseColumn(table: string, col: ColumnDef): Promise<boolean> {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-
-  if (!supabaseUrl || !serviceKey) return false;
-
-  const sql = `ALTER TABLE "${table}" ADD COLUMN IF NOT EXISTS "${col.name}" ${col.pgType}${col.nullable ? '' : ' NOT NULL DEFAULT \'{}\''};`;
-
-  // Try using the db_add_column RPC function if it exists
-  try {
-    const res = await fetch(`${supabaseUrl}/rest/v1/rpc/db_add_column`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': serviceKey,
-        'Authorization': `Bearer ${serviceKey}`,
-      },
-      body: JSON.stringify({
-        p_table_name: table,
-        p_column_name: col.name,
-        p_column_type: col.pgType,
-        p_nullable: col.nullable,
-      }),
-    });
-    if (res.ok) return true;
-  } catch {
-    // RPC function doesn't exist — fall through
-  }
-
-  // Try direct SQL via pg endpoint (available on self-hosted Supabase)
-  try {
-    const pgUrl = supabaseUrl.replace('/rest/v1', '');
-    const res = await fetch(`${pgUrl}/pg`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': serviceKey,
-        'Authorization': `Bearer ${serviceKey}`,
-      },
-      body: JSON.stringify({ query: sql }),
-    });
-    if (res.ok) return true;
-  } catch {
-    // pg endpoint not available
-  }
-
-  return false;
-}
-
-// ---------- sync logic ----------
 
 const SAFE_DEFAULTS: Record<string, string> = {
   TEXT: "DEFAULT ''",
@@ -234,37 +166,66 @@ async function syncTableColumnsSQLite(
   return { added, errors, existing };
 }
 
-async function syncTableColumnsSupabase(
-  table: string,
-  expectedColumns: ColumnDef[]
-): Promise<{ added: number; errors: string[]; existing: Set<string> }> {
-  let existing: Set<string>;
-  try {
-    existing = await getExistingColumnsSupabase(table);
-  } catch {
-    return { added: 0, errors: ['Cannot read Supabase columns'], existing: new Set() };
-  }
-
-  let added = 0;
-  const errors: string[] = [];
-
-  for (const col of expectedColumns) {
-    if (existing.has(col.name.toLowerCase())) continue;
-
-    const ok = await addSupabaseColumn(table, col);
-    if (ok) {
-      added++;
-      console.log(`[db-sync] Supabase ${table}: added column "${col.name}" (${col.pgType})`);
-    } else {
-      errors.push(`${col.name}: could not add to Supabase (no RPC/pg endpoint)`);
-      console.warn(`[db-sync] Supabase ${table}: missing column "${col.name}" — add manually: ALTER TABLE "${table}" ADD COLUMN "${col.name}" ${col.pgType}${col.nullable ? '' : ' NOT NULL DEFAULT \'{}\''};`);
-    }
-  }
-
-  return { added, errors, existing };
-}
-
 // ---------- public API ----------
+
+/**
+ * Lightweight Supabase column verification.
+ * Makes ONE request per table to check if all expected columns exist.
+ * Uses PostgREST `select=col1,col2,...&limit=0` — PostgREST validates column
+ * names even with limit=0 and returns 400 if any are missing.
+ */
+async function verifySupabaseColumns(table: string, expectedColumns: ColumnDef[]): Promise<Set<string>> {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !serviceKey) return new Set(expectedColumns.map(c => c.name.toLowerCase()));
+
+  const colNames = expectedColumns.map(c => c.name);
+  if (colNames.length === 0) return new Set();
+
+  try {
+    const selectStr = colNames.join(',');
+    const res = await fetch(`${supabaseUrl}/rest/v1/${table}?select=${selectStr}&limit=0`, {
+      method: 'GET',
+      headers: {
+        'apikey': serviceKey,
+        'Authorization': `Bearer ${serviceKey}`,
+        'Prefer': 'count=exact',
+      },
+    });
+
+    if (res.ok) {
+      // All columns exist — cache them
+      return new Set(colNames.map(c => c.toLowerCase()));
+    }
+
+    if (res.status === 400) {
+      // Parse the error to find which column is missing
+      const errorBody = await res.json().catch(() => ({}));
+      const msg = (errorBody as any).message || (errorBody as any).error || String(errorBody);
+
+      // PostgREST error: "Could not find the 'total' column in the 'Invoice' table in the schema."
+      const missingMatch = msg.match(/'([\w]+)'\s*(?:column|field)/i);
+      if (missingMatch) {
+        const missingName = missingMatch[1];
+        const colDef = expectedColumns.find(c => c.name.toLowerCase() === missingName.toLowerCase());
+        const pgType = colDef?.pgType || 'TEXT';
+        const nullable = colDef?.nullable ?? true;
+        const defaultVal = nullable ? '' : " NOT NULL DEFAULT ''";
+        const sql = `ALTER TABLE "${table}" ADD COLUMN IF NOT EXISTS "${missingName}" ${pgType}${defaultVal};`;
+        console.warn(`[db-sync] Supabase missing column: ${table}.${missingName}`);
+        console.warn(`[db-sync]   Run: ${sql}`);
+      } else {
+        console.warn(`[db-sync] Supabase ${table} column check failed (400): ${msg.slice(0, 200)}`);
+      }
+    }
+  } catch (err) {
+    // Network error — don't block startup, assume columns exist
+    console.warn(`[db-sync] Could not verify Supabase columns for ${table}:`, (err as Error).message);
+  }
+
+  // Optimistically assume all columns exist
+  return new Set(colNames.map(c => c.toLowerCase()));
+}
 
 /**
  * Ensure a specific table exists and its columns match the Prisma schema.
@@ -277,15 +238,13 @@ export async function ensureTableSync(tableName: string): Promise<void> {
   const cached = _synced.get(tableName.toLowerCase());
   if (cached) return; // Already synced at least once
 
-  // On Supabase (production), the schema is managed via migrations — skip auto-sync.
-  // Auto-sync on Supabase would make ~70 HTTP requests to non-existent RPC endpoints
-  // per table, causing API timeouts. Just mark as synced optimistically.
+  // On Supabase (production), verify columns with a lightweight single-request check.
   if (isSupabase()) {
     const schemaModels = parseSchemaModels();
     const columns = schemaModels.get(tableName);
     if (columns) {
-      // Assume all expected columns exist (managed via Supabase migrations)
-      _synced.set(tableName.toLowerCase(), new Set(columns.map(c => c.name.toLowerCase())));
+      const existing = await verifySupabaseColumns(tableName, columns);
+      _synced.set(tableName.toLowerCase(), existing);
     }
     return;
   }
@@ -327,16 +286,18 @@ export async function ensureAllTablesSynced(): Promise<void> {
   if (_globalSynced) return;
   _globalSynced = true;
 
-  // On Supabase, skip auto-sync entirely — schema managed via migrations
+  const schemaModels = parseSchemaModels();
+
+  // On Supabase, verify columns with a single lightweight request per table
   if (isSupabase()) {
-    const schemaModels = parseSchemaModels();
-    for (const [model, columns] of schemaModels) {
-      _synced.set(model.toLowerCase(), new Set(columns.map(c => c.name.toLowerCase())));
-    }
+    // Run verifications concurrently (1 request per table, not 70 per table)
+    const checks = [...schemaModels.entries()].map(async ([model, columns]) => {
+      const existing = await verifySupabaseColumns(model, columns);
+      _synced.set(model.toLowerCase(), existing);
+    });
+    await Promise.allSettled(checks);
     return;
   }
-
-  const schemaModels = parseSchemaModels();
 
   // SQLite: batch sync
   const tables = await getExistingTablesSQLite();

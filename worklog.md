@@ -1426,3 +1426,21 @@ Files changed:
 - `src/core/database/supabase-db.ts` — Fixed $queryRaw template literal handling, fixed whereToFilters to support multi-op same-column filters
 - `src/app/api/complaints/route.ts` — Removed hasColumn dependency, always include complaintNumber
 - `src/app/api/complaints/counts/route.ts` — Removed unnecessary ensureTableSync call
+
+---
+Task ID: 19
+Agent: Main
+Task: Fix Invoice.total column mismatch on Supabase + improve column sync
+
+Work Log:
+- Diagnosed `Invoice.aggregate: column Invoice.total does not exist` error: the Supabase Invoice table was missing the `total` column that the Prisma schema defines
+- User manually ran `ALTER TABLE "Invoice" ADD COLUMN IF NOT EXISTS "total" DOUBLE PRECISION;` on Supabase — column added successfully
+- Added `.catch(() => ({ _sum: { total: 0 } }))` fallback to the dashboard KPI route's aggregate call for resilience against future column issues
+- Replaced the old Supabase column sync (which was fully skipped with optimistic caching) with a lightweight `verifySupabaseColumns()` function that makes ONE PostgREST request per table (`select=col1,col2,...&limit=0`) to detect missing columns
+- On 400 error, parses the PostgREST message to identify the exact missing column and logs the `ALTER TABLE` SQL the user needs to run
+- Removed dead code: old `getExistingColumnsSupabase()`, `addSupabaseColumn()`, `syncTableColumnsSupabase()` functions that used non-existent RPC endpoints
+- Updated `ensureAllTablesSynced()` to use the new verification (concurrent, 1 req/table)
+
+Files changed:
+- `src/app/api/dashboard/kpi/route.ts` — Added .catch() fallback on aggregate call
+- `src/core/database/db-sync.ts` — New lightweight Supabase column verification, removed old broken sync functions

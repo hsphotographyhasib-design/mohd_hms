@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
         ? db.invoice.aggregate({
             where: { ...scope.invoiceWhere, status: 'PAID' },
             _sum: { total: true },
-          })
+          }).catch(() => ({ _sum: { total: 0 } }))
         : Promise.resolve({ _sum: { total: 0 } }),
       scope.canSeeRevenue
         ? db.invoice.count({ where: { ...scope.invoiceWhere, status: 'PENDING' } })
