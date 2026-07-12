@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken } from '@/core/auth/auth-lib';
+import { ensureTableSync } from '@/core/database/db-sync';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
@@ -16,11 +17,13 @@ export async function GET(
     const tenantId = payload.tenantId as string;
     const { id } = await params;
 
+    await ensureTableSync('Equipment');
+
     const equipment = await db.equipment.findFirst({
       where: { id, tenantId },
       include: {
         customer: { select: { name: true } },
-        _count: { select: { complaints: true, workOrders: true, pmSchedules: true } },
+        _count: { select: { Complaint: true, WorkOrder: true, PmSchedule: true } },
       },
     });
 
@@ -57,7 +60,11 @@ export async function GET(
       notes: equipment.notes,
       createdAt: equipment.createdAt.toISOString(),
       updatedAt: equipment.updatedAt.toISOString(),
-      _count: equipment._count,
+      _count: {
+        complaints: equipment._count.Complaint,
+        workOrders: equipment._count.WorkOrder,
+        pmSchedules: equipment._count.PmSchedule,
+      },
     });
   } catch (error) {
     console.error('Equipment get error:', error);

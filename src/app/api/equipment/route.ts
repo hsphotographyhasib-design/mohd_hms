@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
         orderBy: { createdAt: 'desc' },
         include: {
           customer: { select: { name: true } },
-          _count: { select: { complaints: true, workOrders: true } },
+          _count: { select: { Complaint: true, WorkOrder: true, PmSchedule: true } },
         },
       }),
       db.equipment.count({ where }),
@@ -93,7 +93,11 @@ export async function GET(request: NextRequest) {
       notes: eq.notes,
       createdAt: eq.createdAt.toISOString(),
       updatedAt: eq.updatedAt.toISOString(),
-      _count: eq._count,
+      _count: {
+        complaints: eq._count.Complaint,
+        workOrders: eq._count.WorkOrder,
+        pmSchedules: eq._count.PmSchedule,
+      },
     }));
 
     return NextResponse.json({

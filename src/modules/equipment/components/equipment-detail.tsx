@@ -219,17 +219,26 @@ export function EquipmentDetail() {
 
   // Fetch equipment
   const fetchEquipment = useCallback(async () => {
-    if (!token || !equipmentId) return;
+    if (!token || !equipmentId) {
+      console.warn('[EquipmentDetail] Missing token or equipmentId', { token: !!token, equipmentId });
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch(`/api/equipment/${equipmentId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) throw new Error('Not found');
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        console.error(`[EquipmentDetail] API error ${res.status}:`, errBody);
+        throw new Error(errBody.error || `Server error (${res.status})`);
+      }
       const data = await res.json();
       setItem(data);
-    } catch {
-      toast.error('Failed to load equipment');
+    } catch (err) {
+      console.error('[EquipmentDetail] fetchEquipment failed:', err);
+      toast.error(err instanceof Error ? err.message : 'Failed to load equipment');
       setView('equipment');
     } finally {
       setLoading(false);
