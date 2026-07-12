@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "prisma generate && next build",
+    "build:hostinger": "npm run build && node hostinger-build.js",
     "start": "next start",
     "lint": "eslint .",
     "postinstall": "prisma generate",
