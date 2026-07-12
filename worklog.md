@@ -1400,3 +1400,29 @@ Stage Summary:
 - Root cause identified and permanently fixed for each issue
 - No regressions introduced (all pre-existing tests pass, lint clean)
 - Architecture preserved (no folder restructuring, no module rebuilds)
+---
+Task ID: 1
+Agent: main
+Task: Fix broken complaint submission on Supabase after 11-bug audit
+
+Work Log:
+- Analyzed POST /api/complaints handler, frontend new-complaint.tsx submit flow, db-sync.ts, supabase-db.ts
+- Identified 3 bugs causing complaint submission failure on Supabase (production)
+
+Stage Summary:
+- **Root Cause 1 (CRITICAL)**: `ensureTableSync('Complaint')` on Supabase made ~70 sequential HTTP requests to non-existent RPC endpoints per API call (2 requests × 35 columns). The `$queryRaw` couldn't query `information_schema.columns` (broken template literal handling), so ALL columns were treated as missing. Each `addSupabaseColumn()` call tried an RPC function and a pg endpoint, both non-existent. This caused API timeout before complaint creation.
+  - **Fix**: `ensureTableSync()` now returns immediately on Supabase (optimistic: assumes all expected columns exist since schema is managed via migrations). Same for `ensureAllTablesSynced()`.
+
+- **Root Cause 2**: `$queryRaw` in Supabase adapter used `?` placeholder replacement but Prisma tagged template literals use `${...}` interpolation. Values were silently dropped, producing invalid SQL like `SELECT ... WHERE table_name = ` (missing value).
+  - **Fix**: Rewrote `$queryRaw` to properly reconstruct SQL from `TemplateStringsArray` + interpolated values. Also moved `SELECT 1` health check shortcut before the network call.
+
+- **Root Cause 3**: `hasColumn()` was unreliable on Supabase (returned false for all columns after failed sync), so `complaintNumber` was conditionally excluded from `createData`. The `if (complaintNumberSupported)` guard was fragile.
+  - **Fix**: Removed `hasColumn` check. `complaintNumber` is now always included in `createData`.
+
+- **Bonus Fix**: `whereToFilters()` used `Record<string, string>` which overwrote multiple filters on the same column (e.g., `createdAt.gte.X AND createdAt.lt.Y` — the `lt` overwrote `gte`). Changed to `[string, string][]` (array of pairs) and updated `supabaseRequest` to use `URLSearchParams.append()` instead of `.set()`. This fixes complaint count accuracy on Supabase.
+
+Files changed:
+- `src/core/database/db-sync.ts` — Skip auto-sync on Supabase (optimistic caching)
+- `src/core/database/supabase-db.ts` — Fixed $queryRaw template literal handling, fixed whereToFilters to support multi-op same-column filters
+- `src/app/api/complaints/route.ts` — Removed hasColumn dependency, always include complaintNumber
+- `src/app/api/complaints/counts/route.ts` — Removed unnecessary ensureTableSync call

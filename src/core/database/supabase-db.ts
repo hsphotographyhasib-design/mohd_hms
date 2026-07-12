@@ -26,7 +26,7 @@ async function supabaseRequest<T = any>(
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   options: {
     select?: string;
-    filters?: Record<string, string>;
+    filters?: Record<string, string> | [string, string][];
     order?: string;
     limit?: number;
     offset?: number;
@@ -41,8 +41,11 @@ async function supabaseRequest<T = any>(
 
   const params = new URLSearchParams();
   if (select) params.set('select', select);
-  for (const [k, v] of Object.entries(filters || {})) {
-    params.set(k, v);
+  if (filters) {
+    const entries = Array.isArray(filters) ? filters : Object.entries(filters);
+    for (const [k, v] of entries) {
+      params.append(k, v);
+    }
   }
   if (order) params.set('order', order);
   if (limit !== undefined) params.set('limit', String(limit));
@@ -189,8 +192,8 @@ function isTableNotFoundError(error: { message?: string; code?: string } | null 
 // 5. Where Clause → PostgREST Filters
 // ---------------------------------------------------------------------------
 
-function whereToFilters(where: Record<string, unknown>, prefix = ''): Record<string, string> {
-  const filters: Record<string, string> = {};
+function whereToFilters(where: Record<string, unknown>, prefix = ''): [string, string][] {
+  const filters: [string, string][] = [];
 
   for (const [key, value] of Object.entries(where)) {
     const col = prefix ? `${prefix}.${key}` : key;
@@ -225,7 +228,7 @@ function whereToFilters(where: Record<string, unknown>, prefix = ''): Record<str
         if (groupParts.length > 0) orParts.push(`(${groupParts.join(',')})`);
       }
       if (orParts.length > 0) {
-        filters['or'] = orParts.join(',');
+        filters.push(['or', orParts.join(',')]);
       }
       continue;
     }
@@ -234,7 +237,7 @@ function whereToFilters(where: Record<string, unknown>, prefix = ''): Record<str
     if (key === 'AND' && Array.isArray(value)) {
       for (const andGroup of value as Record<string, unknown>[]) {
         const subFilters = whereToFilters(andGroup, prefix);
-        Object.assign(filters, subFilters);
+        filters.push(...subFilters);
       }
       continue;
     }
@@ -244,42 +247,42 @@ function whereToFilters(where: Record<string, unknown>, prefix = ''): Record<str
       for (const [op, opVal] of Object.entries(obj)) {
         if (op === 'equals' || op === 'eq' || (!op.startsWith('_') && typeof opVal !== 'object')) {
           const v = (op === 'equals' || op === 'eq') ? opVal : value;
-          if (typeof v === 'boolean') filters[col] = `is.${v}`;
-          else if (v instanceof Date) filters[col] = `eq.${v.toISOString()}`;
-          else filters[col] = `eq.${v}`;
+          if (typeof v === 'boolean') filters.push([col, `is.${v}`]);
+          else if (v instanceof Date) filters.push([col, `eq.${v.toISOString()}`]);
+          else filters.push([col, `eq.${v}`]);
           break;
         }
         if (op === 'in') {
-          filters[col] = `in.(${(opVal as any[]).join(',')})`;
+          filters.push([col, `in.(${(opVal as any[]).join(',')})`]);
         } else if (op === 'notIn') {
-          filters[col] = `not.in.(${(opVal as any[]).join(',')})`;
+          filters.push([col, `not.in.(${(opVal as any[]).join(',')})`]);
         } else if (op === 'contains') {
-          filters[col] = `ilike.%${opVal}%`;
+          filters.push([col, `ilike.%${opVal}%`]);
         } else if (op === 'startsWith') {
-          filters[col] = `ilike.${opVal}%`;
+          filters.push([col, `ilike.${opVal}%`]);
         } else if (op === 'endsWith') {
-          filters[col] = `ilike.%${opVal}`;
+          filters.push([col, `ilike.%${opVal}`]);
         } else if (op === 'gt') {
-          filters[col] = `gt.${opVal instanceof Date ? opVal.toISOString() : opVal}`;
+          filters.push([col, `gt.${opVal instanceof Date ? opVal.toISOString() : opVal}`]);
         } else if (op === 'gte') {
-          filters[col] = `gte.${opVal instanceof Date ? opVal.toISOString() : opVal}`;
+          filters.push([col, `gte.${opVal instanceof Date ? opVal.toISOString() : opVal}`]);
         } else if (op === 'lt') {
-          filters[col] = `lt.${opVal instanceof Date ? opVal.toISOString() : opVal}`;
+          filters.push([col, `lt.${opVal instanceof Date ? opVal.toISOString() : opVal}`]);
         } else if (op === 'lte') {
-          filters[col] = `lte.${opVal instanceof Date ? opVal.toISOString() : opVal}`;
+          filters.push([col, `lte.${opVal instanceof Date ? opVal.toISOString() : opVal}`]);
         } else if (op === 'ne' || op === 'not') {
-          if (opVal === null) filters[col] = 'not.is.null';
-          else filters[col] = `neq.${opVal}`;
+          if (opVal === null) filters.push([col, 'not.is.null']);
+          else filters.push([col, `neq.${opVal}`]);
         } else if (op === 'mode' || op === 'path') {
           // Prisma internal — skip
         }
       }
     } else if (typeof value === 'boolean') {
-      filters[col] = `is.${value}`;
+      filters.push([col, `is.${value}`]);
     } else if (value instanceof Date) {
-      filters[col] = `eq.${value.toISOString()}`;
+      filters.push([col, `eq.${value.toISOString()}`]);
     } else {
-      filters[col] = `eq.${value}`;
+      filters.push([col, `eq.${value}`]);
     }
   }
   return filters;
@@ -852,23 +855,28 @@ const MODEL_MAP: Record<string, string> = {
 
 /**
  * Minimal $queryRaw implementation for Supabase.
- * Supports `SELECT 1 as ok` pattern for health checks.
+ * Properly handles Prisma tagged template literal interpolation (${...}).
  * For complex queries, use Supabase RPC functions instead.
  */
 async function $queryRaw(strings: TemplateStringsArray, ...values: any[]): Promise<any[]> {
-  // Only support simple SELECT queries for health checks
-  let query = strings[0] || '';
-  if (values.length > 0) {
-    // Replace placeholders — basic parameterized query support
-    for (const val of values) {
-      if (typeof val === 'string') {
-        query = query.replace('?', `'${val.replace(/'/g, "''")}'`);
+  // Reconstruct query from template literal parts and interpolated values
+  let query = '';
+  for (let i = 0; i < strings.length; i++) {
+    query += strings[i];
+    if (i < values.length) {
+      const val = values[i];
+      if (val === null || val === undefined) {
+        query += 'NULL';
+      } else if (typeof val === 'string') {
+        query += `'${val.replace(/'/g, "''")}'`;
       } else if (typeof val === 'number') {
-        query = query.replace('?', String(val));
-      } else if (val === null || val === undefined) {
-        query = query.replace('?', 'NULL');
+        query += String(val);
+      } else if (val instanceof Date) {
+        query += `'${val.toISOString()}'`;
+      } else if (typeof val === 'boolean') {
+        query += val ? 'TRUE' : 'FALSE';
       } else {
-        query = query.replace('?', String(val));
+        query += String(val);
       }
     }
   }
@@ -876,6 +884,11 @@ async function $queryRaw(strings: TemplateStringsArray, ...values: any[]): Promi
   const trimmed = query.trim().toUpperCase();
   if (!trimmed.startsWith('SELECT')) {
     throw new Error(`[Supabase] $queryRaw only supports SELECT queries. Got: ${trimmed.slice(0, 20)}`);
+  }
+
+  // For health check pattern "SELECT 1 as ok", return immediately without network call
+  if (trimmed.includes('SELECT 1')) {
+    return [{ ok: 1 }];
   }
 
   // Use Supabase RPC endpoint to execute raw SQL
@@ -890,10 +903,6 @@ async function $queryRaw(strings: TemplateStringsArray, ...values: any[]): Promi
   });
 
   if (!res.ok) {
-    // For health check pattern "SELECT 1 as ok", just return the expected result
-    if (trimmed.includes('SELECT 1')) {
-      return [{ ok: 1 }];
-    }
     throw new Error(`[Supabase] $queryRaw failed: HTTP ${res.status}`);
   }
 

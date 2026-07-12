@@ -277,20 +277,27 @@ export async function ensureTableSync(tableName: string): Promise<void> {
   const cached = _synced.get(tableName.toLowerCase());
   if (cached) return; // Already synced at least once
 
+  // On Supabase (production), the schema is managed via migrations — skip auto-sync.
+  // Auto-sync on Supabase would make ~70 HTTP requests to non-existent RPC endpoints
+  // per table, causing API timeouts. Just mark as synced optimistically.
+  if (isSupabase()) {
+    const schemaModels = parseSchemaModels();
+    const columns = schemaModels.get(tableName);
+    if (columns) {
+      // Assume all expected columns exist (managed via Supabase migrations)
+      _synced.set(tableName.toLowerCase(), new Set(columns.map(c => c.name.toLowerCase())));
+    }
+    return;
+  }
+
   const schemaModels = parseSchemaModels();
   const columns = schemaModels.get(tableName);
   if (!columns || columns.length === 0) return;
 
-  let result: { added: number; errors: string[]; existing: Set<string> };
-
-  if (isSupabase()) {
-    result = await syncTableColumnsSupabase(tableName, columns);
-  } else {
-    const tables = await getExistingTablesSQLite();
-    const actualTable = tables.get(tableName.toLowerCase());
-    if (!actualTable) return; // Table doesn't exist — Prisma will handle creation
-    result = await syncTableColumnsSQLite(actualTable, columns);
-  }
+  const tables = await getExistingTablesSQLite();
+  const actualTable = tables.get(tableName.toLowerCase());
+  if (!actualTable) return; // Table doesn't exist — Prisma will handle creation
+  const result = await syncTableColumnsSQLite(actualTable, columns);
 
   // Cache the ACTUALLY EXISTING columns (not the expected ones)
   _synced.set(tableName.toLowerCase(), result.existing);
@@ -320,28 +327,26 @@ export async function ensureAllTablesSynced(): Promise<void> {
   if (_globalSynced) return;
   _globalSynced = true;
 
+  // On Supabase, skip auto-sync entirely — schema managed via migrations
+  if (isSupabase()) {
+    const schemaModels = parseSchemaModels();
+    for (const [model, columns] of schemaModels) {
+      _synced.set(model.toLowerCase(), new Set(columns.map(c => c.name.toLowerCase())));
+    }
+    return;
+  }
+
   const schemaModels = parseSchemaModels();
 
-  if (isSupabase()) {
-    // Supabase: sync each table individually
-    for (const [model, columns] of schemaModels) {
-      const result = await syncTableColumnsSupabase(model, columns);
-      _synced.set(model.toLowerCase(), result.existing);
-      if (result.added > 0) {
-        console.log(`[db-sync] ${model}: added ${result.added} columns`);
-      }
-    }
-  } else {
-    // SQLite: batch sync
-    const tables = await getExistingTablesSQLite();
-    for (const [model, columns] of schemaModels) {
-      const actualTable = tables.get(model.toLowerCase());
-      if (!actualTable) continue;
-      const result = await syncTableColumnsSQLite(actualTable, columns);
-      _synced.set(model.toLowerCase(), result.existing);
-      if (result.added > 0) {
-        console.log(`[db-sync] ${model}: added ${result.added} columns`);
-      }
+  // SQLite: batch sync
+  const tables = await getExistingTablesSQLite();
+  for (const [model, columns] of schemaModels) {
+    const actualTable = tables.get(model.toLowerCase());
+    if (!actualTable) continue;
+    const result = await syncTableColumnsSQLite(actualTable, columns);
+    _synced.set(model.toLowerCase(), result.existing);
+    if (result.added > 0) {
+      console.log(`[db-sync] ${model}: added ${result.added} columns`);
     }
   }
 }

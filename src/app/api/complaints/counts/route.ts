@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken } from '@/core/auth/auth-lib';
-import { ensureTableSync } from '@/core/database/db-sync';
 import { buildAuthContext, buildComplaintWhereClause } from '@/core/permissions/rbac';
 export const dynamic = 'force-dynamic';
 
@@ -11,8 +10,6 @@ export async function GET(request: NextRequest) {
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
     if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-
-    await ensureTableSync('Complaint');
 
     const ctx = await buildAuthContext(payload);
     if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
