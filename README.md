@@ -200,10 +200,9 @@ The system combines the capabilities of:
 
 ### Deployment
 
-* Hostinger VPS
-* Docker
-* Nginx
-* PM2
+* **Frontend:** Vercel
+* **Backend API:** Render (Express.js + Docker)
+* **Database:** Supabase (PostgreSQL)
 
 ---
 

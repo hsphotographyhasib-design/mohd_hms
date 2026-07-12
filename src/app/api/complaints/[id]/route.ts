@@ -32,7 +32,6 @@ export const GET = withErrorLogging(async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) => {
-  try {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
@@ -294,17 +293,12 @@ export const PUT = withErrorLogging(async (
       createdAt: updated.createdAt.toISOString(),
       updatedAt: updated.updatedAt.toISOString(),
     });
-  } catch (error) {
-    console.error('Complaint update error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
 }, { module: 'complaints' });
 
 export const DELETE = withErrorLogging(async (
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) => {
-  try {
     const authHeader = request.headers.get('authorization');
     const token = authHeader?.replace('Bearer ', '');
     const payload = verifyToken(token || '');
@@ -351,8 +345,4 @@ export const DELETE = withErrorLogging(async (
     });
 
     return NextResponse.json({ message: 'Complaint deleted successfully' });
-  } catch (error) {
-    console.error('Complaint delete error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
 }, { module: 'complaints' });

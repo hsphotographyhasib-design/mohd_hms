@@ -52,7 +52,8 @@ export function withErrorLogging(handler: any, opts: WithErrorLoggingOptions = {
       const method = req.method;
       const detectedModule = opts.module || url.split('/api/')[1]?.split('/')[0] || 'unknown';
 
-      // Import error service functions dynamically to avoid issues
+      // Import error service functions dynamically to avoid circular dependencies
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       const { generateErrorRef, generateRequestId } = require('./error-service');
       const errorRef = generateErrorRef();
       const requestId = generateRequestId();
