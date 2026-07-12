@@ -53,6 +53,7 @@ const STATUS_COLORS: Record<string, string> = {
   ACCEPTED: '#8b5cf6',
   WORK_ORDER_CREATED: '#6366f1',
   IN_PROGRESS: '#f97316',
+  PAUSED: '#f59e0b',
   WAITING_CLIENT_CONFIRMATION: '#eab308',
   CLIENT_CONFIRMED: '#14b8a6',
   DRAFT_INVOICE: '#a855f7',

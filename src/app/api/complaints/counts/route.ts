@@ -14,12 +14,12 @@ export async function GET(request: NextRequest) {
     const ctx = await buildAuthContext(payload);
     if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-    const whereClause = buildComplaintWhereClause(ctx);
+    const { where: rbacWhere } = await buildComplaintWhereClause(ctx);
 
     // Single groupBy query to get all status counts at once
     const groups = await db.complaint.groupBy({
       by: ['status'],
-      where: whereClause as any,
+      where: rbacWhere,
       _count: { status: true },
     });
 

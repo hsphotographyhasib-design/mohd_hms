@@ -6,6 +6,7 @@ import {
   getComplaintTimeline,
 } from '@/core/workflow/notification-engine';
 import { createNotification, notifyComplaintAssigned } from '@/modules/notifications/services/notification-service';
+import { buildAuthContext, canAccessComplaint, buildComplaintWhereClause } from '@/core/permissions/rbac';
 
 export const dynamic = 'force-dynamic';
 
@@ -316,6 +317,17 @@ export async function POST(
       return NextResponse.json({ error: 'Only Admin, Supervisor, and Manager can assign technicians' }, { status: 403 });
     }
 
+    // RBAC: Verify data-level access to this complaint
+    const ctx = await buildAuthContext(payload, { resolveCustomer: true });
+    if (!ctx) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+    const hasAccess = await canAccessComplaint(ctx, id);
+    if (!hasAccess) {
+      return NextResponse.json({ error: 'You do not have access to this complaint' }, { status: 403 });
+    }
+
+    const { where: rbacWhere } = await buildComplaintWhereClause(ctx);
+
     const body = await request.json();
     const { technicianId, reason } = body as {
       technicianId: string;
@@ -326,9 +338,9 @@ export async function POST(
       return NextResponse.json({ error: 'technicianId is required' }, { status: 400 });
     }
 
-    // Get the complaint
+    // Get the complaint (with RBAC WHERE clause for data scoping)
     const complaint = await db.complaint.findFirst({
-      where: { id, tenantId },
+      where: { ...rbacWhere, id },
       include: {
         customer: { select: { id: true, name: true, phone: true } },
         assignedTo: { select: { id: true, name: true, phone: true, email: true } },

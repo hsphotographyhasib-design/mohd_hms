@@ -42,6 +42,7 @@ const API = (url: string, opts?: RequestInit) => fetch(url, {
 
 const MAIN_FLOW = [
   'NEW', 'ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS',
+  'PAUSED',
   'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED', 'DRAFT_INVOICE',
   'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED',
 ] as const;
@@ -49,6 +50,7 @@ const MAIN_FLOW = [
 const STEP_LABELS: Record<string, string> = {
   NEW: 'New', ASSIGNED: 'Assigned', ACCEPTED: 'Accepted',
   WORK_ORDER_CREATED: 'WO Created', IN_PROGRESS: 'In Progress',
+  PAUSED: 'Paused',
   WAITING_CLIENT_CONFIRMATION: 'Confirmation', CLIENT_CONFIRMED: 'Confirmed',
   DRAFT_INVOICE: 'Draft Invoice', INVOICE_APPROVED: 'Approved',
   INVOICE_SENT: 'Sent', PAID: 'Paid', CLOSED: 'Closed',
@@ -61,6 +63,7 @@ const STEP_COLORS: Record<string, { dot: string; line: string; text: string }> =
   ACCEPTED: { dot: 'bg-cyan-500', line: 'bg-cyan-200', text: 'text-cyan-700' },
   WORK_ORDER_CREATED: { dot: 'bg-indigo-500', line: 'bg-indigo-200', text: 'text-indigo-700' },
   IN_PROGRESS: { dot: 'bg-amber-500', line: 'bg-amber-200', text: 'text-amber-700' },
+  PAUSED: { dot: 'bg-amber-500', line: 'bg-amber-200', text: 'text-amber-700' },
   WAITING_CLIENT_CONFIRMATION: { dot: 'bg-orange-500', line: 'bg-orange-200', text: 'text-orange-700' },
   CLIENT_CONFIRMED: { dot: 'bg-emerald-500', line: 'bg-emerald-200', text: 'text-emerald-700' },
   DRAFT_INVOICE: { dot: 'bg-violet-500', line: 'bg-violet-200', text: 'text-violet-700' },

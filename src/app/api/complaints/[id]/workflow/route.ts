@@ -75,8 +75,6 @@ export async function POST(
     const tenantId = payload.tenantId as string;
     const userId = payload.userId as string;
     const userRole = (payload.role as string) || 'technician';
-    const isAdminOverride =
-      userRole === 'super_admin' || userRole === 'admin';
     const { id } = await params;
 
     // ─── RBAC: Build auth context and verify access ───
@@ -122,6 +120,10 @@ export async function POST(
         { status: 400 }
       );
     }
+
+    // Only enable admin override for the explicit 'override' action, not all admin actions
+    const isAdminOverride =
+      action === 'override' && (userRole === 'super_admin' || userRole === 'admin');
 
     if (!ACTION_STATUS_MAP[action] && action !== 'override') {
       return NextResponse.json(
@@ -205,6 +207,8 @@ export async function POST(
         });
 
         updateData.workOrderId = workOrder.id;
+        // Advance through the automatic ACCEPTED → WORK_ORDER_CREATED transition
+        updateData.status = 'WORK_ORDER_CREATED' as ComplaintStatus;
       }
 
       if (action === 'reject') {
@@ -270,6 +274,9 @@ export async function POST(
 
       if (action === 'client_confirm') {
         updateData.clientConfirmedAt = new Date();
+
+        // Advance through the automatic CLIENT_CONFIRMED → DRAFT_INVOICE transition
+        updateData.status = 'DRAFT_INVOICE' as ComplaintStatus;
 
         // Auto-create a Draft Invoice from the WorkOrder costs
         const workOrder = complaint.workOrders[0];
@@ -387,12 +394,15 @@ export async function POST(
 
     // Record timeline entry + notifications + audit — runs after the
     // transaction commits (it manages its own transaction internally).
+    // Use the actual status that was written (may differ from ACTION_STATUS_MAP
+    // for automatic transitions like accept → WORK_ORDER_CREATED).
+    const actualFinalStatus = (result.status as ComplaintStatus) || targetStatus;
     await recordWorkflowTransition({
       complaintId: complaint.id,
       tenantId,
       customerId: complaint.customerId,
       fromStatus: currentStatus,
-      toStatus: targetStatus,
+      toStatus: actualFinalStatus,
       action,
       performedBy: userId,
       performedByRole: userRole,

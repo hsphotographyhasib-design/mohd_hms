@@ -1444,3 +1444,49 @@ Work Log:
 Files changed:
 - `src/app/api/dashboard/kpi/route.ts` — Added .catch() fallback on aggregate call
 - `src/core/database/db-sync.ts` — New lightweight Supabase column verification, removed old broken sync functions
+
+---
+Task ID: 20
+Agent: Main
+Task: Enterprise Complaint Management System — Full 17-Phase Audit & Bug Fix
+
+Work Log:
+- Launched 3 parallel audit agents: API audit (10 routes), frontend audit (12 components), RBAC/workflow audit
+- Found 28 bugs total: 4 Critical, 5 High, 8 Medium, 6 Low, 5 Info
+- Fixed all 4 Critical and 5 High bugs (11 total) across 10 files
+- 0 lint errors after all fixes
+
+Bugs fixed:
+1. CRITICAL: counts/route.ts — Missing `await` + wrong destructuring on `buildComplaintWhereClause()` (all status counts broken for every role)
+2. CRITICAL: workflow/route.ts — `accept` action left status at ACCEPTED (state deadlock, technician couldn't start work). Now advances to WORK_ORDER_CREATED.
+3. CRITICAL: workflow/route.ts — `client_confirm` left status at CLIENT_CONFIRMED. Now advances to DRAFT_INVOICE.
+4. CRITICAL: [id]/route.ts PUT — Direct status setting bypassed entire state machine (any role could set any status). Now returns 422 directing to /workflow endpoint.
+5. HIGH: route.ts POST — Customer could inject `assignedToId`/`supervisorId` during complaint creation
+6. HIGH: assign-technician/route.ts — No RBAC data scoping (supervisor could view/assign any complaint in tenant)
+7. HIGH: complaint-detail.tsx — PAUSED missing from MAIN_FLOW progress bar
+8. HIGH: complaint-list.tsx — PAUSED missing from statusCounts initial state
+9. HIGH: mobile-complaint-detail.tsx — Only 6 of 14 statuses shown in timeline
+10. MEDIUM: workflow/route.ts — `isAdminOverride` was true for ALL admin actions (skipped required-field validation). Now only for explicit override.
+11. MEDIUM: [id]/route.ts — Null crash on `complaint.customer.name` (missing `?.`)
+12. MEDIUM: complaints-map-dashboard.tsx — PAUSED missing from STATUS_COLORS
+
+Known remaining (not fixed — lower priority):
+- File uploads in new-complaint.tsx only send filenames, not actual files (requires file upload endpoint)
+- ~100 lines dead dialog code in complaint-list.tsx
+- Duplicate permission stores (ROLE_REQUIRED_ACTIONS vs ACTION_PERMISSIONS) have diverged
+- Finance excluded from complaints feature permissions
+- Race condition on complaint number generation
+- Invoice number collision risk (random instead of sequential)
+- Silent error swallowing on 3 API calls in complaint-list.tsx
+
+Files changed (10):
+- `src/app/api/complaints/counts/route.ts`
+- `src/app/api/complaints/route.ts`
+- `src/app/api/complaints/[id]/route.ts`
+- `src/app/api/complaints/[id]/workflow/route.ts`
+- `src/app/api/complaints/[id]/assign-technician/route.ts`
+- `src/modules/complaints/components/complaint-detail.tsx`
+- `src/modules/complaints/components/complaint-list.tsx`
+- `src/mobile-app/components/mobile-complaint-detail.tsx`
+- `src/core/maps/components/complaints-map-dashboard.tsx`
+- `supabase-schema.sql`

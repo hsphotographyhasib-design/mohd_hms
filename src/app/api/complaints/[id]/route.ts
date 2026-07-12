@@ -97,7 +97,7 @@ export async function GET(
       id: complaint.id,
       tenantId: complaint.tenantId,
       customerId: complaint.customerId,
-      customerName: complaint.customer.name,
+      customerName: complaint.customer?.name,
       equipmentId: complaint.equipmentId,
       equipmentName: complaint.equipment?.name,
       title: complaint.title,
@@ -242,15 +242,13 @@ export async function PUT(
     if (body.customerRating !== undefined) updateData.customerRating = body.customerRating || null;
     if (body.customerFeedback !== undefined) updateData.customerFeedback = body.customerFeedback || null;
 
-    // Handle status transitions
+    // Status transitions must go through /workflow endpoint to enforce the state machine.
+    // The PUT endpoint only handles field updates (title, description, priority, etc.).
     if (body.status) {
-      updateData.status = body.status;
-      if (body.status === 'RESOLVED') updateData.resolvedAt = new Date();
-      if (body.status === 'CLOSED') updateData.closedAt = new Date();
-      if (body.status === 'ASSIGNED') updateData.assignedToId = body.assignedToId || null;
-      if (body.status === 'IN_PROGRESS') {
-        if (body.assignedToId) updateData.assignedToId = body.assignedToId;
-      }
+      return NextResponse.json(
+        { error: 'Use POST /api/complaints/[id]/workflow for status transitions' },
+        { status: 422 }
+      );
     }
     if (body.assignedToId !== undefined && !body.status) updateData.assignedToId = body.assignedToId || null;
     if (body.supervisorId !== undefined) updateData.supervisorId = body.supervisorId || null;
@@ -279,7 +277,7 @@ export async function PUT(
       id: updated.id,
       tenantId: updated.tenantId,
       customerId: updated.customerId,
-      customerName: updated.customer.name,
+      customerName: updated.customer?.name,
       equipmentId: updated.equipmentId,
       equipmentName: updated.equipment?.name,
       title: updated.title,
