@@ -36,7 +36,7 @@ interface CacheEntry<T> {
   expiresAt: number;
 }
 
-const CACHE_TTL_MS = 60_000; // 1 minute
+const CACHE_TTL_MS = 10_000; // 10 seconds (reduced to minimize stale entries)
 const customerCache = new Map<string, CacheEntry<string | null>>();
 const deptTechCache = new Map<string, CacheEntry<string[]>>();
 
@@ -63,9 +63,10 @@ function setCache<T>(cache: Map<string, CacheEntry<T>>, key: string, value: T) {
 async function resolveCustomerId(
   tenantId: string,
   email?: string,
-  phone?: string
+  phone?: string,
+  userId?: string,
 ): Promise<string | null> {
-  const cacheKey = `${tenantId}:${email || ''}:${phone || ''}`;
+  const cacheKey = `${tenantId}:${email || ''}:${phone || ''}:${userId || ''}`;
   const cached = getCached(customerCache, cacheKey);
   if (cached !== null) return cached;
 
@@ -73,19 +74,56 @@ async function resolveCustomerId(
   if (email) orConditions.push({ email });
   if (phone) orConditions.push({ phone });
 
-  if (orConditions.length === 0) {
-    setCache(customerCache, cacheKey, null);
-    return null;
+  // Strategy 1: Match by email or phone
+  if (orConditions.length > 0) {
+    const customer = await db.customer.findFirst({
+      where: { tenantId, OR: orConditions },
+      select: { id: true },
+    });
+    if (customer?.id) {
+      setCache(customerCache, cacheKey, customer.id);
+      return customer.id;
+    }
   }
 
-  const customer = await db.customer.findFirst({
-    where: { tenantId, OR: orConditions },
-    select: { id: true },
-  });
+  // Strategy 2: For customer-role users, find Customer by looking at
+  // complaints they've created (reverse lookup from existing data)
+  if (userId) {
+    const user = await db.user.findUnique({
+      where: { id: userId },
+      select: { email: true, phone: true, name: true },
+    });
+    if (user) {
+      // Retry with user's actual DB email/phone (may differ from JWT)
+      const retryOr: Prisma.CustomerWhereInput[] = [];
+      if (user.email) retryOr.push({ email: user.email });
+      if (user.phone && user.phone !== 'N/A') retryOr.push({ phone: user.phone });
+      if (retryOr.length > 0) {
+        const customer = await db.customer.findFirst({
+          where: { tenantId, OR: retryOr },
+          select: { id: true },
+        });
+        if (customer?.id) {
+          setCache(customerCache, cacheKey, customer.id);
+          return customer.id;
+        }
+      }
+    }
+  }
 
-  const result = customer?.id ?? null;
-  setCache(customerCache, cacheKey, result);
-  return result;
+  setCache(customerCache, cacheKey, null);
+  return null;
+}
+
+/** Invalidate the customer ID cache (call after creating/updating a Customer). */
+export function invalidateCustomerCache(tenantId: string, email?: string, phone?: string) {
+  // Clear all keys that might match this customer
+  const prefix = `${tenantId}:`;
+  for (const key of customerCache.keys()) {
+    if (key.startsWith(prefix)) {
+      customerCache.delete(key);
+    }
+  }
 }
 
 // ── Department Technician Resolution ────────────────────────────────────────
@@ -225,7 +263,7 @@ export async function buildComplaintWhereClause(
     let linkedCustomerId = customerId;
 
     if (!linkedCustomerId) {
-      linkedCustomerId = await resolveCustomerId(tenantId, email, phone);
+      linkedCustomerId = await resolveCustomerId(tenantId, email, phone, userId);
     }
 
     if (!linkedCustomerId) {
@@ -352,7 +390,7 @@ export async function buildAuthContext(
 
   let customerId: string | null = null;
   if (options?.resolveCustomer && role === 'customer') {
-    customerId = await resolveCustomerId(tenantId, user.email || email, user.phone || undefined);
+    customerId = await resolveCustomerId(tenantId, user.email || email, user.phone || undefined, userId);
   }
 
   return {

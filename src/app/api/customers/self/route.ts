@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { generateCustomerNumber } from '@/core/auth/auth-lib';
+import { invalidateCustomerCache } from '@/core/permissions/rbac/complaint-access';
 export const dynamic = 'force-dynamic';
 
 /**
@@ -87,6 +88,9 @@ export async function GET(request: NextRequest) {
           { status: 500 }
         );
       }
+
+      // Invalidate customer cache so subsequent RBAC queries find the new record
+      invalidateCustomerCache(tenantId, user.email || undefined, user.phone || undefined);
     }
 
     return NextResponse.json({
