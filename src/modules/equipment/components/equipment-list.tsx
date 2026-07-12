@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import dynamic from 'next/dynamic';
 import {
   Plus,
   Search,
@@ -80,6 +81,11 @@ import {
 } from 'lucide-react';
 
 // ============ HELPERS ============
+
+const QRCodeSVG = dynamic(
+  () => import('qrcode.react').then((mod) => mod.QRCodeSVG),
+  { ssr: false }
+);
 
 const CATEGORY_OPTIONS: EquipmentCategory[] = [
   'HVAC',
@@ -951,15 +957,17 @@ export function EquipmentList() {
           </DialogHeader>
           {qrItem && (
             <div className="flex flex-col items-center gap-4 py-4">
-              <div className="w-48 h-48 bg-white dark:bg-gray-900 border-2 border-dashed border-muted-foreground/30 rounded-xl flex items-center justify-center p-4">
-                <div className="text-center space-y-2">
-                  <QrCode className="h-16 w-16 mx-auto text-emerald-600 dark:text-emerald-400" />
-                  <p className="text-xs font-mono font-medium break-all">{qrItem.qrCode || qrItem.assetNumber}</p>
-                </div>
+              <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
+                <QRCodeSVG
+                  value={typeof window !== 'undefined' ? `${window.location.origin}/equipment/${qrItem.qrId || qrItem.qrCode}` : (qrItem.qrId || qrItem.qrCode)}
+                  size={180}
+                  level="H"
+                  includeMargin={false}
+                />
               </div>
               <div className="text-center space-y-1">
                 <p className="font-medium text-sm">{qrItem.name}</p>
-                <p className="text-xs text-muted-foreground font-mono">{qrItem.assetNumber}</p>
+                <p className="text-xs text-muted-foreground font-mono">{qrItem.qrId || qrItem.assetNumber}</p>
               </div>
             </div>
           )}

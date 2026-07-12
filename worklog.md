@@ -1545,3 +1545,24 @@ Stage Summary:
 - Files changed: `src/app/api/complaints/counts/route.ts`, `src/app/api/complaints/route.ts`, `src/app/api/complaints/[id]/route.ts`
 - Customer name resolution order: Prisma relation → direct DB lookup → customerSnapshot JSON
 - KPI counts now use same auth context as complaint list (consistent customer resolution)
+
+---
+Task ID: 2
+Agent: Main
+Task: Fix fake QR code in equipment list dialog — replace Lucide icon with real scannable QR code
+
+Work Log:
+- Analyzed uploaded image via VLM — confirmed it shows a fake/placeholder QR code (green Lucide icon, not real QR)
+- Explored entire QR code codebase: found `qrcode.react` package already installed, used correctly in `equipment-detail.tsx` via `dynamic(() => import('qrcode.react'))` 
+- Found root cause in `equipment-list.tsx` QR dialog (lines 943-967): used `<QrCode>` Lucide icon (decorative SVG) instead of `<QRCodeSVG>` from `qrcode.react`
+- Fixed by:
+  1. Added `dynamic` import from `next/dynamic`
+  2. Added dynamic import of `QRCodeSVG` from `qrcode.react` (with `ssr: false`, matching equipment-detail.tsx pattern)
+  3. Replaced fake icon + text display with real `<QRCodeSVG value={...} size={180} level="H" />` 
+  4. QR encodes proper URL: `{origin}/equipment/{qrId || qrCode}` — scannable and links to the equipment public page
+  5. Kept `QrCode` Lucide import for icon buttons in table/bulk actions (still used there)
+- Verified with `bun run lint` — 0 errors
+
+Stage Summary:
+- File modified: `src/modules/equipment/components/equipment-list.tsx`
+- The QR dialog now renders a real, scannable QR code using `qrcode.react` library instead of a decorative icon
