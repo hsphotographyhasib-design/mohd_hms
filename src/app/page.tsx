@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useSyncExternalStore } from 'react';
+import React, { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import dynamic from 'next/dynamic';
 import { Building2 } from 'lucide-react';
 import { useAuthStore } from '@/app-shell/store';
@@ -71,10 +71,43 @@ function ProtectedApp() {
 }
 
 // Dynamic import — landing CSS/JS only loaded when user is NOT authenticated
+// Wrapped in SafeLandingHome with error boundary to handle Turbopack chunk load failures
 const LandingHome = dynamic(
   () => import('@/landing/components/landing-home').then(mod => ({ default: mod.LandingHome })),
-  { ssr: false }
+  {
+    ssr: false,
+    loading: () => (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <Building2 className="h-12 w-12 text-emerald-600 animate-pulse" />
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    ),
+  }
 );
+
+function SafeLandingHome({ onSignIn }: { onSignIn: () => void }) {
+  const [chunkError, setChunkError] = useState(false);
+
+  if (chunkError) {
+    return <LoginView />;
+  }
+
+  return (
+    <ErrorBoundary onError={() => setChunkError(true)}>
+      <LandingHome onSignIn={onSignIn} />
+    </ErrorBoundary>
+  );
+}
+
+// Minimal error boundary for catching chunk load errors
+class ErrorBoundary extends React.Component<{ onError: () => void; children: React.ReactNode }, { hasError: boolean }> {
+  state = { hasError: false };
+  static getDerivedStateFromError() { return { hasError: true }; }
+  componentDidCatch() { this.props.onError(); }
+  render() { return this.state.hasError ? null : this.props.children; }
+}
 
 export default function Home() {
   const { isAuthenticated } = useAuthStore();
@@ -129,7 +162,7 @@ export default function Home() {
           ) : showLogin ? (
             <LoginView />
           ) : (
-            <LandingHome onSignIn={() => setShowLogin(true)} />
+            <SafeLandingHome onSignIn={() => setShowLogin(true)} />
           )}
         </NotificationProvider>
       </ConfirmProvider>
