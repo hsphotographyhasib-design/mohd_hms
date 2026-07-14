@@ -47,7 +47,7 @@ export async function GET(
           },
         },
         _count: {
-          select: { complaints: true, workOrders: true },
+          select: { Complaint: true, WorkOrder: true },
         },
       },
     });
@@ -92,7 +92,7 @@ export async function GET(
               },
             },
             _count: {
-              select: { complaints: true, workOrders: true },
+              select: { Complaint: true, WorkOrder: true },
             },
           },
         });
@@ -129,7 +129,7 @@ export async function GET(
               },
             },
             _count: {
-              select: { complaints: true, workOrders: true },
+              select: { Complaint: true, WorkOrder: true },
             },
           },
         });
@@ -172,7 +172,7 @@ export async function GET(
         priority: true,
         createdAt: true,
         completedAt: true,
-        assignedTo: { select: { name: true } },
+        User_Complaint_assignedToIdToUser: { select: { name: true } },
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -191,7 +191,7 @@ export async function GET(
         type: true,
         createdAt: true,
         completedAt: true,
-        assignedTo: { select: { name: true } },
+        User_WorkOrder_assignedToIdToUser: { select: { name: true } },
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -206,7 +206,7 @@ export async function GET(
         status: c.status,
         createdAt: c.createdAt.toISOString(),
         completedAt: c.completedAt?.toISOString() ?? null,
-        assignedToName: c.assignedTo?.name ?? null,
+        assignedToName: c.User_Complaint_assignedToIdToUser?.name ?? null,
         complaintNumber: c.id.slice(-6).toUpperCase(),
         priority: c.priority,
       })),
@@ -218,7 +218,7 @@ export async function GET(
         status: wo.status,
         createdAt: wo.createdAt.toISOString(),
         completedAt: wo.completedAt?.toISOString() ?? null,
-        assignedToName: wo.assignedTo?.name ?? null,
+        assignedToName: wo.User_WorkOrder_assignedToIdToUser?.name ?? null,
         workOrderNumber: wo.id.slice(-6).toUpperCase(),
         priority: wo.priority,
       })),

@@ -24,7 +24,7 @@ export async function GET(
               select: {
                 id: true, name: true, itemCode: true, sku: true, unit: true,
                 averageCost: true, sellingPrice: true, itemType: true, status: true,
-                category: { select: { id: true, name: true, code: true } },
+                inventoryCategory: { select: { id: true, name: true, code: true } },
               },
             },
           },

@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
     // Low stock items (quantity <= minStock and quantity > 0)
     const lowStockList = await db.inventoryItem.findMany({
       where: { tenantId, isActive: true, quantity: { gt: 0, lte: 999999 } },
-      select: { id: true, name: true, itemCode: true, quantity: true, minStock: true, unit: true, category: { select: { name: true } } },
+      select: { id: true, name: true, itemCode: true, quantity: true, minStock: true, unit: true, inventoryCategory: { select: { name: true } } },
       orderBy: { quantity: 'asc' },
       take: 5,
     });

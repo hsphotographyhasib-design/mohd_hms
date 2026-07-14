@@ -22,8 +22,8 @@ export async function GET(request: NextRequest) {
       where,
       orderBy: { displayOrder: 'asc' },
       include: {
-        category: { select: { id: true, name: true, code: true } },
-        _count: { select: { items: { where: { isActive: true } } } },
+        inventoryCategory: { select: { id: true, name: true, code: true } },
+        _count: { select: { InventoryItem: { where: { isActive: true } } } },
       },
     });
 
@@ -32,13 +32,13 @@ export async function GET(request: NextRequest) {
         id: s.id,
         tenantId: s.tenantId,
         categoryId: s.categoryId,
-        category: s.category,
+        category: s.inventoryCategory,
         name: s.name,
         code: s.code,
         description: s.description,
         displayOrder: s.displayOrder,
         isActive: s.isActive,
-        itemCount: s._count.items,
+        itemCount: (s._count as any).InventoryItem,
         createdAt: s.createdAt.toISOString(),
         updatedAt: s.updatedAt.toISOString(),
       })),
@@ -80,7 +80,7 @@ export async function POST(request: NextRequest) {
         description: body.description || null,
         displayOrder: body.displayOrder ?? ((maxOrder?.displayOrder ?? 0) + 1),
       },
-      include: { category: { select: { id: true, name: true, code: true } } },
+      include: { inventoryCategory: { select: { id: true, name: true, code: true } } },
     });
 
     return NextResponse.json({ ...subcategory, createdAt: subcategory.createdAt.toISOString(), updatedAt: subcategory.updatedAt.toISOString() }, { status: 201 });

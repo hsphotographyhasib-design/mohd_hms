@@ -122,7 +122,14 @@ class WhatsAppServiceManager {
       return true;
     }
 
-    this.log('info', 'SERVICE_START', 'Starting OpenWA service...');
+    this.log('info', 'SERVICE_START', `Attempting to reach OpenWA service at ${SERVICE_URL}...`);
+
+    // Check if we're in a serverless environment (Vercel, etc.) where we can't spawn processes
+    const isServerless = !!process.env.VERCEL || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+    if (isServerless) {
+      this.log('error', 'SERVICE_START', `Cannot start OpenWA service in serverless environment. The OpenWA service must be running separately at ${SERVICE_URL}. Deploy it on Render, Railway, or a VPS.`);
+      return false;
+    }
 
     // Kill any existing process on port 3002
     try {

@@ -25,10 +25,10 @@ export async function GET(
     const item = await db.inventoryItem.findFirst({
       where: { id, tenantId },
       include: {
-        category: { select: { id: true, name: true, code: true, color: true, icon: true } },
-        subcategory: { select: { id: true, name: true, code: true } },
-        suppliers: { where: { isActive: true }, orderBy: { isPrimary: 'desc' } },
-        warehouseStock: {
+        inventoryCategory: { select: { id: true, name: true, code: true, color: true, icon: true } },
+        InventorySubcategory: { select: { id: true, name: true, code: true } },
+        ItemSupplier: { where: { isActive: true }, orderBy: { isPrimary: 'desc' } },
+        WarehouseStock: {
           include: { warehouse: { select: { id: true, name: true, code: true, type: true } } },
         },
       },
@@ -115,8 +115,8 @@ export async function PUT(
       where: { id },
       data,
       include: {
-        category: { select: { id: true, name: true, code: true, color: true } },
-        subcategory: { select: { id: true, name: true, code: true } },
+        inventoryCategory: { select: { id: true, name: true, code: true, color: true } },
+        InventorySubcategory: { select: { id: true, name: true, code: true } },
       },
     });
 

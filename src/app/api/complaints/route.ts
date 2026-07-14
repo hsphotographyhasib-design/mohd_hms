@@ -71,8 +71,8 @@ export const GET = withErrorLogging(async (request: NextRequest) => {
         include: {
           customer: { select: { name: true } },
           equipment: { select: { name: true } },
-          assignedTo: { select: { name: true } },
-          supervisor: { select: { name: true } },
+          User_Complaint_assignedToIdToUser: { select: { name: true } },
+          User_Complaint_supervisorIdToUser: { select: { name: true } },
         },
       }),
       db.complaint.count({ where }),
@@ -125,9 +125,9 @@ export const GET = withErrorLogging(async (request: NextRequest) => {
       category: c.category,
       photos: c.photos,
       assignedToId: c.assignedToId,
-      assignedToName: c.assignedTo?.name,
+      assignedToName: c.User_Complaint_assignedToIdToUser?.name,
       supervisorId: c.supervisorId,
-      supervisorName: c.supervisor?.name,
+      supervisorName: c.User_Complaint_supervisorIdToUser?.name,
       resolutionNotes: c.resolutionNotes,
       customerRating: c.customerRating,
       customerFeedback: c.customerFeedback,
@@ -271,8 +271,8 @@ export const POST = withErrorLogging(async (request: NextRequest) => {
         include: {
           customer: { select: { name: true } },
           equipment: { select: { name: true } },
-          assignedTo: { select: { name: true } },
-          supervisor: { select: { name: true } },
+          User_Complaint_assignedToIdToUser: { select: { name: true } },
+          User_Complaint_supervisorIdToUser: { select: { name: true } },
         },
       });
     });
@@ -311,9 +311,9 @@ export const POST = withErrorLogging(async (request: NextRequest) => {
       status: complaint.status,
       category: complaint.category,
       assignedToId: complaint.assignedToId,
-      assignedToName: complaint.assignedTo?.name,
+      assignedToName: complaint.User_Complaint_assignedToIdToUser?.name,
       supervisorId: complaint.supervisorId,
-      supervisorName: complaint.supervisor?.name,
+      supervisorName: complaint.User_Complaint_supervisorIdToUser?.name,
       createdAt: complaint.createdAt.toISOString(),
       updatedAt: complaint.updatedAt.toISOString(),
     }, { status: 201 });

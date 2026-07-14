@@ -45,7 +45,7 @@ function formatBlog(b: {
     viewCount: b.viewCount,
     createdAt: b.createdAt.toISOString(),
     updatedAt: b.updatedAt.toISOString(),
-    category: b.category ? { id: b.category.id, name: b.category.name, slug: b.category.slug } : null,
+    category: (b as any).CmsBlogCategory ? { id: (b as any).CmsBlogCategory.id, name: (b as any).CmsBlogCategory.name, slug: (b as any).CmsBlogCategory.slug } : null,
   };
 }
 
@@ -62,7 +62,7 @@ export async function GET(
 
     const blog = await db.cmsBlog.findFirst({
       where: { id, tenantId },
-      include: { category: { select: { id: true, name: true, slug: true } } },
+      include: { CmsBlogCategory: { select: { id: true, name: true, slug: true } } },
     });
     if (!blog) return NextResponse.json({ error: 'Blog not found' }, { status: 404 });
 
@@ -70,7 +70,7 @@ export async function GET(
     const updated = await db.cmsBlog.update({
       where: { id },
       data: { viewCount: { increment: 1 } },
-      include: { category: { select: { id: true, name: true, slug: true } } },
+      include: { CmsBlogCategory: { select: { id: true, name: true, slug: true } } },
     });
 
     return NextResponse.json({ data: formatBlog(updated as Parameters<typeof formatBlog>[0]) });
@@ -113,7 +113,7 @@ export async function PUT(
         ...(body.publishedAt !== undefined && { publishedAt: body.publishedAt ? new Date(body.publishedAt) : null }),
         ...(body.scheduledAt !== undefined && { scheduledAt: body.scheduledAt ? new Date(body.scheduledAt) : null }),
       },
-      include: { category: { select: { id: true, name: true, slug: true } } },
+      include: { CmsBlogCategory: { select: { id: true, name: true, slug: true } } },
     });
 
     return NextResponse.json(formatBlog(updated as Parameters<typeof formatBlog>[0]));

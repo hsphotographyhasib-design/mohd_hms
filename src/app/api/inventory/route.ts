@@ -88,8 +88,8 @@ export async function GET(request: NextRequest) {
         take: pageSize,
         orderBy,
         include: {
-          category: { select: { id: true, name: true, code: true, color: true } },
-          subcategory: { select: { id: true, name: true, code: true } },
+          inventoryCategory: { select: { id: true, name: true, code: true, color: true } },
+          InventorySubcategory: { select: { id: true, name: true, code: true } },
         },
       }),
       db.inventoryItem.count({ where }),
@@ -108,9 +108,9 @@ export async function GET(request: NextRequest) {
       shortName: item.shortName,
       itemType: item.itemType,
       categoryId: item.categoryId,
-      category: item.category,
+      category: item.inventoryCategory,
       subcategoryId: item.subcategoryId,
-      subcategory: item.subcategory,
+      subcategory: item.InventorySubcategory,
       description: item.description,
       shortDescription: item.shortDescription,
       brand: item.brand,
@@ -262,8 +262,8 @@ export async function POST(request: NextRequest) {
           sop: sop || null,
         },
         include: {
-          category: { select: { id: true, name: true, code: true, color: true } },
-          subcategory: { select: { id: true, name: true, code: true } },
+          inventoryCategory: { select: { id: true, name: true, code: true, color: true } },
+          InventorySubcategory: { select: { id: true, name: true, code: true } },
         },
       });
 

@@ -65,8 +65,8 @@ export async function POST(
       where: { id, tenantId },
       include: {
         customer: { select: { id: true, name: true, phone: true } },
-        assignedTo: { select: { id: true, name: true, phone: true, email: true } },
-        supervisor: { select: { id: true, name: true } },
+        User_Complaint_assignedToIdToUser: { select: { id: true, name: true, phone: true, email: true } },
+        User_Complaint_supervisorIdToUser: { select: { id: true, name: true } },
       },
     });
 
@@ -128,12 +128,12 @@ export async function POST(
             action: 'accepted',
             fromStatus: 'ASSIGNED',
             toStatus: 'ACCEPTED',
-            description: `${complaint.assignedTo?.name || 'Technician'} accepted the assignment.${eta ? ` ETA: ${eta}` : ''}${slaExceeded ? ' (SLA exceeded)' : ''}`,
+            description: `${complaint.User_Complaint_assignedToIdToUser?.name || 'Technician'} accepted the assignment.${eta ? ` ETA: ${eta}` : ''}${slaExceeded ? ' (SLA exceeded)' : ''}`,
             performedBy: userId,
             performedByRole: userRole,
             metadata: JSON.stringify({
               technicianId: userId,
-              technicianName: complaint.assignedTo?.name,
+              technicianName: complaint.User_Complaint_assignedToIdToUser?.name,
               eta: eta || null,
               slaExceeded,
               slaMinutes: slaExceeded && complaint.slaResponseDeadline
@@ -238,12 +238,12 @@ export async function POST(
             action: 'rejected',
             fromStatus: 'ASSIGNED',
             toStatus: 'NEW',
-            description: `${complaint.assignedTo?.name || 'Technician'} rejected the assignment. Reason: ${rejectionReason}${slaExceeded ? ' (SLA was already exceeded)' : ''}`,
+            description: `${complaint.User_Complaint_assignedToIdToUser?.name || 'Technician'} rejected the assignment. Reason: ${rejectionReason}${slaExceeded ? ' (SLA was already exceeded)' : ''}`,
             performedBy: userId,
             performedByRole: userRole,
             metadata: JSON.stringify({
               technicianId: userId,
-              technicianName: complaint.assignedTo?.name,
+              technicianName: complaint.User_Complaint_assignedToIdToUser?.name,
               rejectionReason,
               slaExceeded,
             }),
@@ -262,7 +262,7 @@ export async function POST(
             entityId: complaint.id,
             oldValue: JSON.stringify({ assignedToId: complaint.assignedToId, assignmentStatus: complaint.assignmentStatus, status: complaint.status }),
             newValue: JSON.stringify({ assignedToId: null, assignmentStatus: 'REJECTED', status: 'NEW' }),
-            details: JSON.stringify({ rejectionReason, slaExceeded, previousTechnicianName: complaint.assignedTo?.name }),
+            details: JSON.stringify({ rejectionReason, slaExceeded, previousTechnicianName: complaint.User_Complaint_assignedToIdToUser?.name }),
             ipAddress: request.headers.get('x-forwarded-for') || null,
             userAgent: request.headers.get('user-agent') || null,
             device: parseDevice(request.headers.get('user-agent') || undefined),
@@ -283,7 +283,7 @@ export async function POST(
           tenantId,
           type: 'complaint_accepted',
           title: 'Technician Accepted Assignment',
-          message: `${complaint.assignedTo?.name || 'Technician'} accepted complaint: ${complaint.title}${eta ? `. ETA: ${eta}` : ''}`,
+          message: `${complaint.User_Complaint_assignedToIdToUser?.name || 'Technician'} accepted complaint: ${complaint.title}${eta ? `. ETA: ${eta}` : ''}`,
           priority: 'normal',
           relatedEntityType: 'complaint',
           relatedEntityId: complaint.id,
@@ -291,14 +291,14 @@ export async function POST(
           createdBy: userId,
           roles: ['admin', 'super_admin', 'supervisor', 'manager'],
           excludeUserIds: [userId],
-          data: { complaintId: complaint.id, technicianName: complaint.assignedTo?.name, eta: eta || null },
+          data: { complaintId: complaint.id, technicianName: complaint.User_Complaint_assignedToIdToUser?.name, eta: eta || null },
         });
       } else {
         await createNotification({
           tenantId,
           type: 'complaint_rejected',
           title: 'Technician Rejected Assignment',
-          message: `${complaint.assignedTo?.name || 'Technician'} rejected complaint "${complaint.title}". Needs reassignment. Reason: ${rejectionReason}`,
+          message: `${complaint.User_Complaint_assignedToIdToUser?.name || 'Technician'} rejected complaint "${complaint.title}". Needs reassignment. Reason: ${rejectionReason}`,
           priority: complaint.priority === 'critical' ? 'high' : 'normal',
           relatedEntityType: 'complaint',
           relatedEntityId: complaint.id,
@@ -306,7 +306,7 @@ export async function POST(
           createdBy: userId,
           roles: ['admin', 'super_admin', 'supervisor', 'manager'],
           excludeUserIds: [userId],
-          data: { complaintId: complaint.id, technicianName: complaint.assignedTo?.name, rejectionReason },
+          data: { complaintId: complaint.id, technicianName: complaint.User_Complaint_assignedToIdToUser?.name, rejectionReason },
         });
       }
     } catch (notifErr) {

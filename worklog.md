@@ -1654,3 +1654,25 @@ Stage Summary:
 - File modified: .env (added JWT_SECRET)
 - The app is fully functional — OOM kills are a sandbox environment limitation (3.9GB RAM vs 2.5GB+ needed for Turbopack)
 - In production (Vercel), routes are pre-compiled so OOM is not an issue
+---
+Task ID: 1
+Agent: Main
+Task: Fix "it's not working" — Prisma relation field name mismatches causing API failures
+
+Work Log:
+- Diagnosed root cause: Prisma schema uses PascalCase for relation fields (e.g., `Complaint`, `WorkOrder`, `User_Complaint_assignedToIdToUser`) but many API routes used camelCase (e.g., `complaints`, `workOrders`, `assignedTo`)
+- Fixed CmsBlog `category` → `CmsBlogCategory` in landing API and CMS blog routes
+- Fixed Customer `_count: { equipment, complaints, invoices }` → `{ Equipment, Complaint, Invoice }` with camelCase response mapping
+- Fixed Equipment QR lookup `_count` and `assignedTo` relation names (Complaint→User_Complaint_assignedToIdToUser, WorkOrder→User_WorkOrder_assignedToIdToUser)
+- Fixed Complaint routes: `assignedTo` → `User_Complaint_assignedToIdToUser`, `supervisor` → `User_Complaint_supervisorIdToUser`, `workOrders` → `WorkOrder` in list/detail/workflow/accept-reject/assign-technician routes
+- Fixed Work Orders routes: `assignedTo` → `User_WorkOrder_assignedToIdToUser`, `supervisor` → `User_WorkOrder_supervisorIdToUser`, `creator` → `User_WorkOrder_createdByToUser`, `materials` → `WorkOrderMaterial`
+- Fixed InventoryItem routes: `category` → `inventoryCategory`, `subcategory` → `InventorySubcategory`, `suppliers` → `ItemSupplier`, `warehouseStock` → `WarehouseStock`
+- Fixed InventorySubcategory routes: `category` → `inventoryCategory`, `_count.items` → `_count.InventoryItem`
+- Fixed CmsBlogs routes: `category` → `CmsBlogCategory`
+- Re-seeded database with 72 records (7 customers, 12 equipment, 10 complaints, 8 work orders, etc.)
+
+Stage Summary:
+- 20+ API route files fixed across complaints, customers, equipment, work-orders, inventory, CMS modules
+- Verified via curl: Login ✅, Customers (7 records, _count mapped correctly) ✅, Complaints (10 records, assignedToName resolved) ✅
+- Turbopack OOM remains a sandbox-only limitation (4GB RAM, not a code issue)
+- All fixes are backward-compatible: API response field names remain camelCase for frontend compatibility

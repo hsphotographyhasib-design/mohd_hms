@@ -164,7 +164,7 @@ export async function GET() {
           slug: true,
           excerpt: true,
           featuredImage: true,
-          category: { select: { name: true } },
+          CmsBlogCategory: { select: { name: true } },
           publishedAt: true,
         },
       }),
@@ -247,7 +247,7 @@ export async function GET() {
       slug: b.slug,
       excerpt: b.excerpt,
       featuredImage: b.featuredImage,
-      category: b.category?.name ?? null,
+      category: b.CmsBlogCategory?.name ?? null,
       publishedAt: b.publishedAt?.toISOString() ?? null,
     }));
 

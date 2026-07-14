@@ -19,7 +19,7 @@ export async function GET(
     const customer = await db.customer.findFirst({
       where: { id, tenantId },
       include: {
-        _count: { select: { equipment: true, complaints: true, invoices: true } },
+        _count: { select: { Equipment: true, Complaint: true, Invoice: true } },
       },
     });
 
@@ -41,7 +41,7 @@ export async function GET(
       isActive: customer.isActive,
       createdAt: customer.createdAt.toISOString(),
       updatedAt: customer.updatedAt.toISOString(),
-      _count: customer._count,
+      _count: customer._count ? { equipment: customer._count.Equipment ?? 0, complaints: customer._count.Complaint ?? 0, invoices: customer._count.Invoice ?? 0 } : { equipment: 0, complaints: 0, invoices: 0 },
     });
   } catch (error) {
     console.error('Customer get error:', error);
@@ -79,7 +79,7 @@ export async function PUT(
         ...(body.isActive !== undefined && { isActive: body.isActive }),
       },
       include: {
-        _count: { select: { equipment: true, complaints: true, invoices: true } },
+        _count: { select: { Equipment: true, Complaint: true, Invoice: true } },
       },
     });
 
@@ -96,7 +96,7 @@ export async function PUT(
       isActive: updated.isActive,
       createdAt: updated.createdAt.toISOString(),
       updatedAt: updated.updatedAt.toISOString(),
-      _count: updated._count,
+      _count: updated._count ? { equipment: updated._count.Equipment ?? 0, complaints: updated._count.Complaint ?? 0, invoices: updated._count.Invoice ?? 0 } : { equipment: 0, complaints: 0, invoices: 0 },
     });
   } catch (error) {
     console.error('Customer update error:', error);

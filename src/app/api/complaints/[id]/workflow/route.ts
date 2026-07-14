@@ -495,16 +495,16 @@ export const GET = withErrorLogging(async (
       where: { ...getRbacWhere, id },
       include: {
         customer: { select: { id: true, name: true, phone: true } },
-        assignedTo: {
+        User_Complaint_assignedToIdToUser: {
           select: { id: true, name: true, role: true },
         },
-        supervisor: {
+        User_Complaint_supervisorIdToUser: {
           select: { id: true, name: true, role: true },
         },
-        workOrders: {
+        WorkOrder: {
           orderBy: { createdAt: 'desc' },
           take: 1,
-          include: { assignedTo: { select: { id: true, name: true } } },
+          include: { User_WorkOrder_assignedToIdToUser: { select: { id: true, name: true } } },
         },
       },
     });
@@ -533,19 +533,19 @@ export const GET = withErrorLogging(async (
         title: complaint.title,
         source: complaint.source,
         assignedToId: complaint.assignedToId,
-        assignedToName: complaint.assignedTo?.name,
+        assignedToName: complaint.User_Complaint_assignedToIdToUser?.name,
         supervisorId: complaint.supervisorId,
-        supervisorName: complaint.supervisor?.name,
-        workOrders: complaint.workOrders.map(wo => ({
+        supervisorName: complaint.User_Complaint_supervisorIdToUser?.name,
+        workOrders: complaint.WorkOrder.map(wo => ({
           id: wo.id,
           status: wo.status,
           type: wo.type,
-          assignedToName: wo.assignedTo?.name || null,
+          assignedToName: wo.User_WorkOrder_assignedToIdToUser?.name || null,
           laborHours: wo.laborHours,
           totalCost: wo.totalCost,
           notes: wo.notes,
         })),
-        workOrderId: complaint.workOrders[0]?.id ?? null,
+        workOrderId: complaint.WorkOrder[0]?.id ?? null,
         invoiceId: complaint.invoiceId,
         eta: complaint.eta,
         rejectionReason: complaint.rejectionReason,

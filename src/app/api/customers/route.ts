@@ -54,13 +54,13 @@ export async function GET(request: NextRequest) {
         take: pageSize,
         orderBy: { createdAt: 'desc' },
         include: {
-          _count: { select: { equipment: true, complaints: true, invoices: true } },
+          _count: { select: { Equipment: true, Complaint: true, Invoice: true } },
         },
       }),
       db.customer.count({ where }),
     ]);
 
-    const data = items.map((c) => ({
+    const data = items.map((c: any) => ({
       id: c.id,
       tenantId: c.tenantId,
       name: c.name,
@@ -78,7 +78,11 @@ export async function GET(request: NextRequest) {
       isActive: c.isActive,
       createdAt: c.createdAt ? (typeof c.createdAt === 'string' ? c.createdAt : c.createdAt.toISOString()) : null,
       updatedAt: c.updatedAt ? (typeof c.updatedAt === 'string' ? c.updatedAt : c.updatedAt.toISOString()) : null,
-      _count: c._count,
+      _count: c._count ? {
+        equipment: c._count.Equipment ?? 0,
+        complaints: c._count.Complaint ?? 0,
+        invoices: c._count.Invoice ?? 0,
+      } : { equipment: 0, complaints: 0, invoices: 0 },
     }));
 
     return NextResponse.json({

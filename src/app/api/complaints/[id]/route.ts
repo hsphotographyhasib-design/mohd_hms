@@ -67,11 +67,11 @@ export const GET = withErrorLogging(async (
       include: {
         customer: { select: { name: true } },
         equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
-        workOrders: {
+        User_Complaint_assignedToIdToUser: { select: { name: true } },
+        User_Complaint_supervisorIdToUser: { select: { name: true } },
+        WorkOrder: {
           include: {
-            assignedTo: { select: { name: true } },
+            User_WorkOrder_assignedToIdToUser: { select: { name: true } },
             equipment: { select: { name: true } },
           },
           orderBy: { createdAt: 'desc' },
@@ -123,9 +123,9 @@ export const GET = withErrorLogging(async (
       photos: complaint.photos,
       gpsLocation: complaint.gpsLocation,
       assignedToId: complaint.assignedToId,
-      assignedToName: complaint.assignedTo?.name,
+      assignedToName: complaint.User_Complaint_assignedToIdToUser?.name,
       supervisorId: complaint.supervisorId,
-      supervisorName: complaint.supervisor?.name,
+      supervisorName: complaint.User_Complaint_supervisorIdToUser?.name,
       resolutionNotes: complaint.resolutionNotes,
       customerRating: complaint.customerRating,
       customerFeedback: complaint.customerFeedback,
@@ -133,7 +133,7 @@ export const GET = withErrorLogging(async (
       closedAt: complaint.closedAt?.toISOString(),
       createdAt: complaint.createdAt.toISOString(),
       updatedAt: complaint.updatedAt.toISOString(),
-      workOrders: complaint.workOrders.map((wo) => ({
+      workOrders: complaint.WorkOrder.map((wo) => ({
         id: wo.id,
         tenantId: wo.tenantId,
         title: wo.title,
@@ -142,7 +142,7 @@ export const GET = withErrorLogging(async (
         priority: wo.priority,
         type: wo.type,
         assignedToId: wo.assignedToId,
-        assignedToName: wo.assignedTo?.name,
+        assignedToName: wo.User_WorkOrder_assignedToIdToUser?.name,
         equipmentName: wo.equipment?.name,
         totalCost: wo.totalCost,
         createdAt: wo.createdAt.toISOString(),
@@ -271,8 +271,8 @@ export const PUT = withErrorLogging(async (
       include: {
         customer: { select: { name: true } },
         equipment: { select: { name: true } },
-        assignedTo: { select: { name: true } },
-        supervisor: { select: { name: true } },
+        User_Complaint_assignedToIdToUser: { select: { name: true } },
+        User_Complaint_supervisorIdToUser: { select: { name: true } },
       },
     });
 
@@ -298,9 +298,9 @@ export const PUT = withErrorLogging(async (
       status: updated.status,
       category: updated.category,
       assignedToId: updated.assignedToId,
-      assignedToName: updated.assignedTo?.name,
+      assignedToName: updated.User_Complaint_assignedToIdToUser?.name,
       supervisorId: updated.supervisorId,
-      supervisorName: updated.supervisor?.name,
+      supervisorName: updated.User_Complaint_supervisorIdToUser?.name,
       resolutionNotes: updated.resolutionNotes,
       customerRating: updated.customerRating,
       resolvedAt: updated.resolvedAt?.toISOString(),

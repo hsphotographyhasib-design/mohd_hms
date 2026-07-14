@@ -155,8 +155,12 @@ export function WhatsAppSettings() {
         }
 
         return json;
+      } else {
+        console.error('WhatsApp status fetch failed:', res.status);
       }
-    } catch {}
+    } catch (err) {
+      console.error('WhatsApp status fetch error:', err);
+    }
     return null;
   }, []);
 
@@ -242,8 +246,12 @@ export function WhatsAppSettings() {
           setWelcomeMessage(d.welcomeMessage || '');
           setEmergencyNumbers(d.emergencyNumbers || '');
           setDefaultPriority(d.defaultPriority || 'medium');
+        } else {
+          console.error('WhatsApp config fetch failed:', res.status);
         }
-      } catch {}
+      } catch (err) {
+        console.error('WhatsApp config fetch error:', err);
+      }
 
       await fetchStatus();
       setLoading(false);
@@ -263,17 +271,24 @@ export function WhatsAppSettings() {
       const result = await res.json();
 
       if (action === 'connect') {
-        if (result.state === 'CONNECTED') {
+        if (result.success === false) {
+          // Connection failed — show the actual error message
+          toast.error(result.message || result.error || 'Connection failed. Make sure the OpenWA service is running.');
+        } else if (result.state === 'CONNECTED') {
           toast.success('WhatsApp connected successfully!');
           setQrImageUrl(null);
         } else {
           toast.info('Connecting to WhatsApp... QR code will appear shortly.');
         }
       } else if (action === 'disconnect') {
-        toast.success('WhatsApp disconnected');
+        toast.success(result.message || 'WhatsApp disconnected');
         setQrImageUrl(null);
       } else if (action === 'reconnect') {
-        toast.info('Reconnecting...');
+        if (result.success === false) {
+          toast.error(result.message || 'Reconnection failed.');
+        } else {
+          toast.info('Reconnecting...');
+        }
         setQrImageUrl(null);
       } else if (action === 'test-message') {
         toast[result.success ? 'success' : 'error'](result.message || 'Test failed');
@@ -411,6 +426,24 @@ export function WhatsAppSettings() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
+              {/* Error Banner — show latest error from logs when disconnected */}
+              {!isConnected && !isConnecting && data?.logs?.length > 0 && (() => {
+                const errorLog = [...data.logs].reverse().find(l => l.level === 'error');
+                if (!errorLog) return null;
+                return (
+                  <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
+                      <div className="text-sm">
+                        <p className="font-medium text-red-700">Connection Error</p>
+                        <p className="text-red-600 mt-0.5">{errorLog.message}</p>
+                        <p className="text-red-400 text-xs mt-1">{errorLog.event} · {new Date(errorLog.timestamp).toLocaleTimeString()}</p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
               {/* Status Info */}
               {isConnected && info && (
                 <div className="space-y-2 p-3 bg-emerald-50 rounded-lg border border-emerald-200">

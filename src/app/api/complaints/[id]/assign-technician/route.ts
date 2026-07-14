@@ -343,7 +343,7 @@ export async function POST(
       where: { ...rbacWhere, id },
       include: {
         customer: { select: { id: true, name: true, phone: true } },
-        assignedTo: { select: { id: true, name: true, phone: true, email: true } },
+        User_Complaint_assignedToIdToUser: { select: { id: true, name: true, phone: true, email: true } },
       },
     });
 
@@ -411,7 +411,7 @@ export async function POST(
     // ===== ASSIGNMENT / REASSIGNMENT =====
     const isReassignment = complaint.assignedToId !== null && complaint.assignedToId !== technicianId;
     const previousTechnicianId = complaint.assignedToId;
-    const previousTechnicianName = complaint.assignedTo?.name || null;
+    const previousTechnicianName = complaint.User_Complaint_assignedToIdToUser?.name || null;
     const slaDeadline = new Date(Date.now() + SLA_RESPONSE_MINUTES * 60 * 1000);
 
     const result = await db.$transaction(async (tx) => {

@@ -55,7 +55,7 @@ function formatBlog(b: {
     viewCount: b.viewCount,
     createdAt: b.createdAt.toISOString(),
     updatedAt: b.updatedAt.toISOString(),
-    category: b.category ? { id: b.category.id, name: b.category.name, slug: b.category.slug } : null,
+    category: (b as any).CmsBlogCategory ? { id: (b as any).CmsBlogCategory.id, name: (b as any).CmsBlogCategory.name, slug: (b as any).CmsBlogCategory.slug } : null,
   };
 }
 
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
         where,
         skip,
         take: pageSize,
-        include: { category: { select: { id: true, name: true, slug: true } } },
+        include: { CmsBlogCategory: { select: { id: true, name: true, slug: true } } },
         orderBy: { createdAt: 'desc' },
       }),
       db.cmsBlog.count({ where }),
