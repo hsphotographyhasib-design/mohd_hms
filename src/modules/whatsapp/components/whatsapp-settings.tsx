@@ -428,7 +428,7 @@ export function WhatsAppSettings() {
             <CardContent className="space-y-4">
               {/* Error Banner — show latest error from logs when disconnected */}
               {!isConnected && !isConnecting && (data?.logs?.length ?? 0) > 0 && (() => {
-                const errorLog = [...data.logs].reverse().find(l => l.level === 'error');
+                const errorLog = [...(data?.logs ?? [])].reverse().find(l => l.level === 'error');
                 if (!errorLog) return null;
                 return (
                   <div className="p-3 bg-red-50 rounded-lg border border-red-200">
