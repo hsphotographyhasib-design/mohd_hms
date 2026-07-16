@@ -2780,3 +2780,185 @@ model ServicePackageItem {
 
   @@index([packageId])
 }
+
+// ============================================================
+// IRMS — Inspection Report Management System
+// ============================================================
+
+model IrmUser {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  role      String   @default("Inspector")
+  avatar    String?
+  phone     String?
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inspectorReports  IrmReport[]  @relation("InspectorReports")
+  assessmentReports IrmReport[]  @relation("AssessedBy")
+  activities        IrmActivity[]
+  revisions         IrmRevision[]
+  approvals         IrmApproval[]
+}
+
+model IrmProject {
+  id              String    @id @default(cuid())
+  name            String
+  number          String?
+  contractNumber  String?
+  tenderNumber    String?
+  customer        String?
+  location        String?
+  gpsLat          Float?
+  gpsLng          Float?
+  value           Float?
+  startDate       DateTime?
+  completionDate  DateTime?
+  status          String    @default("active")
+  logo            String?
+  clientLogo      String?
+  consultant      String?
+  contractor      String?
+  supervisor      String?
+  description     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  reports    IrmReport[]
+  activities IrmActivity[]
+}
+
+model IrmReport {
+  id                String    @id @default(cuid())
+  number            String    @unique
+  projectId         String
+  inspectionDate    DateTime
+  inspectorId       String
+  department        String?
+  site              String?
+  building          String?
+  floor             String?
+  room              String?
+  equipment         String?
+  assetId           String?
+  workCategory      String?
+  inspectionType    String?
+  priority          String    @default("medium")
+  status            String    @default("draft")
+  jobOrderNumber    String?
+  workOrderNumber   String?
+  taskDescription   String?
+  workScope         String?
+  inspectionNotes   String?
+  correctiveActions String?
+  recommendation    String?
+  observation       String?
+  safetyNotes       String?
+  rootCause         String?
+  materialsUsed     String?
+  labourHours       Float?
+  completionPct     Int       @default(0)
+  assessedById      String?
+  assessedDate      DateTime?
+  inspectorSign     String?
+  supervisorSign    String?
+  clientSign        String?
+  managerSign       String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  project     IrmProject  @relation(fields: [projectId], references: [id])
+  inspector   IrmUser     @relation("InspectorReports", fields: [inspectorId], references: [id])
+  assessedBy  IrmUser?    @relation("AssessedBy", fields: [assessedById], references: [id])
+  photos      IrmPhoto[]
+  revisions   IrmRevision[]
+  approvals   IrmApproval[]
+  activities  IrmActivity[]
+
+  @@index([projectId])
+  @@index([inspectorId])
+  @@index([status])
+  @@index([priority])
+}
+
+model IrmPhoto {
+  id            String   @id @default(cuid())
+  reportId      String
+  type          String   @default("before")
+  data          String
+  thumbnail     String
+  originalImage String?
+  caption       String?
+  swRef         String?
+  photoNumber   String?
+  room          String?
+  building      String?
+  gpsLat        Float?
+  gpsLng        Float?
+  width         Int?
+  height        Int?
+  size          Int?
+  mimeType      String?
+  cameraModel   String?
+  exifData      String?
+  timestamp     DateTime @default(now())
+  annotation    String?
+  sortOrder     Int      @default(0)
+  createdBy     String?
+  createdAt     DateTime @default(now())
+
+  report IrmReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+
+  @@index([reportId])
+  @@index([type])
+}
+
+model IrmRevision {
+  id       String   @id @default(cuid())
+  reportId String
+  version  Int
+  snapshot String
+  note     String?
+  userId   String
+  createdAt DateTime @default(now())
+
+  report IrmReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  user   IrmUser   @relation(fields: [userId], references: [id])
+
+  @@index([reportId])
+}
+
+model IrmApproval {
+  id       String   @id @default(cuid())
+  reportId String
+  step     String
+  status   String   @default("pending")
+  userId   String
+  comment  String?
+  createdAt DateTime @default(now())
+
+  report IrmReport @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  user   IrmUser   @relation(fields: [userId], references: [id])
+
+  @@index([reportId])
+}
+
+model IrmActivity {
+  id        String   @id @default(cuid())
+  type      String
+  description String
+  userId    String?
+  reportId  String?
+  projectId String?
+  createdAt DateTime @default(now())
+
+  user    IrmUser?    @relation(fields: [userId], references: [id])
+  report  IrmReport?  @relation(fields: [reportId], references: [id])
+  project IrmProject? @relation(fields: [projectId], references: [id])
+
+  @@index([reportId])
+  @@index([projectId])
+  @@index([createdAt])
+}

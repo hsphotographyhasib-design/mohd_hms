@@ -1676,3 +1676,102 @@ Stage Summary:
 - Verified via curl: Login ✅, Customers (7 records, _count mapped correctly) ✅, Complaints (10 records, assignedToName resolved) ✅
 - Turbopack OOM remains a sandbox-only limitation (4GB RAM, not a code issue)
 - All fixes are backward-compatible: API response field names remain camelCase for frontend compatibility
+
+---
+Task ID: 2
+Agent: fullstack-developer
+Task: Build IRMS (Inspection Report Management System) API Routes
+
+Work Log:
+- Created 21 route files under `/src/app/api/irms/` covering all IRMS entities
+- Routes follow Next.js 16 pattern with `params: Promise<{ id: string }>` and `export const dynamic = 'force-dynamic'`
+- All routes use `import { db } from '@/core/database/db'` and Prisma `Irm*` models
+- Every handler wrapped in try/catch returning `NextResponse.json({ error })` with appropriate status codes
+
+Route files created (21 total):
+1. `/api/irms/seed` (POST) — Seeds 7 users, 3 projects, 4 reports with various statuses, 9 placeholder photos, 3 revisions, 4 approvals, 8 activities
+2. `/api/irms/projects` (GET+POST) — List with search/status filter, create with auto-active status
+3. `/api/irms/projects/[id]` (GET+PUT+DELETE) — Full CRUD with report counts
+4. `/api/irms/reports` (GET+POST) — List with q/status/priority/category/projectId filters, auto-number generation (IR-2024-NNNN), activity creation
+5. `/api/irms/reports/[id]` (GET+PUT+DELETE) — Full detail with all relations, auto revision+approval on status change
+6. `/api/irms/reports/[id]/photos/upload` (POST) — FormData upload with sharp (EXIF rotate, 320px thumbnail, 1280px display), exifr GPS/timestamp/camera, auto-numbering
+7. `/api/irms/reports/[id]/photos` (GET) — List photos ordered by sortOrder
+8. `/api/irms/reports/[id]/photos/[photoId]` (PATCH+DELETE) — Update caption/swRef/room/building/type/annotation, delete
+9. `/api/irms/reports/[id]/photos/reorder` (POST) — Reorder by array position, re-number within category groups
+10. `/api/irms/reports/[id]/photos/bulk` (POST) — Bulk delete/move/rotate/duplicate with sharp for rotate
+11. `/api/irms/reports/[id]/signatures` (PUT) — Update inspector/supervisor/manager/client signature data URLs
+12. `/api/irms/reports/[id]/status` (POST) — Advance/reject workflow with STATUS_FLOW, creates revision+approval+activity
+13. `/api/irms/reports/[id]/revisions` (GET+POST) — List versions, rollback to version by parsing snapshot JSON
+14. `/api/irms/users` (GET+POST) — List with report counts, create user
+15. `/api/irms/activities` (GET) — Last 50 activities with user/report/project info
+16. `/api/irms/dashboard` (GET) — 14-metric dashboard: todayInspections, completedReports, pendingReports, overdueReports, activeProjects, activeWorkOrders, photosUploaded, avgCompletion, recentReports, upcomingInspections, inspectionTrend (14 days), categoryBreakdown, projectProgress, recentActivities
+17. `/api/irms/analytics` (GET) — Monthly trends, status/priority/category breakdowns, technician performance metrics, labour hours by month
+18. `/api/irms/qrcode` (GET) — QR code generation via `qrcode` package
+19. `/api/irms/ai` (POST) — LLM text generation for 6 actions (remarks, corrective, recommendation, summary, safety, rootcause) via z-ai-web-dev-sdk
+20. `/api/irms/ai/image-qa` (POST) — VLM image analysis for blur/dark/issue/caption via z-ai-web-dev-sdk
+21. `/api/irms/reports/[id]/pdf` (GET) — Stub endpoint returning template/sort/download params
+
+Dependencies verified: qrcode ✅, z-ai-web-dev-sdk ✅, sharp ✅, exifr ✅
+
+Stage Summary:
+- All 21 IRMS API routes created and ready for integration
+- Seed endpoint provides complete demo dataset for frontend development
+- Photo processing pipeline uses sharp (resize, rotate, EXIF) + exifr (GPS, camera, timestamp)
+- Workflow engine supports 5-stage approval flow: draft → submitted → supervisor_review → manager_approval → approved
+- AI endpoints integrated with z-ai-web-dev-sdk for text and vision capabilities
+
+---
+Task ID: 2
+Agent: Fullstack Developer
+Task: Build Complete IRMS Frontend Views (SPA)
+
+Work Log:
+- Read existing IRMS lib files (types.ts, constants.ts, store.ts, index.ts) to understand data model and store API
+- Created 13 new files under `/src/modules/irms/components/` and `/src/modules/irms/views/`
+
+Files Created:
+1. `components/irms-layout.tsx` — Main SPA layout with glassmorphism topbar (theme toggle, notification bell, user avatar with role switcher), 240px desktop sidebar with 7 nav items (conditional Admin based on "manage" permission), Sheet-based mobile sidebar, sticky footer, ViewRouter switch
+2. `views/dashboard-view.tsx` — 8 KPI cards (2×4 responsive grid), each clickable and cross-linked (e.g. "Completed Reports" → reports view with status filter), AreaChart (14-day inspection trends), PieChart (category breakdown), BarChart (project progress), recent reports list, activity feed timeline. Fetches `/api/irms/dashboard`
+3. `views/projects-view.tsx` — Search + status filter (All/Active/Completed/On Hold), responsive card grid (1→2→3 cols), create project dialog with 14 form fields, fetches `/api/irms/projects`, POST to create
+4. `views/project-detail-view.tsx` — Back navigation, project info card with all metadata, reports table with View/Edit actions, fetches project and its reports
+5. `views/reports-view.tsx` — Filters row (search, status, priority, category selects), table with all columns, View/Edit action buttons, incoming `reportsFilter` from store applied on mount then cleared, Create Report button navigates to report-builder
+6. `views/report-builder.tsx` — Complex 5-tab form:
+   - Tab 1 (Details): 13 fields including project/inspector selects, date, department, work category, inspection type, priority, location hierarchy
+   - Tab 2 (Work Details): 10 textareas/inputs + 5 AI Generate buttons (sparkles icon) calling `/api/irms/ai` with action param, completion % slider
+   - Tab 3 (Photos): File upload (FormData POST), photo grid with category color dots, photo number badges, delete buttons
+   - Tab 4 (Signatures): 4 canvas-based signature pads (Inspector/Supervisor/Manager/Client) with mouse+touch drawing, clear/sign buttons, toDataURL export
+   - Tab 5 (Approval): Visual workflow stepper (7 steps), advance/reject buttons (permission-gated), comment textarea, audit trail list
+   - Save Draft + Submit buttons always visible in header
+7. `views/report-view.tsx` — Report header with status/priority badges, template selector (6 PDF_TEMPLATES), sort selector (6 SORT_OPTIONS), Preview PDF (blob → window.open) and Download PDF (blob → <a download>) with 5-retry/2.5s-delay logic, report details in 2-column layout (info table, work details, photo gallery grouped by category), signatures sidebar, approval history, revision history
+8. `views/analytics-view.tsx` — 8 KPI cards (clickable), LineChart (monthly trend), BarChart (category breakdown), RadarChart (priority distribution), PieChart (status breakdown), technician performance table. Fetches `/api/irms/analytics`
+9. `views/calendar-view.tsx` — Custom month grid calendar (no date-fns dependency), colored dots per date showing report statuses, date click shows reports sidebar, upcoming inspections list, today highlight, month navigation
+10. `views/admin-view.tsx` — 3 tabs: Users (CRUD table with role dropdown + active toggle), RBAC Matrix (11 roles × 6 permissions grid with ✓/−), Audit Log (scrollable table from `/api/irms/activities`)
+11. `views/settings-view.tsx` — Theme toggle (light/dark via store), current user info card, role switcher demo (select any of 11 roles), regional settings (language, date format, timezone)
+12. `components/index.ts` — Barrel export for IrmsLayout
+13. `views/index.ts` — Barrel export for all 10 views
+
+Technical Details:
+- All components are 'use client'
+- Green primary theme (`bg-green-600`, `text-green-600`) throughout
+- Glassmorphism cards: `backdrop-blur-md bg-white/80 dark:bg-gray-900/80 border border-white/20`
+- Hover lift animation: `hover:-translate-y-0.5 transition-all duration-200`
+- Mobile-first responsive with sm/md/lg breakpoints
+- Dark mode via `dark:` variants
+- shadcn/ui components used exclusively (no custom buttons/inputs)
+- Native fetch API with loading/error states
+- Skeleton loading states while data loads
+- sonner toast for all success/error notifications
+- Zustand store for navigation, filters, selected entities, theme, permissions
+- Recharts for all charts (Area, Line, Bar, Pie, Radar)
+- Canvas-based signature pads with mouse+touch support
+- TypeScript strict mode — zero type errors in all IRMS frontend files
+
+Zero TypeScript errors confirmed via `npx tsc --noEmit` (filtered to irms/(views|components)).
+
+Stage Summary:
+- Complete IRMS frontend SPA built with 10 views + 1 layout component
+- Full CRUD flows for projects, reports, users
+- 5-tab report builder with AI integration points
+- PDF preview/download with retry logic and template/sort options
+- Responsive glassmorphism design with green primary theme
+- Role-based access control (Admin tab hidden without "manage" permission)

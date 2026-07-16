@@ -1,0 +1,10 @@
+export { default as DashboardView } from './dashboard-view';
+export { default as ProjectsView } from './projects-view';
+export { default as ProjectDetailView } from './project-detail-view';
+export { default as ReportsView } from './reports-view';
+export { default as ReportBuilderView } from './report-builder';
+export { default as ReportView } from './report-view';
+export { default as AnalyticsView } from './analytics-view';
+export { default as CalendarView } from './calendar-view';
+export { default as AdminView } from './admin-view';
+export { default as SettingsView } from './settings-view';

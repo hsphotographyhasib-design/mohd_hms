@@ -37,6 +37,10 @@ const nextConfig: NextConfig = {
     // Prisma 7 generated client uses node:path — mark as external
     // so Turbopack doesn't try to bundle Node.js built-ins
     'generated/prisma',
+
+    // IRMS: PDF engine + image processing
+    '@react-pdf/renderer',
+    'sharp',
   ],
 
   // ============================================================

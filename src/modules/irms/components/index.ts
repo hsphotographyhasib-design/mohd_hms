@@ -1,0 +1,1 @@
+export { default as IrmsLayout } from './irms-layout';

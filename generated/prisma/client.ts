@@ -591,3 +591,38 @@ export type ServiceChecklistItem = Prisma.ServiceChecklistItemModel
  * 
  */
 export type ServicePackageItem = Prisma.ServicePackageItemModel
+/**
+ * Model IrmUser
+ * 
+ */
+export type IrmUser = Prisma.IrmUserModel
+/**
+ * Model IrmProject
+ * 
+ */
+export type IrmProject = Prisma.IrmProjectModel
+/**
+ * Model IrmReport
+ * 
+ */
+export type IrmReport = Prisma.IrmReportModel
+/**
+ * Model IrmPhoto
+ * 
+ */
+export type IrmPhoto = Prisma.IrmPhotoModel
+/**
+ * Model IrmRevision
+ * 
+ */
+export type IrmRevision = Prisma.IrmRevisionModel
+/**
+ * Model IrmApproval
+ * 
+ */
+export type IrmApproval = Prisma.IrmApprovalModel
+/**
+ * Model IrmActivity
+ * 
+ */
+export type IrmActivity = Prisma.IrmActivityModel

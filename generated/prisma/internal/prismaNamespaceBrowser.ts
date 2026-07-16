@@ -160,7 +160,14 @@ export const ModelName = {
   ServiceItemMaterial: 'ServiceItemMaterial',
   ServiceItemEquipment: 'ServiceItemEquipment',
   ServiceChecklistItem: 'ServiceChecklistItem',
-  ServicePackageItem: 'ServicePackageItem'
+  ServicePackageItem: 'ServicePackageItem',
+  IrmUser: 'IrmUser',
+  IrmProject: 'IrmProject',
+  IrmReport: 'IrmReport',
+  IrmPhoto: 'IrmPhoto',
+  IrmRevision: 'IrmRevision',
+  IrmApproval: 'IrmApproval',
+  IrmActivity: 'IrmActivity'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2562,6 +2569,160 @@ export const ServicePackageItemScalarFieldEnum = {
 } as const
 
 export type ServicePackageItemScalarFieldEnum = (typeof ServicePackageItemScalarFieldEnum)[keyof typeof ServicePackageItemScalarFieldEnum]
+
+
+export const IrmUserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  name: 'name',
+  role: 'role',
+  avatar: 'avatar',
+  phone: 'phone',
+  active: 'active',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IrmUserScalarFieldEnum = (typeof IrmUserScalarFieldEnum)[keyof typeof IrmUserScalarFieldEnum]
+
+
+export const IrmProjectScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  number: 'number',
+  contractNumber: 'contractNumber',
+  tenderNumber: 'tenderNumber',
+  customer: 'customer',
+  location: 'location',
+  gpsLat: 'gpsLat',
+  gpsLng: 'gpsLng',
+  value: 'value',
+  startDate: 'startDate',
+  completionDate: 'completionDate',
+  status: 'status',
+  logo: 'logo',
+  clientLogo: 'clientLogo',
+  consultant: 'consultant',
+  contractor: 'contractor',
+  supervisor: 'supervisor',
+  description: 'description',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IrmProjectScalarFieldEnum = (typeof IrmProjectScalarFieldEnum)[keyof typeof IrmProjectScalarFieldEnum]
+
+
+export const IrmReportScalarFieldEnum = {
+  id: 'id',
+  number: 'number',
+  projectId: 'projectId',
+  inspectionDate: 'inspectionDate',
+  inspectorId: 'inspectorId',
+  department: 'department',
+  site: 'site',
+  building: 'building',
+  floor: 'floor',
+  room: 'room',
+  equipment: 'equipment',
+  assetId: 'assetId',
+  workCategory: 'workCategory',
+  inspectionType: 'inspectionType',
+  priority: 'priority',
+  status: 'status',
+  jobOrderNumber: 'jobOrderNumber',
+  workOrderNumber: 'workOrderNumber',
+  taskDescription: 'taskDescription',
+  workScope: 'workScope',
+  inspectionNotes: 'inspectionNotes',
+  correctiveActions: 'correctiveActions',
+  recommendation: 'recommendation',
+  observation: 'observation',
+  safetyNotes: 'safetyNotes',
+  rootCause: 'rootCause',
+  materialsUsed: 'materialsUsed',
+  labourHours: 'labourHours',
+  completionPct: 'completionPct',
+  assessedById: 'assessedById',
+  assessedDate: 'assessedDate',
+  inspectorSign: 'inspectorSign',
+  supervisorSign: 'supervisorSign',
+  clientSign: 'clientSign',
+  managerSign: 'managerSign',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IrmReportScalarFieldEnum = (typeof IrmReportScalarFieldEnum)[keyof typeof IrmReportScalarFieldEnum]
+
+
+export const IrmPhotoScalarFieldEnum = {
+  id: 'id',
+  reportId: 'reportId',
+  type: 'type',
+  data: 'data',
+  thumbnail: 'thumbnail',
+  originalImage: 'originalImage',
+  caption: 'caption',
+  swRef: 'swRef',
+  photoNumber: 'photoNumber',
+  room: 'room',
+  building: 'building',
+  gpsLat: 'gpsLat',
+  gpsLng: 'gpsLng',
+  width: 'width',
+  height: 'height',
+  size: 'size',
+  mimeType: 'mimeType',
+  cameraModel: 'cameraModel',
+  exifData: 'exifData',
+  timestamp: 'timestamp',
+  annotation: 'annotation',
+  sortOrder: 'sortOrder',
+  createdBy: 'createdBy',
+  createdAt: 'createdAt'
+} as const
+
+export type IrmPhotoScalarFieldEnum = (typeof IrmPhotoScalarFieldEnum)[keyof typeof IrmPhotoScalarFieldEnum]
+
+
+export const IrmRevisionScalarFieldEnum = {
+  id: 'id',
+  reportId: 'reportId',
+  version: 'version',
+  snapshot: 'snapshot',
+  note: 'note',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type IrmRevisionScalarFieldEnum = (typeof IrmRevisionScalarFieldEnum)[keyof typeof IrmRevisionScalarFieldEnum]
+
+
+export const IrmApprovalScalarFieldEnum = {
+  id: 'id',
+  reportId: 'reportId',
+  step: 'step',
+  status: 'status',
+  userId: 'userId',
+  comment: 'comment',
+  createdAt: 'createdAt'
+} as const
+
+export type IrmApprovalScalarFieldEnum = (typeof IrmApprovalScalarFieldEnum)[keyof typeof IrmApprovalScalarFieldEnum]
+
+
+export const IrmActivityScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  description: 'description',
+  userId: 'userId',
+  reportId: 'reportId',
+  projectId: 'projectId',
+  createdAt: 'createdAt'
+} as const
+
+export type IrmActivityScalarFieldEnum = (typeof IrmActivityScalarFieldEnum)[keyof typeof IrmActivityScalarFieldEnum]
 
 
 export const SortOrder = {
