@@ -251,7 +251,7 @@ class TableProxy {
     q = applyFilters(q, buildFilters(opts.where))
     const { data, error } = await q
     if (error) throw dbError(this.table, 'deleteMany', error)
-    return { count: Array.isArray(data) ? data.length : 0 }
+    return { count: Array.isArray(data) ? (data as any[]).length : 0 }
   }
 
   async updateMany(opts: PrismaOptions) {
@@ -260,7 +260,7 @@ class TableProxy {
     q = applyFilters(q, buildFilters(opts.where))
     const { data, error } = await q
     if (error) throw dbError(this.table, 'updateMany', error)
-    return { count: Array.isArray(data) ? data.length : 0 }
+    return { count: Array.isArray(data) ? (data as any[]).length : 0 }
   }
 
   async createMany(opts: PrismaOptions) {
@@ -271,7 +271,7 @@ class TableProxy {
       .insert(rows.map(serialize))
       .select()
     if (error) throw dbError(this.table, 'createMany', error)
-    return { count: Array.isArray(data) ? data.length : 0 }
+    return { count: Array.isArray(data) ? (data as any[]).length : 0 }
   }
 
   async groupBy(_opts: PrismaOptions) {
@@ -334,9 +334,9 @@ function dbError(
   const prismaCode = mapErrorCode(code, msg)
 
   const err = new Error(msg)
-  ;(err as Record<string, unknown>).code = prismaCode
-  ;(err as Record<string, unknown>).table = table
-  ;(err as Record<string, unknown>).operation = operation
+  ;(err as unknown as Record<string, unknown>).code = prismaCode
+  ;(err as unknown as Record<string, unknown>).table = table
+  ;(err as unknown as Record<string, unknown>).operation = operation
   return err
 }
 

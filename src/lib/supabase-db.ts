@@ -697,7 +697,7 @@ function createTableProxy(tableName: string) {
           const desc = orderDir === 'desc' ? -1 : 1;
           results.sort((a, b) => {
             const av = a[orderField], bv = b[orderField];
-            return av < bv ? -desc : av > bv ? desc : 0;
+            return (av as any) < (bv as any) ? -desc : (av as any) > (bv as any) ? desc : 0;
           });
         }
       }

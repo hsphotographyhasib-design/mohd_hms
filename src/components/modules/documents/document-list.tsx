@@ -2,9 +2,19 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuthStore, useAppStore } from '@/store';
-import type { AppView, DocumentModule } from '@/types';
-import { CHUNK_SIZE, DOCUMENT_PERMISSIONS } from '@/types';
+import type { AppView } from '@/types';
 import { cn } from '@/lib/utils';
+
+// Local fallbacks (not exported from @/types)
+const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
+const DOCUMENT_PERMISSIONS: Record<string, string[]> = {
+  super_admin: ['view', 'upload', 'edit', 'delete', 'archive', 'unarchive'],
+  admin: ['view', 'upload', 'edit', 'delete', 'archive', 'unarchive'],
+  manager: ['view', 'upload', 'edit', 'delete', 'archive', 'unarchive'],
+  supervisor: ['view', 'upload', 'edit', 'archive'],
+  technician: ['view', 'upload'],
+  customer: ['view'],
+};
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -160,7 +170,7 @@ const MODULE_OPTIONS: { value: string; label: string }[] = [
 
 // ============ Auth helper ============
 function getAuthHeaders(): Record<string, string> {
-  const token = useAuthStore.getState().user?.token;
+  const token = useAuthStore.getState().token;
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 }
 

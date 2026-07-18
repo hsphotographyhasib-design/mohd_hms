@@ -1,7 +1,7 @@
 // ============ Brevo Email Provider ============
 // Sends emails via Brevo (formerly Sendinblue) HTTP API v3
 
-import type { SendEmailParams, SendEmailResult, EmailProvider, EmailAttachment } from './types';
+import type { SendEmailParams, SendEmailResult, EmailProvider, EmailAttachment } from '../types';
 
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 

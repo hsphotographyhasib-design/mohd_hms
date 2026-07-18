@@ -71,6 +71,8 @@ const ROLE_LABELS: Record<UserRole, string> = {
   technician: 'Technician',
   finance: 'Finance',
   customer: 'Customer',
+  vendor: 'Vendor',
+  guest: 'Guest',
 };
 
 const ROLE_COLORS: Record<UserRole, string> = {
@@ -81,6 +83,8 @@ const ROLE_COLORS: Record<UserRole, string> = {
   technician: 'bg-emerald-100 text-emerald-800 border-emerald-200',
   finance: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   customer: 'bg-gray-100 text-gray-800 border-gray-200',
+  vendor: 'bg-cyan-100 text-cyan-800 border-cyan-200',
+  guest: 'bg-stone-100 text-stone-800 border-stone-200',
 };
 
 const PAGE_SIZE = 10;

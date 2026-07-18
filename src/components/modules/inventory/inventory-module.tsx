@@ -13,6 +13,8 @@ import { ServiceCategories } from './service-categories';
 import { LabourRates } from './labour-rates';
 import { PriceBook } from './price-book';
 
+const getToken = () => typeof localStorage !== 'undefined' ? (localStorage.getItem('cmms_token') || '') : '';
+
 const TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'materials', label: 'Materials', icon: Package },
@@ -57,7 +59,7 @@ export function InventoryModule() {
 
       {/* Tab Content */}
       <div>
-        {activeTab === 'dashboard' && <InventoryDashboard />}
+        {activeTab === 'dashboard' && <InventoryDashboard token={getToken()} onNavigate={() => {}} />}
         {activeTab === 'materials' && <InventoryList />}
         {activeTab === 'service-items' && <ServiceItems />}
         {activeTab === 'service-packages' && <ServicePackages />}

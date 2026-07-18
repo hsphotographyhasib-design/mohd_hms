@@ -44,6 +44,12 @@
     "backend",
     "mini-services",
     "examples",
-    "deploy"
+    "deploy",
+    "e2e",
+    "skills",
+    "src/landing",
+    "src/modules",
+    "src/core",
+    "src/components/landing"
   ]
 }

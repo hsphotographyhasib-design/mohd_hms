@@ -174,7 +174,7 @@ export function NewQuotation() {
   const [customerSearching, setCustomerSearching] = useState(false);
   const [customerDropdownOpen, setCustomerDropdownOpen] = useState(false);
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerSearchResult | null>(null);
-  const customerSearchTimer = useRef<ReturnType<typeof setTimeout>>();
+  const customerSearchTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const customerInputRef = useRef<HTMLInputElement>(null);
 
   // Inventory search for line items
@@ -185,7 +185,7 @@ export function NewQuotation() {
     loading: boolean;
     open: boolean;
   }>({ index: null, query: '', results: [], loading: false, open: false });
-  const inventorySearchTimer = useRef<ReturnType<typeof setTimeout>>();
+  const inventorySearchTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Line items
   const [lineItems, setLineItems] = useState<QuotationLineItem[]>([createEmptyItem()]);
@@ -196,7 +196,7 @@ export function NewQuotation() {
   // Auto-save
   const [lastSaved, setLastSaved] = useState<string | null>(null);
   const [hasChanges, setHasChanges] = useState(false);
-  const autoSaveTimer = useRef<ReturnType<typeof setInterval>>();
+  const autoSaveTimer = useRef<ReturnType<typeof setInterval>>(undefined);
 
   // Item input refs
   const itemInputRefs = useRef<Map<number, HTMLInputElement>>(new Map());

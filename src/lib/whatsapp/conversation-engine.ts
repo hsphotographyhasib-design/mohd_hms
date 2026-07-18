@@ -88,7 +88,7 @@ function matchCommand(text: string): string | null {
   return null;
 }
 
-function handleCommand(cmd: string, ctx: StateContext): ResponseItem[] {
+async function handleCommand(cmd: string, ctx: StateContext): Promise<ResponseItem[]> {
   switch (cmd) {
     case 'hi':
       return showWelcome(ctx);
@@ -103,10 +103,12 @@ function handleCommand(cmd: string, ctx: StateContext): ResponseItem[] {
       return transitionTo(ctx, 'status_query', 'Please enter your complaint ID (e.g., CMP-XXXXXX) to check its status.');
     case 'equipment_list':
       return handleEquipmentList(ctx);
+
     case 'work_order_status':
       return transitionTo(ctx, 'status_query', 'Please enter your complaint or work order ID to check the status.');
     case 'invoice_query':
       return handleInvoiceQuery(ctx);
+
     case 'emergency':
       return transitionTo(ctx, 'emergency_desc', '🚨 *EMERGENCY SERVICE*\n\nPlease describe the emergency situation.\nOur team will be alerted immediately.\n\nExpected response time: 15 minutes');
     case 'chat':

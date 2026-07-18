@@ -171,7 +171,7 @@ export function NewComplaint() {
     const findLinkedCustomer = async () => {
       setLinkingCustomer(true);
       try {
-        const queries = [];
+        const queries: string[] = [];
         if (user.email) queries.push(`email=${encodeURIComponent(user.email)}`);
         if (user.phone) queries.push(`phone=${encodeURIComponent(user.phone)}`);
         const res = await fetch(`/api/customers?${queries.join('&')}&pageSize=1`, {

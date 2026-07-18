@@ -85,6 +85,9 @@ export type AppView =
   | 'cms-popups'
   | 'cms-forms'
   | 'cms-activity'
+  | 'cms-page-builder'
+  | 'cms-page-list'
+  | 'cms-page-builder-list'
   | 'system-health'
   // WhatsApp views
   | 'whatsapp'
@@ -92,6 +95,7 @@ export type AppView =
   | 'whatsapp-templates'
   | 'whatsapp-campaigns'
   | 'whatsapp-settings'
+  | 'whatsapp-ai-conversations'
   // Customer views
   | 'customer-portal'
   // Admin views
@@ -102,12 +106,14 @@ export type AppView =
   | 'complaint-assignment'
   // Technician Operations Center
   | 'technicians'
-  // System health
-  | 'system-health'
   // Mobile-specific views
   | 'rate-feedback'
   | 'help'
   | 'documents'
+  | 'document-detail'
+  // Session views
+  | 'session-management'
+  | 'session-settings'
   // HR views
   | 'hr-dashboard'
   | 'hr-employees'
@@ -365,6 +371,7 @@ export interface QuotationLineItem {
   amount: number;
   category?: string;
   warranty?: string;
+  itemType?: string;
 }
 
 export interface QuotationItem {
@@ -382,6 +389,7 @@ export interface QuotationItem {
   preparedBy?: string;
   items?: string;
   terms?: string;
+  notes?: string;
   currency?: string;
   subtotal: number;
   taxRate: number;

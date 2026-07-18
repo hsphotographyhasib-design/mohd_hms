@@ -1320,7 +1320,7 @@ export function DashboardView() {
   const role = user?.role || 'admin';
   const isCustomer = role === 'customer';
   const isFinance = role === 'finance';
-  const isHr = role === 'hr';
+  const isHr = (role as string) === 'hr';
   const isTechnician = role === 'technician';
   const isSupervisor = role === 'supervisor';
   const canFilter = FILTER_ROLES.has(role);

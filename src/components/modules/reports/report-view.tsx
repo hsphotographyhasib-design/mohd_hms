@@ -106,7 +106,7 @@ function ReportTabContent({ apiType }: { apiType: string }) {
               key={key}
               label={key.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())}
               value={typeof val === 'number' && key.toLowerCase().includes('amount') || key.toLowerCase().includes('revenue') || key.toLowerCase().includes('cost')
-                ? fmt(val)
+                ? fmt(val as number)
                 : String(val)}
             />
           ))}

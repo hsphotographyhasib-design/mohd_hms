@@ -64,7 +64,7 @@ export function QrScannerModal({ open, onOpenChange, onScan }: QrScannerModalPro
       // Check for torch support
       const videoTrack = stream.getVideoTracks()[0];
       if (videoTrack) {
-        const capabilities = videoTrack.getCapabilities?.();
+        const capabilities = (videoTrack.getCapabilities?.() as any);
         if (capabilities?.torch) {
           setTorchSupported(true);
         }
@@ -166,9 +166,8 @@ export function QrScannerModal({ open, onOpenChange, onScan }: QrScannerModalPro
 
   const handleOpenSettings = useCallback(() => {
     // Try to use the Permissions API to request camera
-    if (navigator.permissions && navigator.permissions.request) {
-      navigator.permissions
-        .request({ name: 'camera' as any })
+    if ((navigator.permissions as any)?.request) {
+      (navigator.permissions as any).request({ name: 'camera' })
         .then(() => {
           startScanning();
         })

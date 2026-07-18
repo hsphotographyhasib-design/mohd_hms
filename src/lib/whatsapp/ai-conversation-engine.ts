@@ -18,7 +18,7 @@ import type { WhatsAppSession } from '@prisma/client';
 import { processIncomingMessage as legacyProcessMessage } from './conversation-engine';
 import { detectLanguage, detectIntent, generateReply, analyzePaymentScreenshot } from '@/lib/ai/ai-service';
 import { parseActionTag, stripActionTag, executeAction, type ActionResult } from '@/lib/ai/actions';
-import { buildCustomerContext } from '@/lib/ai/customer-memory';
+import { buildCustomerContext, type CustomerContext } from '@/lib/ai/customer-memory';
 
 // ============ Types ============
 
@@ -70,12 +70,13 @@ export async function processIncomingAiMessage(
   }
 
   // 3. Build customer context
-  let customerContext = '';
+  let customerContextStr = '';
   try {
-    customerContext = await buildCustomerContext(tenantId, session.customerId, session.phoneNumber);
+    const customerContext: CustomerContext = await buildCustomerContext(tenantId, session.customerId, session.phoneNumber);
+    customerContextStr = customerContext.summary;
   } catch (err) {
     console.error('[AI Engine] Customer context failed:', err);
-    customerContext = `Customer phone: ${session.phoneNumber}`;
+    customerContextStr = `Customer phone: ${session.phoneNumber}`;
   }
 
   // 4. Get conversation history
@@ -111,7 +112,7 @@ export async function processIncomingAiMessage(
   let aiResponse: string;
   try {
     aiResponse = await generateReply({
-      customerContext,
+      customerContext: customerContextStr,
       conversationHistory: history,
       detectedLanguage: detectedLang,
       detectedIntent: intentResult.intent,

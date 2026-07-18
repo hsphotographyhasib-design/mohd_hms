@@ -284,7 +284,7 @@ export function PageSystem({ navigate, subPage }: PageProps) {
                 <div className="flex items-end gap-3" style={{ height: 140 }}>
                   {barData.map(([m, v]) => (
                     <div key={m} className="flex-1 flex flex-col items-center gap-2">
-                      <div style={{ width: '100%', borderRadius: '5px 5px 0 0', background: 'var(--hm-green)', height: `${Math.round((v / 100) * 120)}px`, opacity: 0.9 }} />
+                      <div style={{ width: '100%', borderRadius: '5px 5px 0 0', background: 'var(--hm-green)', height: `${Math.round((Number(v) / 100) * 120)}px`, opacity: 0.9 }} />
                       <span style={{ fontFamily: 'var(--hm-mono)', fontSize: '0.62rem', color: 'rgba(247,248,243,0.4)' }}>{m}</span>
                     </div>
                   ))}

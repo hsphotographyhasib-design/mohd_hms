@@ -249,7 +249,7 @@ export function TrackTechnicianScreen() {
   ];
 
   return (
-    <motion.div className="pb-6" initial="initial" animate="animate" {...stagger}>
+    <motion.div className="pb-6" {...stagger}>
       {/* Map Area */}
       <motion.div {...fadeInUp} className="relative mx-4 mt-4 h-64 rounded-2xl bg-emerald-50 overflow-hidden border border-emerald-100">
         {/* Grid pattern for map-like visual */}

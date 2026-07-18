@@ -142,7 +142,7 @@ export function useSecureFetch() {
  *   3. Permission errors (403) being treated as session expiry
  */
 export function setupFetchInterceptor() {
-  const originalFetch = window.fetch;
+  const originalFetch = (window as any).fetch as typeof fetch;
 
   async function fetchWithRetry(
     url: string | URL | Request,
@@ -161,7 +161,7 @@ export function setupFetchInterceptor() {
     }
   }
 
-  window.fetch = async function (url: string | URL | Request, options?: RequestInit): Promise<Response> {
+  (window as any).fetch = async function (url: string | URL | Request, options?: RequestInit): Promise<Response> {
     const urlStr = typeof url === 'string' ? url : url instanceof URL ? url.href : (url as Request).url;
 
     // Add auth header for API calls

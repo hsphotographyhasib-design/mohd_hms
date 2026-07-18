@@ -141,7 +141,7 @@ interface MobileDashboardProps {
 
 export function MobileDashboard({ stats }: MobileDashboardProps) {
   const { user } = useAuthStore();
-  const { setView, setMobileNavOpen, setNotificationPanelOpen, setSearchOpen } = useAppStore();
+  const { setView, setNotificationPanelOpen, setSearchOpen } = useAppStore();
 
   const greeting = useMemo(() => {
     const hour = new Date().getHours();
@@ -209,7 +209,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
       items.push({
         id: c.id,
         title: c.title,
-        subtitle: `#${c.id.slice(-6)} ${c.equipmentName || c.location || ''}`.trim(),
+        subtitle: `#${c.id.slice(-6)} ${(c as any).location || ''}`.trim(),
         priority: c.priority,
         time: format(new Date(c.createdAt), 'HH:mm'),
         iconBg: cfg.bg,
@@ -391,7 +391,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
               { icon: <ClipboardList className="w-5 h-5" />, label: 'Work Orders', action: () => setView('work-orders') },
               { icon: <Wrench className="w-5 h-5" />, label: 'Equipment', action: () => setView('equipment') },
               { icon: <QrCode className="w-5 h-5" />, label: 'Scan QR', action: () => setView('equipment') },
-              { icon: <MoreHorizontal className="w-5 h-5" />, label: 'More', action: () => setMobileNavOpen(true) },
+              { icon: <MoreHorizontal className="w-5 h-5" />, label: 'More', action: () => setView('settings') },
             ].map((item) => (
               <button
                 key={item.label}

@@ -34,6 +34,7 @@ import {
   Eye,
 } from 'lucide-react';
 import { useAuthStore, useAppStore } from '@/store';
+import type { AppView } from '@/types';
 import { toast } from 'sonner';
 
 // ============ TYPES ============
@@ -258,7 +259,7 @@ export function CmsDashboard() {
               <Card
                 key={key}
                 className={`${color} border cursor-pointer transition-all hover:shadow-md hover:scale-[1.02]`}
-                onClick={() => setView(viewKey)}
+                onClick={() => setView(viewKey as AppView)}
               >
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between mb-2">
@@ -266,7 +267,7 @@ export function CmsDashboard() {
                     <span className="text-xs font-medium opacity-75">{label}</span>
                   </div>
                   <p className="text-2xl font-bold">
-                    {(overview as Record<string, number>)?.[key] ?? 0}
+                    {(overview as unknown as Record<string, number>)?.[key] ?? 0}
                   </p>
                 </CardContent>
               </Card>
@@ -298,7 +299,7 @@ export function CmsDashboard() {
                     </span>
                   </div>
                   <Progress
-                    value={quickStats?.totalBlogs ? ((quickStats.publishedBlogs ?? 0) / (quickStats.totalBlogs || 1)) * 100 : 0}
+                    value={quickStats?.totalBlogs ? ((overview?.publishedBlogs ?? 0) / (quickStats.totalBlogs || 1)) * 100 : 0}
                     className="h-1.5"
                   />
                 </div>

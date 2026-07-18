@@ -147,7 +147,7 @@ export function generateOtpCode(): string {
 }
 
 export function generateRefreshToken(): string {
-  return crypto.randomBytes(16).toString('hex');
+  return randomBytes(16).toString('hex');
 }
 
 const TEMP_TOKEN_EXPIRES_IN = '30m';

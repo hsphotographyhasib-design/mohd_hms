@@ -122,7 +122,7 @@ export async function registerDeviceToken(): Promise<string | null> {
     await sendTokenToBackend(token);
 
     // Listen for token refreshes
-    messaging.onTokenRefresh(async () => {
+    (messaging as any).onTokenRefresh(async () => {
       console.log('[FCM] Token refreshed');
       try {
         const newToken = await getToken(messaging, {

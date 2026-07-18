@@ -588,7 +588,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
   const [reason, setReason] = useState('');
   const [showHistory, setShowHistory] = useState(false);
   const [detailTab, setDetailTab] = useState<'info' | 'history'>('info');
-  const searchTimer = useRef<ReturnType<typeof setTimeout>>();
+  const searchTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   const isReassignment = currentAssignment?.assignedToId !== null;
   const canAssign = ['super_admin', 'admin', 'supervisor', 'manager'].includes(user?.role || '');
@@ -979,7 +979,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
                   ) : (
                     <>
                       <Info className="h-4 w-4 text-gray-400" />
-                      {currentAssignment?.assignedToName ? 'Current Assignment' : 'No Assignment'}
+                      {(currentAssignment as any)?.assignedToName ? 'Current Assignment' : 'No Assignment'}
                     </>
                   )}
                 </CardTitle>

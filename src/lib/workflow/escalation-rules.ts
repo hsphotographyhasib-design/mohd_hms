@@ -261,7 +261,7 @@ async function processRule(
           await tx.auditLog.create({
             data: {
               tenantId,
-              userId: systemUser.id,
+              userId: (systemUser as any).id,
               action: `escalation.${rule.label}`,
               entity: 'Complaint',
               entityId: complaint.id,

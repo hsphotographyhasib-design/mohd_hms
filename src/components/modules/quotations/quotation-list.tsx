@@ -473,7 +473,7 @@ export function QuotationList() {
                       onClick={() => setView('quotation-detail', { id: q.id })}
                     >
                       <TableCell className="text-muted-foreground text-xs font-mono">
-                        {(data.page - 1) * data.pageSize + index + 1}
+                        {((data?.page ?? 1) - 1) * (data?.pageSize ?? 10) + index + 1}
                       </TableCell>
                       <TableCell>
                         <span className="font-mono text-sm font-semibold text-emerald-700">

@@ -210,7 +210,7 @@ export async function POST() {
       },
     ];
 
-    const reports = [];
+    const reports: any[] = [];
     for (const r of reportsData) {
       const report = await db.irmReport.create({ data: r });
       reports.push(report);

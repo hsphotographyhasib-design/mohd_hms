@@ -286,10 +286,10 @@ export function MobileInvoiceDetail() {
                 </div>
               )}
 
-              {invoice.workOrderTitle && (
+              {(invoice as any).workOrderTitle && (
                 <div>
                   <p className="text-xs text-gray-400 mb-0.5">Work Order</p>
-                  <p className="text-sm text-gray-700">{invoice.workOrderTitle}</p>
+                  <p className="text-sm text-gray-700">{(invoice as any).workOrderTitle}</p>
                 </div>
               )}
 

@@ -135,7 +135,8 @@ const CMS_ITEM: NavItemConfig = {
 // ============================================================
 
 export function MobileNavSheet() {
-  const { mobileNavOpen, setMobileNavOpen, currentView, setView } = useAppStore();
+  const { currentView, setView } = useAppStore();
+  const { mobileNavOpen, setMobileNavOpen } = useAppStore() as any;
   const { user } = useAuthStore();
 
   const filteredItems = useMemo(() => {

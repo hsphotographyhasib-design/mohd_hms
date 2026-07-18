@@ -85,7 +85,7 @@ export function TechnicianAssignmentPanel({
   const [submitting, setSubmitting] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [reason, setReason] = useState('');
-  const searchTimer = useRef<ReturnType<typeof setTimeout>>();
+  const searchTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
   // Fetch technicians when dialog opens or filters change
   useEffect(() => {

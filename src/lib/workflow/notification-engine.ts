@@ -51,10 +51,11 @@ interface NotificationTarget {
  * All errors are caught and logged — notifications must never break the workflow.
  */
 export async function recordWorkflowTransition(ctx: WorkflowContext): Promise<void> {
+  // Pre-compute notification targets before entering the transaction
+  // so we don't hold the transaction open longer than necessary for queries.
+  let notificationTargets: NotificationTarget[] = [];
   try {
-    // Pre-compute notification targets before entering the transaction
-    // so we don't hold the transaction open longer than necessary for queries.
-    const notificationTargets = await resolveNotificationTargets(ctx);
+    notificationTargets = await resolveNotificationTargets(ctx);
 
     await db.$transaction(async (tx) => {
       // 1. Create timeline entry

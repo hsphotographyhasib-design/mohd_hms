@@ -167,8 +167,8 @@ export function ServicesSection() {
           <p className="lede">A full range of engineering and facility services — available individually or bundled into an annual maintenance contract with guaranteed response times.</p>
         </div>
         <div className="cap-grid" dangerouslySetInnerHTML={{
-          __html: svcData.map(([cl, items]) =>
-            `<div class="cap-col reveal"><div class="cl">${cl}</div>${items.map(([n, d, p]) =>
+          __html: svcData.map(([cl, items]: any) =>
+            `<div class="cap-col reveal"><div class="cl">${cl}</div>${(items as any[]).map(([n, d, p]: any) =>
               `<div class="cap-item"><span class="cci">${ic(p as string)}</span><div><b>${n}</b><span>${d}</span></div></div>`
             ).join('')}</div>`
           ).join('')
@@ -190,7 +190,7 @@ export function IndustriesSection() {
           <h2>Trusted across demanding environments.</h2>
         </div>
         <div className="ind-grid" dangerouslySetInnerHTML={{
-          __html: indData.map(([t, p], i) =>
+          __html: indData.map(([t, p]: any, i: number) =>
             `<div class="ind reveal ${i % 4 ? 'd' + (i % 4) : ''}"><span class="ii">${ic(p as string)}</span><span>${t}</span></div>`
           ).join('')
         }} />
@@ -456,7 +456,7 @@ export function CareersSection() {
         <div className="career-grid">
           <div className="reveal">
             <div dangerouslySetInnerHTML={{
-              __html: careerData.map(([t, m]) =>
+              __html: careerData.map(([t, m]: any) =>
                 `<div class="vac reveal"><div><b>${t}</b><br><span>${m}</span></div><a href="#contact" class="btn btn-out btn-sm vb">Apply now</a></div>`
               ).join('')
             }} />

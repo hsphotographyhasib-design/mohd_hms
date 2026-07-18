@@ -111,7 +111,8 @@ const cmsNavItems: NavItemConfig[] = [
 
 function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: () => void }) {
   const { user, logout } = useAuthStore();
-  const { currentView, setView, sidebarOpen, setSidebarOpen } = useAppStore();
+  const { currentView, setView } = useAppStore();
+  const { sidebarOpen, setSidebarOpen } = useAppStore() as any;
   const { unreadCount } = useNotificationStore();
 
   if (!user) return null;
@@ -336,7 +337,7 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
 }
 
 export function Sidebar() {
-  const { sidebarOpen, setSidebarOpen } = useAppStore();
+  const { sidebarOpen, setSidebarOpen } = useAppStore() as any;
   const [isMobile, setIsMobile] = useState(() => {
     if (typeof window === 'undefined') return false;
     return window.matchMedia('(max-width: 1023px)').matches;

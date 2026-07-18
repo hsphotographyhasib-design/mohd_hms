@@ -74,9 +74,13 @@ export function SectionHeader({
 export function IconBox({
   children,
   size = 'md',
+  className,
+  style,
 }: {
   children: React.ReactNode;
   size?: 'sm' | 'md' | 'lg';
+  className?: string;
+  style?: React.CSSProperties;
 }) {
   const sizeMap = {
     sm: { w: 30, h: 30, r: 8 },
@@ -86,8 +90,9 @@ export function IconBox({
   const s = sizeMap[size];
   return (
     <div
-      className="grid place-items-center shrink-0"
+      className={`grid place-items-center shrink-0 ${className || ''}`}
       style={{
+        ...style,
         width: s.w,
         height: s.h,
         borderRadius: s.r,
@@ -104,10 +109,12 @@ export function ThemeSection({
   children,
   variant = 'default',
   className = '',
+  style,
 }: {
   children: React.ReactNode;
   variant?: 'default' | 'stone' | 'forest';
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const bgMap = {
     default: 'var(--hm-paper)',
@@ -119,6 +126,7 @@ export function ThemeSection({
     <section
       className={`relative ${className}`}
       style={{
+        ...style,
         padding: 'clamp(56px, 8vw, 104px) 0',
         background: bgMap[variant],
         color: isForest ? 'var(--hm-paper)' : undefined,
@@ -140,16 +148,21 @@ export function ThemeCard({
   className = '',
   hover = true,
   large = false,
+  style,
+  onClick,
 }: {
   children: React.ReactNode;
   className?: string;
   hover?: boolean;
   large?: boolean;
+  style?: React.CSSProperties;
+  onClick?: () => void;
 }) {
   return (
     <div
       className={className}
       style={{
+        ...style,
         background: 'var(--hm-paper-2)',
         border: '1px solid var(--hm-line)',
         borderRadius: large ? 'var(--hm-r-lg)' : 'var(--hm-r)',
@@ -157,8 +170,9 @@ export function ThemeCard({
         transition: hover
           ? 'transform 0.28s var(--hm-ease), border-color 0.28s var(--hm-ease)'
           : undefined,
-        cursor: hover ? 'pointer' : undefined,
+        cursor: hover || onClick ? 'pointer' : undefined,
       }}
+      onClick={onClick}
       onMouseEnter={(e) => {
         if (!hover) return;
         (e.currentTarget as HTMLElement).style.borderColor =
@@ -184,11 +198,13 @@ export function ThemeButton({
   variant = 'fill',
   className = '',
   onClick,
+  style,
 }: {
   children: React.ReactNode;
   variant?: 'fill' | 'green' | 'outline';
   className?: string;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }) {
   const variants: Record<string, React.CSSProperties> = {
     fill: {
@@ -209,6 +225,7 @@ export function ThemeButton({
     <button
       className={`inline-flex items-center gap-2 cursor-pointer whitespace-nowrap ${className}`}
       style={{
+        ...style,
         fontFamily: 'var(--hm-body)',
         fontWeight: 600,
         fontSize: '0.94rem',
@@ -275,16 +292,19 @@ export function DisplayHeading({
   as: Tag = 'h3',
   className = '',
   size,
+  style,
 }: {
   children: React.ReactNode;
   as?: 'h1' | 'h2' | 'h3' | 'h4';
   className?: string;
   size?: string;
+  style?: React.CSSProperties;
 }) {
   return (
     <Tag
       className={className}
       style={{
+        ...style,
         fontFamily: 'var(--hm-disp)',
         fontWeight: 600,
         lineHeight: 1.04,
@@ -437,11 +457,13 @@ export function ThemeLink({
   variant = 'fill',
   className = '',
   onClick,
+  style,
 }: {
   children: React.ReactNode;
   variant?: 'fill' | 'green' | 'outline';
   className?: string;
   onClick?: () => void;
+  style?: React.CSSProperties;
 }) {
   const variants: Record<string, React.CSSProperties> = {
     fill: {
@@ -462,6 +484,7 @@ export function ThemeLink({
     <span
       className={`inline-flex items-center gap-2 cursor-pointer whitespace-nowrap ${className}`}
       style={{
+        ...style,
         fontFamily: 'var(--hm-body)',
         fontWeight: 600,
         fontSize: '0.94rem',

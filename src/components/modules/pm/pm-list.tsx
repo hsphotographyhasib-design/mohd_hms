@@ -149,10 +149,10 @@ export function PmList() {
           <h1 className="text-2xl font-bold">Preventive Maintenance</h1>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" size={viewMode === 'calendar' ? 'default' : 'outline'} onClick={() => setViewMode('calendar')}>
+          <Button variant={viewMode === 'calendar' ? 'default' : 'outline'} onClick={() => setViewMode('calendar')}>
             <Calendar className="h-4 w-4 mr-2" /> Calendar
           </Button>
-          <Button variant="outline" size={viewMode === 'list' ? 'default' : 'outline'} onClick={() => setViewMode('list')}>
+          <Button variant={viewMode === 'list' ? 'default' : 'outline'} onClick={() => setViewMode('list')}>
             <List className="h-4 w-4 mr-2" /> List
           </Button>
           <Button onClick={() => { fetchDropdowns(); setDialogOpen(true); }} className="bg-emerald-600 hover:bg-emerald-700 text-white">

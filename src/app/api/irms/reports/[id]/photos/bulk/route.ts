@@ -47,7 +47,7 @@ export async function POST(
       }
 
       case 'rotate': {
-        const rotatedPhotos = [];
+        const rotatedPhotos: any[] = [];
         for (const photoId of photoIds) {
           const photo = await db.irmPhoto.findUnique({ where: { id: photoId } });
           if (!photo) continue;
@@ -95,7 +95,7 @@ export async function POST(
       }
 
       case 'duplicate': {
-        const duplicated = [];
+        const duplicated: any[] = [];
         for (const photoId of photoIds) {
           const photo = await db.irmPhoto.findUnique({ where: { id: photoId } });
           if (!photo) continue;

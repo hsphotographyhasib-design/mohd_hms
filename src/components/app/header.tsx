@@ -31,7 +31,7 @@ import {
 } from 'lucide-react';
 import { NotificationHistoryPanel } from '@/components/notifications/notification-history';
 
-const viewLabels: Record<AppView, string> = {
+const viewLabels: Partial<Record<AppView, string>> = {
   login: 'Login',
   dashboard: 'Dashboard',
   equipment: 'Equipment',
@@ -70,7 +70,8 @@ function getBreadcrumbPath(view: AppView): { label: string; view?: AppView }[] {
 }
 
 export function Header() {
-  const { currentView, setView, toggleSidebar, sidebarOpen } = useAppStore();
+  const { currentView, setView } = useAppStore();
+  const { toggleSidebar, sidebarOpen } = useAppStore() as any;
   const { user, logout } = useAuthStore();
   const { unreadCount } = useNotificationStore();
 

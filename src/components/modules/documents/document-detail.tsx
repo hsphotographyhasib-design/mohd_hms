@@ -2,8 +2,16 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useAuthStore, useAppStore } from '@/store';
-import { DOCUMENT_PERMISSIONS } from '@/types';
 import { cn } from '@/lib/utils';
+// DOCUMENT_PERMISSIONS — local fallback (not exported from @/types)
+const DOCUMENT_PERMISSIONS: Record<string, string[]> = {
+  super_admin: ['view', 'upload', 'edit', 'delete', 'archive', 'unarchive'],
+  admin: ['view', 'upload', 'edit', 'delete', 'archive', 'unarchive'],
+  manager: ['view', 'upload', 'edit', 'delete', 'archive', 'unarchive'],
+  supervisor: ['view', 'upload', 'edit', 'archive'],
+  technician: ['view', 'upload'],
+  customer: ['view'],
+};
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -187,7 +195,7 @@ const ACTION_COLORS: Record<string, string> = {
 };
 
 function getAuthHeaders(): Record<string, string> {
-  const token = useAuthStore.getState().user?.token;
+  const token = useAuthStore.getState().token;
   return token ? { 'Authorization': `Bearer ${token}` } : {};
 }
 

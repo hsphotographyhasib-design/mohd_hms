@@ -381,7 +381,7 @@ export async function buildAuthContextFromRequest(
   const payload = verifyToken(token);
   if (!payload) return null;
 
-  return buildAuthContext(payload, options);
+  return buildAuthContext(payload as any, options);
 }
 
 // ── Field-level access control for sensitive complaint fields ───────────────

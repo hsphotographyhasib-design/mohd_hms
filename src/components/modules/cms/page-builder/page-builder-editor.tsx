@@ -37,6 +37,7 @@ import {
   FileText, Paintbrush, Palette, Sparkles, Check, AlertCircle, Search,
   Image as ImageIconLucide, Loader2,
 } from 'lucide-react';
+import type { DragOverEvent } from '@dnd-kit/core';
 import {
   DndContext, DragOverlay, closestCenter, useSensor, useSensors,
   PointerSensor, useDraggable, useDroppable, DragStartEvent, DragEndEvent,
@@ -737,15 +738,16 @@ function LayersTree() {
   );
 }
 
-function Columns3Icon({ size = 16 }: { size?: number }) {
+function Columns3Icon({ size = 16, className }: { size?: number; className?: string }) {
   return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
       <rect width="18" height="18" x="3" y="3" rx="2" />
       <path d="M9 3v18" />
       <path d="M15 3v18" />
     </svg>
   );
 }
+
 
 function WidgetPanel() {
   const { leftPanel, setLeftPanel } = useBuilderStore();
@@ -1241,42 +1243,42 @@ function AdvancedPropsSection({
         <div className="space-y-3 pb-4">
           <TextField
             label="Padding"
-            value={(props as Record<string, unknown>).padding as string | undefined}
+            value={(props as unknown as Record<string, unknown>).padding as string | undefined}
             onChange={(v) => onChange('padding', v)}
             placeholder="e.g. 16px"
           />
           <TextField
             label="Margin"
-            value={(props as Record<string, unknown>).margin as string | undefined}
+            value={(props as unknown as Record<string, unknown>).margin as string | undefined}
             onChange={(v) => onChange('margin', v)}
             placeholder="e.g. 8px"
           />
           <ColorPickerField
             label="Background Color"
-            value={(props as Record<string, unknown>).background as string || ''}
+            value={(props as unknown as Record<string, unknown>).background as string || ''}
             onChange={(v) => onChange('background', v)}
           />
           <TextField
             label="Border Radius"
-            value={(props as Record<string, unknown>).borderRadius as string | undefined}
+            value={(props as unknown as Record<string, unknown>).borderRadius as string | undefined}
             onChange={(v) => onChange('borderRadius', v)}
             placeholder="e.g. 8px"
           />
           <TextField
             label="Box Shadow"
-            value={(props as Record<string, unknown>).boxShadow as string | undefined}
+            value={(props as unknown as Record<string, unknown>).boxShadow as string | undefined}
             onChange={(v) => onChange('boxShadow', v)}
             placeholder="e.g. 0 2px 8px rgba(0,0,0,0.1)"
           />
           <TextField
             label="Border"
-            value={(props as Record<string, unknown>).border as string | undefined}
+            value={(props as unknown as Record<string, unknown>).border as string | undefined}
             onChange={(v) => onChange('border', v)}
             placeholder="e.g. 1px solid #e5e7eb"
           />
           <SliderField
             label="Opacity"
-            value={(props as Record<string, unknown>).opacity as number | undefined}
+            value={(props as unknown as Record<string, unknown>).opacity as number | undefined}
             onChange={(v) => onChange('opacity', v)}
             min={0}
             max={1}
@@ -1284,15 +1286,15 @@ function AdvancedPropsSection({
           />
           <SelectField
             label="Animation"
-            value={((props as Record<string, unknown>).animation as string) || 'none'}
+            value={((props as unknown as Record<string, unknown>).animation as string) || 'none'}
             onChange={(v) => onChange('animation', v)}
             options={ANIMATION_OPTIONS}
           />
-          {((props as Record<string, unknown>).animation as string) && (props as Record<string, unknown>).animation !== 'none' && (
+          {((props as unknown as Record<string, unknown>).animation as string) && (props as unknown as Record<string, unknown>).animation !== 'none' && (
             <>
               <NumberField
                 label="Duration (ms)"
-                value={(props as Record<string, unknown>).animationDuration as number | undefined}
+                value={(props as unknown as Record<string, unknown>).animationDuration as number | undefined}
                 onChange={(v) => onChange('animationDuration', v)}
                 min={100}
                 max={5000}
@@ -1301,7 +1303,7 @@ function AdvancedPropsSection({
               />
               <NumberField
                 label="Delay (ms)"
-                value={(props as Record<string, unknown>).animationDelay as number | undefined}
+                value={(props as unknown as Record<string, unknown>).animationDelay as number | undefined}
                 onChange={(v) => onChange('animationDelay', v)}
                 min={0}
                 max={5000}
@@ -1813,7 +1815,7 @@ function WidgetPropertyEditor({ widget }: { widget: WidgetNode }) {
     [sel, updateWidget]
   );
 
-  const props = widget.props as Record<string, unknown>;
+  const props = widget.props as unknown as Record<string, unknown>;
 
   switch (widget.type) {
     case 'heading': return <HeadingProperties props={widget.props as HeadingProps} onChange={handleChange} />;
@@ -2315,8 +2317,8 @@ export function PageBuilderEditor({ pageId }: { pageId: string }) {
   // Drag overlay
   const [dragOverlayContent, setDragOverlayContent] = useState<React.ReactNode>(null);
 
-  const handleDragOver = useCallback((event: { active: { id: string | number; data: { current?: { type: string; widgetDef?: WidgetDefinition } } }; over: { id: string | number; data: { current?: { type: string } } } }) => {
-    const activeData = event.active.data.current;
+  const handleDragOver = useCallback((event: DragOverEvent) => {
+    const activeData = event.active.data.current as { type?: string; widgetDef?: WidgetDefinition } | undefined;
     if (activeData?.type === 'palette-widget' && activeData.widgetDef) {
       setDragOverlayContent(
         <div className="flex items-center gap-2 px-3 py-2 bg-zinc-900 border border-emerald-500 rounded-lg shadow-xl text-xs text-zinc-200">

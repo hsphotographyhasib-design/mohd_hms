@@ -99,7 +99,7 @@ function responsiveFontSize(bp: Breakpoint, size?: number, mobileMin?: number): 
 // ============================================================================
 // Icon Resolver — Maps string names to Lucide icon components
 // ============================================================================
-const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>> = {
+const ICON_MAP: Record<string, React.ComponentType<{ size?: number; color?: string; className?: string; style?: React.CSSProperties }>> = {
   Home, Settings, Phone, Mail, MapPin, Clock, Star, Heart, Shield, Zap,
   Wrench, Building2, Users, Award, Check, ArrowRight, ArrowLeft, ArrowUp,
   ArrowDown, ChevronRight, ChevronLeft, ChevronUp, ChevronDown,
