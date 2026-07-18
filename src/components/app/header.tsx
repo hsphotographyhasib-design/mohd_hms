@@ -53,6 +53,7 @@ const viewLabels: Partial<Record<AppView, string>> = {
   finance: 'Finance',
   reports: 'Reports',
   notifications: 'Notifications',
+  irms: 'Inspection Reports',
   settings: 'Settings',
   profile: 'Profile',
 };

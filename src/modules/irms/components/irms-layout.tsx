@@ -302,33 +302,43 @@ export default function IrmsLayout() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950">
-      <Topbar onMenuClick={() => setMobileOpen(true)} />
+    <div className="flex flex-col bg-gray-50 dark:bg-gray-950 rounded-lg border border-border/40 overflow-hidden -m-4 md:-m-6">
+      {/* IRMS title bar (replaces full Topbar since parent AppShell has its own header) */}
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border/40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm">
+        <ClipboardCheck className="h-5 w-5 text-green-600" />
+        <span className="font-bold text-sm">IRMS</span>
+        <span className="text-xs text-muted-foreground">— Inspection Report Management System</span>
+        <div className="flex-1" />
+        {/* Mobile hamburger for IRMS sidebar only */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden h-7 w-7"
+          onClick={() => setMobileOpen(true)}
+        >
+          <Menu className="h-4 w-4" />
+        </Button>
+      </div>
 
-      <div className="flex flex-1">
+      <div className="flex flex-1 min-h-0">
         {/* Desktop sidebar */}
-        <aside className="hidden lg:block w-60 shrink-0 border-r border-border/40 backdrop-blur-md bg-white/80 dark:bg-gray-900/80 sticky top-14 h-[calc(100vh-3.5rem)]">
+        <aside className="hidden lg:block w-56 shrink-0 border-r border-border/40 bg-white/80 dark:bg-gray-900/80">
           <SidebarNav />
         </aside>
 
         {/* Mobile sidebar */}
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" className="w-60 p-0">
-            <SheetTitle className="sr-only">Navigation</SheetTitle>
-            <div className="pt-14">
-              <SidebarNav onNavigate={() => setMobileOpen(false)} />
-            </div>
+          <SheetContent side="left" className="w-56 p-0">
+            <SheetTitle className="sr-only">IRMS Navigation</SheetTitle>
+            <SidebarNav onNavigate={() => setMobileOpen(false)} />
           </SheetContent>
         </Sheet>
 
         {/* Main content */}
-        <main className="flex-1 min-w-0 flex flex-col">
-          <div className="flex-1 p-4 md:p-6">
+        <main className="flex-1 min-w-0">
+          <div className="p-4">
             <ViewRouter />
           </div>
-          <footer className="border-t border-border/40 px-4 py-3 text-center text-xs text-muted-foreground mt-auto">
-            © 2025 IRMS — Inspection Report Management System
-          </footer>
         </main>
       </div>
     </div>

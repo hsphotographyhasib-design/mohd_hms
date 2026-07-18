@@ -31,6 +31,7 @@ import {
   FileText,
   MessageCircle,
   Mail,
+  ClipboardCheck,
 } from 'lucide-react';
 
 // ============================================================
@@ -70,6 +71,7 @@ const NAV_ITEMS: NavItemConfig[] = [
   { id: 'notifications', label: 'Notifications', icon: Bell, feature: 'notifications' },
   { id: 'email-management', label: 'Email', icon: Mail, feature: 'email' },
   { id: 'whatsapp', label: 'WhatsApp', icon: MessageCircle, feature: 'whatsapp' },
+  { id: 'irms', label: 'Inspection Reports', icon: ClipboardCheck, feature: 'irms' },
   { id: 'settings', label: 'Settings', icon: Settings, feature: 'settings' },
 ];
 

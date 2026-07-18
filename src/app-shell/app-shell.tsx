@@ -189,6 +189,9 @@ const EmailManagement = lazy(() => import('@/modules/email/components/email-dash
 
 const TechnicianAssignmentScreen = lazy(() => import('@/modules/complaints/components/complaint-assignment-screen').then(m => ({ default: m.ComplaintAssignmentScreen })));
 
+// IRMS views
+const IrmsLayout = lazy(() => import('@/modules/irms/components/irms-layout').then(m => ({ default: m.default })));
+
 // Customer views
 const CustomerPortal = lazy(() => import('@/customer-portal/components/customer-portal').then(m => ({ default: m.CustomerPortal })));
 
@@ -308,6 +311,7 @@ function ViewRouter() {
       {currentView === 'hr-announcements' && <HrAnnouncements />}
       {currentView === 'hr-reports' && <HrReportsView />}
       {currentView === 'hr-settings' && <HrSettingsView />}
+      {currentView === 'irms' && <IrmsLayout />}
     </Suspense>
   );
 }

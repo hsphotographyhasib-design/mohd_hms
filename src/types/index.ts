@@ -135,7 +135,9 @@ export type AppView =
   | 'hr-disciplinary'
   | 'hr-announcements'
   | 'hr-reports'
-  | 'hr-settings';
+  | 'hr-settings'
+  // IRMS views
+  | 'irms';
 
 // ============ EQUIPMENT ============
 
