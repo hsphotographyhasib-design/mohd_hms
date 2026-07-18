@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'context is required' }, { status: 400 });
     }
 
-    const zai = new ZAI();
+    const zai = await ZAI.create();
 
     const actionLabel = action.charAt(0).toUpperCase() + action.slice(1);
 

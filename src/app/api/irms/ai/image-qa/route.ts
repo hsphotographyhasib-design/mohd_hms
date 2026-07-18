@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'imageDataUrl is required' }, { status: 400 });
     }
 
-    const zai = new ZAI();
+    const zai = await ZAI.create();
 
     const result = await zai.chat.completions.createVision({
       model: 'default',
