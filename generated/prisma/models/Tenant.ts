@@ -340,6 +340,7 @@ export type TenantWhereInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionListRelationFilter
   WhatsAppTemplate?: Prisma.WhatsAppTemplateListRelationFilter
   WorkOrder?: Prisma.WorkOrderListRelationFilter
+  Inspection?: Prisma.InspectionListRelationFilter
 }
 
 export type TenantOrderByWithRelationInput = {
@@ -423,6 +424,7 @@ export type TenantOrderByWithRelationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionOrderByRelationAggregateInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateOrderByRelationAggregateInput
   WorkOrder?: Prisma.WorkOrderOrderByRelationAggregateInput
+  Inspection?: Prisma.InspectionOrderByRelationAggregateInput
 }
 
 export type TenantWhereUniqueInput = Prisma.AtLeast<{
@@ -509,6 +511,7 @@ export type TenantWhereUniqueInput = Prisma.AtLeast<{
   WhatsAppSession?: Prisma.WhatsAppSessionListRelationFilter
   WhatsAppTemplate?: Prisma.WhatsAppTemplateListRelationFilter
   WorkOrder?: Prisma.WorkOrderListRelationFilter
+  Inspection?: Prisma.InspectionListRelationFilter
 }, "id" | "domain">
 
 export type TenantOrderByWithAggregationInput = {
@@ -630,6 +633,7 @@ export type TenantCreateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateInput = {
@@ -713,6 +717,7 @@ export type TenantUncheckedCreateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUpdateInput = {
@@ -796,6 +801,7 @@ export type TenantUpdateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateInput = {
@@ -879,6 +885,7 @@ export type TenantUncheckedUpdateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateManyInput = {
@@ -1943,6 +1950,20 @@ export type TenantUpdateOneRequiredWithoutWorkOrderNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutWorkOrderInput, Prisma.TenantUpdateWithoutWorkOrderInput>, Prisma.TenantUncheckedUpdateWithoutWorkOrderInput>
 }
 
+export type TenantCreateNestedOneWithoutInspectionInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInspectionInput, Prisma.TenantUncheckedCreateWithoutInspectionInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInspectionInput
+  connect?: Prisma.TenantWhereUniqueInput
+}
+
+export type TenantUpdateOneRequiredWithoutInspectionNestedInput = {
+  create?: Prisma.XOR<Prisma.TenantCreateWithoutInspectionInput, Prisma.TenantUncheckedCreateWithoutInspectionInput>
+  connectOrCreate?: Prisma.TenantCreateOrConnectWithoutInspectionInput
+  upsert?: Prisma.TenantUpsertWithoutInspectionInput
+  connect?: Prisma.TenantWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.TenantUpdateToOneWithWhereWithoutInspectionInput, Prisma.TenantUpdateWithoutInspectionInput>, Prisma.TenantUncheckedUpdateWithoutInspectionInput>
+}
+
 export type TenantCreateWithoutAuditLogInput = {
   id: string
   name: string
@@ -2023,6 +2044,7 @@ export type TenantCreateWithoutAuditLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuditLogInput = {
@@ -2105,6 +2127,7 @@ export type TenantUncheckedCreateWithoutAuditLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuditLogInput = {
@@ -2203,6 +2226,7 @@ export type TenantUpdateWithoutAuditLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuditLogInput = {
@@ -2285,6 +2309,7 @@ export type TenantUncheckedUpdateWithoutAuditLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutAuthAuditLogInput = {
@@ -2367,6 +2392,7 @@ export type TenantCreateWithoutAuthAuditLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutAuthAuditLogInput = {
@@ -2449,6 +2475,7 @@ export type TenantUncheckedCreateWithoutAuthAuditLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutAuthAuditLogInput = {
@@ -2547,6 +2574,7 @@ export type TenantUpdateWithoutAuthAuditLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutAuthAuditLogInput = {
@@ -2629,6 +2657,7 @@ export type TenantUncheckedUpdateWithoutAuthAuditLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutBroadcastLogInput = {
@@ -2711,6 +2740,7 @@ export type TenantCreateWithoutBroadcastLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutBroadcastLogInput = {
@@ -2793,6 +2823,7 @@ export type TenantUncheckedCreateWithoutBroadcastLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutBroadcastLogInput = {
@@ -2891,6 +2922,7 @@ export type TenantUpdateWithoutBroadcastLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutBroadcastLogInput = {
@@ -2973,6 +3005,7 @@ export type TenantUncheckedUpdateWithoutBroadcastLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutChecklistTemplateInput = {
@@ -3055,6 +3088,7 @@ export type TenantCreateWithoutChecklistTemplateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutChecklistTemplateInput = {
@@ -3137,6 +3171,7 @@ export type TenantUncheckedCreateWithoutChecklistTemplateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutChecklistTemplateInput = {
@@ -3235,6 +3270,7 @@ export type TenantUpdateWithoutChecklistTemplateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutChecklistTemplateInput = {
@@ -3317,6 +3353,7 @@ export type TenantUncheckedUpdateWithoutChecklistTemplateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutComplaintInput = {
@@ -3399,6 +3436,7 @@ export type TenantCreateWithoutComplaintInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutComplaintInput = {
@@ -3481,6 +3519,7 @@ export type TenantUncheckedCreateWithoutComplaintInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutComplaintInput = {
@@ -3579,6 +3618,7 @@ export type TenantUpdateWithoutComplaintInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutComplaintInput = {
@@ -3661,6 +3701,7 @@ export type TenantUncheckedUpdateWithoutComplaintInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutComplaintTimelineInput = {
@@ -3743,6 +3784,7 @@ export type TenantCreateWithoutComplaintTimelineInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutComplaintTimelineInput = {
@@ -3825,6 +3867,7 @@ export type TenantUncheckedCreateWithoutComplaintTimelineInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutComplaintTimelineInput = {
@@ -3923,6 +3966,7 @@ export type TenantUpdateWithoutComplaintTimelineInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutComplaintTimelineInput = {
@@ -4005,6 +4049,7 @@ export type TenantUncheckedUpdateWithoutComplaintTimelineInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutConversationThreadInput = {
@@ -4087,6 +4132,7 @@ export type TenantCreateWithoutConversationThreadInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutConversationThreadInput = {
@@ -4169,6 +4215,7 @@ export type TenantUncheckedCreateWithoutConversationThreadInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutConversationThreadInput = {
@@ -4267,6 +4314,7 @@ export type TenantUpdateWithoutConversationThreadInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutConversationThreadInput = {
@@ -4349,6 +4397,7 @@ export type TenantUncheckedUpdateWithoutConversationThreadInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerInput = {
@@ -4431,6 +4480,7 @@ export type TenantCreateWithoutCustomerInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerInput = {
@@ -4513,6 +4563,7 @@ export type TenantUncheckedCreateWithoutCustomerInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerInput = {
@@ -4611,6 +4662,7 @@ export type TenantUpdateWithoutCustomerInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerInput = {
@@ -4693,6 +4745,7 @@ export type TenantUncheckedUpdateWithoutCustomerInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerFeedbackInput = {
@@ -4775,6 +4828,7 @@ export type TenantCreateWithoutCustomerFeedbackInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerFeedbackInput = {
@@ -4857,6 +4911,7 @@ export type TenantUncheckedCreateWithoutCustomerFeedbackInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerFeedbackInput = {
@@ -4955,6 +5010,7 @@ export type TenantUpdateWithoutCustomerFeedbackInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerFeedbackInput = {
@@ -5037,6 +5093,7 @@ export type TenantUncheckedUpdateWithoutCustomerFeedbackInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutCustomerReportInput = {
@@ -5119,6 +5176,7 @@ export type TenantCreateWithoutCustomerReportInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutCustomerReportInput = {
@@ -5201,6 +5259,7 @@ export type TenantUncheckedCreateWithoutCustomerReportInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutCustomerReportInput = {
@@ -5299,6 +5358,7 @@ export type TenantUpdateWithoutCustomerReportInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutCustomerReportInput = {
@@ -5381,6 +5441,7 @@ export type TenantUncheckedUpdateWithoutCustomerReportInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDepartmentInput = {
@@ -5463,6 +5524,7 @@ export type TenantCreateWithoutDepartmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDepartmentInput = {
@@ -5545,6 +5607,7 @@ export type TenantUncheckedCreateWithoutDepartmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDepartmentInput = {
@@ -5643,6 +5706,7 @@ export type TenantUpdateWithoutDepartmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDepartmentInput = {
@@ -5725,6 +5789,7 @@ export type TenantUncheckedUpdateWithoutDepartmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDeviceInput = {
@@ -5807,6 +5872,7 @@ export type TenantCreateWithoutDeviceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDeviceInput = {
@@ -5889,6 +5955,7 @@ export type TenantUncheckedCreateWithoutDeviceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDeviceInput = {
@@ -5987,6 +6054,7 @@ export type TenantUpdateWithoutDeviceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDeviceInput = {
@@ -6069,6 +6137,7 @@ export type TenantUncheckedUpdateWithoutDeviceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutDeviceTokenInput = {
@@ -6151,6 +6220,7 @@ export type TenantCreateWithoutDeviceTokenInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutDeviceTokenInput = {
@@ -6233,6 +6303,7 @@ export type TenantUncheckedCreateWithoutDeviceTokenInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutDeviceTokenInput = {
@@ -6331,6 +6402,7 @@ export type TenantUpdateWithoutDeviceTokenInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutDeviceTokenInput = {
@@ -6413,6 +6485,7 @@ export type TenantUncheckedUpdateWithoutDeviceTokenInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEmailLogInput = {
@@ -6495,6 +6568,7 @@ export type TenantCreateWithoutEmailLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEmailLogInput = {
@@ -6577,6 +6651,7 @@ export type TenantUncheckedCreateWithoutEmailLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEmailLogInput = {
@@ -6675,6 +6750,7 @@ export type TenantUpdateWithoutEmailLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEmailLogInput = {
@@ -6757,6 +6833,7 @@ export type TenantUncheckedUpdateWithoutEmailLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEmailTemplateInput = {
@@ -6839,6 +6916,7 @@ export type TenantCreateWithoutEmailTemplateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEmailTemplateInput = {
@@ -6921,6 +6999,7 @@ export type TenantUncheckedCreateWithoutEmailTemplateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEmailTemplateInput = {
@@ -7019,6 +7098,7 @@ export type TenantUpdateWithoutEmailTemplateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEmailTemplateInput = {
@@ -7101,6 +7181,7 @@ export type TenantUncheckedUpdateWithoutEmailTemplateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEquipmentInput = {
@@ -7183,6 +7264,7 @@ export type TenantCreateWithoutEquipmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEquipmentInput = {
@@ -7265,6 +7347,7 @@ export type TenantUncheckedCreateWithoutEquipmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEquipmentInput = {
@@ -7363,6 +7446,7 @@ export type TenantUpdateWithoutEquipmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEquipmentInput = {
@@ -7445,6 +7529,7 @@ export type TenantUncheckedUpdateWithoutEquipmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutEquipmentQrCodeInput = {
@@ -7527,6 +7612,7 @@ export type TenantCreateWithoutEquipmentQrCodeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutEquipmentQrCodeInput = {
@@ -7609,6 +7695,7 @@ export type TenantUncheckedCreateWithoutEquipmentQrCodeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutEquipmentQrCodeInput = {
@@ -7707,6 +7794,7 @@ export type TenantUpdateWithoutEquipmentQrCodeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutEquipmentQrCodeInput = {
@@ -7789,6 +7877,7 @@ export type TenantUncheckedUpdateWithoutEquipmentQrCodeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrAnnouncementInput = {
@@ -7871,6 +7960,7 @@ export type TenantCreateWithoutHrAnnouncementInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrAnnouncementInput = {
@@ -7953,6 +8043,7 @@ export type TenantUncheckedCreateWithoutHrAnnouncementInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrAnnouncementInput = {
@@ -8051,6 +8142,7 @@ export type TenantUpdateWithoutHrAnnouncementInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrAnnouncementInput = {
@@ -8133,6 +8225,7 @@ export type TenantUncheckedUpdateWithoutHrAnnouncementInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrAssetAssignmentInput = {
@@ -8215,6 +8308,7 @@ export type TenantCreateWithoutHrAssetAssignmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrAssetAssignmentInput = {
@@ -8297,6 +8391,7 @@ export type TenantUncheckedCreateWithoutHrAssetAssignmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrAssetAssignmentInput = {
@@ -8395,6 +8490,7 @@ export type TenantUpdateWithoutHrAssetAssignmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrAssetAssignmentInput = {
@@ -8477,6 +8573,7 @@ export type TenantUncheckedUpdateWithoutHrAssetAssignmentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrCandidateInput = {
@@ -8559,6 +8656,7 @@ export type TenantCreateWithoutHrCandidateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrCandidateInput = {
@@ -8641,6 +8739,7 @@ export type TenantUncheckedCreateWithoutHrCandidateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrCandidateInput = {
@@ -8739,6 +8838,7 @@ export type TenantUpdateWithoutHrCandidateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrCandidateInput = {
@@ -8821,6 +8921,7 @@ export type TenantUncheckedUpdateWithoutHrCandidateInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrDisciplinaryActionInput = {
@@ -8903,6 +9004,7 @@ export type TenantCreateWithoutHrDisciplinaryActionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrDisciplinaryActionInput = {
@@ -8985,6 +9087,7 @@ export type TenantUncheckedCreateWithoutHrDisciplinaryActionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrDisciplinaryActionInput = {
@@ -9083,6 +9186,7 @@ export type TenantUpdateWithoutHrDisciplinaryActionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrDisciplinaryActionInput = {
@@ -9165,6 +9269,7 @@ export type TenantUncheckedUpdateWithoutHrDisciplinaryActionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrEmployeeInput = {
@@ -9247,6 +9352,7 @@ export type TenantCreateWithoutHrEmployeeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrEmployeeInput = {
@@ -9329,6 +9435,7 @@ export type TenantUncheckedCreateWithoutHrEmployeeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrEmployeeInput = {
@@ -9427,6 +9534,7 @@ export type TenantUpdateWithoutHrEmployeeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrEmployeeInput = {
@@ -9509,6 +9617,7 @@ export type TenantUncheckedUpdateWithoutHrEmployeeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrEmployeeDocumentInput = {
@@ -9591,6 +9700,7 @@ export type TenantCreateWithoutHrEmployeeDocumentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrEmployeeDocumentInput = {
@@ -9673,6 +9783,7 @@ export type TenantUncheckedCreateWithoutHrEmployeeDocumentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrEmployeeDocumentInput = {
@@ -9771,6 +9882,7 @@ export type TenantUpdateWithoutHrEmployeeDocumentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrEmployeeDocumentInput = {
@@ -9853,6 +9965,7 @@ export type TenantUncheckedUpdateWithoutHrEmployeeDocumentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrExpenseClaimInput = {
@@ -9935,6 +10048,7 @@ export type TenantCreateWithoutHrExpenseClaimInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrExpenseClaimInput = {
@@ -10017,6 +10131,7 @@ export type TenantUncheckedCreateWithoutHrExpenseClaimInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrExpenseClaimInput = {
@@ -10115,6 +10230,7 @@ export type TenantUpdateWithoutHrExpenseClaimInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrExpenseClaimInput = {
@@ -10197,6 +10313,7 @@ export type TenantUncheckedUpdateWithoutHrExpenseClaimInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrHolidayInput = {
@@ -10279,6 +10396,7 @@ export type TenantCreateWithoutHrHolidayInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrHolidayInput = {
@@ -10361,6 +10479,7 @@ export type TenantUncheckedCreateWithoutHrHolidayInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrHolidayInput = {
@@ -10459,6 +10578,7 @@ export type TenantUpdateWithoutHrHolidayInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrHolidayInput = {
@@ -10541,6 +10661,7 @@ export type TenantUncheckedUpdateWithoutHrHolidayInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrJobPositionInput = {
@@ -10623,6 +10744,7 @@ export type TenantCreateWithoutHrJobPositionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrJobPositionInput = {
@@ -10705,6 +10827,7 @@ export type TenantUncheckedCreateWithoutHrJobPositionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrJobPositionInput = {
@@ -10803,6 +10926,7 @@ export type TenantUpdateWithoutHrJobPositionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrJobPositionInput = {
@@ -10885,6 +11009,7 @@ export type TenantUncheckedUpdateWithoutHrJobPositionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrLeaveBalanceInput = {
@@ -10967,6 +11092,7 @@ export type TenantCreateWithoutHrLeaveBalanceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrLeaveBalanceInput = {
@@ -11049,6 +11175,7 @@ export type TenantUncheckedCreateWithoutHrLeaveBalanceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrLeaveBalanceInput = {
@@ -11147,6 +11274,7 @@ export type TenantUpdateWithoutHrLeaveBalanceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrLeaveBalanceInput = {
@@ -11229,6 +11357,7 @@ export type TenantUncheckedUpdateWithoutHrLeaveBalanceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrLeaveRequestInput = {
@@ -11311,6 +11440,7 @@ export type TenantCreateWithoutHrLeaveRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrLeaveRequestInput = {
@@ -11393,6 +11523,7 @@ export type TenantUncheckedCreateWithoutHrLeaveRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrLeaveRequestInput = {
@@ -11491,6 +11622,7 @@ export type TenantUpdateWithoutHrLeaveRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrLeaveRequestInput = {
@@ -11573,6 +11705,7 @@ export type TenantUncheckedUpdateWithoutHrLeaveRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrLeaveTypeInput = {
@@ -11655,6 +11788,7 @@ export type TenantCreateWithoutHrLeaveTypeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrLeaveTypeInput = {
@@ -11737,6 +11871,7 @@ export type TenantUncheckedCreateWithoutHrLeaveTypeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrLeaveTypeInput = {
@@ -11835,6 +11970,7 @@ export type TenantUpdateWithoutHrLeaveTypeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrLeaveTypeInput = {
@@ -11917,6 +12053,7 @@ export type TenantUncheckedUpdateWithoutHrLeaveTypeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrMedicalRecordInput = {
@@ -11999,6 +12136,7 @@ export type TenantCreateWithoutHrMedicalRecordInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrMedicalRecordInput = {
@@ -12081,6 +12219,7 @@ export type TenantUncheckedCreateWithoutHrMedicalRecordInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrMedicalRecordInput = {
@@ -12179,6 +12318,7 @@ export type TenantUpdateWithoutHrMedicalRecordInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrMedicalRecordInput = {
@@ -12261,6 +12401,7 @@ export type TenantUncheckedUpdateWithoutHrMedicalRecordInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrOvertimeRequestInput = {
@@ -12343,6 +12484,7 @@ export type TenantCreateWithoutHrOvertimeRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrOvertimeRequestInput = {
@@ -12425,6 +12567,7 @@ export type TenantUncheckedCreateWithoutHrOvertimeRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrOvertimeRequestInput = {
@@ -12523,6 +12666,7 @@ export type TenantUpdateWithoutHrOvertimeRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrOvertimeRequestInput = {
@@ -12605,6 +12749,7 @@ export type TenantUncheckedUpdateWithoutHrOvertimeRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrPayrollInput = {
@@ -12687,6 +12832,7 @@ export type TenantCreateWithoutHrPayrollInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrPayrollInput = {
@@ -12769,6 +12915,7 @@ export type TenantUncheckedCreateWithoutHrPayrollInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrPayrollInput = {
@@ -12867,6 +13014,7 @@ export type TenantUpdateWithoutHrPayrollInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrPayrollInput = {
@@ -12949,6 +13097,7 @@ export type TenantUncheckedUpdateWithoutHrPayrollInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrPerformanceReviewInput = {
@@ -13031,6 +13180,7 @@ export type TenantCreateWithoutHrPerformanceReviewInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrPerformanceReviewInput = {
@@ -13113,6 +13263,7 @@ export type TenantUncheckedCreateWithoutHrPerformanceReviewInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrPerformanceReviewInput = {
@@ -13211,6 +13362,7 @@ export type TenantUpdateWithoutHrPerformanceReviewInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrPerformanceReviewInput = {
@@ -13293,6 +13445,7 @@ export type TenantUncheckedUpdateWithoutHrPerformanceReviewInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrShiftInput = {
@@ -13375,6 +13528,7 @@ export type TenantCreateWithoutHrShiftInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrShiftInput = {
@@ -13457,6 +13611,7 @@ export type TenantUncheckedCreateWithoutHrShiftInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrShiftInput = {
@@ -13555,6 +13710,7 @@ export type TenantUpdateWithoutHrShiftInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrShiftInput = {
@@ -13637,6 +13793,7 @@ export type TenantUncheckedUpdateWithoutHrShiftInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrShiftScheduleInput = {
@@ -13719,6 +13876,7 @@ export type TenantCreateWithoutHrShiftScheduleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrShiftScheduleInput = {
@@ -13801,6 +13959,7 @@ export type TenantUncheckedCreateWithoutHrShiftScheduleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrShiftScheduleInput = {
@@ -13899,6 +14058,7 @@ export type TenantUpdateWithoutHrShiftScheduleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrShiftScheduleInput = {
@@ -13981,6 +14141,7 @@ export type TenantUncheckedUpdateWithoutHrShiftScheduleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrTrainingInput = {
@@ -14063,6 +14224,7 @@ export type TenantCreateWithoutHrTrainingInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrTrainingInput = {
@@ -14145,6 +14307,7 @@ export type TenantUncheckedCreateWithoutHrTrainingInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrTrainingInput = {
@@ -14243,6 +14406,7 @@ export type TenantUpdateWithoutHrTrainingInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrTrainingInput = {
@@ -14325,6 +14489,7 @@ export type TenantUncheckedUpdateWithoutHrTrainingInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrTrainingRecordInput = {
@@ -14407,6 +14572,7 @@ export type TenantCreateWithoutHrTrainingRecordInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrTrainingRecordInput = {
@@ -14489,6 +14655,7 @@ export type TenantUncheckedCreateWithoutHrTrainingRecordInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrTrainingRecordInput = {
@@ -14587,6 +14754,7 @@ export type TenantUpdateWithoutHrTrainingRecordInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrTrainingRecordInput = {
@@ -14669,6 +14837,7 @@ export type TenantUncheckedUpdateWithoutHrTrainingRecordInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrTravelRequestInput = {
@@ -14751,6 +14920,7 @@ export type TenantCreateWithoutHrTravelRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrTravelRequestInput = {
@@ -14833,6 +15003,7 @@ export type TenantUncheckedCreateWithoutHrTravelRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrTravelRequestInput = {
@@ -14931,6 +15102,7 @@ export type TenantUpdateWithoutHrTravelRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrTravelRequestInput = {
@@ -15013,6 +15185,7 @@ export type TenantUncheckedUpdateWithoutHrTravelRequestInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutHrVisitorInput = {
@@ -15095,6 +15268,7 @@ export type TenantCreateWithoutHrVisitorInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutHrVisitorInput = {
@@ -15177,6 +15351,7 @@ export type TenantUncheckedCreateWithoutHrVisitorInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutHrVisitorInput = {
@@ -15275,6 +15450,7 @@ export type TenantUpdateWithoutHrVisitorInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutHrVisitorInput = {
@@ -15357,6 +15533,7 @@ export type TenantUncheckedUpdateWithoutHrVisitorInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventoryCategoryInput = {
@@ -15439,6 +15616,7 @@ export type TenantCreateWithoutInventoryCategoryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventoryCategoryInput = {
@@ -15521,6 +15699,7 @@ export type TenantUncheckedCreateWithoutInventoryCategoryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventoryCategoryInput = {
@@ -15619,6 +15798,7 @@ export type TenantUpdateWithoutInventoryCategoryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventoryCategoryInput = {
@@ -15701,6 +15881,7 @@ export type TenantUncheckedUpdateWithoutInventoryCategoryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventoryItemInput = {
@@ -15783,6 +15964,7 @@ export type TenantCreateWithoutInventoryItemInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventoryItemInput = {
@@ -15865,6 +16047,7 @@ export type TenantUncheckedCreateWithoutInventoryItemInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventoryItemInput = {
@@ -15963,6 +16146,7 @@ export type TenantUpdateWithoutInventoryItemInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventoryItemInput = {
@@ -16045,6 +16229,7 @@ export type TenantUncheckedUpdateWithoutInventoryItemInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInventorySubcategoryInput = {
@@ -16127,6 +16312,7 @@ export type TenantCreateWithoutInventorySubcategoryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInventorySubcategoryInput = {
@@ -16209,6 +16395,7 @@ export type TenantUncheckedCreateWithoutInventorySubcategoryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInventorySubcategoryInput = {
@@ -16307,6 +16494,7 @@ export type TenantUpdateWithoutInventorySubcategoryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInventorySubcategoryInput = {
@@ -16389,6 +16577,7 @@ export type TenantUncheckedUpdateWithoutInventorySubcategoryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInvoiceInput = {
@@ -16471,6 +16660,7 @@ export type TenantCreateWithoutInvoiceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInvoiceInput = {
@@ -16553,6 +16743,7 @@ export type TenantUncheckedCreateWithoutInvoiceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInvoiceInput = {
@@ -16651,6 +16842,7 @@ export type TenantUpdateWithoutInvoiceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInvoiceInput = {
@@ -16733,6 +16925,7 @@ export type TenantUncheckedUpdateWithoutInvoiceInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutInvoicePaymentInput = {
@@ -16815,6 +17008,7 @@ export type TenantCreateWithoutInvoicePaymentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutInvoicePaymentInput = {
@@ -16897,6 +17091,7 @@ export type TenantUncheckedCreateWithoutInvoicePaymentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutInvoicePaymentInput = {
@@ -16995,6 +17190,7 @@ export type TenantUpdateWithoutInvoicePaymentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutInvoicePaymentInput = {
@@ -17077,6 +17273,7 @@ export type TenantUncheckedUpdateWithoutInvoicePaymentInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutItemSupplierInput = {
@@ -17159,6 +17356,7 @@ export type TenantCreateWithoutItemSupplierInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutItemSupplierInput = {
@@ -17241,6 +17439,7 @@ export type TenantUncheckedCreateWithoutItemSupplierInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutItemSupplierInput = {
@@ -17339,6 +17538,7 @@ export type TenantUpdateWithoutItemSupplierInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutItemSupplierInput = {
@@ -17421,6 +17621,7 @@ export type TenantUncheckedUpdateWithoutItemSupplierInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutLoginSessionInput = {
@@ -17503,6 +17704,7 @@ export type TenantCreateWithoutLoginSessionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutLoginSessionInput = {
@@ -17585,6 +17787,7 @@ export type TenantUncheckedCreateWithoutLoginSessionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutLoginSessionInput = {
@@ -17683,6 +17886,7 @@ export type TenantUpdateWithoutLoginSessionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutLoginSessionInput = {
@@ -17765,6 +17969,7 @@ export type TenantUncheckedUpdateWithoutLoginSessionInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutNotificationInput = {
@@ -17847,6 +18052,7 @@ export type TenantCreateWithoutNotificationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutNotificationInput = {
@@ -17929,6 +18135,7 @@ export type TenantUncheckedCreateWithoutNotificationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutNotificationInput = {
@@ -18027,6 +18234,7 @@ export type TenantUpdateWithoutNotificationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutNotificationInput = {
@@ -18109,6 +18317,7 @@ export type TenantUncheckedUpdateWithoutNotificationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutNotificationLogInput = {
@@ -18191,6 +18400,7 @@ export type TenantCreateWithoutNotificationLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutNotificationLogInput = {
@@ -18273,6 +18483,7 @@ export type TenantUncheckedCreateWithoutNotificationLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutNotificationLogInput = {
@@ -18371,6 +18582,7 @@ export type TenantUpdateWithoutNotificationLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutNotificationLogInput = {
@@ -18453,6 +18665,7 @@ export type TenantUncheckedUpdateWithoutNotificationLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutOtpCodeInput = {
@@ -18535,6 +18748,7 @@ export type TenantCreateWithoutOtpCodeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutOtpCodeInput = {
@@ -18617,6 +18831,7 @@ export type TenantUncheckedCreateWithoutOtpCodeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutOtpCodeInput = {
@@ -18715,6 +18930,7 @@ export type TenantUpdateWithoutOtpCodeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutOtpCodeInput = {
@@ -18797,6 +19013,7 @@ export type TenantUncheckedUpdateWithoutOtpCodeInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPasswordResetOtpInput = {
@@ -18879,6 +19096,7 @@ export type TenantCreateWithoutPasswordResetOtpInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPasswordResetOtpInput = {
@@ -18961,6 +19179,7 @@ export type TenantUncheckedCreateWithoutPasswordResetOtpInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPasswordResetOtpInput = {
@@ -19059,6 +19278,7 @@ export type TenantUpdateWithoutPasswordResetOtpInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPasswordResetOtpInput = {
@@ -19141,6 +19361,7 @@ export type TenantUncheckedUpdateWithoutPasswordResetOtpInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPasswordResetTokenInput = {
@@ -19223,6 +19444,7 @@ export type TenantCreateWithoutPasswordResetTokenInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPasswordResetTokenInput = {
@@ -19305,6 +19527,7 @@ export type TenantUncheckedCreateWithoutPasswordResetTokenInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPasswordResetTokenInput = {
@@ -19403,6 +19626,7 @@ export type TenantUpdateWithoutPasswordResetTokenInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPasswordResetTokenInput = {
@@ -19485,6 +19709,7 @@ export type TenantUncheckedUpdateWithoutPasswordResetTokenInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPmScheduleInput = {
@@ -19567,6 +19792,7 @@ export type TenantCreateWithoutPmScheduleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPmScheduleInput = {
@@ -19649,6 +19875,7 @@ export type TenantUncheckedCreateWithoutPmScheduleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPmScheduleInput = {
@@ -19747,6 +19974,7 @@ export type TenantUpdateWithoutPmScheduleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPmScheduleInput = {
@@ -19829,6 +20057,7 @@ export type TenantUncheckedUpdateWithoutPmScheduleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPriceBookInput = {
@@ -19911,6 +20140,7 @@ export type TenantCreateWithoutPriceBookInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPriceBookInput = {
@@ -19993,6 +20223,7 @@ export type TenantUncheckedCreateWithoutPriceBookInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPriceBookInput = {
@@ -20091,6 +20322,7 @@ export type TenantUpdateWithoutPriceBookInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPriceBookInput = {
@@ -20173,6 +20405,7 @@ export type TenantUncheckedUpdateWithoutPriceBookInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPriceBookEntryInput = {
@@ -20255,6 +20488,7 @@ export type TenantCreateWithoutPriceBookEntryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPriceBookEntryInput = {
@@ -20337,6 +20571,7 @@ export type TenantUncheckedCreateWithoutPriceBookEntryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPriceBookEntryInput = {
@@ -20435,6 +20670,7 @@ export type TenantUpdateWithoutPriceBookEntryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPriceBookEntryInput = {
@@ -20517,6 +20753,7 @@ export type TenantUncheckedUpdateWithoutPriceBookEntryInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutPurchaseOrderInput = {
@@ -20599,6 +20836,7 @@ export type TenantCreateWithoutPurchaseOrderInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutPurchaseOrderInput = {
@@ -20681,6 +20919,7 @@ export type TenantUncheckedCreateWithoutPurchaseOrderInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutPurchaseOrderInput = {
@@ -20779,6 +21018,7 @@ export type TenantUpdateWithoutPurchaseOrderInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutPurchaseOrderInput = {
@@ -20861,6 +21101,7 @@ export type TenantUncheckedUpdateWithoutPurchaseOrderInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutQuotationInput = {
@@ -20943,6 +21184,7 @@ export type TenantCreateWithoutQuotationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutQuotationInput = {
@@ -21025,6 +21267,7 @@ export type TenantUncheckedCreateWithoutQuotationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutQuotationInput = {
@@ -21123,6 +21366,7 @@ export type TenantUpdateWithoutQuotationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutQuotationInput = {
@@ -21205,6 +21449,7 @@ export type TenantUncheckedUpdateWithoutQuotationInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutScanLogInput = {
@@ -21287,6 +21532,7 @@ export type TenantCreateWithoutScanLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutScanLogInput = {
@@ -21369,6 +21615,7 @@ export type TenantUncheckedCreateWithoutScanLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutScanLogInput = {
@@ -21467,6 +21714,7 @@ export type TenantUpdateWithoutScanLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutScanLogInput = {
@@ -21549,6 +21797,7 @@ export type TenantUncheckedUpdateWithoutScanLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutStockMovementInput = {
@@ -21631,6 +21880,7 @@ export type TenantCreateWithoutStockMovementInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutStockMovementInput = {
@@ -21713,6 +21963,7 @@ export type TenantUncheckedCreateWithoutStockMovementInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutStockMovementInput = {
@@ -21811,6 +22062,7 @@ export type TenantUpdateWithoutStockMovementInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutStockMovementInput = {
@@ -21893,6 +22145,7 @@ export type TenantUncheckedUpdateWithoutStockMovementInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutUserInput = {
@@ -21975,6 +22228,7 @@ export type TenantCreateWithoutUserInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutUserInput = {
@@ -22057,6 +22311,7 @@ export type TenantUncheckedCreateWithoutUserInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutUserInput = {
@@ -22155,6 +22410,7 @@ export type TenantUpdateWithoutUserInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutUserInput = {
@@ -22237,6 +22493,7 @@ export type TenantUncheckedUpdateWithoutUserInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutVehicleInput = {
@@ -22319,6 +22576,7 @@ export type TenantCreateWithoutVehicleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutVehicleInput = {
@@ -22401,6 +22659,7 @@ export type TenantUncheckedCreateWithoutVehicleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutVehicleInput = {
@@ -22499,6 +22758,7 @@ export type TenantUpdateWithoutVehicleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutVehicleInput = {
@@ -22581,6 +22841,7 @@ export type TenantUncheckedUpdateWithoutVehicleInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWarehouseInput = {
@@ -22663,6 +22924,7 @@ export type TenantCreateWithoutWarehouseInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWarehouseInput = {
@@ -22745,6 +23007,7 @@ export type TenantUncheckedCreateWithoutWarehouseInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWarehouseInput = {
@@ -22843,6 +23106,7 @@ export type TenantUpdateWithoutWarehouseInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWarehouseInput = {
@@ -22925,6 +23189,7 @@ export type TenantUncheckedUpdateWithoutWarehouseInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWarehouseStockInput = {
@@ -23007,6 +23272,7 @@ export type TenantCreateWithoutWarehouseStockInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWarehouseStockInput = {
@@ -23089,6 +23355,7 @@ export type TenantUncheckedCreateWithoutWarehouseStockInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWarehouseStockInput = {
@@ -23187,6 +23454,7 @@ export type TenantUpdateWithoutWarehouseStockInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWarehouseStockInput = {
@@ -23269,6 +23537,7 @@ export type TenantUncheckedUpdateWithoutWarehouseStockInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsAppConfigInput = {
@@ -23351,6 +23620,7 @@ export type TenantCreateWithoutWhatsAppConfigInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsAppConfigInput = {
@@ -23433,6 +23703,7 @@ export type TenantUncheckedCreateWithoutWhatsAppConfigInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsAppConfigInput = {
@@ -23531,6 +23802,7 @@ export type TenantUpdateWithoutWhatsAppConfigInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsAppConfigInput = {
@@ -23613,6 +23885,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppConfigInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsAppDeliveryLogInput = {
@@ -23695,6 +23968,7 @@ export type TenantCreateWithoutWhatsAppDeliveryLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsAppDeliveryLogInput = {
@@ -23777,6 +24051,7 @@ export type TenantUncheckedCreateWithoutWhatsAppDeliveryLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsAppDeliveryLogInput = {
@@ -23875,6 +24150,7 @@ export type TenantUpdateWithoutWhatsAppDeliveryLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsAppDeliveryLogInput = {
@@ -23957,6 +24233,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppDeliveryLogInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsAppMessageInput = {
@@ -24039,6 +24316,7 @@ export type TenantCreateWithoutWhatsAppMessageInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsAppMessageInput = {
@@ -24121,6 +24399,7 @@ export type TenantUncheckedCreateWithoutWhatsAppMessageInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsAppMessageInput = {
@@ -24219,6 +24498,7 @@ export type TenantUpdateWithoutWhatsAppMessageInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsAppMessageInput = {
@@ -24301,6 +24581,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppMessageInput = {
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsAppSessionInput = {
@@ -24383,6 +24664,7 @@ export type TenantCreateWithoutWhatsAppSessionInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsAppSessionInput = {
@@ -24465,6 +24747,7 @@ export type TenantUncheckedCreateWithoutWhatsAppSessionInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsAppSessionInput = {
@@ -24563,6 +24846,7 @@ export type TenantUpdateWithoutWhatsAppSessionInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsAppSessionInput = {
@@ -24645,6 +24929,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppSessionInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWhatsAppTemplateInput = {
@@ -24727,6 +25012,7 @@ export type TenantCreateWithoutWhatsAppTemplateInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWhatsAppTemplateInput = {
@@ -24809,6 +25095,7 @@ export type TenantUncheckedCreateWithoutWhatsAppTemplateInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWhatsAppTemplateInput = {
@@ -24907,6 +25194,7 @@ export type TenantUpdateWithoutWhatsAppTemplateInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWhatsAppTemplateInput = {
@@ -24989,6 +25277,7 @@ export type TenantUncheckedUpdateWithoutWhatsAppTemplateInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantCreateWithoutWorkOrderInput = {
@@ -25071,6 +25360,7 @@ export type TenantCreateWithoutWorkOrderInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
   WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionCreateNestedManyWithoutTenantInput
 }
 
 export type TenantUncheckedCreateWithoutWorkOrderInput = {
@@ -25153,6 +25443,7 @@ export type TenantUncheckedCreateWithoutWorkOrderInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  Inspection?: Prisma.InspectionUncheckedCreateNestedManyWithoutTenantInput
 }
 
 export type TenantCreateOrConnectWithoutWorkOrderInput = {
@@ -25251,6 +25542,7 @@ export type TenantUpdateWithoutWorkOrderInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
   WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUpdateManyWithoutTenantNestedInput
 }
 
 export type TenantUncheckedUpdateWithoutWorkOrderInput = {
@@ -25333,6 +25625,355 @@ export type TenantUncheckedUpdateWithoutWorkOrderInput = {
   WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
   WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  Inspection?: Prisma.InspectionUncheckedUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantCreateWithoutInspectionInput = {
+  id: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogCreateNestedManyWithoutTenantInput
+  AuthAuditLog?: Prisma.AuthAuditLogCreateNestedManyWithoutTenantInput
+  BroadcastLog?: Prisma.BroadcastLogCreateNestedManyWithoutTenantInput
+  ChecklistTemplate?: Prisma.ChecklistTemplateCreateNestedManyWithoutTenantInput
+  Complaint?: Prisma.ComplaintCreateNestedManyWithoutTenantInput
+  ComplaintTimeline?: Prisma.ComplaintTimelineCreateNestedManyWithoutTenantInput
+  ConversationThread?: Prisma.ConversationThreadCreateNestedManyWithoutTenantInput
+  Customer?: Prisma.CustomerCreateNestedManyWithoutTenantInput
+  CustomerFeedback?: Prisma.CustomerFeedbackCreateNestedManyWithoutTenantInput
+  CustomerReport?: Prisma.CustomerReportCreateNestedManyWithoutTenantInput
+  Department?: Prisma.DepartmentCreateNestedManyWithoutTenantInput
+  Device?: Prisma.DeviceCreateNestedManyWithoutTenantInput
+  DeviceToken?: Prisma.DeviceTokenCreateNestedManyWithoutTenantInput
+  EmailLog?: Prisma.EmailLogCreateNestedManyWithoutTenantInput
+  EmailTemplate?: Prisma.EmailTemplateCreateNestedManyWithoutTenantInput
+  Equipment?: Prisma.EquipmentCreateNestedManyWithoutTenantInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeCreateNestedManyWithoutTenantInput
+  HrAnnouncement?: Prisma.HrAnnouncementCreateNestedManyWithoutTenantInput
+  HrAssetAssignment?: Prisma.HrAssetAssignmentCreateNestedManyWithoutTenantInput
+  HrCandidate?: Prisma.HrCandidateCreateNestedManyWithoutTenantInput
+  HrDisciplinaryAction?: Prisma.HrDisciplinaryActionCreateNestedManyWithoutTenantInput
+  HrEmployee?: Prisma.HrEmployeeCreateNestedManyWithoutTenantInput
+  HrEmployeeDocument?: Prisma.HrEmployeeDocumentCreateNestedManyWithoutTenantInput
+  HrExpenseClaim?: Prisma.HrExpenseClaimCreateNestedManyWithoutTenantInput
+  HrHoliday?: Prisma.HrHolidayCreateNestedManyWithoutTenantInput
+  HrJobPosition?: Prisma.HrJobPositionCreateNestedManyWithoutTenantInput
+  HrLeaveBalance?: Prisma.HrLeaveBalanceCreateNestedManyWithoutTenantInput
+  HrLeaveRequest?: Prisma.HrLeaveRequestCreateNestedManyWithoutTenantInput
+  HrLeaveType?: Prisma.HrLeaveTypeCreateNestedManyWithoutTenantInput
+  HrMedicalRecord?: Prisma.HrMedicalRecordCreateNestedManyWithoutTenantInput
+  HrOvertimeRequest?: Prisma.HrOvertimeRequestCreateNestedManyWithoutTenantInput
+  HrPayroll?: Prisma.HrPayrollCreateNestedManyWithoutTenantInput
+  HrPerformanceReview?: Prisma.HrPerformanceReviewCreateNestedManyWithoutTenantInput
+  HrShift?: Prisma.HrShiftCreateNestedManyWithoutTenantInput
+  HrShiftSchedule?: Prisma.HrShiftScheduleCreateNestedManyWithoutTenantInput
+  HrTraining?: Prisma.HrTrainingCreateNestedManyWithoutTenantInput
+  HrTrainingRecord?: Prisma.HrTrainingRecordCreateNestedManyWithoutTenantInput
+  HrTravelRequest?: Prisma.HrTravelRequestCreateNestedManyWithoutTenantInput
+  HrVisitor?: Prisma.HrVisitorCreateNestedManyWithoutTenantInput
+  InventoryCategory?: Prisma.InventoryCategoryCreateNestedManyWithoutTenantInput
+  InventoryItem?: Prisma.InventoryItemCreateNestedManyWithoutTenantInput
+  InventorySubcategory?: Prisma.InventorySubcategoryCreateNestedManyWithoutTenantInput
+  Invoice?: Prisma.InvoiceCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentCreateNestedManyWithoutTenantInput
+  ItemSupplier?: Prisma.ItemSupplierCreateNestedManyWithoutTenantInput
+  LoginSession?: Prisma.LoginSessionCreateNestedManyWithoutTenantInput
+  Notification?: Prisma.NotificationCreateNestedManyWithoutTenantInput
+  NotificationLog?: Prisma.NotificationLogCreateNestedManyWithoutTenantInput
+  OtpCode?: Prisma.OtpCodeCreateNestedManyWithoutTenantInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpCreateNestedManyWithoutTenantInput
+  PasswordResetToken?: Prisma.PasswordResetTokenCreateNestedManyWithoutTenantInput
+  PmSchedule?: Prisma.PmScheduleCreateNestedManyWithoutTenantInput
+  PriceBook?: Prisma.PriceBookCreateNestedManyWithoutTenantInput
+  PriceBookEntry?: Prisma.PriceBookEntryCreateNestedManyWithoutTenantInput
+  PurchaseOrder?: Prisma.PurchaseOrderCreateNestedManyWithoutTenantInput
+  Quotation?: Prisma.QuotationCreateNestedManyWithoutTenantInput
+  ScanLog?: Prisma.ScanLogCreateNestedManyWithoutTenantInput
+  StockMovement?: Prisma.StockMovementCreateNestedManyWithoutTenantInput
+  User?: Prisma.UserCreateNestedManyWithoutTenantInput
+  Vehicle?: Prisma.VehicleCreateNestedManyWithoutTenantInput
+  Warehouse?: Prisma.WarehouseCreateNestedManyWithoutTenantInput
+  WarehouseStock?: Prisma.WarehouseStockCreateNestedManyWithoutTenantInput
+  WhatsAppConfig?: Prisma.WhatsAppConfigCreateNestedOneWithoutTenantInput
+  WhatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogCreateNestedManyWithoutTenantInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageCreateNestedManyWithoutTenantInput
+  WhatsAppSession?: Prisma.WhatsAppSessionCreateNestedManyWithoutTenantInput
+  WhatsAppTemplate?: Prisma.WhatsAppTemplateCreateNestedManyWithoutTenantInput
+  WorkOrder?: Prisma.WorkOrderCreateNestedManyWithoutTenantInput
+}
+
+export type TenantUncheckedCreateWithoutInspectionInput = {
+  id: string
+  name: string
+  domain: string
+  logo?: string | null
+  address?: string | null
+  phone?: string | null
+  email?: string | null
+  isActive?: boolean
+  plan?: string
+  maxUsers?: number
+  createdAt?: Date | string
+  updatedAt: Date | string
+  AuditLog?: Prisma.AuditLogUncheckedCreateNestedManyWithoutTenantInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedCreateNestedManyWithoutTenantInput
+  BroadcastLog?: Prisma.BroadcastLogUncheckedCreateNestedManyWithoutTenantInput
+  ChecklistTemplate?: Prisma.ChecklistTemplateUncheckedCreateNestedManyWithoutTenantInput
+  Complaint?: Prisma.ComplaintUncheckedCreateNestedManyWithoutTenantInput
+  ComplaintTimeline?: Prisma.ComplaintTimelineUncheckedCreateNestedManyWithoutTenantInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedCreateNestedManyWithoutTenantInput
+  Customer?: Prisma.CustomerUncheckedCreateNestedManyWithoutTenantInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedCreateNestedManyWithoutTenantInput
+  CustomerReport?: Prisma.CustomerReportUncheckedCreateNestedManyWithoutTenantInput
+  Department?: Prisma.DepartmentUncheckedCreateNestedManyWithoutTenantInput
+  Device?: Prisma.DeviceUncheckedCreateNestedManyWithoutTenantInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedCreateNestedManyWithoutTenantInput
+  EmailLog?: Prisma.EmailLogUncheckedCreateNestedManyWithoutTenantInput
+  EmailTemplate?: Prisma.EmailTemplateUncheckedCreateNestedManyWithoutTenantInput
+  Equipment?: Prisma.EquipmentUncheckedCreateNestedManyWithoutTenantInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedCreateNestedManyWithoutTenantInput
+  HrAnnouncement?: Prisma.HrAnnouncementUncheckedCreateNestedManyWithoutTenantInput
+  HrAssetAssignment?: Prisma.HrAssetAssignmentUncheckedCreateNestedManyWithoutTenantInput
+  HrCandidate?: Prisma.HrCandidateUncheckedCreateNestedManyWithoutTenantInput
+  HrDisciplinaryAction?: Prisma.HrDisciplinaryActionUncheckedCreateNestedManyWithoutTenantInput
+  HrEmployee?: Prisma.HrEmployeeUncheckedCreateNestedManyWithoutTenantInput
+  HrEmployeeDocument?: Prisma.HrEmployeeDocumentUncheckedCreateNestedManyWithoutTenantInput
+  HrExpenseClaim?: Prisma.HrExpenseClaimUncheckedCreateNestedManyWithoutTenantInput
+  HrHoliday?: Prisma.HrHolidayUncheckedCreateNestedManyWithoutTenantInput
+  HrJobPosition?: Prisma.HrJobPositionUncheckedCreateNestedManyWithoutTenantInput
+  HrLeaveBalance?: Prisma.HrLeaveBalanceUncheckedCreateNestedManyWithoutTenantInput
+  HrLeaveRequest?: Prisma.HrLeaveRequestUncheckedCreateNestedManyWithoutTenantInput
+  HrLeaveType?: Prisma.HrLeaveTypeUncheckedCreateNestedManyWithoutTenantInput
+  HrMedicalRecord?: Prisma.HrMedicalRecordUncheckedCreateNestedManyWithoutTenantInput
+  HrOvertimeRequest?: Prisma.HrOvertimeRequestUncheckedCreateNestedManyWithoutTenantInput
+  HrPayroll?: Prisma.HrPayrollUncheckedCreateNestedManyWithoutTenantInput
+  HrPerformanceReview?: Prisma.HrPerformanceReviewUncheckedCreateNestedManyWithoutTenantInput
+  HrShift?: Prisma.HrShiftUncheckedCreateNestedManyWithoutTenantInput
+  HrShiftSchedule?: Prisma.HrShiftScheduleUncheckedCreateNestedManyWithoutTenantInput
+  HrTraining?: Prisma.HrTrainingUncheckedCreateNestedManyWithoutTenantInput
+  HrTrainingRecord?: Prisma.HrTrainingRecordUncheckedCreateNestedManyWithoutTenantInput
+  HrTravelRequest?: Prisma.HrTravelRequestUncheckedCreateNestedManyWithoutTenantInput
+  HrVisitor?: Prisma.HrVisitorUncheckedCreateNestedManyWithoutTenantInput
+  InventoryCategory?: Prisma.InventoryCategoryUncheckedCreateNestedManyWithoutTenantInput
+  InventoryItem?: Prisma.InventoryItemUncheckedCreateNestedManyWithoutTenantInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUncheckedCreateNestedManyWithoutTenantInput
+  Invoice?: Prisma.InvoiceUncheckedCreateNestedManyWithoutTenantInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedCreateNestedManyWithoutTenantInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedCreateNestedManyWithoutTenantInput
+  LoginSession?: Prisma.LoginSessionUncheckedCreateNestedManyWithoutTenantInput
+  Notification?: Prisma.NotificationUncheckedCreateNestedManyWithoutTenantInput
+  NotificationLog?: Prisma.NotificationLogUncheckedCreateNestedManyWithoutTenantInput
+  OtpCode?: Prisma.OtpCodeUncheckedCreateNestedManyWithoutTenantInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedCreateNestedManyWithoutTenantInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutTenantInput
+  PmSchedule?: Prisma.PmScheduleUncheckedCreateNestedManyWithoutTenantInput
+  PriceBook?: Prisma.PriceBookUncheckedCreateNestedManyWithoutTenantInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedCreateNestedManyWithoutTenantInput
+  PurchaseOrder?: Prisma.PurchaseOrderUncheckedCreateNestedManyWithoutTenantInput
+  Quotation?: Prisma.QuotationUncheckedCreateNestedManyWithoutTenantInput
+  ScanLog?: Prisma.ScanLogUncheckedCreateNestedManyWithoutTenantInput
+  StockMovement?: Prisma.StockMovementUncheckedCreateNestedManyWithoutTenantInput
+  User?: Prisma.UserUncheckedCreateNestedManyWithoutTenantInput
+  Vehicle?: Prisma.VehicleUncheckedCreateNestedManyWithoutTenantInput
+  Warehouse?: Prisma.WarehouseUncheckedCreateNestedManyWithoutTenantInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedCreateNestedManyWithoutTenantInput
+  WhatsAppConfig?: Prisma.WhatsAppConfigUncheckedCreateNestedOneWithoutTenantInput
+  WhatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogUncheckedCreateNestedManyWithoutTenantInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedCreateNestedManyWithoutTenantInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedCreateNestedManyWithoutTenantInput
+  WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedCreateNestedManyWithoutTenantInput
+  WorkOrder?: Prisma.WorkOrderUncheckedCreateNestedManyWithoutTenantInput
+}
+
+export type TenantCreateOrConnectWithoutInspectionInput = {
+  where: Prisma.TenantWhereUniqueInput
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInspectionInput, Prisma.TenantUncheckedCreateWithoutInspectionInput>
+}
+
+export type TenantUpsertWithoutInspectionInput = {
+  update: Prisma.XOR<Prisma.TenantUpdateWithoutInspectionInput, Prisma.TenantUncheckedUpdateWithoutInspectionInput>
+  create: Prisma.XOR<Prisma.TenantCreateWithoutInspectionInput, Prisma.TenantUncheckedCreateWithoutInspectionInput>
+  where?: Prisma.TenantWhereInput
+}
+
+export type TenantUpdateToOneWithWhereWithoutInspectionInput = {
+  where?: Prisma.TenantWhereInput
+  data: Prisma.XOR<Prisma.TenantUpdateWithoutInspectionInput, Prisma.TenantUncheckedUpdateWithoutInspectionInput>
+}
+
+export type TenantUpdateWithoutInspectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUpdateManyWithoutTenantNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUpdateManyWithoutTenantNestedInput
+  BroadcastLog?: Prisma.BroadcastLogUpdateManyWithoutTenantNestedInput
+  ChecklistTemplate?: Prisma.ChecklistTemplateUpdateManyWithoutTenantNestedInput
+  Complaint?: Prisma.ComplaintUpdateManyWithoutTenantNestedInput
+  ComplaintTimeline?: Prisma.ComplaintTimelineUpdateManyWithoutTenantNestedInput
+  ConversationThread?: Prisma.ConversationThreadUpdateManyWithoutTenantNestedInput
+  Customer?: Prisma.CustomerUpdateManyWithoutTenantNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUpdateManyWithoutTenantNestedInput
+  CustomerReport?: Prisma.CustomerReportUpdateManyWithoutTenantNestedInput
+  Department?: Prisma.DepartmentUpdateManyWithoutTenantNestedInput
+  Device?: Prisma.DeviceUpdateManyWithoutTenantNestedInput
+  DeviceToken?: Prisma.DeviceTokenUpdateManyWithoutTenantNestedInput
+  EmailLog?: Prisma.EmailLogUpdateManyWithoutTenantNestedInput
+  EmailTemplate?: Prisma.EmailTemplateUpdateManyWithoutTenantNestedInput
+  Equipment?: Prisma.EquipmentUpdateManyWithoutTenantNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUpdateManyWithoutTenantNestedInput
+  HrAnnouncement?: Prisma.HrAnnouncementUpdateManyWithoutTenantNestedInput
+  HrAssetAssignment?: Prisma.HrAssetAssignmentUpdateManyWithoutTenantNestedInput
+  HrCandidate?: Prisma.HrCandidateUpdateManyWithoutTenantNestedInput
+  HrDisciplinaryAction?: Prisma.HrDisciplinaryActionUpdateManyWithoutTenantNestedInput
+  HrEmployee?: Prisma.HrEmployeeUpdateManyWithoutTenantNestedInput
+  HrEmployeeDocument?: Prisma.HrEmployeeDocumentUpdateManyWithoutTenantNestedInput
+  HrExpenseClaim?: Prisma.HrExpenseClaimUpdateManyWithoutTenantNestedInput
+  HrHoliday?: Prisma.HrHolidayUpdateManyWithoutTenantNestedInput
+  HrJobPosition?: Prisma.HrJobPositionUpdateManyWithoutTenantNestedInput
+  HrLeaveBalance?: Prisma.HrLeaveBalanceUpdateManyWithoutTenantNestedInput
+  HrLeaveRequest?: Prisma.HrLeaveRequestUpdateManyWithoutTenantNestedInput
+  HrLeaveType?: Prisma.HrLeaveTypeUpdateManyWithoutTenantNestedInput
+  HrMedicalRecord?: Prisma.HrMedicalRecordUpdateManyWithoutTenantNestedInput
+  HrOvertimeRequest?: Prisma.HrOvertimeRequestUpdateManyWithoutTenantNestedInput
+  HrPayroll?: Prisma.HrPayrollUpdateManyWithoutTenantNestedInput
+  HrPerformanceReview?: Prisma.HrPerformanceReviewUpdateManyWithoutTenantNestedInput
+  HrShift?: Prisma.HrShiftUpdateManyWithoutTenantNestedInput
+  HrShiftSchedule?: Prisma.HrShiftScheduleUpdateManyWithoutTenantNestedInput
+  HrTraining?: Prisma.HrTrainingUpdateManyWithoutTenantNestedInput
+  HrTrainingRecord?: Prisma.HrTrainingRecordUpdateManyWithoutTenantNestedInput
+  HrTravelRequest?: Prisma.HrTravelRequestUpdateManyWithoutTenantNestedInput
+  HrVisitor?: Prisma.HrVisitorUpdateManyWithoutTenantNestedInput
+  InventoryCategory?: Prisma.InventoryCategoryUpdateManyWithoutTenantNestedInput
+  InventoryItem?: Prisma.InventoryItemUpdateManyWithoutTenantNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUpdateManyWithoutTenantNestedInput
+  Invoice?: Prisma.InvoiceUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUpdateManyWithoutTenantNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUpdateManyWithoutTenantNestedInput
+  LoginSession?: Prisma.LoginSessionUpdateManyWithoutTenantNestedInput
+  Notification?: Prisma.NotificationUpdateManyWithoutTenantNestedInput
+  NotificationLog?: Prisma.NotificationLogUpdateManyWithoutTenantNestedInput
+  OtpCode?: Prisma.OtpCodeUpdateManyWithoutTenantNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUpdateManyWithoutTenantNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUpdateManyWithoutTenantNestedInput
+  PmSchedule?: Prisma.PmScheduleUpdateManyWithoutTenantNestedInput
+  PriceBook?: Prisma.PriceBookUpdateManyWithoutTenantNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUpdateManyWithoutTenantNestedInput
+  PurchaseOrder?: Prisma.PurchaseOrderUpdateManyWithoutTenantNestedInput
+  Quotation?: Prisma.QuotationUpdateManyWithoutTenantNestedInput
+  ScanLog?: Prisma.ScanLogUpdateManyWithoutTenantNestedInput
+  StockMovement?: Prisma.StockMovementUpdateManyWithoutTenantNestedInput
+  User?: Prisma.UserUpdateManyWithoutTenantNestedInput
+  Vehicle?: Prisma.VehicleUpdateManyWithoutTenantNestedInput
+  Warehouse?: Prisma.WarehouseUpdateManyWithoutTenantNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUpdateManyWithoutTenantNestedInput
+  WhatsAppConfig?: Prisma.WhatsAppConfigUpdateOneWithoutTenantNestedInput
+  WhatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogUpdateManyWithoutTenantNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUpdateManyWithoutTenantNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUpdateManyWithoutTenantNestedInput
+  WhatsAppTemplate?: Prisma.WhatsAppTemplateUpdateManyWithoutTenantNestedInput
+  WorkOrder?: Prisma.WorkOrderUpdateManyWithoutTenantNestedInput
+}
+
+export type TenantUncheckedUpdateWithoutInspectionInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  domain?: Prisma.StringFieldUpdateOperationsInput | string
+  logo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  plan?: Prisma.StringFieldUpdateOperationsInput | string
+  maxUsers?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  AuditLog?: Prisma.AuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  AuthAuditLog?: Prisma.AuthAuditLogUncheckedUpdateManyWithoutTenantNestedInput
+  BroadcastLog?: Prisma.BroadcastLogUncheckedUpdateManyWithoutTenantNestedInput
+  ChecklistTemplate?: Prisma.ChecklistTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  Complaint?: Prisma.ComplaintUncheckedUpdateManyWithoutTenantNestedInput
+  ComplaintTimeline?: Prisma.ComplaintTimelineUncheckedUpdateManyWithoutTenantNestedInput
+  ConversationThread?: Prisma.ConversationThreadUncheckedUpdateManyWithoutTenantNestedInput
+  Customer?: Prisma.CustomerUncheckedUpdateManyWithoutTenantNestedInput
+  CustomerFeedback?: Prisma.CustomerFeedbackUncheckedUpdateManyWithoutTenantNestedInput
+  CustomerReport?: Prisma.CustomerReportUncheckedUpdateManyWithoutTenantNestedInput
+  Department?: Prisma.DepartmentUncheckedUpdateManyWithoutTenantNestedInput
+  Device?: Prisma.DeviceUncheckedUpdateManyWithoutTenantNestedInput
+  DeviceToken?: Prisma.DeviceTokenUncheckedUpdateManyWithoutTenantNestedInput
+  EmailLog?: Prisma.EmailLogUncheckedUpdateManyWithoutTenantNestedInput
+  EmailTemplate?: Prisma.EmailTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  Equipment?: Prisma.EquipmentUncheckedUpdateManyWithoutTenantNestedInput
+  EquipmentQrCode?: Prisma.EquipmentQrCodeUncheckedUpdateManyWithoutTenantNestedInput
+  HrAnnouncement?: Prisma.HrAnnouncementUncheckedUpdateManyWithoutTenantNestedInput
+  HrAssetAssignment?: Prisma.HrAssetAssignmentUncheckedUpdateManyWithoutTenantNestedInput
+  HrCandidate?: Prisma.HrCandidateUncheckedUpdateManyWithoutTenantNestedInput
+  HrDisciplinaryAction?: Prisma.HrDisciplinaryActionUncheckedUpdateManyWithoutTenantNestedInput
+  HrEmployee?: Prisma.HrEmployeeUncheckedUpdateManyWithoutTenantNestedInput
+  HrEmployeeDocument?: Prisma.HrEmployeeDocumentUncheckedUpdateManyWithoutTenantNestedInput
+  HrExpenseClaim?: Prisma.HrExpenseClaimUncheckedUpdateManyWithoutTenantNestedInput
+  HrHoliday?: Prisma.HrHolidayUncheckedUpdateManyWithoutTenantNestedInput
+  HrJobPosition?: Prisma.HrJobPositionUncheckedUpdateManyWithoutTenantNestedInput
+  HrLeaveBalance?: Prisma.HrLeaveBalanceUncheckedUpdateManyWithoutTenantNestedInput
+  HrLeaveRequest?: Prisma.HrLeaveRequestUncheckedUpdateManyWithoutTenantNestedInput
+  HrLeaveType?: Prisma.HrLeaveTypeUncheckedUpdateManyWithoutTenantNestedInput
+  HrMedicalRecord?: Prisma.HrMedicalRecordUncheckedUpdateManyWithoutTenantNestedInput
+  HrOvertimeRequest?: Prisma.HrOvertimeRequestUncheckedUpdateManyWithoutTenantNestedInput
+  HrPayroll?: Prisma.HrPayrollUncheckedUpdateManyWithoutTenantNestedInput
+  HrPerformanceReview?: Prisma.HrPerformanceReviewUncheckedUpdateManyWithoutTenantNestedInput
+  HrShift?: Prisma.HrShiftUncheckedUpdateManyWithoutTenantNestedInput
+  HrShiftSchedule?: Prisma.HrShiftScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  HrTraining?: Prisma.HrTrainingUncheckedUpdateManyWithoutTenantNestedInput
+  HrTrainingRecord?: Prisma.HrTrainingRecordUncheckedUpdateManyWithoutTenantNestedInput
+  HrTravelRequest?: Prisma.HrTravelRequestUncheckedUpdateManyWithoutTenantNestedInput
+  HrVisitor?: Prisma.HrVisitorUncheckedUpdateManyWithoutTenantNestedInput
+  InventoryCategory?: Prisma.InventoryCategoryUncheckedUpdateManyWithoutTenantNestedInput
+  InventoryItem?: Prisma.InventoryItemUncheckedUpdateManyWithoutTenantNestedInput
+  InventorySubcategory?: Prisma.InventorySubcategoryUncheckedUpdateManyWithoutTenantNestedInput
+  Invoice?: Prisma.InvoiceUncheckedUpdateManyWithoutTenantNestedInput
+  InvoicePayment?: Prisma.InvoicePaymentUncheckedUpdateManyWithoutTenantNestedInput
+  ItemSupplier?: Prisma.ItemSupplierUncheckedUpdateManyWithoutTenantNestedInput
+  LoginSession?: Prisma.LoginSessionUncheckedUpdateManyWithoutTenantNestedInput
+  Notification?: Prisma.NotificationUncheckedUpdateManyWithoutTenantNestedInput
+  NotificationLog?: Prisma.NotificationLogUncheckedUpdateManyWithoutTenantNestedInput
+  OtpCode?: Prisma.OtpCodeUncheckedUpdateManyWithoutTenantNestedInput
+  PasswordResetOtp?: Prisma.PasswordResetOtpUncheckedUpdateManyWithoutTenantNestedInput
+  PasswordResetToken?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutTenantNestedInput
+  PmSchedule?: Prisma.PmScheduleUncheckedUpdateManyWithoutTenantNestedInput
+  PriceBook?: Prisma.PriceBookUncheckedUpdateManyWithoutTenantNestedInput
+  PriceBookEntry?: Prisma.PriceBookEntryUncheckedUpdateManyWithoutTenantNestedInput
+  PurchaseOrder?: Prisma.PurchaseOrderUncheckedUpdateManyWithoutTenantNestedInput
+  Quotation?: Prisma.QuotationUncheckedUpdateManyWithoutTenantNestedInput
+  ScanLog?: Prisma.ScanLogUncheckedUpdateManyWithoutTenantNestedInput
+  StockMovement?: Prisma.StockMovementUncheckedUpdateManyWithoutTenantNestedInput
+  User?: Prisma.UserUncheckedUpdateManyWithoutTenantNestedInput
+  Vehicle?: Prisma.VehicleUncheckedUpdateManyWithoutTenantNestedInput
+  Warehouse?: Prisma.WarehouseUncheckedUpdateManyWithoutTenantNestedInput
+  WarehouseStock?: Prisma.WarehouseStockUncheckedUpdateManyWithoutTenantNestedInput
+  WhatsAppConfig?: Prisma.WhatsAppConfigUncheckedUpdateOneWithoutTenantNestedInput
+  WhatsAppDeliveryLog?: Prisma.WhatsAppDeliveryLogUncheckedUpdateManyWithoutTenantNestedInput
+  WhatsAppMessage?: Prisma.WhatsAppMessageUncheckedUpdateManyWithoutTenantNestedInput
+  WhatsAppSession?: Prisma.WhatsAppSessionUncheckedUpdateManyWithoutTenantNestedInput
+  WhatsAppTemplate?: Prisma.WhatsAppTemplateUncheckedUpdateManyWithoutTenantNestedInput
+  WorkOrder?: Prisma.WorkOrderUncheckedUpdateManyWithoutTenantNestedInput
 }
 
 
@@ -25408,6 +26049,7 @@ export type TenantCountOutputType = {
   WhatsAppSession: number
   WhatsAppTemplate: number
   WorkOrder: number
+  Inspection: number
 }
 
 export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -25478,6 +26120,7 @@ export type TenantCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions
   WhatsAppSession?: boolean | TenantCountOutputTypeCountWhatsAppSessionArgs
   WhatsAppTemplate?: boolean | TenantCountOutputTypeCountWhatsAppTemplateArgs
   WorkOrder?: boolean | TenantCountOutputTypeCountWorkOrderArgs
+  Inspection?: boolean | TenantCountOutputTypeCountInspectionArgs
 }
 
 /**
@@ -25959,6 +26602,13 @@ export type TenantCountOutputTypeCountWorkOrderArgs<ExtArgs extends runtime.Type
   where?: Prisma.WorkOrderWhereInput
 }
 
+/**
+ * TenantCountOutputType without action
+ */
+export type TenantCountOutputTypeCountInspectionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.InspectionWhereInput
+}
+
 
 export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -26041,6 +26691,7 @@ export type TenantSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   WhatsAppSession?: boolean | Prisma.Tenant$WhatsAppSessionArgs<ExtArgs>
   WhatsAppTemplate?: boolean | Prisma.Tenant$WhatsAppTemplateArgs<ExtArgs>
   WorkOrder?: boolean | Prisma.Tenant$WorkOrderArgs<ExtArgs>
+  Inspection?: boolean | Prisma.Tenant$InspectionArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["tenant"]>
 
@@ -26159,6 +26810,7 @@ export type TenantInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   WhatsAppSession?: boolean | Prisma.Tenant$WhatsAppSessionArgs<ExtArgs>
   WhatsAppTemplate?: boolean | Prisma.Tenant$WhatsAppTemplateArgs<ExtArgs>
   WorkOrder?: boolean | Prisma.Tenant$WorkOrderArgs<ExtArgs>
+  Inspection?: boolean | Prisma.Tenant$InspectionArgs<ExtArgs>
   _count?: boolean | Prisma.TenantCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type TenantIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -26235,6 +26887,7 @@ export type $TenantPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs
     WhatsAppSession: Prisma.$WhatsAppSessionPayload<ExtArgs>[]
     WhatsAppTemplate: Prisma.$WhatsAppTemplatePayload<ExtArgs>[]
     WorkOrder: Prisma.$WorkOrderPayload<ExtArgs>[]
+    Inspection: Prisma.$InspectionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -26711,6 +27364,7 @@ export interface Prisma__TenantClient<T, Null = never, ExtArgs extends runtime.T
   WhatsAppSession<T extends Prisma.Tenant$WhatsAppSessionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$WhatsAppSessionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppSessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   WhatsAppTemplate<T extends Prisma.Tenant$WhatsAppTemplateArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$WhatsAppTemplateArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WhatsAppTemplatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   WorkOrder<T extends Prisma.Tenant$WorkOrderArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$WorkOrderArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$WorkOrderPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  Inspection<T extends Prisma.Tenant$InspectionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Tenant$InspectionArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InspectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -28767,6 +29421,30 @@ export type Tenant$WorkOrderArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.WorkOrderScalarFieldEnum | Prisma.WorkOrderScalarFieldEnum[]
+}
+
+/**
+ * Tenant.Inspection
+ */
+export type Tenant$InspectionArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Inspection
+   */
+  select?: Prisma.InspectionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Inspection
+   */
+  omit?: Prisma.InspectionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.InspectionInclude<ExtArgs> | null
+  where?: Prisma.InspectionWhereInput
+  orderBy?: Prisma.InspectionOrderByWithRelationInput | Prisma.InspectionOrderByWithRelationInput[]
+  cursor?: Prisma.InspectionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.InspectionScalarFieldEnum | Prisma.InspectionScalarFieldEnum[]
 }
 
 /**

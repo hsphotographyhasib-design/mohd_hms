@@ -12,6 +12,116 @@ export type ViewKey =
   | "admin"
   | "settings";
 
+// ─── New Inspection Types ───────────────────────────────────────────
+
+export interface DashboardStats {
+  totalInspections: number;
+  scheduledToday: number;
+  pending: number;
+  completed: number;
+  overdue: number;
+  failed: number;
+  passRate: number;
+}
+
+export interface InspectionItem {
+  id: string;
+  title: string;
+  equipmentName?: string;
+  equipmentId?: string;
+  assignedToId?: string;
+  assignedToName?: string;
+  scheduledDate: string;
+  status: 'scheduled' | 'in_progress' | 'completed' | 'failed' | 'overdue' | 'cancelled';
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  result?: 'pass' | 'fail' | 'conditional' | 'na';
+  type?: string;
+  templateId?: string;
+  templateName?: string;
+  description?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InspectionListResponse {
+  items: InspectionItem[];
+  total: number;
+  page: number;
+  pageSize: number;
+  totalPages: number;
+}
+
+export interface InspectorWorkload {
+  id: string;
+  name: string;
+  pending: number;
+  completed: number;
+  inProgress: number;
+}
+
+export interface EquipmentDueItem {
+  id: string;
+  name: string;
+  lastInspection?: string;
+  nextDue: string;
+  isOverdue: boolean;
+  category?: string;
+}
+
+export interface ComplianceSummary {
+  pass: number;
+  fail: number;
+  conditional: number;
+  na: number;
+  total: number;
+}
+
+export interface InspectionTemplate {
+  id: string;
+  name: string;
+  category: string;
+  description?: string;
+  itemCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ChecklistItem {
+  id?: string;
+  question: string;
+  type: 'pass_fail' | 'yes_no' | 'rating' | 'text' | 'photo' | 'numeric';
+  required: boolean;
+  helpText?: string;
+}
+
+export interface GeneratedReport {
+  id: string;
+  type: string;
+  title: string;
+  generatedAt: string;
+  format: 'pdf' | 'excel' | 'csv';
+  downloadUrl?: string;
+  size?: string;
+}
+
+export interface AnalyticsSummary {
+  monthlyTrend: { month: string; count: number; pass: number; fail: number }[];
+  statusBreakdown: { status: string; count: number }[];
+  priorityBreakdown: { priority: string; count: number }[];
+  topInspectors: { name: string; completed: number; total: number; rate: number }[];
+  passFailByCategory: { category: string; pass: number; fail: number; total: number }[];
+}
+
+export interface CalendarInspection {
+  id: string;
+  title: string;
+  date: string;
+  status: string;
+  priority: string;
+  assignedToName?: string;
+  equipmentName?: string;
+}
+
 export interface ReportsFilter {
   status?: string;
   priority?: string;

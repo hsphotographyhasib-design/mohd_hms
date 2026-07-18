@@ -1974,6 +1974,7 @@ model Tenant {
   WhatsAppSession      WhatsAppSession[]
   WhatsAppTemplate     WhatsAppTemplate[]
   WorkOrder            WorkOrder[]
+  Inspection           Inspection[]
 }
 
 model TermsAcceptance {
@@ -2961,4 +2962,142 @@ model IrmActivity {
   @@index([reportId])
   @@index([projectId])
   @@index([createdAt])
+}
+
+// ============================================================
+// IRMS — Enterprise Inspection Module (native integration)
+// ============================================================
+
+model Inspection {
+  id              String    @id @default(cuid())
+  tenantId        String
+  title           String
+  description     String?
+  inspectionType  String    @default("routine")  // routine, scheduled, emergency, follow-up, acceptance
+  status          String    @default("scheduled") // scheduled, in_progress, completed, failed, overdue, cancelled
+  priority        String    @default("medium")    // low, medium, high, critical
+  result          String?   // pass, fail, conditional, na
+
+  // Scheduling
+  scheduledDate   DateTime?
+  scheduledTime   String?   // HH:mm
+  startedAt       DateTime?
+  completedAt     DateTime?
+  dueDate         DateTime?
+
+  // Assignments
+  assignedToId    String?   // User/Employee ID
+  assignedToName  String?
+  supervisorId    String?
+  supervisorName  String?
+  createdBy       String?
+  creatorName     String?
+
+  // Equipment / location
+  equipmentId     String?
+  equipmentName   String?
+  location        String?
+  building        String?
+  floor           String?
+  room            String?
+
+  // Links to other modules
+  complaintId     String?
+  workOrderId     String?
+  pmScheduleId    String?
+  quotationId     String?
+  invoiceId       String?
+  templateId      String?
+
+  // Inspection data
+  checklistData   String?   // JSON: checklist answers
+  notes           String?
+  findings        String?   // JSON: structured findings
+  correctiveActions String?
+  recommendation  String?
+  photos          String?   // JSON array of photo URLs
+  signatureData   String?   // JSON: {inspector, supervisor, client} signatures
+  passRate        Float?
+
+  // Scoring
+  score           Int?
+  maxScore        Int       @default(100)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  tenant          Tenant    @relation(fields: [tenantId], references: [id])
+  template        InspectionTemplate? @relation(fields: [templateId], references: [id])
+  results         InspectionResult[]
+
+  @@index([tenantId])
+  @@index([tenantId, status])
+  @@index([tenantId, scheduledDate])
+  @@index([assignedToId])
+  @@index([equipmentId])
+  @@index([complaintId])
+  @@index([workOrderId])
+  @@index([templateId])
+}
+
+model InspectionTemplate {
+  id              String    @id @default(cuid())
+  tenantId        String
+  name            String
+  description     String?
+  category        String?   // HVAC, Electrical, Plumbing, Fire Protection, etc.
+  inspectionType  String    @default("routine")
+  isActive        Boolean   @default(true)
+  createdById     String?
+  createdByName   String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  checklistItems  InspectionChecklistItem[]
+  inspections     Inspection[]
+
+  @@index([tenantId])
+  @@index([tenantId, category])
+}
+
+model InspectionChecklistItem {
+  id              String    @id @default(cuid())
+  tenantId        String
+  templateId      String
+  question        String
+  category        String?   // group heading
+  itemType        String    @default("pass_fail") // pass_fail, yes_no, rating, text, photo, numeric
+  isRequired      Boolean   @default(true)
+  sortOrder       Int       @default(0)
+  helpText        String?
+  options         String?   // JSON: for multiple choice
+  minScore        Float?
+  maxScore        Float?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  template        InspectionTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([templateId])
+}
+
+model InspectionResult {
+  id              String    @id @default(cuid())
+  tenantId        String
+  inspectionId    String
+  checklistItemId String
+  answer          String?   // the answer value
+  score           Float?
+  notes           String?
+  photoUrl        String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  inspection      Inspection         @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([inspectionId])
+  @@index([checklistItemId])
 }

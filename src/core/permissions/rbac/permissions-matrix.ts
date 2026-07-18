@@ -304,6 +304,22 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
     manage_builder:  ['super_admin'],
   },
 
+  // ─── IRMS / Inspection actions ───────────────────────────────────────
+  inspection: {
+    create:          ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
+    view:            ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance'],
+    update:          ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
+    delete:          ['super_admin', 'admin'],
+    assign:          ['super_admin', 'admin', 'manager', 'supervisor'],
+    approve:         ['super_admin', 'admin', 'supervisor', 'manager'],
+    complete:        ['super_admin', 'admin', 'supervisor', 'manager', 'technician'],
+    upload_photos:   ['super_admin', 'admin', 'supervisor', 'manager', 'technician'],
+    sign:            ['super_admin', 'admin', 'supervisor', 'manager', 'technician'],
+    export:          ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],
+    manage_templates:['super_admin', 'admin'],
+    view_analytics:  ['super_admin', 'admin', 'manager', 'supervisor'],
+  },
+
   // ─── PM actions ───────────────────────────────────────────────────────
   pm_module: {
     create:          ['super_admin', 'admin', 'manager'],

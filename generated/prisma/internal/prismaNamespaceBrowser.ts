@@ -167,7 +167,11 @@ export const ModelName = {
   IrmPhoto: 'IrmPhoto',
   IrmRevision: 'IrmRevision',
   IrmApproval: 'IrmApproval',
-  IrmActivity: 'IrmActivity'
+  IrmActivity: 'IrmActivity',
+  Inspection: 'Inspection',
+  InspectionTemplate: 'InspectionTemplate',
+  InspectionChecklistItem: 'InspectionChecklistItem',
+  InspectionResult: 'InspectionResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2723,6 +2727,108 @@ export const IrmActivityScalarFieldEnum = {
 } as const
 
 export type IrmActivityScalarFieldEnum = (typeof IrmActivityScalarFieldEnum)[keyof typeof IrmActivityScalarFieldEnum]
+
+
+export const InspectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  title: 'title',
+  description: 'description',
+  inspectionType: 'inspectionType',
+  status: 'status',
+  priority: 'priority',
+  result: 'result',
+  scheduledDate: 'scheduledDate',
+  scheduledTime: 'scheduledTime',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  dueDate: 'dueDate',
+  assignedToId: 'assignedToId',
+  assignedToName: 'assignedToName',
+  supervisorId: 'supervisorId',
+  supervisorName: 'supervisorName',
+  createdBy: 'createdBy',
+  creatorName: 'creatorName',
+  equipmentId: 'equipmentId',
+  equipmentName: 'equipmentName',
+  location: 'location',
+  building: 'building',
+  floor: 'floor',
+  room: 'room',
+  complaintId: 'complaintId',
+  workOrderId: 'workOrderId',
+  pmScheduleId: 'pmScheduleId',
+  quotationId: 'quotationId',
+  invoiceId: 'invoiceId',
+  templateId: 'templateId',
+  checklistData: 'checklistData',
+  notes: 'notes',
+  findings: 'findings',
+  correctiveActions: 'correctiveActions',
+  recommendation: 'recommendation',
+  photos: 'photos',
+  signatureData: 'signatureData',
+  passRate: 'passRate',
+  score: 'score',
+  maxScore: 'maxScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspectionScalarFieldEnum = (typeof InspectionScalarFieldEnum)[keyof typeof InspectionScalarFieldEnum]
+
+
+export const InspectionTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  inspectionType: 'inspectionType',
+  isActive: 'isActive',
+  createdById: 'createdById',
+  createdByName: 'createdByName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspectionTemplateScalarFieldEnum = (typeof InspectionTemplateScalarFieldEnum)[keyof typeof InspectionTemplateScalarFieldEnum]
+
+
+export const InspectionChecklistItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  templateId: 'templateId',
+  question: 'question',
+  category: 'category',
+  itemType: 'itemType',
+  isRequired: 'isRequired',
+  sortOrder: 'sortOrder',
+  helpText: 'helpText',
+  options: 'options',
+  minScore: 'minScore',
+  maxScore: 'maxScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspectionChecklistItemScalarFieldEnum = (typeof InspectionChecklistItemScalarFieldEnum)[keyof typeof InspectionChecklistItemScalarFieldEnum]
+
+
+export const InspectionResultScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  inspectionId: 'inspectionId',
+  checklistItemId: 'checklistItemId',
+  answer: 'answer',
+  score: 'score',
+  notes: 'notes',
+  photoUrl: 'photoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspectionResultScalarFieldEnum = (typeof InspectionResultScalarFieldEnum)[keyof typeof InspectionResultScalarFieldEnum]
 
 
 export const SortOrder = {

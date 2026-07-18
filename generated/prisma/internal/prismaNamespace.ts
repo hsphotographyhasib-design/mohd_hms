@@ -500,7 +500,11 @@ export const ModelName = {
   IrmPhoto: 'IrmPhoto',
   IrmRevision: 'IrmRevision',
   IrmApproval: 'IrmApproval',
-  IrmActivity: 'IrmActivity'
+  IrmActivity: 'IrmActivity',
+  Inspection: 'Inspection',
+  InspectionTemplate: 'InspectionTemplate',
+  InspectionChecklistItem: 'InspectionChecklistItem',
+  InspectionResult: 'InspectionResult'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -516,7 +520,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "attendance" | "auditLog" | "authAuditLog" | "broadcastLog" | "checklistTemplate" | "cmsActivityLog" | "cmsAnnouncement" | "cmsBlog" | "cmsBlogCategory" | "cmsCareerApplication" | "cmsCareerJob" | "cmsContactMessage" | "cmsFooter" | "cmsForm" | "cmsHero" | "cmsIndustry" | "cmsMedia" | "cmsPopup" | "cmsProject" | "cmsSeo" | "cmsService" | "cmsSetting" | "cmsTestimonial" | "complaint" | "complaintTimeline" | "conversationThread" | "customer" | "customerFeedback" | "customerReport" | "department" | "device" | "deviceToken" | "emailLog" | "emailTemplate" | "equipment" | "equipmentQrCode" | "hrAnnouncement" | "hrAssetAssignment" | "hrCandidate" | "hrDisciplinaryAction" | "hrEmployee" | "hrEmployeeDocument" | "hrExpenseClaim" | "hrHoliday" | "hrJobPosition" | "hrLeaveBalance" | "hrLeaveRequest" | "hrLeaveType" | "hrMedicalRecord" | "hrOvertimeRequest" | "hrPayroll" | "hrPerformanceReview" | "hrShift" | "hrShiftSchedule" | "hrTraining" | "hrTrainingRecord" | "hrTravelRequest" | "hrVisitor" | "inventoryCategory" | "inventoryItem" | "inventorySubcategory" | "invoice" | "invoicePayment" | "itemSupplier" | "leaveRequest" | "loginSession" | "notification" | "notificationLog" | "otpCode" | "passwordResetOtp" | "passwordResetToken" | "pmSchedule" | "priceBook" | "priceBookEntry" | "purchaseOrder" | "quotation" | "scanLog" | "stockMovement" | "tenant" | "termsAcceptance" | "user" | "vehicle" | "vehicleLog" | "warehouse" | "warehouseStock" | "whatsAppConfig" | "whatsAppDeliveryLog" | "whatsAppMessage" | "whatsAppSession" | "whatsAppTemplate" | "workOrder" | "workOrderMaterial" | "errorLog" | "cmsPage" | "cmsRevision" | "cmsPageTemplate" | "document" | "documentVersion" | "documentAuditLog" | "serviceItem" | "serviceCategory" | "servicePackage" | "labourRate" | "aiConversationLog" | "paymentVerification" | "savedLocation" | "serviceItemMaterial" | "serviceItemEquipment" | "serviceChecklistItem" | "servicePackageItem" | "irmUser" | "irmProject" | "irmReport" | "irmPhoto" | "irmRevision" | "irmApproval" | "irmActivity"
+    modelProps: "attendance" | "auditLog" | "authAuditLog" | "broadcastLog" | "checklistTemplate" | "cmsActivityLog" | "cmsAnnouncement" | "cmsBlog" | "cmsBlogCategory" | "cmsCareerApplication" | "cmsCareerJob" | "cmsContactMessage" | "cmsFooter" | "cmsForm" | "cmsHero" | "cmsIndustry" | "cmsMedia" | "cmsPopup" | "cmsProject" | "cmsSeo" | "cmsService" | "cmsSetting" | "cmsTestimonial" | "complaint" | "complaintTimeline" | "conversationThread" | "customer" | "customerFeedback" | "customerReport" | "department" | "device" | "deviceToken" | "emailLog" | "emailTemplate" | "equipment" | "equipmentQrCode" | "hrAnnouncement" | "hrAssetAssignment" | "hrCandidate" | "hrDisciplinaryAction" | "hrEmployee" | "hrEmployeeDocument" | "hrExpenseClaim" | "hrHoliday" | "hrJobPosition" | "hrLeaveBalance" | "hrLeaveRequest" | "hrLeaveType" | "hrMedicalRecord" | "hrOvertimeRequest" | "hrPayroll" | "hrPerformanceReview" | "hrShift" | "hrShiftSchedule" | "hrTraining" | "hrTrainingRecord" | "hrTravelRequest" | "hrVisitor" | "inventoryCategory" | "inventoryItem" | "inventorySubcategory" | "invoice" | "invoicePayment" | "itemSupplier" | "leaveRequest" | "loginSession" | "notification" | "notificationLog" | "otpCode" | "passwordResetOtp" | "passwordResetToken" | "pmSchedule" | "priceBook" | "priceBookEntry" | "purchaseOrder" | "quotation" | "scanLog" | "stockMovement" | "tenant" | "termsAcceptance" | "user" | "vehicle" | "vehicleLog" | "warehouse" | "warehouseStock" | "whatsAppConfig" | "whatsAppDeliveryLog" | "whatsAppMessage" | "whatsAppSession" | "whatsAppTemplate" | "workOrder" | "workOrderMaterial" | "errorLog" | "cmsPage" | "cmsRevision" | "cmsPageTemplate" | "document" | "documentVersion" | "documentAuditLog" | "serviceItem" | "serviceCategory" | "servicePackage" | "labourRate" | "aiConversationLog" | "paymentVerification" | "savedLocation" | "serviceItemMaterial" | "serviceItemEquipment" | "serviceChecklistItem" | "servicePackageItem" | "irmUser" | "irmProject" | "irmReport" | "irmPhoto" | "irmRevision" | "irmApproval" | "irmActivity" | "inspection" | "inspectionTemplate" | "inspectionChecklistItem" | "inspectionResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -9178,6 +9182,302 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    Inspection: {
+      payload: Prisma.$InspectionPayload<ExtArgs>
+      fields: Prisma.InspectionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InspectionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InspectionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>
+        }
+        findFirst: {
+          args: Prisma.InspectionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InspectionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>
+        }
+        findMany: {
+          args: Prisma.InspectionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>[]
+        }
+        create: {
+          args: Prisma.InspectionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>
+        }
+        createMany: {
+          args: Prisma.InspectionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InspectionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>[]
+        }
+        delete: {
+          args: Prisma.InspectionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>
+        }
+        update: {
+          args: Prisma.InspectionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>
+        }
+        deleteMany: {
+          args: Prisma.InspectionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InspectionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InspectionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>[]
+        }
+        upsert: {
+          args: Prisma.InspectionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionPayload>
+        }
+        aggregate: {
+          args: Prisma.InspectionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInspection>
+        }
+        groupBy: {
+          args: Prisma.InspectionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspectionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InspectionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspectionCountAggregateOutputType> | number
+        }
+      }
+    }
+    InspectionTemplate: {
+      payload: Prisma.$InspectionTemplatePayload<ExtArgs>
+      fields: Prisma.InspectionTemplateFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InspectionTemplateFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InspectionTemplateFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>
+        }
+        findFirst: {
+          args: Prisma.InspectionTemplateFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InspectionTemplateFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>
+        }
+        findMany: {
+          args: Prisma.InspectionTemplateFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>[]
+        }
+        create: {
+          args: Prisma.InspectionTemplateCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>
+        }
+        createMany: {
+          args: Prisma.InspectionTemplateCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InspectionTemplateCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>[]
+        }
+        delete: {
+          args: Prisma.InspectionTemplateDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>
+        }
+        update: {
+          args: Prisma.InspectionTemplateUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>
+        }
+        deleteMany: {
+          args: Prisma.InspectionTemplateDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InspectionTemplateUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InspectionTemplateUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>[]
+        }
+        upsert: {
+          args: Prisma.InspectionTemplateUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionTemplatePayload>
+        }
+        aggregate: {
+          args: Prisma.InspectionTemplateAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInspectionTemplate>
+        }
+        groupBy: {
+          args: Prisma.InspectionTemplateGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspectionTemplateGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InspectionTemplateCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspectionTemplateCountAggregateOutputType> | number
+        }
+      }
+    }
+    InspectionChecklistItem: {
+      payload: Prisma.$InspectionChecklistItemPayload<ExtArgs>
+      fields: Prisma.InspectionChecklistItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InspectionChecklistItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InspectionChecklistItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>
+        }
+        findFirst: {
+          args: Prisma.InspectionChecklistItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InspectionChecklistItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>
+        }
+        findMany: {
+          args: Prisma.InspectionChecklistItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>[]
+        }
+        create: {
+          args: Prisma.InspectionChecklistItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>
+        }
+        createMany: {
+          args: Prisma.InspectionChecklistItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InspectionChecklistItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>[]
+        }
+        delete: {
+          args: Prisma.InspectionChecklistItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>
+        }
+        update: {
+          args: Prisma.InspectionChecklistItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.InspectionChecklistItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InspectionChecklistItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InspectionChecklistItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.InspectionChecklistItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionChecklistItemPayload>
+        }
+        aggregate: {
+          args: Prisma.InspectionChecklistItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInspectionChecklistItem>
+        }
+        groupBy: {
+          args: Prisma.InspectionChecklistItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspectionChecklistItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InspectionChecklistItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspectionChecklistItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    InspectionResult: {
+      payload: Prisma.$InspectionResultPayload<ExtArgs>
+      fields: Prisma.InspectionResultFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.InspectionResultFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.InspectionResultFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>
+        }
+        findFirst: {
+          args: Prisma.InspectionResultFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.InspectionResultFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>
+        }
+        findMany: {
+          args: Prisma.InspectionResultFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>[]
+        }
+        create: {
+          args: Prisma.InspectionResultCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>
+        }
+        createMany: {
+          args: Prisma.InspectionResultCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.InspectionResultCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>[]
+        }
+        delete: {
+          args: Prisma.InspectionResultDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>
+        }
+        update: {
+          args: Prisma.InspectionResultUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>
+        }
+        deleteMany: {
+          args: Prisma.InspectionResultDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.InspectionResultUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.InspectionResultUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>[]
+        }
+        upsert: {
+          args: Prisma.InspectionResultUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$InspectionResultPayload>
+        }
+        aggregate: {
+          args: Prisma.InspectionResultAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateInspectionResult>
+        }
+        groupBy: {
+          args: Prisma.InspectionResultGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspectionResultGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.InspectionResultCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.InspectionResultCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -11756,6 +12056,108 @@ export const IrmActivityScalarFieldEnum = {
 export type IrmActivityScalarFieldEnum = (typeof IrmActivityScalarFieldEnum)[keyof typeof IrmActivityScalarFieldEnum]
 
 
+export const InspectionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  title: 'title',
+  description: 'description',
+  inspectionType: 'inspectionType',
+  status: 'status',
+  priority: 'priority',
+  result: 'result',
+  scheduledDate: 'scheduledDate',
+  scheduledTime: 'scheduledTime',
+  startedAt: 'startedAt',
+  completedAt: 'completedAt',
+  dueDate: 'dueDate',
+  assignedToId: 'assignedToId',
+  assignedToName: 'assignedToName',
+  supervisorId: 'supervisorId',
+  supervisorName: 'supervisorName',
+  createdBy: 'createdBy',
+  creatorName: 'creatorName',
+  equipmentId: 'equipmentId',
+  equipmentName: 'equipmentName',
+  location: 'location',
+  building: 'building',
+  floor: 'floor',
+  room: 'room',
+  complaintId: 'complaintId',
+  workOrderId: 'workOrderId',
+  pmScheduleId: 'pmScheduleId',
+  quotationId: 'quotationId',
+  invoiceId: 'invoiceId',
+  templateId: 'templateId',
+  checklistData: 'checklistData',
+  notes: 'notes',
+  findings: 'findings',
+  correctiveActions: 'correctiveActions',
+  recommendation: 'recommendation',
+  photos: 'photos',
+  signatureData: 'signatureData',
+  passRate: 'passRate',
+  score: 'score',
+  maxScore: 'maxScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspectionScalarFieldEnum = (typeof InspectionScalarFieldEnum)[keyof typeof InspectionScalarFieldEnum]
+
+
+export const InspectionTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  name: 'name',
+  description: 'description',
+  category: 'category',
+  inspectionType: 'inspectionType',
+  isActive: 'isActive',
+  createdById: 'createdById',
+  createdByName: 'createdByName',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspectionTemplateScalarFieldEnum = (typeof InspectionTemplateScalarFieldEnum)[keyof typeof InspectionTemplateScalarFieldEnum]
+
+
+export const InspectionChecklistItemScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  templateId: 'templateId',
+  question: 'question',
+  category: 'category',
+  itemType: 'itemType',
+  isRequired: 'isRequired',
+  sortOrder: 'sortOrder',
+  helpText: 'helpText',
+  options: 'options',
+  minScore: 'minScore',
+  maxScore: 'maxScore',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspectionChecklistItemScalarFieldEnum = (typeof InspectionChecklistItemScalarFieldEnum)[keyof typeof InspectionChecklistItemScalarFieldEnum]
+
+
+export const InspectionResultScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  inspectionId: 'inspectionId',
+  checklistItemId: 'checklistItemId',
+  answer: 'answer',
+  score: 'score',
+  notes: 'notes',
+  photoUrl: 'photoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InspectionResultScalarFieldEnum = (typeof InspectionResultScalarFieldEnum)[keyof typeof InspectionResultScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -12039,6 +12441,10 @@ export type GlobalOmitConfig = {
   irmRevision?: Prisma.IrmRevisionOmit
   irmApproval?: Prisma.IrmApprovalOmit
   irmActivity?: Prisma.IrmActivityOmit
+  inspection?: Prisma.InspectionOmit
+  inspectionTemplate?: Prisma.InspectionTemplateOmit
+  inspectionChecklistItem?: Prisma.InspectionChecklistItemOmit
+  inspectionResult?: Prisma.InspectionResultOmit
 }
 
 /* Types for Logging */

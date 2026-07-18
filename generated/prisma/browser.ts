@@ -602,3 +602,23 @@ export type IrmApproval = Prisma.IrmApprovalModel
  * 
  */
 export type IrmActivity = Prisma.IrmActivityModel
+/**
+ * Model Inspection
+ * 
+ */
+export type Inspection = Prisma.InspectionModel
+/**
+ * Model InspectionTemplate
+ * 
+ */
+export type InspectionTemplate = Prisma.InspectionTemplateModel
+/**
+ * Model InspectionChecklistItem
+ * 
+ */
+export type InspectionChecklistItem = Prisma.InspectionChecklistItemModel
+/**
+ * Model InspectionResult
+ * 
+ */
+export type InspectionResult = Prisma.InspectionResultModel

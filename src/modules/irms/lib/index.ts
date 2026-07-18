@@ -1,9 +1,8 @@
-export { useIrmStore } from "./store";
+export { useInspectionStore } from './store';
+export type { InspectionTab } from './store';
+
+// Keep existing type exports that are still useful for reports
 export type {
-  ViewKey,
-  ReportsFilter,
-  IrmUser,
-  IrmProject,
   IrmReport,
   IrmPhoto,
   IrmRevision,
@@ -17,20 +16,25 @@ export type {
   PdfTemplate,
   AnnotationLayer,
   UploadQueueItem,
-} from "./types";
+  // New inspection types
+  DashboardStats,
+  InspectionItem,
+  InspectionListResponse,
+  InspectorWorkload,
+  EquipmentDueItem,
+  ComplianceSummary,
+  InspectionTemplate,
+  ChecklistItem,
+  GeneratedReport,
+  AnalyticsSummary,
+  CalendarInspection,
+} from './types';
+
 export {
   PHOTO_CATEGORIES,
   PDF_TEMPLATES,
   SORT_OPTIONS,
-  ROLES,
-  ROLE_PERMISSIONS,
-  WORKFLOW_STEPS,
-  STATUS_FLOW,
-  REPORT_STATUSES,
-  PRIORITIES,
-  WORK_CATEGORIES,
   INSPECTION_TYPES,
   DEPARTMENTS,
   ANNOTATION_COLORS,
-} from "./constants";
-export type { Role } from "./constants";
+} from './constants';
