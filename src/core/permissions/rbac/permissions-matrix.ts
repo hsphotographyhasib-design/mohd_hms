@@ -52,6 +52,7 @@ export const FEATURE_PERMISSIONS: Record<string, UserRole[]> = {
   notifications:   ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user', 'customer'],
   whatsapp:        ['super_admin', 'admin', 'manager', 'supervisor'],
   email:           ['super_admin', 'admin'],
+  irms:            ['super_admin', 'admin', 'manager', 'supervisor', 'technician'],
 
   // ─── Intelligence ──────────────────────────────────────────────────────
   reports:         ['super_admin', 'admin', 'manager', 'supervisor', 'finance'],

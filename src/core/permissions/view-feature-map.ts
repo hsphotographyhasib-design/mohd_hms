@@ -79,6 +79,9 @@ export const VIEW_FEATURE_MAP: Record<string, string> = {
   // Intelligence
   reports: 'reports',
 
+  // IRMS
+  irms: 'irms',
+
   // System
   settings: 'settings',
   'user-management': 'user-management',
