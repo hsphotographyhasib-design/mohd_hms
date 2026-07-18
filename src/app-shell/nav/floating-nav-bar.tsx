@@ -193,9 +193,23 @@ export function FloatingNavBar() {
   // ============================================================
 
   const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
     const el = scrollContainerRef.current;
     if (!el) return;
+
+    const hasOverflow = el.scrollWidth > el.clientWidth;
+    if (!hasOverflow) return;
+
+    // Horizontal trackpad swipe: let the browser handle it natively for momentum
+    if (Math.abs(e.deltaX) >= Math.abs(e.deltaY)) {
+      return; // Don't prevent default — browser's native horizontal scroll is smoother
+    }
+
+    // Vertical scroll: convert to horizontal, but only when there's room
+    const { scrollLeft, scrollWidth, clientWidth } = el;
+    if (e.deltaY > 0 && scrollLeft >= scrollWidth - clientWidth - 1) return;
+    if (e.deltaY < 0 && scrollLeft <= 1) return;
+
+    e.preventDefault();
     el.scrollLeft += e.deltaY;
   }, []);
 
@@ -320,7 +334,11 @@ export function FloatingNavBar() {
           ref={scrollContainerRef}
           onScroll={checkOverflow}
           className="flex items-center gap-0.5 overflow-x-auto scrollbar-none px-1"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          style={{
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
+            WebkitOverflowScrolling: 'touch',
+          }}
         >
           {/* Main nav items */}
           {filteredItems.mainItems.map(renderNavItem)}
