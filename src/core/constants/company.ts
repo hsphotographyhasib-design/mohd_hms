@@ -25,11 +25,9 @@ export const BRAND = {
   defaultTenantDomain: 'default.mohdhms.com',
   /** Logo paths */
   logo: {
-    /** Main SVG logo used in documents and app shell */
-    svg: '/mohd_hms_logo.svg',
-    /** PNG logo used as brand icon in headers */
+    /** Main PNG logo used everywhere in the app */
     png: '/logo.png',
-    /** Logo used for high-res / email / notifications */
+    /** PNG logo for high-res / email / notifications */
     png512: '/logo-512.png',
     /** Logo for OG / social sharing */
     png1024: '/logo-1024.png',
@@ -50,7 +48,7 @@ export const COMPANY = {
   email: 'info@mohdhms.com',
   website: 'www.mohdhms.com',
   regNo: 'BE1318',
-  logoSvg: '/mohd_hms_logo.svg',
+  logoSvg: '/logo.png',
 } as const;
 
 export const COMPANY_COLORS = {
