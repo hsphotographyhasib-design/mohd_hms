@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# FacilityPro - Backup Script
+# MOHD.HMS ENTERPRISE - Backup Script
 # Company: SMART MAINTENANCE SERVICES SDN BHD
 #
 # Backs up the SQLite database and document storage to a compressed archive.
@@ -12,9 +12,9 @@ set -euo pipefail
 #   sudo bash backup.sh
 #
 # Cron example (daily at 2 AM, keep last 7 days):
-#   0 2 * * * /opt/facilitypro/app/backup.sh >> /opt/facilitypro/logs/backup.log 2>&1
+#   0 2 * * * /opt/mohd-hms/app/backup.sh >> /opt/mohd-hms/logs/backup.log 2>&1
 #
-# Restore with:  sudo bash restore.sh /opt/facilitypro/backups/facilitypro-YYYYMMDD-HHMMSS.tar.gz
+# Restore with:  sudo bash restore.sh /opt/mohd-hms/backups/mohd-hms-YYYYMMDD-HHMMSS.tar.gz
 # =============================================================================
 
 # ── Colours ──────────────────────────────────────────────────────────────────
@@ -37,13 +37,13 @@ error()   { echo -e "${RED}[$(date '+%Y-%m-%d %H:%M:%S')] [ERROR]${NC} $*" >&2; 
 fatal()   { error "$*"; exit 1; }
 
 # ── Configuration ────────────────────────────────────────────────────────────
-APP_DIR="/opt/facilitypro"
+APP_DIR="/opt/mohd-hms"
 BACKUP_DIR="${APP_DIR}/backups"
 DB_DIR="${APP_DIR}/db"
 STORAGE_DIR="${APP_DIR}/storage"
 RETENTION_DAYS=7
 TIMESTAMP=$(date '+%Y%m%d-%H%M%S')
-BACKUP_NAME="facilitypro-${TIMESTAMP}"
+BACKUP_NAME="mohd-hms-${TIMESTAMP}"
 BACKUP_FILE="${BACKUP_DIR}/${BACKUP_NAME}.tar.gz"
 
 # ── Preflight ────────────────────────────────────────────────────────────────
@@ -144,7 +144,7 @@ if [[ -d "${BACKUP_DIR}" ]]; then
     while IFS= read -r -d '' old_backup; do
         rm -f "${old_backup}"
         DELETED=$((DELETED + 1))
-    done < <(find "${BACKUP_DIR}" -name 'facilitypro-*.tar.gz' -type f -mtime +${RETENTION_DAYS} -print0 2>/dev/null)
+    done < <(find "${BACKUP_DIR}" -name 'mohd-hms-*.tar.gz' -type f -mtime +${RETENTION_DAYS} -print0 2>/dev/null)
 fi
 
 if [[ ${DELETED} -gt 0 ]]; then

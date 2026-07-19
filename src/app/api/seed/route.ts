@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     if (payload.role !== 'super_admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
 
     // Check if seed data already exists
-    const existingTenant = await db.tenant.findFirst({ where: { domain: 'demo.facilitypro.com' } });
+    const existingTenant = await db.tenant.findFirst({ where: { domain: 'demo.mohdhms.com' } });
     if (existingTenant) {
       // Delete old invoices and quotations, then recreate them
       await db.invoice.deleteMany({ where: { tenantId: existingTenant.id } });
@@ -141,11 +141,11 @@ export async function POST(request: NextRequest) {
     // Create tenant
     const tenant = await db.tenant.create({
       data: {
-        name: 'FacilityPro Services',
-        domain: 'demo.facilitypro.com',
+        name: 'MOHD.HMS ENTERPRISE Services',
+        domain: 'demo.mohdhms.com',
         address: '123 Business Park, Suite 100',
         phone: '+1-555-0100',
-        email: 'info@facilitypro.com',
+        email: 'info@mohdhms.com',
         plan: 'enterprise',
         maxUsers: 200,
       },
@@ -166,42 +166,42 @@ export async function POST(request: NextRequest) {
     const users = await Promise.all([
       db.user.create({
         data: {
-          tenantId: tenant.id, email: 'admin@facilitypro.com', passwordHash: password,
+          tenantId: tenant.id, email: 'admin@mohdhms.com', passwordHash: password,
           name: 'Ahmed Al-Rashid', role: 'admin', employeeNumber: 'EMP-001',
           departmentId: departments[2].id, phone: '+1-555-0101', profileCompleted: true,
         },
       }),
       db.user.create({
         data: {
-          tenantId: tenant.id, email: 'manager@facilitypro.com', passwordHash: password,
+          tenantId: tenant.id, email: 'manager@mohdhms.com', passwordHash: password,
           name: 'Sarah Johnson', role: 'manager', employeeNumber: 'EMP-002',
           departmentId: departments[0].id, phone: '+1-555-0102', profileCompleted: true,
         },
       }),
       db.user.create({
         data: {
-          tenantId: tenant.id, email: 'supervisor@facilitypro.com', passwordHash: password,
+          tenantId: tenant.id, email: 'supervisor@mohdhms.com', passwordHash: password,
           name: 'Mohammed Hassan', role: 'supervisor', employeeNumber: 'EMP-003',
           departmentId: departments[0].id, phone: '+1-555-0103', profileCompleted: true,
         },
       }),
       db.user.create({
         data: {
-          tenantId: tenant.id, email: 'tech1@facilitypro.com', passwordHash: password,
+          tenantId: tenant.id, email: 'tech1@mohdhms.com', passwordHash: password,
           name: 'Carlos Mendez', role: 'technician', employeeNumber: 'EMP-004',
           departmentId: departments[3].id, phone: '+1-555-0104', isOnline: true, profileCompleted: true,
         },
       }),
       db.user.create({
         data: {
-          tenantId: tenant.id, email: 'tech2@facilitypro.com', passwordHash: password,
+          tenantId: tenant.id, email: 'tech2@mohdhms.com', passwordHash: password,
           name: 'David Chen', role: 'technician', employeeNumber: 'EMP-005',
           departmentId: departments[4].id, phone: '+1-555-0105', isOnline: false, profileCompleted: true,
         },
       }),
       db.user.create({
         data: {
-          tenantId: tenant.id, email: 'finance@facilitypro.com', passwordHash: password,
+          tenantId: tenant.id, email: 'finance@mohdhms.com', passwordHash: password,
           name: 'Lisa Park', role: 'finance', employeeNumber: 'EMP-006',
           departmentId: departments[1].id, phone: '+1-555-0106', profileCompleted: true,
         },
@@ -569,11 +569,11 @@ export async function POST(request: NextRequest) {
       message: 'Seed data created successfully',
       tenantId: tenant.id,
       credentials: {
-        admin: { email: 'admin@facilitypro.com', password: 'password123' },
-        manager: { email: 'manager@facilitypro.com', password: 'password123' },
-        supervisor: { email: 'supervisor@facilitypro.com', password: 'password123' },
-        technician: { email: 'tech1@facilitypro.com', password: 'password123' },
-        finance: { email: 'finance@facilitypro.com', password: 'password123' },
+        admin: { email: 'admin@mohdhms.com', password: 'password123' },
+        manager: { email: 'manager@mohdhms.com', password: 'password123' },
+        supervisor: { email: 'supervisor@mohdhms.com', password: 'password123' },
+        technician: { email: 'tech1@mohdhms.com', password: 'password123' },
+        finance: { email: 'finance@mohdhms.com', password: 'password123' },
       },
     });
   } catch (error) {

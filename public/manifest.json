@@ -2,6 +2,7 @@
   "name": "MOHD.HMS ENTERPRISE",
   "short_name": "MOHD.HMS",
   "description": "Smart Facility Maintenance & Engineering",
+  "version": "2.0.0",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

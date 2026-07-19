@@ -270,7 +270,7 @@ export function AppHeader() {
               <Building2 className="h-5 w-5" />
             </div>
             <span className="font-semibold text-lg text-foreground tracking-tight">
-              FacilityPro
+              MOHD.HMS
             </span>
           </div>
 

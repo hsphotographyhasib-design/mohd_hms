@@ -1,4 +1,4 @@
-# FacilityPro — Changelog
+# MOHD.HMS ENTERPRISE — Changelog
 
 ## [2025-07] Memory System Created
 - Added `src/memory/` directory with 16 knowledge base documents

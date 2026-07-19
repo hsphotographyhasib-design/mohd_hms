@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# FacilityPro - Restore Script
+# MOHD.HMS ENTERPRISE - Restore Script
 # Company: SMART MAINTENANCE SERVICES SDN BHD
 #
 # Restores database and storage from a previously created backup archive.
@@ -15,7 +15,7 @@ set -euo pipefail
 #   --force        Skip confirmation prompt
 #
 # Example:
-#   sudo bash restore.sh /opt/facilitypro/backups/facilitypro-20250101-020000.tar.gz
+#   sudo bash restore.sh /opt/mohd-hms/backups/mohd-hms-20250101-020000.tar.gz
 # =============================================================================
 
 # ── Colours ──────────────────────────────────────────────────────────────────
@@ -34,7 +34,7 @@ error()   { echo -e "${RED}[ERROR]${NC} $*" >&2; }
 fatal()   { echo -e "${RED}[ERROR]${NC} $*" >&2; exit 1; }
 
 # ── Configuration ────────────────────────────────────────────────────────────
-APP_DIR="/opt/facilitypro"
+APP_DIR="/opt/mohd-hms"
 DB_DIR="${APP_DIR}/db"
 STORAGE_DIR="${APP_DIR}/storage"
 COMPOSE_FILE="${APP_DIR}/app/docker-compose.yml"
@@ -62,10 +62,10 @@ if [[ -z "${BACKUP_FILE}" ]]; then
     echo ""
     echo -e "  Available backups:"
     if [[ -d "${APP_DIR}/backups" ]]; then
-        ls -lht "${APP_DIR}/backups"/facilitypro-*.tar.gz 2>/dev/null | while read -r line; do
+        ls -lht "${APP_DIR}/backups"/mohd-hms-*.tar.gz 2>/dev/null | while read -r line; do
             echo -e "    ${CYAN}${line}${NC}"
         done
-        if [[ -z "$(ls "${APP_DIR}/backups"/facilitypro-*.tar.gz 2>/dev/null)" ]]; then
+        if [[ -z "$(ls "${APP_DIR}/backups"/mohd-hms-*.tar.gz 2>/dev/null)" ]]; then
             echo -e "    ${YELLOW}(no backups found)${NC}"
         fi
     else

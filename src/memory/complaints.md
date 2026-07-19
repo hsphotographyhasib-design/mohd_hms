@@ -1,7 +1,7 @@
-# FacilityPro — Complaints Feature
+# MOHD.HMS ENTERPRISE — Complaints Feature
 
 ## Overview
-The complaints feature is the **core workflow engine** of FacilityPro. It manages the full lifecycle of service requests from creation through resolution, billing, and closure.
+The complaints feature is the **core workflow engine** of MOHD.HMS ENTERPRISE. It manages the full lifecycle of service requests from creation through resolution, billing, and closure.
 
 ## Data Model (`Complaint` in Prisma schema)
 

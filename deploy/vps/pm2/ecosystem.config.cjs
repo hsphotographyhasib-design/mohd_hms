@@ -1,5 +1,5 @@
 // =============================================================================
-// FacilityPro — PM2 Ecosystem Configuration
+// MOHD.HMS ENTERPRISE — PM2 Ecosystem Configuration
 // =============================================================================
 // Alternative to Docker. Use when you prefer running directly on the VPS.
 // Install:  npm install -g pm2
@@ -14,21 +14,21 @@ module.exports = {
   apps: [
     // ── Main Next.js Application ──────────────────────────────────────────
     {
-      name: 'facilitypro',
+      name: 'mohd-hms',
       script: 'server.js',
-      cwd: '/opt/facilitypro/app/.next/standalone',
+      cwd: '/opt/mohd-hms/app/.next/standalone',
       instances: 1,         // SQLite: single instance only
       exec_mode: 'fork',
       env: {
         NODE_ENV: 'production',
         PORT: 3000,
         HOSTNAME: '0.0.0.0',
-        DATABASE_URL: 'file:/opt/facilitypro/db/custom.db',
-        STORAGE_ROOT: '/opt/facilitypro/storage',
+        DATABASE_URL: 'file:/opt/mohd-hms/db/custom.db',
+        STORAGE_ROOT: '/opt/mohd-hms/storage',
       },
       log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-      error_file: '/opt/facilitypro/logs/app-error.log',
-      out_file: '/opt/facilitypro/logs/app-out.log',
+      error_file: '/opt/mohd-hms/logs/app-error.log',
+      out_file: '/opt/mohd-hms/logs/app-out.log',
       max_memory_restart: '1G',
       autorestart: true,
       watch: false,
@@ -43,7 +43,7 @@ module.exports = {
     // {
     //   name: 'whatsapp-service',
     //   script: 'index.ts',
-    //   cwd: '/opt/facilitypro/app/mini-services/whatsapp-service',
+    //   cwd: '/opt/mohd-hms/app/mini-services/whatsapp-service',
     //   interpreter: 'bun',
     //   instances: 1,
     //   exec_mode: 'fork',
@@ -54,8 +54,8 @@ module.exports = {
     //     CHROME_PATH: '/usr/bin/chromium',
     //   },
     //   log_date_format: 'YYYY-MM-DD HH:mm:ss Z',
-    //   error_file: '/opt/facilitypro/logs/whatsapp-error.log',
-    //   out_file: '/opt/facilitypro/logs/whatsapp-out.log',
+    //   error_file: '/opt/mohd-hms/logs/whatsapp-error.log',
+    //   out_file: '/opt/mohd-hms/logs/whatsapp-out.log',
     //   max_memory_restart: '2G',
     //   autorestart: true,
     //   watch: false,

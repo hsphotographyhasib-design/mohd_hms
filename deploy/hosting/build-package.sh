@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# FacilityPro — Build Deployment Package for Hostinger Business Hosting
+# MOHD.HMS ENTERPRISE — Build Deployment Package for Hostinger Business Hosting
 # =============================================================================
 # This script builds the Next.js app and creates a deployable .tar.gz
 # for upload to Hostinger Business hosting (cPanel Node.js).
@@ -50,11 +50,11 @@ done
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/../.." && pwd)"
 BUILD_DIR="${PROJECT_ROOT}/.build-output"
-PACKAGE_NAME="facilitypro-deploy.tar.gz"
+PACKAGE_NAME="mohd-hms-deploy.tar.gz"
 OUTPUT="${PROJECT_ROOT}/${PACKAGE_NAME}"
 
 echo -e "${CYAN}═══════════════════════════════════════════════════════════════${NC}"
-echo -e "${CYAN}  FacilityPro — Build Deployment Package${NC}"
+echo -e "${CYAN}  MOHD.HMS ENTERPRISE — Build Deployment Package${NC}"
 echo -e "${CYAN}═══════════════════════════════════════════════════════════════${NC}"
 echo ""
 
@@ -66,7 +66,7 @@ if [[ "${USE_DOCKER}" == "true" ]]; then
 
     info "Building with Docker (Linux compatibility guaranteed)…"
 
-    DOCKER_TAG="facilitypro-build:latest"
+    DOCKER_TAG="mohd-hms-build:latest"
 
     # Build the package inside a Docker container
     docker build -f "${SCRIPT_DIR}/Dockerfile.build" -t "${DOCKER_TAG}" "${PROJECT_ROOT}"
@@ -207,7 +207,7 @@ echo -e "     - cPanel File Manager → Upload to home directory"
 echo -e "     - Or SFTP:  sftp ${YELLOW}u366055699@orangered-hippopotamus-866396.hostingersite.com${NC}"
 echo ""
 echo -e "  2. Extract on the server:"
-echo -e "     ${YELLOW}tar xzf facilitypro-deploy.tar.gz${NC}"
+echo -e "     ${YELLOW}tar xzf mohd-hms-deploy.tar.gz${NC}"
 echo ""
 echo -e "  3. Configure and start (see DEPLOY.md for full guide)"
 echo ""

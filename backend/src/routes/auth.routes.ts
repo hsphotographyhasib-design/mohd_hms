@@ -102,7 +102,7 @@ router.route('/register').post(async (req: Request, res: Response) => {
 
     if (!tenantId) {
       const tenant = await db.tenant.findFirst({ where: { domain: 'mohd-hms.supabase.co' } })
-        || await db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } })
+        || await db.tenant.findFirst({ where: { domain: 'default.mohdhms.com' } })
         || await db.tenant.findFirst({});
       tenantId = tenant?.id;
     }

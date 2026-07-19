@@ -1,4 +1,4 @@
-# FacilityPro — Deployment Guide
+# MOHD.HMS ENTERPRISE — Deployment Guide
 
 **Company:** SMART MAINTENANCE SERVICES SDN BHD (BE1318)
 **Framework:** Next.js 16 + React 19 + TypeScript
@@ -191,7 +191,7 @@ curl https://your-app.vercel.app/api/health
 curl https://mohd-hms-backend.onrender.com/api/health
 
 # Expected response:
-# {"status":"ok","timestamp":"...","service":"FacilityPro","version":"0.2.0","environment":"production"}
+# {"status":"ok","timestamp":"...","service":"MOHD.HMS ENTERPRISE","version":"0.2.0","environment":"production"}
 ```
 
 ---

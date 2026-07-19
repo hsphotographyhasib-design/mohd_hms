@@ -1,7 +1,7 @@
 # Task 2 — Landing Page Builder
 
 ## Summary
-Created a professional SaaS landing page for FacilityPro CMMS and integrated it into the app's routing flow.
+Created a professional SaaS landing page for MOHD.HMS ENTERPRISE and integrated it into the app's routing flow.
 
 ## Files Created
 - `/src/components/app/landing-page.tsx` — Full landing page component (~530 lines)

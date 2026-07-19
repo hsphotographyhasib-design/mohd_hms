@@ -58,7 +58,7 @@ export async function sendEmail(p: SendEmailParams, opts?: { tenantId?: string }
 /* ------------------------------------------------------------------ */
 
 const BRAND = 'MOHD.HMS ENTERPRISE';
-const BRAND_GREEN = '#059669';
+const BRAND_GREEN = '#0B5E3C';
 
 function escapeHtml(s: string): string {
   return s

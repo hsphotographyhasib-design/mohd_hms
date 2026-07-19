@@ -1122,7 +1122,7 @@ export default function EquipmentQrPage() {
             </p>
           </div>
           <p className="text-xs text-gray-300 mt-1">
-            FacilityPro CMMS &middot; Smart Facility Management
+            MOHD.HMS ENTERPRISE &middot; Smart Facility Management
           </p>
         </footer>
       </main>

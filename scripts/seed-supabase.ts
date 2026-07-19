@@ -20,7 +20,7 @@ const admin = createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
 });
 
-const TENANT_DOMAIN = 'mohd-hms.facilitypro.com';
+const TENANT_DOMAIN = 'app.mohdhms.com';
 
 const SETTINGS = [
   { key: 'company_name', value: 'MOHD.HMS ENTERPRISE' },

@@ -1,5 +1,5 @@
 /** Application name used across branding and meta tags */
-export const APP_NAME = 'FacilityPro';
+export const APP_NAME = 'MOHD.HMS ENTERPRISE';
 
 /** Mobile responsive breakpoint (px) — screens below this width are considered mobile */
 export const MOBILE_BREAKPOINT = 768;

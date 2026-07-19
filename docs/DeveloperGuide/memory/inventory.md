@@ -1,4 +1,4 @@
-# FacilityPro — Inventory Feature
+# MOHD.HMS ENTERPRISE — Inventory Feature
 
 ## Overview
 Inventory management tracks stock items (spare parts, materials, tools) used in maintenance work. Items can be linked to work orders via `WorkOrderMaterial` to track material usage and costs.

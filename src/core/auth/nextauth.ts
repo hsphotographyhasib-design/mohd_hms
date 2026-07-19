@@ -38,7 +38,7 @@ export const authOptions: NextAuthOptions = {
           existingUser = await db.user.findFirst({
             where: {
               email,
-              tenant: { domain: 'default.facilitypro.com' },
+              tenant: { domain: 'default.mohdhms.com' },
             },
           });
         }
@@ -46,13 +46,13 @@ export const authOptions: NextAuthOptions = {
         if (!existingUser) {
           // Find or create default tenant
           let tenant = await db.tenant.findFirst({
-            where: { domain: 'default.facilitypro.com' },
+            where: { domain: 'default.mohdhms.com' },
           });
           if (!tenant) {
             tenant = await db.tenant.create({
               data: {
                 name: 'Default Organization',
-                domain: 'default.facilitypro.com',
+                domain: 'default.mohdhms.com',
                 plan: 'professional',
                 maxUsers: 50,
               },
@@ -97,7 +97,7 @@ export const authOptions: NextAuthOptions = {
         const dbUser = await db.user.findFirst({
           where: {
             email: user.email,
-            tenant: { domain: 'default.facilitypro.com' },
+            tenant: { domain: 'default.mohdhms.com' },
           },
           include: { tenant: { select: { id: true, name: true, domain: true } } },
         });
@@ -133,5 +133,5 @@ export const authOptions: NextAuthOptions = {
     strategy: 'jwt',
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
-  secret: process.env.NEXTAUTH_SECRET || 'facilitypro-nextauth-secret-key-2024',
+  secret: process.env.NEXTAUTH_SECRET || 'mohd-hms-nextauth-secret-key-2024',
 };

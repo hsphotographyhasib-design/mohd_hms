@@ -36,7 +36,7 @@ export async function GET() {
     return NextResponse.json({
       status: dbStatus === 'connected' ? 'ok' : 'degraded',
       timestamp: new Date().toISOString(),
-      service: 'FacilityPro',
+      service: 'MOHD.HMS ENTERPRISE',
       version: process.env.npm_package_version || '0.2.0',
       environment: env.nodeEnv,
       database: {

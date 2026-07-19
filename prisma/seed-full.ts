@@ -1,5 +1,5 @@
 /**
- * Comprehensive seed data script for FacilityPro CMMS demo.
+ * Comprehensive seed data script for MOHD.HMS ENTERPRISE CMMS demo.
  * Creates realistic sample data for the entire application.
  * Usage: bun run prisma/seed-full.ts
  *
@@ -1416,7 +1416,7 @@ const vehicles = [
 // ══════════════════════════════════════════════
 async function main() {
   console.log("\n╔══════════════════════════════════════════════════╗");
-  console.log("║   FacilityPro Comprehensive Seed Data Generator   ║");
+  console.log("║   MOHD.HMS ENTERPRISE Comprehensive Seed Data Generator   ║");
   console.log("╚══════════════════════════════════════════════════╝\n");
 
   const counts = { customers: 0, equipment: 0, complaints: 0, workOrders: 0, pmSchedules: 0, invoices: 0, inventoryItems: 0, serviceItems: 0, suppliers: 0, vehicles: 0 };

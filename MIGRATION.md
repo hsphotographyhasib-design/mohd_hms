@@ -1,6 +1,6 @@
 # Feature-Based Architecture Migration Plan
 
-**Project:** FacilityPro CMMS  
+**Project:** MOHD.HMS ENTERPRISE
 **Pattern:** Feature-Based Architecture (incremental migration)  
 **Date:** 2026-06-23  
 **Status:** Phase 1 Complete — Infrastructure Ready

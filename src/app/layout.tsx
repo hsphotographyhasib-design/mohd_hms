@@ -181,7 +181,7 @@ export default function RootLayout({
           defaultTheme="light"
           enableSystem
           disableTransitionOnChange
-          storageKey="facilitypro-theme"
+          storageKey="mohd-hms-theme"
         >
           {children}
           <Toaster />

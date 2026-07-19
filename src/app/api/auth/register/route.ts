@@ -41,9 +41,9 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    let tenant = await withRetry(() => db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } }), { label: 'register-findTenant' });
+    let tenant = await withRetry(() => db.tenant.findFirst({ where: { domain: 'default.mohdhms.com' } }), { label: 'register-findTenant' });
     if (!tenant) {
-      tenant = await withRetry(() => db.tenant.create({ data: { name: 'Default Organization', domain: 'default.facilitypro.com', plan: 'professional', maxUsers: 50 } }), { label: 'register-createTenant' });
+      tenant = await withRetry(() => db.tenant.create({ data: { name: 'Default Organization', domain: 'default.mohdhms.com', plan: 'professional', maxUsers: 50 } }), { label: 'register-createTenant' });
     }
 
     const existing = await withRetry(() => db.user.findFirst({ where: { tenantId: tenant.id, email } }), { label: 'register-checkEmail' });

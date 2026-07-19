@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const user = await db.user.findFirst({
       where: {
         email,
-        tenant: { domain: 'default.facilitypro.com' },
+        tenant: { domain: 'default.mohdhms.com' },
       },
       include: { tenant: { select: { id: true, name: true, domain: true } } },
     });

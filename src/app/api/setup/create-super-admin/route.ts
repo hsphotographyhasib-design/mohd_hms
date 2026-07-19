@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
 
     // Find or create a default tenant
     let tenant = await withRetry(
-      () => db.tenant.findFirst({ where: { domain: 'default.facilitypro.com' } }),
+      () => db.tenant.findFirst({ where: { domain: 'default.mohdhms.com' } }),
       { label: 'setup-findTenant' }
     );
 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
           db.tenant.create({
             data: {
               name: 'Default Organization',
-              domain: 'default.facilitypro.com',
+              domain: 'default.mohdhms.com',
               plan: 'enterprise',
               maxUsers: 999,
             },

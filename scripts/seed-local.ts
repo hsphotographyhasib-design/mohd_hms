@@ -14,7 +14,7 @@ console.log('Seeding database:', dbPath);
 // 1. Tenant
 const tenantId = randomUUID();
 db.prepare(`INSERT OR IGNORE INTO Tenant (id, name, domain, plan, maxUsers, isActive, createdAt, updatedAt)
-  VALUES (?, 'MOHD.HMS ENTERPRISE', 'mohd-hms.facilitypro.com', 'enterprise', 999, 1, datetime('now'), datetime('now'))`).run(tenantId);
+  VALUES (?, 'MOHD.HMS ENTERPRISE', 'app.mohdhms.com', 'enterprise', 999, 1, datetime('now'), datetime('now'))`).run(tenantId);
 console.log('✓ Tenant');
 
 // 2. Departments

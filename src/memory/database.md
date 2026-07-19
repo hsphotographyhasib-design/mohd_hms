@@ -1,4 +1,4 @@
-# FacilityPro — Database Schema
+# MOHD.HMS ENTERPRISE — Database Schema
 
 ## Overview
 - **Database**: SQLite (via Prisma ORM)

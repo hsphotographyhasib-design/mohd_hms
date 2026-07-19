@@ -20,13 +20,13 @@ const NOW = new Date();
 async function main() {
   // 1. Create tenant
   const tenant = await prisma.tenant.upsert({
-    where: { domain: "demo.facilitypro.com" },
+    where: { domain: "demo.mohdhms.com" },
     update: {},
     create: {
       id: "tenant-demo",
-      name: "FacilityPro Demo",
-      domain: "demo.facilitypro.com",
-      email: "admin@facilitypro.com",
+      name: "MOHD.HMS ENTERPRISE Demo",
+      domain: "demo.mohdhms.com",
+      email: "admin@mohdhms.com",
       phone: "+6738888888",
       plan: "professional",
       address: "Brunei Darussalam",
@@ -62,11 +62,11 @@ async function main() {
   const passwordHash = await bcrypt.hash("Admin@123", 12);
 
   const demoUsers = [
-    { id: "user-admin",      email: "admin@facilitypro.com",      name: "Admin User",       role: "super_admin", deptId: "dept-general-operations" },
-    { id: "user-manager",    email: "manager@facilitypro.com",    name: "Manager User",     role: "manager",     deptId: "dept-general-operations" },
-    { id: "user-supervisor", email: "supervisor@facilitypro.com", name: "Supervisor User",   role: "supervisor",  deptId: "dept-maintenance" },
-    { id: "user-tech1",      email: "tech1@facilitypro.com",      name: "Technician One",    role: "technician",  deptId: "dept-maintenance" },
-    { id: "user-finance",    email: "finance@facilitypro.com",    name: "Finance User",      role: "finance",     deptId: "dept-general-operations" },
+    { id: "user-admin",      email: "admin@mohdhms.com",      name: "Admin User",       role: "super_admin", deptId: "dept-general-operations" },
+    { id: "user-manager",    email: "manager@mohdhms.com",    name: "Manager User",     role: "manager",     deptId: "dept-general-operations" },
+    { id: "user-supervisor", email: "supervisor@mohdhms.com", name: "Supervisor User",   role: "supervisor",  deptId: "dept-maintenance" },
+    { id: "user-tech1",      email: "tech1@mohdhms.com",      name: "Technician One",    role: "technician",  deptId: "dept-maintenance" },
+    { id: "user-finance",    email: "finance@mohdhms.com",    name: "Finance User",      role: "finance",     deptId: "dept-general-operations" },
   ];
 
   for (const u of demoUsers) {
@@ -129,11 +129,11 @@ async function main() {
   console.log(`[Seed] Created 1 warehouse`);
 
   console.log("\n✅ Seed complete — demo accounts (password: Admin@123):");
-  console.log("   admin@facilitypro.com     — Super Admin");
-  console.log("   manager@facilitypro.com   — Manager");
-  console.log("   supervisor@facilitypro.com— Supervisor");
-  console.log("   tech1@facilitypro.com     — Technician");
-  console.log("   finance@facilitypro.com   — Finance");
+  console.log("   admin@mohdhms.com     — Super Admin");
+  console.log("   manager@mohdhms.com   — Manager");
+  console.log("   supervisor@mohdhms.com— Supervisor");
+  console.log("   tech1@mohdhms.com     — Technician");
+  console.log("   finance@mohdhms.com   — Finance");
 }
 
 main()

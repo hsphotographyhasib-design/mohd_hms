@@ -1,4 +1,4 @@
-# FacilityPro — Equipment Feature
+# MOHD.HMS ENTERPRISE — Equipment Feature
 
 ## Overview
 Equipment management tracks all physical assets (HVAC systems, electrical panels, plumbing fixtures, generators, mechanical equipment, fire protection systems). Each equipment can have a QR code for quick identification and service requests.

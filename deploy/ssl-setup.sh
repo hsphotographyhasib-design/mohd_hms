@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# FacilityPro - SSL Certificate Setup (Let's Encrypt / Certbot)
+# MOHD.HMS ENTERPRISE - SSL Certificate Setup (Let's Encrypt / Certbot)
 # Company: SMART MAINTENANCE SERVICES SDN BHD
 #
 # Usage:
@@ -42,7 +42,7 @@ fi
 DOMAIN="$1"
 NGINX_CONF="/etc/nginx/sites-available/${DOMAIN}"
 NGINX_ENABLED="/etc/nginx/sites-enabled/${DOMAIN}"
-APP_DIR="/opt/facilitypro"
+APP_DIR="/opt/mohd-hms"
 
 # ── Preflight Checks ─────────────────────────────────────────────────────────
 if [[ "$(id -u)" -ne 0 ]]; then
@@ -128,7 +128,7 @@ success "SSL certificate obtained for ${DOMAIN}!"
 info "Writing production Nginx configuration…"
 
 cat > "${NGINX_CONF}" <<EOF
-# FacilityPro - Nginx Configuration for ${DOMAIN}
+# MOHD.HMS ENTERPRISE - Nginx Configuration for ${DOMAIN}
 # Company: SMART MAINTENANCE SERVICES SDN BHD
 
 # HTTP → HTTPS redirect

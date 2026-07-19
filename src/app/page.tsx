@@ -144,7 +144,7 @@ export default function Home() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Building2 className="h-12 w-12 text-emerald-600 animate-pulse" />
-          <p className="text-muted-foreground">Loading FacilityPro...</p>
+          <p className="text-muted-foreground">Loading MOHD.HMS...</p>
         </div>
       </div>
     );

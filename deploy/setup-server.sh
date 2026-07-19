@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# FacilityPro - Initial VPS Setup Script
+# MOHD.HMS ENTERPRISE - Initial VPS Setup Script
 # Company: SMART MAINTENANCE SERVICES SDN BHD
 #
 # Run this ONCE on a fresh Hostinger VPS (Ubuntu 22.04+).
@@ -32,7 +32,7 @@ warn()    { echo -e "${YELLOW}[WARN]${NC}  $*"; }
 error()   { echo -e "${RED}[ERROR]${NC} $*" >&2; }
 
 # ── Constants ────────────────────────────────────────────────────────────────
-APP_DIR="/opt/facilitypro"
+APP_DIR="/opt/mohd-hms"
 APP_USER="${SUDO_USER:-$(whoami)}"
 
 # ── Preflight Checks ─────────────────────────────────────────────────────────
@@ -41,7 +41,7 @@ if [[ "$(id -u)" -ne 0 ]]; then
     exit 1
 fi
 
-info "Starting VPS setup for FacilityPro…"
+info "Starting VPS setup for MOHD.HMS ENTERPRISE…"
 echo ""
 
 # ── Step 1: Update System Packages ───────────────────────────────────────────
@@ -127,20 +127,20 @@ echo ""
 echo -e "${CYAN}Next steps:${NC}"
 echo ""
 echo -e "  1. Copy your project to the server:"
-echo -e "     ${YELLOW}scp -r ./deploy/ root@<your-vps-ip>:/opt/facilitypro/app/${NC}"
+echo -e "     ${YELLOW}scp -r ./deploy/ root@<your-vps-ip>:/opt/mohd-hms/app/${NC}"
 echo ""
 echo -e "  2. Configure environment:"
-echo -e "     ${YELLOW}cd /opt/facilitypro/app${NC}"
+echo -e "     ${YELLOW}cd /opt/mohd-hms/app${NC}"
 echo -e "     ${YELLOW}cp .env.example .env${NC}"
 echo -e "     ${YELLOW}nano .env   # Update JWT_SECRET, APP_URL, etc.${NC}"
 echo ""
 echo -e "  3. Deploy the application:"
-echo -e "     ${YELLOW}bash /opt/facilitypro/app/deploy.sh --domain your-domain.com${NC}"
+echo -e "     ${YELLOW}bash /opt/mohd-hms/app/deploy.sh --domain your-domain.com${NC}"
 echo ""
 echo -e "  4. Set up SSL (after DNS points to this VPS):"
-echo -e "     ${YELLOW}bash /opt/facilitypro/app/ssl-setup.sh your-domain.com${NC}"
+echo -e "     ${YELLOW}bash /opt/mohd-hms/app/ssl-setup.sh your-domain.com${NC}"
 echo ""
 echo -e "  5. (Optional) Set up automated backups with cron:"
 echo -e "     ${YELLOW}crontab -e${NC}"
-echo -e "     ${YELLOW}# Add: 0 2 * * * /opt/facilitypro/app/backup.sh${NC}"
+echo -e "     ${YELLOW}# Add: 0 2 * * * /opt/mohd-hms/app/backup.sh${NC}"
 echo ""

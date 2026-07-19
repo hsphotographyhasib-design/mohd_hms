@@ -1,6 +1,44 @@
 // ============ COMPANY INFORMATION ============
 // Single source of truth for company details used across
 // Invoice, Quotation, and other document views.
+// Also serves as the centralized branding configuration.
+
+// ─── Brand Identity ───────────────────────────────────────────────
+export const BRAND = {
+  /** Full legal/official name */
+  name: 'MOHD.HMS ENTERPRISE',
+  /** Short brand name for headers, nav bars, and tight spaces */
+  shortName: 'MOHD.HMS',
+  /** Application name used in browser tabs, meta tags, and system UI */
+  appName: 'MOHD.HMS ENTERPRISE',
+  /** Official website URL */
+  siteUrl: 'https://mohdhms.com',
+  /** Primary brand color — the official company green */
+  green: '#0B5E3C',
+  /** Lighter green for accents / hover states */
+  greenBright: '#0B7E50',
+  /** Very light green for backgrounds */
+  greenSoft: '#E8F5E9',
+  /** Theme storage key for next-themes */
+  themeStorageKey: 'mohd-hms-theme',
+  /** Default tenant domain used in auth / multi-tenant queries */
+  defaultTenantDomain: 'default.mohdhms.com',
+  /** Logo paths */
+  logo: {
+    /** Main SVG logo used in documents and app shell */
+    svg: '/mohd_hms_logo.svg',
+    /** PNG logo used as brand icon in headers */
+    png: '/logo.png',
+    /** Logo used for high-res / email / notifications */
+    png512: '/logo-512.png',
+    /** Logo for OG / social sharing */
+    png1024: '/logo-1024.png',
+    /** Favicon (ICO) */
+    ico: '/favicon.ico',
+    /** Favicon (SVG, modern browsers) */
+    svgIcon: '/icon.svg',
+  },
+} as const;
 
 export const COMPANY = {
   name: 'MOHD.HMS ENTERPRISE',

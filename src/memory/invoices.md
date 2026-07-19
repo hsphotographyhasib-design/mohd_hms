@@ -1,4 +1,4 @@
-# FacilityPro — Invoices Feature
+# MOHD.HMS ENTERPRISE — Invoices Feature
 
 ## Overview
 The invoice system handles billing for completed work. Invoices can be created manually or auto-generated from the complaint workflow (when status reaches CLIENT_CONFIRMED). They support line items, taxes, discounts, shipping, and multiple payment tracking fields.

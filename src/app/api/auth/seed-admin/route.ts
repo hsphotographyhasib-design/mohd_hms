@@ -70,7 +70,7 @@ export async function POST(request: Request) {
     let tenant = await withRetry(() => db.tenant.findFirst({}), { label: 'seed-tenant' });
     if (!tenant) {
       tenant = await withRetry(() => db.tenant.create({
-        data: { name: 'Default Organization', domain: 'default.facilitypro.com', plan: 'professional', maxUsers: 50 },
+        data: { name: 'Default Organization', domain: 'default.mohdhms.com', plan: 'professional', maxUsers: 50 },
       }), { label: 'seed-tenant' });
     }
 

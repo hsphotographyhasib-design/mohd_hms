@@ -549,7 +549,7 @@ export async function sendTestMessage(
     }
   }
 
-  const result = await sendMessage(sessionId, targetChatId, '✅ WhatsApp connection successful!\n\nThis is a test message from FacilityPro CMMS.', 'text');
+  const result = await sendMessage(sessionId, targetChatId, '✅ WhatsApp connection successful!\n\nThis is a test message from MOHD.HMS ENTERPRISE.', 'text');
   return {
     success: result.success,
     message: result.success ? 'Test message sent successfully!' : `Failed: ${result.error}`,

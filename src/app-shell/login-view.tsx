@@ -96,11 +96,11 @@ interface DemoAccount {
 }
 
 const demoAccounts: DemoAccount[] = ENABLE_DEMO ? [
-  { label: 'Admin', email: 'admin@facilitypro.com', password: 'Admin@123', icon: <Shield className="h-3.5 w-3.5" /> },
-  { label: 'Manager', email: 'manager@facilitypro.com', password: 'Admin@123', icon: <UserCog className="h-3.5 w-3.5" /> },
-  { label: 'Supervisor', email: 'supervisor@facilitypro.com', password: 'Admin@123', icon: <HardHat className="h-3.5 w-3.5" /> },
-  { label: 'Technician', email: 'tech1@facilitypro.com', password: 'Admin@123', icon: <Wrench className="h-3.5 w-3.5" /> },
-  { label: 'Finance', email: 'finance@facilitypro.com', password: 'Admin@123', icon: <DollarSign className="h-3.5 w-3.5" /> },
+  { label: 'Admin', email: 'admin@mohdhms.com', password: 'Admin@123', icon: <Shield className="h-3.5 w-3.5" /> },
+  { label: 'Manager', email: 'manager@mohdhms.com', password: 'Admin@123', icon: <UserCog className="h-3.5 w-3.5" /> },
+  { label: 'Supervisor', email: 'supervisor@mohdhms.com', password: 'Admin@123', icon: <HardHat className="h-3.5 w-3.5" /> },
+  { label: 'Technician', email: 'tech1@mohdhms.com', password: 'Admin@123', icon: <Wrench className="h-3.5 w-3.5" /> },
+  { label: 'Finance', email: 'finance@mohdhms.com', password: 'Admin@123', icon: <DollarSign className="h-3.5 w-3.5" /> },
 ] : [];
 
 /* ------------------------------------------------------------------ */

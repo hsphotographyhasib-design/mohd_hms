@@ -169,7 +169,7 @@ export function MobileNavSheet() {
               <LayoutDashboard className="h-4 w-4" />
             </div>
             <span className="text-base font-semibold text-foreground tracking-tight">
-              FacilityPro
+              MOHD.HMS
             </span>
           </SheetTitle>
         </SheetHeader>

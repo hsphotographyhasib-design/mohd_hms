@@ -1,7 +1,7 @@
 # =============================================================================
 # Dockerfile for building the deployment package (cross-platform)
 # =============================================================================
-# Usage: docker build -f deploy/hosting/Dockerfile.build -t facilitypro-build .
+# Usage: docker build -f deploy/hosting/Dockerfile.build -t mohd-hms-build .
 # This creates a Linux-compatible build on any OS (macOS, Windows, Linux).
 # The output is a .tar.gz file extracted from the container.
 # =============================================================================
@@ -55,7 +55,7 @@ RUN mkdir -p /app/pkg/app/prisma /app/pkg/app/storage/chunks /app/pkg/app/storag
     cp -f /app/deploy/hosting/.env.production /app/pkg/app/.env.example 2>/dev/null || true && \
     cp -f /app/deploy/hosting/.htaccess /app/pkg/app/.htaccess 2>/dev/null || true && \
     cd /app/pkg && \
-    tar czf /app/facilitypro-deploy.tar.gz app/
+    tar czf /app/mohd-hms-deploy.tar.gz app/
 
 # Default command shows the output file
-CMD ["ls", "-lh", "facilitypro-deploy.tar.gz"]
+CMD ["ls", "-lh", "mohd-hms-deploy.tar.gz"]

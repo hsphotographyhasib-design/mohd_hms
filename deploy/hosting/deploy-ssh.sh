@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# FacilityPro — SSH Deploy Script (Hostinger Business Hosting)
+# MOHD.HMS ENTERPRISE — SSH Deploy Script (Hostinger Business Hosting)
 # =============================================================================
 # This script automates the full deployment:
 #   1. Builds the deployment package (or uses an existing one)
@@ -50,8 +50,8 @@ SSH_TARGET=""
 
 # Remote paths
 REMOTE_HOME="/home/${SSH_USER}"
-APP_DIR="facilitypro"          # Application directory name on the server
-PACKAGE_NAME="facilitypro-deploy.tar.gz"
+APP_DIR="mohd-hms"          # Application directory name on the server
+PACKAGE_NAME="mohd-hms-deploy.tar.gz"
 
 # ══════════════════════════════════════════════════════════════════════════
 # ARGUMENTS
@@ -96,7 +96,7 @@ fi
 REMOTE_APP="${REMOTE_HOME}/${APP_DIR}"
 
 echo -e "${CYAN}═══════════════════════════════════════════════════════════════${NC}"
-echo -e "${CYAN}  FacilityPro — SSH Deploy${NC}"
+echo -e "${CYAN}  MOHD.HMS ENTERPRISE — SSH Deploy${NC}"
 echo -e "${CYAN}═══════════════════════════════════════════════════════════════${NC}"
 echo ""
 echo -e "  ${CYAN}Server:${NC}   ${SSH_USER}@${SSH_HOST}:${SSH_PORT}"

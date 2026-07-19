@@ -1,4 +1,4 @@
-# FacilityPro — WhatsApp Integration
+# MOHD.HMS ENTERPRISE — WhatsApp Integration
 
 ## Overview
 The WhatsApp system provides a **conversational bot interface** for customers to interact with the CMMS. It supports complaint creation, status queries, feedback, emergency alerts, and broadcast campaigns. The system has two layers:

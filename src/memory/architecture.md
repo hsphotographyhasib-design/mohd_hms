@@ -1,7 +1,7 @@
-# FacilityPro — Architecture
+# MOHD.HMS ENTERPRISE — Architecture
 
 ## Overview
-FacilityPro is a **Computerized Maintenance Management System (CMMS)** built with Next.js 16 (App Router), React 19, TypeScript, Prisma ORM (SQLite), and Tailwind CSS 4. It supports **multi-tenancy** via a `Tenant` model that scopes all data.
+MOHD.HMS ENTERPRISE is a **Computerized Maintenance Management System (CMMS)** built with Next.js 16 (App Router), React 19, TypeScript, Prisma ORM (SQLite), and Tailwind CSS 4. It supports **multi-tenancy** via a `Tenant` model that scopes all data.
 
 ## Folder Structure
 

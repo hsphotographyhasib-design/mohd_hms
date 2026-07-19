@@ -1,4 +1,4 @@
-# FacilityPro — Feature Index
+# MOHD.HMS ENTERPRISE — Feature Index
 
 ## Overview
 25 feature modules defined in `src/features/`. Each has a barrel `index.ts` file. Migration status indicates whether the feature's code has been moved into the barrel module or remains in the legacy structure.

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # =============================================================================
-# FacilityPro - Main Deployment Script
+# MOHD.HMS ENTERPRISE - Main Deployment Script
 # Company: SMART MAINTENANCE SERVICES SDN BHD
 #
 # Usage:
@@ -53,14 +53,14 @@ done
 # ── Constants ────────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-APP_DIR="/opt/facilitypro"
+APP_DIR="/opt/mohd-hms"
 COMPOSE_FILE="${APP_DIR}/app/deploy/vps/docker-compose.yml"
 HEALTH_URL="http://localhost:3000"
 MAX_WAIT=60 # seconds to wait for health check
 
 # ── Step 1: Prerequisite Checks ─────────────────────────────────────────────
 echo -e "${CYAN}═══════════════════════════════════════════════════════════════${NC}"
-echo -e "${CYAN}  FacilityPro Deployment${NC}"
+echo -e "${CYAN}  MOHD.HMS ENTERPRISE Deployment${NC}"
 echo -e "${CYAN}═══════════════════════════════════════════════════════════════${NC}"
 echo ""
 

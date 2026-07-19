@@ -17,7 +17,7 @@ pre_compile() {
   # Get a real token
   TOKEN=$(curl -4 -s --max-time 15 -X POST "$BASE/api/auth/login" \
     -H "Content-Type: application/json" \
-    -d '{"email":"admin@facilitypro.com","password":"Admin@123"}' \
+    -d '{"email":"admin@mohdhms.com","password":"Admin@123"}' \
     | python3 -c "import sys,json; print(json.load(sys.stdin).get('token',''))" 2>/dev/null)
   
   if [ -n "$TOKEN" ]; then
