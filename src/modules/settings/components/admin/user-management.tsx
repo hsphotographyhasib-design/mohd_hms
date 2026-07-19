@@ -454,6 +454,10 @@ export function UserManagement() {
     // Support both detail dialog and inline table role changes
     const targetUser = selectedUser || roleChangeTarget;
     if (!targetUser || !newRole) return;
+
+    const previousRole = targetUser.role;
+    if (newRole === previousRole) return;
+
     setActionLoading('change-role');
     try {
       const res = await fetch(`/api/auth/users/${targetUser.id}`, {
@@ -462,8 +466,15 @@ export function UserManagement() {
         body: JSON.stringify({ role: newRole }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to change role');
-      toast.success(`Role changed to ${ROLE_LABELS[newRole]}`);
+      if (!res.ok) {
+        // Extract the most useful error message from the response
+        const errMsg = data.error || data.message || 'Failed to change role';
+        throw new Error(errMsg);
+      }
+      // Show role transition in the success toast
+      const fromLabel = ROLE_LABELS[previousRole] || previousRole;
+      const toLabel = ROLE_LABELS[newRole] || newRole;
+      toast.success(`Role changed: ${fromLabel} → ${toLabel}`);
       setRoleDialogOpen(false);
       setNewRole('');
       setRoleChangeTarget(null);
@@ -500,9 +511,10 @@ export function UserManagement() {
         body: JSON.stringify({ isActive: newStatus }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || `Failed to ${label} user`);
+      if (!res.ok) throw new Error(data.error || data.message || `Failed to ${label} user`);
       toast.success(`User ${label}d successfully`);
       refreshDetail();
+      fetchUsers();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : `Failed to ${label} user`);
     } finally {
@@ -538,7 +550,7 @@ export function UserManagement() {
         headers: { Authorization: `Bearer ${token()}` },
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to delete user');
+      if (!res.ok) throw new Error(data.error || data.message || 'Failed to delete user');
       toast.success('User deactivated and all sessions revoked');
       setDeleteDialogOpen(false);
       setDetailOpen(false);
@@ -823,14 +835,18 @@ export function UserManagement() {
                             <DropdownMenuItem onSelect={() => openUserDetail(u.id)}>
                               <Eye className="h-4 w-4 mr-2" /> View Details
                             </DropdownMenuItem>
-                            {u.authProvider === 'google' && u.role === 'customer' && u.id !== currentUser?.id && (
+                            {(isSuperAdmin || hasMinRole(currentUser?.role || 'guest', 'admin')) &&
+                              u.id !== currentUser?.id && (
                               <>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
-                                  className="text-amber-600 dark:text-amber-400"
+                                  className={u.authProvider === 'google' && u.role === 'customer'
+                                    ? 'text-amber-600 dark:text-amber-400'
+                                    : 'text-emerald-600 dark:text-emerald-400'}
                                   onSelect={() => openQuickRoleChange(u)}
                                 >
-                                  <ArrowUpRight className="h-4 w-4 mr-2" /> Upgrade Role
+                                  <UserCog className="h-4 w-4 mr-2" />
+                                  {u.authProvider === 'google' && u.role === 'customer' ? 'Upgrade Role' : 'Change Role'}
                                 </DropdownMenuItem>
                               </>
                             )}
@@ -940,14 +956,18 @@ export function UserManagement() {
                     <GoogleCustomerBadge provider={u.authProvider} role={u.role} />
                     <OnlineStatusIndicator info={u.presenceInfo} />
                   </div>
-                  {u.authProvider === 'google' && u.role === 'customer' && u.id !== currentUser?.id && (
+                  {(isSuperAdmin || hasMinRole(currentUser?.role || 'guest', 'admin')) &&
+                    u.id !== currentUser?.id && (
                     <Button
                       variant="outline"
                       size="sm"
-                      className="text-amber-600 border-amber-200 hover:bg-amber-50 dark:text-amber-400 dark:border-amber-800 dark:hover:bg-amber-950/50 h-7 text-xs"
+                      className={u.authProvider === 'google' && u.role === 'customer'
+                        ? 'text-amber-600 border-amber-200 hover:bg-amber-50 dark:text-amber-400 dark:border-amber-800 dark:hover:bg-amber-950/50 h-7 text-xs'
+                        : 'text-emerald-600 border-emerald-200 hover:bg-emerald-50 dark:text-emerald-400 dark:border-emerald-800 dark:hover:bg-emerald-950/50 h-7 text-xs'}
                       onClick={(e) => openQuickRoleChange(u, e)}
                     >
-                      <ArrowUpRight className="h-3 w-3 mr-1" /> Upgrade Role
+                      <UserCog className="h-3 w-3 mr-1" />
+                      {u.authProvider === 'google' && u.role === 'customer' ? 'Upgrade Role' : 'Change Role'}
                     </Button>
                   )}
                 </div>

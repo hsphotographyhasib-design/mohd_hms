@@ -407,3 +407,61 @@ Stage Summary:
 - New files: src/app/api/branding/route.ts, src/app/api/branding/upload/route.ts, src/app/api/branding/assets/route.ts, src/app/api/branding/assets/[id]/route.ts, src/app/api/branding/serve/[type]/route.ts, src/core/branding/branding-types.ts, src/core/branding/branding-store.ts, src/core/branding/branding-service.ts, src/core/branding/use-branding.ts, src/core/branding/index.ts, src/modules/cms/components/cms-branding.tsx
 - Modified files: prisma/schema.prisma, src/core/types/index.ts, src/types/index.ts, src/core/permissions/view-feature-map.ts, src/app-shell/app-shell.tsx, src/modules/cms/index.ts, src/modules/cms/components/cms-dashboard.tsx, src/shared/components/brand/brand-logo.tsx, src/app-shell/login-view.tsx, src/core/auth/components/auth-shell.tsx, src/app-shell/sidebar.tsx
 - TypeScript: 0 errors
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix Super Admin Role Upgrade Bug (Enterprise RBAC Audit)
+
+Work Log:
+- Conducted comprehensive full-stack audit of the role change feature
+- Frontend: Inspected user-management.tsx (1492 lines), role dialog, handleChangeRole, API request, error handling
+- Backend: Inspected PUT /api/auth/users/[id] route, authenticateRequest, RBAC checks, Prisma update
+- Database: Verified User model (role: String @default("technician")), no enum constraints blocking updates
+- RBAC: Verified FEATURE_PERMISSIONS, ACTION_PERMISSIONS, authenticateRequest role checks
+
+Root Causes Found:
+1. **"Change Role" only visible for Google customers in table** — The dropdown menu item was gated behind `u.authProvider === 'google' && u.role === 'customer'`. Non-Google users and non-customer roles had NO way to change roles from the table view. Only accessible via detail dialog's "Change Role" button.
+2. **Audit log creation failing silently** — AuditLog model requires `id String @id`, but all audit log creations in PUT/DELETE/sessions routes omitted the `id` field, causing PrismaClientValidationError caught by `.catch(() => {})`. No audit trail for any user updates.
+3. **No safeguard against removing the last super_admin** — A super_admin could demote the only super_admin, locking out all administration.
+4. **No self-role-change prevention** — A user could theoretically change their own role.
+5. **Generic error messages** — Frontend only read `data.error` from API responses, missing `data.message` from withErrorLogging wrapper for super admins.
+6. **No role transition feedback** — Success toast said "Role changed to X" without showing the previous role.
+
+Fixes Applied:
+- **API (PUT /api/auth/users/[id]/route.ts)**:
+  - Added `id: crypto.randomUUID()` to all audit log creations (PUT and DELETE handlers)
+  - Added self-role-change prevention: returns 400 "Cannot change your own role"
+  - Added last-super-admin safeguard: counts active super_admins before demotion, returns 400 if only 1 remains
+  - Added role-specific audit action: `change_role` instead of generic `update_user`
+  - Added `previousRole` to response body for frontend transition message
+  - Added audit `details` field with `{ previousRole, newRole, changedBy }`
+  - Added `fetchUsers()` call after toggle-active success (was missing, list wouldn't refresh)
+
+- **API (sessions/route.ts)**:
+  - Added `id: crypto.randomUUID()` to force-logout audit log creation
+
+- **Frontend (user-management.tsx)**:
+  - Made "Change Role" available in table dropdown for ALL users (not just Google customers)
+  - Condition: `(isSuperAdmin || hasMinRole(currentUser?.role, 'admin')) && u.id !== currentUser?.id`
+  - Google customer upgrade uses amber styling + "Upgrade Role" label
+  - All other users use emerald styling + "Change Role" label
+  - Same fix applied to both table dropdown (Desktop) and card view (Mobile)
+  - Improved `handleChangeRole`: added `previousRole` tracking, shows "Customer → Technician" transition in toast
+  - Improved error extraction: reads both `data.error` and `data.message` from API responses
+  - Added `fetchUsers()` call after handleToggleActive success
+
+Testing (direct handler invocation):
+- ✅ technician → supervisor: 200, audit log created
+- ✅ supervisor → manager: 200, audit log created
+- ✅ customer → technician: 200, audit log created
+- ✅ Self-role-change: 400 "Cannot change your own role"
+- ✅ Last super_admin demotion: 400 "Cannot demote the last remaining super admin"
+- ✅ Manager cannot demote super_admin: 403 "Insufficient permissions"
+- ✅ Audit logs verified: 7 entries with proper `change_role` action and details
+
+Stage Summary:
+- Files modified: src/app/api/auth/users/[id]/route.ts, src/app/api/auth/users/[id]/sessions/route.ts, src/modules/settings/components/admin/user-management.tsx
+- Root causes: Missing "Change Role" visibility for non-Google users, broken audit logs, missing safeguards
+- All 5 role change scenarios verified working via direct API handler testing
+- TypeScript: 0 errors

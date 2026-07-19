@@ -43,7 +43,7 @@ export const GET = withErrorLogging(async function GET(
     const authResult = await authenticateRequest(request);
     if (authResult instanceof NextResponse) return authResult;
 
-    const { payload, ipAddress, userAgent } = authResult;
+    const { payload } = authResult;
     const { id } = await params;
 
     const user = await withRetry(
@@ -152,7 +152,18 @@ export const PUT = withErrorLogging(async function PUT(
     if (authResult instanceof NextResponse) return authResult;
 
     const { payload, ipAddress, userAgent } = authResult;
+    const callerId = payload.userId as string;
+    const callerRole = payload.role as string;
+    const tenantId = payload.tenantId as string;
     const { id } = await params;
+
+    // Prevent self-role-change
+    if (id === callerId) {
+      return NextResponse.json(
+        { error: 'Cannot change your own role. Ask another super admin to change it.' },
+        { status: 400 }
+      );
+    }
 
     // Find existing user by primary key
     const existingUser = await withRetry(
@@ -164,7 +175,7 @@ export const PUT = withErrorLogging(async function PUT(
       { label: 'updateUser-find' }
     );
 
-    if (!existingUser || existingUser.tenantId !== (payload.tenantId as string)) {
+    if (!existingUser || existingUser.tenantId !== tenantId) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
@@ -175,19 +186,25 @@ export const PUT = withErrorLogging(async function PUT(
     const updateData: Record<string, unknown> = {};
     if (name !== undefined) updateData.name = name;
     if (phone !== undefined) updateData.phone = phone;
+
+    // Track previous role for audit and response
+    const previousRole = existingUser.role;
+    const isRoleChange = role !== undefined && role !== previousRole;
+
     if (role !== undefined) {
       // Only admin or super_admin can change roles
-      const callerRole = payload.role as string;
       if (!['admin', 'super_admin'].includes(callerRole)) {
         return NextResponse.json(
           { error: 'Only admins can change user roles' },
           { status: 403 }
         );
       }
+
       const validRoles = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer', 'vendor', 'guest'];
       if (!validRoles.includes(role)) {
-        return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
+        return NextResponse.json({ error: `Invalid role "${role}". Must be one of: ${validRoles.join(', ')}` }, { status: 400 });
       }
+
       // Only super_admin can assign super_admin role
       if (role === 'super_admin' && callerRole !== 'super_admin') {
         return NextResponse.json(
@@ -195,6 +212,7 @@ export const PUT = withErrorLogging(async function PUT(
           { status: 403 }
         );
       }
+
       // Non-super_admin cannot modify super_admin users
       if (existingUser.role === 'super_admin' && callerRole !== 'super_admin') {
         return NextResponse.json(
@@ -202,6 +220,21 @@ export const PUT = withErrorLogging(async function PUT(
           { status: 403 }
         );
       }
+
+      // Safeguard: prevent removing the last super_admin
+      if (previousRole === 'super_admin' && role !== 'super_admin') {
+        const superAdminCount = await withRetry(
+          () => db.user.count({ where: { tenantId, role: 'super_admin', isActive: true } }),
+          { label: 'updateUser-superAdminCount' }
+        );
+        if (superAdminCount <= 1) {
+          return NextResponse.json(
+            { error: 'Cannot demote the last remaining super admin. Assign another super admin first.' },
+            { status: 400 }
+          );
+        }
+      }
+
       updateData.role = role;
     }
     if (isActive !== undefined) updateData.isActive = isActive;
@@ -213,7 +246,7 @@ export const PUT = withErrorLogging(async function PUT(
           db.user.findFirst({
             where: {
               email,
-              tenantId: payload.tenantId as string,
+              tenantId,
               id: { not: id },
             },
           }),
@@ -265,18 +298,25 @@ export const PUT = withErrorLogging(async function PUT(
       isActive: updatedUser.isActive,
     });
 
-    // Audit log (non-critical)
+    // Audit log (non-critical) — use role-specific action for role changes
+    const auditAction = isRoleChange ? 'change_role' : 'update_user';
+    const auditDetails = isRoleChange
+      ? JSON.stringify({ previousRole, newRole: role, changedBy: callerRole })
+      : undefined;
+
     withRetry(
       () =>
         db.auditLog.create({
           data: {
-            tenantId: payload.tenantId as string,
-            userId: payload.userId as string,
-            action: 'update_user',
+            id: crypto.randomUUID(),
+            tenantId,
+            userId: callerId,
+            action: auditAction,
             entity: 'User',
             entityId: id,
             oldValue,
             newValue,
+            details: auditDetails,
             ipAddress,
             userAgent,
             device: 'api',
@@ -285,7 +325,11 @@ export const PUT = withErrorLogging(async function PUT(
       { label: 'updateUser-audit' }
     ).catch(() => {});
 
-    return NextResponse.json({ user: updatedUser });
+    // Return previousRole so the frontend can show a transition message
+    return NextResponse.json({
+      user: updatedUser,
+      ...(isRoleChange ? { previousRole } : {}),
+    });
   } catch (error) {
     console.error('Update user error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });
@@ -346,6 +390,20 @@ export const DELETE = withErrorLogging(async function DELETE(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
+    // Safeguard: prevent deleting the last super_admin
+    if (user.role === 'super_admin') {
+      const superAdminCount = await withRetry(
+        () => db.user.count({ where: { tenantId: tokenPayload.tenantId as string, role: 'super_admin', isActive: true } }),
+        { label: 'deleteUser-superAdminCount' }
+      );
+      if (superAdminCount <= 1) {
+        return NextResponse.json(
+          { error: 'Cannot deactivate the last remaining super admin.' },
+          { status: 400 }
+        );
+      }
+    }
+
     // Soft delete: set isActive = false
     const updatedUser = await withRetry(
       () =>
@@ -379,12 +437,13 @@ export const DELETE = withErrorLogging(async function DELETE(
       () =>
         db.auditLog.create({
           data: {
+            id: crypto.randomUUID(),
             tenantId: tokenPayload.tenantId as string,
             userId: tokenPayload.userId as string,
             action: 'deactivate_user',
             entity: 'User',
             entityId: id,
-            oldValue: JSON.stringify({ isActive: user.isActive }),
+            oldValue: JSON.stringify({ isActive: user.isActive, role: user.role }),
             newValue: JSON.stringify({ isActive: false }),
             ipAddress,
             userAgent,

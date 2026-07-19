@@ -52,6 +52,7 @@ export async function DELETE(
     try {
       await db.auditLog.create({
         data: {
+          id: crypto.randomUUID(),
           tenantId: payload.tenantId as string,
           userId: payload.userId as string,
           action: 'force_logout_user',
