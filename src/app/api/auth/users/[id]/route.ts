@@ -74,7 +74,7 @@ export const GET = withErrorLogging(async function GET(
             department: {
               select: { id: true, name: true },
             },
-            loginSessions: {
+            LoginSession: {
               select: {
                 id: true,
                 deviceName: true,
@@ -89,7 +89,7 @@ export const GET = withErrorLogging(async function GET(
               orderBy: { lastActivity: 'desc' },
               take: 10,
             },
-            devices: {
+            Device: {
               select: {
                 id: true,
                 name: true,
@@ -103,7 +103,7 @@ export const GET = withErrorLogging(async function GET(
               orderBy: { lastSeen: 'desc' },
               take: 10,
             },
-            auditLogs: {
+            AuditLog: {
               select: {
                 id: true,
                 action: true,
@@ -123,7 +123,18 @@ export const GET = withErrorLogging(async function GET(
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ user });
+    // Map PascalCase relation keys to camelCase for the frontend
+    const response = {
+      ...user,
+      loginSessions: user.LoginSession,
+      devices: user.Device,
+      auditLogs: user.AuditLog,
+    };
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { LoginSession, Device, AuditLog, ...rest } = response;
+    void rest;
+
+    return NextResponse.json({ user: response });
   } catch (error) {
     console.error('Get user error:', error);
     return NextResponse.json({ error: getDbFriendlyMessage(error) }, { status: 500 });

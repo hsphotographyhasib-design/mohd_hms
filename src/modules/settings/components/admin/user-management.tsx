@@ -409,8 +409,11 @@ export function UserManagement() {
   const openUserDetail = async (userId: string) => {
     setDetailLoading(true);
     setSelectedUser(null);
-    // Delay dialog open to avoid Radix UI portal conflict with DropdownMenu
-    setTimeout(() => setDetailOpen(true), 150);
+    // Use a ref-based timeout so we can cancel it on early failure
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      if (!cancelled) setDetailOpen(true);
+    }, 150);
     try {
       const res = await fetch(`/api/auth/users/${userId}`, {
         headers: { Authorization: `Bearer ${token()}` },
@@ -419,8 +422,10 @@ export function UserManagement() {
       const json = await res.json();
       setSelectedUser(json.user);
     } catch {
-      toast.error('Failed to load user details');
+      clearTimeout(timer);
+      cancelled = true;
       setDetailOpen(false);
+      toast.error('Failed to load user details');
     } finally {
       setDetailLoading(false);
     }
@@ -993,7 +998,7 @@ export function UserManagement() {
                 <DialogTitle className="flex items-center gap-3">
                   <Avatar className="h-10 w-10">
                     <AvatarFallback className="bg-emerald-100 text-emerald-700 text-sm font-semibold dark:bg-emerald-900 dark:text-emerald-300">
-                      {getInitials(selectedUser.name)}
+                      {getInitials(selectedUser.name || 'U')}
                     </AvatarFallback>
                   </Avatar>
                   <div className="text-left">
@@ -1281,7 +1286,16 @@ export function UserManagement() {
                 )}
               </div>
             </>
-          ) : null}
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <AlertTriangle className="h-10 w-10 text-muted-foreground mb-3" />
+              <p className="text-sm font-medium text-muted-foreground">Unable to load user details</p>
+              <p className="text-xs text-muted-foreground mt-1">Please try again or check your connection</p>
+              <Button variant="outline" size="sm" className="mt-4" onClick={() => setDetailOpen(false)}>
+                Close
+              </Button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 

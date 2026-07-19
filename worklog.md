@@ -271,3 +271,25 @@ Stage Summary:
 - Shows live online/away user counts from presence store
 - WebSocket connection status indicator (Live/Offline)
 - Consistent card styling with existing KPI cards
+
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix user detail modal crash when viewing user details
+
+Work Log:
+- Analyzed screenshot showing blank modal when clicking user detail in Users management
+- Investigated the user-management.tsx component (1459 lines) and /api/auth/users/[id]/route.ts API
+- Discovered TWO root causes:
+  1. **Prisma field name mismatch**: API route used camelCase `loginSessions`, `devices`, `auditLogs` but Prisma schema defines PascalCase `LoginSession`, `Device`, `AuditLog` as relation field names on User model. This caused PrismaClientValidationError → 500 response.
+  2. **Race condition**: `setTimeout(() => setDetailOpen(true), 150)` was scheduled before fetch. If fetch failed quickly (<150ms), the catch block set `setDetailOpen(false)`, but the stale timeout then fired and reopened the dialog with `detailLoading=false` and `selectedUser=null` → blank modal.
+- Fixed API route: Changed Prisma query to use PascalCase field names, added response mapping to camelCase for frontend compatibility
+- Fixed frontend: Added `clearTimeout` + `cancelled` flag to prevent race condition
+- Added fallback UI for blank state (shows error message instead of empty dialog)
+- Added null safety on `getInitials(selectedUser.name || 'U')`
+- Verified: TypeScript compilation passes with zero errors, initial page compiles successfully
+
+Stage Summary:
+- Files modified: `src/app/api/auth/users/[id]/route.ts`, `src/modules/settings/components/admin/user-management.tsx`
+- Root cause: Prisma PascalCase relation names vs camelCase API usage + setTimeout race condition
+- Fix verified via `npx tsc --noEmit` (0 errors) and dev server compilation (GET / 200)
