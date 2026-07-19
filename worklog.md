@@ -105,3 +105,29 @@ Stage Summary:
 - Pushed to GitHub: commit 291d00d on branch main
 - All previous session tasks confirmed complete
 - Dev server running on port 3000, responding with HTTP 200
+
+---
+Task ID: 8
+Agent: main
+Task: Standardize MOHD.HMS ENTERPRISE branding across entire application
+
+Work Log:
+- Conducted comprehensive audit: found 35+ "FacilityPro" references across 82 files
+- Fixed 9 critical user-visible references (APP_NAME, headers, loading screen, page titles)
+- Fixed 14 internal/auth references (tenant domains, JWT secrets, demo emails, seed data)
+- Fixed brand color inconsistency: legacy email files used #059669, corrected to #0B5E3C
+- Created centralized BRAND config in src/core/constants/company.ts with name, shortName, colors, logo paths, theme key, default tenant domain
+- Made src/lib/company.ts re-export from centralized config (backward compatible)
+- Updated PWA manifest with version 2.0.0 for cache invalidation
+- Updated 14 deploy scripts (nginx, PM2, Docker, backup, SSL, hosting)
+- Updated 36 documentation/memory .md files
+- Deleted 2 stale auth-state.json files
+- Final validation: grep confirms ZERO "facilitypro" or "FacilityPro" remaining in src/, prisma/, public/, mini-services/
+
+Stage Summary:
+- 82 files changed, 230 insertions, 281 deletions
+- Commit ade999b pushed to origin/main
+- Dev server compiles and serves correctly (verified with agent-browser)
+- Browser title shows: "MOHD.HMS ENTERPRISE — Smart Facility Maintenance & Engineering"
+- All existing Feature-Based Modular Architecture preserved
+- No functional changes, branding only
