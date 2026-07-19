@@ -29,6 +29,7 @@ import {
 import { useAuthStore, useAppStore } from '@/store';
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
+import { PresenceIndicator } from '@/core/presence/presence-indicator';
 
 // ============ TYPES ============
 
@@ -283,10 +284,7 @@ function TechnicianCard({
                 </AvatarFallback>
               )}
             </Avatar>
-            <div className={cn(
-              'absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white',
-              avail.dotColor
-            )} />
+            <PresenceIndicator userId={tech.id} dbIsOnline={tech.isOnline} className="absolute -bottom-0.5 -right-0.5" />
           </div>
 
           <div className="flex-1 min-w-0">

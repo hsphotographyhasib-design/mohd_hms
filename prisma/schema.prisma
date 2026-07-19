@@ -2007,6 +2007,7 @@ model User {
   isActive                                      Boolean              @default(true)
   isOnline                                      Boolean              @default(false)
   lastLogin                                     DateTime?
+  lastSeen                                      DateTime?
   gpsLocation                                   String?
   profileCompleted                              Boolean              @default(false)
   createdAt                                     DateTime             @default(now())

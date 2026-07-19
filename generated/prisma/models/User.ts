@@ -40,6 +40,7 @@ export type UserMinAggregateOutputType = {
   isActive: boolean | null
   isOnline: boolean | null
   lastLogin: Date | null
+  lastSeen: Date | null
   gpsLocation: string | null
   profileCompleted: boolean | null
   createdAt: Date | null
@@ -62,6 +63,7 @@ export type UserMaxAggregateOutputType = {
   isActive: boolean | null
   isOnline: boolean | null
   lastLogin: Date | null
+  lastSeen: Date | null
   gpsLocation: string | null
   profileCompleted: boolean | null
   createdAt: Date | null
@@ -84,6 +86,7 @@ export type UserCountAggregateOutputType = {
   isActive: number
   isOnline: number
   lastLogin: number
+  lastSeen: number
   gpsLocation: number
   profileCompleted: number
   createdAt: number
@@ -108,6 +111,7 @@ export type UserMinAggregateInputType = {
   isActive?: true
   isOnline?: true
   lastLogin?: true
+  lastSeen?: true
   gpsLocation?: true
   profileCompleted?: true
   createdAt?: true
@@ -130,6 +134,7 @@ export type UserMaxAggregateInputType = {
   isActive?: true
   isOnline?: true
   lastLogin?: true
+  lastSeen?: true
   gpsLocation?: true
   profileCompleted?: true
   createdAt?: true
@@ -152,6 +157,7 @@ export type UserCountAggregateInputType = {
   isActive?: true
   isOnline?: true
   lastLogin?: true
+  lastSeen?: true
   gpsLocation?: true
   profileCompleted?: true
   createdAt?: true
@@ -247,6 +253,7 @@ export type UserGroupByOutputType = {
   isActive: boolean
   isOnline: boolean
   lastLogin: Date | null
+  lastSeen: Date | null
   gpsLocation: string | null
   profileCompleted: boolean
   createdAt: Date
@@ -290,6 +297,7 @@ export type UserWhereInput = {
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastSeen?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   gpsLocation?: Prisma.StringNullableFilter<"User"> | string | null
   profileCompleted?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -335,6 +343,7 @@ export type UserOrderByWithRelationInput = {
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSeen?: Prisma.SortOrderInput | Prisma.SortOrder
   gpsLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -384,6 +393,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastSeen?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   gpsLocation?: Prisma.StringNullableFilter<"User"> | string | null
   profileCompleted?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -429,6 +439,7 @@ export type UserOrderByWithAggregationInput = {
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSeen?: Prisma.SortOrderInput | Prisma.SortOrder
   gpsLocation?: Prisma.SortOrderInput | Prisma.SortOrder
   profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -457,6 +468,7 @@ export type UserScalarWhereWithAggregatesInput = {
   isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   isOnline?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  lastSeen?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   gpsLocation?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   profileCompleted?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -477,6 +489,7 @@ export type UserCreateInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -522,6 +535,7 @@ export type UserUncheckedCreateInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -563,6 +577,7 @@ export type UserUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -608,6 +623,7 @@ export type UserUncheckedUpdateInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -651,6 +667,7 @@ export type UserCreateManyInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -671,6 +688,7 @@ export type UserUpdateManyMutationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -693,6 +711,7 @@ export type UserUncheckedUpdateManyInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -740,6 +759,7 @@ export type UserCountOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
+  lastSeen?: Prisma.SortOrder
   gpsLocation?: Prisma.SortOrder
   profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -762,6 +782,7 @@ export type UserMaxOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
+  lastSeen?: Prisma.SortOrder
   gpsLocation?: Prisma.SortOrder
   profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -784,6 +805,7 @@ export type UserMinOrderByAggregateInput = {
   isActive?: Prisma.SortOrder
   isOnline?: Prisma.SortOrder
   lastLogin?: Prisma.SortOrder
+  lastSeen?: Prisma.SortOrder
   gpsLocation?: Prisma.SortOrder
   profileCompleted?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -1208,6 +1230,7 @@ export type UserCreateWithoutAuditLogInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1252,6 +1275,7 @@ export type UserUncheckedCreateWithoutAuditLogInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1308,6 +1332,7 @@ export type UserUpdateWithoutAuditLogInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1352,6 +1377,7 @@ export type UserUncheckedUpdateWithoutAuditLogInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1392,6 +1418,7 @@ export type UserCreateWithoutAuthAuditLogInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1436,6 +1463,7 @@ export type UserUncheckedCreateWithoutAuthAuditLogInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1492,6 +1520,7 @@ export type UserUpdateWithoutAuthAuditLogInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1536,6 +1565,7 @@ export type UserUncheckedUpdateWithoutAuthAuditLogInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1576,6 +1606,7 @@ export type UserCreateWithoutComplaint_Complaint_supervisorIdToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1620,6 +1651,7 @@ export type UserUncheckedCreateWithoutComplaint_Complaint_supervisorIdToUserInpu
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1665,6 +1697,7 @@ export type UserCreateWithoutComplaint_Complaint_assignedToIdToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1709,6 +1742,7 @@ export type UserUncheckedCreateWithoutComplaint_Complaint_assignedToIdToUserInpu
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1765,6 +1799,7 @@ export type UserUpdateWithoutComplaint_Complaint_supervisorIdToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1809,6 +1844,7 @@ export type UserUncheckedUpdateWithoutComplaint_Complaint_supervisorIdToUserInpu
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1860,6 +1896,7 @@ export type UserUpdateWithoutComplaint_Complaint_assignedToIdToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1904,6 +1941,7 @@ export type UserUncheckedUpdateWithoutComplaint_Complaint_assignedToIdToUserInpu
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1944,6 +1982,7 @@ export type UserCreateWithoutDepartmentInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -1987,6 +2026,7 @@ export type UserUncheckedCreateWithoutDepartmentInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2058,6 +2098,7 @@ export type UserScalarWhereInput = {
   isActive?: Prisma.BoolFilter<"User"> | boolean
   isOnline?: Prisma.BoolFilter<"User"> | boolean
   lastLogin?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
+  lastSeen?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   gpsLocation?: Prisma.StringNullableFilter<"User"> | string | null
   profileCompleted?: Prisma.BoolFilter<"User"> | boolean
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -2078,6 +2119,7 @@ export type UserCreateWithoutDeviceInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2122,6 +2164,7 @@ export type UserUncheckedCreateWithoutDeviceInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2178,6 +2221,7 @@ export type UserUpdateWithoutDeviceInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2222,6 +2266,7 @@ export type UserUncheckedUpdateWithoutDeviceInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2262,6 +2307,7 @@ export type UserCreateWithoutDeviceTokenInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2306,6 +2352,7 @@ export type UserUncheckedCreateWithoutDeviceTokenInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2362,6 +2409,7 @@ export type UserUpdateWithoutDeviceTokenInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2406,6 +2454,7 @@ export type UserUncheckedUpdateWithoutDeviceTokenInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2446,6 +2495,7 @@ export type UserCreateWithoutInvoice_Invoice_preparedByToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2490,6 +2540,7 @@ export type UserUncheckedCreateWithoutInvoice_Invoice_preparedByToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2535,6 +2586,7 @@ export type UserCreateWithoutInvoice_Invoice_createdByToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2579,6 +2631,7 @@ export type UserUncheckedCreateWithoutInvoice_Invoice_createdByToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2624,6 +2677,7 @@ export type UserCreateWithoutInvoice_Invoice_approvedByToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2668,6 +2722,7 @@ export type UserUncheckedCreateWithoutInvoice_Invoice_approvedByToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -2724,6 +2779,7 @@ export type UserUpdateWithoutInvoice_Invoice_preparedByToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2768,6 +2824,7 @@ export type UserUncheckedUpdateWithoutInvoice_Invoice_preparedByToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2819,6 +2876,7 @@ export type UserUpdateWithoutInvoice_Invoice_createdByToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2863,6 +2921,7 @@ export type UserUncheckedUpdateWithoutInvoice_Invoice_createdByToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2914,6 +2973,7 @@ export type UserUpdateWithoutInvoice_Invoice_approvedByToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2958,6 +3018,7 @@ export type UserUncheckedUpdateWithoutInvoice_Invoice_approvedByToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2998,6 +3059,7 @@ export type UserCreateWithoutInvoicePayment_InvoicePayment_createdByToUserInput 
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3042,6 +3104,7 @@ export type UserUncheckedCreateWithoutInvoicePayment_InvoicePayment_createdByToU
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3098,6 +3161,7 @@ export type UserUpdateWithoutInvoicePayment_InvoicePayment_createdByToUserInput 
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3142,6 +3206,7 @@ export type UserUncheckedUpdateWithoutInvoicePayment_InvoicePayment_createdByToU
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3182,6 +3247,7 @@ export type UserCreateWithoutLoginSessionInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3226,6 +3292,7 @@ export type UserUncheckedCreateWithoutLoginSessionInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3282,6 +3349,7 @@ export type UserUpdateWithoutLoginSessionInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3326,6 +3394,7 @@ export type UserUncheckedUpdateWithoutLoginSessionInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3366,6 +3435,7 @@ export type UserCreateWithoutNotificationLogInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3410,6 +3480,7 @@ export type UserUncheckedCreateWithoutNotificationLogInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3466,6 +3537,7 @@ export type UserUpdateWithoutNotificationLogInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3510,6 +3582,7 @@ export type UserUncheckedUpdateWithoutNotificationLogInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3550,6 +3623,7 @@ export type UserCreateWithoutPasswordResetOtpInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3594,6 +3668,7 @@ export type UserUncheckedCreateWithoutPasswordResetOtpInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3650,6 +3725,7 @@ export type UserUpdateWithoutPasswordResetOtpInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3694,6 +3770,7 @@ export type UserUncheckedUpdateWithoutPasswordResetOtpInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3734,6 +3811,7 @@ export type UserCreateWithoutPasswordResetTokenInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3778,6 +3856,7 @@ export type UserUncheckedCreateWithoutPasswordResetTokenInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3834,6 +3913,7 @@ export type UserUpdateWithoutPasswordResetTokenInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3878,6 +3958,7 @@ export type UserUncheckedUpdateWithoutPasswordResetTokenInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3918,6 +3999,7 @@ export type UserCreateWithoutPmScheduleInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -3962,6 +4044,7 @@ export type UserUncheckedCreateWithoutPmScheduleInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4018,6 +4101,7 @@ export type UserUpdateWithoutPmScheduleInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4062,6 +4146,7 @@ export type UserUncheckedUpdateWithoutPmScheduleInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4102,6 +4187,7 @@ export type UserCreateWithoutQuotationInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4146,6 +4232,7 @@ export type UserUncheckedCreateWithoutQuotationInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4202,6 +4289,7 @@ export type UserUpdateWithoutQuotationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4246,6 +4334,7 @@ export type UserUncheckedUpdateWithoutQuotationInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4286,6 +4375,7 @@ export type UserCreateWithoutTenantInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4329,6 +4419,7 @@ export type UserUncheckedCreateWithoutTenantInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4395,6 +4486,7 @@ export type UserCreateWithoutTermsAcceptanceInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4439,6 +4531,7 @@ export type UserUncheckedCreateWithoutTermsAcceptanceInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4495,6 +4588,7 @@ export type UserUpdateWithoutTermsAcceptanceInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4539,6 +4633,7 @@ export type UserUncheckedUpdateWithoutTermsAcceptanceInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4579,6 +4674,7 @@ export type UserCreateWithoutVehicleLogInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4623,6 +4719,7 @@ export type UserUncheckedCreateWithoutVehicleLogInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4679,6 +4776,7 @@ export type UserUpdateWithoutVehicleLogInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4723,6 +4821,7 @@ export type UserUncheckedUpdateWithoutVehicleLogInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4763,6 +4862,7 @@ export type UserCreateWithoutWorkOrder_WorkOrder_createdByToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4807,6 +4907,7 @@ export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_createdByToUserInput =
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4852,6 +4953,7 @@ export type UserCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4896,6 +4998,7 @@ export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_supervisorIdToUserInpu
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4941,6 +5044,7 @@ export type UserCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -4985,6 +5089,7 @@ export type UserUncheckedCreateWithoutWorkOrder_WorkOrder_assignedToIdToUserInpu
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -5041,6 +5146,7 @@ export type UserUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5085,6 +5191,7 @@ export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_createdByToUserInput =
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5136,6 +5243,7 @@ export type UserUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5180,6 +5288,7 @@ export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_supervisorIdToUserInpu
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5231,6 +5340,7 @@ export type UserUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5275,6 +5385,7 @@ export type UserUncheckedUpdateWithoutWorkOrder_WorkOrder_assignedToIdToUserInpu
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5316,6 +5427,7 @@ export type UserCreateManyDepartmentInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -5336,6 +5448,7 @@ export type UserUpdateWithoutDepartmentInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5379,6 +5492,7 @@ export type UserUncheckedUpdateWithoutDepartmentInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5421,6 +5535,7 @@ export type UserUncheckedUpdateManyWithoutDepartmentInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5442,6 +5557,7 @@ export type UserCreateManyTenantInput = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: Date | string | null
+  lastSeen?: Date | string | null
   gpsLocation?: string | null
   profileCompleted?: boolean
   createdAt?: Date | string
@@ -5462,6 +5578,7 @@ export type UserUpdateWithoutTenantInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5505,6 +5622,7 @@ export type UserUncheckedUpdateWithoutTenantInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5547,6 +5665,7 @@ export type UserUncheckedUpdateManyWithoutTenantInput = {
   isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLogin?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastSeen?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   gpsLocation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   profileCompleted?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -5780,6 +5899,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: boolean
+  lastSeen?: boolean
   gpsLocation?: boolean
   profileCompleted?: boolean
   createdAt?: boolean
@@ -5826,6 +5946,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: boolean
+  lastSeen?: boolean
   gpsLocation?: boolean
   profileCompleted?: boolean
   createdAt?: boolean
@@ -5850,6 +5971,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: boolean
+  lastSeen?: boolean
   gpsLocation?: boolean
   profileCompleted?: boolean
   createdAt?: boolean
@@ -5874,13 +5996,14 @@ export type UserSelectScalar = {
   isActive?: boolean
   isOnline?: boolean
   lastLogin?: boolean
+  lastSeen?: boolean
   gpsLocation?: boolean
   profileCompleted?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "passwordHash" | "name" | "phone" | "avatar" | "role" | "employeeNumber" | "departmentId" | "authProvider" | "googleId" | "isActive" | "isOnline" | "lastLogin" | "gpsLocation" | "profileCompleted" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "tenantId" | "email" | "passwordHash" | "name" | "phone" | "avatar" | "role" | "employeeNumber" | "departmentId" | "authProvider" | "googleId" | "isActive" | "isOnline" | "lastLogin" | "lastSeen" | "gpsLocation" | "profileCompleted" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   AuditLog?: boolean | Prisma.User$AuditLogArgs<ExtArgs>
   AuthAuditLog?: boolean | Prisma.User$AuthAuditLogArgs<ExtArgs>
@@ -5959,6 +6082,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     isActive: boolean
     isOnline: boolean
     lastLogin: Date | null
+    lastSeen: Date | null
     gpsLocation: string | null
     profileCompleted: boolean
     createdAt: Date
@@ -6424,6 +6548,7 @@ export interface UserFieldRefs {
   readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
   readonly isOnline: Prisma.FieldRef<"User", 'Boolean'>
   readonly lastLogin: Prisma.FieldRef<"User", 'DateTime'>
+  readonly lastSeen: Prisma.FieldRef<"User", 'DateTime'>
   readonly gpsLocation: Prisma.FieldRef<"User", 'String'>
   readonly profileCompleted: Prisma.FieldRef<"User", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>

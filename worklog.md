@@ -131,3 +131,143 @@ Stage Summary:
 - Browser title shows: "MOHD.HMS ENTERPRISE — Smart Facility Maintenance & Engineering"
 - All existing Feature-Based Modular Architecture preserved
 - No functional changes, branding only
+
+---
+Task ID: 3
+Agent: main
+Task: Enhance user-presence Socket.IO server and add lastSeen to User model
+
+Work Log:
+- Added `lastSeen DateTime?` field to User model in prisma/schema.prisma (after lastLogin, line 2010)
+- Ran `bun run db:push` and `prisma generate` successfully
+- Rewrote mini-services/user-presence/index.ts with enhanced features:
+  - Added in-memory maps: lastHeartbeat, userStatus, lastSeenMap, userNameMap, userTenantMap
+  - Added `presence:heartbeat` event listener — updates lastHeartbeat timestamp, marks user dirty for batched DB flush
+  - Added `presence:idle` event listener — sets user status to 'away', emits status change to tenant room
+  - Added `presence:active` event listener — sets user status to 'online', updates lastSeen, emits status change
+  - Updated `presence:snapshot` format: `{ users: [{ userId, name, status: 'online'|'away', lastSeen: string }] }`
+  - Updated `user:status-change` format: `{ userId, isOnline, status: 'online'|'away'|'offline', lastSeen, name }`
+  - Added batched DB flush timer: every 60s writes lastSeen for all dirty users (fire-and-forget)
+  - Added stale connection cleanup timer: every 120s, force-disconnects sockets with no heartbeat in 120s
+  - On connect: sets lastSeen + isOnline in DB (fire-and-forget), initializes all in-memory maps
+  - On disconnect (last socket): sets lastSeen + isOnline=false in DB (fire-and-forget), emits offline status
+  - All existing functionality preserved: multi-tab support, tenant isolation, JWT auth, startup cleanup
+  - Verified server starts successfully on port 3004
+
+Stage Summary:
+- User model now has lastSeen field for tracking when users were last active
+- Presence server supports online/away/offline status with heartbeat-based tracking
+- DB writes optimized: batched every 60s for heartbeats, immediate for connect/disconnect
+- Stale connection cleanup runs every 120s
+- All events include lastSeen ISO string and proper status field
+
+---
+Task ID: 4
+Agent: main
+Task: Enhance presence store and useUserPresence hook
+
+Work Log:
+- Rewrote `src/core/presence/presence-store.ts`:
+  - Changed from `Record<string, boolean>` to `Record<string, UserPresenceInfo>`
+  - Added `UserPresenceStatus` type ('online' | 'away' | 'offline')
+  - Added `UserPresenceInfo` interface (isOnline, status, lastSeen)
+  - Added `UserPresenceSnapshotItem` type (UserPresenceInfo & { userId })
+  - `setStatus` merges with existing info, preserving lastSeen if new value is null
+  - `setFromSnapshot` clears existing map and rebuilds from snapshot
+  - `clearAll` resets to empty
+  - All types exported
+- Rewrote `src/core/presence/use-user-presence.ts`:
+  - Added heartbeat: sends `presence:heartbeat` every 30s while connected
+  - Added idle detection: tracks mousemove/keydown/touchstart/scroll/click, emits `presence:idle` after 5 min inactivity, emits `presence:active` on resume
+  - Added visibility change: on tab visible, emits `presence:active` + immediate heartbeat
+  - Added beforeunload: sends final `presence:heartbeat` on page unload
+  - Enhanced event parsing: handles new snapshot/status-change format with status + lastSeen fields
+  - Exponential backoff: reconnectionDelayMax 30s
+  - Properly cleans up all timers and listeners on unmount
+- Created `src/core/presence/use-presence-status.ts`:
+  - `usePresenceStatus(userId, dbIsOnline?)` hook — returns UserPresenceInfo from real-time store, falls back to DB value when WS disconnected
+  - `formatLastSeen(lastSeen)` — human-readable "Just now", "5 min ago", "Today 3:45 PM", "Yesterday", "Jan 15"
+- Created `src/core/presence/presence-indicator.tsx`:
+  - Reusable `PresenceIndicator` component with green/amber/gray dots
+  - Props: userId, dbIsOnline, showLabel, showLastSeen, className, size
+  - Uses Lucide CircleDot icon with animate-ping overlay
+  - Shows "Last seen: ..." text for non-online users when showLastSeen=true
+
+Stage Summary:
+- 4 files modified/created in src/core/presence/
+- 0 lint errors, 5 warnings (all from interface property names — false positives from no-unused-vars)
+- Dev server compiles successfully
+
+---
+Task ID: 5
+Agent: main
+Task: Wire Employee List, Technician Ops Center, and Complaint Assignment to real-time presence store
+
+Work Log:
+- Component 1 (employee-list.tsx):
+  - Added imports: `usePresenceStore` and `PresenceIndicator`
+  - Replaced static `onlineCount` with real-time version using `isConnected`/`onlineStatus` from presence store
+  - Replaced hardcoded CircleDot + text with `<PresenceIndicator userId={emp.id} dbIsOnline={emp.isOnline} showLabel size="sm" />`
+- Component 2 (technician-ops-center.tsx):
+  - Added import: `PresenceIndicator`
+  - Card view (~line 274): Replaced conditional green dot with `<PresenceIndicator />` next to technician name
+  - Table view (~line 414): Replaced conditional green dot with inline `<PresenceIndicator />` in name cell
+  - Detail sheet (~line 486): Replaced conditional "Online" span with `<PresenceIndicator showLabel />`
+- Component 3 (technician-assignment-panel.tsx):
+  - Added import: `PresenceIndicator`
+  - Replaced static green/gray dot on avatar with `<PresenceIndicator />` (absolute positioned)
+- Component 4 (complaint-assignment-screen.tsx):
+  - Added import: `PresenceIndicator`
+  - Replaced `avail.dotColor` static dot on avatar with `<PresenceIndicator />` (absolute positioned)
+- Lint: 0 new errors or warnings from changes (all pre-existing)
+
+Stage Summary:
+- 4 component files updated with real-time presence indicators
+- Employee list now shows live online count from presence store when WS connected
+- All technician/employee status dots now show real-time online/away/offline states
+- Fallback to DB `isOnline` when WebSocket is disconnected
+- Minimal, surgical changes — only presence-related code touched
+
+---
+Task ID: 7
+Agent: main
+Task: Update Admin User Management for new presence store format
+
+Work Log:
+- Updated imports: added `type UserPresenceInfo` from presence-store, added `formatLastSeen` from use-presence-status
+- Added `lastSeen: string | null` and `presenceInfo: UserPresenceInfo | null` fields to both `UserListItem` and `UserDetail` interfaces
+- Rewrote `OnlineStatusIndicator` component: changed from `{ isOnline: boolean }` to `{ info: UserPresenceInfo | null }`, now shows green/amber/gray dots for online/away/offline with color-coded text labels, displays lastSeen for non-online users via `formatLastSeen`
+- Fixed merge logic in useEffect: previously compared boolean to `UserPresenceInfo` object (broken). Now properly extracts `.isOnline` and `.lastSeen` from presence info, stores full `presenceInfo` on each user. When WS disconnects, clears `presenceInfo` and falls back to DB values
+- Updated online count: changed from `u.isOnline` to `u.presenceInfo?.status === 'online' || (!u.presenceInfo && u.isOnline)` — uses status field when WS connected, falls back to DB boolean when not
+- Added `selectedUserPresence` derived variable for detail dialog: reads from presence store when WS connected
+- Updated all 7 call sites: 3 inline dot indicators (table, card, detail header) now check `presenceInfo?.status` with 3-way color logic (emerald/amber/gray), 4 `OnlineStatusIndicator` usages now pass `info` prop instead of `isOnline`
+- Detail header dot now shows amber for 'away' status in addition to green for 'online'
+
+Stage Summary:
+- 0 new lint errors (only pre-existing warnings unrelated to presence changes)
+- All `isOnline={...}` prop usages eliminated — replaced with `info={...}` using `UserPresenceInfo`
+- Presence display now supports 3-state status: online (green), away (amber), offline (gray)
+- Last seen timestamps shown inline for non-online users in all views
+- Dev server compiles successfully
+
+---
+Task ID: 6
+Agent: main
+Task: Add real-time presence widget to main dashboard
+
+Work Log:
+- Added `Wifi` icon to lucide-react import
+- Added `usePresenceStore` import from `@/core/presence/presence-store`
+- Added 3 presence store selectors inside `KpiCardsSection`: `presenceOnlineStatus`, `isPresenceConnected`, `onlineCount`, `awayCount`
+- Inserted a real-time presence widget card as the 5th item in the KPI stats grid
+- Card uses same Card/CardContent structure as other KPI cards for consistency
+- Shows online count with "online" label, "Active Now" sublabel, and conditional "X away" indicator
+- Wifi icon turns gray with "Offline" label when WebSocket disconnected, green with "Live" when connected
+- Changed grid from `lg:grid-cols-4` to `lg:grid-cols-5` to accommodate the new card
+- Lint: 0 errors, 6 warnings (all pre-existing)
+
+Stage Summary:
+- Real-time presence widget added to dashboard KPI grid
+- Shows live online/away user counts from presence store
+- WebSocket connection status indicator (Live/Offline)
+- Consistent card styling with existing KPI cards

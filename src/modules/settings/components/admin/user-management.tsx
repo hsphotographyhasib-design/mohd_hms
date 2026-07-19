@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { usePresenceStore } from '@/core/presence/presence-store';
+import { usePresenceStore, type UserPresenceInfo } from '@/core/presence/presence-store';
+import { formatLastSeen } from '@/core/presence/use-presence-status';
 import {
   Users, Search, Filter, MoreHorizontal, Shield, UserCog, Lock, Unlock,
   Trash2, History, LogOut, RefreshCw, ChevronLeft, ChevronRight,
@@ -51,6 +52,8 @@ interface UserListItem {
   employeeNumber: string | null;
   department: { id: string; name: string } | null;
   isOnline: boolean;
+  lastSeen: string | null;
+  presenceInfo: UserPresenceInfo | null;
   authProvider: string | null;
 }
 
@@ -96,6 +99,8 @@ interface UserDetail {
   departmentId: string | null;
   isActive: boolean;
   isOnline: boolean;
+  lastSeen: string | null;
+  presenceInfo: UserPresenceInfo | null;
   authProvider: string | null;
   lastLogin: string | null;
   profileCompleted: boolean;
@@ -237,17 +242,26 @@ function GoogleCustomerBadge({ provider, role }: { provider: string | null; role
   );
 }
 
-function OnlineStatusIndicator({ isOnline }: { isOnline: boolean }) {
+function OnlineStatusIndicator({ info }: { info: UserPresenceInfo | null }) {
+  const status = info?.status ?? 'offline';
+  const dotColor = {
+    online: 'bg-emerald-500 animate-pulse',
+    away: 'bg-amber-400',
+    offline: 'bg-gray-400 dark:bg-gray-600',
+  }[status];
+  const label = { online: 'Online', away: 'Away', offline: 'Offline' }[status];
+  const textColor = {
+    online: 'text-emerald-600 dark:text-emerald-400',
+    away: 'text-amber-600 dark:text-amber-400',
+    offline: 'text-muted-foreground',
+  }[status];
   return (
     <span className="inline-flex items-center gap-1.5 text-xs font-medium">
-      <span
-        className={`h-2 w-2 rounded-full ${
-          isOnline
-            ? 'bg-emerald-500 animate-pulse'
-            : 'bg-gray-400 dark:bg-gray-600'
-        }`}
-      />
-      {isOnline ? 'Online' : 'Offline'}
+      <span className={`h-2 w-2 rounded-full shrink-0 ${dotColor}`} />
+      <span className={textColor}>{label}</span>
+      {status !== 'online' && info?.lastSeen && (
+        <span className="text-muted-foreground">· {formatLastSeen(info.lastSeen)}</span>
+      )}
     </span>
   );
 }
@@ -543,25 +557,45 @@ export function UserManagement() {
   const onlineStatus = usePresenceStore((s) => s.onlineStatus);
   const isPresenceConnected = usePresenceStore((s) => s.isConnected);
 
+  // Derived presence info for the selected user detail view
+  const selectedUserPresence = selectedUser
+    ? (isPresenceConnected ? onlineStatus[selectedUser.id] ?? null : null)
+    : null;
+
   // Merge real-time presence data into the users list.
   // When the WebSocket is connected, the presence map is the source of truth:
-  //   - Users in the map → use their presence status
+  //   - Users in the map → use their presence status (UserPresenceInfo)
   //   - Users NOT in the map → they are offline (no active WebSocket connection)
   // When the WebSocket is NOT connected, fall back to the DB isOnline value.
   useEffect(() => {
-    if (!isPresenceConnected) return; // No WS → keep DB values
+    if (!isPresenceConnected) {
+      // No WS → clear presenceInfo, keep DB values
+      setUsers((prev) =>
+        prev.map((u) => (u.presenceInfo ? { ...u, presenceInfo: null } : u))
+      );
+      return;
+    }
 
     setUsers((prev) =>
       prev.map((u) => {
-        const realtimeStatus = onlineStatus[u.id];
+        const presence = onlineStatus[u.id];
         // User has a presence entry → use it
-        if (realtimeStatus !== undefined) {
-          if (u.isOnline === realtimeStatus) return u; // No change needed
-          return { ...u, isOnline: realtimeStatus };
+        if (presence) {
+          if (u.presenceInfo?.status === presence.status && u.presenceInfo?.lastSeen === presence.lastSeen) return u; // No change needed
+          return {
+            ...u,
+            isOnline: presence.isOnline,
+            lastSeen: presence.lastSeen ?? u.lastSeen,
+            presenceInfo: presence,
+          };
         }
         // User has NO presence entry but WS is connected → they are offline
-        if (u.isOnline === false) return u; // Already offline
-        return { ...u, isOnline: false };
+        if (!u.presenceInfo) return u; // Already no presence info
+        return {
+          ...u,
+          isOnline: false,
+          presenceInfo: null,
+        };
       })
     );
   }, [onlineStatus, isPresenceConnected]);
@@ -570,7 +604,7 @@ export function UserManagement() {
 
   const activeCount = users.filter((u) => u.isActive).length;
   const inactiveCount = users.length - activeCount;
-  const onlineCount = users.filter((u) => u.isOnline).length;
+  const onlineCount = users.filter((u) => u.presenceInfo?.status === 'online' || (!u.presenceInfo && u.isOnline)).length;
 
   const stats = [
     { label: 'Total Users', value: pagination?.total ?? 0, icon: <Users className="h-4 w-4 text-emerald-600" />, color: 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-800 dark:bg-emerald-950/50' },
@@ -746,9 +780,11 @@ export function UserManagement() {
                               <GoogleCustomerBadge provider={u.authProvider} role={u.role} />
                               <span
                                 className={`h-2 w-2 rounded-full shrink-0 ${
-                                  u.isOnline
+                                  u.presenceInfo?.status === 'online'
                                     ? 'bg-emerald-500 animate-pulse'
-                                    : 'bg-gray-400 dark:bg-gray-600'
+                                    : u.presenceInfo?.status === 'away'
+                                      ? 'bg-amber-400'
+                                      : 'bg-gray-400 dark:bg-gray-600'
                                 }`}
                               />
                             </div>
@@ -766,7 +802,7 @@ export function UserManagement() {
                       <TableCell>
                         <div className="flex flex-col gap-1">
                           <StatusBadge active={u.isActive} />
-                          <OnlineStatusIndicator isOnline={u.isOnline} />
+                          <OnlineStatusIndicator info={u.presenceInfo} />
                         </div>
                       </TableCell>
                       <TableCell className="text-sm text-muted-foreground">{formatDate(u.createdAt)}</TableCell>
@@ -875,9 +911,11 @@ export function UserManagement() {
                       </Avatar>
                       <span
                         className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background ${
-                          u.isOnline
+                          u.presenceInfo?.status === 'online'
                             ? 'bg-emerald-500'
-                            : 'bg-gray-400 dark:bg-gray-600'
+                            : u.presenceInfo?.status === 'away'
+                              ? 'bg-amber-400'
+                              : 'bg-gray-400 dark:bg-gray-600'
                         }`}
                       />
                     </div>
@@ -895,7 +933,7 @@ export function UserManagement() {
                   <div className="flex items-center gap-2">
                     <AuthProviderBadge provider={u.authProvider} />
                     <GoogleCustomerBadge provider={u.authProvider} role={u.role} />
-                    <OnlineStatusIndicator isOnline={u.isOnline} />
+                    <OnlineStatusIndicator info={u.presenceInfo} />
                   </div>
                   {u.authProvider === 'google' && u.role === 'customer' && u.id !== currentUser?.id && (
                     <Button
@@ -961,8 +999,11 @@ export function UserManagement() {
                   <div className="text-left">
                     <div className="flex items-center gap-2">
                       {selectedUser.name}
-                      {selectedUser.isOnline && (
+                      {selectedUserPresence?.status === 'online' && (
                         <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" title="Online" />
+                      )}
+                      {selectedUserPresence?.status === 'away' && (
+                        <span className="h-2.5 w-2.5 rounded-full bg-amber-400" title="Away" />
                       )}
                     </div>
                     <p className="text-sm font-normal text-muted-foreground">{selectedUser.email}</p>
@@ -1010,7 +1051,7 @@ export function UserManagement() {
                 <div className="flex flex-wrap gap-2">
                   <RoleBadge role={selectedUser.role} />
                   <StatusBadge active={selectedUser.isActive} />
-                  <OnlineStatusIndicator isOnline={selectedUser.isOnline} />
+                  <OnlineStatusIndicator info={selectedUserPresence} />
                   <AuthProviderBadge provider={selectedUser.authProvider} />
                   {selectedUser.profileCompleted && (
                     <Badge variant="outline" className="bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-400">
@@ -1053,7 +1094,7 @@ export function UserManagement() {
                   </div>
                   <div>
                     <p className="text-muted-foreground text-xs font-medium uppercase tracking-wider mb-1">Online Status</p>
-                    <div className="mt-0.5"><OnlineStatusIndicator isOnline={selectedUser.isOnline} /></div>
+                    <div className="mt-0.5"><OnlineStatusIndicator info={selectedUserPresence} /></div>
                   </div>
                 </div>
 

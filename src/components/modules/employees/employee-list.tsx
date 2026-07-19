@@ -23,6 +23,8 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useAppStore } from '@/store';
 import type { EmployeeData, PaginatedResponse } from '@/types';
+import { usePresenceStore } from '@/core/presence/presence-store';
+import { PresenceIndicator } from '@/core/presence/presence-indicator';
 
 // ============ HELPERS ============
 
@@ -135,7 +137,11 @@ export function EmployeeList() {
   };
 
   const employees = data?.data || [];
-  const onlineCount = employees.filter((e) => e.isOnline).length;
+  const isConnected = usePresenceStore((s) => s.isConnected);
+  const onlineStatus = usePresenceStore((s) => s.onlineStatus);
+  const onlineCount = isConnected
+    ? Object.values(onlineStatus).filter((info) => info.status === 'online').length
+    : employees.filter((e) => e.isOnline).length;
 
   // Count by department
   const deptCounts: Record<string, number> = {};
@@ -246,10 +252,7 @@ export function EmployeeList() {
                       <TableCell className="text-sm">{emp.departmentName || '—'}</TableCell>
                       <TableCell className="text-sm text-muted-foreground">{emp.phone || '—'}</TableCell>
                       <TableCell>
-                        <div className="flex items-center gap-1.5">
-                          <CircleDot className={`h-2.5 w-2.5 ${emp.isOnline ? 'text-emerald-500' : 'text-gray-400'}`} />
-                          <span className="text-xs text-muted-foreground">{emp.isOnline ? 'Online' : 'Offline'}</span>
-                        </div>
+                        <PresenceIndicator userId={emp.id} dbIsOnline={emp.isOnline} showLabel size="sm" />
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1">

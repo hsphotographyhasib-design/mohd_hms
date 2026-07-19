@@ -10,7 +10,7 @@ import {
   Wrench, AlertTriangle, ClipboardList, DollarSign,
   TrendingUp, TrendingDown, Clock, Users, Package,
   Activity, CheckCircle2, Star, Calendar, ArrowRight,
-  RefreshCw, ShieldCheck, Filter, X, LogOut,
+  RefreshCw, ShieldCheck, Filter, X, LogOut, Wifi,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +21,7 @@ import {
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useAuthStore, useAppStore } from '@/store';
+import { usePresenceStore } from '@/core/presence/presence-store';
 import type { ComplaintItem, WorkOrderItem, PmScheduleItem, UserRole } from '@/types';
 import {
   useDashboardKpi, useDashboardCharts, useDashboardRecent,
@@ -316,6 +317,12 @@ const KpiCardsSection = memo(function KpiCardsSection({
   // On error, show cards with default 0 values instead of an error banner
   const effectiveData = data ?? DEFAULT_KPI;
   const hasError = !!error && !data;
+
+  // Presence store selectors
+  const presenceOnlineStatus = usePresenceStore((s) => s.onlineStatus);
+  const isPresenceConnected = usePresenceStore((s) => s.isConnected);
+  const onlineCount = Object.values(presenceOnlineStatus).filter((u) => u.status === 'online').length;
+  const awayCount = Object.values(presenceOnlineStatus).filter((u) => u.status === 'away').length;
   const isAuthError = hasError && (error?.message?.includes('Authentication') || error?.message?.includes('auth') || (error as any)?.isAuthError);
 
   if (isLoading && !hasError) {
@@ -359,7 +366,7 @@ const KpiCardsSection = memo(function KpiCardsSection({
           </button>
         </div>
       )}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
       {kpiCards.map((kpi, i) => (
         <Card key={i} className="py-0 gap-0">
           <CardContent className="p-4">
@@ -390,6 +397,34 @@ const KpiCardsSection = memo(function KpiCardsSection({
           </CardContent>
         </Card>
       ))}
+      {/* Real-time presence widget */}
+      <Card className="py-0 gap-0">
+        <CardContent className="p-4">
+          <div className="flex items-center justify-between mb-3">
+            <div className={`h-10 w-10 rounded-lg flex items-center justify-center ${isPresenceConnected ? 'bg-emerald-50' : 'bg-gray-100'}`}>
+              <Wifi className={`h-5 w-5 ${isPresenceConnected ? 'text-emerald-600' : 'text-gray-400'}`} />
+            </div>
+            <div className="flex items-center gap-1 text-xs">
+              <span className={isPresenceConnected ? 'text-emerald-600' : 'text-gray-400'}>
+                {isPresenceConnected ? 'Live' : 'Offline'}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <p className="text-2xl font-bold tracking-tight">{onlineCount}</p>
+            <span className="text-xs text-emerald-600 font-medium">online</span>
+          </div>
+          <div className="flex items-center gap-3 mt-0.5">
+            <p className="text-sm text-muted-foreground">Active Now</p>
+            {awayCount > 0 && (
+              <span className="flex items-center gap-1 text-xs text-amber-600">
+                <Clock className="h-3 w-3" />
+                {awayCount} away
+              </span>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
     </>
   );

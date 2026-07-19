@@ -32,6 +32,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { PresenceIndicator } from '@/core/presence/presence-indicator';
 
 // ============ TYPES ============
 
@@ -271,12 +272,10 @@ function TechnicianGridCard({ tech, onViewDetail }: { tech: Technician; onViewDe
                 {tech.avatar ? <img src={tech.avatar} alt={tech.name} className="h-full w-full rounded-full object-cover" /> : initials}
               </AvatarFallback>
             </Avatar>
-            {tech.isOnline && (
-              <span className="absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-white bg-emerald-500" />
-            )}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
+              <PresenceIndicator userId={tech.id} dbIsOnline={tech.isOnline} />
               <h3 className="font-semibold text-sm text-gray-900 truncate">{tech.name}</h3>
             </div>
             <p className="text-xs text-muted-foreground">{tech.employeeNumber}</p>
@@ -411,12 +410,9 @@ function TechnicianListRow({ tech, onViewDetail }: { tech: Technician; onViewDet
                 {tech.avatar ? <img src={tech.avatar} alt={tech.name} className="h-full w-full rounded-full object-cover" /> : initials}
               </AvatarFallback>
             </Avatar>
-            {tech.isOnline && (
-              <span className="absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-emerald-500" />
-            )}
           </div>
           <div>
-            <p className="font-medium text-sm text-gray-900">{tech.name}</p>
+            <p className="font-medium text-sm text-gray-900 flex items-center gap-2">{tech.name}<PresenceIndicator userId={tech.id} dbIsOnline={tech.isOnline} /></p>
             <p className="text-xs text-muted-foreground">{tech.email}</p>
           </div>
         </div>
@@ -483,7 +479,7 @@ function OverviewTab({ tech }: { tech: TechnicianDetail }) {
           <p className="text-sm text-muted-foreground">{tech.employeeNumber} · {tech.role}</p>
           <div className="flex items-center gap-2 mt-1">
             <StatusBadge status={tech.availabilityStatus} />
-            {tech.isOnline && <span className="text-xs text-emerald-600 font-medium">Online</span>}
+            <PresenceIndicator userId={tech.id} dbIsOnline={tech.isOnline} showLabel />
           </div>
         </div>
       </div>

@@ -11261,6 +11261,7 @@ export const UserScalarFieldEnum = {
   isActive: 'isActive',
   isOnline: 'isOnline',
   lastLogin: 'lastLogin',
+  lastSeen: 'lastSeen',
   gpsLocation: 'gpsLocation',
   profileCompleted: 'profileCompleted',
   createdAt: 'createdAt',

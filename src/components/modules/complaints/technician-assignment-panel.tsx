@@ -19,6 +19,7 @@ import {
 import { toast } from 'sonner';
 import { cn } from '@/lib/utils';
 import { useAppStore } from '@/store';
+import { PresenceIndicator } from '@/core/presence/presence-indicator';
 
 // ============ TYPES ============
 
@@ -289,13 +290,7 @@ export function TechnicianAssignmentPanel({
                               </AvatarFallback>
                             )}
                           </Avatar>
-                          {/* Online indicator */}
-                          <div
-                            className={cn(
-                              'absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white',
-                              tech.isOnline && !tech.onLeave ? 'bg-emerald-500' : 'bg-gray-400'
-                            )}
-                          />
+                          <PresenceIndicator userId={tech.id} dbIsOnline={tech.isOnline} className="absolute -bottom-0.5 -right-0.5" />
                         </div>
 
                         {/* Info */}
