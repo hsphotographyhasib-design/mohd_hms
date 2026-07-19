@@ -293,3 +293,24 @@ Stage Summary:
 - Files modified: `src/app/api/auth/users/[id]/route.ts`, `src/modules/settings/components/admin/user-management.tsx`
 - Root cause: Prisma PascalCase relation names vs camelCase API usage + setTimeout race condition
 - Fix verified via `npx tsc --noEmit` (0 errors) and dev server compilation (GET / 200)
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix loading screens showing wrong logo (Building2 icon instead of MOHD.HMS brand logo)
+
+Work Log:
+- User reported "still showing different logo" on the Verifying Session screen
+- Analyzed screenshot: confirmed generic green Building2 lucide icon was displayed
+- Found 3 files with the wrong logo on loading/session screens:
+  1. `src/app/page.tsx` — two loading screens (initial app load + dynamic import loading)
+  2. `src/components/session/auth-guard.tsx` — session verification screen
+  3. `src/core/auth/session/auth-guard.tsx` — session verification screen (app-shell version)
+- Replaced all `<Building2>` icons with `<img src={BRAND.logo.svg} alt="MOHD.HMS">` using the centralized brand config
+- Removed unused `Building2` imports from auth-guard files
+- Verified: TypeScript compilation passes (0 errors)
+
+Stage Summary:
+- Files modified: `src/app/page.tsx`, `src/components/session/auth-guard.tsx`, `src/core/auth/session/auth-guard.tsx`
+- All loading/session screens now show the MOHD.HMS brand logo (SVG) instead of generic Building2 icon
+- Used centralized BRAND config for consistency

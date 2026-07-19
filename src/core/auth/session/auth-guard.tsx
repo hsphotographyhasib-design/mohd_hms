@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useAuthStore, useAppStore } from '@/app-shell/store';
-import { Building2 } from 'lucide-react';
+import { BRAND } from '@/core/constants/company';
 
 /**
  * AuthGuard validates the session on mount by calling /api/auth/me.
@@ -122,7 +122,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <Building2 className="h-12 w-12 text-emerald-600 animate-pulse" />
+          <img src={BRAND.logo.svg} alt="MOHD.HMS" className="h-14 w-14 animate-pulse" />
           <p className="text-muted-foreground text-sm">Verifying session...</p>
         </div>
       </div>

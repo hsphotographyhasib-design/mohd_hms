@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useSyncExternalStore } from 'react';
 import dynamic from 'next/dynamic';
-import { Building2 } from 'lucide-react';
+import { BRAND } from '@/core/constants/company';
 import { useAuthStore } from '@/app-shell/store';
 import type { AuthUser } from '@/core/types';
 import { useNotificationStore } from '@/modules/notifications/services/store';
@@ -79,7 +79,7 @@ const LandingHome = dynamic(
     loading: () => (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <Building2 className="h-12 w-12 text-emerald-600 animate-pulse" />
+          <img src={BRAND.logo.svg} alt="MOHD.HMS" className="h-12 w-12 animate-pulse" />
           <p className="text-muted-foreground">Loading...</p>
         </div>
       </div>
@@ -143,7 +143,7 @@ export default function Home() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <Building2 className="h-12 w-12 text-emerald-600 animate-pulse" />
+          <img src={BRAND.logo.svg} alt="MOHD.HMS" className="h-14 w-14 animate-pulse" />
           <p className="text-muted-foreground">Loading MOHD.HMS...</p>
         </div>
       </div>
