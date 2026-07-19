@@ -88,6 +88,7 @@ export type AppView =
   | 'cms-page-builder'
   | 'cms-page-list'
   | 'cms-page-builder-list'
+  | 'cms-branding'
   | 'system-health'
   // WhatsApp views
   | 'whatsapp'

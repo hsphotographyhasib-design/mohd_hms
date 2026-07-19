@@ -1893,6 +1893,32 @@ model StockMovement {
   @@index([tenantId, createdAt])
 }
 
+// ============ BRANDING ============
+
+model BrandingAsset {
+  id        String   @id @default(cuid())
+  tenantId  String
+  /** Asset type: primary_logo, compact_logo, dark_logo, light_logo, favicon, icon_192, icon_512, apple_touch_icon, notification_icon, login_logo, splash_logo, pdf_header_logo, email_header_logo */
+  type      String
+  fileName  String
+  mimeType  String
+  fileSize  Int
+  width     Int?
+  height    Int?
+  /** Relative storage path */
+  url       String
+  /** Incremented on each replace for version tracking */
+  version   Int      @default(1)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, type, isActive])
+  @@index([tenantId])
+  @@index([tenantId, type])
+}
+
 model Tenant {
   id                   String                 @id
   name                 String
@@ -1975,6 +2001,7 @@ model Tenant {
   WhatsAppTemplate     WhatsAppTemplate[]
   WorkOrder            WorkOrder[]
   Inspection           Inspection[]
+  BrandingAsset        BrandingAsset[]
 }
 
 model TermsAcceptance {

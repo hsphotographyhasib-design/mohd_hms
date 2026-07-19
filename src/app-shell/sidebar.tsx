@@ -6,6 +6,7 @@ import { useAuthStore, useAppStore, canAccess } from '@/app-shell/store';
 import { useNotificationStore } from '@/modules/notifications/services/store';
 import type { AppView, UserRole, NavItem } from '@/core/types';
 import { cn } from '@/core/utils/utils';
+import { useBrandingStore } from '@/core/branding';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
@@ -121,6 +122,8 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
   const filteredCmsItems = cmsNavItems.filter((item) => canAccess(role, item.feature));
   const filteredItems = navItems.filter((item) => canAccess(role, item.feature));
 
+  const sidebarLogo = useBrandingStore((st) => st.getAssetUrl('compact_logo'));
+
   const initials = user.name
     .split(' ')
     .map((n) => n[0])
@@ -141,7 +144,7 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
         collapsed ? 'justify-center' : 'gap-3'
       )}>
         <div className="flex items-center justify-center w-9 h-9 shrink-0 overflow-hidden">
-          <img src="/logo-512.png" alt="" className="w-full h-full object-contain" aria-hidden="true" />
+          <img src={sidebarLogo} alt="" className="w-full h-full object-contain" aria-hidden="true" />
         </div>
         <AnimatePresence>
           {!collapsed && (

@@ -20,6 +20,7 @@ export { CmsTestimonials } from './components/cms-testimonials';
 export { CmsContact } from './components/cms-contact';
 export { CmsCareers } from './components/cms-careers';
 export { CmsAnnouncements } from './components/cms-announcements';
+export { CmsBranding } from './components/cms-branding';
 
 // ─── Page Builder ─────────────────────────────────────────────────────────────
 export { LeftPanel } from './page-builder/builder-left-panel';

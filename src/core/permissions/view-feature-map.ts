@@ -106,6 +106,9 @@ export const VIEW_FEATURE_MAP: Record<string, string> = {
   'cms-popups': 'cms',
   'cms-forms': 'cms',
   'cms-activity': 'cms',
+  'cms-page-list': 'cms',
+  'cms-page-builder': 'cms',
+  'cms-branding': 'cms',
 
   // Customer
   'customer-portal': 'dashboard',

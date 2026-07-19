@@ -19,6 +19,7 @@ import {
 import { useAuthStore } from '@/app-shell/store';
 import { toast } from 'sonner';
 import { cn } from '@/core/utils/utils';
+import { useBrandingStore } from '@/core/branding';
 import { Checkbox } from '@/shared/ui/checkbox';
 import {
   Select,
@@ -109,8 +110,9 @@ const demoAccounts: DemoAccount[] = ENABLE_DEMO ? [
 
 /** Brand logo using the official MOHD.HMS ENTERPRISE icon */
 function BrandLogo({ className }: { className?: string }) {
+  const logoSrc = useBrandingStore((st) => st.getAssetUrl('login_logo'));
   return (
-    <img src="/logo-512.png" alt="MOHD.HMS ENTERPRISE" className={className} />
+    <img src={logoSrc} alt="MOHD.HMS ENTERPRISE" className={className} />
   );
 }
 

@@ -1,14 +1,7 @@
 'use client';
 
 import { cn } from '@/core/utils/utils';
-
-// ============================================================
-// CONSTANTS
-// ============================================================
-
-const LOGO_SRC = '/logo.png';
-/** Natural aspect ratio of the logo (width:height) */
-const LOGO_ASPECT = 512 / 341;
+import { useBrandingStore } from '@/core/branding';
 
 // ============================================================
 // TYPES
@@ -31,6 +24,8 @@ interface BrandLogoProps {
   textClassName?: string;
   /** Show compact wordmark ('MH ENTERPRISE') instead of full name */
   compact?: boolean;
+  /** Force a specific logo type (e.g. 'dark_logo', 'compact_logo') */
+  logoType?: string;
 }
 
 // ============================================================
@@ -56,16 +51,21 @@ export function BrandLogo({
   iconClassName,
   textClassName,
   compact = false,
+  logoType,
 }: BrandLogoProps) {
   const s = sizeMap[size];
+  // Dynamic logo from branding service — falls back to static /logo.png
+  const logoSrc = useBrandingStore((st) =>
+    logoType ? st.getAssetUrl(logoType as any) : st.getAssetUrl('primary_logo')
+  );
 
   // ─── Icon-only variant (bare logo image) ──────────────────
   if (variant === 'icon') {
     return (
       <img
-        src={LOGO_SRC}
+        src={logoSrc}
         alt=""
-        width={Math.round(s.h * LOGO_ASPECT)}
+        width={s.h}
         height={s.h}
         className={cn('shrink-0 object-contain', iconClassName, className)}
         aria-hidden="true"
@@ -85,7 +85,7 @@ export function BrandLogo({
         )}
       >
         <img
-          src={LOGO_SRC}
+          src={logoSrc}
           alt=""
           style={{ width: '85%', height: '85%', objectFit: 'contain' }}
           aria-hidden="true"
@@ -107,7 +107,7 @@ export function BrandLogo({
         )}
       >
         <img
-          src={LOGO_SRC}
+          src={logoSrc}
           alt=""
           style={{ width: '85%', height: '85%', objectFit: 'contain' }}
           aria-hidden="true"
@@ -135,12 +135,13 @@ export function HeaderBrandLogo({ className }: { className?: string }) {
   return <BrandLogo variant="icon-square" size="md" className={className} />;
 }
 
-/** Full logo for login / error pages — matches the original w-14 h-14 visual weight */
+/** Full logo for login / error pages — uses login_logo if available */
 export function LoginBrandLogo({ className }: { className?: string }) {
+  const logoSrc = useBrandingStore((st) => st.getAssetUrl('login_logo'));
   return (
     <div className={cn('w-14 h-14 rounded-xl bg-emerald-600 flex items-center justify-center shrink-0 overflow-hidden', className)}>
       <img
-        src={LOGO_SRC}
+        src={logoSrc}
         alt=""
         width={52}
         height={52}

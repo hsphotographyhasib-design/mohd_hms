@@ -32,6 +32,7 @@ import {
   CheckCircle2,
   Clock,
   Eye,
+  Palette,
 } from 'lucide-react';
 import { useAuthStore, useAppStore } from '@/app-shell/store';
 import { toast } from 'sonner';
@@ -409,6 +410,16 @@ export function CmsDashboard() {
                 >
                   <Globe className="h-4 w-4" />
                   Edit Landing Page
+                  <ArrowRight className="h-3 w-3 ml-auto" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full justify-start gap-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50"
+                  onClick={() => setView('cms-branding')}
+                >
+                  <Palette className="h-4 w-4" />
+                  Branding
                   <ArrowRight className="h-3 w-3 ml-auto" />
                 </Button>
               </CardContent>

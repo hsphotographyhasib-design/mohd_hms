@@ -101,6 +101,7 @@ export type AppView =
   | 'cms-activity'
   | 'cms-page-list'
   | 'cms-page-builder'
+  | 'cms-branding'
   | 'system-health'
   // WhatsApp views
   | 'whatsapp'

@@ -1,11 +1,13 @@
 'use client';
 
 import { ReactNode } from 'react';
+import { useBrandingStore } from '@/core/branding';
 
 export function BrandLogo({ className }: { className?: string }) {
+  const logoSrc = useBrandingStore((st) => st.getAssetUrl('login_logo'));
   return (
     <img
-      src="/logo-512.png"
+      src={logoSrc}
       alt="MOHD.HMS ENTERPRISE"
       className={className}
     />

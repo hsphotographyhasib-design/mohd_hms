@@ -67,6 +67,7 @@ const CmsForms = lazy(() => import('@/modules/cms/components/cms-forms').then(m 
 const CmsActivity = lazy(() => import('@/modules/cms/components/cms-activity').then(m => ({ default: m.CmsActivity })));
 const CmsPageList = lazy(() => import('@/modules/cms/components/cms-page-list').then(m => ({ default: m.CmsPageList })));
 const CmsPageBuilder = lazy(() => import('@/modules/cms/components/cms-page-builder').then(m => ({ default: m.CmsPageBuilder })));
+const CmsBranding = lazy(() => import('@/modules/cms/components/cms-branding').then(m => ({ default: m.CmsBranding })));
 const SystemHealth = lazy(() => import('@/modules/settings/components/health-dashboard').then(m => ({ default: m.HealthDashboard })));
 
 // WhatsApp views
@@ -278,6 +279,7 @@ function ViewRouter() {
       {currentView === 'cms-activity' && <CmsActivity />}
       {currentView === 'cms-page-list' && <CmsPageList />}
       {currentView === 'cms-page-builder' && <CmsPageBuilder pageId={useAppStore.getState().viewParams?.id} />}
+      {currentView === 'cms-branding' && <CmsBranding />}
       {currentView === 'documents' && <DocumentList />}
       {currentView === 'document-detail' && <DocumentDetail documentId={useAppStore.getState().viewParams?.id ?? ''} />}
       {currentView === 'system-health' && <SystemHealth />}

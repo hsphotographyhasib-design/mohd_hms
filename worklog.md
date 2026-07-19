@@ -314,3 +314,96 @@ Stage Summary:
 - Files modified: `src/app/page.tsx`, `src/components/session/auth-guard.tsx`, `src/core/auth/session/auth-guard.tsx`
 - All loading/session screens now show the MOHD.HMS brand logo (SVG) instead of generic Building2 icon
 - Used centralized BRAND config for consistency
+
+---
+Task ID: 4
+Agent: branding-service-agent
+Task: Create client-side branding service and store
+
+Work Log:
+- Created `src/core/branding/branding-types.ts` with BrandAssetType union, BrandAsset, BrandConfig, BrandingData interfaces
+- Created `src/core/branding/branding-store.ts` Zustand store with config/assets/assetMap state, setBranding/setLoading/getAssetUrl/invalidate actions
+- getAssetUrl checks assetMap for dynamic assets (served via /api/branding/serve/) and falls back to static BRAND config paths
+- Created `src/core/branding/branding-service.ts` with fetchBranding, uploadAsset, updateConfig, deleteAsset, invalidateCache methods
+- Uses localStorage 'cmms_token' for auth headers, consistent with existing codebase
+- Created `src/core/branding/use-branding.ts` with useBranding (load-once with dedup), useLogo, useBrandConfig, useIsBrandingLoaded hooks
+- useBranding silently falls back to static assets for unauthenticated users (login page)
+- Created `src/core/branding/index.ts` barrel export for all types, store, service, and hooks
+- Lint: 0 errors, 3 warnings (false positives from Zustand callback parameter detection)
+
+Stage Summary:
+- Files created: branding-types.ts, branding-store.ts, branding-service.ts, use-branding.ts, index.ts
+- Store loads branding data ONCE and caches; invalidate() clears cache for re-fetch
+- Works before authentication — unauthenticated users get static fallback assets from BRAND config
+
+---
+Task ID: 3
+Agent: branding-api-agent
+Task: Create centralized Branding API routes
+
+Work Log:
+- Created `src/app/api/branding/route.ts` — GET full branding config (assets + CmsSetting keys), PUT upsert branding config (super_admin only, uses withErrorLogging)
+- Created `src/app/api/branding/upload/route.ts` — POST multipart upload with file type/size/dimension validation, versioning, auto-deactivation of previous active asset (super_admin only, uses withErrorLogging)
+- Created `src/app/api/branding/assets/route.ts` — GET all assets grouped by type with version history (any authenticated role)
+- Created `src/app/api/branding/assets/[id]/route.ts` — DELETE soft-delete with automatic previous-version activation (super_admin only, uses withErrorLogging)
+- Created `src/app/api/branding/serve/[type]/route.ts` — GET serve file from storage provider, no auth required, cache headers, static fallback on error/missing
+- Valid asset types: primary_logo, compact_logo, dark_logo, light_logo, favicon, icon_192, icon_512, apple_touch_icon, notification_icon, login_logo, splash_logo, pdf_header_logo, email_header_logo
+- MIME validation: image/png, image/svg+xml, image/x-icon, image/vnd.microsoft.icon, image/jpeg, image/webp
+- Size limits: 2MB for logos, 5MB for icons/favicons
+- Upload route includes header-based dimension parsing for PNG, JPEG, and WEBP formats
+- Fixed TypeScript errors: ErrorCategoryType values (used 'api'), Buffer→Uint8Array for NextResponse body
+- TypeScript compilation: 0 errors in branding routes
+
+Stage Summary:
+- Files created: src/app/api/branding/route.ts, upload/route.ts, assets/route.ts, assets/[id]/route.ts, serve/[type]/route.ts
+- API endpoints: GET/PUT /api/branding, POST /api/branding/upload, GET /api/branding/assets, DELETE /api/branding/assets/[id], GET /api/branding/serve/[type]
+- All write endpoints require super_admin role; GET endpoints require auth (except serve/[type] which is public)
+- GET /api/branding and GET /api/branding/serve/[type] do NOT use withErrorLogging (return fallbacks on error)
+
+---
+Task ID: 6
+Agent: branding-ui-agent
+Task: Create CMS Branding management UI
+
+Work Log:
+- Created `src/modules/cms/components/cms-branding.tsx` with comprehensive 7-tab branding management interface
+- Tab 1 (Company): Form with company name, short name, tagline, address, phone, email, website, tax/reg numbers with save button
+- Tab 2 (Logos): Grid of 13 upload slots for all asset types (primary, compact, dark/light, favicon, icons, login, splash, PDF, email logos) with preview, upload, download, delete, file size/dimensions/version display
+- Tab 3 (Icons): Filtered view showing only icon-type assets (favicon, icon_192, icon_512, apple_touch_icon, notification_icon)
+- Tab 4 (Colors): 4 color pickers (primary, accent, theme, background) with native color input + hex text input + preview swatch
+- Tab 5 (PWA): Read-only config display (app name, short name, theme/bg colors) + PWA icon previews (192, 512, apple_touch) + "Update PWA" button
+- Tab 6 (Email): Live preview card showing email header with logo, company name, tagline, theme color bar, body area, footer with contact info
+- Tab 7 (PDF): Live preview card showing PDF header with logo/company info/contact, sample invoice table, color accent bar, footer with tax/reg info
+- Implemented AssetUploadSlot sub-component with file validation, upload progress, download/delete actions
+- Integrated with useBrandingStore for cache invalidation after mutations
+- Used direct fetch API calls for mutations (upload, delete, config update) with Bearer token auth
+- Follows existing CMS component pattern (use client, localStorage token, card-based layout, emerald green accent)
+- Added loading skeletons, error state with retry, dirty state tracking for config save
+- Back button navigates to cms-dashboard via useAppStore setView
+
+Stage Summary:
+- File created: src/modules/cms/components/cms-branding.tsx
+- 7 tabs: Company Info, Logo Management, Icons, Theme Colors, PWA Settings, Email Branding, PDF Branding
+- 13 asset upload slots with full CRUD (upload, download, delete)
+- Professional emerald green theme consistent with CMS module
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Implement Centralized Logo & Branding Management System
+
+Work Log:
+- Added BrandingAsset model to Prisma schema (13 asset types, version tracking, soft delete)
+- Created 5 branding API routes (GET/PUT /api/branding, POST /api/branding/upload, GET /api/branding/assets, DELETE /api/branding/assets/[id], GET /api/branding/serve/[type])
+- Created client-side branding service (types, Zustand store, API service, React hooks)
+- Created CMS Branding UI with 7 tabs (Company Info, Logos, Icons, Colors, PWA, Email, PDF)
+- Added 'cms-branding' to AppView types, view-feature-map, app-shell lazy imports, and CMS module exports
+- Added Branding quick-action to CMS Dashboard
+- Updated BrandLogo component to use dynamic branding service
+- Updated login-view, auth-shell, sidebar to use dynamic logos
+- All components fall back to static /logo.png when no branding is configured
+
+Stage Summary:
+- New files: src/app/api/branding/route.ts, src/app/api/branding/upload/route.ts, src/app/api/branding/assets/route.ts, src/app/api/branding/assets/[id]/route.ts, src/app/api/branding/serve/[type]/route.ts, src/core/branding/branding-types.ts, src/core/branding/branding-store.ts, src/core/branding/branding-service.ts, src/core/branding/use-branding.ts, src/core/branding/index.ts, src/modules/cms/components/cms-branding.tsx
+- Modified files: prisma/schema.prisma, src/core/types/index.ts, src/types/index.ts, src/core/permissions/view-feature-map.ts, src/app-shell/app-shell.tsx, src/modules/cms/index.ts, src/modules/cms/components/cms-dashboard.tsx, src/shared/components/brand/brand-logo.tsx, src/app-shell/login-view.tsx, src/core/auth/components/auth-shell.tsx, src/app-shell/sidebar.tsx
+- TypeScript: 0 errors
