@@ -135,8 +135,8 @@ export async function sendFcmToToken(
       } : undefined,
       webpush: {
         notification: {
-          icon: payload.icon || '/logo-512.png',
-          badge: '/logo-512.png',
+          icon: payload.icon || '/logo.png',
+          badge: '/logo.png',
           tag: payload.data?.notificationId || `mohd-hms-${Date.now()}`,
           requireInteraction: payload.data?.priority === 'urgent' || payload.data?.priority === 'high',
         },
@@ -285,8 +285,8 @@ export async function sendFcmToUsers(
         } : undefined,
         webpush: {
           notification: {
-            icon: payload.icon || '/logo-512.png',
-            badge: '/logo-512.png',
+            icon: payload.icon || '/logo.png',
+            badge: '/logo.png',
           },
           fcmOptions: {
             link: payload.data?.actionUrl || '/',

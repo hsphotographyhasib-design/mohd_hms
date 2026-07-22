@@ -5,7 +5,7 @@ import { ReactNode } from 'react';
 export function BrandLogo({ className }: { className?: string }) {
   return (
     <img
-      src="/logo-512.png"
+      src="/logo.png"
       alt="MOHD.HMS ENTERPRISE"
       className={className}
     />

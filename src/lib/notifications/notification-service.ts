@@ -245,7 +245,7 @@ export async function createNotification(
     sendFcmToUsers(targetUserIds, input.tenantId, {
       title: input.title,
       body: input.message,
-      icon: '/logo-512.png',
+      icon: '/logo.png',
       data: {
         notificationId: firstId,
         type: input.type,

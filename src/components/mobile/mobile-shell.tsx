@@ -45,6 +45,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { BrandLogo } from '@/shared/components/brand/brand-logo';
 import { toast } from 'sonner';
 import type { AppView, UserRole } from '@/types';
 import { QrScannerModal } from './qr-scanner-modal';
@@ -179,7 +180,7 @@ function MobileHeader() {
       <div className="flex h-14 items-center justify-between px-4">
         {/* Logo */}
         <div className="flex items-center gap-2">
-          <img src="/logo-512.png" alt="" className="h-8 w-8 object-contain" aria-hidden="true" />
+          <BrandLogo variant="icon-square" size="sm" />
           <div className="flex flex-col leading-none">
             <span className="text-sm font-bold tracking-tight text-emerald-700">MOHD.HMS</span>
             <span className="text-[9px] font-medium uppercase tracking-widest text-gray-400">Enterprise</span>

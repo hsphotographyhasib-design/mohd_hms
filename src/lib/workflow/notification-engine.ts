@@ -140,7 +140,7 @@ export async function recordWorkflowTransition(ctx: WorkflowContext): Promise<vo
       sendFcmToUsers(targetUserIds, ctx.tenantId, {
         title: firstTarget.title,
         body: firstTarget.message,
-        icon: '/logo-512.png',
+        icon: '/logo.png',
         data: {
           type: firstTarget.type,
           priority: 'normal',

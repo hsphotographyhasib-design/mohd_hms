@@ -508,3 +508,59 @@ Stage Summary:
 - Export works as JSON and CSV file downloads
 - Create Inspection button works across components via Zustand store
 - Proper error feedback via toast notifications
+
+---
+Task ID: 4
+Agent: Main Agent
+Task: Fix logo showing old/placeholder instead of user's custom logo
+
+Work Log:
+- Audited ALL logo rendering paths across the entire codebase (30+ locations)
+- Found the user's custom logo is correctly at /public/logo.png (same hash as upload/logo 1.png)
+- Identified the app-header.tsx used a Lucide Building2 icon instead of the actual logo image
+- Found /logo-512.png and /logo-1024.png hardcoded in 17+ files pointing to old/missing files
+
+Key fixes:
+1. app-header.tsx: Replaced Building2 icon + "MOHD.HMS" text with <BrandLogo variant="full" compact />
+2. mobile-shell.tsx (both copies): Replaced hardcoded /logo-512.png with <BrandLogo variant="icon-square" />
+3. mobile-dashboard.tsx: Replaced inline SVG hexagon "MH" with <BrandLogo variant="icon-square" />
+4. company-logo.tsx: Rewrote to use <BrandLogo> component instead of hardcoded COMPANY.logoSvg
+5. public-layout.tsx (both copies): Changed /logo-512.png to /logo.png with object-contain
+6. company.ts (BRAND constants): Changed png512 and png1024 to /logo.png
+7. layout.tsx: Changed OG_IMAGE from /logo-1024.png to /logo.png
+8. All backend files (FCM, email templates, notification engine, escalation rules): /logo-512.png → /logo.png
+9. Legacy component duplicates (src/components/): /logo-512.png → /logo.png
+
+Files modified:
+- src/app-shell/nav/app-header.tsx
+- src/mobile-app/components/mobile-shell.tsx
+- src/components/mobile/mobile-shell.tsx
+- src/modules/dashboard/components/mobile-dashboard.tsx
+- src/components/shared/company-logo.tsx
+- src/landing/components/public-layout.tsx
+- src/components/landing/public-layout.tsx
+- src/core/constants/company.ts
+- src/app/layout.tsx
+- src/core/workflow/escalation-rules.ts
+- src/core/workflow/workflow/escalation-rules.ts
+- src/core/workflow/workflow/notification-engine.ts
+- src/core/workflow/notification-engine.ts
+- src/core/firebase/fcm-admin.ts
+- src/core/email/service/templates/base.ts
+- src/lib/notifications/notification-service.ts
+- src/lib/workflow/escalation-rules.ts
+- src/lib/workflow/notification-engine.ts
+- src/lib/fcm-admin.ts
+- src/lib/email-service/templates/base.ts
+- src/components/app/sidebar.tsx
+- src/components/auth/auth-shell.tsx
+- src/components/app/login-view.tsx
+
+TypeScript: 0 errors
+
+Stage Summary:
+- App header now shows user's actual logo instead of Building2 Lucide icon
+- All 22 files updated to use /logo.png (user's custom logo)
+- Zero remaining references to /logo-512.png or /logo-1024.png in src/
+- Mobile, landing, email, push notifications all use correct logo
+- BrandLogo component (with dynamic branding store) used everywhere possible

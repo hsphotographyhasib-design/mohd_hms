@@ -303,7 +303,7 @@ async function processRule(
           sendFcmToUsers(targetUserIds, tenantId, {
             title: `⚠️ ${rule.label}`,
             body: rule.staffMessage(complaint.title, elapsed),
-            icon: '/logo-512.png',
+            icon: '/logo.png',
             data: {
               type: 'escalation',
               priority,

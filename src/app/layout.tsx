@@ -25,7 +25,7 @@ const SITE_URL = "https://mohdhms.com";
 const SITE_NAME = "MOHD.HMS ENTERPRISE";
 const SITE_DESCRIPTION =
   "MOHD.HMS ENTERPRISE — Brunei's trusted facility maintenance & engineering partner. HVAC, electrical, plumbing, mechanical and fire protection, delivered by certified teams with 24/7 emergency support and smart CMMS tracking.";
-const OG_IMAGE = `${SITE_URL}/logo-1024.png`;
+const OG_IMAGE = `${SITE_URL}/logo.png`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

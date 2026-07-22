@@ -28,9 +28,9 @@ export const BRAND = {
     /** Main PNG logo used everywhere in the app */
     png: '/logo.png',
     /** PNG logo for high-res / email / notifications */
-    png512: '/logo-512.png',
+    png512: '/logo.png',
     /** Logo for OG / social sharing */
-    png1024: '/logo-1024.png',
+    png1024: '/logo.png',
     /** Favicon (ICO) */
     ico: '/favicon.ico',
     /** Favicon (SVG, modern browsers) */

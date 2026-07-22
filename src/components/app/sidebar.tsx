@@ -141,7 +141,7 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
         collapsed ? 'justify-center' : 'gap-3'
       )}>
         <div className="flex items-center justify-center w-9 h-9 shrink-0 overflow-hidden">
-          <img src="/logo-512.png" alt="" className="w-full h-full object-contain" aria-hidden="true" />
+          <img src="/logo.png" alt="" className="w-full h-full object-contain" aria-hidden="true" />
         </div>
         <AnimatePresence>
           {!collapsed && (

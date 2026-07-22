@@ -12,7 +12,6 @@ import { useTheme } from 'next-themes';
 import { useNotification } from '@/modules/notifications';
 import { getQuickActionsForView } from '@/core/constants/quick-actions-config';
 import {
-  Building2,
   Search,
   QrCode,
   Bell,
@@ -36,6 +35,7 @@ import {
 import { Avatar, AvatarFallback } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
+import { BrandLogo } from '@/shared/components/brand/brand-logo';
 
 // ============================================================
 // CONSTANTS
@@ -265,13 +265,8 @@ export function AppHeader() {
       >
         <div className="flex items-center justify-between h-16 px-4 lg:px-6 gap-4">
           {/* ---- LEFT: Logo + Company Name ---- */}
-          <div className="flex items-center gap-2.5 shrink-0">
-            <div className="flex items-center justify-center h-9 w-9 rounded-lg bg-emerald-500 text-white shadow-md shadow-emerald-500/25">
-              <Building2 className="h-5 w-5" />
-            </div>
-            <span className="font-semibold text-lg text-foreground tracking-tight">
-              MOHD.HMS
-            </span>
+          <div className="cursor-pointer" onClick={() => useAppStore.getState().setView('dashboard')}>
+          <BrandLogo variant="full" size="md" compact />
           </div>
 
           {/* ---- CENTER: Search Bar ---- */}

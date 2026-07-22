@@ -1,7 +1,6 @@
 'use client';
 
-import Image from 'next/image';
-import { COMPANY } from '@/lib/company';
+import { BrandLogo } from '@/shared/components/brand/brand-logo';
 
 interface CompanyLogoProps {
   size?: number;
@@ -11,34 +10,21 @@ interface CompanyLogoProps {
 }
 
 export function CompanyLogo({ size = 44, className = '', showText = false, circle = false }: CompanyLogoProps) {
+  const sizeVariant = size <= 20 ? 'xs' : size <= 28 ? 'sm' : size <= 40 ? 'md' : 'lg';
+
+  if (!showText) {
+    return (
+      <div className={`flex-none overflow-hidden ${circle ? 'rounded-full' : 'rounded-xl'}`} style={{ width: size, height: size }}>
+        <div className="w-full h-full flex items-center justify-center">
+          <BrandLogo variant="icon" size={sizeVariant} />
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={`flex items-center gap-3 ${className}`}>
-      <div
-        className={`flex-none overflow-hidden ${circle ? 'rounded-full' : 'rounded-xl'}`}
-        style={{ width: size, height: size }}
-      >
-        <Image
-          src={COMPANY.logoSvg}
-          alt={COMPANY.name}
-          width={size}
-          height={size}
-          priority
-          className="w-full h-full object-contain"
-        />
-      </div>
-      {showText && (
-        <div className="min-w-0">
-          <p className="font-bold leading-tight text-gray-900" style={{ fontSize: Math.max(13, size * 0.34) }}>
-            MOHD.HMS
-          </p>
-          <p
-            className="text-green-600 font-semibold tracking-[0.22em]"
-            style={{ fontSize: Math.max(9, size * 0.22), marginTop: 2 }}
-          >
-            ENTERPRISE
-          </p>
-        </div>
-      )}
+      <BrandLogo variant="full" size={sizeVariant} compact />
     </div>
   );
 }

@@ -11,6 +11,7 @@ import {
 import { Skeleton } from '@/shared/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { useAuthStore, useAppStore } from '@/app-shell/store';
+import { BrandLogo } from '@/shared/components/brand/brand-logo';
 import type { DashboardStats, ComplaintItem, WorkOrderItem } from '@/core/types';
 
 // ============ SKELETON ============
@@ -257,20 +258,7 @@ export function MobileDashboard({ stats }: MobileDashboardProps) {
         <div className="flex items-center justify-between px-4 py-3">
           {/* Left: Logo + Name */}
           <div className="flex items-center gap-2.5">
-            {/* Hexagonal Logo */}
-            <div className="relative w-9 h-9 flex items-center justify-center">
-              <svg viewBox="0 0 36 36" className="w-9 h-9" fill="none">
-                <path
-                  d="M18 2L32.5 10.5V25.5L18 34L3.5 25.5V10.5L18 2Z"
-                  fill="#0A6E4A"
-                  stroke="#0A6E4A"
-                  strokeWidth="1"
-                />
-                <text x="18" y="21" textAnchor="middle" fill="white" fontSize="10" fontWeight="700" fontFamily="system-ui">
-                  MH
-                </text>
-              </svg>
-            </div>
+            <BrandLogo variant="icon-square" size="md" />
             <div>
               <p className="text-[#0A6E4A] font-bold text-[18px] leading-tight tracking-tight">
                 MOHD.HMS
