@@ -564,3 +564,57 @@ Stage Summary:
 - Zero remaining references to /logo-512.png or /logo-1024.png in src/
 - Mobile, landing, email, push notifications all use correct logo
 - BrandLogo component (with dynamic branding store) used everywhere possible
+
+---
+Task ID: 1
+Agent: main
+Task: Rebuild Enterprise User Role Management System
+
+Work Log:
+- Explored entire codebase: user-management.tsx (1493 lines), permissions-matrix.ts, RBAC types, auth store, existing PUT /api/auth/users/[id] route, Prisma schema (User + AuditLog models), notification service
+- Identified root causes of old implementation failure:
+  1. Old role change used overloaded PUT /api/auth/users/[id] with generic body - no dedicated endpoint
+  2. Simple Select dropdown with ALL_ROLES list - no permission matrix enforcement
+  3. No confirmation dialog - instant role change
+  4. Frontend-only role restriction (only checked super_admin) - no backend transition matrix
+  5. No role descriptions shown to operator
+  6. No audit trail with structured details (only basic action/entity)
+  7. No notification sent to target user
+  8. PUT handler mixed role changes with generic user updates
+
+- Added ROLE_TRANSITION_MATRIX and canTransitionRole() to permissions-matrix.ts
+  - Super Admin: can assign any role
+  - Admin: can only assign customer, technician, hr, finance
+  - All other roles: empty set (no role change permission)
+- Exported new exports from rbac/index.ts barrel
+
+- Created dedicated PATCH /api/admin/users/[id]/role API endpoint
+  - 13-step validation pipeline: auth, self-change prevention, body validation, permission matrix, user lookup, context-aware transition check, no-op check, last super_admin protection, metadata extraction, DB update, audit log, notification, response
+  - Creates structured audit log with previousRole, newRole, changedBy, targetUserName, targetUserEmail, reason
+  - Creates in-app notification for target user about role change
+  - Fire-and-forget pattern for audit and notification (never blocks response)
+
+- Created new ChangeRoleModal component
+  - Searchable dropdown with role descriptions
+  - Permission matrix enforced: only shows roles caller can assign
+  - Two-step flow: Select → Confirmation view with visual role transition display
+  - User info card showing avatar, name, email, current role, auth provider, department
+  - Error handling with expandable technical details for Super Admin
+  - Google Customer Upgrade special UI treatment preserved
+
+- Updated user-management.tsx
+  - Removed old roleDialogOpen, newRole, roleChangeTarget state
+  - Added roleModalOpen, roleModalUser state
+  - Replaced handleChangeRole() and openQuickRoleChange() with openRoleModal()
+  - Replaced old Dialog-based role selector (60+ lines) with ChangeRoleModal component
+  - Updated all 3 trigger points: table dropdown, mobile card button, detail dialog button
+  - Preserved ALL other functionality: toggle active, force logout, delete, audit log view
+
+Stage Summary:
+- Files Added: src/app/api/admin/users/[id]/role/route.ts, src/modules/settings/components/admin/change-role-modal.tsx
+- Files Modified: src/core/permissions/rbac/permissions-matrix.ts, src/core/permissions/rbac/index.ts, src/modules/settings/components/admin/user-management.tsx
+- Files Removed: None (old code replaced in-place)
+- New API: PATCH /api/admin/users/{userId}/role
+- New RBAC exports: ROLE_TRANSITION_MATRIX, canTransitionRole
+- TypeScript: 0 errors
+- Lint: 0 errors, 1 warning (any type in API route - unavoidable for const array includes check)

@@ -360,6 +360,57 @@ export const ROLE_HIERARCHY: Record<UserRole, number> = {
   guest:       0,
 };
 
+// ── Role Transition Matrix ───────────────────────────────────────────────
+//
+// Defines which roles a caller (operator) can assign to a target user.
+// Key: operator role → Set of target roles they can assign.
+// Super Admin can assign ANY role (except self-demotion edge case handled in API).
+// Admin has limited scope — only promote customers to operational roles.
+//
+
+export const ROLE_TRANSITION_MATRIX: Record<string, Set<string>> = {
+  super_admin: new Set([
+    'customer', 'technician', 'supervisor', 'finance', 'hr', 'manager', 'admin', 'super_admin',
+  ]),
+  admin: new Set([
+    'customer', 'technician', 'hr', 'finance',
+  ]),
+  // All other roles cannot change anyone's role
+  manager: new Set([]),
+  supervisor: new Set([]),
+  technician: new Set([]),
+  finance: new Set([]),
+  hr: new Set([]),
+  user: new Set([]),
+  customer: new Set([]),
+  vendor: new Set([]),
+  guest: new Set([]),
+};
+
+/**
+ * Check if an operator role can transition a target user to a new role.
+ * This enforces the permission matrix on the backend.
+ */
+export function canTransitionRole(operatorRole: string, targetNewRole: string, targetCurrentRole: string): { allowed: boolean; reason?: string } {
+  const allowedTargets = ROLE_TRANSITION_MATRIX[operatorRole];
+  if (!allowedTargets || !allowedTargets.has(targetNewRole)) {
+    return {
+      allowed: false,
+      reason: `Your role (${operatorRole.replace(/_/g, ' ')}) does not have permission to assign the role ${targetNewRole.replace(/_/g, ' ')}.`,
+    };
+  }
+
+  // Super Admin cannot be modified by non-super_admin (defensive check)
+  if (targetCurrentRole === 'super_admin' && operatorRole !== 'super_admin') {
+    return {
+      allowed: false,
+      reason: 'Only a Super Admin can modify another Super Admin.',
+    };
+  }
+
+  return { allowed: true };
+}
+
 // ── Permission Check Functions ────────────────────────────────────────────────
 
 /**

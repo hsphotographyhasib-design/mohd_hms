@@ -19,4 +19,4 @@ export type { DataScope } from './data-scope';
 export { buildDataScope, buildDataScopeFromRequest, scopeInvoice, scopeWorkOrder, scopeQuotation, scopeEquipment, scopeCustomer } from './data-scope';
 
 // Unified permissions matrix (SINGLE SOURCE OF TRUTH)
-export { FEATURE_PERMISSIONS, ACTION_PERMISSIONS, ROLE_HIERARCHY, canAccessFeature, canPerformAction, hasMinRole, hasPermission } from './permissions-matrix';
+export { FEATURE_PERMISSIONS, ACTION_PERMISSIONS, ROLE_HIERARCHY, ROLE_TRANSITION_MATRIX, canAccessFeature, canPerformAction, hasMinRole, hasPermission, canTransitionRole } from './permissions-matrix';

@@ -35,6 +35,7 @@ import {
 import { toast } from 'sonner';
 import { useAuthStore, hasMinRole } from '@/app-shell/store';
 import type { UserRole } from '@/core/types';
+import { ChangeRoleModal, type ChangeRoleModalUser } from './change-role-modal';
 
 // ============ TYPES ============
 
@@ -353,9 +354,8 @@ export function UserManagement() {
 
   // Action states
   const [actionLoading, setActionLoading] = useState<string | null>(null);
-  const [roleDialogOpen, setRoleDialogOpen] = useState(false);
-  const [newRole, setNewRole] = useState('');
-  const [roleChangeTarget, setRoleChangeTarget] = useState<UserListItem | null>(null);
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [roleModalUser, setRoleModalUser] = useState<ChangeRoleModalUser | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   // Audit log view state
@@ -450,54 +450,33 @@ export function UserManagement() {
 
   // ============ ACTIONS ============
 
-  const handleChangeRole = async () => {
-    // Support both detail dialog and inline table role changes
-    const targetUser = selectedUser || roleChangeTarget;
-    if (!targetUser || !newRole) return;
+  const openRoleModal = (user: UserListItem | UserDetail | null, e?: React.MouseEvent) => {
+    if (!user) return;
+    if (e) e.stopPropagation();
+    setRoleModalUser({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      avatar: user.avatar || null,
+      authProvider: 'authProvider' in user ? (user as UserDetail).authProvider : (user as UserListItem).authProvider || null,
+      employeeNumber: user.employeeNumber || null,
+      department: user.department || null,
+      tenant: 'tenant' in user ? (user as UserDetail).tenant || null : null,
+    });
+    // Delay to avoid Radix UI portal conflict with DropdownMenu
+    setTimeout(() => setRoleModalOpen(true), 150);
+  };
 
-    const previousRole = targetUser.role;
-    if (newRole === previousRole) return;
-
-    setActionLoading('change-role');
-    try {
-      const res = await fetch(`/api/auth/users/${targetUser.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
-        body: JSON.stringify({ role: newRole }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        // Extract the most useful error message from the response
-        const errMsg = data.error || data.message || 'Failed to change role';
-        throw new Error(errMsg);
-      }
-      // Show role transition in the success toast
-      const fromLabel = ROLE_LABELS[previousRole] || previousRole;
-      const toLabel = ROLE_LABELS[newRole] || newRole;
-      toast.success(`Role changed: ${fromLabel} → ${toLabel}`);
-      setRoleDialogOpen(false);
-      setNewRole('');
-      setRoleChangeTarget(null);
-      if (selectedUser) {
-        refreshDetail();
-      } else {
-        fetchUsers();
-      }
-    } catch (err) {
-      toast.error(err instanceof Error ? err.message : 'Failed to change role');
-    } finally {
-      setActionLoading(null);
+  const handleRoleChangeSuccess = () => {
+    if (selectedUser) {
+      refreshDetail();
+    } else {
+      fetchUsers();
     }
   };
 
-  // Quick role change from table row (without opening detail dialog)
-  const openQuickRoleChange = (user: UserListItem, e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    setRoleChangeTarget(user);
-    setNewRole(user.role);
-    // Delay dialog open to avoid Radix UI portal conflict with DropdownMenu
-    setTimeout(() => setRoleDialogOpen(true), 150);
-  };
+  // Removed old handleChangeRole — replaced by ChangeRoleModal
 
   const handleToggleActive = async () => {
     if (!selectedUser) return;
@@ -565,8 +544,7 @@ export function UserManagement() {
 
   const openRoleChange = () => {
     if (!selectedUser) return;
-    setNewRole(selectedUser.role);
-    setRoleDialogOpen(true);
+    openRoleModal(selectedUser);
   };
 
   // ============ REAL-TIME PRESENCE ============
@@ -843,7 +821,7 @@ export function UserManagement() {
                                   className={u.authProvider === 'google' && u.role === 'customer'
                                     ? 'text-amber-600 dark:text-amber-400'
                                     : 'text-emerald-600 dark:text-emerald-400'}
-                                  onSelect={() => openQuickRoleChange(u)}
+                                  onSelect={() => openRoleModal(u)}
                                 >
                                   <UserCog className="h-4 w-4 mr-2" />
                                   {u.authProvider === 'google' && u.role === 'customer' ? 'Upgrade Role' : 'Change Role'}
@@ -964,7 +942,7 @@ export function UserManagement() {
                       className={u.authProvider === 'google' && u.role === 'customer'
                         ? 'text-amber-600 border-amber-200 hover:bg-amber-50 dark:text-amber-400 dark:border-amber-800 dark:hover:bg-amber-950/50 h-7 text-xs'
                         : 'text-emerald-600 border-emerald-200 hover:bg-emerald-50 dark:text-emerald-400 dark:border-emerald-800 dark:hover:bg-emerald-950/50 h-7 text-xs'}
-                      onClick={(e) => openQuickRoleChange(u, e)}
+                      onClick={(e) => openRoleModal(u, e)}
                     >
                       <UserCog className="h-3 w-3 mr-1" />
                       {u.authProvider === 'google' && u.role === 'customer' ? 'Upgrade Role' : 'Change Role'}
@@ -1319,70 +1297,15 @@ export function UserManagement() {
         </DialogContent>
       </Dialog>
 
-      {/* ============ CHANGE ROLE DIALOG ============ */}
-      <Dialog open={roleDialogOpen} onOpenChange={(open) => { if (!open) { setRoleDialogOpen(false); setRoleChangeTarget(null); setNewRole(''); } }}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2">
-              {roleChangeTarget?.authProvider === 'google' && roleChangeTarget?.role === 'customer' ? (
-                <>
-                  <ArrowUpRight className="h-5 w-5 text-amber-500" />
-                  Upgrade User Role
-                </>
-              ) : (
-                <>
-                  <UserCog className="h-5 w-5 text-emerald-600" />
-                  Change User Role
-                </>
-              )}
-            </DialogTitle>
-            <DialogDescription>
-              {roleChangeTarget ? (
-                <>
-                  Change role for <span className="font-medium text-foreground">{roleChangeTarget.name}</span>
-                  <br />
-                  <span className="text-xs text-muted-foreground">Signed up via Google on {formatDate(roleChangeTarget.createdAt)}</span>
-                </>
-              ) : (
-                <>Change role for <span className="font-medium text-foreground">{selectedUser?.name}</span></>
-              )}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <Select value={newRole} onValueChange={setNewRole}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select role" />
-              </SelectTrigger>
-              <SelectContent>
-                {ALL_ROLES.map((r) => (
-                  <SelectItem key={r} value={r}>
-                    <div className="flex items-center gap-2">
-                      <RoleBadge role={r} />
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {!isSuperAdmin && (
-              <p className="text-xs text-amber-600 dark:text-amber-400 mt-2 flex items-center gap-1">
-                <AlertTriangle className="h-3 w-3" />
-                You cannot assign the super_admin role.
-              </p>
-            )}
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => { setRoleDialogOpen(false); setRoleChangeTarget(null); setNewRole(''); }}>Cancel</Button>
-            <Button
-              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-              onClick={handleChangeRole}
-              disabled={actionLoading !== null || newRole === (selectedUser?.role || roleChangeTarget?.role)}
-            >
-              {actionLoading === 'change-role' && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              {roleChangeTarget?.authProvider === 'google' && roleChangeTarget?.role === 'customer' ? 'Upgrade Role' : 'Change Role'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* ============ CHANGE ROLE MODAL (Enterprise) ============ */}
+      {roleModalUser && (
+        <ChangeRoleModal
+          user={roleModalUser}
+          open={roleModalOpen}
+          onClose={() => { setRoleModalOpen(false); setRoleModalUser(null); }}
+          onSuccess={handleRoleChangeSuccess}
+        />
+      )}
 
       {/* ============ DELETE CONFIRMATION DIALOG ============ */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
