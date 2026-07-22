@@ -644,3 +644,31 @@ Stage Summary:
 - FIX 4: Improved change-role-modal.tsx - proper error diagnostics with HTTP status endpoint response body
 - FIX 5: Added name to JWT token payload in login route
 - FIX 6: Express route uses correct AuditLog field names matching Prisma schema
+
+---
+Task ID: role-sync-repair
+Agent: main
+Task: Fix Technician Role Synchronization & Permission Propagation
+
+Work Log:
+- Phase 1: Inspected Prisma schema — NO dedicated Technician table exists. System uses User.role field.
+- Phase 2: Audited /api/technicians route — correctly filters by role: { in: ['technician', 'supervisor'] }.
+- Phase 3: Identified ROOT CAUSE — when admin changes user role, only DB User.role is updated. JWT token, localStorage, and Zustand store still contain OLD role. Navigation, dashboard, and all permission-gated UI use the stale role from the store.
+- Created /api/auth/refresh-session endpoint — compares JWT role with DB role, issues new JWT if changed.
+- Enhanced /api/admin/users/[id]/role/route.ts — now revokes all LoginSessions for target user after role change.
+- Added refreshSession() to auth store — calls /api/auth/refresh-session, updates store + localStorage + token if role changed.
+- Added periodic session refresh (60s interval) in app-entry.tsx SetupHelpers — auto-detects role changes.
+- Enhanced 401 handlers in use-secure-fetch.ts (both secureFetch and global interceptor) — attempts refreshSession before logout.
+- Phase 4: Verified complaint assignment API already uses DB query (role: { in: ['technician', 'supervisor'] }).
+- Phase 5-6: Dashboard reads user.role from Zustand store — auto-renders on store update. Navigation same pattern.
+- Phase 7-8: Session refresh mechanism ensures active sessions get new role within 60s max.
+- Phase 9: RBAC permissions-matrix.ts already correctly maps technician permissions.
+- Phase 10-12: Notification service uses userId targeting (not role), so already works for any promoted user.
+
+Stage Summary:
+- Created: /src/app/api/auth/refresh-session/route.ts (new silent role-refresh endpoint)
+- Modified: /src/app/api/admin/users/[id]/role/route.ts (session revocation on role change)
+- Modified: /src/app-shell/store.ts (added refreshSession method)
+- Modified: /src/app-shell/app-entry.tsx (60s periodic role refresh)
+- Modified: /src/shared/hooks/use-secure-fetch.ts (401 recovery via refreshSession)
+- Root Cause: Role change only updated DB. JWT + client store had stale role. Fixed with server-side refresh endpoint + client-side periodic polling + 401 recovery.

@@ -32,6 +32,35 @@ const LandingHome = dynamic(
 function SetupHelpers() {
   useEffect(() => { setupFetchInterceptor(); }, []);
   useNotificationPolling();
+
+  // ── Periodic session / role refresh ─────────────────────────────
+  // Every 60 seconds, silently call /api/auth/refresh-session.
+  // If an admin changed this user's role, the endpoint returns a
+  // new JWT and the store is updated — causing all permission-gated
+  // UI (sidebar, dashboard, nav) to re-render automatically.
+  useEffect(() => {
+    const INTERVAL_MS = 60_000; // 60 seconds
+    let timer: ReturnType<typeof setInterval> | null = null;
+
+    const tick = () => {
+      const { isAuthenticated } = useAuthStore.getState();
+      if (isAuthenticated) {
+        useAuthStore.getState().refreshSession();
+      }
+    };
+
+    // First check after 15 seconds (fast initial detection)
+    const initialTimeout = setTimeout(() => {
+      tick();
+      timer = setInterval(tick, INTERVAL_MS);
+    }, 15_000);
+
+    return () => {
+      clearTimeout(initialTimeout);
+      if (timer) clearInterval(timer);
+    };
+  }, []);
+
   return null;
 }
 

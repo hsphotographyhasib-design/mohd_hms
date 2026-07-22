@@ -42,6 +42,20 @@ export function useSecureFetch() {
         return res;
       }
 
+      // Attempt silent session refresh before logging out.
+      // This handles the case where the user's role was changed by an admin
+      // and the session was revoked. If refresh-session succeeds (JWT is
+      // still cryptographically valid), the user gets a new token with the
+      // updated role and we retry the original request.
+      const refreshed = await useAuthStore.getState().refreshSession();
+      if (refreshed) {
+        // Role changed — retry the original request with the new token
+        const newHeaders = new Headers(options.headers);
+        const newToken = useAuthStore.getState().token;
+        if (newToken) newHeaders.set('Authorization', `Bearer ${newToken}`);
+        return fetch(url, { ...options, headers: newHeaders });
+      }
+
       // Full session cleanup
       broadcastLogoutEvent('Session expired. Please sign in again.');
       localStorage.clear();
@@ -110,12 +124,27 @@ export function setupFetchInterceptor() {
     if (res.status === 401 && urlStr.includes('/api/') && !urlStr.includes('/api/auth/login') && !urlStr.includes('/api/auth/register')) {
       // Skip cleanup during login grace period
       if (isWithinGracePeriod()) return res;
+      // Skip cleanup for refresh-session itself (avoid infinite loop)
+      if (urlStr.includes('/api/auth/refresh-session')) return res;
 
       // Schedule cleanup for next tick (don't block the current response)
-      setTimeout(() => {
+      // But first, attempt a silent session refresh in case the 401 is due
+      // to a role change (sessions revoked). If refresh-session returns a
+      // new token, we skip logout — the store was already updated.
+      setTimeout(async () => {
         const currentState = useAuthStore.getState();
         if (!currentState.isAuthenticated) return; // Already logged out
 
+        // Attempt silent refresh
+        const refreshed = await currentState.refreshSession();
+        if (refreshed) {
+          // Got a new token — the 401 was due to role change, not auth failure.
+          // The periodic refresh already updated the store, so future requests
+          // will use the new token. No logout needed.
+          return;
+        }
+
+        // Genuine auth failure — full cleanup
         broadcastLogoutEvent('Session expired. Please sign in again.');
         localStorage.clear();
         sessionStorage.clear();

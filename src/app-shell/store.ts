@@ -24,6 +24,15 @@ interface AuthState {
   secureLogout: (reason?: string) => void;
   updateProfile: (data: Partial<AuthUser>) => void;
   loadFromStorage: () => void;
+  /**
+   * Silent session refresh — calls /api/auth/refresh-session to detect
+   * role changes made by an admin.  If the role has changed, the store
+   * is updated with the new user data and a fresh JWT, causing all
+   * permission-gated UI (sidebar, dashboard, etc.) to re-render.
+   *
+   * Returns `true` when a role change was detected and applied.
+   */
+  refreshSession: () => Promise<boolean>;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -185,6 +194,78 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         localStorage.removeItem('cmms_token');
         localStorage.removeItem('cmms_user');
       }
+    }
+  },
+
+  /**
+   * Silent session & role refresh.
+   *
+   * Calls GET /api/auth/refresh-session which compares the role embedded
+   * in the JWT with the role stored in the database.  When they differ
+   * (e.g. an admin promoted this user to technician), the endpoint
+     * returns a new JWT + updated user object.
+   *
+   * The Zustand store + localStorage are both updated, which triggers
+   * a reactive re-render of every permission-gated component (sidebar,
+   * dashboard, floating nav, mobile nav).
+   *
+   * Returns `true` when a role change was detected and applied.
+   */
+  refreshSession: async () => {
+    const { token, isAuthenticated } = get();
+    if (!token || !isAuthenticated) return false;
+
+    try {
+      const res = await fetch('/api/auth/refresh-session', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) return false; // Session invalid — let the 401 handler deal with it
+
+      const data = await res.json();
+
+      // Destructure to separate auth fields from user data
+      const { roleChanged, token: newToken, previousRole, ...userData } = data;
+
+      // Update the store with fresh user data (even if role didn't change,
+      // other fields like name/avatar may have been updated)
+      const freshUser = normalizeUser(userData as AuthUser);
+      localStorage.setItem('cmms_user', JSON.stringify(freshUser));
+
+      if (roleChanged && newToken) {
+        // Role changed — update token too
+        localStorage.setItem('cmms_token', newToken);
+        set({ user: freshUser, token: newToken });
+
+        // Notify the user about the role change
+        const newRole = (freshUser.role as string).replace(/_/g, ' ');
+        const oldRole = (previousRole || 'unknown').replace(/_/g, ' ');
+        window.dispatchEvent(
+          new CustomEvent('cmms:toast', {
+            detail: {
+              type: 'info',
+              message: `Your role has been updated from ${oldRole} to ${newRole}. Permissions refreshed automatically.`,
+            },
+          }),
+        );
+
+        // Dispatch a dedicated event so other modules (e.g. dashboard)
+        // can react immediately without polling.
+        window.dispatchEvent(
+          new CustomEvent('cmms:role-changed', {
+            detail: { previousRole, newRole: freshUser.role },
+          }),
+        );
+
+        return true;
+      }
+
+      // No role change — still update user data in store (name, avatar, etc.)
+      set({ user: freshUser });
+      return false;
+    } catch {
+      // Network error — silently ignore, will retry on next interval
+      return false;
     }
   },
 }));

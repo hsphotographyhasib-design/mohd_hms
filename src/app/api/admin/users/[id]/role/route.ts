@@ -187,6 +187,31 @@ export const PATCH = withErrorLogging(async function PATCH(
       { label: 'roleChange-update' }
     );
 
+    // ── 10b. Revoke all active sessions for the target user ─────────
+    //      This ensures the target user's stale JWT (which still
+    //      contains the old role) will be detected by the client-side
+    //      refresh-session mechanism, which will then fetch a new JWT
+    //      with the updated role from /api/auth/refresh-session.
+    let sessionsRevoked = 0;
+    try {
+      const revokeResult = await withRetry(
+        () =>
+          db.loginSession.updateMany({
+            where: {
+              userId: targetUserId,
+              tenantId,
+              isRevoked: false,
+              expiresAt: { gt: new Date() },
+            },
+            data: { isRevoked: true },
+          }),
+        { label: 'roleChange-revokeSessions' }
+      );
+      sessionsRevoked = revokeResult.count;
+    } catch (err) {
+      console.error('[Role Change] Failed to revoke sessions:', err);
+    }
+
     // ── 11. Create audit log ────────────────────────────────────────
     withRetry(
       () =>
@@ -208,6 +233,9 @@ export const PATCH = withErrorLogging(async function PATCH(
               targetUserName: targetUser.name,
               targetUserEmail: targetUser.email,
               reason: reason || null,
+              sessionsRevoked,
+              permissionRefresh: true,
+              sessionRefresh: true,
             }),
             ipAddress,
             userAgent,
@@ -251,12 +279,13 @@ export const PATCH = withErrorLogging(async function PATCH(
       user: updatedUser,
       previousRole,
       newRole: normalizedNewRole,
+      sessionsRevoked,
       changedBy: {
         id: callerId,
         role: callerRole,
         name: (payload.name as string) || 'Unknown',
       },
-      message: `Role changed from ${previousRole.replace(/_/g, ' ')} to ${normalizedNewRole.replace(/_/g, ' ')}.`,
+      message: `Role changed from ${previousRole.replace(/_/g, ' ')} to ${normalizedNewRole.replace(/_/g, ' ')}. ${sessionsRevoked > 0 ? `${sessionsRevoked} active session(s) revoked — the user will receive updated permissions on their next action.` : ''}`,
     });
   } catch (error) {
     console.error('[Role Change API] Error:', error);
