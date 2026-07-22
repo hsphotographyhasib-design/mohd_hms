@@ -1,21 +1,63 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db, withRetry, getDbFriendlyMessage } from '@/core/database/db';
-import { verifyToken } from '@/core/auth/auth-lib';
-import { canTransitionRole } from '@/core/permissions/rbac/permissions-matrix';
 import { withErrorLogging } from '@/core/errors/with-error-logging';
 
 export const dynamic = 'force-dynamic';
 
-/** Valid roles that can be assigned */
-const VALID_ROLES = [
-  'super_admin', 'admin', 'manager', 'supervisor',
-  'technician', 'finance', 'hr', 'user', 'customer', 'vendor', 'guest',
-] as const;
-
+/**
+ * PATCH /api/admin/users/:id/role
+ *
+ * Enterprise User Role Update Endpoint.
+ *
+ * Architecture:
+ *   - Production (BACKEND_URL set): Proxies to Express backend on Render.
+ *     The Express backend handles auth verification, RBAC, Supabase queries,
+ *     and audit logging. This ensures the same JWT secret is used for
+ *     token verification (since login also goes through Express in prod).
+ *
+ *   - Local Dev (no BACKEND_URL): Uses Prisma/SQLite directly.
+ *     Full 13-step pipeline with auth, RBAC, DB update, audit log, notification.
+ */
 export const PATCH = withErrorLogging(async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
+
+  // ── Production: Proxy to Express backend ─────────────────────────────
+  if (BACKEND_URL) {
+    try {
+      const { id } = await params;
+      const body = await request.json();
+      const authHeader = request.headers.get('authorization') || '';
+
+      const res = await fetch(`${BACKEND_URL}/api/admin/users/${id}/role`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(authHeader ? { Authorization: authHeader } : {}),
+          'X-Forwarded-For': request.headers.get('x-forwarded-for') || '',
+          'X-Real-IP': request.headers.get('x-real-ip') || '',
+        },
+        body: JSON.stringify(body),
+      });
+
+      const data = await res.json();
+      return NextResponse.json(data, { status: res.status });
+    } catch (error) {
+      console.error('[Role Change API] Proxy error:', error);
+      return NextResponse.json(
+        { error: 'Backend service unavailable. Please try again.' },
+        { status: 502 }
+      );
+    }
+  }
+
+  // ── Local Dev: Handle with Prisma/SQLite ─────────────────────────────
+  // Dynamic imports to avoid bundling Prisma in production proxy path
+  const { db, withRetry, getDbFriendlyMessage } = await import('@/core/database/db');
+  const { verifyToken } = await import('@/core/auth/auth-lib');
+  const { canTransitionRole } = await import('@/core/permissions/rbac/permissions-matrix');
+
   try {
     // ── 1. Authentication ───────────────────────────────────────────
     const authHeader = request.headers.get('authorization');
@@ -42,6 +84,11 @@ export const PATCH = withErrorLogging(async function PATCH(
     }
 
     // ── 3. Request body validation ──────────────────────────────────
+    const VALID_ROLES = [
+      'super_admin', 'admin', 'manager', 'supervisor',
+      'technician', 'finance', 'hr', 'user', 'customer', 'vendor', 'guest',
+    ] as const;
+
     let body: { role?: string; reason?: string };
     try {
       body = await request.json();
@@ -76,13 +123,8 @@ export const PATCH = withErrorLogging(async function PATCH(
         db.user.findUnique({
           where: { id: targetUserId },
           select: {
-            id: true,
-            tenantId: true,
-            name: true,
-            email: true,
-            role: true,
-            isActive: true,
-            authProvider: true,
+            id: true, tenantId: true, name: true, email: true,
+            role: true, isActive: true, authProvider: true,
           },
         }),
       { label: 'roleChange-findUser' }
@@ -125,8 +167,7 @@ export const PATCH = withErrorLogging(async function PATCH(
     // ── 9. Extract request metadata ─────────────────────────────────
     const ipAddress =
       request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
-      request.headers.get('x-real-ip') ||
-      'unknown';
+      request.headers.get('x-real-ip') || 'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
     // ── 10. Update user role ────────────────────────────────────────
@@ -136,16 +177,9 @@ export const PATCH = withErrorLogging(async function PATCH(
           where: { id: targetUserId },
           data: { role: normalizedNewRole, updatedAt: new Date() },
           select: {
-            id: true,
-            name: true,
-            email: true,
-            role: true,
-            isActive: true,
-            avatar: true,
-            employeeNumber: true,
-            profileCompleted: true,
-            lastLogin: true,
-            createdAt: true,
+            id: true, name: true, email: true, role: true, isActive: true,
+            avatar: true, employeeNumber: true, profileCompleted: true,
+            lastLogin: true, createdAt: true,
             department: { select: { id: true, name: true } },
             tenant: { select: { id: true, name: true, domain: true } },
           },
@@ -154,16 +188,6 @@ export const PATCH = withErrorLogging(async function PATCH(
     );
 
     // ── 11. Create audit log ────────────────────────────────────────
-    const auditDetails = JSON.stringify({
-      previousRole,
-      newRole: normalizedNewRole,
-      changedBy: callerRole,
-      changedByName: (payload.name as string) || 'Unknown',
-      targetUserName: targetUser.name,
-      targetUserEmail: targetUser.email,
-      reason: reason || null,
-    });
-
     withRetry(
       () =>
         db.auditLog.create({
@@ -176,14 +200,22 @@ export const PATCH = withErrorLogging(async function PATCH(
             entityId: targetUserId,
             oldValue: JSON.stringify({ role: previousRole }),
             newValue: JSON.stringify({ role: normalizedNewRole }),
-            details: auditDetails,
+            details: JSON.stringify({
+              previousRole,
+              newRole: normalizedNewRole,
+              changedBy: callerRole,
+              changedByName: (payload.name as string) || 'Unknown',
+              targetUserName: targetUser.name,
+              targetUserEmail: targetUser.email,
+              reason: reason || null,
+            }),
             ipAddress,
             userAgent,
             device: 'api',
           },
         }),
       { label: 'roleChange-audit' }
-    ).catch((err) => {
+    ).catch((err: Error) => {
       console.error('[Role Change Audit] Failed to log:', err.message);
     });
 
@@ -209,7 +241,7 @@ export const PATCH = withErrorLogging(async function PATCH(
           },
         }),
       { label: 'roleChange-notification' }
-    ).catch((err) => {
+    ).catch((err: Error) => {
       console.error('[Role Change Notification] Failed:', err.message);
     });
 

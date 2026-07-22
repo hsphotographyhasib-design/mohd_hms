@@ -203,14 +203,23 @@ export function ChangeRoleModal({ user, open, onClose, onSuccess }: ChangeRoleMo
 
   // ── Submit ─────────────────────────────────────────────────────
 
+  const [debugInfo, setDebugInfo] = useState<string>('');
+
   const handleSubmit = async () => {
     if (!selectedRole || isSameRole || submitting) return;
     setSubmitting(true);
     setError(null);
+    setDebugInfo('');
+
+    const endpoint = `/api/admin/users/${user.id}/role`;
 
     try {
       const token = localStorage.getItem('cmms_token') || '';
-      const res = await fetch(`/api/admin/users/${user.id}/role`, {
+      if (!token) {
+        throw { status: 0, message: 'No authentication token found. Please log in again.', body: null };
+      }
+
+      const res = await fetch(endpoint, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -219,22 +228,53 @@ export function ChangeRoleModal({ user, open, onClose, onSuccess }: ChangeRoleMo
         body: JSON.stringify({ role: selectedRole }),
       });
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || 'Unable to update user role. Please try again.');
+      // Parse response — handle non-JSON responses gracefully
+      let data: Record<string, unknown> | null = null;
+      const contentType = res.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const text = await res.text();
+        throw { status: res.status, message: `Server returned non-JSON response (HTTP ${res.status})`, body: text.slice(0, 500) };
       }
 
-      const fromLabel = ROLE_DEFINITIONS.find((r) => r.key === data.previousRole)?.label || data.previousRole;
-      const toLabel = ROLE_DEFINITIONS.find((r) => r.key === data.newRole)?.label || data.newRole;
+      if (!res.ok) {
+        const serverError = (data?.error as string) || (data?.detail as string) || data?.message as string || null;
+        const errorMsg = serverError || `Server error (HTTP ${res.status})`;
+        const debugParts = [
+          `Status: ${res.status} ${res.statusText}`,
+          `Endpoint: PATCH ${endpoint}`,
+          serverError ? `Error: ${serverError}` : null,
+          data?.detail ? `Detail: ${data.detail as string}` : null,
+        ].filter(Boolean).join('\n');
+        throw { status: res.status, message: errorMsg, body: data, debug: debugParts };
+      }
+
+      const fromLabel = ROLE_DEFINITIONS.find((r) => r.key === data?.previousRole)?.label || String(data?.previousRole || '');
+      const toLabel = ROLE_DEFINITIONS.find((r) => r.key === data?.newRole)?.label || String(data?.newRole || '');
 
       toast.success(`Role changed: ${fromLabel} → ${toLabel}`);
       setConfirming(false);
       onSuccess();
       onClose();
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Unable to update user role. Please try again.';
+      let msg: string;
+      let debug: string = '';
+
+      if (err && typeof err === 'object' && 'message' in err) {
+        const e = err as { message: string; status?: number; debug?: string; body?: unknown };
+        msg = e.message;
+        debug = e.debug || `Status: ${e.status ?? 'unknown'} | Endpoint: ${endpoint}`;
+      } else if (err instanceof Error) {
+        msg = err.message;
+        debug = `Endpoint: ${endpoint} | ${err.stack?.slice(0, 200) || 'No stack trace'}`;
+      } else {
+        msg = 'Unable to update user role. Please try again.';
+        debug = `Endpoint: ${endpoint} | Unknown error: ${String(err)}`;
+      }
+
       setError(msg);
+      setDebugInfo(debug);
       setConfirming(false);
       toast.error(msg);
     } finally {
@@ -416,13 +456,13 @@ export function ChangeRoleModal({ user, open, onClose, onSuccess }: ChangeRoleMo
             {error && (
               <div className="rounded-md border border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950/30 p-3 flex items-start gap-2">
                 <X className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
-                <div>
+                <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-red-800 dark:text-red-400">Unable to update user role</p>
                   <p className="text-xs text-red-600 dark:text-red-500 mt-1">{error}</p>
-                  {isSuperAdmin && (
+                  {debugInfo && (
                     <details className="mt-2">
                       <summary className="text-xs text-red-500 cursor-pointer hover:underline">Technical Details</summary>
-                      <p className="text-xs text-red-400 mt-1 font-mono">{error}</p>
+                      <pre className="text-[10px] text-red-400 mt-1 font-mono whitespace-pre-wrap break-all leading-relaxed">{debugInfo}</pre>
                     </details>
                   )}
                 </div>

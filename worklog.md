@@ -618,3 +618,29 @@ Stage Summary:
 - New RBAC exports: ROLE_TRANSITION_MATRIX, canTransitionRole
 - TypeScript: 0 errors
 - Lint: 0 errors, 1 warning (any type in API route - unavoidable for const array includes check)
+
+---
+Task ID: role-change-bugfix
+Agent: main
+---
+Task ID: role-change-bugfix
+Agent: main
+Task: Fix can't change the role bug - full root cause analysis and fix
+
+Work Log:
+- Traced complete request chain: Frontend -> fetch -> Next.js route -> middleware -> auth -> RBAC -> DB
+- Verified Next.js route file exists at src/app/api/admin/users/[id]/role/route.ts
+- Verified middleware does NOT block /api/admin/ paths
+- Verified canTransitionRole() never returns Not found
+- Searched entire codebase: string Not found only in middleware and Express 404 handler
+- Found ROOT CAUSE in next.config.ts afterFiles rewrite + Express backend 404 handler
+- Confirmed fix: curl to localhost:3000/api/admin/users/test-id/role returns 401 not 404
+
+Stage Summary:
+- ROOT CAUSE: In production next.config.ts afterFiles rewrite proxies unmatched /api/* to Express backend. The Express backend did NOT have a /api/admin/users/:id/role endpoint. Express 404 handler returns {error: Not found}.
+- FIX 1: Created backend/src/routes/user-management.routes.ts - Express endpoint for role changes
+- FIX 2: Updated backend/src/index.ts - mounted userManagementRoutes at /api/admin/users
+- FIX 3: Rewrote Next.js route to proxy to Express in production use Prisma in dev
+- FIX 4: Improved change-role-modal.tsx - proper error diagnostics with HTTP status endpoint response body
+- FIX 5: Added name to JWT token payload in login route
+- FIX 6: Express route uses correct AuditLog field names matching Prisma schema

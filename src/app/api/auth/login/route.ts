@@ -71,7 +71,7 @@ export const POST = withErrorLogging(async function POST(request: NextRequest) {
 
     const normalizedRole = (user.role as string).toLowerCase() as typeof user.role;
 
-    const token = generateToken({ userId: user.id, tenantId: user.tenantId, role: normalizedRole, email: user.email });
+    const token = generateToken({ userId: user.id, tenantId: user.tenantId, role: normalizedRole, email: user.email, name: user.name });
 
     return NextResponse.json({
       token,

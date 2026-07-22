@@ -27,6 +27,7 @@ import employeesRoutes from './routes/employees.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 import googleAuthRoutes from './routes/google-auth.routes.js';
 import notificationRoutes from './routes/notifications.routes.js';
+import userManagementRoutes from './routes/user-management.routes.js';
 import cacheRoutes from './routes/cache.routes.js';
 
 // ─── App Setup ───────────────────────────────────────────────────────────
@@ -112,6 +113,7 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/auth/google', googleAuthRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/cache', cacheRoutes);
+app.use('/api/admin/users', userManagementRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────
 app.use((_req, res) => {
