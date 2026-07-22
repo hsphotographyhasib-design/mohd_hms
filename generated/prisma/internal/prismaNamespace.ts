@@ -462,6 +462,7 @@ export const ModelName = {
   Quotation: 'Quotation',
   ScanLog: 'ScanLog',
   StockMovement: 'StockMovement',
+  BrandingAsset: 'BrandingAsset',
   Tenant: 'Tenant',
   TermsAcceptance: 'TermsAcceptance',
   User: 'User',
@@ -520,7 +521,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "attendance" | "auditLog" | "authAuditLog" | "broadcastLog" | "checklistTemplate" | "cmsActivityLog" | "cmsAnnouncement" | "cmsBlog" | "cmsBlogCategory" | "cmsCareerApplication" | "cmsCareerJob" | "cmsContactMessage" | "cmsFooter" | "cmsForm" | "cmsHero" | "cmsIndustry" | "cmsMedia" | "cmsPopup" | "cmsProject" | "cmsSeo" | "cmsService" | "cmsSetting" | "cmsTestimonial" | "complaint" | "complaintTimeline" | "conversationThread" | "customer" | "customerFeedback" | "customerReport" | "department" | "device" | "deviceToken" | "emailLog" | "emailTemplate" | "equipment" | "equipmentQrCode" | "hrAnnouncement" | "hrAssetAssignment" | "hrCandidate" | "hrDisciplinaryAction" | "hrEmployee" | "hrEmployeeDocument" | "hrExpenseClaim" | "hrHoliday" | "hrJobPosition" | "hrLeaveBalance" | "hrLeaveRequest" | "hrLeaveType" | "hrMedicalRecord" | "hrOvertimeRequest" | "hrPayroll" | "hrPerformanceReview" | "hrShift" | "hrShiftSchedule" | "hrTraining" | "hrTrainingRecord" | "hrTravelRequest" | "hrVisitor" | "inventoryCategory" | "inventoryItem" | "inventorySubcategory" | "invoice" | "invoicePayment" | "itemSupplier" | "leaveRequest" | "loginSession" | "notification" | "notificationLog" | "otpCode" | "passwordResetOtp" | "passwordResetToken" | "pmSchedule" | "priceBook" | "priceBookEntry" | "purchaseOrder" | "quotation" | "scanLog" | "stockMovement" | "tenant" | "termsAcceptance" | "user" | "vehicle" | "vehicleLog" | "warehouse" | "warehouseStock" | "whatsAppConfig" | "whatsAppDeliveryLog" | "whatsAppMessage" | "whatsAppSession" | "whatsAppTemplate" | "workOrder" | "workOrderMaterial" | "errorLog" | "cmsPage" | "cmsRevision" | "cmsPageTemplate" | "document" | "documentVersion" | "documentAuditLog" | "serviceItem" | "serviceCategory" | "servicePackage" | "labourRate" | "aiConversationLog" | "paymentVerification" | "savedLocation" | "serviceItemMaterial" | "serviceItemEquipment" | "serviceChecklistItem" | "servicePackageItem" | "irmUser" | "irmProject" | "irmReport" | "irmPhoto" | "irmRevision" | "irmApproval" | "irmActivity" | "inspection" | "inspectionTemplate" | "inspectionChecklistItem" | "inspectionResult"
+    modelProps: "attendance" | "auditLog" | "authAuditLog" | "broadcastLog" | "checklistTemplate" | "cmsActivityLog" | "cmsAnnouncement" | "cmsBlog" | "cmsBlogCategory" | "cmsCareerApplication" | "cmsCareerJob" | "cmsContactMessage" | "cmsFooter" | "cmsForm" | "cmsHero" | "cmsIndustry" | "cmsMedia" | "cmsPopup" | "cmsProject" | "cmsSeo" | "cmsService" | "cmsSetting" | "cmsTestimonial" | "complaint" | "complaintTimeline" | "conversationThread" | "customer" | "customerFeedback" | "customerReport" | "department" | "device" | "deviceToken" | "emailLog" | "emailTemplate" | "equipment" | "equipmentQrCode" | "hrAnnouncement" | "hrAssetAssignment" | "hrCandidate" | "hrDisciplinaryAction" | "hrEmployee" | "hrEmployeeDocument" | "hrExpenseClaim" | "hrHoliday" | "hrJobPosition" | "hrLeaveBalance" | "hrLeaveRequest" | "hrLeaveType" | "hrMedicalRecord" | "hrOvertimeRequest" | "hrPayroll" | "hrPerformanceReview" | "hrShift" | "hrShiftSchedule" | "hrTraining" | "hrTrainingRecord" | "hrTravelRequest" | "hrVisitor" | "inventoryCategory" | "inventoryItem" | "inventorySubcategory" | "invoice" | "invoicePayment" | "itemSupplier" | "leaveRequest" | "loginSession" | "notification" | "notificationLog" | "otpCode" | "passwordResetOtp" | "passwordResetToken" | "pmSchedule" | "priceBook" | "priceBookEntry" | "purchaseOrder" | "quotation" | "scanLog" | "stockMovement" | "brandingAsset" | "tenant" | "termsAcceptance" | "user" | "vehicle" | "vehicleLog" | "warehouse" | "warehouseStock" | "whatsAppConfig" | "whatsAppDeliveryLog" | "whatsAppMessage" | "whatsAppSession" | "whatsAppTemplate" | "workOrder" | "workOrderMaterial" | "errorLog" | "cmsPage" | "cmsRevision" | "cmsPageTemplate" | "document" | "documentVersion" | "documentAuditLog" | "serviceItem" | "serviceCategory" | "servicePackage" | "labourRate" | "aiConversationLog" | "paymentVerification" | "savedLocation" | "serviceItemMaterial" | "serviceItemEquipment" | "serviceChecklistItem" | "servicePackageItem" | "irmUser" | "irmProject" | "irmReport" | "irmPhoto" | "irmRevision" | "irmApproval" | "irmActivity" | "inspection" | "inspectionTemplate" | "inspectionChecklistItem" | "inspectionResult"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -6296,6 +6297,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    BrandingAsset: {
+      payload: Prisma.$BrandingAssetPayload<ExtArgs>
+      fields: Prisma.BrandingAssetFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.BrandingAssetFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.BrandingAssetFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>
+        }
+        findFirst: {
+          args: Prisma.BrandingAssetFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.BrandingAssetFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>
+        }
+        findMany: {
+          args: Prisma.BrandingAssetFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>[]
+        }
+        create: {
+          args: Prisma.BrandingAssetCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>
+        }
+        createMany: {
+          args: Prisma.BrandingAssetCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.BrandingAssetCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>[]
+        }
+        delete: {
+          args: Prisma.BrandingAssetDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>
+        }
+        update: {
+          args: Prisma.BrandingAssetUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>
+        }
+        deleteMany: {
+          args: Prisma.BrandingAssetDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.BrandingAssetUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.BrandingAssetUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>[]
+        }
+        upsert: {
+          args: Prisma.BrandingAssetUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$BrandingAssetPayload>
+        }
+        aggregate: {
+          args: Prisma.BrandingAssetAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateBrandingAsset>
+        }
+        groupBy: {
+          args: Prisma.BrandingAssetGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BrandingAssetGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.BrandingAssetCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.BrandingAssetCountAggregateOutputType> | number
+        }
+      }
+    }
     Tenant: {
       payload: Prisma.$TenantPayload<ExtArgs>
       fields: Prisma.TenantFieldRefs
@@ -11214,6 +11289,25 @@ export const StockMovementScalarFieldEnum = {
 export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
 
 
+export const BrandingAssetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  type: 'type',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  width: 'width',
+  height: 'height',
+  url: 'url',
+  version: 'version',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BrandingAssetScalarFieldEnum = (typeof BrandingAssetScalarFieldEnum)[keyof typeof BrandingAssetScalarFieldEnum]
+
+
 export const TenantScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -12403,6 +12497,7 @@ export type GlobalOmitConfig = {
   quotation?: Prisma.QuotationOmit
   scanLog?: Prisma.ScanLogOmit
   stockMovement?: Prisma.StockMovementOmit
+  brandingAsset?: Prisma.BrandingAssetOmit
   tenant?: Prisma.TenantOmit
   termsAcceptance?: Prisma.TermsAcceptanceOmit
   user?: Prisma.UserOmit

@@ -465,3 +465,46 @@ Stage Summary:
 - Root causes: Missing "Change Role" visibility for non-Google users, broken audit logs, missing safeguards
 - All 5 role change scenarios verified working via direct API handler testing
 - TypeScript: 0 errors
+
+---
+Task ID: 3
+Agent: Main Agent
+Task: Fix IRMS Inspection Report creation (4 critical bugs)
+
+Work Log:
+- Investigated the full IRMS module architecture: two systems (old IrmReport views + new Inspection tabs)
+- Identified the new Inspection tab system (irms-layout.tsx) is the active one loaded in app-shell
+- Found 4 critical bugs preventing report creation:
+
+Bug 1: "Create Inspection" button in irms-layout.tsx header (line 231-236) had NO onClick handler — completely dead button
+  - Fix: Added onClick that switches to 'inspections' tab and triggers create dialog via store
+
+Bug 2: Reports tab "Generate" button called POST /api/irms/inspections/reports but API only has GET handler → 405 Method Not Allowed
+  - Fix: Rewrote handleGenerate to use GET with ?generate=reportType&fromDate=...&toDate=... query params
+
+Bug 3: Reports tab "Export" buttons called /api/irms/inspections/reports/export?... which doesn't exist → 404
+  - Fix: Replaced non-existent export endpoint calls with direct GET to reports API + client-side JSON/CSV file download
+
+Bug 4: Reports tab "loadReports" called GET without ?generate= param → always returned { items: [], total: 0 } → showed empty forever; all errors silently swallowed
+  - Fix: Removed broken "previously generated reports" list; replaced with live generated report preview showing summary stats, expandable data table, and download button
+
+Additional fixes:
+- Added showCreateDialog state to useInspectionStore for cross-component communication
+- Added useEffect in InspectionsTab to listen for showCreateDialog trigger
+- Added toast notifications for create inspection success/failure
+- Added proper error feedback throughout Reports tab (toast + error card)
+
+Files modified:
+- src/modules/irms/lib/store.ts — added showCreateDialog/setShowCreateDialog
+- src/modules/irms/components/irms-layout.tsx — added onClick to Create Inspection button, imported toast
+- src/modules/irms/tabs/inspections-tab.tsx — added showCreateDialog listener, toast import, error feedback
+- src/modules/irms/tabs/reports-tab.tsx — complete rewrite fixing Generate/Export/Empty list bugs
+
+TypeScript: 0 errors (verified via npx tsc --noEmit)
+
+Stage Summary:
+- 4 critical bugs fixed: dead Create button, wrong HTTP method, missing export endpoint, empty list
+- Reports now generate on-the-fly and show preview with summary stats + expandable data table
+- Export works as JSON and CSV file downloads
+- Create Inspection button works across components via Zustand store
+- Proper error feedback via toast notifications

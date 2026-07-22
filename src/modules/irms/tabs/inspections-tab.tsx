@@ -11,6 +11,7 @@ import {
   Loader2,
   Inbox,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
@@ -43,6 +44,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useAuthStore } from '@/app-shell/store';
 import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
+import { useInspectionStore } from '../lib/store';
 import { STATUS_STYLES, PRIORITY_STYLES, RESULT_STYLES, formatDate } from './shared';
 import type { InspectionItem, InspectionListResponse } from '../lib';
 import { INSPECTION_TYPES } from '../lib';
@@ -79,6 +81,16 @@ export default function InspectionsTab({ searchQuery }: InspectionsTabProps) {
     description: '',
   });
   const [creating, setCreating] = useState(false);
+
+  // Listen for external create dialog trigger (from header button)
+  const showCreateDialog = useInspectionStore((s) => s.showCreateDialog);
+  const setShowCreateDialog = useInspectionStore((s) => s.setShowCreateDialog);
+  useEffect(() => {
+    if (showCreateDialog) {
+      setCreateOpen(true);
+      setShowCreateDialog(false);
+    }
+  }, [showCreateDialog, setShowCreateDialog]);
 
   const canCreate = role ? canPerformAction(role, 'inspection', 'create') : false;
   const canComplete = role ? canPerformAction(role, 'inspection', 'complete') : false;
@@ -130,12 +142,16 @@ export default function InspectionsTab({ searchQuery }: InspectionsTabProps) {
         body: JSON.stringify(createForm),
       });
       if (res.ok) {
+        toast.success('Inspection created successfully');
         setCreateOpen(false);
         setCreateForm({ title: '', type: '', priority: 'medium', equipmentId: '', assignedToId: '', templateId: '', scheduledDate: '', description: '' });
         loadInspections();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        toast.error(data.error || 'Failed to create inspection');
       }
     } catch {
-      // Silent fail
+      toast.error('Failed to create inspection');
     } finally {
       setCreating(false);
     }

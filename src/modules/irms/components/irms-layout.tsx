@@ -39,6 +39,7 @@ import {
 import { useAuthStore } from '@/app-shell/store';
 import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
 import { useInspectionStore, type InspectionTab } from '../lib/store';
+import { toast } from 'sonner';
 import type { DashboardStats } from '../lib/types';
 
 // Lazy-loaded tab components
@@ -115,6 +116,7 @@ export default function IrmsLayout() {
   const setActiveTab = useInspectionStore((s) => s.setActiveTab);
   const searchQuery = useInspectionStore((s) => s.searchQuery);
   const setSearchQuery = useInspectionStore((s) => s.setSearchQuery);
+  const setShowCreateDialog = useInspectionStore((s) => s.setShowCreateDialog);
 
   const [stats, setStats] = useState<DashboardStats | null>(null);
   const [statsLoading, setStatsLoading] = useState(true);
@@ -229,7 +231,15 @@ export default function IrmsLayout() {
 
           {/* Create inspection */}
           {canCreate && (
-            <Button size="sm" className="h-9 bg-emerald-600 hover:bg-emerald-700 text-white">
+            <Button
+              size="sm"
+              className="h-9 bg-emerald-600 hover:bg-emerald-700 text-white"
+              onClick={() => {
+                setActiveTab('inspections');
+                // Small delay to let the tab switch render, then open the dialog
+                setTimeout(() => setShowCreateDialog(true), 100);
+              }}
+            >
               <Plus className="h-4 w-4" />
               <span className="hidden sm:inline">Create Inspection</span>
             </Button>

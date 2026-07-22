@@ -9,6 +9,8 @@ interface InspectionState {
   setSearchQuery: (q: string) => void;
   selectedInspectionId: string | null;
   setSelectedInspectionId: (id: string | null) => void;
+  showCreateDialog: boolean;
+  setShowCreateDialog: (show: boolean) => void;
 }
 
 export const useInspectionStore = create<InspectionState>((set) => ({
@@ -18,4 +20,6 @@ export const useInspectionStore = create<InspectionState>((set) => ({
   setSearchQuery: (q) => set({ searchQuery: q }),
   selectedInspectionId: null,
   setSelectedInspectionId: (id) => set({ selectedInspectionId: id }),
+  showCreateDialog: false,
+  setShowCreateDialog: (show) => set({ showCreateDialog: show }),
 }));

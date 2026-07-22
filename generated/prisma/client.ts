@@ -432,6 +432,11 @@ export type ScanLog = Prisma.ScanLogModel
  */
 export type StockMovement = Prisma.StockMovementModel
 /**
+ * Model BrandingAsset
+ * 
+ */
+export type BrandingAsset = Prisma.BrandingAssetModel
+/**
  * Model Tenant
  * 
  */

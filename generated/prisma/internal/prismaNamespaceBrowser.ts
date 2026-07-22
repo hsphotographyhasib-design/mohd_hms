@@ -129,6 +129,7 @@ export const ModelName = {
   Quotation: 'Quotation',
   ScanLog: 'ScanLog',
   StockMovement: 'StockMovement',
+  BrandingAsset: 'BrandingAsset',
   Tenant: 'Tenant',
   TermsAcceptance: 'TermsAcceptance',
   User: 'User',
@@ -1885,6 +1886,25 @@ export const StockMovementScalarFieldEnum = {
 } as const
 
 export type StockMovementScalarFieldEnum = (typeof StockMovementScalarFieldEnum)[keyof typeof StockMovementScalarFieldEnum]
+
+
+export const BrandingAssetScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  type: 'type',
+  fileName: 'fileName',
+  mimeType: 'mimeType',
+  fileSize: 'fileSize',
+  width: 'width',
+  height: 'height',
+  url: 'url',
+  version: 'version',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type BrandingAssetScalarFieldEnum = (typeof BrandingAssetScalarFieldEnum)[keyof typeof BrandingAssetScalarFieldEnum]
 
 
 export const TenantScalarFieldEnum = {
