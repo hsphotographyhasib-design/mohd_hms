@@ -369,7 +369,7 @@ export function startWorkers(queues: string[]): void {
   console.log(`[Queue] Starting workers for: ${queues.join(', ')} (base poll: ${QUEUE_CONFIG.pollIntervalMs}ms, adaptive backoff enabled)`);
 
   for (const queueName of queues) {
-    let currentInterval = QUEUE_CONFIG.pollIntervalMs;
+    let currentInterval: number = QUEUE_CONFIG.pollIntervalMs;
     let consecutiveEmpty = 0;
     const backoffFactor = 2;
     const maxInterval = (QUEUE_CONFIG as any).queueIdleBackoffMax || 60000;
