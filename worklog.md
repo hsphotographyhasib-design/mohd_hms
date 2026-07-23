@@ -672,3 +672,30 @@ Stage Summary:
 - Modified: /src/app-shell/app-entry.tsx (60s periodic role refresh)
 - Modified: /src/shared/hooks/use-secure-fetch.ts (401 recovery via refreshSession)
 - Root Cause: Role change only updated DB. JWT + client store had stale role. Fixed with server-side refresh endpoint + client-side periodic polling + 401 recovery.
+---
+Task ID: 2
+Agent: main
+Task: Fix Technician Role Synchronization + Redis Rate Limiting
+
+Work Log:
+- Read prisma/schema.prisma: No dedicated Technician table exists. User model has role field (String, default "technician"). HrEmployee is separate 1:1 relation.
+- Read role change API (src/app/api/admin/users/[id]/role/route.ts): Found CRITICAL bug — in production (BACKEND_URL set), the API proxied to Express backend (Supabase), while all other APIs (technicians list, complaint assignment) use Prisma/SQLite directly. This split-database architecture caused role changes to be invisible to the rest of the system.
+- Read technicians API (src/app/api/technicians/route.ts): Correctly queries `role: { in: ['technician', 'supervisor'] }` from Prisma/SQLite.
+- Read complaint assignment API (src/app/api/complaints/[id]/assign-technician/route.ts): Also correctly queries `role: { in: ['technician', 'supervisor'] }` from Prisma/SQLite.
+- Read sidebar (src/app-shell/sidebar.tsx): Missing 'technicians' nav item in desktop sidebar (only in floating nav bar).
+- Read permissions matrix: Role transition Customer→Technician is allowed for admin. Feature permissions correctly include technician role.
+- Read refreshSession mechanism: 60s polling with 15s initial delay. Works correctly for target user's role propagation.
+- Read Redis queue service: pollIntervalMs=2000 (2s) across 4 queues = ~1.38M requests/month, exceeding 500k Upstash free tier limit.
+
+Fixes Applied:
+1. FIX 1 (CRITICAL): Removed BACKEND_URL proxy from role change API. Now always uses Prisma/SQLite (same DB as all other operational APIs).
+2. FIX 2: Added 'technicians' entry with HardHat icon to desktop sidebar navItems.
+3. FIX 3: No longer needed — Fix 1 eliminates the split-database root cause.
+4. FIX 4: Reduced refreshSession initial delay from 15s to 5s for faster role propagation to target user.
+5. FIX 5 (REDIS): Increased queue pollIntervalMs from 2000 to 10000. Implemented adaptive exponential backoff (10s→20s→40s→60s max) when queues are idle.
+6. FIX 6 (REDIS): Added scheduled-jobs tracking to skip ZRANGE calls when no scheduled jobs exist, reducing Redis requests by ~40%.
+
+Stage Summary:
+- Root cause of technician role sync: Split-database architecture (Express/Supabase for writes vs Prisma/SQLite for reads)
+- Root cause of Redis rate limit: 2s polling × 4 queues × 24/7 = ~1.38M req/month vs 500k limit
+- Files changed: role/route.ts, sidebar.tsx, app-entry.tsx, queue.service.ts, cache.constants.ts

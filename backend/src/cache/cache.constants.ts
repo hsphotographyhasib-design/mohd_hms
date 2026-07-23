@@ -80,6 +80,7 @@ export const TTL = {
   // Queue
   queueJob:              86400, // 24h — jobs persist until processed
   queueProcessing:       300,   // 5 min — processing lock
+  queueIdleBackoffMax:   60000, // 60s — max poll interval when queue is idle (adaptive backoff)
 
   // Rate limiting
   rateLimitWindow:       60,
@@ -121,7 +122,7 @@ export const QUEUE_CONFIG = {
   retryDelayMs: 5000,        // 5 seconds between retries
   deadLetterTTL: 604800,     // 7 days for dead-letter jobs
   maxQueueSize: 10000,       // Safety limit
-  pollIntervalMs: 2000,      // Worker poll interval
+  pollIntervalMs: 10000,     // Worker poll interval (10s — was 2s, reduced to stay under Redis 500k/mo limit)
 } as const;
 
 // ─── Monitoring ────────────────────────────────────────────────────────────

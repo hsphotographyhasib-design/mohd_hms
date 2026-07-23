@@ -49,11 +49,11 @@ function SetupHelpers() {
       }
     };
 
-    // First check after 15 seconds (fast initial detection)
+    // First check after 5 seconds (fast initial detection for role changes)
     const initialTimeout = setTimeout(() => {
       tick();
       timer = setInterval(tick, INTERVAL_MS);
-    }, 15_000);
+    }, 5_000);
 
     return () => {
       clearTimeout(initialTimeout);

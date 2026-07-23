@@ -8,52 +8,19 @@ export const dynamic = 'force-dynamic';
  *
  * Enterprise User Role Update Endpoint.
  *
- * Architecture:
- *   - Production (BACKEND_URL set): Proxies to Express backend on Render.
- *     The Express backend handles auth verification, RBAC, Supabase queries,
- *     and audit logging. This ensures the same JWT secret is used for
- *     token verification (since login also goes through Express in prod).
+ * Uses Prisma/SQLite directly (same as all other operational APIs).
+ * This ensures the role change is immediately visible to the technicians
+ * list, complaint assignment, and all other role-gated features.
  *
- *   - Local Dev (no BACKEND_URL): Uses Prisma/SQLite directly.
- *     Full 13-step pipeline with auth, RBAC, DB update, audit log, notification.
+ * Previously, this endpoint proxied to the Express backend in production,
+ * which wrote to a DIFFERENT database (Supabase). This caused the
+ * "role changed but system doesn't recognize" bug — technicians module
+ * and complaint assignment read from Prisma/SQLite and never saw the change.
  */
 export const PATCH = withErrorLogging(async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL;
-
-  // ── Production: Proxy to Express backend ─────────────────────────────
-  if (BACKEND_URL) {
-    try {
-      const { id } = await params;
-      const body = await request.json();
-      const authHeader = request.headers.get('authorization') || '';
-
-      const res = await fetch(`${BACKEND_URL}/api/admin/users/${id}/role`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(authHeader ? { Authorization: authHeader } : {}),
-          'X-Forwarded-For': request.headers.get('x-forwarded-for') || '',
-          'X-Real-IP': request.headers.get('x-real-ip') || '',
-        },
-        body: JSON.stringify(body),
-      });
-
-      const data = await res.json();
-      return NextResponse.json(data, { status: res.status });
-    } catch (error) {
-      console.error('[Role Change API] Proxy error:', error);
-      return NextResponse.json(
-        { error: 'Backend service unavailable. Please try again.' },
-        { status: 502 }
-      );
-    }
-  }
-
-  // ── Local Dev: Handle with Prisma/SQLite ─────────────────────────────
-  // Dynamic imports to avoid bundling Prisma in production proxy path
   const { db, withRetry, getDbFriendlyMessage } = await import('@/core/database/db');
   const { verifyToken } = await import('@/core/auth/auth-lib');
   const { canTransitionRole } = await import('@/core/permissions/rbac/permissions-matrix');
