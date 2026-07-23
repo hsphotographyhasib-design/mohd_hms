@@ -117,14 +117,13 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
   const { user, logout } = useAuthStore();
   const { currentView, setView, sidebarOpen, setSidebarOpen } = useAppStore();
   const { unreadCount } = useNotificationStore();
+  const sidebarLogo = useBrandingStore((st: { getAssetUrl: (key: string) => string }) => st.getAssetUrl('compact_logo'));
 
   if (!user) return null;
 
   const role = user.role;
   const filteredCmsItems = cmsNavItems.filter((item) => canAccess(role, item.feature));
   const filteredItems = navItems.filter((item) => canAccess(role, item.feature));
-
-  const sidebarLogo = useBrandingStore((st) => st.getAssetUrl('compact_logo'));
 
   const initials = user.name
     .split(' ')
