@@ -7,6 +7,7 @@ import { useNotificationStore } from '@/modules/notifications/services/store';
 import type { AppView, UserRole, NavItem } from '@/core/types';
 import { cn } from '@/core/utils/utils';
 import { useBrandingStore } from '@/core/branding';
+import type { BrandAssetType } from '@/core/branding/branding-types';
 import { ScrollArea } from '@/shared/ui/scroll-area';
 import { Avatar, AvatarFallback } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
@@ -117,7 +118,7 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
   const { user, logout } = useAuthStore();
   const { currentView, setView, sidebarOpen, setSidebarOpen } = useAppStore();
   const { unreadCount } = useNotificationStore();
-  const sidebarLogo = useBrandingStore((st: { getAssetUrl: (key: string) => string }) => st.getAssetUrl('compact_logo'));
+  const sidebarLogo = useBrandingStore((st) => st.getAssetUrl('compact_logo' as BrandAssetType));
 
   if (!user) return null;
 
