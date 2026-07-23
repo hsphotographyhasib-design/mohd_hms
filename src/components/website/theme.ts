@@ -42,8 +42,23 @@ export const THEME = {
 
 export type ThemeKey = keyof typeof THEME;
 
-// Shorthand accessors
-export const T = THEME;
+// Re-export all components from theme.tsx so that import { SectionHeader, ... } from '../theme'
+// resolves correctly (TypeScript picks .ts before .tsx when both exist).
+export {
+  SectionHeader,
+  IconBox,
+  ThemeSection,
+  ThemeCard,
+  ThemeButton,
+  MonoLabel,
+  DisplayHeading,
+  Reveal,
+  bodyStyle,
+  Divider,
+  PlaceholderFig,
+  PageWrapper,
+  ThemeLink,
+} from './theme';
 
 // Reusable CSS class names for common patterns
 export const CLASSES = {
