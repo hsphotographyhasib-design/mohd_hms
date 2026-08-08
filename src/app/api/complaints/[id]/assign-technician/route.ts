@@ -87,11 +87,11 @@ export async function GET(
         employeeNumber: true, avatar: true, departmentId: true,
         isOnline: true, lastLogin: true, profileCompleted: true,
         department: { select: { name: true } },
-        assignedComplaints: {
+        Complaint_Complaint_assignedToIdToUser: {
           where: { status: { in: [...ACTIVE_COMPLAINT_STATUSES] } },
           select: { id: true, title: true, status: true, priority: true, category: true, createdAt: true },
         },
-        assignedWorkOrders: {
+        WorkOrder_WorkOrder_assignedToIdToUser: {
           where: { status: { in: [...ACTIVE_WO_STATUSES] } },
           select: { id: true },
         },
@@ -169,8 +169,8 @@ export async function GET(
     // --- Build enriched technician list ---
     let enriched = technicians.map(t => {
       const onLeave = (leaveMap[t.id] ?? 0) > 0;
-      const activeJobs = t.assignedComplaints.length;
-      const activeWorkOrders = t.assignedWorkOrders.length;
+      const activeJobs = t.Complaint_Complaint_assignedToIdToUser.length;
+      const activeWorkOrders = t.WorkOrder_WorkOrder_assignedToIdToUser.length;
       const completed = completedStats[t.id];
       const skills = (skillMap[t.id] || []).slice(0, 8);
 
@@ -199,7 +199,7 @@ export async function GET(
         avgCompletionHours: completed?.avgHours ? parseFloat(completed.avgHours.toFixed(1)) : null,
         totalCompleted: completed?.count ?? 0,
         skills,
-        currentTasks: t.assignedComplaints.map(c => ({
+        currentTasks: t.Complaint_Complaint_assignedToIdToUser.map(c => ({
           id: c.id, title: c.title, status: c.status,
           priority: c.priority, category: c.category, createdAt: c.createdAt,
         })),

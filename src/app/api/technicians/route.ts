@@ -79,7 +79,7 @@ export async function GET(request: NextRequest) {
           employeeNumber: true, role: true, departmentId: true, isOnline: true,
           lastLogin: true,
           department: { select: { name: true } },
-          assignedComplaints: {
+          Complaint_Complaint_assignedToIdToUser: {
             where: { status: { in: [...ACTIVE_COMPLAINT_STATUSES] } },
             select: {
               id: true, title: true, status: true, priority: true, category: true,
@@ -87,7 +87,7 @@ export async function GET(request: NextRequest) {
               customer: { select: { name: true, address: true } },
             },
           },
-          assignedWorkOrders: {
+          WorkOrder_WorkOrder_assignedToIdToUser: {
             where: { status: { in: [...ACTIVE_WO_STATUSES] } },
             select: { id: true, title: true, status: true },
           },
@@ -320,8 +320,8 @@ export async function GET(request: NextRequest) {
       const onLeave = leaveMap[t.id]?.onLeave ?? false;
       const leaveType = leaveMap[t.id]?.type ?? null;
       const hasEmergency = (emergencyMap[t.id] ?? 0) > 0;
-      const activeJobs = t.assignedComplaints.length;
-      const activeWorkOrders = t.assignedWorkOrders.length;
+      const activeJobs = t.Complaint_Complaint_assignedToIdToUser.length;
+      const activeWorkOrders = t.WorkOrder_WorkOrder_assignedToIdToUser.length;
       const completed = completedStatsMap[t.id];
       const skills = (skillMap[t.id] || []).slice(0, 8);
 
@@ -340,7 +340,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Current complaint (first active one)
-      const firstComplaint = t.assignedComplaints[0];
+      const firstComplaint = t.Complaint_Complaint_assignedToIdToUser[0];
       const currentComplaint = firstComplaint ? {
         id: firstComplaint.id,
         title: firstComplaint.title,
@@ -353,7 +353,7 @@ export async function GET(request: NextRequest) {
       } : null;
 
       // Current work order (first active one)
-      const firstWO = t.assignedWorkOrders[0];
+      const firstWO = t.WorkOrder_WorkOrder_assignedToIdToUser[0];
       const currentWorkOrder = firstWO ? {
         id: firstWO.id,
         title: firstWO.title,

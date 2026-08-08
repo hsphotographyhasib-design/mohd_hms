@@ -1105,7 +1105,7 @@ export function TechnicianOpsCenter() {
       if (searchTerm) params.set('search', searchTerm);
       if (statusFilter !== '__all__') params.set('status', statusFilter);
       if (departmentFilter !== '__all__') params.set('department', departmentFilter);
-      params.set('sort', sortBy);
+      params.set('sortBy', sortBy);
 
       const res = await fetch(`/api/technicians?${params.toString()}`, {
         headers: { Authorization: 'Bearer ' + token() },

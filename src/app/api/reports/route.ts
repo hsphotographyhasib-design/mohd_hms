@@ -329,8 +329,8 @@ export async function GET(request: NextRequest) {
             department: { select: { name: true } },
             _count: {
               select: {
-                assignedComplaints: true,
-                assignedWorkOrders: true,
+                Complaint_Complaint_assignedToIdToUser: true,
+                WorkOrder_WorkOrder_assignedToIdToUser: true,
               },
             },
           },
@@ -348,8 +348,8 @@ export async function GET(request: NextRequest) {
             phone: t.phone,
             departmentName: t.department?.name,
             isOnline: t.isOnline,
-            complaints: t._count.assignedComplaints,
-            workOrders: t._count.assignedWorkOrders,
+            complaints: t._count.Complaint_Complaint_assignedToIdToUser,
+            workOrders: t._count.WorkOrder_WorkOrder_assignedToIdToUser,
           })),
           accessLevel,
         });
