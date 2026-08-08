@@ -19,7 +19,7 @@ import {
 } from '@/shared/ui/select';
 import { Badge } from '@/shared/ui/badge';
 import {
-  Settings, Plus, Loader2, Shield, Database, Globe, Server, HardDrive, Bug,
+  Settings, Plus, Loader2, Shield, Database, Globe, Server, HardDrive, Bug, Pencil,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/app-shell/store';
@@ -217,6 +217,12 @@ function UsersTab() {
   const [roleFilter, setRoleFilter] = useState('all');
   const [form, setForm] = useState({ name: '', email: '', role: '' as UserRole | '' });
 
+  // Edit user dialog state
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editSubmitting, setEditSubmitting] = useState(false);
+  const [editUser, setEditUser] = useState<any>(null);
+  const [editForm, setEditForm] = useState({ name: '', phone: '', role: '' as UserRole | '', isActive: true });
+
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
@@ -244,6 +250,49 @@ function UsersTab() {
   }, [roleFilter]);
 
   useEffect(() => { fetchUsers(); }, [fetchUsers]);
+
+  const openEditDialog = (u: any) => {
+    setEditUser(u);
+    setEditForm({
+      name: u.name || '',
+      phone: u.phone || '',
+      role: u.role || '',
+      isActive: u.isActive ?? true,
+    });
+    setEditDialogOpen(true);
+  };
+
+  const handleEditSave = async () => {
+    if (!editUser) return;
+    if (!editForm.name.trim()) {
+      toast.error('Name is required');
+      return;
+    }
+    setEditSubmitting(true);
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token()}` },
+        body: JSON.stringify({
+          userId: editUser.id,
+          name: editForm.name,
+          phone: editForm.phone,
+          role: editForm.role,
+          isActive: editForm.isActive,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || data.message || 'Failed to update user');
+      toast.success('User updated successfully');
+      setEditDialogOpen(false);
+      setEditUser(null);
+      fetchUsers();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to update user');
+    } finally {
+      setEditSubmitting(false);
+    }
+  };
 
   const handleInvite = async () => {
     if (!form.name || !form.email || !form.role) {
@@ -352,7 +401,13 @@ function UsersTab() {
                         {u.createdAt ? format(new Date(u.createdAt), 'dd MMM yyyy') : '—'}
                       </TableCell>
                       <TableCell>
-                        <Button variant="ghost" size="sm" className="text-xs">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => openEditDialog(u)}
+                        >
+                          <Pencil className="h-3 w-3 mr-1" />
                           Edit
                         </Button>
                       </TableCell>
@@ -364,6 +419,81 @@ function UsersTab() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Edit User Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={(open) => { if (!open) { setEditDialogOpen(false); setEditUser(null); } }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit User</DialogTitle>
+          </DialogHeader>
+          {editUser && (
+            <div className="space-y-4">
+              <div>
+                <Label>Email</Label>
+                <Input className="mt-1" value={editUser.email || ''} disabled />
+                <p className="text-xs text-muted-foreground mt-1">Email cannot be changed</p>
+              </div>
+              <div>
+                <Label>Name *</Label>
+                <Input
+                  className="mt-1"
+                  value={editForm.name}
+                  onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                  placeholder="Full name"
+                />
+              </div>
+              <div>
+                <Label>Phone</Label>
+                <Input
+                  className="mt-1"
+                  value={editForm.phone}
+                  onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                  placeholder="Phone number"
+                />
+              </div>
+              <div>
+                <Label>Role</Label>
+                <Select value={editForm.role} onValueChange={(v) => setEditForm({ ...editForm, role: v as UserRole })}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ALL_ROLES.map((r) => (
+                      <SelectItem key={r} value={r} className="capitalize">
+                        {r.replace(/_/g, ' ')}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center gap-3">
+                <Label>Status</Label>
+                <Badge
+                  variant="outline"
+                  className={editForm.isActive
+                    ? 'bg-emerald-100 text-emerald-800 border-emerald-200 cursor-pointer hover:opacity-80'
+                    : 'bg-gray-100 text-gray-600 border-gray-200 cursor-pointer hover:opacity-80'}
+                  onClick={() => setEditForm({ ...editForm, isActive: !editForm.isActive })}
+                >
+                  {editForm.isActive ? 'Active' : 'Inactive'}
+                </Badge>
+                <span className="text-xs text-muted-foreground">Click to toggle</span>
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => { setEditDialogOpen(false); setEditUser(null); }}>Cancel</Button>
+            <Button
+              onClick={handleEditSave}
+              disabled={editSubmitting || !editForm.name.trim()}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            >
+              {editSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+              Save Changes
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Invite User Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

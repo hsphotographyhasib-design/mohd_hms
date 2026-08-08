@@ -785,3 +785,28 @@ Work Log:
 Stage Summary:
 - Quick actions no longer have inline role arrays that contradict the matrix
 - Role change uses centralized auth middleware
+---
+Task ID: 1
+Agent: Main
+Task: Fix User Management "Edit" Action in Settings → Users
+
+Work Log:
+- Explored project structure to find all user management files (3 components found)
+- Traced the Settings → Users tab rendering path: app-shell.tsx lazy-loads SettingsView from settings-view.tsx
+- Identified that SettingsView renders UsersTab which has a user list table with an "Edit" button
+- Found ROOT CAUSE: Edit button at settings-view.tsx line 355 had NO onClick handler — it was a dead button
+- Found existing PATCH /api/admin/users endpoint that already handled role and isActive updates
+- Extended PATCH /api/admin/users to also accept name and phone fields for full user editing
+- Added Edit User dialog to UsersTab with form fields: Email (disabled), Name, Phone, Role, Status toggle
+- Added openEditDialog and handleEditSave functions to UsersTab component
+- Wired Edit button onClick to openEditDialog(u) with the correct user object
+- Verified TypeScript compilation: 0 errors
+- Verified ESLint: 0 errors
+- Attempted browser testing but sandbox memory constraints caused dev server OOM
+
+Stage Summary:
+- Root cause: Edit button in settings-view.tsx UsersTab had no onClick handler (completely dead button)
+- Fix: Added complete Edit User workflow (dialog + API wiring + form validation + save logic)
+- Files modified: 2 (settings-view.tsx, route.ts)
+- Files added: 0
+- Files removed: 0

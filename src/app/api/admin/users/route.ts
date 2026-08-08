@@ -73,7 +73,7 @@ export async function PATCH(request: NextRequest) {
     const auth = verifyRouteAuth(request, { feature: 'user-management' });
     if (auth.error) return auth.error;
 
-    const { userId, role, isActive } = await request.json();
+    const { userId, role, isActive, name, phone } = await request.json();
 
     if (!userId) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
@@ -95,6 +95,8 @@ export async function PATCH(request: NextRequest) {
     const updateData: any = {};
     if (role) updateData.role = role;
     if (typeof isActive === 'boolean') updateData.isActive = isActive;
+    if (name && typeof name === 'string' && name.trim().length > 0) updateData.name = name.trim();
+    if (phone !== undefined) updateData.phone = phone === '' ? null : String(phone);
 
     if (Object.keys(updateData).length === 0) {
       return NextResponse.json({ error: 'No fields to update' }, { status: 400 });
@@ -107,6 +109,7 @@ export async function PATCH(request: NextRequest) {
         id: true,
         email: true,
         name: true,
+        phone: true,
         role: true,
         isActive: true,
       },
