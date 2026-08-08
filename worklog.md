@@ -699,3 +699,89 @@ Stage Summary:
 - Root cause of technician role sync: Split-database architecture (Express/Supabase for writes vs Prisma/SQLite for reads)
 - Root cause of Redis rate limit: 2s polling × 4 queues × 24/7 = ~1.38M req/month vs 500k limit
 - Files changed: role/route.ts, sidebar.tsx, app-entry.tsx, queue.service.ts, cache.constants.ts
+---
+Task ID: 2-a
+Agent: RBAC Rebuild Phase 2-5
+Task: Critical security fixes + RBAC foundation consolidation
+
+Work Log:
+- Fixed /api/auth/register to hardcode role:'customer' (privilege escalation fix)
+- Added runtime role validation in verifyRouteAuth (reject unknown roles)
+- Fixed verifyRouteAuth feature check to deny-by-default for unknown features
+- Deleted dead /src/core/auth/auth.ts (hardcoded JWT secret)
+- Consolidated UserRole type to single source in rbac/types.ts
+- Removed DOCUMENT_PERMISSIONS duplicate
+- Added ALL_ROLES constant and parseRole() runtime validator
+- Fixed role-change endpoint to import ALL_ROLES from SSOT
+
+Stage Summary:
+- Register endpoint no longer accepts client-provided roles
+- verifyRouteAuth now rejects unrecognized roles and unknown features
+- Single UserRole type definition
+- Single ALL_ROLES constant
+
+---
+Task ID: 6-a
+Agent: RBAC Rebuild Phase 6
+Task: Create guard components + fix mobile router + customer portal
+
+Work Log:
+- Created /src/core/permissions/guards.tsx with FeatureGuard, ActionGuard, RoleGuard, MinRoleGuard
+- Exported guards from /src/core/permissions/index.ts
+- Added permission check to MobileViewRouter in app-shell.tsx
+- Added customer role gate to customer-portal.tsx
+
+Stage Summary:
+- 4 reusable guard components now available
+- Mobile views are now permission-gated
+- Customer portal restricted to customer role
+- TypeScript compiles with 0 errors
+
+---
+Task ID: 7-a
+Agent: RBAC Rebuild Phase 7
+Task: Lock down 22 IRMS legacy routes with authentication
+
+Work Log:
+- Added verifyRouteAuth to all 22 IRMS legacy route files
+- Each route now requires 'irms' feature permission
+- Seed route additionally requires super_admin role
+- Added tenantId scoping where missing
+- Handlers without request param (dashboard, analytics, activities, users GET, seed) had signatures updated to accept NextRequest
+
+Stage Summary:
+- All IRMS routes now require authentication + IRMS feature permission
+- No route is publicly accessible anymore
+- TypeScript compiles cleanly
+---
+Task ID: 8-a
+Agent: RBAC Rebuild Phase 8
+Task: Enhance ACTION_PERMISSIONS + remove complaint-access duplicate
+
+Work Log:
+- Added missing complaint actions (record_payment, approve_invoice, send_invoice, close, accept, reject, escalate)
+- Added missing HR sub-actions
+- Added missing inventory sub-actions  
+- Added missing finance sub-actions
+- Added document entity to ACTION_PERMISSIONS
+- Removed ROLE_REQUIRED_ACTIONS from complaint-access.ts
+- Replaced canPerformComplaintAction to delegate to centralized matrix
+- Fixed barrel export to avoid duplicate canPerformAction
+
+Stage Summary:
+- Single source of truth for ALL action permissions
+- No more duplicate permission maps
+- complaint-access.ts now delegates to the matrix
+---
+Task ID: 9-a
+Agent: RBAC Rebuild Phases 9-10
+Task: Fix quick-actions, role change endpoint
+
+Work Log:
+- Fixed quick-actions to use ACTION_PERMISSIONS matrix for role derivation
+- Enhanced role change endpoint with better logging
+- Migrated role change endpoint from raw verifyToken to verifyRouteAuth
+
+Stage Summary:
+- Quick actions no longer have inline role arrays that contradict the matrix
+- Role change uses centralized auth middleware

@@ -1,6 +1,7 @@
 // ============ AUTH & USER TYPES ============
 
-export type UserRole = 'super_admin' | 'admin' | 'manager' | 'supervisor' | 'technician' | 'finance' | 'hr' | 'user' | 'customer' | 'vendor' | 'guest';
+import type { UserRole } from '@/core/permissions/rbac/types';
+export type { UserRole };
 
 export interface LoginRequest {
   email: string;
@@ -31,13 +32,6 @@ export interface AuthUser {
 
 /** Chunk size (bytes) for chunked document uploads. */
 export const CHUNK_SIZE = 5 * 1024 * 1024;
-
-/** Role -> allowed document actions (UI gate; API enforces RBAC server-side). */
-export const DOCUMENT_PERMISSIONS: Record<string, string[]> = {
-  super_admin: ['view', 'upload', 'download', 'delete', 'version_restore'],
-  admin: ['view', 'upload', 'download', 'delete', 'version_restore'],
-  hr: ['view', 'upload', 'download'],
-};
 
 // ============ NAVIGATION ============
 

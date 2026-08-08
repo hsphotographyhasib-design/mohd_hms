@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import ZAI from 'z-ai-web-dev-sdk';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
+  const auth = verifyRouteAuth(req, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const body = await req.json() as { imageDataUrl: string; context?: string };
     const { imageDataUrl, context } = body;

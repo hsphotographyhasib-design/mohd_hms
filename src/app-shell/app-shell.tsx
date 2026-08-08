@@ -98,6 +98,15 @@ const MobileDocuments = lazy(() => import('@/mobile-app/components/mobile-docume
 
 function MobileViewRouter() {
   const { currentView, viewParams } = useAppStore();
+  const user = useAuthStore(s => s.user);
+  const role = user?.role;
+
+  // Page-level permission check (matches desktop ViewRouter)
+  const feature = getViewFeature(currentView);
+  if (feature && role && !canAccessFeature(role, feature)) {
+    return <AccessDenied feature={feature} />;
+  }
+
   return (
     <Suspense fallback={<ViewLoader />}>
       {currentView === 'dashboard' && <MobileDashboard />}

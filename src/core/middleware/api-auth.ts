@@ -99,6 +99,18 @@ export function verifyRouteAuth(
 
   const normalizedRole = (role as string).toLowerCase() as UserRole;
 
+  // Runtime role validation — reject unrecognized roles
+  const VALID_ROLES = new Set<string>(['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user', 'customer', 'vendor', 'guest']);
+  if (!VALID_ROLES.has(normalizedRole)) {
+    return {
+      ok: false,
+      error: NextResponse.json(
+        { error: 'Forbidden', message: 'Unrecognized user role' },
+        { status: 403 }
+      ),
+    };
+  }
+
   // 2. Check explicit roles if provided
   if (options?.roles && options.roles.length > 0) {
     if (!options.roles.includes(normalizedRole)) {
@@ -116,7 +128,7 @@ export function verifyRouteAuth(
   // 3. Check feature permission if provided
   if (options?.feature) {
     const allowedRoles = FEATURE_PERMISSIONS[options.feature];
-    if (allowedRoles && !allowedRoles.includes(normalizedRole)) {
+    if (!allowedRoles || !allowedRoles.includes(normalizedRole)) {
       logAccessDenied(request, normalizedRole, `feature:${options.feature}`, userId);
       return {
         ok: false,

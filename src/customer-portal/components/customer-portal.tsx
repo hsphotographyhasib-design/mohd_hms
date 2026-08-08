@@ -277,10 +277,16 @@ function SimpleListView({ title, icon, apiPath }: { title: string; icon: React.R
 /* ─── Main Customer Portal ─── */
 export function CustomerPortal() {
   const user = useAuthStore(s => s.user)
+  const role = useAuthStore(s => s.user?.role)
   const setAppView = useAppStore(s => s.setView)
   const logout = useAuthStore(s => s.secureLogout)
   const [portalView, setPortalView] = useState<PortalView>('dashboard')
   const [mobileNavOpen, setMobileNavOpen] = useState(false)
+
+  // Only customers should access the customer portal
+  if (role && role !== 'customer') {
+    return <div className="flex items-center justify-center h-full"><p>Access denied. This portal is for customers only.</p></div>;
+  }
 
   const handleLogout = () => {
     fetch('/api/auth/whatsapp/logout', {

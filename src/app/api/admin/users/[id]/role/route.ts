@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { withErrorLogging } from '@/core/errors/with-error-logging';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -22,27 +23,17 @@ export const PATCH = withErrorLogging(async function PATCH(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { db, withRetry, getDbFriendlyMessage } = await import('@/core/database/db');
-  const { verifyToken } = await import('@/core/auth/auth-lib');
-  const { canTransitionRole } = await import('@/core/permissions/rbac/permissions-matrix');
+  const { canTransitionRole, ALL_ROLES } = await import('@/core/permissions/rbac/permissions-matrix');
 
   try {
-    // ── 1. Authentication ───────────────────────────────────────────
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader?.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Authorization required' }, { status: 401 });
-    }
+    // ── 1. Authentication via centralized RBAC middleware ───────
+    const auth = verifyRouteAuth(request);
+    if (auth.error) return auth.error;
+    const { userId: callerId, role: callerRole, tenantId } = auth;
 
-    const payload = verifyToken(authHeader.replace('Bearer ', ''));
-    if (!payload || !payload.userId) {
-      return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
-    }
-
-    const callerId = payload.userId as string;
-    const callerRole = (payload.role as string).toLowerCase();
-    const tenantId = payload.tenantId as string;
     const { id: targetUserId } = await params;
 
-    // ── 2. Self-change prevention ────────────────────────────────────
+    // ── 2. Self-change prevention ────────────────────────────────
     if (targetUserId === callerId) {
       return NextResponse.json(
         { error: 'You cannot change your own role. Ask another administrator.' },
@@ -50,11 +41,8 @@ export const PATCH = withErrorLogging(async function PATCH(
       );
     }
 
-    // ── 3. Request body validation ──────────────────────────────────
-    const VALID_ROLES = [
-      'super_admin', 'admin', 'manager', 'supervisor',
-      'technician', 'finance', 'hr', 'user', 'customer', 'vendor', 'guest',
-    ] as const;
+    // ── 3. Request body validation ──────────────────────────────
+    const VALID_ROLES = ALL_ROLES;
 
     let body: { role?: string; reason?: string };
     try {
@@ -78,13 +66,13 @@ export const PATCH = withErrorLogging(async function PATCH(
       );
     }
 
-    // ── 4. Permission matrix check ──────────────────────────────────
+    // ── 4. Permission matrix check ──────────────────────────────
     const transitionCheck = canTransitionRole(callerRole, normalizedNewRole, '');
     if (!transitionCheck.allowed) {
       return NextResponse.json({ error: transitionCheck.reason }, { status: 403 });
     }
 
-    // ── 5. Find target user ─────────────────────────────────────────
+    // ── 5. Find target user ─────────────────────────────────────
     const targetUser = await withRetry(
       () =>
         db.user.findUnique({
@@ -109,7 +97,7 @@ export const PATCH = withErrorLogging(async function PATCH(
       return NextResponse.json({ error: fullTransitionCheck.reason }, { status: 403 });
     }
 
-    // ── 7. No-op check ──────────────────────────────────────────────
+    // ── 7. No-op check ──────────────────────────────────────────
     if (normalizedNewRole === previousRole) {
       return NextResponse.json(
         { error: `User already has the role "${normalizedNewRole.replace(/_/g, ' ')}". No change needed.` },
@@ -117,7 +105,7 @@ export const PATCH = withErrorLogging(async function PATCH(
       );
     }
 
-    // ── 8. Protect last super_admin ─────────────────────────────────
+    // ── 8. Protect last super_admin ─────────────────────────────
     if (previousRole === 'super_admin' && normalizedNewRole !== 'super_admin') {
       const superAdminCount = await withRetry(
         () => db.user.count({ where: { tenantId, role: 'super_admin', isActive: true } }),
@@ -131,13 +119,13 @@ export const PATCH = withErrorLogging(async function PATCH(
       }
     }
 
-    // ── 9. Extract request metadata ─────────────────────────────────
+    // ── 9. Extract request metadata ─────────────────────────────
     const ipAddress =
       request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
       request.headers.get('x-real-ip') || 'unknown';
     const userAgent = request.headers.get('user-agent') || 'unknown';
 
-    // ── 10. Update user role ────────────────────────────────────────
+    // ── 10. Update user role ────────────────────────────────────
     const updatedUser = await withRetry(
       () =>
         db.user.update({
@@ -154,7 +142,7 @@ export const PATCH = withErrorLogging(async function PATCH(
       { label: 'roleChange-update' }
     );
 
-    // ── 10b. Revoke all active sessions for the target user ─────────
+    // ── 10b. Revoke all active sessions for the target user ─────
     //      This ensures the target user's stale JWT (which still
     //      contains the old role) will be detected by the client-side
     //      refresh-session mechanism, which will then fetch a new JWT
@@ -179,7 +167,11 @@ export const PATCH = withErrorLogging(async function PATCH(
       console.error('[Role Change] Failed to revoke sessions:', err);
     }
 
-    // ── 11. Create audit log ────────────────────────────────────────
+    // ── 10c. Dispatch role-changed event for real-time session invalidation ──
+    // The auth guard's refreshSession will pick this up on next heartbeat
+    console.log(`[RBAC] Role changed: user=${targetUserId} ${previousRole} → ${normalizedNewRole} by ${callerId}`);
+
+    // ── 11. Create audit log ────────────────────────────────────
     withRetry(
       () =>
         db.auditLog.create({
@@ -196,7 +188,7 @@ export const PATCH = withErrorLogging(async function PATCH(
               previousRole,
               newRole: normalizedNewRole,
               changedBy: callerRole,
-              changedByName: (payload.name as string) || 'Unknown',
+              changedByName: auth.email || 'Unknown',
               targetUserName: targetUser.name,
               targetUserEmail: targetUser.email,
               reason: reason || null,
@@ -214,7 +206,7 @@ export const PATCH = withErrorLogging(async function PATCH(
       console.error('[Role Change Audit] Failed to log:', err.message);
     });
 
-    // ── 12. Send in-app notification to target user ─────────────────
+    // ── 12. Send in-app notification to target user ─────────────
     withRetry(
       () =>
         db.notificationLog.create({
@@ -224,12 +216,12 @@ export const PATCH = withErrorLogging(async function PATCH(
             userId: targetUserId,
             type: 'role_change',
             title: 'Role Updated',
-            message: `Your account role has been updated from ${previousRole.replace(/_/g, ' ')} to ${normalizedNewRole.replace(/_/g, ' ')} by ${(payload.name as string) || 'an administrator'}.`,
+            message: `Your account role has been updated from ${previousRole.replace(/_/g, ' ')} to ${normalizedNewRole.replace(/_/g, ' ')} by ${auth.email || 'an administrator'}.`,
             data: JSON.stringify({
               previousRole,
               newRole: normalizedNewRole,
               changedBy: callerId,
-              changedByName: (payload.name as string) || 'Unknown',
+              changedByName: auth.email || 'Unknown',
               changedByRole: callerRole,
             }),
             isRead: false,
@@ -240,7 +232,7 @@ export const PATCH = withErrorLogging(async function PATCH(
       console.error('[Role Change Notification] Failed:', err.message);
     });
 
-    // ── 13. Response ────────────────────────────────────────────────
+    // ── 13. Response ────────────────────────────────────────────
     return NextResponse.json({
       success: true,
       user: updatedUser,
@@ -250,7 +242,7 @@ export const PATCH = withErrorLogging(async function PATCH(
       changedBy: {
         id: callerId,
         role: callerRole,
-        name: (payload.name as string) || 'Unknown',
+        name: auth.email || 'Unknown',
       },
       message: `Role changed from ${previousRole.replace(/_/g, ' ')} to ${normalizedNewRole.replace(/_/g, ' ')}. ${sessionsRevoked > 0 ? `${sessionsRevoked} active session(s) revoked — the user will receive updated permissions on their next action.` : ''}`,
     });

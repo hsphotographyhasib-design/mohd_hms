@@ -1,10 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 const PLACEHOLDER_IMG = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  const auth = verifyRouteAuth(request, { feature: 'irms' });
+  if (auth.error) return auth.error;
+  // Only super_admin can seed
+  if (auth.role !== 'super_admin') {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
   try {
     // Clean existing data
     await db.irmActivity.deleteMany();

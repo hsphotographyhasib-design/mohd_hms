@@ -15,6 +15,16 @@
 
 import type { UserRole } from './types';
 
+/** All valid roles — single source of truth for runtime validation */
+export const ALL_ROLES = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user', 'customer', 'vendor', 'guest'] as const;
+
+/** Runtime role validator — returns null for invalid roles */
+export function parseRole(raw: unknown): UserRole | null {
+  if (typeof raw !== 'string') return null;
+  const lowered = raw.toLowerCase().trim();
+  return (ALL_ROLES as readonly string[]).includes(lowered) ? (lowered as UserRole) : null;
+}
+
 // ── Feature-Level Permissions ─────────────────────────────────────────────────
 //
 // Maps each feature/module name to the list of roles that can access it.
@@ -87,11 +97,15 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
     complete_work:         ['super_admin', 'admin', 'supervisor', 'manager', 'technician'],
     client_confirm:        ['customer', 'super_admin', 'admin'],
     client_reject:         ['customer', 'super_admin', 'admin'],
-    accept:                ['technician'],
-    reject:                ['technician'],
+    accept:                ['technician', 'super_admin', 'admin', 'supervisor', 'manager'],
+    reject:                ['technician', 'super_admin', 'admin', 'supervisor', 'manager'],
     view_timeline:         ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer'],
     view_assignment_history: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance'],
     escalate:              ['super_admin', 'admin', 'manager', 'supervisor'],
+    record_payment:        ['super_admin', 'admin', 'finance', 'manager'],
+    approve_invoice:       ['super_admin', 'admin', 'finance', 'manager'],
+    send_invoice:          ['super_admin', 'admin', 'finance'],
+    close:                 ['super_admin', 'admin', 'supervisor', 'manager'],
   },
 
   // ─── Work Order actions ───────────────────────────────────────────────
@@ -158,7 +172,7 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
     update:          ['super_admin', 'admin', 'manager'],
     delete:          ['super_admin', 'admin'],
     adjust:          ['super_admin', 'admin', 'manager'],
-    manage_warehouse: ['super_admin', 'admin', 'manager'],
+    manage_warehouse: ['super_admin', 'admin'],
     manage_category:  ['super_admin', 'admin', 'manager'],
     manage_supplier:  ['super_admin', 'admin', 'manager'],
     manage_price_book: ['super_admin', 'admin'],
@@ -185,23 +199,24 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
   // ─── HR actions ───────────────────────────────────────────────────────
   hr_module: {
     manage_travel:    ['super_admin', 'admin', 'hr'],
-    manage_leave:     ['super_admin', 'admin', 'hr'],
-    manage_attendance: ['super_admin', 'admin', 'hr'],
-    manage_payroll:   ['super_admin', 'admin', 'hr'],
+    manage_leave:     ['super_admin', 'admin', 'hr', 'manager', 'supervisor'],
+    manage_attendance: ['super_admin', 'admin', 'hr', 'manager', 'supervisor'],
+    manage_payroll:   ['super_admin', 'admin', 'hr', 'manager'],
     manage_disciplinary: ['super_admin', 'admin', 'hr'],
     manage_assets:    ['super_admin', 'admin', 'hr'],
     manage_medical:   ['super_admin', 'admin', 'hr'],
     manage_expenses:  ['super_admin', 'admin', 'hr'],
     manage_performance: ['super_admin', 'admin', 'hr'],
-    manage_recruitment: ['super_admin', 'admin', 'hr'],
+    manage_recruitment: ['super_admin', 'admin', 'hr', 'manager'],
     manage_training:  ['super_admin', 'admin', 'hr'],
     manage_visitors:  ['super_admin', 'admin', 'hr'],
     manage_shifts:    ['super_admin', 'admin', 'hr'],
     manage_holidays:  ['super_admin', 'admin', 'hr'],
     manage_documents: ['super_admin', 'admin', 'hr'],
-    manage_announcements: ['super_admin', 'admin', 'hr'],
+    manage_announcements: ['super_admin', 'admin', 'hr', 'manager'],
     manage_settings:  ['super_admin', 'admin', 'hr'],
     view_reports:     ['super_admin', 'admin', 'hr'],
+    view_employee_details: ['super_admin', 'admin', 'hr', 'manager', 'supervisor'],
   },
 
   // ─── Purchase actions ─────────────────────────────────────────────────
@@ -228,8 +243,8 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
     update:          ['super_admin', 'admin', 'finance'],
     delete:          ['super_admin', 'admin'],
     record_payment:  ['super_admin', 'admin', 'finance'],
-    approve:         ['super_admin', 'admin', 'finance'],
-    export:          ['super_admin', 'admin', 'finance'],
+    approve:         ['super_admin', 'admin', 'finance', 'manager'],
+    export:          ['super_admin', 'admin', 'finance', 'manager'],
   },
 
   // ─── Report actions ───────────────────────────────────────────────────
@@ -331,12 +346,10 @@ export const ACTION_PERMISSIONS: Record<string, Record<string, UserRole[]>> = {
 
   // ─── Document actions ─────────────────────────────────────────────────
   document: {
-    create:          ['super_admin', 'admin'],
-    view:            ['super_admin', 'admin'],
-    update:          ['super_admin', 'admin'],
-    delete:          ['super_admin', 'admin'],
-    download:        ['super_admin', 'admin'],
-    manage_versions: ['super_admin', 'admin'],
+    view:            ['super_admin', 'admin', 'hr', 'manager', 'supervisor', 'technician', 'finance', 'customer', 'user'],
+    upload:          ['super_admin', 'admin', 'hr', 'manager', 'supervisor', 'technician', 'finance', 'user'],
+    delete:          ['super_admin', 'admin', 'hr'],
+    manage:          ['super_admin', 'admin', 'hr'],
   },
 };
 

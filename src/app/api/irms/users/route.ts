@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const auth = verifyRouteAuth(request, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const users = await db.irmUser.findMany({
       orderBy: { name: 'asc' },
@@ -21,6 +24,8 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = verifyRouteAuth(req, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const body = await req.json();
 

@@ -1,8 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const auth = verifyRouteAuth(request, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());

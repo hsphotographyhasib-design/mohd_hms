@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
+  const auth = verifyRouteAuth(req, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const q = req.nextUrl.searchParams.get('q') || '';
     const status = req.nextUrl.searchParams.get('status') || '';
@@ -33,6 +36,8 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  const auth = verifyRouteAuth(req, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const body = await req.json();
     const { status: inputStatus, ...data } = body;

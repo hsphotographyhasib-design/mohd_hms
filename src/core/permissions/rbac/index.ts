@@ -9,7 +9,7 @@
 export type { AuthContext, ComplaintAccessResult, AccessLevel, UserRole, ComplaintAuditEntry } from './types';
 
 // Complaint RBAC engine
-export { buildComplaintWhereClause, canAccessComplaint, canPerformAction as canPerformComplaintAction, buildAuthContext, buildAuthContextFromRequest, isFieldVisibleToRole, CUSTOMER_HIDDEN_FIELDS, ROLE_REQUIRED_ACTIONS, resolveDepartmentTechnicianIds } from './complaint-access';
+export { buildComplaintWhereClause, canAccessComplaint, canPerformComplaintAction, buildAuthContext, buildAuthContextFromRequest, isFieldVisibleToRole, CUSTOMER_HIDDEN_FIELDS, resolveDepartmentTechnicianIds } from './complaint-access';
 
 // Complaint audit logging
 export { logComplaintAccess, logComplaintAccessDenied, logComplaintAccessAllowed, extractIpAddress, extractUserAgent, extractDeviceType } from './audit-logger';
@@ -19,4 +19,4 @@ export type { DataScope } from './data-scope';
 export { buildDataScope, buildDataScopeFromRequest, scopeInvoice, scopeWorkOrder, scopeQuotation, scopeEquipment, scopeCustomer } from './data-scope';
 
 // Unified permissions matrix (SINGLE SOURCE OF TRUTH)
-export { FEATURE_PERMISSIONS, ACTION_PERMISSIONS, ROLE_HIERARCHY, ROLE_TRANSITION_MATRIX, canAccessFeature, canPerformAction, hasMinRole, hasPermission, canTransitionRole } from './permissions-matrix';
+export { FEATURE_PERMISSIONS, ACTION_PERMISSIONS, ROLE_HIERARCHY, ROLE_TRANSITION_MATRIX, ALL_ROLES, canAccessFeature, canPerformAction, hasMinRole, hasPermission, canTransitionRole, parseRole } from './permissions-matrix';

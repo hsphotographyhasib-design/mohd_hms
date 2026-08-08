@@ -10,6 +10,7 @@ import {
   isFieldVisibleToRole,
   logComplaintAccessDenied,
   logComplaintAccessAllowed,
+  type UserRole,
 } from '@/core/permissions/rbac';
 import type { Prisma } from '@prisma/client';
 import { withErrorLogging } from '@/core/errors/with-error-logging';
@@ -171,7 +172,7 @@ export const PUT = withErrorLogging(async (
     const body = await request.json();
 
     // ─── RBAC: Check mutation permission ───
-    if (!canPerformComplaintAction(role, 'update_fields')) {
+    if (!canPerformComplaintAction(role as UserRole, 'update_fields')) {
       logComplaintAccessDenied({
         userId,
         tenantId,
@@ -325,7 +326,7 @@ export const DELETE = withErrorLogging(async (
     const { id } = await params;
 
     // ─── RBAC: Only super_admin and admin can delete ───
-    if (!canPerformComplaintAction(role, 'delete')) {
+    if (!canPerformComplaintAction(role as UserRole, 'delete')) {
       logComplaintAccessDenied({
         userId,
         tenantId,

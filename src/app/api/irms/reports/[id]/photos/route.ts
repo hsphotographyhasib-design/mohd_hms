@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = verifyRouteAuth(request, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const { id: reportId } = await params;
 

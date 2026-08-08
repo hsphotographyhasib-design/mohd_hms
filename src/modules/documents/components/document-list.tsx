@@ -3,7 +3,9 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuthStore, useAppStore } from '@/app-shell/store';
 import type { AppView } from '@/core/types';
-import { CHUNK_SIZE, DOCUMENT_PERMISSIONS } from '@/core/types';
+import { CHUNK_SIZE } from '@/core/types';
+import { canPerformAction } from '@/core/permissions/rbac/permissions-matrix';
+import type { UserRole } from '@/core/types';
 import { cn } from '@/core/utils/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
 import { Button } from '@/shared/ui/button';
@@ -165,8 +167,9 @@ function getAuthHeaders(): Record<string, string> {
 }
 
 function hasPermission(action: string): boolean {
-  const role = useAuthStore.getState().user?.role || '';
-  return (DOCUMENT_PERMISSIONS[role] || []).includes(action);
+  const role = (useAuthStore.getState().user?.role || '') as UserRole;
+  const mappedAction = action === 'upload' ? 'create' : action === 'version_restore' ? 'manage_versions' : action;
+  return canPerformAction(role, 'document', mappedAction);
 }
 
 // ============ Component ============

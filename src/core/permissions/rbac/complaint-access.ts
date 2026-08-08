@@ -28,6 +28,7 @@ import type {
   AccessLevel,
   UserRole,
 } from './types';
+import { canPerformAction as matrixCanPerformAction } from './permissions-matrix';
 
 // ── In-memory cache for customer/department lookups (short TTL) ─────────────
 
@@ -330,37 +331,11 @@ export async function canAccessComplaint(
   return count > 0;
 }
 
-// ── Role mutation permission checks ─────────────────────────────────────────
+// ── Role mutation permission checks — delegates to centralized matrix ───────
 
-/** Actions that require specific roles */
-export const ROLE_REQUIRED_ACTIONS: Record<string, UserRole[]> = {
-  delete: ['super_admin', 'admin'],
-  assign_technician: ['super_admin', 'admin', 'supervisor', 'manager'],
-  reassign_technician: ['super_admin', 'admin', 'supervisor', 'manager'],
-  override_status: ['super_admin', 'admin'],
-  approve_completion: ['super_admin', 'admin', 'supervisor', 'manager'],
-  start_work: ['super_admin', 'admin', 'supervisor', 'manager', 'technician'],
-  complete_work: ['super_admin', 'admin', 'supervisor', 'manager', 'technician'],
-  client_confirm: ['customer', 'super_admin', 'admin'],
-  client_reject: ['customer', 'super_admin', 'admin'],
-  record_payment: ['super_admin', 'admin', 'finance'],
-  approve_invoice: ['super_admin', 'admin', 'finance', 'manager'],
-  send_invoice: ['super_admin', 'admin', 'finance'],
-  close: ['super_admin', 'admin', 'supervisor', 'manager'],
-  update_fields: ['super_admin', 'admin', 'supervisor', 'manager', 'technician'],
-  view: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer'],
-  create: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'customer'],
-  view_timeline: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'user', 'customer'],
-  view_assignment_history: ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance'],
-};
-
-/**
- * Check if a role can perform a specific action.
- */
-export function canPerformAction(role: string, action: string): boolean {
-  const allowedRoles = ROLE_REQUIRED_ACTIONS[action];
-  if (!allowedRoles) return false;
-  return allowedRoles.includes(role as UserRole);
+/** Check if a role can perform a specific complaint action — delegates to the centralized matrix */
+export function canPerformComplaintAction(role: UserRole, action: string): boolean {
+  return matrixCanPerformAction(role, 'complaint', action);
 }
 
 // ── Auth Context Builder ────────────────────────────────────────────────────

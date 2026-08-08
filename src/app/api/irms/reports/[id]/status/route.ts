@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 const STATUS_FLOW = [
@@ -14,6 +15,8 @@ export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = verifyRouteAuth(request, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const { id } = await params;
     const body = await request.json() as { action: 'advance' | 'reject'; comment?: string; userId?: string };

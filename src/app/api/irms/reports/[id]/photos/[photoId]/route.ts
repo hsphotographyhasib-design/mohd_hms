@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; photoId: string }> }
 ) {
+  const auth = verifyRouteAuth(request, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const { photoId } = await params;
     const body = await request.json();
@@ -30,6 +33,8 @@ export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string; photoId: string }> }
 ) {
+  const auth = verifyRouteAuth(request, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const { photoId } = await params;
 

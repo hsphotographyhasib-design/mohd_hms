@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const auth = verifyRouteAuth(_request, { feature: 'irms' });
+  if (auth.error) return auth.error;
   try {
     const { id } = await params;
     const template = _request.nextUrl.searchParams.get('template') || 'government';
