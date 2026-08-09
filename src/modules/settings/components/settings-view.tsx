@@ -19,7 +19,7 @@ import {
 } from '@/shared/ui/select';
 import { Badge } from '@/shared/ui/badge';
 import {
-  Settings, Plus, Loader2, Shield, Database, Globe, Server, HardDrive, Bug, Pencil,
+  Settings, Plus, Loader2, Shield, Database, Globe, Server, HardDrive, Bug, Pencil, Users, CheckCircle2, XCircle,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/app-shell/store';
@@ -27,6 +27,8 @@ import { canAccess } from '@/app-shell/store';
 import { format } from 'date-fns';
 import type { UserRole } from '@/core/types';
 import { ErrorHistoryView } from './error-history-view';
+import { usePresenceStore } from '@/core/presence/presence-store';
+import { PresenceIndicator } from '@/core/presence/presence-indicator';
 
 const token = () => localStorage.getItem('cmms_token') || '';
 
@@ -318,8 +320,53 @@ function UsersTab() {
     }
   };
 
+  // ============ REAL-TIME PRESENCE ============
+  const onlineStatus = usePresenceStore((s) => s.onlineStatus);
+  const isPresenceConnected = usePresenceStore((s) => s.isConnected);
+
+  // Derive real-time online count from the presence store
+  // When WebSocket is connected, count users in the presence map with status 'online'
+  // When WebSocket is NOT connected, fall back to DB isOnline
+  const onlineCount = isPresenceConnected
+    ? Object.values(onlineStatus).filter((p) => p.status === 'online' || p.isOnline).length
+    : users.filter((u) => u.isOnline).length;
+
+  const activeCount = users.filter((u) => u.isActive).length;
+  const inactiveCount = users.length - activeCount;
+
+  const stats = [
+    { label: 'Total Users', value: users.length, icon: <Users className="h-4 w-4 text-emerald-600" />, color: 'border-emerald-200 bg-emerald-50/50' },
+    { label: 'Active', value: activeCount, icon: <CheckCircle2 className="h-4 w-4 text-emerald-600" />, color: 'border-emerald-200 bg-emerald-50/50' },
+    { label: 'Inactive', value: inactiveCount, icon: <XCircle className="h-4 w-4 text-gray-500" />, color: 'border-gray-200 bg-gray-50/50' },
+    {
+      label: 'Online Now',
+      value: onlineCount,
+      icon: (
+        <span className="relative flex h-4 w-4 items-center justify-center">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse" />
+        </span>
+      ),
+      color: 'border-emerald-200 bg-emerald-50/50',
+    },
+  ];
+
   return (
     <div className="space-y-4">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {stats.map((s) => (
+          <Card key={s.label} className={s.color}>
+            <CardContent className="p-3 flex items-center gap-3">
+              <div className="shrink-0">{s.icon}</div>
+              <div className="min-w-0">
+                <p className="text-xs text-muted-foreground">{s.label}</p>
+                <p className="text-xl font-bold">{loading ? <Skeleton className="h-6 w-8 inline-block" /> : s.value}</p>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">Filter:</span>
@@ -357,6 +404,7 @@ function UsersTab() {
                   <TableHead>Role</TableHead>
                   <TableHead>Provider</TableHead>
                   <TableHead>Status</TableHead>
+                  <TableHead>Presence</TableHead>
                   <TableHead>Registered</TableHead>
                   <TableHead className="w-20">Actions</TableHead>
                 </TableRow>
@@ -365,12 +413,12 @@ function UsersTab() {
                 {loading ? (
                   Array.from({ length: 5 }).map((_, i) => (
                     <TableRow key={i}>
-                      <TableCell colSpan={7}><Skeleton className="h-10 w-full" /></TableCell>
+                      <TableCell colSpan={8}><Skeleton className="h-10 w-full" /></TableCell>
                     </TableRow>
                   ))
                 ) : users.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
                       No users found
                     </TableCell>
                   </TableRow>
@@ -393,9 +441,9 @@ function UsersTab() {
                       </TableCell>
                       <TableCell>
                         <StatusBadge status={u.isActive ? 'active' : 'inactive'} />
-                        {u.isOnline && (
-                          <span className="ml-1 inline-block h-2 w-2 rounded-full bg-emerald-500" title="Online" />
-                        )}
+                      </TableCell>
+                      <TableCell>
+                        <PresenceIndicator userId={u.id} dbIsOnline={u.isOnline} showLabel />
                       </TableCell>
                       <TableCell className="text-xs text-muted-foreground">
                         {u.createdAt ? format(new Date(u.createdAt), 'dd MMM yyyy') : '—'}

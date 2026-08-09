@@ -1,46 +1,26 @@
-# Work Log — Technician Data Synchronization Fix
-
 ---
 Task ID: 1
 Agent: Main Agent
-Task: Phase 1-2 — Full Repository Audit & Data Source Mismatch Analysis
+Task: Fix Real-Time User Online/Offline Presence System
 
 Work Log:
-- Read prisma/schema.prisma: NO Technician model exists. Users with role='technician' are the canonical source.
-- Found 46+ files related to technicians across the codebase
-- Identified 3 different technician data resolution paths:
-  1. `/api/technicians` — used by Technician Ops Center (enriched, correct filter)
-  2. `/api/complaints/{id}/assign-technician` — used by complaint assignment (enriched)
-  3. `/api/employees?role=technician` — used by work orders & complaint detail fallback (basic, NO isActive filter)
-- Found legacy duplicate files in src/components/modules/
-- Found Supabase adapter limitation: Prisma auto-generated relation names cannot be resolved
-- Found frontend bug: `if (!res.ok) return;` silently swallows API errors
-- Found frontend bug: KPI stats recalculated from paginated list, ignoring server-side stats
-- Found /api/employees missing isActive: true filter
+- Phase 1: Comprehensive audit of entire codebase for presence-related keywords (60+ files identified)
+- Phase 2-3: Identified root cause of "Online Now = 4" vs actual 2 users online
+- Phase 4: Confirmed existing presence infrastructure is solid (Socket.IO server, Zustand store, hooks, indicator)
+- Phase 5: Verified DB schema in sync (lastSeen column exists in SQLite)
+- Phase 6: Started presence mini-service on port 3004
+- Phase 7: Fixed settings-view.tsx UsersTab to use real-time presence
+- Phase 8: Added KPI cards (Total Users, Active, Inactive, Online Now)
+- Phase 9: Added separate Presence column using PresenceIndicator component
+- Phase 10: Separated Account Status (Active/Inactive) from Presence (Online/Away/Offline)
+- Phase 11: Lint passed with 0 errors
 
 Stage Summary:
-- Root cause identified: Multiple issues compound to show 0 technicians
-- Key fix areas: API resilience, frontend error handling, data source standardization
-
----
-Task ID: 2
-Agent: Main Agent
-Task: Phase 3-9 — Implementation of all fixes
-
-Work Log:
-- Fixed /api/technicians/route.ts: Removed Prisma relation names from select, added separate queries, safeQuery wrapper
-- Fixed technician-ops-center.tsx: Use server-side KPI stats, proper error logging, defensive type checks
-- Fixed /api/employees/route.ts: Added isActive:true, standardized role filter to {in: ['technician','supervisor']}, RBAC switch for technician queries
-- Fixed /api/complaints/[id]/assign-technician/route.ts: Removed all Prisma relation names from GET and POST, separate fetches for customer and previous tech
-- Fixed /api/technicians/[id]/route.ts: Subagent removed 5+ relation traversals, replaced with separate queries
-- Fixed /api/technicians/[id]/performance/route.ts: Same treatment
-- Fixed /api/technicians/[id]/timeline/route.ts: Same treatment
-- Created TechnicianResolver service at src/modules/technicians/services/technician-resolver.ts
-- Fixed TypeScript errors (22 → 0), ESLint errors (0 → 0)
-
-Stage Summary:
-- All 10 files modified, 1 file added, 0 files removed
-- 0 TypeScript errors, 0 ESLint errors
-- Root cause: Prisma auto-generated relation names (e.g. Complaint_Complaint_assignedToIdToUser) resolve to null in Supabase adapter, causing null.length TypeError crash
-
----
+- Root cause: settings-view.tsx UsersTab (the actually rendered component) had NO KPI cards and used only DB `isOnline` for a green dot — did NOT use the real-time presence store at all
+- The presence infrastructure (Socket.IO on port 3004, Zustand store, hooks, PresenceIndicator) was already well-built but not wired into the rendered user management component
+- Fix: Added KPI cards with real-time online count from usePresenceStore, added separate Presence column using PresenceIndicator
+- Key principle: Account Status (Active/Inactive) is now visually SEPARATE from Presence (Online/Away/Offline)
+- Online Now KPI derives from the WebSocket presence store when connected, falls back to DB isOnline when disconnected
+- Files modified: src/modules/settings/components/settings-view.tsx
+- Files added: None
+- Files removed: None
