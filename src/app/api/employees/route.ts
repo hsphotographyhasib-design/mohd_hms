@@ -5,6 +5,9 @@ import { hashPassword } from '@/core/auth/auth-lib';
 
 export const dynamic = 'force-dynamic';
 
+/** Roles that represent internal staff (employees), NOT external users like customers/vendors */
+const EMPLOYEE_ROLES = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user'] as const;
+
 /** Technician/supervisor roles — single source of truth for technician resolution */
 const TECH_ROLES = ['technician', 'supervisor'] as const;
 
@@ -46,6 +49,9 @@ export async function GET(request: NextRequest) {
       where.role = { in: [...TECH_ROLES] };
     } else if (role) {
       where.role = role;
+    } else {
+      // Default: only return employee-eligible roles (exclude customer, vendor, guest)
+      where.role = { in: [...EMPLOYEE_ROLES] };
     }
 
     if (departmentId) where.departmentId = departmentId;
