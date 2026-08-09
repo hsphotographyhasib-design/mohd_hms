@@ -178,8 +178,8 @@ export function TechnicianAssignmentPanel({
   }, [selectedId, reason, isReassignment, complaintId, onSuccess, onOpenChange]);
 
   // Get initials for avatar
-  const getInitials = (name: string) => {
-    return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  const getInitials = (name: string | undefined) => {
+    return (name || '??').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
   };
 
   return (

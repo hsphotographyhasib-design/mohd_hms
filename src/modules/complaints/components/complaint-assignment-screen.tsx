@@ -251,7 +251,7 @@ function TechnicianCard({
 }) {
   const avail = AVAILABILITY_CONFIG[tech.availabilityStatus] || AVAILABILITY_CONFIG.offline;
   const pConfig = PRIORITY_CONFIG[tech.currentTasks[0]?.priority] || PRIORITY_CONFIG.medium;
-  const getInitials = (name: string) => name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  const getInitials = (name: string | undefined) => (name || '??').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
   return (
     <motion.div
@@ -462,7 +462,7 @@ function AssignmentHistorySidebar({ complaintId }: { complaintId: string }) {
     };
   }, [complaintId]);
 
-  const getInitials = (name: string) => name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  const getInitials = (name: string | undefined) => (name || '??').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
   return (
     <Card className="rounded-2xl border-0 shadow-sm bg-white h-fit">
@@ -739,7 +739,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
   }, [technicians]);
 
   const pConfig = complaint ? PRIORITY_CONFIG[complaint.priority] : PRIORITY_CONFIG.medium;
-  const getInitials = (name: string) => name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  const getInitials = (name: string | undefined) => (name || '??').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 
   if (complaintLoading) {
     return (

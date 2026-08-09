@@ -24,3 +24,35 @@ Stage Summary:
 - Files modified: src/modules/settings/components/settings-view.tsx
 - Files added: None
 - Files removed: None
+---
+Task ID: 1
+Agent: Main
+Task: Fix TypeError: Cannot read properties of undefined (reading 'split') — comprehensive fix across entire codebase
+
+Work Log:
+- Searched all .split() calls across the entire codebase (~100+ occurrences)
+- Identified all unsafe patterns where .split() is called on potentially undefined values
+- Fixed 14 files total (primary + duplicate copies):
+  1. src/components/app/header.tsx — user.name → (user.name || '??')
+  2. src/modules/settings/components/user-management.tsx — getInitials(name: string) → (name: string | undefined) with guard
+  3. src/modules/settings/components/admin/user-management.tsx — same pattern
+  4. src/modules/settings/components/admin/change-role-modal.tsx — same pattern
+  5. src/modules/technicians/components/technician-ops-center.tsx — tech.name → (tech.name || '??') (3 occurrences)
+  6. src/modules/irms/views/settings-view.tsx — currentUser.name → (currentUser.name || '')
+  7. src/mobile-app/components/mobile-complaint-detail.tsx — assignedToName → (assignedToName || '??')
+  8. src/components/modules/settings/user-management.tsx — duplicate fix
+  9. src/components/admin/user-management.tsx — duplicate fix
+  10. src/components/modules/technicians/technician-ops-center.tsx — duplicate fix
+  11. src/components/modules/complaints/complaint-assignment-screen.tsx — getInitials fix
+  12. src/modules/complaints/components/complaint-assignment-screen.tsx — getInitials fix
+  13. src/components/modules/complaints/technician-assignment-panel.tsx — getInitials fix
+  14. src/modules/complaints/components/technician-assignment-panel.tsx — getInitials fix
+  15. src/components/mobile/mobile-complaint-detail.tsx — assignedToName fix
+- Verified remaining user.name.split() calls are all safely guarded by optional chaining (user?.name ternary)
+- Ran lint: 0 errors, 2874 warnings (all pre-existing)
+
+Stage Summary:
+- Comprehensive .split() crash fix applied across 15 files
+- All getInitials() functions now accept `string | undefined` with early return fallback
+- All direct .name.split() calls now use `(name || '??')` fallback pattern
+- No remaining unsafe .split() calls in the codebase

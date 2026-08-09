@@ -107,7 +107,8 @@ function relativeTime(dateStr?: string): string {
   return date.toLocaleDateString();
 }
 
-function getInitials(name: string): string {
+function getInitials(name: string | undefined): string {
+  if (!name) return '??';
   return name
     .split(' ')
     .map((n) => n[0])

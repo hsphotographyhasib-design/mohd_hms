@@ -74,8 +74,7 @@ export default function SettingsView() {
             <div className="flex items-center gap-4">
               <Avatar className="h-14 w-14">
                 <AvatarFallback className="bg-green-600 text-white text-lg">
-                  {currentUser.name
-                    .split(' ')
+                  {(currentUser.name || '').split(' ')
                     .map((n) => n[0])
                     .join('')
                     .slice(0, 2)

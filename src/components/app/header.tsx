@@ -80,7 +80,7 @@ export function Header() {
 
   if (!user) return null;
 
-  const initials = user.name
+  const initials = (user.name || '??')
     .split(' ')
     .map((n) => n[0])
     .join('')

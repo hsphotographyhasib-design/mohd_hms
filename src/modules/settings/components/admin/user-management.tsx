@@ -275,7 +275,8 @@ function formatDate(dateStr: string | null): string {
   });
 }
 
-function getInitials(name: string): string {
+function getInitials(name: string | undefined): string {
+  if (!name) return '??';
   return name
     .split(' ')
     .map((n) => n[0])

@@ -121,7 +121,7 @@ function SidebarContent({ collapsed, onClose }: { collapsed: boolean; onClose?: 
   const filteredCmsItems = cmsNavItems.filter((item) => canAccess(role, item.feature));
   const filteredItems = navItems.filter((item) => canAccess(role, item.feature));
 
-  const initials = user.name
+  const initials = (user.name || '??')
     .split(' ')
     .map((n) => n[0])
     .join('')

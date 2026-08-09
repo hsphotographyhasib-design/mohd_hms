@@ -518,7 +518,7 @@ export function MobileComplaintDetail() {
               <div className="flex items-center gap-3">
                 <Avatar className="size-11">
                   <AvatarFallback className="bg-emerald-100 text-emerald-700 text-sm font-semibold">
-                    {assignedToName.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
+                    {(assignedToName || '??').split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 min-w-0">

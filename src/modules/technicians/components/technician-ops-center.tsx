@@ -252,7 +252,7 @@ function WorkloadBar({ percent }: { percent: number }) {
 
 function TechnicianGridCard({ tech, onViewDetail }: { tech: Technician; onViewDetail: () => void }) {
   const statusCfg = STATUS_CONFIG[tech.availabilityStatus] || STATUS_CONFIG.offline;
-  const initials = tech.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  const initials = (tech.name || '??').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
   const primaryTask = tech.currentTasks[0];
   const priorityCfg = primaryTask ? PRIORITY_CONFIG[primaryTask.priority] || PRIORITY_CONFIG.medium : null;
 
@@ -398,7 +398,7 @@ function TechnicianGridCard({ tech, onViewDetail }: { tech: Technician; onViewDe
 
 function TechnicianListRow({ tech, onViewDetail }: { tech: Technician; onViewDetail: () => void }) {
   const statusCfg = STATUS_CONFIG[tech.availabilityStatus] || STATUS_CONFIG.offline;
-  const initials = tech.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  const initials = (tech.name || '??').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
   const primaryTask = tech.currentTasks[0];
 
   return (
@@ -460,7 +460,7 @@ function TechnicianListRow({ tech, onViewDetail }: { tech: Technician; onViewDet
 
 function OverviewTab({ tech }: { tech: TechnicianDetail }) {
   const statusCfg = STATUS_CONFIG[tech.availabilityStatus] || STATUS_CONFIG.offline;
-  const initials = tech.name.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+  const initials = (tech.name || '??').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
 
   const summaryCards = [
     { label: 'Active Jobs', value: `${tech.activeJobs}/${tech.maxJobs}`, color: 'text-orange-600', bg: 'bg-orange-50', border: 'border-orange-200' },
