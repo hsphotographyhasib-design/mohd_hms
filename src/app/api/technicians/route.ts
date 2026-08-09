@@ -13,6 +13,16 @@ const TECH_ROLES = ['technician', 'supervisor'] as const;
 
 type AvailabilityStatus = 'available' | 'busy' | 'on_leave' | 'offline' | 'emergency';
 
+/** Safe helper: run a DB query, return fallback on error */
+async function safeQuery<T>(fn: () => Promise<T>, fallback: T, label: string): Promise<T> {
+  try {
+    return await fn();
+  } catch (err) {
+    console.warn(`[Technicians API] ${label} failed:`, err);
+    return fallback;
+  }
+}
+
 // ============ GET: Technicians list with KPI stats ============
 
 export async function GET(request: NextRequest) {
@@ -32,7 +42,7 @@ export async function GET(request: NextRequest) {
     const skill = searchParams.get('skill') || '';
     const sortBy = searchParams.get('sortBy') || 'name';
 
-    // --- Base where clause for technician query ---
+    // --- Base where clause (Supabase-compatible: no Prisma relation names) ---
     const baseWhere: Record<string, unknown>[] = [
       { tenantId, isActive: true, role: { in: [...TECH_ROLES] } },
     ];
@@ -54,52 +64,52 @@ export async function GET(request: NextRequest) {
 
     const listWhere = { AND: baseWhere };
 
-    // --- Parallel: count + paginated technicians + KPI prerequisite data ---
+    // --- Time boundaries ---
     const now = new Date();
     const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     const todayEnd = new Date(todayStart);
     todayEnd.setDate(todayEnd.getDate() + 1);
 
-    // Fetch all tech IDs in this tenant (for KPI + enrichment)
-    const allTechIdsResult = await db.user.findMany({
-      where: { tenantId, isActive: true, role: { in: [...TECH_ROLES] } },
-      select: { id: true, isOnline: true, departmentId: true },
-    });
+    // --- Fetch all tech IDs (for KPI + enrichment) ---
+    // Only select scalar columns — NO Prisma relation names (Supabase-incompatible)
+    const allTechIdsResult = await safeQuery(
+      () => db.user.findMany({
+        where: { tenantId, isActive: true, role: { in: [...TECH_ROLES] } },
+        select: { id: true, isOnline: true, departmentId: true },
+      }),
+      [] as { id: string; isOnline: boolean; departmentId: string | null }[],
+      'allTechIds fetch',
+    );
 
     const allTechIds = allTechIdsResult.map(t => t.id);
     const allTechOnlineMap = Object.fromEntries(allTechIdsResult.map(t => [t.id, t.isOnline]));
 
-    // Pagination count (respects search/department filters)
+    // --- Pagination count + paginated technician list ---
+    // CRITICAL: Do NOT include Prisma auto-generated relation names (e.g.,
+    // Complaint_Complaint_assignedToIdToUser) in the select. The Supabase adapter
+    // cannot resolve them. Active complaints/work orders are fetched separately.
     const [total, technicians] = await Promise.all([
-      db.user.count({ where: listWhere }),
-      db.user.findMany({
-        where: listWhere,
-        select: {
-          id: true, name: true, email: true, phone: true, avatar: true,
-          employeeNumber: true, role: true, departmentId: true, isOnline: true,
-          lastLogin: true,
-          department: { select: { name: true } },
-          Complaint_Complaint_assignedToIdToUser: {
-            where: { status: { in: [...ACTIVE_COMPLAINT_STATUSES] } },
-            select: {
-              id: true, title: true, status: true, priority: true, category: true,
-              customerId: true, assignedAt: true, createdAt: true,
-              customer: { select: { name: true, address: true } },
-            },
+      safeQuery(() => db.user.count({ where: listWhere }), 0, 'count'),
+      safeQuery(
+        () => db.user.findMany({
+          where: listWhere,
+          select: {
+            id: true, name: true, email: true, phone: true, avatar: true,
+            employeeNumber: true, role: true, departmentId: true, isOnline: true,
+            lastLogin: true,
+            department: { select: { name: true } },
           },
-          WorkOrder_WorkOrder_assignedToIdToUser: {
-            where: { status: { in: [...ACTIVE_WO_STATUSES] } },
-            select: { id: true, title: true, status: true },
-          },
-        },
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-      }),
+          skip: (page - 1) * pageSize,
+          take: pageSize,
+        }),
+        [] as any[],
+        'technician list',
+      ),
     ]);
 
-    const pageTechIds = technicians.map(t => t.id);
+    const pageTechIds = technicians.map((t: any) => t.id);
 
-    // --- Parallel enrichment queries ---
+    // --- Parallel enrichment queries (each individually resilient) ---
     const [
       leaveMap,
       emergencyMap,
@@ -107,20 +117,11 @@ export async function GET(request: NextRequest) {
       todayCompletedMap,
       todayAttendanceMap,
       skillMap,
+      pageActiveJobsMap,
     ] = await Promise.all([
-      // 1. On-leave check (all techs for KPI, page techs for enrichment)
-      db.leaveRequest.groupBy({
-        by: ['userId'],
-        where: {
-          userId: { in: allTechIds },
-          status: 'APPROVED',
-          startDate: { lte: now },
-          endDate: { gte: now },
-        },
-      }).then(rows => {
-        const map: Record<string, { onLeave: boolean; type: string | null }> = {};
-        // Also get the leave type for each
-        return db.leaveRequest.findMany({
+      // 1. On-leave check
+      safeQuery(
+        () => db.leaveRequest.findMany({
           where: {
             userId: { in: allTechIds },
             status: 'APPROVED',
@@ -139,112 +140,187 @@ export async function GET(request: NextRequest) {
             map[userId] = { onLeave: true, type: types[0] || null };
           }
           return map;
-        });
-      }),
+        }),
+        {} as Record<string, { onLeave: boolean; type: string | null }>,
+        'leave check',
+      ),
 
-      // 2. Emergency count — technicians with critical/high IN_PROGRESS complaints
-      db.complaint.groupBy({
+      // 2. Emergency count
+      safeQuery(
+        () => db.complaint.groupBy({
+          by: ['assignedToId'],
+          where: {
+            assignedToId: { in: allTechIds },
+            status: 'IN_PROGRESS',
+            priority: { in: ['critical', 'high'] },
+          },
+          _count: { id: true },
+        }).then((rows: any[]) =>
+          Object.fromEntries(rows.map((r: any) => [r.assignedToId, (r._count as any)?.id ?? 0]))
+        ),
+        {} as Record<string, number>,
+        'emergency count',
+      ),
+
+      // 3. Completed complaints stats
+      safeQuery(
+        () => db.complaint.findMany({
+          where: {
+            assignedToId: { in: pageTechIds },
+            status: { in: [...CLOSED_STATUSES] },
+            startedAt: { not: null },
+            completedAt: { not: null },
+          },
+          select: { assignedToId: true, startedAt: true, completedAt: true },
+        }).then((rows: any[]) => {
+          const map: Record<string, { count: number; totalMs: number }> = {};
+          for (const r of rows) {
+            if (!r.assignedToId || !r.startedAt || !r.completedAt) continue;
+            const ms = new Date(r.completedAt).getTime() - new Date(r.startedAt).getTime();
+            if (!map[r.assignedToId]) map[r.assignedToId] = { count: 0, totalMs: 0 };
+            map[r.assignedToId].count++;
+            map[r.assignedToId].totalMs += ms;
+          }
+          const result: Record<string, { count: number; avgHours: number | null }> = {};
+          for (const [id, data] of Object.entries(map)) {
+            result[id] = {
+              count: data.count,
+              avgHours: data.totalMs > 0 ? parseFloat(((data.totalMs / data.count) / 3_600_000).toFixed(1)) : null,
+            };
+          }
+          return result;
+        }),
+        {} as Record<string, { count: number; avgHours: number | null }>,
+        'completed stats',
+      ),
+
+      // 4. Today's completed complaints count
+      safeQuery(
+        () => db.complaint.groupBy({
+          by: ['assignedToId'],
+          where: {
+            assignedToId: { in: pageTechIds },
+            status: { in: [...CLOSED_STATUSES] },
+            completedAt: { gte: todayStart, lt: todayEnd },
+          },
+          _count: { id: true },
+        }).then((rows: any[]) =>
+          Object.fromEntries(rows.map((r: any) => [r.assignedToId, (r._count as any)?.id ?? 0]))
+        ),
+        {} as Record<string, number>,
+        'today completed',
+      ),
+
+      // 5. Today's attendance
+      safeQuery(
+        () => db.attendance.findMany({
+          where: {
+            userId: { in: pageTechIds },
+            date: { gte: todayStart, lt: todayEnd },
+          },
+          select: { userId: true, hoursWorked: true, checkIn: true, checkOut: true, status: true },
+        }).then((rows: any[]) => {
+          const map: Record<string, { hoursWorked: number | null; status: string | null }> = {};
+          for (const r of rows) {
+            map[r.userId] = { hoursWorked: r.hoursWorked, status: r.status };
+          }
+          return map;
+        }),
+        {} as Record<string, { hoursWorked: number | null; status: string | null }>,
+        'attendance',
+      ),
+
+      // 6. Skills (distinct complaint categories)
+      safeQuery(
+        () => db.complaint.findMany({
+          where: {
+            assignedToId: { in: pageTechIds },
+            AND: [
+              { category: { not: null } },
+              { category: { not: '' } },
+            ],
+          },
+          select: { assignedToId: true, category: true },
+          distinct: ['assignedToId', 'category'],
+        }).then((rows: any[]) => {
+          const map: Record<string, string[]> = {};
+          for (const r of rows) {
+            if (!r.assignedToId) continue;
+            if (!map[r.assignedToId]) map[r.assignedToId] = [];
+            if (r.category && !map[r.assignedToId].includes(r.category)) {
+              map[r.assignedToId].push(r.category);
+            }
+          }
+          return map;
+        }),
+        {} as Record<string, string[]>,
+        'skills',
+      ),
+
+      // 7. Active complaints per page tech (replaces the Prisma relation include)
+      safeQuery(
+        () => db.complaint.findMany({
+          where: {
+            assignedToId: { in: pageTechIds },
+            status: { in: [...ACTIVE_COMPLAINT_STATUSES] },
+          },
+          select: {
+            id: true, title: true, status: true, priority: true, category: true,
+            customerId: true, assignedToId: true, assignedAt: true, createdAt: true,
+          },
+        }),
+        [] as any[],
+        'active complaints',
+      ),
+    ]);
+
+    // Build per-tech active complaint map (replaces Prisma relation)
+    const activeComplaintsByTech: Record<string, any[]> = {};
+    for (const c of pageActiveJobsMap) {
+      if (!c.assignedToId) continue;
+      if (!activeComplaintsByTech[c.assignedToId]) activeComplaintsByTech[c.assignedToId] = [];
+      activeComplaintsByTech[c.assignedToId].push(c);
+    }
+
+    // --- Active work orders per page tech ---
+    const activeWOs = await safeQuery(
+      () => db.workOrder.findMany({
+        where: {
+          assignedToId: { in: pageTechIds },
+          status: { in: [...ACTIVE_WO_STATUSES] },
+        },
+        select: { id: true, title: true, status: true, assignedToId: true },
+      }),
+      [] as any[],
+      'active work orders',
+    );
+
+    const activeWOsByTech: Record<string, any[]> = {};
+    for (const wo of activeWOs) {
+      if (!wo.assignedToId) continue;
+      if (!activeWOsByTech[wo.assignedToId]) activeWOsByTech[wo.assignedToId] = [];
+      activeWOsByTech[wo.assignedToId].push(wo);
+    }
+
+    // --- Compute KPI stats (using ALL techs, not just page) ---
+    const allActiveJobsMap = await safeQuery(
+      () => db.complaint.groupBy({
         by: ['assignedToId'],
         where: {
           assignedToId: { in: allTechIds },
-          status: 'IN_PROGRESS',
-          priority: { in: ['critical', 'high'] },
+          status: { in: [...ACTIVE_COMPLAINT_STATUSES] },
         },
         _count: { id: true },
-      }).then(rows => Object.fromEntries(rows.map(r => [r.assignedToId, r._count.id]))),
-
-      // 3. Completed complaints stats (avg completion time, total count)
-      db.complaint.findMany({
-        where: {
-          assignedToId: { in: pageTechIds },
-          status: { in: [...CLOSED_STATUSES] },
-          startedAt: { not: null },
-          completedAt: { not: null },
-        },
-        select: { assignedToId: true, startedAt: true, completedAt: true },
-      }).then(rows => {
-        const map: Record<string, { count: number; totalMs: number }> = {};
-        for (const r of rows) {
-          if (!r.assignedToId || !r.startedAt || !r.completedAt) continue;
-          const ms = r.completedAt.getTime() - r.startedAt.getTime();
-          if (!map[r.assignedToId]) map[r.assignedToId] = { count: 0, totalMs: 0 };
-          map[r.assignedToId].count++;
-          map[r.assignedToId].totalMs += ms;
-        }
-        const result: Record<string, { count: number; avgHours: number | null }> = {};
-        for (const [id, data] of Object.entries(map)) {
-          result[id] = {
-            count: data.count,
-            avgHours: data.totalMs > 0 ? parseFloat(((data.totalMs / data.count) / 3_600_000).toFixed(1)) : null,
-          };
-        }
-        return result;
-      }),
-
-      // 4. Today's completed complaints count
-      db.complaint.groupBy({
-        by: ['assignedToId'],
-        where: {
-          assignedToId: { in: pageTechIds },
-          status: { in: [...CLOSED_STATUSES] },
-          completedAt: { gte: todayStart, lt: todayEnd },
-        },
-        _count: { id: true },
-      }).then(rows => Object.fromEntries(rows.map(r => [r.assignedToId, r._count.id]))),
-
-      // 5. Today's attendance (hours worked)
-      db.attendance.findMany({
-        where: {
-          userId: { in: pageTechIds },
-          date: { gte: todayStart, lt: todayEnd },
-        },
-        select: { userId: true, hoursWorked: true, checkIn: true, checkOut: true, status: true },
-      }).then(rows => {
-        const map: Record<string, { hoursWorked: number | null; status: string | null }> = {};
-        for (const r of rows) {
-          map[r.userId] = { hoursWorked: r.hoursWorked, status: r.status };
-        }
-        return map;
-      }),
-
-      // 6. Skills (distinct complaint categories)
-      db.complaint.findMany({
-        where: {
-          assignedToId: { in: pageTechIds },
-          AND: [
-            { category: { not: null } },
-            { category: { not: '' } },
-          ],
-        },
-        select: { assignedToId: true, category: true },
-        distinct: ['assignedToId', 'category'],
-      }).then(rows => {
-        const map: Record<string, string[]> = {};
-        for (const r of rows) {
-          if (!r.assignedToId) continue;
-          if (!map[r.assignedToId]) map[r.assignedToId] = [];
-          if (r.category && !map[r.assignedToId].includes(r.category)) {
-            map[r.assignedToId].push(r.category);
-          }
-        }
-        return map;
-      }),
-    ]);
-
-    // --- Compute KPI stats (using all techs, not just page) ---
-    // Build active job counts for all techs
-    const allActiveJobsMap = await db.complaint.groupBy({
-      by: ['assignedToId'],
-      where: {
-        assignedToId: { in: allTechIds },
-        status: { in: [...ACTIVE_COMPLAINT_STATUSES] },
-      },
-      _count: { id: true },
-    }).then(rows => Object.fromEntries(rows.map(r => [r.assignedToId, r._count.id])));
+      }).then((rows: any[]) =>
+        Object.fromEntries(rows.map((r: any) => [r.assignedToId, (r._count as any)?.id ?? 0]))
+      ),
+      {} as Record<string, number>,
+      'all active jobs',
+    );
 
     let totalTechnicians = allTechIds.length;
-    let activeCount = allTechIds.length; // all are isActive=true from query
-    let inactiveCount = 0; // all queried are active
+    let activeCount = allTechIds.length;
+    let inactiveCount = 0;
     let availableCount = 0;
     let busyCount = 0;
     let onLeaveCount = 0;
@@ -308,7 +384,6 @@ export async function GET(request: NextRequest) {
       completedToday: number;
       hoursWorkedToday: number | null;
       lastLogin: string | null;
-      // Sort helpers (stripped later)
       _name?: string;
       _lastLogin?: Date | null;
       _onLeave?: boolean;
@@ -316,12 +391,14 @@ export async function GET(request: NextRequest) {
       _activeJobs?: number;
     };
 
-    let enriched: EnrichedTech[] = technicians.map(t => {
+    let enriched: EnrichedTech[] = technicians.map((t: any) => {
       const onLeave = leaveMap[t.id]?.onLeave ?? false;
       const leaveType = leaveMap[t.id]?.type ?? null;
       const hasEmergency = (emergencyMap[t.id] ?? 0) > 0;
-      const activeJobs = t.Complaint_Complaint_assignedToIdToUser.length;
-      const activeWorkOrders = t.WorkOrder_WorkOrder_assignedToIdToUser.length;
+      const techComplaints = activeComplaintsByTech[t.id] || [];
+      const techWOs = activeWOsByTech[t.id] || [];
+      const activeJobs = techComplaints.length;
+      const activeWorkOrders = techWOs.length;
       const completed = completedStatsMap[t.id];
       const skills = (skillMap[t.id] || []).slice(0, 8);
 
@@ -340,20 +417,18 @@ export async function GET(request: NextRequest) {
       }
 
       // Current complaint (first active one)
-      const firstComplaint = t.Complaint_Complaint_assignedToIdToUser[0];
+      const firstComplaint = techComplaints[0];
       const currentComplaint = firstComplaint ? {
         id: firstComplaint.id,
         title: firstComplaint.title,
         status: firstComplaint.status,
         priority: firstComplaint.priority,
-        customerName: firstComplaint.customer?.name || null,
-        site: firstComplaint.customer?.address || null,
         category: firstComplaint.category,
-        assignedAt: firstComplaint.assignedAt?.toISOString() || null,
+        assignedAt: firstComplaint.assignedAt ?? null,
       } : null;
 
       // Current work order (first active one)
-      const firstWO = t.WorkOrder_WorkOrder_assignedToIdToUser[0];
+      const firstWO = techWOs[0];
       const currentWorkOrder = firstWO ? {
         id: firstWO.id,
         title: firstWO.title,
@@ -361,16 +436,17 @@ export async function GET(request: NextRequest) {
       } : null;
 
       const attendance = todayAttendanceMap[t.id];
+      const lastLogin = t.lastLogin;
 
       return {
         id: t.id,
         name: t.name,
         email: t.email,
-        phone: t.phone,
-        avatar: t.avatar,
-        employeeNumber: t.employeeNumber,
+        phone: t.phone ?? null,
+        avatar: t.avatar ?? null,
+        employeeNumber: t.employeeNumber ?? null,
         role: t.role,
-        departmentId: t.departmentId,
+        departmentId: t.departmentId ?? null,
         departmentName: t.department?.name || null,
         isOnline: Boolean(t.isOnline),
         availabilityStatus,
@@ -387,17 +463,17 @@ export async function GET(request: NextRequest) {
         leaveType,
         completedToday: todayCompletedMap[t.id] ?? 0,
         hoursWorkedToday: attendance?.hoursWorked ?? null,
-        lastLogin: t.lastLogin?.toISOString() || null,
-        // Sort helpers
+        lastLogin: lastLogin ? new Date(lastLogin).toISOString() : null,
+        // Sort helpers (stripped before response)
         _name: t.name,
-        _lastLogin: t.lastLogin,
+        _lastLogin: lastLogin ? new Date(lastLogin) : null,
         _onLeave: onLeave,
-        _isOnline: t.isOnline,
+        _isOnline: Boolean(t.isOnline),
         _activeJobs: activeJobs,
       };
     });
 
-    // --- Post-filter by status (after enrichment since we need leave/emergency data) ---
+    // --- Post-filter by status ---
     if (status === 'available') {
       enriched = enriched.filter(t => t.availabilityStatus === 'available');
     } else if (status === 'busy') {
@@ -422,11 +498,7 @@ export async function GET(request: NextRequest) {
       case 'availability':
         enriched.sort((a, b) => {
           const order: Record<AvailabilityStatus, number> = {
-            emergency: 0,
-            busy: 1,
-            available: 2,
-            offline: 3,
-            on_leave: 4,
+            emergency: 0, busy: 1, available: 2, offline: 3, on_leave: 4,
           };
           const aPri = order[a.availabilityStatus] ?? 5;
           const bPri = order[b.availabilityStatus] ?? 5;
@@ -460,19 +532,12 @@ export async function GET(request: NextRequest) {
       _name, _lastLogin, _onLeave, _isOnline, _activeJobs, ...rest
     }) => rest);
 
-    // --- Adjust pagination for post-filters ---
-    const filteredTotal = total; // Approximation — the pre-filter total is used for pagination
-    const totalPages = Math.ceil(filteredTotal / pageSize);
+    const totalPages = Math.ceil(total / pageSize);
 
     return NextResponse.json({
       stats: kpiStats,
       technicians: result,
-      pagination: {
-        page,
-        pageSize,
-        total: filteredTotal,
-        totalPages,
-      },
+      pagination: { page, pageSize, total, totalPages },
     });
   } catch (error) {
     console.error('Technicians list error:', error);

@@ -8,6 +8,21 @@ const CLOSED_STATUSES = ['CLOSED', 'PAID'] as const;
 const ACTIVE_STATUSES = ['ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS'] as const;
 const CANCELLED_STATUS = 'CANCELLED';
 
+// Helper: safe query wrapper
+async function safeQuery<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await fn();
+  } catch {
+    return fallback;
+  }
+}
+
+// Helper: safe date parsing
+function toDate(val: unknown): Date | null {
+  if (val == null) return null;
+  return new Date(val as string | Date);
+}
+
 // ============ GET: Performance metrics for a single technician ============
 
 export async function GET(
@@ -22,10 +37,13 @@ export async function GET(
     const { id } = await params;
 
     // Verify technician exists
-    const tech = await db.user.findFirst({
-      where: { id, tenantId, isActive: true, role: { in: ['technician', 'supervisor'] } },
-      select: { id: true, name: true },
-    });
+    const tech: any = await safeQuery(
+      () => db.user.findFirst({
+        where: { id, tenantId, isActive: true, role: { in: ['technician', 'supervisor'] } },
+        select: { id: true, name: true },
+      }),
+      null,
+    );
 
     if (!tech) {
       return NextResponse.json({ error: 'Technician not found' }, { status: 404 });
@@ -47,160 +65,210 @@ export async function GET(
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
 
+    // --- Get work order IDs for invoices (separate queries instead of nested relation filter) ---
+    // Complaint IDs assigned to this tech
+    const techComplaintIds: string[] = await safeQuery(
+      () => db.complaint.findMany({
+        where: { assignedToId: id, tenantId },
+        select: { id: true },
+      }).then((rows: any[]) => rows.map((r: any) => r.id)),
+      [],
+    );
+
+    // Work order IDs linked to those complaints
+    const woIdsFromComplaints: string[] = await safeQuery(
+      () => techComplaintIds.length > 0
+        ? db.workOrder.findMany({
+            where: { complaintId: { in: techComplaintIds }, tenantId },
+            select: { id: true },
+          }).then((rows: any[]) => rows.map((r: any) => r.id))
+        : Promise.resolve([]),
+      [],
+    );
+
+    // Work order IDs directly assigned to this tech
+    const woIdsDirect: string[] = await safeQuery(
+      () => db.workOrder.findMany({
+        where: { assignedToId: id, tenantId },
+        select: { id: true },
+      }).then((rows: any[]) => rows.map((r: any) => r.id)),
+      [],
+    );
+
+    // Combine and deduplicate work order IDs for invoice query
+    const allWoIds = [...new Set([...woIdsFromComplaints, ...woIdsDirect])];
+
     // --- Parallel queries ---
     const [
-      // 1. Completed counts — all time, this month, this week, today
       allTimeCompleted,
       monthlyCompleted,
       weeklyCompleted,
       todayCompleted,
-
-      // 2. Pending jobs
       pendingCount,
-
-      // 3. Cancelled jobs
       cancelledCount,
-
-      // 4. SLA compliance data (complaints with completedAt and startedAt)
       slaComplaints,
-
-      // 5. Customer ratings
       ratings,
-
-      // 6. First-time fix rate / rework rate
       reworkComplaints,
       directClosedComplaints,
-
-      // 7. Attendance this month (for % and punctuality)
       monthlyAttendance,
-
-      // 8. Average completion time (all completed)
       allCompletedComplaints,
-
-      // 9. Revenue generated (invoices linked to tech's complaints/work orders)
       revenueInvoices,
-
-      // 10. Labor hours total
       laborHoursWorkOrders,
     ] = await Promise.all([
       // 1a. All-time completed
-      db.complaint.count({
-        where: { assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] } },
-      }),
+      safeQuery(
+        () => db.complaint.count({
+          where: { assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] } },
+        }),
+        0,
+      ),
       // 1b. Monthly completed
-      db.complaint.count({
-        where: {
-          assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
-          completedAt: { gte: monthStart, lte: monthEnd },
-        },
-      }),
+      safeQuery(
+        () => db.complaint.count({
+          where: {
+            assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
+            completedAt: { gte: monthStart, lte: monthEnd },
+          },
+        }),
+        0,
+      ),
       // 1c. Weekly completed
-      db.complaint.count({
-        where: {
-          assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
-          completedAt: { gte: weekStart },
-        },
-      }),
+      safeQuery(
+        () => db.complaint.count({
+          where: {
+            assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
+            completedAt: { gte: weekStart },
+          },
+        }),
+        0,
+      ),
       // 1d. Today completed
-      db.complaint.count({
-        where: {
-          assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
-          completedAt: { gte: todayStart, lt: todayEnd },
-        },
-      }),
+      safeQuery(
+        () => db.complaint.count({
+          where: {
+            assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
+            completedAt: { gte: todayStart, lt: todayEnd },
+          },
+        }),
+        0,
+      ),
 
       // 2. Pending jobs (active complaints)
-      db.complaint.count({
-        where: { assignedToId: id, tenantId, status: { in: [...ACTIVE_STATUSES] } },
-      }),
+      safeQuery(
+        () => db.complaint.count({
+          where: { assignedToId: id, tenantId, status: { in: [...ACTIVE_STATUSES] } },
+        }),
+        0,
+      ),
 
       // 3. Cancelled
-      db.complaint.count({
-        where: { assignedToId: id, tenantId, status: CANCELLED_STATUS },
-      }),
+      safeQuery(
+        () => db.complaint.count({
+          where: { assignedToId: id, tenantId, status: CANCELLED_STATUS },
+        }),
+        0,
+      ),
 
-      // 4. SLA complaints — completed complaints with assignedAt and completedAt for SLA calc
-      db.complaint.findMany({
-        where: {
-          assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
-          assignedAt: { not: null }, completedAt: { not: null },
-        },
-        select: {
-          id: true, priority: true, assignedAt: true, completedAt: true,
-        },
-      }),
+      // 4. SLA complaints
+      safeQuery<any[]>(
+        () => db.complaint.findMany({
+          where: {
+            assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
+            assignedAt: { not: null }, completedAt: { not: null },
+          },
+          select: {
+            id: true, priority: true, assignedAt: true, completedAt: true,
+          },
+        }),
+        [],
+      ),
 
       // 5. Customer ratings
-      db.complaint.findMany({
-        where: {
-          assignedToId: id, tenantId, customerRating: { not: null },
-        },
-        select: { id: true, customerRating: true },
-      }),
+      safeQuery<any[]>(
+        () => db.complaint.findMany({
+          where: {
+            assignedToId: id, tenantId, customerRating: { not: null },
+          },
+          select: { id: true, customerRating: true },
+        }),
+        [],
+      ),
 
       // 6a. Complaints that went to REWORK_REQUIRED (rework count)
-      db.complaint.count({
-        where: {
-          assignedToId: id, tenantId, status: 'REWORK_REQUIRED',
-        },
-      }),
+      safeQuery(
+        () => db.complaint.count({
+          where: {
+            assignedToId: id, tenantId, status: 'REWORK_REQUIRED',
+          },
+        }),
+        0,
+      ),
 
-      // 6b. Complaints that went directly to CLOSED (no rework)
-      // We check if the timeline has a REWORK_REQUIRED entry. Instead, check:
-      // complaints that reached CLOSED/PAID and were never REWORK_REQUIRED
-      // Simplified: count complaints where status is CLOSED/PAID
-      // and check timeline for absence of 'rework_required' action
-      db.complaint.count({
-        where: {
-          assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
-        },
-      }),
+      // 6b. Complaints that went directly to CLOSED/PAID
+      safeQuery(
+        () => db.complaint.count({
+          where: {
+            assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
+          },
+        }),
+        0,
+      ),
 
       // 7. Monthly attendance
-      db.attendance.findMany({
-        where: {
-          userId: id, tenantId,
-          date: { gte: monthStart, lte: monthEnd },
-        },
-        select: { id: true, date: true, checkIn: true, status: true, hoursWorked: true },
-      }),
+      safeQuery<any[]>(
+        () => db.attendance.findMany({
+          where: {
+            userId: id, tenantId,
+            date: { gte: monthStart, lte: monthEnd },
+          },
+          select: { id: true, date: true, checkIn: true, status: true, hoursWorked: true },
+        }),
+        [],
+      ),
 
-      // 8. All completed complaints with timing (for avg completion time)
-      db.complaint.findMany({
-        where: {
-          assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
-          startedAt: { not: null }, completedAt: { not: null },
-        },
-        select: { id: true, startedAt: true, completedAt: true },
-      }),
+      // 8. All completed complaints with timing
+      safeQuery<any[]>(
+        () => db.complaint.findMany({
+          where: {
+            assignedToId: id, tenantId, status: { in: [...CLOSED_STATUSES] },
+            startedAt: { not: null }, completedAt: { not: null },
+          },
+          select: { id: true, startedAt: true, completedAt: true },
+        }),
+        [],
+      ),
 
-      // 9. Revenue: invoices linked to complaints assigned to this tech
-      db.invoice.findMany({
-        where: {
-          tenantId,
-          OR: [
-            { workOrder: { complaint: { assignedToId: id } } },
-            { workOrder: { assignedToId: id } },
-          ],
-          status: { in: ['PAID', 'APPROVED', 'PENDING'] },
-        },
-        select: { id: true, total: true, status: true },
-      }),
+      // 9. Revenue: invoices linked to work orders (using pre-fetched WO IDs instead of nested relation)
+      safeQuery<any[]>(
+        () => allWoIds.length > 0
+          ? db.invoice.findMany({
+              where: {
+                tenantId,
+                workOrderId: { in: allWoIds },
+                status: { in: ['PAID', 'APPROVED', 'PENDING'] },
+              },
+              select: { id: true, total: true, status: true },
+            })
+          : Promise.resolve([]),
+        [],
+      ),
 
       // 10. Labor hours from completed work orders
-      db.workOrder.aggregate({
-        where: {
-          assignedToId: id, tenantId,
-          status: { in: ['COMPLETED', 'CLOSED'] },
-          laborHours: { not: null },
-        },
-        _sum: { laborHours: true, totalCost: true, materialCost: true, laborCost: true },
-        _count: true,
-      }),
+      safeQuery<any>(
+        () => db.workOrder.aggregate({
+          where: {
+            assignedToId: id, tenantId,
+            status: { in: ['COMPLETED', 'CLOSED'] },
+            laborHours: { not: null },
+          },
+          _sum: { laborHours: true, totalCost: true, materialCost: true, laborCost: true },
+          _count: true,
+        }),
+        { _sum: { laborHours: null, totalCost: null, materialCost: null, laborCost: null }, _count: 0 },
+      ),
     ]);
 
     // --- Compute SLA compliance ---
-    // SLA thresholds by priority (hours from assignment to completion)
     const slaThresholds: Record<string, number> = {
       critical: 4,
       high: 8,
@@ -208,33 +276,41 @@ export async function GET(
       low: 48,
     };
     let slaCompliant = 0;
-    for (const c of slaComplaints) {
+    const slaArr = slaComplaints || [];
+    for (const c of slaArr) {
       if (c.assignedAt && c.completedAt) {
-        const hoursTaken = (c.completedAt.getTime() - c.assignedAt.getTime()) / 3_600_000;
+        const hoursTaken = (toDate(c.completedAt)!.getTime() - toDate(c.assignedAt)!.getTime()) / 3_600_000;
         const threshold = slaThresholds[c.priority] ?? 48;
         if (hoursTaken <= threshold) slaCompliant++;
       }
     }
-    const slaTotal = slaComplaints.length;
+    const slaTotal = slaArr.length;
     const slaCompliancePercent = slaTotal > 0 ? parseFloat(((slaCompliant / slaTotal) * 100).toFixed(1)) : null;
 
     // --- Average customer rating ---
-    const avgRating = ratings.length > 0
-      ? parseFloat((ratings.reduce((sum, r) => sum + (r.customerRating ?? 0), 0) / ratings.length).toFixed(1))
+    const ratingsArr = ratings || [];
+    const avgRating = ratingsArr.length > 0
+      ? parseFloat((ratingsArr.reduce((sum: number, r: any) => sum + (r.customerRating ?? 0), 0) / ratingsArr.length).toFixed(1))
       : null;
 
     // --- First-time fix rate & rework rate ---
     // Get complaint IDs that ever had REWORK_REQUIRED in their timeline
-    const reworkedComplaintIds = await db.complaintTimeline.findMany({
-      where: {
-        complaint: { assignedToId: id, tenantId },
-        action: 'rework_required',
-      },
-      select: { complaintId: true },
-      distinct: ['complaintId'],
-    }).then(rows => new Set(rows.map(r => r.complaintId)));
+    // Use complaintIds instead of nested relation filter
+    const reworkedComplaintIds = await safeQuery(
+      () => techComplaintIds.length > 0
+        ? db.complaintTimeline.findMany({
+            where: {
+              complaintId: { in: techComplaintIds },
+              action: 'rework_required',
+            },
+            select: { complaintId: true },
+            distinct: ['complaintId'],
+          }).then((rows: any[]) => new Set(rows.map((r: any) => r.complaintId)))
+        : Promise.resolve(new Set<string>()),
+      new Set<string>(),
+    );
 
-    const totalClosedComplaints = directClosedComplaints;
+    const totalClosedComplaints = directClosedComplaints ?? 0;
     const reworkCount = reworkedComplaintIds.size;
     const firstTimeFixCount = totalClosedComplaints - reworkCount;
     const firstTimeFixRate = totalClosedComplaints > 0
@@ -255,16 +331,19 @@ export async function GET(
     }
     const totalWorkingDays = workingDaysInMonth.length;
 
-    const presentDays = monthlyAttendance.filter(a => a.status === 'present' || a.status === 'late').length;
+    const monthlyAttendanceArr = monthlyAttendance || [];
+    const presentDays = monthlyAttendanceArr.filter((a: any) => a.status === 'present' || a.status === 'late').length;
     const attendancePercent = totalWorkingDays > 0
       ? parseFloat(((presentDays / totalWorkingDays) * 100).toFixed(1))
       : null;
 
     // Punctuality: check-ins before or at 9:00 AM
-    const punctualDays = monthlyAttendance.filter(a => {
+    const punctualDays = monthlyAttendanceArr.filter((a: any) => {
       if (!a.checkIn) return false;
-      const h = a.checkIn.getHours();
-      const m = a.checkIn.getMinutes();
+      const checkInDate = toDate(a.checkIn);
+      if (!checkInDate) return false;
+      const h = checkInDate.getHours();
+      const m = checkInDate.getMinutes();
       return h < 9 || (h === 9 && m === 0);
     }).length;
     const punctualityPercent = totalWorkingDays > 0
@@ -273,13 +352,18 @@ export async function GET(
 
     // --- Average completion time ---
     let avgCompletionHours: number | null = null;
-    if (allCompletedComplaints.length > 0) {
+    const allCompletedArr = allCompletedComplaints || [];
+    if (allCompletedArr.length > 0) {
       let totalMs = 0;
       let validCount = 0;
-      for (const c of allCompletedComplaints) {
+      for (const c of allCompletedArr) {
         if (c.startedAt && c.completedAt) {
-          totalMs += c.completedAt.getTime() - c.startedAt.getTime();
-          validCount++;
+          const start = toDate(c.startedAt);
+          const end = toDate(c.completedAt);
+          if (start && end) {
+            totalMs += end.getTime() - start.getTime();
+            validCount++;
+          }
         }
       }
       if (validCount > 0) {
@@ -288,12 +372,13 @@ export async function GET(
     }
 
     // --- Revenue generated ---
-    const totalRevenue = revenueInvoices.reduce((sum, inv) => sum + inv.total, 0);
+    const revenueInvoicesArr = revenueInvoices || [];
+    const totalRevenue = revenueInvoicesArr.reduce((sum: number, inv: any) => sum + (inv.total ?? 0), 0);
 
     // --- Labor hours ---
-    const totalLaborHours = laborHoursWorkOrders._sum.laborHours ?? 0;
-    const totalMaterialCost = laborHoursWorkOrders._sum.materialCost ?? 0;
-    const totalLaborCost = laborHoursWorkOrders._sum.laborCost ?? 0;
+    const totalLaborHours = laborHoursWorkOrders?._sum?.laborHours ?? 0;
+    const totalMaterialCost = laborHoursWorkOrders?._sum?.materialCost ?? 0;
+    const totalLaborCost = laborHoursWorkOrders?._sum?.laborCost ?? 0;
 
     return NextResponse.json({
       technicianId: id,
@@ -301,15 +386,15 @@ export async function GET(
 
       // Completed jobs
       completedJobs: {
-        allTime: allTimeCompleted,
-        thisMonth: monthlyCompleted,
-        thisWeek: weeklyCompleted,
-        today: todayCompleted,
+        allTime: allTimeCompleted ?? 0,
+        thisMonth: monthlyCompleted ?? 0,
+        thisWeek: weeklyCompleted ?? 0,
+        today: todayCompleted ?? 0,
       },
 
       // Pending & cancelled
-      pendingJobs: pendingCount,
-      cancelledJobs: cancelledCount,
+      pendingJobs: pendingCount ?? 0,
+      cancelledJobs: cancelledCount ?? 0,
 
       // SLA
       slaCompliance: {
@@ -320,7 +405,7 @@ export async function GET(
 
       // Customer satisfaction
       customerSatisfaction: {
-        totalRatings: ratings.length,
+        totalRatings: ratingsArr.length,
         averageRating: avgRating,
       },
 
@@ -346,20 +431,20 @@ export async function GET(
       // Efficiency
       efficiency: {
         averageCompletionTimeHours: avgCompletionHours,
-        totalLaborHours: parseFloat(totalLaborHours.toFixed(1)),
+        totalLaborHours: parseFloat((totalLaborHours ?? 0).toFixed(1)),
       },
 
       // Revenue
       revenue: {
         totalGenerated: parseFloat(totalRevenue.toFixed(2)),
-        invoiceCount: revenueInvoices.length,
+        invoiceCount: revenueInvoicesArr.length,
       },
 
       // Work order costs
       workOrderCosts: {
-        totalLaborCost: parseFloat(totalLaborCost.toFixed(2)),
-        totalMaterialCost: parseFloat(totalMaterialCost.toFixed(2)),
-        completedWorkOrders: laborHoursWorkOrders._count,
+        totalLaborCost: parseFloat((totalLaborCost ?? 0).toFixed(2)),
+        totalMaterialCost: parseFloat((totalMaterialCost ?? 0).toFixed(2)),
+        completedWorkOrders: laborHoursWorkOrders?._count ?? 0,
       },
     });
   } catch (error) {

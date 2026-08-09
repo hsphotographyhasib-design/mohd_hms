@@ -1110,24 +1110,51 @@ export function TechnicianOpsCenter() {
       const res = await fetch(`/api/technicians?${params.toString()}`, {
         headers: { Authorization: 'Bearer ' + token() },
       });
-      if (!res.ok) return;
+      if (!res.ok) {
+        console.error('[TechnicianOpsCenter] API error:', res.status, res.statusText);
+        return;
+      }
       const data = await res.json();
-      const list: Technician[] = Array.isArray(data) ? data : data.data || data.technicians || [];
+      const list: Technician[] = (Array.isArray(data) ? data : data.data || data.technicians || []).map((t: any) => ({
+        ...t,
+        // Ensure activeJobs/activeWorkOrders are numbers (defensive)
+        activeJobs: typeof t.activeJobs === 'number' ? t.activeJobs : 0,
+        activeWorkOrders: typeof t.activeWorkOrders === 'number' ? t.activeWorkOrders : 0,
+        isCurrentlyAssigned: (t.activeJobs > 0) || (t.activeWorkOrders > 0),
+        canAssign: t.availabilityStatus === 'available' || t.availabilityStatus === 'offline',
+        completionRate: t.totalCompleted > 0 ? Math.round((t.totalCompleted / Math.max(1, t.totalCompleted + (t.totalCompleted || 0))) * 100) : null,
+        currentTasks: [],
+      }));
       if (mountedRef.current) {
         setTechnicians(list);
 
-        // Compute stats from list
-        const s: TechnicianStats = { total: list.length, available: 0, busy: 0, onLeave: 0, emergency: 0, offline: 0 };
-        list.forEach(t => {
-          if (t.availabilityStatus === 'available') s.available++;
-          else if (t.availabilityStatus === 'on_leave') s.onLeave++;
-          else if (t.availabilityStatus === 'emergency') s.emergency++;
-          else if (t.availabilityStatus === 'offline' || t.availabilityStatus === 'shift_ended') s.offline++;
-          else s.busy++;
-        });
-        setStats(s);
+        // Use SERVER-SIDE KPI stats (covers ALL technicians, not just current page)
+        if (data.stats) {
+          const serverStats = data.stats;
+          setStats({
+            total: serverStats.totalTechnicians ?? list.length,
+            available: serverStats.availableCount ?? 0,
+            busy: serverStats.busyCount ?? 0,
+            onLeave: serverStats.onLeaveCount ?? 0,
+            emergency: serverStats.emergencyCount ?? 0,
+            offline: serverStats.offlineCount ?? 0,
+          });
+        } else {
+          // Fallback: compute from list (only accurate for single page)
+          const s: TechnicianStats = { total: list.length, available: 0, busy: 0, onLeave: 0, emergency: 0, offline: 0 };
+          list.forEach(t => {
+            if (t.availabilityStatus === 'available') s.available++;
+            else if (t.availabilityStatus === 'on_leave') s.onLeave++;
+            else if (t.availabilityStatus === 'emergency') s.emergency++;
+            else if (t.availabilityStatus === 'offline' || t.availabilityStatus === 'shift_ended') s.offline++;
+            else s.busy++;
+          });
+          setStats(s);
+        }
       }
-    } catch { /* ignore */ }
+    } catch (err) {
+      console.error('[TechnicianOpsCenter] Fetch error:', err);
+    }
     finally { if (mountedRef.current) setLoading(false); }
   }, [statusFilter, departmentFilter, sortBy]);
 

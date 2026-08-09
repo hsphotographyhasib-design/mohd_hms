@@ -4,6 +4,21 @@ import { verifyRouteAuth } from '@/core/middleware/api-auth';
 
 export const dynamic = 'force-dynamic';
 
+// Helper: safe query wrapper
+async function safeQuery<T>(fn: () => Promise<T>, fallback: T): Promise<T> {
+  try {
+    return await fn();
+  } catch {
+    return fallback;
+  }
+}
+
+// Helper: safe date to ISO string
+function toISO(date: unknown): string | null {
+  if (date == null) return null;
+  return new Date(date as string | Date).toISOString();
+}
+
 // ============ GET: Today's activity timeline for a technician ============
 
 export async function GET(
@@ -18,10 +33,13 @@ export async function GET(
     const { id } = await params;
 
     // Verify technician exists
-    const tech = await db.user.findFirst({
-      where: { id, tenantId, isActive: true, role: { in: ['technician', 'supervisor'] } },
-      select: { id: true, name: true },
-    });
+    const tech: any = await safeQuery(
+      () => db.user.findFirst({
+        where: { id, tenantId, isActive: true, role: { in: ['technician', 'supervisor'] } },
+        select: { id: true, name: true },
+      }),
+      null,
+    );
 
     if (!tech) {
       return NextResponse.json({ error: 'Technician not found' }, { status: 404 });
@@ -33,37 +51,64 @@ export async function GET(
     const todayEnd = new Date(todayStart);
     todayEnd.setDate(todayEnd.getDate() + 1);
 
-    // --- Parallel: attendance + complaint timeline ---
-    const [attendance, timelineEntries] = await Promise.all([
-      // Today's attendance record
-      db.attendance.findFirst({
-        where: {
-          userId: id,
-          tenantId,
-          date: { gte: todayStart, lt: todayEnd },
-        },
-        select: {
-          id: true, checkIn: true, checkOut: true, status: true, hoursWorked: true,
-        },
-      }),
+    // Get complaint IDs assigned to this tech (instead of using nested relation in WHERE)
+    const techComplaintIds: string[] = await safeQuery(
+      () => db.complaint.findMany({
+        where: { assignedToId: id, tenantId },
+        select: { id: true },
+      }).then((rows: any[]) => rows.map((r: any) => r.id)),
+      [],
+    );
 
-      // Today's complaint timeline entries
-      db.complaintTimeline.findMany({
-        where: {
-          complaint: { assignedToId: id, tenantId },
-          createdAt: { gte: todayStart, lt: todayEnd },
-        },
-        select: {
-          id: true, complaintId: true, action: true, fromStatus: true,
-          toStatus: true, description: true, performedBy: true,
-          performedByRole: true, createdAt: true,
-          complaint: {
-            select: { id: true, title: true, status: true },
+    // --- Parallel: attendance + complaint timeline ---
+    const [attendance, timelineEntries]: [any, any[]] = await Promise.all([
+      // Today's attendance record
+      safeQuery(
+        () => db.attendance.findFirst({
+          where: {
+            userId: id,
+            tenantId,
+            date: { gte: todayStart, lt: todayEnd },
           },
-        },
-        orderBy: { createdAt: 'asc' },
-      }),
+          select: {
+            id: true, checkIn: true, checkOut: true, status: true, hoursWorked: true,
+          },
+        }),
+        null,
+      ),
+
+      // Today's complaint timeline entries (use complaintIds instead of relation filter)
+      safeQuery(
+        () => techComplaintIds.length > 0
+          ? db.complaintTimeline.findMany({
+              where: {
+                complaintId: { in: techComplaintIds },
+                createdAt: { gte: todayStart, lt: todayEnd },
+              },
+              select: {
+                id: true, complaintId: true, action: true, fromStatus: true,
+                toStatus: true, description: true, performedBy: true,
+                performedByRole: true, createdAt: true,
+              },
+              orderBy: { createdAt: 'asc' },
+            })
+          : Promise.resolve([]),
+        [],
+      ),
     ]);
+
+    // Fetch complaint details for timeline entries separately
+    const timelineComplaintIds = [...new Set((timelineEntries || []).map((e: any) => e.complaintId).filter(Boolean))] as string[];
+    const timelineComplaints: any[] = await safeQuery(
+      () => timelineComplaintIds.length > 0
+        ? db.complaint.findMany({
+            where: { id: { in: timelineComplaintIds } },
+            select: { id: true, title: true, status: true },
+          })
+        : Promise.resolve([]),
+      [],
+    );
+    const complaintMap = new Map(timelineComplaints.map((c: any) => [c.id, c]));
 
     // --- Build unified timeline ---
     type TimelineEntry = {
@@ -80,7 +125,7 @@ export async function GET(
     // Attendance: check-in
     if (attendance?.checkIn) {
       timeline.push({
-        time: attendance.checkIn.toISOString(),
+        time: toISO(attendance.checkIn)!,
         actionType: 'check_in',
         description: `Checked in${attendance.status === 'late' ? ' (late)' : ''}`,
         entityId: attendance.id,
@@ -112,15 +157,16 @@ export async function GET(
       status_override: (c) => `Status override for: ${c.title}`,
     };
 
-    for (const entry of timelineEntries) {
-      const complaintTitle = entry.complaint?.title || 'Unknown Complaint';
+    for (const entry of (timelineEntries || [])) {
+      const complaint = complaintMap.get(entry.complaintId);
+      const complaintTitle = complaint?.title || 'Unknown Complaint';
       const descFn = actionDescriptions[entry.action];
       const description = descFn
         ? descFn({ title: complaintTitle })
         : entry.description || `${entry.action}: ${complaintTitle}`;
 
       timeline.push({
-        time: entry.createdAt.toISOString(),
+        time: toISO(entry.createdAt)!,
         actionType: entry.action,
         description,
         entityId: entry.complaintId,
@@ -131,7 +177,7 @@ export async function GET(
           fromStatus: entry.fromStatus,
           toStatus: entry.toStatus,
           complaintTitle,
-          complaintStatus: entry.complaint?.status,
+          complaintStatus: complaint?.status,
         },
       });
     }
@@ -139,7 +185,7 @@ export async function GET(
     // Attendance: check-out (add last if exists)
     if (attendance?.checkOut) {
       timeline.push({
-        time: attendance.checkOut.toISOString(),
+        time: toISO(attendance.checkOut)!,
         actionType: 'check_out',
         description: `Checked out`,
         entityId: attendance.id,
@@ -155,8 +201,8 @@ export async function GET(
     timeline.sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
 
     // --- Summary ---
-    const checkInTime = attendance?.checkIn?.toISOString() || null;
-    const checkOutTime = attendance?.checkOut?.toISOString() || null;
+    const checkInTime = toISO(attendance?.checkIn);
+    const checkOutTime = toISO(attendance?.checkOut);
     const totalActivities = timeline.length;
 
     return NextResponse.json({
