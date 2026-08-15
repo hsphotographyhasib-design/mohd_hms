@@ -32,6 +32,8 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     name = body.name; email = body.email; password = body.password;
+    // SECURITY: role is NEVER accepted from the request body — always 'customer'
+    // This prevents privilege escalation via self-registration
   } catch {
     return NextResponse.json({ error: 'Invalid request data.' }, { status: 400 });
   }

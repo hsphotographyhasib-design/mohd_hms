@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import sharp from 'sharp';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function POST(

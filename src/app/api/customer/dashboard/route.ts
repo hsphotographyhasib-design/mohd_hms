@@ -20,9 +20,14 @@ export const dynamic = 'force-dynamic';
  */
 export async function GET(request: NextRequest) {
   try {
-    // 1. Auth + RBAC (dashboard feature includes customer role)
+    // 1. Auth + RBAC — ONLY customer role can access customer dashboard
     const auth = verifyRouteAuth(request, { feature: 'dashboard' });
     if (auth.error) return auth.error;
+
+    // SECURITY: Non-customer roles must not access customer-specific data
+    if (auth.role !== 'customer') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
 
     const userId = auth.userId;
     const tenantId = auth.tenantId;

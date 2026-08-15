@@ -15,16 +15,19 @@ export function middleware(request: NextRequest) {
 
   // Security headers
   response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('X-Frame-Options', 'ALLOWALL');
+  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
   response.headers.set('X-XSS-Protection', '1; mode=block');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
 
-  // Block dangerous debug/setup endpoints in production
+  // Block dangerous debug/setup/irms endpoints in production
   if (process.env.NODE_ENV === 'production') {
     const blockedPaths = [
       '/api/debug/',
       '/api/setup/',
       '/api/auth/seed-admin',
+      '/api/irms/seed',
+      '/api/irms/ai',
+      '/api/db/',
     ];
     const path = request.nextUrl.pathname;
     if (blockedPaths.some(p => path.startsWith(p))) {

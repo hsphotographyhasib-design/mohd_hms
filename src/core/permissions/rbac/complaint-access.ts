@@ -145,7 +145,7 @@ export async function resolveDepartmentTechnicianIds(
     where: {
       tenantId,
       departmentId,
-      role: 'technician',
+      role: { in: ['technician', 'supervisor'] },
       isActive: true,
     },
     select: { id: true },

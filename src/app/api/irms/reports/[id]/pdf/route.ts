@@ -3,16 +3,16 @@ import { verifyRouteAuth } from '@/core/middleware/api-auth';
 export const dynamic = 'force-dynamic';
 
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const auth = verifyRouteAuth(_request, { feature: 'irms' });
+  const auth = verifyRouteAuth(request, { feature: 'irms' });
   if (auth.error) return auth.error;
   try {
     const { id } = await params;
-    const template = _request.nextUrl.searchParams.get('template') || 'government';
-    const sort = _request.nextUrl.searchParams.get('sort') || 'oldest';
-    const download = _request.nextUrl.searchParams.get('download') || '0';
+    const template = request.nextUrl.searchParams.get('template') || 'government';
+    const sort = request.nextUrl.searchParams.get('sort') || 'oldest';
+    const download = request.nextUrl.searchParams.get('download') || '0';
 
     // STUB: Full PDF generation will be implemented with @react-pdf/renderer
     return NextResponse.json({

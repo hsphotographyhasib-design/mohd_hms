@@ -28,6 +28,11 @@ export async function GET(
     if (!employee || employee.tenantId !== tenantId) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
+    // Prevent accessing non-employee users (customers, vendors, guests)
+    const NON_EMPLOYEE_ROLES = ['customer', 'vendor', 'guest'];
+    if (NON_EMPLOYEE_ROLES.includes(employee.role)) {
+      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    }
 
     return NextResponse.json({
       id: employee.id,
@@ -71,6 +76,11 @@ export async function PUT(
       { label: 'employee-put-find' }
     );
     if (!existing || existing.tenantId !== tenantId) {
+      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    }
+    // Prevent modifying non-employee users
+    const NON_EMPLOYEE_ROLES = ['customer', 'vendor', 'guest'];
+    if (NON_EMPLOYEE_ROLES.includes(existing.role)) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
 
@@ -138,6 +148,11 @@ export async function DELETE(
       { label: 'employee-delete-find' }
     );
     if (!existing || existing.tenantId !== tenantId) {
+      return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
+    }
+    // Prevent deleting non-employee users
+    const NON_EMPLOYEE_ROLES = ['customer', 'vendor', 'guest'];
+    if (NON_EMPLOYEE_ROLES.includes(existing.role)) {
       return NextResponse.json({ error: 'Employee not found' }, { status: 404 });
     }
 

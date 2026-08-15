@@ -316,19 +316,40 @@ export async function notifyComplaintAssigned(
     data: { complaintId },
   });
 
-  await createNotification({
-    tenantId,
-    userId: customerId,
-    type: 'info',
-    title: 'Technician Assigned',
-    message: `A technician has been assigned to your complaint: ${complaintTitle}.`,
-    priority: 'normal',
-    relatedEntityType: 'complaint',
-    relatedEntityId: complaintId,
-    actionLabel: 'View Complaint',
-    createdBy,
-    data: { complaintId },
+  // Resolve Customer → User ID so the notification is findable by the customer
+  const customer = await db.customer.findUnique({
+    where: { id: customerId },
+    select: { email: true, phone: true },
   });
+  if (customer) {
+    const customerUser = await db.user.findFirst({
+      where: {
+        tenantId,
+        isActive: true,
+        role: 'customer',
+        OR: [
+          ...(customer.email ? [{ email: customer.email }] : []),
+          ...(customer.phone ? [{ phone: customer.phone }] : []),
+        ],
+      },
+      select: { id: true },
+    });
+    if (customerUser) {
+      await createNotification({
+        tenantId,
+        userId: customerUser.id,
+        type: 'info',
+        title: 'Technician Assigned',
+        message: `A technician has been assigned to your complaint: ${complaintTitle}.`,
+        priority: 'normal',
+        relatedEntityType: 'complaint',
+        relatedEntityId: complaintId,
+        actionLabel: 'View Complaint',
+        createdBy,
+        data: { complaintId },
+      });
+    }
+  }
 }
 
 /**
@@ -400,9 +421,30 @@ export async function notifyInvoiceCreated(
     currency: 'USD',
   }).format(amount);
 
+  // Resolve Customer → User ID so the notification is findable by the customer
+  const customer = await db.customer.findUnique({
+    where: { id: customerId },
+    select: { email: true, phone: true },
+  });
+  if (!customer) return;
+
+  const customerUser = await db.user.findFirst({
+    where: {
+      tenantId,
+      isActive: true,
+      role: 'customer',
+      OR: [
+        ...(customer.email ? [{ email: customer.email }] : []),
+        ...(customer.phone ? [{ phone: customer.phone }] : []),
+      ],
+    },
+    select: { id: true },
+  });
+  if (!customerUser) return;
+
   await createNotification({
     tenantId,
-    userId: customerId,
+    userId: customerUser.id,
     type: 'info',
     title: 'New Invoice',
     message: `A new invoice "${title}" has been generated for ${formattedAmount}.`,

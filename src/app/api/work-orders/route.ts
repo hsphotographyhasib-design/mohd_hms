@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyToken } from '@/core/auth/auth-lib';
+import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { buildAuthContext, resolveDepartmentTechnicianIds } from '@/core/permissions/rbac';
 import { notifyWorkOrderCreated, createNotification } from '@/modules/notifications/services/notification-service';
 import type { Prisma } from '@prisma/client';
@@ -226,13 +227,11 @@ export async function GET(request: NextRequest) {
 // ─── POST: Create Work Order ──────────────────────────────────────────
 export async function POST(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    const token = authHeader?.replace('Bearer ', '');
-    const payload = verifyToken(token || '');
-    if (!payload) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    // RBAC check — only authorized roles can create work orders
+    const auth = verifyRouteAuth(request, { action: ['work-orders', 'create'] });
+    if (auth.error) return auth.error;
 
-    const tenantId = payload.tenantId as string;
-    const userId = payload.userId as string;
+    const { tenantId, userId, role } = auth;
     const body = await request.json();
 
     const {

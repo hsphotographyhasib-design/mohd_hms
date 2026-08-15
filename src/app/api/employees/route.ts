@@ -2,40 +2,26 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/core/database/db';
 import { verifyRouteAuth } from '@/core/middleware/api-auth';
 import { hashPassword } from '@/core/auth/auth-lib';
-
+import type { Prisma } from '@prisma/client';
 export const dynamic = 'force-dynamic';
-
-/** Roles that represent internal staff (employees), NOT external users like customers/vendors */
-const EMPLOYEE_ROLES = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user'] as const;
-
-/** Technician/supervisor roles — single source of truth for technician resolution */
-const TECH_ROLES = ['technician', 'supervisor'] as const;
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = request.nextUrl;
-    const role = searchParams.get('role') || '';
-    const page = parseInt(searchParams.get('page') || '1');
-    const pageSize = parseInt(searchParams.get('pageSize') || '20');
-    const search = searchParams.get('search') || '';
-    const departmentId = searchParams.get('departmentId') || '';
-    const skip = (page - 1) * pageSize;
-
-    // When fetching technicians for assignment, allow broader role access
-    // (supervisors, managers need to load technician dropdowns)
-    const isTechnicianFilter = role === 'technician';
-    const auth = verifyRouteAuth(request, {
-      feature: isTechnicianFilter ? 'technicians' : 'employees',
-    });
+    const auth = verifyRouteAuth(request, { feature: 'employees' });
     if (auth.error) return auth.error;
     const { tenantId } = auth;
+    const page = parseInt(request.nextUrl.searchParams.get('page') || '1');
+    const pageSize = parseInt(request.nextUrl.searchParams.get('pageSize') || '20');
+    const search = request.nextUrl.searchParams.get('search') || '';
+    const role = request.nextUrl.searchParams.get('role') || '';
+    const departmentId = request.nextUrl.searchParams.get('departmentId') || '';
+    const skip = (page - 1) * pageSize;
 
-    // Build where clause
-    const where: Record<string, unknown> = {
+    // Exclude non-employee roles (customers, vendors, guests)
+    const where: Prisma.UserWhereInput = {
       tenantId,
-      isActive: true, // ALWAYS filter active users only
+      role: { notIn: ['customer', 'vendor', 'guest'] },
     };
-
     if (search) {
       where.OR = [
         { name: { contains: search } },
@@ -43,17 +29,7 @@ export async function GET(request: NextRequest) {
         { employeeNumber: { contains: search } },
       ];
     }
-
-    // Standardize technician role filter to match /api/technicians
-    if (isTechnicianFilter) {
-      where.role = { in: [...TECH_ROLES] };
-    } else if (role) {
-      where.role = role;
-    } else {
-      // Default: only return employee-eligible roles (exclude customer, vendor, guest)
-      where.role = { in: [...EMPLOYEE_ROLES] };
-    }
-
+    if (role) where.role = role;
     if (departmentId) where.departmentId = departmentId;
 
     const [items, total] = await Promise.all([
@@ -62,18 +38,14 @@ export async function GET(request: NextRequest) {
         skip,
         take: pageSize,
         orderBy: { createdAt: 'desc' },
-        select: {
-          id: true, tenantId: true, email: true, name: true, phone: true,
-          avatar: true, role: true, employeeNumber: true, departmentId: true,
-          isActive: true, isOnline: true, lastLogin: true, profileCompleted: true,
-          createdAt: true, updatedAt: true,
+        include: {
           department: { select: { id: true, name: true } },
         },
       }),
       db.user.count({ where }),
     ]);
 
-    const data = items.map((u: any) => ({
+    const data = items.map((u) => ({
       id: u.id,
       tenantId: u.tenantId,
       email: u.email,
@@ -83,13 +55,13 @@ export async function GET(request: NextRequest) {
       role: u.role,
       employeeNumber: u.employeeNumber,
       departmentId: u.departmentId,
-      departmentName: u.department?.name ?? null,
+      departmentName: u.department?.name,
       isActive: u.isActive,
       isOnline: u.isOnline,
-      lastLogin: u.lastLogin ? new Date(u.lastLogin).toISOString() : null,
+      lastLogin: u.lastLogin?.toISOString(),
       profileCompleted: u.profileCompleted,
-      createdAt: u.createdAt ? new Date(u.createdAt).toISOString() : null,
-      updatedAt: u.updatedAt ? new Date(u.updatedAt).toISOString() : null,
+      createdAt: u.createdAt.toISOString(),
+      updatedAt: u.updatedAt.toISOString(),
     }));
 
     return NextResponse.json({
@@ -109,12 +81,17 @@ export async function POST(request: NextRequest) {
   try {
     const auth = verifyRouteAuth(request, { feature: 'employees' });
     if (auth.error) return auth.error;
-    const { tenantId } = auth;
+    const { userId, tenantId, role } = auth;
     const body = await request.json();
     const { email, name, phone, role: employeeRole, employeeNumber, departmentId, password } = body;
 
+    // Validate role against allowed employee roles
+    const EMPLOYEE_ROLES = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'hr', 'user'];
     if (!email || !name || !employeeRole) {
       return NextResponse.json({ error: 'Email, name, and role are required' }, { status: 400 });
+    }
+    if (!EMPLOYEE_ROLES.includes(employeeRole)) {
+      return NextResponse.json({ error: `Invalid employee role. Allowed: ${EMPLOYEE_ROLES.join(', ')}` }, { status: 422 });
     }
 
     const passwordHash = password ? await hashPassword(password) : null;
@@ -130,11 +107,7 @@ export async function POST(request: NextRequest) {
         employeeNumber: employeeNumber || null,
         profileCompleted: true,
       },
-      select: {
-        id: true, tenantId: true, email: true, name: true, phone: true,
-        avatar: true, role: true, employeeNumber: true, departmentId: true,
-        isActive: true, isOnline: true, profileCompleted: true,
-        createdAt: true, updatedAt: true,
+      include: {
         department: { select: { id: true, name: true } },
       },
     });
@@ -149,12 +122,12 @@ export async function POST(request: NextRequest) {
       role: employee.role,
       employeeNumber: employee.employeeNumber,
       departmentId: employee.departmentId,
-      departmentName: employee.department?.name ?? null,
+      departmentName: employee.department?.name,
       isActive: employee.isActive,
       isOnline: employee.isOnline,
       profileCompleted: employee.profileCompleted,
-      createdAt: employee.createdAt ? new Date(employee.createdAt).toISOString() : null,
-      updatedAt: employee.updatedAt ? new Date(employee.updatedAt).toISOString() : null,
+      createdAt: employee.createdAt.toISOString(),
+      updatedAt: employee.updatedAt.toISOString(),
     }, { status: 201 });
   } catch (error) {
     console.error('Employee create error:', error);
