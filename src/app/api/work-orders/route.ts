@@ -228,7 +228,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     // RBAC check — only authorized roles can create work orders
-    const auth = verifyRouteAuth(request, { action: ['work-orders', 'create'] });
+    const auth = verifyRouteAuth(request, { feature: 'work-orders' });
     if (auth.error) return auth.error;
 
     const { tenantId, userId, role } = auth;
