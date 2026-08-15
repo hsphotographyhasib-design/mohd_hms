@@ -146,6 +146,7 @@ export function MobileWorkOrders() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   // Pull-to-refresh
   const [pullDistance, setPullDistance] = useState(0);
@@ -213,10 +214,10 @@ export function MobileWorkOrders() {
         }
 
         setTotal(totalCount);
-      } catch {
-        // Silently handle – empty state will show
+      } catch (err) {
         if (isRefresh || currentPage === 1) {
           setWorkOrders([]);
+          setFetchError(err instanceof Error ? err.message : 'Failed to load work orders');
         }
       } finally {
         setLoading(false);
@@ -400,7 +401,25 @@ export function MobileWorkOrders() {
                 </Card>
               ))}
 
-            {/* Empty state */}
+            {/* Error state */}
+            {!loading && fetchError && workOrders.length === 0 && (
+              <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-50">
+                  <AlertTriangle className="h-8 w-8 text-red-400" />
+                </div>
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-foreground">Failed to load</p>
+                  <p className="text-xs text-red-500 max-w-[260px]">{fetchError}</p>
+                </div>
+                <button
+                  onClick={() => { setFetchError(null); fetchWorkOrders(1, activeTab, debouncedSearch); }}
+                  className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg active:bg-emerald-700"
+                >
+                  <RotateCcw className="size-4 inline mr-1.5" />Retry
+                </button>
+              </div>
+            )}
+
             {showEmpty && (
               <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">

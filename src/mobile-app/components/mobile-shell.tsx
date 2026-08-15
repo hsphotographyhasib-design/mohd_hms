@@ -260,7 +260,7 @@ function MoreMenuSheet({ open, onOpenChange }: { open: boolean; onOpenChange: (o
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="bottom" className="max-h-[85vh] rounded-t-2xl px-0 pb-8">
+      <SheetContent side="bottom" className="max-h-[85dvh] rounded-t-2xl px-0 pb-8">
         <SheetHeader className="px-4 pb-0 pt-2">
           <SheetTitle className="text-base font-semibold text-gray-900">All Modules</SheetTitle>
           <SheetDescription className="text-xs text-gray-500">Navigate to any section</SheetDescription>

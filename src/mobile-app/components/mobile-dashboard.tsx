@@ -312,6 +312,7 @@ export function MobileDashboard() {
   const complaints = recent.data?.recentComplaints || [];
   const loading = recent.isLoading;
   const statsLoading = kpi.isLoading;
+  const hasError = kpi.isError || recent.isError;
   const role = user?.role || 'customer';
 
   // Greeting
@@ -461,6 +462,14 @@ export function MobileDashboard() {
 
   return (
     <motion.div className="min-h-screen bg-white" variants={containerVariants} initial="hidden" animate="visible">
+      {/* ── Error Banner ────────────── */}
+      {hasError && !loading && !statsLoading && (
+        <div className="mx-4 mt-4 rounded-xl bg-red-50 border border-red-200 p-3 flex items-center gap-2">
+          <AlertTriangle className="size-4 text-red-500 shrink-0" />
+          <p className="text-xs text-red-600 flex-1">Failed to load dashboard data. Pull down to refresh.</p>
+        </div>
+      )}
+
       {/* ── Welcome Card — always visible ────────────── */}
       {(
         <motion.div variants={itemVariants} className="mx-4 mt-4">

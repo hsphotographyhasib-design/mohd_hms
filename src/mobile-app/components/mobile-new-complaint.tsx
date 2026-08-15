@@ -891,7 +891,7 @@ export function MobileNewComplaint() {
                     <img src={photo} alt={`Photo ${idx + 1}`} className="size-full object-cover" />
                     <button
                       onClick={() => removePhoto(idx)}
-                      className="absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-black/60 text-white text-[10px] font-bold opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 flex size-5 items-center justify-center rounded-full bg-black/60 text-white text-[10px] font-bold opacity-100 active:opacity-70 transition-opacity"
                       aria-label="Remove photo"
                     >
                       ✕

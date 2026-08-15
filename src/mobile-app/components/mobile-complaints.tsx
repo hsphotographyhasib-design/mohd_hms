@@ -64,6 +64,7 @@ export function MobileComplaints() {
   const [complaints, setComplaints] = useState<ComplaintItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [search, setSearch] = useState('');
   const [activeTab, setActiveTab] = useState(viewParams?.status || '');
   const [page, setPage] = useState(1);
@@ -114,8 +115,11 @@ export function MobileComplaints() {
         setTotal(json.total || 0);
         setHasMore(json.page < json.totalPages);
         setPage(pageNum);
-      } catch {
-        if (!append) setComplaints([]);
+      } catch (err) {
+        if (!append) {
+          setComplaints([]);
+          setFetchError(err instanceof Error ? err.message : 'Failed to load complaints');
+        }
       } finally {
         setLoading(false);
         setLoadingMore(false);
@@ -308,8 +312,25 @@ export function MobileComplaints() {
               </Card>
             ))}
 
+          {/* Error state */}
+          {!loading && fetchError && complaints.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+              <div className="flex size-16 items-center justify-center rounded-full bg-red-50 mb-4">
+                <AlertTriangle className="size-8 text-red-400" />
+              </div>
+              <h3 className="text-base font-semibold text-gray-700 mb-1">Failed to load</h3>
+              <p className="text-sm text-red-500 max-w-[240px] mb-4">{fetchError}</p>
+              <button
+                onClick={() => fetchComplaints(1, false)}
+                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg active:bg-emerald-700"
+              >
+                <RotateCcw className="size-4 inline mr-1.5" />Retry
+              </button>
+            </div>
+          )}
+
           {/* Empty state */}
-          {!loading && complaints.length === 0 && (
+          {!loading && !fetchError && complaints.length === 0 && (
             <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
               <div className="flex size-16 items-center justify-center rounded-full bg-gray-100 mb-4">
                 <AlertTriangle className="size-8 text-gray-400" />

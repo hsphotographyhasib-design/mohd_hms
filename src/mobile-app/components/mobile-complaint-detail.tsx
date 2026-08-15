@@ -26,6 +26,11 @@ import {
   Package,
   Plus,
   Trash2,
+  Search,
+  UserCheck,
+  Shield,
+  Users,
+  Briefcase,
 } from 'lucide-react';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
 import { Badge } from '@/shared/ui/badge';
@@ -39,6 +44,7 @@ import { Label } from '@/shared/ui/label';
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription,
 } from '@/shared/ui/dialog';
+import { ScrollArea } from '@/shared/ui/scroll-area';
 import { toast } from 'sonner';
 import { cn } from '@/core/utils/utils';
 import { format } from 'date-fns';
@@ -150,6 +156,7 @@ const ACTION_STYLES: Record<string, { bg: string; text: string; border: string; 
   invoice_paid: { bg: 'bg-green-600', text: 'text-white', border: 'border-green-600', icon: <CheckCircle2 className="size-4" /> },
   complaint_closed: { bg: 'bg-zinc-600', text: 'text-white', border: 'border-zinc-600', icon: <CheckCircle2 className="size-4" /> },
   assigned: { bg: 'bg-blue-600', text: 'text-white', border: 'border-blue-600', icon: <Layers className="size-4" /> },
+  reassigned: { bg: 'bg-indigo-600', text: 'text-white', border: 'border-indigo-600', icon: <Layers className="size-4" /> },
   status_override: { bg: 'bg-amber-600', text: 'text-white', border: 'border-amber-600', icon: <AlertTriangle className="size-4" /> },
 };
 
@@ -169,6 +176,26 @@ export function MobileComplaintDetail() {
   const [dialogType, setDialogType] = useState<string | null>(null);
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [materials, setMaterials] = useState<Array<{ name: string; qty: string; unit: string; cost: string }>>([]);
+
+  // Technician assignment state (uses SAME API as desktop TechnicianAssignmentPanel)
+  const [techSearch, setTechSearch] = useState('');
+  const [techList, setTechList] = useState<Array<{
+    id: string; name: string; email: string; phone: string; employeeNumber: string;
+    avatar: string | null; departmentName: string | null;
+    isOnline: boolean; onLeave: boolean; availabilityStatus: string;
+    activeJobs: number; isCurrentlyAssigned: boolean;
+  }>>([]);
+  const [techLoading, setTechLoading] = useState(false);
+  const [techSubmitting, setTechSubmitting] = useState(false);
+  const [selectedTechId, setSelectedTechId] = useState<string | null>(null);
+  const [assignReason, setAssignReason] = useState('');
+
+  // Status override options
+  const OVERRIDE_STATUSES = [
+    'NEW', 'ASSIGNED', 'ACCEPTED', 'IN_PROGRESS', 'PAUSED',
+    'WORK_ORDER_CREATED', 'WAITING_CLIENT_CONFIRMATION', 'CLIENT_CONFIRMED',
+    'REWORK_REQUIRED', 'DRAFT_INVOICE', 'INVOICE_APPROVED', 'INVOICE_SENT', 'PAID', 'CLOSED',
+  ];
 
   // ============ FETCH ============
   const fetchWorkflow = useCallback(async () => {
@@ -303,6 +330,11 @@ export function MobileComplaintDetail() {
         if (!formData.targetStatus) { toast.error('Please select a target status'); return; }
         executeTransition('override', { targetStatus: formData.targetStatus, notes: formData.notes });
         break;
+      // assigned/reassigned are handled by their own dialogs (not workflow API)
+      case 'assigned':
+      case 'reassigned':
+        // These open the technician assignment dialog — handled by dialogType state
+        break;
       default:
         toast.info('This action opens a desktop-only dialog');
         setDialogType(null);
@@ -313,6 +345,92 @@ export function MobileComplaintDetail() {
   const removeMaterial = (i: number) => setMaterials(p => p.filter((_, idx) => idx !== i));
   const updateMaterial = (i: number, field: string, value: string) => {
     setMaterials(p => p.map((m, idx) => idx === i ? { ...m, [field]: value } : m));
+  };
+
+  // ============ TECHNICIAN ASSIGNMENT (SAME API AS DESKTOP) ============
+  const fetchTechnicians = useCallback(async (searchTerm?: string) => {
+    if (!complaintId) return;
+    setTechLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (searchTerm) params.set('q', searchTerm);
+      params.set('limit', '20');
+      const res = await fetch(
+        `/api/complaints/${complaintId}/assign-technician?${params.toString()}`,
+        { headers: { Authorization: `Bearer ${getToken()}` } }
+      );
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      setTechList(data.technicians || []);
+      if (data.currentAssignment?.assignedToId) {
+        setSelectedTechId(data.currentAssignment.assignedToId);
+      }
+    } catch {
+      setTechList([]);
+      toast.error('Failed to load technicians');
+    } finally {
+      setTechLoading(false);
+    }
+  }, [complaintId]);
+
+  // Fetch technicians when assignment dialog opens
+  useEffect(() => {
+    if (dialogType === 'assigned' || dialogType === 'reassigned') {
+      setTechSearch('');
+      setSelectedTechId(null);
+      setAssignReason('');
+      fetchTechnicians();
+    }
+  }, [dialogType, fetchTechnicians]);
+
+  // Debounced search for technicians
+  useEffect(() => {
+    if (dialogType !== 'assigned' && dialogType !== 'reassigned') return;
+    if (!techSearch) return; // Don't re-fetch on empty (already loaded all)
+    const timer = setTimeout(() => fetchTechnicians(techSearch), 300);
+    return () => clearTimeout(timer);
+  }, [techSearch, dialogType, fetchTechnicians]);
+
+  const handleTechAssign = useCallback(async () => {
+    if (!selectedTechId || !complaintId) return;
+    const isReassign = dialogType === 'reassigned';
+    if (isReassign && !assignReason.trim()) {
+      toast.error('Provide a reason for reassignment');
+      return;
+    }
+    setTechSubmitting(true);
+    try {
+      const res = await fetch(
+        `/api/complaints/${complaintId}/assign-technician`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: JSON.stringify({
+            technicianId: selectedTechId,
+            reason: assignReason.trim() || undefined,
+          }),
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.details || data.error || 'Assignment failed');
+      toast.success(data.message || (isReassign ? 'Technician reassigned' : 'Technician assigned') + ' successfully');
+      setDialogType(null);
+      setTechSearch('');
+      setSelectedTechId(null);
+      setAssignReason('');
+      await fetchComplaint();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Assignment failed');
+    } finally {
+      setTechSubmitting(false);
+    }
+  }, [selectedTechId, assignReason, dialogType, complaintId, fetchComplaint]);
+
+  const getInitials = (name: string | undefined) => {
+    return (name || '??').split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
   };
 
   // ============ LOADING STATE ============
@@ -366,8 +484,8 @@ export function MobileComplaintDetail() {
   const refNumber = generateComplaintRef(createdAt);
   const workOrders = (complaint.workOrders as Array<Record<string, unknown>>) || [];
 
-  // Filter to show only non-automatic actions (hide reassigned — it opens a desktop-only panel)
-  const visibleActions = actions.filter(a => !a.isAutomatic && a.action !== 'reassigned');
+  // Filter to show only non-automatic actions
+  const visibleActions = actions.filter(a => !a.isAutomatic);
 
   return (
     <div className="space-y-5 pb-4">
@@ -782,7 +900,7 @@ export function MobileComplaintDetail() {
         {/* ─── COMPLETE WORK DIALOG ─── */}
         {dialogType === 'work_completed' && (
           <Dialog open onOpenChange={(open) => { if (!open) setDialogType(null); }}>
-            <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
+            <DialogContent className="sm:max-w-lg max-h-[85dvh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <div className="size-8 rounded-full bg-emerald-100 flex items-center justify-center">
@@ -1021,6 +1139,215 @@ export function MobileComplaintDetail() {
                 <Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button>
                 <Button className="bg-green-600 hover:bg-green-700" onClick={handleSubmitAction} disabled={transitioning || !formData.paymentMethod}>
                   {transitioning ? <Loader2 className="size-4 animate-spin" /> : 'Record Payment'}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* ─── ASSIGN TECHNICIAN DIALOG ─── */}
+        {(dialogType === 'assigned' || dialogType === 'reassigned') && (
+          <Dialog open onOpenChange={(open) => { if (!open) { setDialogType(null); setTechList([]); } }}>
+            <DialogContent className="sm:max-w-lg max-h-[85dvh] flex flex-col p-0 gap-0 overflow-hidden">
+              {/* Header */}
+              <div className="px-4 pt-5 pb-3 space-y-2 shrink-0">
+                <DialogHeader className="space-y-1 text-left">
+                  <DialogTitle className="flex items-center gap-2">
+                    <div className="size-8 rounded-full bg-blue-100 flex items-center justify-center">
+                      <Shield className="size-4 text-blue-600" />
+                    </div>
+                    {dialogType === 'reassigned' ? 'Reassign Technician' : 'Assign Technician'}
+                  </DialogTitle>
+                  <DialogDescription className="text-sm">
+                    {dialogType === 'reassigned'
+                      ? `Currently: ${assignedToName || 'unknown'}. Select a new technician.`
+                      : 'Search and select a technician to assign.'}
+                  </DialogDescription>
+                </DialogHeader>
+                {/* Search bar */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                  <Input
+                    placeholder="Search by name, ID, email..."
+                    className="pl-9 h-10 text-sm"
+                    value={techSearch}
+                    onChange={(e) => setTechSearch(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              {/* Technician list */}
+              <div className="flex-1 min-h-0 overflow-hidden border-t border-gray-100">
+                {techLoading ? (
+                  <div className="p-4 space-y-3">
+                    {[...Array(3)].map((_, i) => (
+                      <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
+                        <Skeleton className="size-10 rounded-full" />
+                        <div className="flex-1 space-y-2">
+                          <Skeleton className="h-4 w-32" />
+                          <Skeleton className="h-3 w-20" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : techList.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-10 text-muted-foreground">
+                    <Users className="size-8 mb-2 opacity-40" />
+                    <p className="text-sm">No technicians found</p>
+                    <p className="text-xs mt-1">Try adjusting your search</p>
+                  </div>
+                ) : (
+                  <ScrollArea className="h-full max-h-[45dvh]">
+                    <div className="p-3 space-y-2">
+                      {techList.map((tech) => {
+                        const isSelected = selectedTechId === tech.id;
+                        const availLabel = tech.onLeave ? 'On Leave' : (tech.isOnline ? 'Available' : 'Offline');
+                        const availColor = tech.onLeave ? 'text-amber-700 bg-amber-50 border-amber-200' : (tech.isOnline ? 'text-emerald-700 bg-emerald-50 border-emerald-200' : 'text-gray-600 bg-gray-100 border-gray-300');
+                        return (
+                          <button
+                            key={tech.id}
+                            className={cn(
+                              'w-full text-left rounded-xl border-2 p-3 transition-all',
+                              isSelected
+                                ? 'border-emerald-500 bg-emerald-50/50'
+                                : 'border-gray-200 active:bg-gray-50'
+                            )}
+                            onClick={() => setSelectedTechId(tech.id)}
+                          >
+                            <div className="flex items-center gap-3">
+                              <div className="relative shrink-0">
+                                <Avatar className="size-10">
+                                  <AvatarFallback className="bg-emerald-100 text-emerald-700 text-xs font-bold">
+                                    {getInitials(tech.name)}
+                                  </AvatarFallback>
+                                </Avatar>
+                                <div className={cn(
+                                  'absolute -bottom-0.5 -right-0.5 size-3 rounded-full border-2 border-white',
+                                  tech.isOnline && !tech.onLeave ? 'bg-emerald-500' : 'bg-gray-400'
+                                )} />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-semibold text-sm text-gray-900 truncate">{tech.name}</span>
+                                  {tech.isCurrentlyAssigned && (
+                                    <Badge className="text-[10px] h-4 px-1.5 bg-blue-100 text-blue-700 border-blue-200">Current</Badge>
+                                  )}
+                                </div>
+                                <div className="flex items-center gap-2 mt-0.5">
+                                  <span className="text-xs text-gray-500 font-mono">{tech.employeeNumber || '—'}</span>
+                                  {tech.departmentName && (
+                                    <span className="text-xs text-gray-500 flex items-center gap-0.5">
+                                      <Briefcase className="size-3" />{tech.departmentName}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex flex-col items-end gap-1 shrink-0">
+                                <Badge variant="outline" className={cn('text-[10px] h-5 px-2 font-medium border', availColor)}>
+                                  {availLabel}
+                                </Badge>
+                                <span className="text-[10px] text-gray-500">
+                                  {tech.activeJobs} {tech.activeJobs === 1 ? 'job' : 'jobs'}
+                                </span>
+                              </div>
+                            </div>
+                            {isSelected && (
+                              <div className="flex items-center justify-center mt-2 pt-2 border-t border-emerald-200/50">
+                                <UserCheck className="size-4 text-emerald-600 mr-1.5" />
+                                <span className="text-xs font-medium text-emerald-700">
+                                  {dialogType === 'reassigned' ? 'Will reassign to' : 'Will assign to'} {tech.name}
+                                </span>
+                              </div>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </ScrollArea>
+                )}
+              </div>
+
+              {/* Footer: Reason + Submit */}
+              <div className="px-4 pb-5 pt-3 border-t border-gray-100 space-y-3 shrink-0">
+                <div>
+                  <Label className="text-xs text-gray-600 mb-1 block">
+                    {dialogType === 'reassigned' ? 'Reassignment Reason (required)' : 'Reason (optional)'}
+                  </Label>
+                  <Textarea
+                    placeholder={dialogType === 'reassigned' ? 'Why is this being reassigned?' : 'Any notes about this assignment...'}
+                    className="text-sm min-h-[56px] resize-none"
+                    rows={2}
+                    value={assignReason}
+                    onChange={(e) => setAssignReason(e.target.value)}
+                  />
+                </div>
+                <DialogFooter className="gap-2 sm:gap-2">
+                  <Button variant="outline" onClick={() => { setDialogType(null); setTechList([]); }} disabled={techSubmitting}>
+                    Cancel
+                  </Button>
+                  <Button
+                    className="bg-emerald-600 hover:bg-emerald-700"
+                    onClick={handleTechAssign}
+                    disabled={techSubmitting || !selectedTechId}
+                  >
+                    {techSubmitting && <Loader2 className="size-4 animate-spin mr-1.5" />}
+                    <UserCheck className="size-4 mr-1.5" />
+                    {dialogType === 'reassigned' ? 'Reassign' : 'Assign'}
+                  </Button>
+                </DialogFooter>
+              </div>
+            </DialogContent>
+          </Dialog>
+        )}
+
+        {/* ─── STATUS OVERRIDE DIALOG ─── */}
+        {dialogType === 'status_override' && (
+          <Dialog open onOpenChange={(open) => { if (!open) setDialogType(null); }}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2">
+                  <div className="size-8 rounded-full bg-amber-100 flex items-center justify-center">
+                    <AlertTriangle className="size-4 text-amber-600" />
+                  </div>
+                  Override Status
+                </DialogTitle>
+                <DialogDescription>Manually set this complaint to a specific status. Use with caution.</DialogDescription>
+              </DialogHeader>
+              <div className="space-y-4 py-2">
+                <div>
+                  <Label className="text-sm">Target Status</Label>
+                  <div className="flex flex-wrap gap-1.5 mt-2 max-h-40 overflow-y-auto">
+                    {OVERRIDE_STATUSES.map(s => (
+                      <button
+                        key={s}
+                        className={cn(
+                          'px-2.5 py-1.5 text-xs rounded-full border transition-colors',
+                          formData.targetStatus === s
+                            ? 'bg-amber-100 border-amber-300 text-amber-700 font-medium'
+                            : 'bg-gray-50 border-gray-200 text-gray-600 hover:bg-gray-100'
+                        )}
+                        onClick={() => setFormData(p => ({ ...p, targetStatus: s }))}
+                      >
+                        {s.replace(/_/g, ' ')}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <Label className="text-sm">Notes (optional)</Label>
+                  <Textarea
+                    rows={2}
+                    value={formData.notes || ''}
+                    onChange={e => setFormData(p => ({ ...p, notes: e.target.value }))}
+                    placeholder="Reason for override..."
+                    className="mt-1.5"
+                  />
+                </div>
+              </div>
+              <DialogFooter className="gap-2 sm:gap-0">
+                <Button variant="ghost" onClick={() => setDialogType(null)}>Cancel</Button>
+                <Button className="bg-amber-600 hover:bg-amber-700" onClick={handleSubmitAction} disabled={transitioning || !formData.targetStatus}>
+                  {transitioning ? <Loader2 className="size-4 animate-spin" /> : 'Override Status'}
                 </Button>
               </DialogFooter>
             </DialogContent>

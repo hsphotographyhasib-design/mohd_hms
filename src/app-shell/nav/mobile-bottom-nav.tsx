@@ -120,7 +120,7 @@ function CustomizeSheet({ open, onClose, allItems, currentPinned, maxPinned, onS
               'fixed bottom-0 left-0 right-0 z-[60] md:hidden',
               'bg-white dark:bg-gray-900',
               'rounded-t-3xl',
-              'max-h-[85vh] flex flex-col',
+              'max-h-[85dvh] flex flex-col',
               'pb-[env(safe-area-inset-bottom)]'
             )}
           >
@@ -575,7 +575,7 @@ export function MobileBottomNav() {
                 'fixed bottom-0 left-0 right-0 z-50 md:hidden',
                 'bg-white dark:bg-gray-900',
                 'rounded-t-3xl',
-                'max-h-[75vh] flex flex-col',
+                'max-h-[75dvh] flex flex-col',
                 'pb-[env(safe-area-inset-bottom)]'
               )}
             >
