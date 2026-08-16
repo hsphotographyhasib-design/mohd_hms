@@ -6,8 +6,9 @@ import {
   Users, CheckCircle, Clock, CalendarOff, AlertTriangle, WifiOff,
   Search, RefreshCw, LayoutGrid, List, Phone, Eye, Briefcase,
   MapPin, Star, X, ChevronRight, Activity, Timer, TrendingUp,
-  CircleDot, UserCheck, Wrench, Building2, Mail,
+  CircleDot, UserCheck, Wrench, Building2, Mail, Loader2,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
@@ -32,6 +33,9 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/shared/ui/table';
 import { cn } from '@/core/utils/utils';
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter,
+} from '@/shared/ui/dialog';
 
 // ============ TYPES ============
 
@@ -248,9 +252,183 @@ function WorkloadBar({ percent }: { percent: number }) {
   );
 }
 
+// ============ ASSIGN JOB DIALOG ============
+
+interface AssignJobComplaint {
+  id: string;
+  title: string;
+  complaintNumber?: string;
+  category?: string | null;
+  priority?: string;
+  createdAt?: string;
+  customerName?: string;
+}
+
+function AssignJobDialog({
+  technician, open, onOpenChange, onSuccess,
+}: {
+  technician: Technician | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSuccess: () => void;
+}) {
+  const [complaints, setComplaints] = useState<AssignJobComplaint[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedComplaintId, setSelectedComplaintId] = useState<string | null>(null);
+  const [reason, setReason] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!open) { setComplaints([]); setError(null); setSelectedComplaintId(null); setReason(''); return; }
+    setLoading(true);
+    setError(null);
+    fetch('/api/complaints?status=NEW&pageSize=50', {
+      headers: { Authorization: 'Bearer ' + token() },
+    })
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`Request failed (${r.status})`);
+        const data = await r.json();
+        const list = Array.isArray(data) ? data : data.data || data.complaints || [];
+        return list.map((c: any) => ({
+          id: c.id, title: c.title, complaintNumber: c.complaintNumber,
+          category: c.category, priority: c.priority, createdAt: c.createdAt,
+          customerName: c.customerName || c.Customer?.name || null,
+        }));
+      })
+      .then(setComplaints)
+      .catch((err) => { setError(err.message || 'Failed to load complaints'); setComplaints([]); })
+      .finally(() => setLoading(false));
+  }, [open]);
+
+  const handleAssign = async () => {
+    if (!selectedComplaintId || !technician) return;
+    setSubmitting(true);
+    try {
+      const res = await fetch(`/api/complaints/${selectedComplaintId}/assign-technician`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + token() },
+        body: JSON.stringify({ technicianId: technician.id, reason: reason.trim() || undefined }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.details || data.error || 'Assignment failed');
+      toast.success(data.message || `${technician.name} assigned successfully`);
+      onOpenChange(false);
+      onSuccess();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Assignment failed');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const getInitials = (name: string | undefined) => (name || '??').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-2xl max-h-[85vh] flex flex-col p-0 gap-0 overflow-hidden">
+        <div className="px-6 pt-6 pb-4 space-y-3 shrink-0">
+          <DialogHeader className="space-y-1 text-left">
+            <DialogTitle className="flex items-center gap-2 text-lg font-bold text-gray-900">
+              <Briefcase className="h-5 w-5 text-emerald-600" />
+              Assign Job to {technician?.name || 'Technician'}
+            </DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">
+              Select an unassigned complaint to assign to this technician.
+            </DialogDescription>
+          </DialogHeader>
+        </div>
+        <div className="flex-1 min-h-0 overflow-hidden border-t border-gray-100">
+          {loading ? (
+            <div className="p-6 flex items-center gap-2 text-sm text-muted-foreground">
+              <Loader2 className="h-4 w-4 animate-spin" /> Loading available complaints...
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+              <AlertTriangle className="h-10 w-10 mb-2 text-red-400" />
+              <p className="text-sm font-medium text-red-600">Unable to load complaints</p>
+              <p className="text-xs mt-1 text-gray-500">{error}</p>
+            </div>
+          ) : complaints.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+              <Briefcase className="h-10 w-10 mb-2 opacity-40" />
+              <p className="text-sm">No unassigned complaints found</p>
+              <p className="text-xs mt-1">All complaints have been assigned</p>
+            </div>
+          ) : (
+            <ScrollArea className="h-full max-h-[40vh]">
+              <div className="p-4 space-y-2">
+                {complaints.map((c) => {
+                  const isSelected = selectedComplaintId === c.id;
+                  const priCfg: Record<string, string> = { high: 'bg-red-100 text-red-700 border-red-200', medium: 'bg-amber-100 text-amber-700 border-amber-200', low: 'bg-blue-100 text-blue-700 border-blue-200' };
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      className={cn(
+                        'w-full text-left rounded-xl border-2 p-3 transition-all',
+                        isSelected ? 'border-emerald-500 bg-emerald-50/50 shadow-sm' : 'border-gray-200 hover:border-emerald-300 hover:bg-gray-50'
+                      )}
+                      onClick={() => setSelectedComplaintId(c.id)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium text-gray-900 truncate">{c.title}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            {c.complaintNumber && <span className="text-[10px] text-gray-400 font-mono">{c.complaintNumber}</span>}
+                            {c.category && <span className="text-[10px] text-gray-500">{c.category}</span>}
+                            {c.customerName && <span className="text-[10px] text-gray-500">{c.customerName}</span>}
+                          </div>
+                        </div>
+                        {c.priority && (
+                          <Badge variant="outline" className={cn('text-[10px] h-5 px-1.5 font-medium border', priCfg[c.priority] || 'bg-gray-100 text-gray-600 border-gray-200')}>
+                            {c.priority?.toUpperCase()}
+                          </Badge>
+                        )}
+                      </div>
+                      {isSelected && (
+                        <div className="flex items-center gap-1.5 mt-2 pt-2 border-t border-emerald-200/50 text-xs text-emerald-700 font-medium">
+                          <UserCheck className="h-3.5 w-3.5" /> Will assign to {technician?.name}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </ScrollArea>
+          )}
+        </div>
+        <div className="px-6 pb-6 pt-4 border-t border-gray-100 space-y-3 shrink-0">
+          <div>
+            <label className="text-xs text-gray-600 mb-1.5 block">Assignment Reason (optional)</label>
+            <Input
+              placeholder="Any notes about this assignment..."
+              className="text-sm h-9"
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+            />
+          </div>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => onOpenChange(false)} disabled={submitting} className="h-9">Cancel</Button>
+            <Button
+              className="h-9 bg-emerald-600 hover:bg-emerald-700 text-white"
+              onClick={handleAssign}
+              disabled={submitting || !selectedComplaintId}
+            >
+              {submitting && <Loader2 className="h-4 w-4 mr-1.5 animate-spin" />}
+              <UserCheck className="h-4 w-4 mr-1.5" />
+              Assign
+            </Button>
+          </DialogFooter>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 // ============ TECHNICIAN GRID CARD ============
 
-function TechnicianGridCard({ tech, onViewDetail }: { tech: Technician; onViewDetail: () => void }) {
+function TechnicianGridCard({ tech, onViewDetail, onAssignJob, onCall }: { tech: Technician; onViewDetail: () => void; onAssignJob: () => void; onCall: () => void }) {
   const statusCfg = STATUS_CONFIG[tech.availabilityStatus] || STATUS_CONFIG.offline;
   const initials = (tech.name || '??').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
   const primaryTask = tech.currentTasks[0];
@@ -377,13 +555,13 @@ function TechnicianGridCard({ tech, onViewDetail }: { tech: Technician; onViewDe
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
-              <DropdownMenuItem onClick={onViewDetail} className="gap-2 text-xs">
+              <DropdownMenuItem onSelect={onViewDetail} className="gap-2 text-xs">
                 <Eye className="h-3.5 w-3.5" /> View Detail
               </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2 text-xs">
+              <DropdownMenuItem onSelect={onAssignJob} className="gap-2 text-xs">
                 <Briefcase className="h-3.5 w-3.5" /> Assign Job
               </DropdownMenuItem>
-              <DropdownMenuItem className="gap-2 text-xs">
+              <DropdownMenuItem onSelect={onCall} className="gap-2 text-xs">
                 <Phone className="h-3.5 w-3.5" /> Call
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -396,7 +574,7 @@ function TechnicianGridCard({ tech, onViewDetail }: { tech: Technician; onViewDe
 
 // ============ LIST VIEW TABLE ROW ============
 
-function TechnicianListRow({ tech, onViewDetail }: { tech: Technician; onViewDetail: () => void }) {
+function TechnicianListRow({ tech, onViewDetail, onAssignJob, onCall }: { tech: Technician; onViewDetail: () => void; onAssignJob: () => void; onCall: () => void }) {
   const statusCfg = STATUS_CONFIG[tech.availabilityStatus] || STATUS_CONFIG.offline;
   const initials = (tech.name || '??').split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase();
   const primaryTask = tech.currentTasks[0];
@@ -440,13 +618,13 @@ function TechnicianListRow({ tech, onViewDetail }: { tech: Technician; onViewDet
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
-            <DropdownMenuItem onClick={(e) => { e.stopPropagation(); onViewDetail(); }} className="gap-2 text-xs">
+            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onViewDetail(); }} className="gap-2 text-xs">
               <Eye className="h-3.5 w-3.5" /> View Detail
             </DropdownMenuItem>
-            <DropdownMenuItem className="gap-2 text-xs">
+            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onAssignJob(); }} className="gap-2 text-xs">
               <Briefcase className="h-3.5 w-3.5" /> Assign Job
             </DropdownMenuItem>
-            <DropdownMenuItem className="gap-2 text-xs">
+            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onCall(); }} className="gap-2 text-xs">
               <Phone className="h-3.5 w-3.5" /> Call
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -937,9 +1115,12 @@ function TechnicianDetailPanel({ techId, open, onClose }: { techId: string | nul
       headers: { Authorization: 'Bearer ' + token() },
       signal: ctrl.signal,
     })
-      .then(r => r.json())
+      .then(r => {
+        if (!r.ok) throw new Error(`Request failed (${r.status})`);
+        return r.json();
+      })
       .then((data: TechnicianDetail) => setDetail(data))
-      .catch(() => {})
+      .catch((err) => { console.error('[TechDetail]', err); })
       .finally(() => setDetailLoading(false));
     return () => ctrl.abort();
   }, [techId, open]);
@@ -1004,7 +1185,9 @@ function TechnicianDetailPanel({ techId, open, onClose }: { techId: string | nul
           </>
         ) : (
           <div className="p-6 text-center">
-            <p className="text-sm text-muted-foreground">Failed to load technician details.</p>
+            <AlertTriangle className="h-10 w-10 text-red-400 mx-auto mb-3" />
+            <p className="text-sm text-muted-foreground">Unable to load technician details.</p>
+            <Button variant="outline" className="mt-3 text-xs" onClick={() => { setDetailLoading(true); setDetail(null); setPrevId(null); }}>Try again</Button>
           </div>
         )}
       </SheetContent>
@@ -1080,6 +1263,10 @@ export function TechnicianOpsCenter() {
   // Detail panel
   const [selectedTechId, setSelectedTechId] = useState<string | null>(null);
   const [detailOpen, setDetailOpen] = useState(false);
+
+  // Assign job dialog
+  const [assignJobTech, setAssignJobTech] = useState<Technician | null>(null);
+  const [assignJobOpen, setAssignJobOpen] = useState(false);
 
   // Debounce
   const searchRef = useRef<NodeJS.Timeout | null>(null);
@@ -1202,6 +1389,19 @@ export function TechnicianOpsCenter() {
   const handleViewDetail = useCallback((techId: string) => {
     setSelectedTechId(techId);
     setDetailOpen(true);
+  }, []);
+
+  const handleAssignJob = useCallback((tech: Technician) => {
+    setAssignJobTech(tech);
+    setAssignJobOpen(true);
+  }, []);
+
+  const handleCall = useCallback((phone: string, name: string) => {
+    if (!phone) {
+      toast.error(`No phone number available for ${name}`);
+      return;
+    }
+    window.open(`tel:${phone}`, '_self');
   }, []);
 
   const handleRefresh = useCallback(() => {
@@ -1359,7 +1559,11 @@ export function TechnicianOpsCenter() {
         ) : viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {sortedTechnicians.map((tech) => (
-              <TechnicianGridCard key={tech.id} tech={tech} onViewDetail={() => handleViewDetail(tech.id)} />
+              <TechnicianGridCard key={tech.id} tech={tech}
+                onViewDetail={() => handleViewDetail(tech.id)}
+                onAssignJob={() => handleAssignJob(tech)}
+                onCall={() => handleCall(tech.phone, tech.name)}
+              />
             ))}
           </div>
         ) : (
@@ -1378,7 +1582,11 @@ export function TechnicianOpsCenter() {
               </TableHeader>
               <TableBody>
                 {sortedTechnicians.map((tech) => (
-                  <TechnicianListRow key={tech.id} tech={tech} onViewDetail={() => handleViewDetail(tech.id)} />
+                  <TechnicianListRow key={tech.id} tech={tech}
+                    onViewDetail={() => handleViewDetail(tech.id)}
+                    onAssignJob={() => handleAssignJob(tech)}
+                    onCall={() => handleCall(tech.phone, tech.name)}
+                  />
                 ))}
               </TableBody>
             </Table>
@@ -1390,6 +1598,14 @@ export function TechnicianOpsCenter() {
           techId={selectedTechId}
           open={detailOpen}
           onClose={() => { setDetailOpen(false); setSelectedTechId(null); }}
+        />
+
+        {/* SECTION 5: ASSIGN JOB DIALOG */}
+        <AssignJobDialog
+          technician={assignJobTech}
+          open={assignJobOpen}
+          onOpenChange={(v) => { if (!v) setAssignJobTech(null); setAssignJobOpen(v); }}
+          onSuccess={handleRefresh}
         />
       </div>
     </TooltipProvider>
