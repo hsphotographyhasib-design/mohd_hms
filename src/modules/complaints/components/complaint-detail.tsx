@@ -9,7 +9,7 @@ import {
   MessageSquare, MapPin, Phone, Building2, Package, Send,
   ShieldAlert, Banknote, Lock, RotateCcw, ThumbsUp, ClipboardList,
   CirclePlus, BadgeCheck, Eye, Camera, PenTool, Timer, X, Plus, Trash2,
-  Users, RefreshCw, Shield,
+  Users, RefreshCw, Shield, UserPlus,
 } from 'lucide-react';
 import { TechnicianAssignmentPanel } from './technician-assignment-panel';
 import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/card';
@@ -142,6 +142,14 @@ export function ComplaintDetail() {
   const [assignmentPanelOpen, setAssignmentPanelOpen] = useState(false);
   const [reassignPanelOpen, setReassignPanelOpen] = useState(false);
 
+  // ── Assignment eligibility (client-side, does NOT depend on workflow API) ──
+  const ASSIGNMENT_ROLES = ['super_admin', 'admin', 'supervisor', 'manager'];
+  const canAssign = ASSIGNMENT_ROLES.includes(user?.role || '');
+  const isAssignableStatus = complaint && ['NEW'].includes(complaint.status || '');
+  const isReassignableStatus = complaint && ['ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED'].includes(complaint.status || '');
+  const showAssignButton = canAssign && complaint && (isAssignableStatus || (isReassignableStatus && !complaint.assignedToId));
+  const showReassignButton = canAssign && isReassignableStatus && !!complaint?.assignedToId;
+
   // Form state
   const [formData, setFormData] = useState<Record<string, string>>({});
   const [materials, setMaterials] = useState<Array<{ name: string; qty: string; unit: string; cost: string }>>([]);
@@ -228,6 +236,15 @@ export function ComplaintDetail() {
 
   // ============ ACTION HANDLERS ============
   const openDialog = (action: WorkflowAction) => {
+    // Assignment actions go directly to TechnicianAssignmentPanel (skip redundant dialog)
+    if (action.action === 'assigned') {
+      setAssignmentPanelOpen(true);
+      return;
+    }
+    if (action.action === 'reassigned') {
+      setReassignPanelOpen(true);
+      return;
+    }
     setDialogType(action.action);
     setFormData({});
     setMaterials([{ name: '', qty: '1', unit: 'pcs', cost: '0' }]);
@@ -409,16 +426,37 @@ export function ComplaintDetail() {
                 {complaint.supervisorName && <div className="flex items-center gap-2"><Eye className="h-4 w-4 text-gray-400" /><span className="text-gray-500">Supervisor:</span><span className="font-medium">{complaint.supervisorName}</span></div>}
                 {complaint.eta && <div className="flex items-center gap-2"><Timer className="h-4 w-4 text-amber-400" /><span className="text-gray-500">ETA:</span><span className="font-medium">{complaint.eta}</span></div>}
               </div>
-              {/* Manage Assignment link */}
-              {['super_admin','admin','supervisor','manager'].includes(user?.role || '') && (
-                <button
-                  type="button"
-                  onClick={() => setView('complaint-assignment', { id: complaintId })}
-                  className="inline-flex items-center gap-1.5 text-xs text-emerald-600 hover:text-emerald-700 font-medium transition-colors"
-                >
-                  <Shield className="h-3.5 w-3.5" />
-                  Open full assignment screen
-                </button>
+              {/* ── Technician Assignment Action (always visible, does NOT depend on workflow API) ── */}
+              {canAssign && (
+                <div className="flex flex-col gap-2 pt-1">
+                  {showAssignButton && (
+                    <Button
+                      className="w-full sm:w-auto justify-start gap-2 h-10 bg-emerald-600 hover:bg-emerald-700 text-white"
+                      onClick={() => setAssignmentPanelOpen(true)}
+                    >
+                      <UserPlus className="h-4 w-4" />
+                      Assign Technician
+                    </Button>
+                  )}
+                  {showReassignButton && (
+                    <Button
+                      variant="outline"
+                      className="w-full sm:w-auto justify-start gap-2 h-10 border-amber-300 text-amber-700 hover:bg-amber-50"
+                      onClick={() => setReassignPanelOpen(true)}
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      Reassign Technician
+                    </Button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setView('complaint-assignment', { id: complaintId })}
+                    className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-gray-600 font-medium transition-colors w-fit"
+                  >
+                    <Shield className="h-3 w-3" />
+                    Open full assignment screen
+                  </button>
+                </div>
               )}
               {/* Timestamps */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs text-gray-500">
@@ -475,7 +513,7 @@ export function ComplaintDetail() {
             <Card className="border-dashed border-2 border-emerald-200 bg-emerald-50/30">
               <CardHeader className="pb-3"><CardTitle className="text-base font-semibold flex items-center gap-2"><Play className="h-4 w-4 text-emerald-600" /> Available Actions</CardTitle></CardHeader>
               <CardContent className="space-y-2">
-                {actions.filter(a => !a.isAutomatic && a.action !== 'reassigned').map((action, i) => (
+                {actions.filter(a => !a.isAutomatic && a.action !== 'assigned' && a.action !== 'reassigned').map((action, i) => (
                   <Button
                     key={i}
                     variant="outline"
@@ -487,18 +525,6 @@ export function ComplaintDetail() {
                     {transitioning && <Loader2 className="h-3.5 w-3.5 animate-spin ml-auto" />}
                   </Button>
                 ))}
-                {/* Reassign button — show separately for ASSIGNED status */}
-                {complaint.status === 'ASSIGNED' && complaint.assignedToId && (
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start gap-2 h-10 text-amber-600 border-amber-200 hover:bg-amber-50"
-                    onClick={() => setReassignPanelOpen(true)}
-                    disabled={transitioning}
-                  >
-                    <RefreshCw className="h-4 w-4" />
-                    Reassign Technician
-                  </Button>
-                )}
               </CardContent>
             </Card>
           )}

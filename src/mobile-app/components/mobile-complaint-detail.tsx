@@ -31,6 +31,8 @@ import {
   Shield,
   Users,
   Briefcase,
+  UserPlus,
+  RefreshCw,
 } from 'lucide-react';
 import { useAppStore, useAuthStore } from '@/app-shell/store';
 import { Badge } from '@/shared/ui/badge';
@@ -484,8 +486,17 @@ export function MobileComplaintDetail() {
   const refNumber = generateComplaintRef(createdAt);
   const workOrders = (complaint.workOrders as Array<Record<string, unknown>>) || [];
 
-  // Filter to show only non-automatic actions
-  const visibleActions = actions.filter(a => !a.isAutomatic);
+  // Filter to show only non-automatic actions (exclude assigned/reassigned — handled by direct buttons above)
+  const visibleActions = actions.filter(a => !a.isAutomatic && a.action !== 'assigned' && a.action !== 'reassigned');
+
+  // ── Assignment eligibility (client-side, does NOT depend on workflow API) ──
+  const MOBILE_ASSIGNMENT_ROLES = ['super_admin', 'admin', 'supervisor', 'manager'];
+  const canAssign = MOBILE_ASSIGNMENT_ROLES.includes(user?.role || '');
+  const complaintStatus = (complaint.status as string) || '';
+  const isAssignableStatus = ['NEW'].includes(complaintStatus);
+  const isReassignableStatus = ['ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED'].includes(complaintStatus);
+  const showMobileAssignButton = canAssign && (isAssignableStatus || (isReassignableStatus && !assignedToName));
+  const showMobileReassignButton = canAssign && isReassignableStatus && !!assignedToName;
 
   return (
     <div className="space-y-5 pb-4">
@@ -704,6 +715,38 @@ export function MobileComplaintDetail() {
               </div>
             </CardContent>
           </Card>
+        </motion.div>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════════════
+          ASSIGNMENT ACTIONS — always visible, does NOT depend on workflow API
+          ═══════════════════════════════════════════════════════════════════ */}
+      {(showMobileAssignButton || showMobileReassignButton) && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, delay: 0.28 }}
+          className="space-y-2"
+        >
+          {showMobileAssignButton && (
+            <Button
+              className="w-full justify-center gap-2 h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm"
+              onClick={() => { setDialogType('assigned'); }}
+            >
+              <UserPlus className="size-5" />
+              Assign Technician
+            </Button>
+          )}
+          {showMobileReassignButton && (
+            <Button
+              variant="outline"
+              className="w-full justify-center gap-2 h-12 border-amber-300 text-amber-700 hover:bg-amber-50 font-semibold text-sm"
+              onClick={() => { setDialogType('reassigned'); }}
+            >
+              <RefreshCw className="size-5" />
+              Reassign Technician
+            </Button>
+          )}
         </motion.div>
       )}
 

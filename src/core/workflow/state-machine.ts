@@ -749,7 +749,7 @@ export const STATUS_CONFIG: Record<ComplaintStatus, StatusDisplayConfig> = {
  */
 function getActionLabel(action: string, _targetStatus: ComplaintStatus): string {
   const labels: Record<string, string> = {
-    assigned: 'Assign Complaint',
+    assigned: 'Assign Technician',
     reassigned: 'Reassign Technician',
     accepted: 'Accept Assignment',
     assignment_rejected: 'Reject Assignment',
