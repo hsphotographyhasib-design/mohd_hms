@@ -78,3 +78,22 @@ Stage Summary:
 - 4 responsive bugs fixed (dvh, photo delete, dialog keyboard)
 - 3 error state bugs fixed (complaints, work orders, dashboard)
 - tsc --noEmit passes with 0 errors
+---
+Task ID: 1
+Agent: Main Agent
+Task: Fix missing "Assign Technician" action in Complaint Details
+
+Work Log:
+- Explored full codebase structure: found complaint module, assignment panel, workflow state machine, RBAC system
+- Read all key files: complaint-detail.tsx (desktop + mobile), workflow/route.ts, state-machine.ts, complaint-access.ts, assign-technician/route.ts, technician-assignment-panel.tsx
+- Traced full chain: UI → workflow API → state machine → RBAC → database
+- Identified multi-factor root cause
+- Implemented fix across 3 files
+- Verified tsc --noEmit passes with zero errors
+- Pushed to GitHub commit 7fad8fc
+
+Stage Summary:
+- Root cause: Assignment button was ONLY available via dynamic workflow API response; if API failed, button disappeared. Also label mismatch ("Assign Complaint" vs expected "Assign Technician")
+- Files modified: complaint-detail.tsx (desktop), mobile-complaint-detail.tsx, state-machine.ts
+- Added always-visible Assign/Reassign Technician buttons gated by client-side role + status
+- No new APIs, RBAC, or components created — reuses all existing infrastructure
