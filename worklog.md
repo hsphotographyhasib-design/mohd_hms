@@ -97,3 +97,27 @@ Stage Summary:
 - Files modified: complaint-detail.tsx (desktop), mobile-complaint-detail.tsx, state-machine.ts
 - Added always-visible Assign/Reassign Technician buttons gated by client-side role + status
 - No new APIs, RBAC, or components created — reuses all existing infrastructure
+
+---
+Task ID: 2
+Agent: Main Agent
+Task: Fix "No technicians found" in Assign Technician interface
+
+Work Log:
+- Traced full technician data flow: User Management → Technician Resolution → Assign Technician API → Frontend
+- Read: assign-technician/route.ts, technician-assignment-panel.tsx, complaint-assignment-screen.tsx, supabase-db.ts, db.ts, db-sync.ts, api-auth.ts, technicians/route.ts, admin/users/route.ts, prisma.ts
+- Queried local SQLite database — 0 users (production uses Supabase)
+- Analyzed Supabase adapter: whereToFilters handles `in:` correctly, MODEL_MAP correct
+- Identified multi-layered error swallowing as root cause
+- Fixed API: Removed safeQuery from main technician query, added proper error propagation with diagnostic info
+- Fixed API: Moved department fetch out of main query (separate, non-critical)
+- Fixed API: Added TECH_ROLES constant, normalized userRole to lowercase
+- Fixed frontend (panel): Added error state, proper loading/empty/error state separation
+- Fixed frontend (screen): Same error state improvements
+- Verified: tsc --noEmit passes with 0 errors
+- Pushed to GitHub
+
+Stage Summary:
+- Root cause: The main technician DB query was wrapped in `safeQuery()` which silently converted ANY database error into an empty array. The frontend catch block then showed "No technicians found" instead of the actual error. Additionally, the `department` relation include could cause the entire query to fail in Supabase if the Department table had issues.
+- Files modified: assign-technician/route.ts, technician-assignment-panel.tsx, complaint-assignment-screen.tsx
+- Key changes: (1) Main query no longer wrapped in safeQuery — errors now return proper 500 with diagnostic info, (2) Department fetched separately and resiliently, (3) Frontend distinguishes LOADING / SUCCESS WITH DATA / SUCCESS EMPTY / ERROR states, (4) API errors no longer hidden as empty arrays

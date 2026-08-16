@@ -16,6 +16,7 @@ const SLA_RESPONSE_MINUTES = 15;
 const ASSIGNMENT_ROLES = ['super_admin', 'admin', 'supervisor', 'manager'] as const;
 const ACTIVE_COMPLAINT_STATUSES = ['ASSIGNED', 'ACCEPTED', 'WORK_ORDER_CREATED', 'IN_PROGRESS'] as const;
 const ACTIVE_WO_STATUSES = ['PENDING', 'ASSIGNED', 'ACCEPTED', 'IN_PROGRESS'] as const;
+const TECH_ROLES = ['technician', 'supervisor'] as const;
 
 function parseDevice(ua?: string): string | null {
   if (!ua) return null;
@@ -24,7 +25,9 @@ function parseDevice(ua?: string): string | null {
   return 'desktop';
 }
 
-/** Safe DB query wrapper */
+/** Safe DB query wrapper — ONLY for non-critical enrichment queries.
+ *  DO NOT wrap the primary technician list query with this.
+ */
 async function safeQuery<T>(fn: () => Promise<T>, fallback: T, label: string): Promise<T> {
   try { return await fn(); } catch (err) { console.warn(`[AssignTech] ${label}:`, err); return fallback; }
 }
@@ -45,7 +48,7 @@ export async function GET(
     await ensureTableSync('User');
 
     const tenantId = payload.tenantId as string;
-    const userRole = payload.role as string;
+    const userRole = (payload.role as string).toLowerCase();
     const { id } = await params;
 
     if (!ASSIGNMENT_ROLES.includes(userRole as any)) {
@@ -60,7 +63,7 @@ export async function GET(
     const limit = Math.min(parseInt(searchParams.get('limit') || '25', 10), 50);
 
     const and: any[] = [
-      { tenantId, isActive: true, role: { in: ['technician', 'supervisor'] } },
+      { tenantId, isActive: true, role: { in: [...TECH_ROLES] } },
     ];
 
     if (q.length >= 1) {
@@ -80,20 +83,45 @@ export async function GET(
     if (department) and.push({ departmentId: department });
 
     // Fetch technicians — NO Prisma relation names in select (Supabase-incompatible)
-    let technicians = await safeQuery(
-      () => db.user.findMany({
+    // Department is fetched separately to keep the main query resilient.
+    // DO NOT wrap this in safeQuery — errors must propagate to the client.
+    let technicians: any[];
+    try {
+      technicians = await db.user.findMany({
         where: { AND: and },
         select: {
           id: true, name: true, email: true, phone: true, role: true,
           employeeNumber: true, avatar: true, departmentId: true,
           isOnline: true, lastLogin: true, profileCompleted: true,
-          department: { select: { name: true } },
         },
         take: limit * 2,
-      }),
-      [] as any[],
-      'technician list',
-    );
+      });
+    } catch (dbErr) {
+      console.error('[AssignTech] CRITICAL: technician list query failed:', dbErr);
+      return NextResponse.json(
+        { error: 'Unable to load technicians. Please try again.', diagnostic: `Technician query failed: ${(dbErr as Error).message?.slice(0, 200)}` },
+        { status: 500 }
+      );
+    }
+
+    // Fetch department names separately (non-critical — failure doesn't block technician list)
+    const deptIds = [...new Set(technicians.map((t: any) => t.departmentId).filter(Boolean))];
+    const deptMap: Record<string, string> = {};
+    if (deptIds.length > 0) {
+      try {
+        const depts = await safeQuery(
+          () => db.department.findMany({
+            where: { id: { in: deptIds } },
+            select: { id: true, name: true },
+          }),
+          [] as any[],
+          'department lookup',
+        );
+        for (const d of depts) deptMap[d.id] = d.name;
+      } catch {
+        // Non-critical — technicians will show without department names
+      }
+    }
 
     const now = new Date();
     const techIds = technicians.map((t: any) => t.id);
@@ -200,7 +228,7 @@ export async function GET(
       return {
         id: t.id, name: t.name, email: t.email, phone: t.phone, role: t.role,
         employeeNumber: t.employeeNumber, avatar: t.avatar, departmentId: t.departmentId,
-        departmentName: t.department?.name || null,
+        departmentName: t.departmentId ? (deptMap[t.departmentId] || null) : null,
         isOnline: Boolean(t.isOnline),
         lastLogin: t.lastLogin ? new Date(t.lastLogin).toISOString() : null,
         activeJobs, activeWorkOrders,
@@ -378,7 +406,7 @@ export async function POST(
       return NextResponse.json({ error: 'Technician not found or inactive' }, { status: 404 });
     }
 
-    if (tech.role !== 'technician' && tech.role !== 'supervisor') {
+    if (!(TECH_ROLES as readonly string[]).includes(tech.role)) {
       return NextResponse.json({ error: 'Selected user is not a technician or supervisor' }, { status: 400 });
     }
 

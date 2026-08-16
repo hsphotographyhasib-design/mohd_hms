@@ -82,6 +82,7 @@ export function TechnicianAssignmentPanel({
   const [statusFilter, setStatusFilter] = useState('');
   const [technicians, setTechnicians] = useState<Technician[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [reason, setReason] = useState('');
@@ -93,6 +94,7 @@ export function TechnicianAssignmentPanel({
 
     const timer = setTimeout(async () => {
       setLoading(true);
+      setError(null);
       try {
         const params = new URLSearchParams();
         if (search) params.set('q', search);
@@ -103,17 +105,26 @@ export function TechnicianAssignmentPanel({
           `/api/complaints/${complaintId}/assign-technician?${params.toString()}`,
           { headers: { Authorization: `Bearer ${getToken()}` } }
         );
-        if (!res.ok) throw new Error('Failed to fetch');
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => ({}));
+          const msg = (errBody as any).details || (errBody as any).error || `Request failed (${res.status})`;
+          throw new Error(typeof msg === 'string' ? msg : String(msg));
+        }
         const data = await res.json();
         setTechnicians(data.technicians || []);
+        setError(null);
 
         // Auto-select current technician if reassigning
         if (data.currentAssignment?.assignedToId) {
           setSelectedId(data.currentAssignment.assignedToId);
         }
-      } catch {
+      } catch (err) {
+        // Do NOT set technicians to [] on error — preserve any previous data
+        // and show the error state instead of "No technicians found"
+        const message = err instanceof Error ? err.message : 'Failed to load technicians';
+        setError(message);
         setTechnicians([]);
-        toast.error('Failed to load technicians');
+        toast.error(message);
       } finally {
         setLoading(false);
       }
@@ -129,6 +140,7 @@ export function TechnicianAssignmentPanel({
       setStatusFilter('');
       setSelectedId(null);
       setReason('');
+      setError(null);
     }
   }, [open]);
 
@@ -241,8 +253,12 @@ export function TechnicianAssignmentPanel({
 
         {/* Technician list */}
         <div className="flex-1 min-h-0 overflow-hidden border-t border-gray-100">
-          {loading ? (
+          {loading && !error ? (
             <div className="p-4 space-y-3">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Loading technicians...</span>
+              </div>
               {[...Array(3)].map((_, i) => (
                 <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-gray-50">
                   <Skeleton className="h-10 w-10 rounded-full" />
@@ -253,6 +269,19 @@ export function TechnicianAssignmentPanel({
                   <Skeleton className="h-8 w-20" />
                 </div>
               ))}
+            </div>
+          ) : error ? (
+            <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+              <AlertCircle className="h-10 w-10 mb-2 text-red-400" />
+              <p className="text-sm font-medium text-red-600">Unable to load technicians</p>
+              <p className="text-xs mt-1 text-gray-500">{error}</p>
+              <button
+                type="button"
+                className="mt-3 text-xs text-emerald-600 hover:text-emerald-700 font-medium underline"
+                onClick={() => setLoading(true)}
+              >
+                Try again
+              </button>
             </div>
           ) : technicians.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">

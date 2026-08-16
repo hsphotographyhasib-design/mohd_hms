@@ -582,6 +582,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
   const [complaint, setComplaint] = useState<ComplaintInfo | null>(null);
   const [departments, setDepartments] = useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [complaintLoading, setComplaintLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
@@ -624,6 +625,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
 
     const timer = setTimeout(async () => {
       setLoading(true);
+      setError(null);
       try {
         const params = new URLSearchParams();
         if (search) params.set('q', search);
@@ -636,18 +638,25 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
           `/api/complaints/${complaintId}/assign-technician?${params.toString()}`,
           { headers: { Authorization: `Bearer ${getToken()}` } }
         );
-        if (!res.ok) throw new Error('Failed to fetch');
+        if (!res.ok) {
+          const errBody = await res.json().catch(() => ({}));
+          const msg = (errBody as any).details || (errBody as any).error || `Request failed (${res.status})`;
+          throw new Error(typeof msg === 'string' ? msg : String(msg));
+        }
         const data = await res.json();
         setTechnicians(data.technicians || []);
+        setError(null);
         setCurrentAssignment(data.currentAssignment || null);
 
         // Auto-select current technician for reassignment
         if (data.currentAssignment?.assignedToId && !selectedId) {
           setSelectedId(data.currentAssignment.assignedToId);
         }
-      } catch {
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Failed to load technicians';
+        setError(message);
         setTechnicians([]);
-        toast.error('Failed to load technicians');
+        toast.error(message);
       } finally {
         setLoading(false);
       }
@@ -665,6 +674,7 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
     setSelectedId(null);
     setSelectedTech(null);
     setReason('');
+    setError(null);
   }, [complaintId]);
 
   // Track selected tech
@@ -941,6 +951,19 @@ export function ComplaintAssignmentScreen({ complaintId: propComplaintId }: Comp
                       </div>
                     </div>
                   ))}
+                </div>
+              ) : error ? (
+                <div className="bg-white rounded-2xl border border-gray-100 flex flex-col items-center justify-center py-16 text-muted-foreground">
+                  <AlertCircle className="h-12 w-12 mb-3 text-red-400" />
+                  <p className="text-sm font-medium text-red-600">Unable to load technicians</p>
+                  <p className="text-xs mt-1 text-gray-500">{error}</p>
+                  <button
+                    type="button"
+                    className="mt-3 text-xs text-emerald-600 hover:text-emerald-700 font-medium underline"
+                    onClick={() => setLoading(true)}
+                  >
+                    Try again
+                  </button>
                 </div>
               ) : technicians.length === 0 ? (
                 <div className="bg-white rounded-2xl border border-gray-100 flex flex-col items-center justify-center py-16 text-muted-foreground">
