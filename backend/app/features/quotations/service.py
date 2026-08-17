@@ -30,6 +30,7 @@ from app.core.database import (
     delete_record,
     insert_record,
     query_table,
+    resolve_includes,
     update_record,
     MODEL_TO_TABLE,
 )
@@ -285,7 +286,7 @@ async def list_quotations(
     offset = (page - 1) * page_size
     result = await query_table(
         QUOTATION_TABLE,
-        select="*,customer:Customer(name,phone,email)",
+        select="*",
         where=where,
         order="createdAt.desc",
         limit=page_size,
@@ -294,7 +295,7 @@ async def list_quotations(
         tenant_id=None,  # Already in data_scope
     )
 
-    rows = result.get("data", [])
+    rows = await resolve_includes(result.get("data", []), "*,customer:Customer(name,phone,email)")
     total = int(result.get("count", 0) or 0)
 
     data = []
@@ -402,12 +403,12 @@ async def get_quotation(
 
     result = await query_table(
         QUOTATION_TABLE,
-        select="*,customer:Customer(name,phone,email,address,companyName,pic),preparedByUser:User!preparedBy(name)",
+        select="*",
         where={"id": quotation_id, "tenantId": tenant_id},
         limit=1,
         tenant_id=None,
     )
-    rows = result.get("data", [])
+    rows = await resolve_includes(result.get("data", []), "*,customer:Customer(name,phone,email,address,companyName,pic),preparedByUser:User!preparedBy(name)")
     if not rows:
         raise NotFoundException(resource="Quotation", message="Quotation not found")
 
@@ -1136,22 +1137,22 @@ async def _fetch_quotation(
     with_user: bool = False,
 ) -> dict[str, Any] | None:
     """Fetch a single quotation from DB, returning raw dict or None."""
-    select = "*"
+    includes = ""
     if with_customer and with_user:
-        select = "*,customer:Customer(name,phone,email,address,companyName,pic,district,country),preparedByUser:User!preparedBy(name)"
+        includes = "*,customer:Customer(name,phone,email,address,companyName,pic,district,country),preparedByUser:User!preparedBy(name)"
     elif with_customer:
-        select = "*,customer:Customer(name,phone,email,address,companyName,pic,district,country)"
+        includes = "*,customer:Customer(name,phone,email,address,companyName,pic,district,country)"
     elif with_user:
-        select = "*,preparedByUser:User!preparedBy(name)"
+        includes = "*,preparedByUser:User!preparedBy(name)"
 
     result = await query_table(
         QUOTATION_TABLE,
-        select=select,
+        select="*",
         where={"id": quotation_id, "tenantId": tenant_id},
         limit=1,
         tenant_id=None,
     )
-    rows = result.get("data", [])
+    rows = await resolve_includes(result.get("data", []), includes) if includes else result.get("data", [])
     return rows[0] if rows else None
 
 

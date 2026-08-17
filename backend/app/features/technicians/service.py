@@ -21,6 +21,7 @@ from typing import Any, Literal
 
 from app.core.exceptions import NotFoundException
 from app.core.logging import get_logger
+from app.core.database import resolve_includes
 from app.integrations.supabase import AsyncSupabaseClient, get_supabase
 
 from .schemas import (
@@ -124,30 +125,28 @@ async def list_technicians(
     online_map = {t["id"]: bool(t.get("isOnline")) for t in all_techs}
 
     # Paginated tech list
-    [count_result, technicians] = await _safe_query(
-        lambda: (
-            db.query(
-                "User",
-                select="id,name,email,phone,avatar,employeeNumber,role,departmentId,isOnline,lastLogin,department:Department(name)",
-                where=list_where,
-                order="createdAt.desc",
-                offset=offset,
-                limit=page_size,
-                count="exact",
-            )
+    tech_result = await _safe_query(
+        lambda: db.query(
+            "User",
+            select="id,name,email,phone,avatar,employeeNumber,role,departmentId,isOnline,lastLogin",
+            where=list_where,
+            order="createdAt.desc",
+            offset=offset,
+            limit=page_size,
+            count="exact",
         ),
-        fallback=({"count": "0"}, []),
+        fallback=None,
         label="tech_list",
     )
 
-    if not isinstance(count_result, dict) and not isinstance(technicians, list):
-        # _safe_query returned the fallback tuple
+    if tech_result and isinstance(tech_result, dict):
+        count_result = tech_result
+        technicians = tech_result.get("data", [])
+    else:
         count_result = {"count": "0"}
         technicians = []
 
-    # Unpack properly
-    if isinstance(count_result, dict) and "data" in count_result and not technicians:
-        technicians = count_result.get("data", [])
+    technicians = await resolve_includes(technicians, "department:Department(name)")
 
     count_str = count_result.get("count", "0") if isinstance(count_result, dict) else "0"
     try:

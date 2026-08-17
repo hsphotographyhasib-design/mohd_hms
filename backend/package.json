@@ -1,0 +1,10 @@
+{
+  "name": "mohd-hms-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MOHD.HMS Python backend — Node.js shim for Render compatibility",
+  "scripts": {
+    "postinstall": "python3 --version && pip3 install --no-cache-dir -r requirements.txt",
+    "start": "python3 -m uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+  }
+}

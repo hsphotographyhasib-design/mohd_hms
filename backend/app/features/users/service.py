@@ -13,7 +13,7 @@ import json
 from datetime import datetime, timezone
 from typing import Any
 
-from app.core.database import MODEL_TO_TABLE
+from app.core.database import MODEL_TO_TABLE, resolve_includes
 from app.core.exceptions import (
     ConflictException,
     ForbiddenException,
@@ -103,11 +103,11 @@ async def list_users(
         where["isActive"] = is_active.lower() == "true"
 
     # Fetch users with department
-    select = "id,email,name,phone,avatar,googleId,role,employeeNumber,isActive,isOnline,lastLogin,profileCompleted,createdAt,department:Department(id,name)"
+    includes = "id,email,name,phone,avatar,googleId,role,employeeNumber,isActive,isOnline,lastLogin,profileCompleted,createdAt,department:Department(id,name)"
 
     result = await db.query(
         "User",
-        select=select,
+        select="id,email,name,phone,avatar,googleId,role,employeeNumber,isActive,isOnline,lastLogin,profileCompleted,createdAt",
         where=where,
         order="createdAt.desc",
         offset=offset,
@@ -115,7 +115,7 @@ async def list_users(
         count="exact",
     )
 
-    users = result.get("data", [])
+    users = await resolve_includes(result.get("data", []), includes)
     count_str = result.get("count", "0")
     try:
         total = int(count_str) if count_str != "*" else len(users)
@@ -152,7 +152,7 @@ async def get_user(tenant_id: str, user_id: str) -> dict[str, Any]:
 
     result = await db.query(
         "User",
-        select=select,
+        select="id,email,name,phone,avatar,googleId,role,employeeNumber,isActive,isOnline,lastLogin,profileCompleted,createdAt,updatedAt",
         where={"id": user_id, "tenantId": tenant_id},
         single=True,
     )
@@ -163,6 +163,8 @@ async def get_user(tenant_id: str, user_id: str) -> dict[str, Any]:
 
     if not user:
         raise NotFoundException(resource="User")
+
+    await resolve_includes([user], select)
 
     dept = user.pop("department", None)
     if dept and isinstance(dept, dict):
@@ -395,7 +397,7 @@ async def change_role(
     full_result = await _safe_query(
         lambda: db.query(
             "User",
-            select=f"id,name,email,role,isActive,avatar,employeeNumber,profileCompleted,lastLogin,createdAt,{dept_select}",
+            select="id,name,email,role,isActive,avatar,employeeNumber,profileCompleted,lastLogin,createdAt",
             where={"id": target_user_id},
             single=True,
         ),
@@ -404,6 +406,9 @@ async def change_role(
     full_user = full_result.get("data")
     if isinstance(full_user, list):
         full_user = full_user[0] if full_user else None
+
+    if full_user:
+        await resolve_includes([full_user], f"id,name,email,role,isActive,avatar,employeeNumber,profileCompleted,lastLogin,createdAt,{dept_select}")
 
     formatted_user = _format_user(full_user or updated)
 

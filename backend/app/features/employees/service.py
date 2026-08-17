@@ -21,6 +21,7 @@ from app.core.exceptions import (
 )
 from app.core.logging import get_logger
 from app.core.security import hash_password, normalize_role
+from app.core.database import resolve_includes
 from app.integrations.supabase import AsyncSupabaseClient, get_supabase
 from app.utils.helpers import generate_employee_id
 
@@ -110,7 +111,7 @@ async def list_employees(
 
     result = await db.query(
         "User",
-        select=select,
+        select="id,tenantId,email,name,phone,avatar,role,employeeNumber,departmentId,isActive,isOnline,lastLogin,profileCompleted,createdAt,updatedAt",
         where=where,
         order="createdAt.desc",
         offset=offset,
@@ -118,7 +119,7 @@ async def list_employees(
         count="exact",
     )
 
-    users = result.get("data", [])
+    users = await resolve_includes(result.get("data", []), select)
     count_str = result.get("count", "0")
     try:
         total = int(count_str) if count_str != "*" else len(users)
@@ -189,7 +190,7 @@ async def create_employee(
         full = await _safe_query(
             lambda: db.query(
                 "User",
-                select="id,tenantId,email,name,phone,avatar,role,employeeNumber,departmentId,isActive,isOnline,profileCompleted,createdAt,updatedAt,department:Department(id,name)",
+                select="id,tenantId,email,name,phone,avatar,role,employeeNumber,departmentId,isActive,isOnline,profileCompleted,createdAt,updatedAt",
                 where={"id": created.get("id")},
                 single=True,
             ),
@@ -197,6 +198,7 @@ async def create_employee(
         )
         full_user = full.get("data") if isinstance(full.get("data"), dict) else None
         if full_user:
+            await resolve_includes([full_user], "department:Department(id,name)")
             dept = full_user.pop("department", None)
             return _format_employee(full_user, dept)
 
@@ -211,7 +213,7 @@ async def get_employee(tenant_id: str, employee_id: str) -> dict[str, Any]:
     """
     db: AsyncSupabaseClient = get_supabase()
 
-    select = "id,tenantId,email,name,phone,avatar,role,employeeNumber,departmentId,isActive,isOnline,lastLogin,gpsLocation,profileCompleted,createdAt,updatedAt,department:Department(id,name)"
+    select = "id,tenantId,email,name,phone,avatar,role,employeeNumber,departmentId,isActive,isOnline,lastLogin,gpsLocation,profileCompleted,createdAt,updatedAt"
 
     result = await db.query(
         "User",
@@ -230,6 +232,8 @@ async def get_employee(tenant_id: str, employee_id: str) -> dict[str, Any]:
     # Check not a non-employee role
     if user.get("role") in NON_EMPLOYEE_ROLES:
         raise NotFoundException(resource="Employee")
+
+    await resolve_includes([user], "department:Department(id,name)")
 
     dept = user.pop("department", None)
     return _format_employee(user, dept)
@@ -286,7 +290,7 @@ async def update_employee(
     full = await _safe_query(
         lambda: db.query(
             "User",
-            select="id,tenantId,email,name,phone,avatar,role,employeeNumber,departmentId,isActive,isOnline,lastLogin,profileCompleted,createdAt,updatedAt,department:Department(id,name)",
+            select="id,tenantId,email,name,phone,avatar,role,employeeNumber,departmentId,isActive,isOnline,lastLogin,profileCompleted,createdAt,updatedAt",
             where={"id": employee_id},
             single=True,
         ),
@@ -294,6 +298,7 @@ async def update_employee(
     )
     full_user = full.get("data") if isinstance(full.get("data"), dict) else None
     if full_user:
+        await resolve_includes([full_user], "department:Department(id,name)")
         dept = full_user.pop("department", None)
         return _format_employee(full_user, dept)
 
@@ -409,7 +414,7 @@ async def list_hr_employees(
 
     result = await db.query(
         "HrEmployee",
-        select=select,
+        select="*",
         where=where,
         order="createdAt.desc",
         offset=offset,
@@ -417,7 +422,7 @@ async def list_hr_employees(
         count="exact",
     )
 
-    employees = result.get("data", [])
+    employees = await resolve_includes(result.get("data", []), select)
     count_str = result.get("count", "0")
     try:
         total = int(count_str) if count_str != "*" else len(employees)
@@ -512,7 +517,7 @@ async def get_hr_employee(tenant_id: str, employee_id: str) -> dict[str, Any]:
 
     result = await db.query(
         "HrEmployee",
-        select=select,
+        select="*",
         where={"id": employee_id, "tenantId": tenant_id},
         single=True,
     )
@@ -523,6 +528,8 @@ async def get_hr_employee(tenant_id: str, employee_id: str) -> dict[str, Any]:
 
     if not emp:
         raise NotFoundException(resource="Employee")
+
+    await resolve_includes([emp], select)
 
     user = emp.pop("user", None)
     dept = emp.pop("department", None)

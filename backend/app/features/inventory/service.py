@@ -19,6 +19,7 @@ from app.core.database import (
     delete_record,
     insert_record,
     query_table,
+    resolve_includes,
     update_record,
 )
 from app.core.exceptions import (
@@ -176,7 +177,7 @@ async def list_items(
 
 async def get_item(item_id: str, tenant_id: str, user: AuthUser) -> dict[str, Any]:
     """Get a single inventory item with relations."""
-    select = (
+    includes = (
         "*,inventoryCategory(id,name,code,color,icon),"
         "InventorySubcategory(id,name,code),"
         "ItemSupplier(id,tenantId,itemId,supplierName,supplierCode,contactPerson,phone,email,address,leadTimeDays,purchasePrice,moq,warranty,paymentTerms,rating,isPrimary,isActive,createdAt,updatedAt),"
@@ -184,11 +185,11 @@ async def get_item(item_id: str, tenant_id: str, user: AuthUser) -> dict[str, An
     )
     result = await query_table(
         ITEM_TABLE,
-        select=select,
+        select="*",
         where={"id": item_id},
         tenant_id=tenant_id,
     )
-    items = result.get("data", [])
+    items = await resolve_includes(result.get("data", []), includes)
     if not items:
         raise NotFoundException(resource="InventoryItem")
 
@@ -447,7 +448,7 @@ async def list_stock_movements(
 
     result = await query_table(
         MOVEMENT_TABLE,
-        select=select,
+        select="*",
         where=where,
         order="createdAt.desc",
         limit=page_size,
@@ -456,7 +457,7 @@ async def list_stock_movements(
         tenant_id=tenant_id,
     )
 
-    movements = result.get("data", [])
+    movements = await resolve_includes(result.get("data", []), select)
     total_str = result.get("count", "0")
     total = int(total_str) if total_str not in ("*", "0") else len(movements)
 
@@ -527,7 +528,6 @@ async def create_stock_movement(
         "performedBy": user.userId,
     }
 
-    select = "*,item(id,name,itemCode,unit),warehouse(id,name,code)"
     return await insert_record(MOVEMENT_TABLE, movement_record)
 
 
@@ -564,7 +564,7 @@ async def list_suppliers(tenant_id: str, params: dict[str, Any]) -> dict[str, An
 
     result = await query_table(
         SUPPLIER_TABLE,
-        select=select,
+        select="*",
         where=where,
         order="createdAt.desc",
         limit=page_size,
@@ -573,7 +573,7 @@ async def list_suppliers(tenant_id: str, params: dict[str, Any]) -> dict[str, An
         tenant_id=tenant_id,
     )
 
-    suppliers = result.get("data", [])
+    suppliers = await resolve_includes(result.get("data", []), select)
     total_str = result.get("count", "0")
     total = int(total_str) if total_str not in ("*", "0") else len(suppliers)
 
@@ -597,7 +597,6 @@ async def create_supplier(tenant_id: str, data: dict[str, Any]) -> dict[str, Any
         raise NotFoundException(resource="InventoryItem")
 
     record = {"tenantId": tenant_id, "isActive": True, **data}
-    select = "*,item(id,name,itemCode,sku,unit)"
     return await insert_record(SUPPLIER_TABLE, record)
 
 
@@ -707,12 +706,12 @@ async def get_stats(tenant_id: str) -> dict[str, Any]:
     # Recent movements
     movements_result = await query_table(
         MOVEMENT_TABLE,
-        select="*,item(id,name,itemCode,unit),warehouse(id,name)",
+        select="*",
         order="createdAt.desc",
         limit=10,
         tenant_id=tenant_id,
     )
-    recent_movements = movements_result.get("data", [])
+    recent_movements = await resolve_includes(movements_result.get("data", []), "*,item(id,name,itemCode,unit),warehouse(id,name)")
 
     return {
         "totalItems": total_items,

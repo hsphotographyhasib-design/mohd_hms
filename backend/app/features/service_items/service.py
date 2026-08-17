@@ -14,6 +14,7 @@ from app.core.database import (
     delete_record,
     insert_record,
     query_table,
+    resolve_includes,
     update_record,
 )
 from app.core.exceptions import ConflictException, NotFoundException, ValidationException
@@ -295,11 +296,11 @@ async def get_package(package_id: str, tenant_id: str) -> dict[str, Any]:
     """Get a service package by ID with its items."""
     result = await query_table(
         PACKAGE_TABLE,
-        select="*,items(*)",
+        select="*",
         where={"id": package_id},
         tenant_id=tenant_id,
     )
-    rows = result.get("data", [])
+    rows = await resolve_includes(result.get("data", []), "*,items(*)")
     if not rows:
         raise NotFoundException(resource="ServicePackage")
     return rows[0]

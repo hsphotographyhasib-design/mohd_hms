@@ -18,6 +18,7 @@ from typing import Any
 
 from app.core.exceptions import NotFoundException, ValidationException
 from app.core.logging import get_logger
+from app.core.database import resolve_includes
 from app.integrations.supabase import AsyncSupabaseClient, get_supabase
 from app.utils.helpers import sanitize_input
 
@@ -308,7 +309,7 @@ async def get_department_employees(
 
     result = await db.query(
         "User",
-        select=select,
+        select="id,tenantId,email,name,phone,avatar,role,employeeNumber,departmentId,isActive,isOnline,lastLogin,profileCompleted,createdAt,updatedAt",
         where={"tenantId": tenant_id, "departmentId": department_id},
         order="name.asc",
         offset=offset,
@@ -316,7 +317,7 @@ async def get_department_employees(
         count="exact",
     )
 
-    users = result.get("data", [])
+    users = await resolve_includes(result.get("data", []), select)
     count_str = result.get("count", "0")
     try:
         total = int(count_str) if count_str != "*" else len(users)

@@ -28,6 +28,7 @@ from app.core.database import (
     delete_record,
     insert_record,
     query_table,
+    resolve_includes,
     update_record,
     MODEL_TO_TABLE,
 )
@@ -239,14 +240,15 @@ async def list_invoices(
         where["customerId"] = customer_id
 
     offset = (page - 1) * page_size
+    includes = (
+        "*,customer:Customer(name,phone,email,address,companyName,pic),"
+        "quotation:Quotation(quotationNo),workOrder:WorkOrder(id,title),"
+        "preparedByUser:User!preparedBy(name),createdByUser:User!createdBy(name),"
+        "payments:InvoicePayment(amount,method,referenceNo,transactionId,notes,paidAt)"
+    )
     result = await query_table(
         INVOICE_TABLE,
-        select=(
-            "*,customer:Customer(name,phone,email,address,companyName,pic),"
-            "quotation:Quotation(quotationNo),workOrder:WorkOrder(id,title),"
-            "preparedByUser:User!preparedBy(name),createdByUser:User!createdBy(name),"
-            "payments:InvoicePayment(amount,method,referenceNo,transactionId,notes,paidAt)"
-        ),
+        select="*",
         where=where,
         order="createdAt.desc",
         limit=page_size,
@@ -255,7 +257,7 @@ async def list_invoices(
         tenant_id=None,
     )
 
-    rows = result.get("data", [])
+    rows = await resolve_includes(result.get("data", []), includes)
     total = int(result.get("count", 0) or 0)
 
     data = []
@@ -385,16 +387,12 @@ async def get_invoice(
 
     result = await query_table(
         INVOICE_TABLE,
-        select=(
-            "*,customer:Customer(name,phone,email,address,companyName,pic),"
-            "workOrder:WorkOrder(id,title),quotation:Quotation(quotationNo),"
-            "preparer:User!preparedBy(name),creator:User!createdBy(name)"
-        ),
+        select="*",
         where={"id": invoice_id, "tenantId": tenant_id},
         limit=1,
         tenant_id=None,
     )
-    rows = result.get("data", [])
+    rows = await resolve_includes(result.get("data", []), "*,customer:Customer(name,phone,email,address,companyName,pic),workOrder:WorkOrder(id,title),quotation:Quotation(quotationNo),preparer:User!preparedBy(name),creator:User!createdBy(name)")
     if not rows:
         raise NotFoundException(resource="Invoice", message="Invoice not found")
 
@@ -902,23 +900,23 @@ async def _fetch_invoice(
     with_customer: bool = False,
     with_user: bool = False,
 ) -> dict[str, Any] | None:
-    select = "*"
+    includes = ""
     if with_customer and with_user:
-        select = ("*,customer:Customer(name,phone,email,address,companyName,pic),"
+        includes = ("*,customer:Customer(name,phone,email,address,companyName,pic),"
                 "preparer:User!preparedBy(name),creator:User!createdBy(name)")
     elif with_customer:
-        select = "*,customer:Customer(name,phone,email,address,companyName,pic)"
+        includes = "*,customer:Customer(name,phone,email,address,companyName,pic)"
     elif with_user:
-        select = "*,preparer:User!preparedBy(name),creator:User!createdBy(name)"
+        includes = "*,preparer:User!preparedBy(name),creator:User!createdBy(name)"
 
     result = await query_table(
         INVOICE_TABLE,
-        select=select,
+        select="*",
         where={"id": invoice_id, "tenantId": tenant_id},
         limit=1,
         tenant_id=None,
     )
-    rows = result.get("data", [])
+    rows = await resolve_includes(result.get("data", []), includes) if includes else result.get("data", [])
     return rows[0] if rows else None
 
 

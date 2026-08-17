@@ -513,3 +513,217 @@ async def count_records(table: str, where: dict[str, Any] | None = None, *, tena
         return int(count_str)
     except (ValueError, TypeError):
         return 0
+
+
+# ── Application-layer join resolution ─────────────────────────────────────────
+#
+# PostgREST requires foreign-key constraints for embedded-resource selects like
+# `Tenant(name, domain)`.  This schema has NO foreign keys — all relationships
+# are maintained at the application layer.  The helpers below parse a PostgREST
+# select string, discover the embedded resources, batch-fetch them in separate
+# queries, and stitch the results into each record.
+# ────────────────────────────────────────────────────────────────────────────────
+
+# Mapping of lowercase aliases / abbreviations → actual Supabase table names.
+_ALIAS_TO_TABLE: dict[str, str] = {
+    "tenant": "Tenant",
+    "department": "Department",
+    "user": "User",
+    "customer": "Customer",
+    "warehouse": "Warehouse",
+    "inventoryitem": "InventoryItem",
+    "item": "InventoryItem",
+    "servicepackageitem": "ServicePackageItem",
+    "items": "ServicePackageItem",
+    "inventorycategory": "InventoryCategory",
+    "inventorysubcategory": "InventorySubcategory",
+    "itemsupplier": "ItemSupplier",
+    "warehousestock": "WarehouseStock",
+    "invoicepayment": "InvoicePayment",
+    "quotation": "Quotation",
+    "workorder": "WorkOrder",
+    "hremployee": "HrEmployee",
+}
+
+# Has-many relationship config: alias → (table, fk-field-in-related-table).
+_HAS_MANY_CONFIG: dict[str, tuple[str, str]] = {
+    "items": ("ServicePackageItem", "packageId"),
+    "payments": ("InvoicePayment", "invoiceId"),
+    "ItemSupplier": ("ItemSupplier", "itemId"),
+    "WarehouseStock": ("WarehouseStock", "itemId"),
+}
+
+# Regex: optional_alias : TableName !hint (columns)
+_EMBED_RE = re.compile(r"(?:(\w+):)?(\w+)(?:!\w+)?\(([^)]*)\)")
+
+
+def strip_joins_from_select(select: str) -> str:
+    """Remove embedded-resource patterns from a PostgREST select string.
+
+    Examples
+    --------
+    '*, Tenant(name, domain)'                          → '*'
+    '*, customer:Customer(name), User!hint(id)'         → '*'
+    'id, name, Department(id, name)'                    → 'id, name'
+    """
+    cleaned = _EMBED_RE.sub("", select)
+    # Collapse double commas, trim whitespace
+    cleaned = re.sub(r"\s*,\s*,\s*", ", ", cleaned)
+    cleaned = cleaned.strip()
+    cleaned = re.sub(r"^,\s*", "", cleaned)
+    cleaned = re.sub(r",\s*$", "", cleaned)
+    return cleaned or "*"
+
+
+def _resolve_table_name(name: str) -> str:
+    """Resolve a relation name to the actual Supabase table name."""
+    key = name.lower()
+    if key in _ALIAS_TO_TABLE:
+        return _ALIAS_TO_TABLE[key]
+    if key in MODEL_TO_TABLE:
+        return MODEL_TO_TABLE[key]
+    if name[0].isupper():
+        return name
+    return name[0].upper() + name[1:]
+
+
+def _get_fk_candidates(alias: str) -> list[str]:
+    """Return plausible foreign-key field names for a given alias."""
+    camel = alias[0].lower() + alias[1:] if alias and alias[0].isupper() else (alias or "")
+    candidates = [f"{camel}Id", alias, f"{camel}_id"]
+    # Specific known overrides
+    if alias.lower() == "preparedbyuser":
+        candidates = ["preparedBy", "preparedByUserId"]
+    elif alias.lower() == "preparer":
+        candidates = ["preparedBy"]
+    elif alias.lower() == "creator":
+        candidates = ["createdBy"]
+    elif alias.lower() == "createdbyuser":
+        candidates = ["createdBy", "createdByUserId"]
+    elif alias.lower() == "inventorycategory":
+        candidates = ["categoryId"]
+    elif alias.lower() == "inventorysubcategory":
+        candidates = ["subcategoryId"]
+    elif alias.lower() == "items":
+        candidates = ["packageId"]
+    return candidates
+
+
+async def resolve_includes(records: list, select: str) -> list:
+    """Resolve embedded resources in a PostgREST select string.
+
+    Parses *select* for patterns such as ``Tenant(name, domain)``,
+    ``customer:Customer(name,phone)``, ``preparedByUser:User!hint(id)``,
+    ``item(id,name)``, or ``items(*)``.  For each discovered relation the
+    function:
+
+    1. Finds the foreign-key field in each record (e.g. ``tenantId``).
+    2. Batch-queries the related table for **all** distinct FK values.
+    3. Injects the related row(s) into each record as a nested dict (has-one)
+       or list of dicts (has-many).
+
+    This replaces PostgREST's built-in embedded-resource joins which require
+    foreign-key constraints that do not exist in this schema.
+
+    Parameters
+    ----------
+    records:
+        List of dicts returned by ``query_table`` (the ``data`` key).
+    select:
+        The original PostgREST select string **containing** the join parts.
+
+    Returns
+    -------
+    The same list of dicts, mutated in-place with nested relation data.
+    """
+    if not records or not select:
+        return records
+
+    relations = []
+    for m in _EMBED_RE.finditer(select):
+        alias = m.group(1)
+        table_name = m.group(2)
+        columns = m.group(3).strip()
+        if alias is None:
+            alias = table_name
+        relations.append((alias, table_name, columns))
+
+    if not relations:
+        return records
+
+    for alias, table_name, columns in relations:
+        # ── has-many path ──────────────────────────────────────────────
+        if alias in _HAS_MANY_CONFIG:
+            related_table, fk_field = _HAS_MANY_CONFIG[alias]
+            record_ids = [r["id"] for r in records if r.get("id") is not None]
+            if not record_ids:
+                for r in records:
+                    r[alias] = []
+                continue
+            try:
+                # Strip nested joins from columns for the initial query
+                clean_columns = strip_joins_from_select(columns)
+                result = await query_table(
+                    related_table,
+                    select=clean_columns,
+                    where={fk_field: {"in": record_ids}},
+                )
+                related_records = result.get("data", [])
+                # Recursively resolve nested joins in related records
+                if clean_columns != columns and related_records:
+                    related_records = await resolve_includes(related_records, columns)
+                grouped: dict = {}
+                for row in related_records:
+                    grouped.setdefault(row.get(fk_field), []).append(row)
+                for r in records:
+                    r[alias] = grouped.get(r.get("id"), [])
+            except Exception as exc:
+                log.warning(f"resolve_includes (has-many {alias}): {exc}")
+                for r in records:
+                    r[alias] = []
+            continue
+
+        # ── has-one path ────────────────────────────────────────────────
+        resolved_table = _resolve_table_name(table_name)
+        fk_candidates = _get_fk_candidates(alias)
+
+        fk_field = None
+        for candidate in fk_candidates:
+            if any(r.get(candidate) is not None for r in records):
+                fk_field = candidate
+                break
+
+        if fk_field is None:
+            log.warning(
+                "resolve_includes: no FK field found for %r "
+                "(candidates: %s)",
+                alias,
+                fk_candidates,
+            )
+            for r in records:
+                r[alias] = None
+            continue
+
+        fk_values = list(
+            {r[fk_field] for r in records if r.get(fk_field) is not None}
+        )
+        if not fk_values:
+            for r in records:
+                r[alias] = None
+            continue
+
+        try:
+            result = await query_table(
+                resolved_table,
+                select=columns,
+                where={"id": {"in": fk_values}},
+            )
+            lookup = {r["id"]: r for r in result.get("data", [])}
+            for r in records:
+                r[alias] = lookup.get(r.get(fk_field))
+        except Exception as exc:
+            log.warning(f"resolve_includes ({alias}): {exc}")
+            for r in records:
+                r[alias] = None
+
+    return records

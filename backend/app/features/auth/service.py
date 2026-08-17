@@ -27,6 +27,7 @@ from app.core.database import (
     delete_record,
     insert_record,
     query_table,
+    resolve_includes,
     update_record,
 )
 from app.core.exceptions import (
@@ -193,12 +194,12 @@ async def authenticate_user(email: str, password: str) -> dict[str, Any]:
     # Find user by email
     result = await query_table(
         'user',
-        select='*, Tenant(name, domain)',
+        select='*',
         where={'email': email.lower().strip()},
         limit=1,
         order='createdAt.desc',
     )
-    users = result.get('data', [])
+    users = await resolve_includes(result.get('data', []), '*, Tenant(name, domain)')
     if not users:
         raise UnauthorizedException(code='AUTH_INVALID', message='Invalid email or password')
 
@@ -279,11 +280,11 @@ async def get_current_user_profile(user_id: str, tenant_id: str) -> dict[str, An
     """Get current user's profile with tenant and department relations."""
     result = await query_table(
         'user',
-        select='*, Tenant(name, domain), Department(name)',
+        select='*',
         where={'id': user_id, 'tenantId': tenant_id},
         limit=1,
     )
-    users = result.get('data', [])
+    users = await resolve_includes(result.get('data', []), '*, Tenant(name, domain), Department(name)')
     if not users:
         raise NotFoundException(resource='User', message='User not found')
     return _build_user_response(users[0])
@@ -305,11 +306,11 @@ async def update_user_profile(user_id: str, tenant_id: str, data: dict[str, Any]
         # Fetch with relations for full response
         result = await query_table(
             'user',
-            select='*, Tenant(name, domain), Department(name)',
+            select='*',
             where={'id': user_id, 'tenantId': tenant_id},
             limit=1,
         )
-        users = result.get('data', [])
+        users = await resolve_includes(result.get('data', []), '*, Tenant(name, domain), Department(name)')
         if users:
             return _build_user_response(users[0])
         return _build_user_response(updated)
@@ -405,12 +406,12 @@ async def verify_reset_otp(email: str, otp: str) -> dict[str, Any]:
     # Find active OTP
     result = await query_table(
         'passwordResetOtp',
-        select='*, User(id, email, name, isActive)',
+        select='*',
         where={'email': email, 'status': 'active'},
         order='createdAt.desc',
         limit=1,
     )
-    records = result.get('data', [])
+    records = await resolve_includes(result.get('data', []), '*, User(id, email, name, isActive)')
     if not records:
         return {'ok': False, 'code': 'invalid', 'message': 'Invalid or expired verification code.'}
 
@@ -497,11 +498,11 @@ async def reset_password(reset_token: str, password: str, confirm_password: str)
     # Find the OTP record
     result = await query_table(
         'passwordResetOtp',
-        select='*, User(id, email, name, isActive)',
+        select='*',
         where={'id': otp_id},
         limit=1,
     )
-    records = result.get('data', [])
+    records = await resolve_includes(result.get('data', []), '*, User(id, email, name, isActive)')
     if not records:
         return {'ok': False, 'message': 'Invalid session. Please start the password reset process again.'}
 
@@ -680,11 +681,11 @@ async def google_authenticate(code: str, code_verifier: str | None = None, redir
     # Find by googleId
     result = await query_table(
         'user',
-        select='*, Tenant(name, domain)',
+        select='*',
         where={'googleId': google_id},
         limit=1,
     )
-    users = result.get('data', [])
+    users = await resolve_includes(result.get('data', []), '*, Tenant(name, domain)')
     user = users[0] if users else None
 
     if user:
@@ -707,11 +708,11 @@ async def google_authenticate(code: str, code_verifier: str | None = None, redir
     # Find by email (link accounts)
     result = await query_table(
         'user',
-        select='*, Tenant(name, domain)',
+        select='*',
         where={'email': email},
         limit=1,
     )
-    users = result.get('data', [])
+    users = await resolve_includes(result.get('data', []), '*, Tenant(name, domain)')
     user = users[0] if users else None
 
     if user:
@@ -839,11 +840,11 @@ async def whatsapp_verify_otp(phone_number: str, code: str, dial_code: str | Non
     # Check if user exists
     result = await query_table(
         'user',
-        select='*, Tenant(name, domain)',
+        select='*',
         where={'phone': full_phone, 'tenantId': tenant['id'], 'isActive': True},
         limit=1,
     )
-    users = result.get('data', [])
+    users = await resolve_includes(result.get('data', []), '*, Tenant(name, domain)')
     existing = users[0] if users else None
 
     if existing:
@@ -1041,7 +1042,7 @@ async def list_users(
 
     result = await query_table(
         'user',
-        select='id, name, email, phone, avatar, role, isActive, isOnline, lastLogin, createdAt, profileCompleted, employeeNumber, authProvider, Department(id, name)',
+        select='id, name, email, phone, avatar, role, isActive, isOnline, lastLogin, createdAt, profileCompleted, employeeNumber, authProvider',
         where=where,
         order='createdAt.desc',
         limit=page_size,
@@ -1049,7 +1050,7 @@ async def list_users(
         count='exact',
     )
 
-    users = result.get('data', [])
+    users = await resolve_includes(result.get('data', []), 'id, name, email, phone, avatar, role, isActive, isOnline, lastLogin, createdAt, profileCompleted, employeeNumber, authProvider, Department(id, name)')
     count_str = result.get('count', '0')
     try:
         total = int(count_str) if count_str not in ('*', '') else len(users)
@@ -1094,11 +1095,11 @@ async def get_user(tenant_id: str, user_id: str) -> dict[str, Any]:
     """Get a single user by ID within a tenant."""
     result = await query_table(
         'user',
-        select='*, Tenant(name, domain), Department(name)',
+        select='*',
         where={'id': user_id, 'tenantId': tenant_id},
         limit=1,
     )
-    users = result.get('data', [])
+    users = await resolve_includes(result.get('data', []), '*, Tenant(name, domain), Department(name)')
     if not users:
         raise NotFoundException(resource='User', message='User not found')
     return _build_user_response(users[0])
@@ -1220,11 +1221,11 @@ async def refresh_session(user_id: str, tenant_id: str, current_role: str) -> di
     """Refresh session — re-read user from DB, issue new JWT if role changed."""
     result = await query_table(
         'user',
-        select='*, Tenant(name, domain), Department(name)',
+        select='*',
         where={'id': user_id, 'tenantId': tenant_id},
         limit=1,
     )
-    users = result.get('data', [])
+    users = await resolve_includes(result.get('data', []), '*, Tenant(name, domain), Department(name)')
     if not users:
         raise UnauthorizedException(code='AUTH_INVALID', message='User not found')
 
