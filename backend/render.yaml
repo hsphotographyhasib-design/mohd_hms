@@ -1,18 +1,64 @@
+# Render.com deployment configuration
+# https://docs.render.com/yaml-spec
+
 services:
   - type: web
     name: mohd-hms-backend
-    runtime: docker
-    plan: starter
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: PORT
-        value: "4000"
-      - key: NODE_ENV
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: APP_ENV
         value: production
+      - key: PORT
+        value: "8000"
+      - key: APP_NAME
+        value: "MOHD.HMS ENTERPRISE"
+      - key: APP_VERSION
+        value: "1.0.0"
+      - key: CORS_ORIGINS
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: JWT_ALGORITHM
+        value: "HS256"
+      - key: JWT_ACCESS_TOKEN_EXPIRE
+        value: "604800"
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
         sync: false
-      - key: JWT_SECRET
-        generateValue: true
-      - key: FRONTEND_URL
+      - key: SUPABASE_ANON_KEY
         sync: false
+      - key: UPSTASH_REDIS_REST_URL
+        sync: false
+      - key: UPSTASH_REDIS_REST_TOKEN
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        value: "587"
+      - key: EMAIL_USERNAME
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: WHATSAPP_API_URL
+        sync: false
+      - key: WHATSAPP_TOKEN
+        sync: false
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
+    healthCheckPath: /health
+    autoDeploy: true
