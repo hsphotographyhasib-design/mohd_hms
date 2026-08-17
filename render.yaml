@@ -1,9 +1,14 @@
-# Render.com Blueprint — place at repository root
-# Points to backend/ subdirectory
+# Render.com Blueprint — at repository root
+# Matches existing service name: mohd-hms
+#
+# IMPORTANT: If the existing service was created as Node.js,
+# you MUST manually change its Environment to "Docker" in the
+# Render Dashboard (Settings → Environment). The Blueprint alone
+# cannot change the runtime of an existing service.
 
 services:
   - type: web
-    name: mohd-hms-backend
+    name: mohd-hms
     rootDir: backend
     env: docker
     plan: starter
