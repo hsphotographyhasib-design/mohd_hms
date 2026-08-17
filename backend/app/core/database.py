@@ -10,13 +10,8 @@ from app.core.logging import get_logger
 log = get_logger(__name__)
 
 # ── Table name mapping: camelCase Prisma model → PascalCase Supabase table ─────
-#
-# Supabase/PostgREST uses the table names as-is in the REST URL.
-# The Prisma schema uses camelCase model names, but the actual Supabase
-# tables use PascalCase. This map translates between the two.
 
 MODEL_TO_TABLE: dict[str, str] = {
-    # ─── Core Auth & Tenancy ────────────────────────────────────────────
     "user": "User",
     "tenant": "Tenant",
     "otpCode": "OtpCode",
@@ -27,26 +22,19 @@ MODEL_TO_TABLE: dict[str, str] = {
     "termsAcceptance": "TermsAcceptance",
     "device": "Device",
     "deviceToken": "DeviceToken",
-    # ─── Complaints ─────────────────────────────────────────────────────
     "complaint": "Complaint",
     "complaintTimeline": "ComplaintTimeline",
-    # ─── Work Orders ────────────────────────────────────────────────────
     "workOrder": "WorkOrder",
     "workOrderMaterial": "WorkOrderMaterial",
-    # ─── Equipment ──────────────────────────────────────────────────────
     "equipment": "Equipment",
     "equipmentQrCode": "EquipmentQrCode",
-    # ─── Customers ──────────────────────────────────────────────────────
     "customer": "Customer",
     "customerFeedback": "CustomerFeedback",
     "customerReport": "CustomerReport",
-    # ─── Invoices ───────────────────────────────────────────────────────
     "invoice": "Invoice",
     "invoicePayment": "InvoicePayment",
     "paymentVerification": "PaymentVerification",
-    # ─── Quotations ─────────────────────────────────────────────────────
     "quotation": "Quotation",
-    # ─── Inventory ──────────────────────────────────────────────────────
     "inventoryItem": "InventoryItem",
     "inventoryCategory": "InventoryCategory",
     "inventorySubcategory": "InventorySubcategory",
@@ -63,12 +51,9 @@ MODEL_TO_TABLE: dict[str, str] = {
     "serviceItemMaterial": "ServiceItemMaterial",
     "servicePackage": "ServicePackage",
     "servicePackageItem": "ServicePackageItem",
-    # ─── Purchases ──────────────────────────────────────────────────────
     "purchaseOrder": "PurchaseOrder",
-    # ─── Vehicles ───────────────────────────────────────────────────────
     "vehicle": "Vehicle",
     "vehicleLog": "VehicleLog",
-    # ─── Employees / HR ────────────────────────────────────────────────
     "department": "Department",
     "hrEmployee": "HrEmployee",
     "hrEmployeeDocument": "HrEmployeeDocument",
@@ -94,9 +79,7 @@ MODEL_TO_TABLE: dict[str, str] = {
     "hrAnnouncement": "HrAnnouncement",
     "attendance": "Attendance",
     "leaveRequest": "LeaveRequest",
-    # ─── PM Schedules ───────────────────────────────────────────────────
     "pmSchedule": "PmSchedule",
-    # ─── IRMS / Inspections ────────────────────────────────────────────
     "irmProject": "IrmProject",
     "irmReport": "IrmReport",
     "irmRevision": "IrmRevision",
@@ -109,31 +92,25 @@ MODEL_TO_TABLE: dict[str, str] = {
     "inspectionResult": "InspectionResult",
     "inspectionChecklistItem": "InspectionChecklistItem",
     "checklistTemplate": "ChecklistTemplate",
-    # ─── Notifications ──────────────────────────────────────────────────
     "notification": "Notification",
     "notificationLog": "NotificationLog",
     "broadcastLog": "BroadcastLog",
-    # ─── WhatsApp ───────────────────────────────────────────────────────
     "whatsappConfig": "WhatsAppConfig",
     "whatsappMessage": "WhatsAppMessage",
     "whatsappSession": "WhatsAppSession",
     "whatsappTemplate": "WhatsAppTemplate",
     "whatsappDeliveryLog": "WhatsAppDeliveryLog",
     "conversationThread": "ConversationThread",
-    # ─── Email ──────────────────────────────────────────────────────────
     "emailLog": "EmailLog",
     "emailTemplate": "EmailTemplate",
-    # ─── Documents ──────────────────────────────────────────────────────
     "document": "Document",
     "documentVersion": "DocumentVersion",
     "documentAuditLog": "DocumentAuditLog",
-    # ─── CMS ────────────────────────────────────────────────────────────
     "cmsSetting": "CmsSetting",
     "cmsPage": "CmsPage",
     "cmsPageTemplate": "CmsPageTemplate",
     "cmsBlog": "CmsBlog",
     "cmsBlogCategory": "CmsBlogCategory",
-    "cmsBlog": "CmsBlog",
     "cmsService": "CmsService",
     "cmsProject": "CmsProject",
     "cmsIndustry": "CmsIndustry",
@@ -151,12 +128,9 @@ MODEL_TO_TABLE: dict[str, str] = {
     "cmsRevision": "CmsRevision",
     "cmsActivityLog": "CmsActivityLog",
     "brandingAsset": "BrandingAsset",
-    # ─── AI ─────────────────────────────────────────────────────────────
     "aiConversationLog": "AiConversationLog",
-    # ─── Locations ──────────────────────────────────────────────────────
     "savedLocation": "SavedLocation",
     "scanLog": "ScanLog",
-    # ─── Audit & Errors ─────────────────────────────────────────────────
     "auditLog": "AuditLog",
     "errorLog": "ErrorLog",
 }
@@ -168,32 +142,19 @@ MODEL_TO_TABLE: dict[str, str] = {
 def where_to_postgrest_filters(
     where: dict[str, Any],
     prefix: str = "",
-) -> str:
-    """Convert a Prisma-style where dict to a PostgREST query string filter.
+) -> list[tuple[str, str]]:
+    """Convert a Prisma-style where dict to PostgREST query params.
 
-    Supported operators (mapped from Prisma conventions):
-      - Direct equality:  {"status": "open"}          → status=eq.open
-      - In:               {"status": {"in": [...]}}  → status=in.(a,b,c)
-      - Not in:           {"status": {"notIn": [...]}}→ status=not.in.(a,b,c)
-      - Contains:         {"name": {"contains": "x"}}→ name=ilike.*x*
-      - Starts with:      {"name": {"startsWith": "x"}}→ name=ilike.x*
-      - Ends with:        {"name": {"endsWith": "x"}}→ name=ilike.*x
-      - gt, gte, lt, lte: {"amount": {"gt": 100}}    → amount=gt.100
-      - ne:               {"status": {"ne": "x"}}    → status=neq.x
-      - isNull:           {"field": {"isNull": true}} → field=is.null
-      - isNotNull:        {"field": {"isNotNull": true}} → field=not.is.null
-      - OR:               {"OR": [...]}               → or=(and1, and2, ...)
-      - AND:              {"AND": [...]}              → and=(cond1, cond2, ...)
-      - NOT:              {"NOT": {...}}              → not=(cond)
+    Returns a list of (key, value) tuples suitable for passing to httpx params.
+    PostgREST expects filters as query params like:
+      ?email=eq.test@example.com&status=eq.active
+      ?or=(email.eq.test@example.com,phone.eq.123)
 
-    Args:
-        where:  Prisma-style where clause dict.
-        prefix: Key prefix for recursive calls (e.g. "complaint.").
-
-    Returns:
-        PostgREST query string (the part after the ``?`` that goes into the URL).
+    Supported operators:
+      eq, ne/neq, in, notIn, contains, startsWith, endsWith,
+      gt, gte, lt, lte, isNull, isNotNull, OR, AND, NOT
     """
-    filters: list[str] = []
+    params: list[tuple[str, str]] = []
 
     for key, value in where.items():
         full_key = f"{prefix}{key}" if prefix else key
@@ -203,28 +164,28 @@ def where_to_postgrest_filters(
             or_parts: list[str] = []
             for sub in value:
                 if isinstance(sub, dict):
-                    sub_filter = where_to_postgrest_filters(sub, prefix)
-                    if sub_filter:
-                        or_parts.append(f"and({sub_filter})")
+                    sub_params = where_to_postgrest_filters(sub, prefix)
+                    for pk, pv in sub_params:
+                        or_parts.append(f"{pk}.{pv}")
             if or_parts:
-                filters.append(f"or({','.join(or_parts)})")
+                params.append(("or", f"({','.join(or_parts)})"))
             continue
 
         if key.upper() == "AND" and isinstance(value, list):
             and_parts: list[str] = []
             for sub in value:
                 if isinstance(sub, dict):
-                    sub_filter = where_to_postgrest_filters(sub, prefix)
-                    if sub_filter:
-                        and_parts.append(sub_filter)
+                    sub_params = where_to_postgrest_filters(sub, prefix)
+                    for pk, pv in sub_params:
+                        and_parts.append(f"{pk}.{pv}")
             if and_parts:
-                filters.append(f"and({','.join(and_parts)})")
+                params.append(("and", f"({','.join(and_parts)})"))
             continue
 
         if key.upper() == "NOT" and isinstance(value, dict):
-            not_filter = where_to_postgrest_filters(value, prefix)
-            if not_filter:
-                filters.append(f"not({not_filter})")
+            not_params = where_to_postgrest_filters(value, prefix)
+            for pk, pv in not_params:
+                params.append(("not", f"({pk}.{pv})"))
             continue
 
         # ── Operator objects ─────────────────────────────────────────────
@@ -232,45 +193,45 @@ def where_to_postgrest_filters(
             for op, op_val in value.items():
                 match op:
                     case "eq":
-                        filters.append(f"{full_key}=eq.{_escape(op_val)}")
+                        params.append((full_key, f"eq.{_escape(op_val)}"))
                     case "ne" | "neq":
-                        filters.append(f"{full_key}=neq.{_escape(op_val)}")
+                        params.append((full_key, f"neq.{_escape(op_val)}"))
                     case "in":
                         items = ",".join(_escape(v) for v in op_val)
-                        filters.append(f"{full_key}=in.({items})")
+                        params.append((full_key, f"in.({items})"))
                     case "notIn":
                         items = ",".join(_escape(v) for v in op_val)
-                        filters.append(f"{full_key}=not.in.({items})")
+                        params.append((full_key, f"not.in.({items})"))
                     case "contains":
-                        filters.append(f"{full_key}=ilike.*{_escape(op_val)}*")
+                        params.append((full_key, f"ilike.*{_escape(op_val)}*"))
                     case "startsWith":
-                        filters.append(f"{full_key}=ilike.{_escape(op_val)}*")
+                        params.append((full_key, f"ilike.{_escape(op_val)}*"))
                     case "endsWith":
-                        filters.append(f"{full_key}=ilike.*{_escape(op_val)}")
+                        params.append((full_key, f"ilike.*{_escape(op_val)}"))
                     case "gt":
-                        filters.append(f"{full_key}=gt.{_escape(op_val)}")
+                        params.append((full_key, f"gt.{_escape(op_val)}"))
                     case "gte":
-                        filters.append(f"{full_key}=gte.{_escape(op_val)}")
+                        params.append((full_key, f"gte.{_escape(op_val)}"))
                     case "lt":
-                        filters.append(f"{full_key}=lt.{_escape(op_val)}")
+                        params.append((full_key, f"lt.{_escape(op_val)}"))
                     case "lte":
-                        filters.append(f"{full_key}=lte.{_escape(op_val)}")
+                        params.append((full_key, f"lte.{_escape(op_val)}"))
                     case "isNull":
                         if op_val:
-                            filters.append(f"{full_key}=is.null")
+                            params.append((full_key, "is.null"))
                         else:
-                            filters.append(f"{full_key}=not.is.null")
+                            params.append((full_key, "not.is.null"))
                     case "isNotNull":
                         if op_val:
-                            filters.append(f"{full_key}=not.is.null")
+                            params.append((full_key, "not.is.null"))
                     case _:
                         log.warning(f"Unsupported PostgREST operator: {op}")
             continue
 
         # ── Direct equality (non-dict value) ─────────────────────────────
-        filters.append(f"{full_key}=eq.{_escape(value)}")
+        params.append((full_key, f"eq.{_escape(value)}"))
 
-    return ",".join(filters)
+    return params
 
 
 def _escape(value: Any) -> str:
@@ -285,13 +246,13 @@ def _escape(value: Any) -> str:
         return "true" if value else "false"
     if isinstance(value, (int, float)):
         return str(value)
-    # String: escape commas, parens, dots that would break PostgREST syntax
-    escaped = str(value).replace(",", r"\2C").replace("(", r"\28").replace(")", r"\29").replace(".", r"\2E")
+    # String: escape commas and parens that break PostgREST syntax.
+    # Dots, @, and other chars are safe in filter values.
+    escaped = str(value).replace(",", r"\2C").replace("(", r"\28").replace(")", r"\29")
     return escaped
 
 
 # ── Database client ───────────────────────────────────────────────────────────
-
 
 _client: httpx.AsyncClient | None = None
 
@@ -302,16 +263,11 @@ def _get_table_name(model_or_table: str) -> str:
     """
     if model_or_table in MODEL_TO_TABLE:
         return MODEL_TO_TABLE[model_or_table]
-    # If it's already PascalCase or a direct table name, return as-is
     return model_or_table
 
 
 def get_supabase_client() -> httpx.AsyncClient:
-    """Return the singleton httpx.AsyncClient configured for Supabase PostgREST.
-
-    Uses the service_role key for full admin access (bypasses RLS).
-    For user-scoped queries, tenant isolation must be enforced in the where clause.
-    """
+    """Return the singleton httpx.AsyncClient for Supabase PostgREST."""
     global _client
     if _client is not None:
         return _client
@@ -347,6 +303,44 @@ async def close_supabase_client() -> None:
 # ── CRUD helpers ──────────────────────────────────────────────────────────────
 
 
+def _build_query_params(
+    select: str,
+    where: dict[str, Any] | None,
+    order: str | None,
+    limit: int | None,
+    offset: int | None,
+    tenant_id: str | None,
+) -> list[tuple[str, str]]:
+    """Build the complete list of PostgREST query parameters.
+
+    Returns list of (key, value) tuples for httpx params.
+    """
+    params: list[tuple[str, str]] = []
+
+    # select is always first
+    params.append(("select", select))
+
+    # Build where clause (with optional tenant isolation)
+    effective_where: dict[str, Any] = {}
+    if tenant_id:
+        effective_where["tenantId"] = tenant_id
+    if where:
+        effective_where.update(where)
+
+    if effective_where:
+        filter_params = where_to_postgrest_filters(effective_where)
+        params.extend(filter_params)
+
+    if order:
+        params.append(("order", order))
+    if limit is not None:
+        params.append(("limit", str(limit)))
+    if offset is not None:
+        params.append(("offset", str(offset)))
+
+    return params
+
+
 async def query_table(
     table: str,
     *,
@@ -364,77 +358,36 @@ async def query_table(
         table:    Prisma model name (camelCase) or direct table name.
         select:   PostgREST select string (default "*").
         where:    Prisma-style where clause. If tenant_id is given,
-                  a ``tenantId`` filter is automatically injected.
+                  a tenantId filter is automatically injected.
         order:    PostgREST order string, e.g. "createdAt.desc".
         limit:    Max rows to return.
         offset:   Rows to skip.
-        count:    Include ``Prefer: count=<value>`` header.
-        tenant_id: If provided, injects ``tenantId=eq.<id>`` into where.
+        count:    Include Prefer: count=<value> header.
+        tenant_id: If provided, injects tenantId=eq.<id> into where.
 
     Returns:
-        Dict with keys:
-          - data: list of records
-          - count: total count (if count param was set)
-          - range: Content-Range header value
+        Dict with keys: data, count (if count param set), range.
     """
     client = get_supabase_client()
     table_name = _get_table_name(table)
 
-    # Build query params
-    params: dict[str, str] = {"select": select}
+    # Build ALL query params including filters
+    params = _build_query_params(select, where, order, limit, offset, tenant_id)
 
-    # Build where clause
-    effective_where: dict[str, Any] = {}
-    if tenant_id:
-        effective_where["tenantId"] = tenant_id
-    if where:
-        # Merge, letting explicit where override tenant_id if needed
-        effective_where.update(where)
-
-    if effective_where:
-        filter_str = where_to_postgrest_filters(effective_where)
-        if filter_str:
-            params["filter"] = filter_str  # Not a real PostgREST param — we inline into URL
-
-    if order:
-        params["order"] = order
-
-    # Build headers
+    # Build headers (Prefer for count, auth headers)
     headers: dict[str, str] = {
         "apikey": client.headers.get("apikey", ""),
         "Authorization": client.headers.get("Authorization", ""),
     }
     if count:
         headers["Prefer"] = f"count={count},return=representation"
+    else:
+        headers["Prefer"] = "return=representation"
 
-    # Build URL with filters inlined (PostgREST uses column=value in query params)
     url_path = f"/rest/v1/{table_name}"
-    query_parts: list[str] = []
-
-    # Add filter params as PostgREST column filters
-    if effective_where:
-        filter_str = where_to_postgrest_filters(effective_where)
-        if filter_str:
-            # Each filter is a separate query param
-            # For AND: just add them all
-            # For OR/AND/NOT: need special handling
-            _add_filters_to_query(filter_str, query_parts)
-
-    for k, v in params.items():
-        if k != "filter":
-            query_parts.append(f"{k}={v}")
-
-    # Pagination via Range header
-    range_start = offset or 0
-    range_end = (range_start + (limit or 1000)) - 1
-    if limit:
-        range_end = range_start + limit - 1
-    headers["Range"] = f"{range_start}-{range_end}"
-
-    url = f"{client.base_url}{url_path}?{'&'.join(query_parts)}"
 
     try:
-        response = await client.get(url_path, params={k: v for k, v in params.items() if k != "filter"}, headers=headers)
+        response = await client.get(url_path, params=params, headers=headers)
     except httpx.HTTPError as exc:
         log.error(f"PostgREST query failed: {exc}")
         raise InternalException(message="Database query failed") from exc
@@ -445,10 +398,9 @@ async def query_table(
 
     result: dict[str, Any] = {"data": response.json()}
 
-    # Extract count from header
+    # Extract count from Content-Range header
     content_range = response.headers.get("content-range", "")
     if content_range and count:
-        # Format: "0-24/100" where 100 is total
         parts = content_range.split("/")
         if len(parts) == 2:
             result["count"] = parts[1]
@@ -457,62 +409,10 @@ async def query_table(
     return result
 
 
-def _add_filters_to_query(filter_str: str, query_parts: list[str]) -> None:
-    """Parse the filter string and add individual PostgREST filter params.
-
-    PostgREST expects column operators as separate query params:
-      ?status=eq.open&priority=in.(high,medium)
-
-    For complex logical operators (or, and, not), we use the special
-    PostgREST syntax.
-    """
-    # Split by commas but respect parentheses
-    parts: list[str] = []
-    depth = 0
-    current = ""
-    for ch in filter_str:
-        if ch == "(" :
-            depth += 1
-            current += ch
-        elif ch == ")":
-            depth -= 1
-            current += ch
-        elif ch == "," and depth == 0:
-            if current.strip():
-                parts.append(current.strip())
-            current = ""
-        else:
-            current += ch
-    if current.strip():
-        parts.append(current.strip())
-
-    for part in parts:
-        # Check for logical operators (or(...), and(...), not(...))
-        if part.startswith("or(") and part.endswith(")"):
-            query_parts.append(part)
-        elif part.startswith("and(") and part.endswith(")"):
-            query_parts.append(part)
-        elif part.startswith("not(") and part.endswith(")"):
-            query_parts.append(part)
-        else:
-            # Regular column.operator.value filter
-            # Split on first = to get the param key=value
-            eq_pos = part.find("=")
-            if eq_pos > 0:
-                query_parts.append(part)
-            else:
-                query_parts.append(part)
-
-
 async def insert_record(table: str, data: dict[str, Any]) -> dict[str, Any]:
     """Insert a single record into a Supabase table.
 
-    Args:
-        table: Prisma model name or direct table name.
-        data:  Record data dict.
-
-    Returns:
-        The inserted record (as returned by PostgREST with return=representation).
+    Returns the inserted record (with return=representation).
     """
     client = get_supabase_client()
     table_name = _get_table_name(table)
@@ -542,13 +442,7 @@ async def insert_record(table: str, data: dict[str, Any]) -> dict[str, Any]:
 async def update_record(table: str, record_id: str, data: dict[str, Any]) -> dict[str, Any]:
     """Update a record by ID in a Supabase table.
 
-    Args:
-        table:     Prisma model name or direct table name.
-        record_id: The record's ``id`` value.
-        data:      Partial update data.
-
-    Returns:
-        The updated record.
+    Returns the updated record.
     """
     client = get_supabase_client()
     table_name = _get_table_name(table)
@@ -582,12 +476,7 @@ async def update_record(table: str, record_id: str, data: dict[str, Any]) -> dic
 
 
 async def delete_record(table: str, record_id: str) -> None:
-    """Delete a record by ID from a Supabase table.
-
-    Args:
-        table:     Prisma model name or direct table name.
-        record_id: The record's ``id`` value.
-    """
+    """Delete a record by ID from a Supabase table."""
     client = get_supabase_client()
     table_name = _get_table_name(table)
 
@@ -615,19 +504,9 @@ async def delete_record(table: str, record_id: str) -> None:
 
 
 async def count_records(table: str, where: dict[str, Any] | None = None, *, tenant_id: str | None = None) -> int:
-    """Count records in a Supabase table.
-
-    Args:
-        table:     Prisma model name or direct table name.
-        where:     Optional Prisma-style where clause.
-        tenant_id: If provided, injects ``tenantId=eq.<id>`` into where.
-
-    Returns:
-        Total matching record count.
-    """
+    """Count records in a Supabase table."""
     result = await query_table(table, select="id", where=where, tenant_id=tenant_id, count="exact", limit=1)
     count_str = result.get("count", "0")
-    # Handle '*' (PostgREST returns '*' when count is not exact)
     if count_str == "*":
         return len(result.get("data", []))
     try:

@@ -99,40 +99,13 @@ class AsyncSupabaseClient:
         return headers
 
     @staticmethod
-    def _build_filter_params(where: dict[str, Any]) -> list[str]:
-        """Convert a simple where dict to PostgREST query filter params.
+    def _build_filter_params(where: dict[str, Any]) -> list[tuple[str, str]]:
+        """Convert a where dict to PostgREST query params.
 
-        Supports:
-          - Direct equality:  {"status": "open"}          -> status=eq.open
-          - In:               {"status": {"in": [...]}}  -> status=in.(a,b,c)
-          - gt, gte, lt, lte, ne, contains, startsWith, endsWith
-          - isNull / isNotNull
+        Returns list of (key, value) tuples.
         """
         from app.core.database import where_to_postgrest_filters
-        filter_str = where_to_postgrest_filters(where)
-        if not filter_str:
-            return []
-
-        # Parse the filter string into individual parts
-        parts: list[str] = []
-        depth = 0
-        current = ""
-        for ch in filter_str:
-            if ch == "(":
-                depth += 1
-                current += ch
-            elif ch == ")":
-                depth -= 1
-                current += ch
-            elif ch == "," and depth == 0:
-                if current.strip():
-                    parts.append(current.strip())
-                current = ""
-            else:
-                current += ch
-        if current.strip():
-            parts.append(current.strip())
-        return parts
+        return where_to_postgrest_filters(where)
 
     # ── Query ───────────────────────────────────────────────────────────────
 
@@ -165,18 +138,9 @@ class AsyncSupabaseClient:
         params: dict[str, str] = {"select": select}
 
         if where:
-            filter_parts = self._build_filter_params(where)
-            for i, part in enumerate(filter_parts):
-                # Each filter becomes a query param
-                eq_pos = part.find("=")
-                if eq_pos > 0:
-                    key = part[:eq_pos]
-                    val = part[eq_pos + 1:]
-                    params[key] = val
-                else:
-                    # Logical operators (or(...), and(...), not(...))
-                    # PostgREST accepts these as top-level params
-                    params[f"filter_{i}"] = part
+            filter_tuples = self._build_filter_params(where)
+            for key, val in filter_tuples:
+                params[key] = val
 
         if order:
             params["order"] = order
