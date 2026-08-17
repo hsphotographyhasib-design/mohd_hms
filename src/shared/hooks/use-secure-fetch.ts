@@ -3,6 +3,7 @@
 import { useCallback } from 'react';
 import { useAuthStore, useAppStore } from '@/app-shell/store';
 import { broadcastLogoutEvent } from '@/core/auth/session/broadcast-logout';
+import { resolveApiUrl } from '@/lib/api-client';
 
 /**
  * A secure fetch wrapper that:
@@ -99,7 +100,8 @@ export function isWithinGracePeriod(): boolean {
 /**
  * Global fetch interceptor — patches global fetch to handle 401.
  * Call once at app initialization.
- * Does NOT rewrite URLs.
+ * Rewrites /api/... URLs to the FastAPI backend via resolveApiUrl
+ * when NEXT_PUBLIC_API_URL is configured.
  *
  * IMPORTANT: Only 401 (unauthenticated) triggers auto-logout.
  * 403 (forbidden) is intentionally NOT handled here — the calling
@@ -109,7 +111,12 @@ export function setupFetchInterceptor() {
   const originalFetch = window.fetch;
 
   window.fetch = (async function (url: RequestInfo | URL, options?: RequestInit): Promise<Response> {
-    const urlStr = typeof url === 'string' ? url : url instanceof URL ? url.href : (url as Request).url;
+    let urlStr = typeof url === 'string' ? url : url instanceof URL ? url.href : (url as Request).url;
+
+    // Rewrite /api/... URLs to the FastAPI backend when configured
+    if (urlStr.startsWith('/api/')) {
+      urlStr = resolveApiUrl(urlStr);
+    }
 
     // Add auth header for API calls
     const { token } = useAuthStore.getState();
@@ -118,7 +125,7 @@ export function setupFetchInterceptor() {
       headers.set('Authorization', `Bearer ${token}`);
     }
 
-    const res = await originalFetch(url, { ...options, headers });
+    const res = await originalFetch(urlStr, { ...options, headers });
 
     // Only 401 (unauthenticated) triggers session cleanup, NOT 403 (forbidden).
     if (res.status === 401 && urlStr.includes('/api/') && !urlStr.includes('/api/auth/login') && !urlStr.includes('/api/auth/register')) {

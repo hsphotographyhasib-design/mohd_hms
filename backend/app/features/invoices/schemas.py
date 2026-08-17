@@ -13,7 +13,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class InvoiceStatus(StrEnum):
@@ -161,5 +161,4 @@ class InvoiceResponse(BaseModel):
     updatedAt: str | None = None
     amountPaid: float = 0
     balanceDue: float = 0
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")

@@ -13,7 +13,7 @@ from __future__ import annotations
 from enum import StrEnum
 from typing import Any
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class LineItemType(StrEnum):
@@ -175,8 +175,7 @@ class QuotationResponse(BaseModel):
     notes: str | None = None
     createdAt: str | None = None
     updatedAt: str | None = None
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")
 
 
 class QuotationListParams(BaseModel):

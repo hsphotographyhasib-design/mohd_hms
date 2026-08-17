@@ -644,3 +644,284 @@ Stage Summary:
 - PO number auto-generated: PO-YYYYMMDD-XXXXX
 - Finance monthly revenue computed from paid invoices for last 6 months
 - No `from __future__ import annotations` used in any new file
+
+---
+Task ID: 11-irms
+Agent: Build
+Task: Create IRMS (Inspection & Report Management System) feature module
+
+Work Log:
+- Read worklog.md and 7 core files (exceptions, database, dependencies, permissions, pagination, router)
+- Read 21 Next.js IRMS route files to reverse-engineer API contract
+- Created /backend/app/features/irms/__init__.py (module docstring)
+- Created /backend/app/features/irms/schemas.py (9 enums + 19 Pydantic models)
+- Created /backend/app/features/irms/service.py (30+ service functions)
+- Created /backend/app/features/irms/router.py (38 endpoints)
+- Registered IRMS router in /backend/app/api/router.py
+- All new files pass Python syntax check and forbidden-import validation
+
+Stage Summary:
+- 4 files created in /backend/app/features/irms/
+- 1 file modified (router.py — added IRMS import and include_router)
+- Total endpoints: 38 (dashboard, analytics, activities, projects CRUD, reports CRUD, photos single/bulk/reorder, revisions, status advance/reject, signatures, PDF stub, templates CRUD with checklist items, IRM users, inspections CRUD, inspection completion, inspection reports/stats/analytics)
+- All endpoints scoped under /api/v1/irms/
+- RBAC: super_admin, admin, manager, supervisor, technician have access; customer role explicitly blocked
+- Uses inspection.* action permissions from permissions.py
+- Report status workflow: draft → submitted → supervisor_review → manager_approval → approved
+- Revision snapshots saved before every status change; rollback restores fields
+- Report numbers auto-generated: IR-YYYY-NNNN
+- No `from __future__ import annotations` in any new file
+
+---
+Task ID: 12-cms
+Agent: Build
+Task: Create CMS (Content Management System) feature module
+
+Work Log:
+- Read worklog.md for project context
+- Read 7 core backend files (exceptions, database, dependencies, permissions, pagination, router, logging)
+- Read 14 Next.js CMS route files to reverse-engineer API contract patterns
+- Read existing vehicles module (schemas, router, service, __init__) for patterns
+- Created /backend/app/features/cms/__init__.py (module docstring)
+- Created /backend/app/features/cms/schemas.py (31 Pydantic models)
+- Created /backend/app/features/cms/service.py (90+ service functions)
+- Created /backend/app/features/cms/router.py (104 endpoint handlers)
+- Registered CMS router in /backend/app/api/router.py
+- All 4 new Python files pass syntax validation and forbidden-import validation
+
+Files Created:
+- backend/app/features/cms/__init__.py
+- backend/app/features/cms/schemas.py
+- backend/app/features/cms/service.py
+- backend/app/features/cms/router.py
+
+Files Modified:
+- backend/app/api/router.py (added CMS import and include_router)
+
+Endpoints Created (104 total, mounted at /api/v1/cms):
+Dashboard & Settings (4):
+- GET  /cms/dashboard — overview stats + recent activity
+- GET  /cms/about — about page content
+- PUT  /cms/about — update about page
+- GET/PUT /cms/settings — CMS settings (bulk upsert)
+- GET  /cms/analytics — analytics summary
+
+Hero (5):
+- GET/POST /cms/hero, GET/PUT/DELETE /cms/hero/{id}
+
+Footer (2):
+- GET/PUT /cms/footer
+
+Services (5):
+- GET/POST /cms/services, GET/PUT/DELETE /cms/services/{id}
+
+Industries (5):
+- GET/POST /cms/industries, GET/PUT/DELETE /cms/industries/{id}
+
+Projects (5):
+- GET/POST /cms/projects, GET/PUT/DELETE /cms/projects/{id}
+
+Blogs (9):
+- GET/POST /cms/blogs, GET/PUT/DELETE /cms/blogs/{id}
+- GET/POST /cms/blogs/categories, PUT/DELETE /cms/blogs/categories/{id}
+
+Testimonials (5):
+- GET/POST /cms/testimonials, GET/PUT/DELETE /cms/testimonials/{id}
+
+Careers (7):
+- GET/POST /cms/careers, GET/PUT/DELETE /cms/careers/{id}
+- GET/POST /cms/careers/{id}/applications
+
+Contact (4):
+- GET/POST /cms/contact, GET/PUT /cms/contact/{id}
+
+Announcements (5):
+- GET/POST /cms/announcements, GET/PUT/DELETE /cms/announcements/{id}
+
+Popups (5):
+- GET/POST /cms/popups, GET/PUT/DELETE /cms/popups/{id}
+
+Forms (5):
+- GET/POST /cms/forms, GET/PUT/DELETE /cms/forms/{id}
+
+SEO (5):
+- GET/PUT /cms/seo (list + bulk upsert)
+- GET/PUT/DELETE /cms/seo/{pagePath}
+
+Media (4):
+- GET/POST /cms/media, GET/DELETE /cms/media/{id}
+
+Activity (2):
+- GET/POST /cms/activity
+
+Pages (5):
+- GET/POST /cms/pages, GET/PUT/DELETE /cms/pages/{id}
+
+Page Builder (17):
+- GET/POST /cms/builder/pages, GET/PUT/DELETE /cms/builder/pages/{id}
+- POST /cms/builder/pages/{id}/publish
+- POST /cms/builder/pages/{id}/duplicate
+- GET/POST /cms/builder/pages/{id}/revisions
+- POST /cms/builder/pages/{id}/revisions/{revId}/restore
+- GET/POST /cms/builder/revisions
+- GET/POST /cms/builder/templates, GET/PUT/DELETE /cms/builder/templates/{id}
+- GET/PUT /cms/builder/theme
+
+Public (1):
+- GET /cms/public/landing (no auth required)
+
+Key Implementation Details:
+- All CMS endpoints require super_admin role (per RBAC matrix FEATURE_PERMISSIONS["cms"])
+- Uses single `require_role("super_admin")` dependency factory for all protected routes
+- Two public endpoints: POST /cms/contact (contact form) and GET /cms/public/landing
+- Generic CRUD helpers: _generic_list, _generic_get, _generic_create, _generic_update, _generic_delete
+- All list endpoints support pagination (page/pageSize), search, and status filtering
+- Slug auto-generation from name/title using generate_slug()
+- Unique slug enforcement for builder pages (auto-appends -copy-1, -copy-2)
+- Revision management: auto-created on publish, manual snapshot creation, restore capability
+- Activity logging: every mutation logs to cmsActivityLog (fire-and-forget)
+- SEO: bulk upsert pattern matching Next.js contract exactly
+- Settings: stored as JSON in cmsSetting table, keyed by setting name
+- Footer/About: stored in cmsFooter and cmsSetting (key=about_page) respectively
+- JSON field serialization via _serialize_json_fields helper for PostgREST text columns
+- All queries enforce multi-tenant isolation via tenant_id
+- Page creation auto-creates initial revision
+- Builder publish: saves revision snapshot, increments version, sets status=published
+- Builder duplicate: copies all fields, ensures unique slug
+- No `from __future__ import annotations` in any new file
+
+Stage Summary:
+- 4 files created in /backend/app/features/cms/
+- 1 file modified (router.py — added CMS import and include_router)
+- Total endpoints: 104 (all under /api/v1/cms/)
+- RBAC: super_admin only (matching permissions.py FEATURE_PERMISSIONS["cms"])
+- Full parity with 14 Next.js CMS route files analyzed
+- Generic CRUD pattern minimizes code duplication across 20+ entity types
+- Activity logging on all mutations for audit trail
+- Revision management with publish/duplicate/restore workflow
+
+---
+
+## Task ID: 13b — Sessions, Settings, Reports, Service Items Features
+
+**Date:** $(date -u +"%Y-%m-%d %H:%M UTC")
+**Status:** Completed
+
+### Files Created (14 new files)
+
+**Sessions Module (2 files — completing existing module):**
+- `/backend/app/features/sessions/service.py` — 10 service functions: list_sessions, create_session, delete_session, refresh_session, record_activity, list_audit, get_settings, update_settings, get_config_public, revoke_other_sessions. Uses LoginSession and AuthAuditLog tables.
+- `/backend/app/features/sessions/router.py` — 10 endpoints under /api/v1/sessions. RBAC: super_admin, admin (except /activity and /revoke-others which use get_current_user). Public endpoint: /config/public.
+
+**Settings Module (4 files):**
+- `/backend/app/features/settings/__init__.py`
+- `/backend/app/features/settings/schemas.py` — SystemInfoResponse model
+- `/backend/app/features/settings/service.py` — get_system_info: returns app version, environment, feature flags resolved from config
+- `/backend/app/features/settings/router.py` — GET /api/v1/settings/system-info. RBAC: super_admin only.
+
+**Reports Module (4 files):**
+- `/backend/app/features/reports/__init__.py`
+- `/backend/app/features/reports/schemas.py` — ReportFilters, ReportSummary, ReportsResponse
+- `/backend/app/features/reports/service.py` — get_summary_reports: parallel queries for complaints, work orders, invoices, equipment with date range filtering and status grouping
+- `/backend/app/features/reports/router.py` — GET /api/v1/reports. RBAC: super_admin, admin, manager, supervisor, finance.
+
+**Service Items Module (4 files):**
+- `/backend/app/features/service_items/__init__.py`
+- `/backend/app/features/service_items/schemas.py` — Pydantic models for ServiceItem, Category, Package, LabourRate, PriceBook, ChecklistItem, Material
+- `/backend/app/features/service_items/service.py` — Generic CRUD helpers + 29 service functions across 8 tables (ServiceItem, ServiceCategory, ServicePackage, ServicePackageItem, LabourRate, PriceBook, ServiceItemMaterial, ServiceChecklistItem)
+- `/backend/app/features/service_items/router.py` — 29 endpoints across 5 routers: service-items (9), service-categories (5), service-packages (5), labour-rates (5), price-book (5). RBAC: super_admin, admin, manager, supervisor.
+
+### Files Modified (1)
+- `/backend/app/api/router.py` — Added imports and include_router for all 4 new feature modules (sessions, settings, reports, service_items with 5 sub-routers)
+
+### Endpoint Summary
+| Module | Endpoints | Prefix | RBAC |
+|--------|-----------|--------|------|
+| Sessions | 10 | /api/v1/sessions | super_admin, admin |
+| Settings | 1 | /api/v1/settings | super_admin |
+| Reports | 1 | /api/v1/reports | super_admin, admin, manager, supervisor, finance |
+| Service Items | 29 | /api/v1/service-items, /service-categories, /service-packages, /labour-rates, /price-book | super_admin, admin, manager, supervisor |
+| **Total** | **41** | | |
+
+### Key Implementation Details
+- No `from __future__ import annotations` in any new file
+- Sessions service uses LoginSession and AuthAuditLog tables via PostgREST
+- Session settings stored as JSON in cmsSetting table (key=session_settings) with upsert pattern
+- Settings endpoint resolves feature flags dynamically from config (whatsapp, email, firebase, redis, google_maps)
+- Reports uses asyncio.gather for parallel queries across 4 tables
+- Service items uses generic CRUD helpers (_generic_list, _generic_get, _generic_create, _generic_update, _generic_delete) to minimize duplication
+- Service package creation supports nested items (ServicePackageItem records)
+- Package deletion cascades to package items
+- All queries enforce multi-tenant isolation via tenant_id
+- All list endpoints support pagination (page/pageSize), search, and status filtering
+
+---
+Task ID: 16
+Agent: General
+Task: Build frontend API client and backend tests
+
+Work Log:
+- Read worklog.md, use-secure-fetch.ts, page.tsx, store/index.ts for context
+- Read backend: main.py, api/router.py, dependencies.py, auth/router.py, complaints/router.py
+- Read backend: config.py, security.py, exceptions.py, database.py, rbac/permissions.py
+- Read auth schemas.py, complaints schemas.py
+
+TASK A — Frontend API Client:
+- Created src/lib/api-client.ts with resolveApiUrl() and apiClient()
+- resolveApiUrl rewrites /api/... → {NEXT_PUBLIC_API_URL}/api/v1/... when env var set
+- Modified src/shared/hooks/use-secure-fetch.ts: imported resolveApiUrl, added URL rewriting in setupFetchInterceptor
+- All 223+ existing fetch('/api/...') calls now auto-route to FastAPI backend when configured
+- When NEXT_PUBLIC_API_URL is empty, behavior is unchanged (passes through to Next.js API routes)
+
+TASK B — Backend Tests:
+- Created backend/tests/__init__.py (empty)
+- Created backend/tests/conftest.py with:
+  - Test FastAPI app factory (bypasses lifespan/Supabase/Redis)
+  - JWT-based auth override (real JWT verification with test secret)
+  - Pre-generated tokens for all 7 roles (super_admin, admin, manager, supervisor, technician, finance, customer)
+  - Role-specific client fixtures (sa_client, admin_client, customer_client, tech_client)
+  - mock_db fixture (patches all database CRUD helpers)
+  - mock_supabase_client and mock_redis fixtures
+- Created backend/tests/test_health.py (5 tests): health/ready endpoints, no-auth required, 404 for unknown
+- Created backend/tests/test_auth.py (18 tests): login, register, me, profile, forgot-password, refresh, logout, list users (RBAC), delete user (super_admin only), invalid/missing tokens
+- Created backend/tests/test_rbac.py (21 tests): super_admin full access, admin restricted, customer/technician restrictions, role hierarchy, permission matrix, role transitions
+- Created backend/tests/test_complaints.py (25 tests): CRUD, list with filters, counts, escalation rules, create, get, update, delete (RBAC), assign technician, accept/reject, assignment history, workflow transitions (start_work, complete_work, client_confirm, close), workflow state, escalation check, customer profile
+
+All 69 tests pass.
+
+Stage Summary:
+- Frontend: api-client.ts + fetch interceptor update enables zero-change migration to FastAPI backend
+- Backend: 69 tests covering health, auth, RBAC (unit + integration), and complaints (CRUD + workflow)
+- Test infrastructure: reusable fixtures for any future test files (just add a new test_*.py)
+
+---
+Task ID: 20-final
+Agent: Main
+Task: Create backend README.md and final worklog entry
+
+Work Log:
+- Read app/main.py — understood app factory, middleware stack, lifespan, health endpoints
+- Read app/api/router.py — verified all 33 feature routers registered under /api/v1
+- Read app/core/config.py — Pydantic Settings with 7 sub-settings classes
+- Read app/core/security.py — JWT HS256, bcrypt, OTP, 11 roles with hierarchy
+- Read app/rbac/permissions.py — feature-level + action-level permission matrix (mirror of frontend)
+- Read app/rbac/data_scope.py — role-based PostgREST where-clause builder
+- Read app/api/dependencies.py — auth, DB, RBAC dependency injection factories
+- Read app/integrations/redis.py — Upstash REST client with cache-through pattern
+- Read tests/conftest.py — test infrastructure, mock DB, JWT fixtures
+- Scanned all 33 feature router files — counted 303 API endpoints across all modules
+- Read .env.example, Dockerfile, render.yaml — deployment configuration
+- Counted project metrics: 153 Python files, ~39,000 LOC, 33 modules, 303 endpoints, 69 tests
+- Created comprehensive backend/README.md with 15 sections covering all aspects
+- Appended this final worklog entry
+
+Stage Summary:
+- COMPLETE: MOHD.HMS ENTERPRISE FastAPI Backend build is finished
+- 153 Python files created across 33 feature modules + core + integrations + tests
+- 303 API endpoints under /api/v1/ covering all HMS functionality
+- 69 test cases all passing (health, auth, RBAC, complaints)
+- 33 feature modules: auth, users, employees, technicians, departments, complaints, work-orders, equipment, pm, quotations, invoices, payments, customers, dashboard, notifications, presence, inventory, purchases, finance, vehicles, hr, irms, cms, whatsapp, email, documents, sessions, settings, reports, service-items, service-categories, service-packages, labour-rates, price-book
+- Key architectural decisions: no ORM (direct PostgREST), feature-based modular design, centralized RBAC, JWT-compatible with NextAuth, Upstash Redis with graceful degradation, Docker-first deployment
+- Migration path: set NEXT_PUBLIC_API_URL in frontend to route all /api/ calls to FastAPI — zero code changes required in existing frontend fetch calls
+- README.md created at backend/README.md with full documentation
+- All deliverables complete
