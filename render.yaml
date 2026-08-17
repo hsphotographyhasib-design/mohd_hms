@@ -1,18 +1,13 @@
-# Render.com deployment configuration
-# This file lives inside backend/ — for Render Blueprint, copy to repo root.
-#
-# Two deployment modes:
-#   1. DOCKER (recommended) — Render auto-detects Dockerfile in rootDir
-#   2. NATIVE PYTHON — uses buildCommand + startCommand below
+# Render.com Blueprint — place at repository root
+# Points to backend/ subdirectory
 
 services:
   - type: web
     name: mohd-hms-backend
     rootDir: backend
-    env: docker  # Use Docker build (Dockerfile is in backend/)
+    env: docker
+    plan: starter
     envVars:
-      - key: PYTHON_VERSION
-        value: "3.12.0"
       - key: APP_ENV
         value: production
       - key: PORT
@@ -21,14 +16,17 @@ services:
         value: "MOHD.HMS ENTERPRISE"
       - key: APP_VERSION
         value: "1.0.0"
-      - key: CORS_ORIGINS
-        sync: false
-      - key: JWT_SECRET
-        sync: false
       - key: JWT_ALGORITHM
         value: "HS256"
       - key: JWT_ACCESS_TOKEN_EXPIRE
         value: "604800"
+      - key: EMAIL_PORT
+        value: "587"
+      # Secrets — set these in Render Dashboard, NOT here
+      - key: CORS_ORIGINS
+        sync: false
+      - key: JWT_SECRET
+        sync: false
       - key: SUPABASE_URL
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
@@ -51,8 +49,6 @@ services:
         sync: false
       - key: EMAIL_HOST
         sync: false
-      - key: EMAIL_PORT
-        value: "587"
       - key: EMAIL_USERNAME
         sync: false
       - key: EMAIL_PASSWORD

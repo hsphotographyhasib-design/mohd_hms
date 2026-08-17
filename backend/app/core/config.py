@@ -159,6 +159,32 @@ class Settings(
         extra="ignore",
     )
 
+    # ── Explicit configuration checks (avoid MRO collision with is_configured) ──
+
+    @property
+    def redis_configured(self) -> bool:
+        return bool(self.redis_url and self.redis_token)
+
+    @property
+    def firebase_configured(self) -> bool:
+        return bool(self.firebase_project_id and self.firebase_client_email and self.firebase_private_key)
+
+    @property
+    def google_configured(self) -> bool:
+        return bool(self.google_client_id and self.google_client_secret)
+
+    @property
+    def email_configured(self) -> bool:
+        return bool(self.email_host and self.email_username and self.email_password)
+
+    @property
+    def whatsapp_configured(self) -> bool:
+        return bool(self.whatsapp_api_url and self.whatsapp_token)
+
+    @property
+    def maps_configured(self) -> bool:
+        return bool(self.google_maps_api_key)
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:

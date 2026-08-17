@@ -43,7 +43,7 @@ def get_whatsapp_service() -> WhatsAppService:
     _instance = WhatsAppService(
         api_url=settings.whatsapp_api_url,
         token=settings.whatsapp_token,
-        is_configured=settings.whatsapp.is_configured,
+        is_configured=settings.whatsapp_configured,
     )
     return _instance
 

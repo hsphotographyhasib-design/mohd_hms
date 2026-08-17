@@ -659,7 +659,7 @@ async def resend_reset_otp(email: str) -> dict[str, Any]:
 async def google_authenticate(code: str, code_verifier: str | None = None, redirect_uri: str | None = None) -> dict[str, Any]:
     """Exchange Google authorization code for user token. Returns { token, user } or raises."""
     settings = get_settings()
-    if not settings.google.is_configured:
+    if not settings.google_configured:
         raise ServiceUnavailableException(message='Google Sign-In is not configured on the server.')
 
     # Exchange code for tokens
@@ -1352,7 +1352,7 @@ async def _send_whatsapp_otp(phone: str, otp: str, tenant_id: str) -> None:
     import httpx
 
     settings = get_settings()
-    if not settings.whatsapp.is_configured:
+    if not settings.whatsapp_configured:
         log.info('WhatsApp not configured — OTP stored for dev entry')
         return
 

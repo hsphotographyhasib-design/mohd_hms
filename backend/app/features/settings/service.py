@@ -47,11 +47,11 @@ async def get_system_info() -> dict[str, Any]:
 
     # Resolve feature flags based on configuration
     flags = dict(FEATURE_FLAGS)
-    flags["whatsapp_enabled"] = settings.whatsapp.is_configured
-    flags["email_enabled"] = settings.email.is_configured
-    flags["firebase_enabled"] = settings.firebase.is_configured
-    flags["google_maps_enabled"] = settings.maps.is_configured
-    flags["redis_enabled"] = settings.redis.is_configured
+    flags["whatsapp_enabled"] = settings.whatsapp_configured
+    flags["email_enabled"] = settings.email_configured
+    flags["firebase_enabled"] = settings.firebase_configured
+    flags["google_maps_enabled"] = settings.maps_configured
+    flags["redis_enabled"] = settings.redis_configured
 
     return {
         "success": True,

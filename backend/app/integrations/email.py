@@ -43,7 +43,7 @@ def get_email_service() -> EmailService:
         port=settings.email_port,
         username=settings.email_username,
         password=settings.email_password,
-        is_configured=settings.email.is_configured,
+        is_configured=settings.email_configured,
     )
     return _instance
 

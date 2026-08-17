@@ -29,15 +29,19 @@ COPY --from=builder /install /usr/local
 # Copy application code
 COPY --chown=appuser:appuser . .
 
-# Expose port (configurable via PORT env var)
-EXPOSE ${PORT:-8000}
+# Expose port (static — actual port set via PORT env var at runtime)
+EXPOSE 8000
 
-# Health check
+# Health check — use shell form so $PORT expands at runtime
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-    CMD python -c "import httpx; r = httpx.get('http://localhost:${PORT:-8000}/health', timeout=5); assert r.status_code == 200"
+    CMD python -c "import httpx; r = httpx.get('http://localhost:' + __import__('os').environ.get('PORT', '8000') + '/health', timeout=5); assert r.status_code == 200"
+
+# Copy and set up entrypoint script
+COPY --chown=appuser:appuser start.sh /app/start.sh
+RUN chmod +x /app/start.sh
 
 # Run as non-root
 USER appuser
 
-# Start with uvicorn
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start with entrypoint script that reads PORT env var
+CMD ["/app/start.sh"]

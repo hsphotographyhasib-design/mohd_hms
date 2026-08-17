@@ -52,7 +52,7 @@ async def lifespan(app: FastAPI):
     except Exception as exc:
         log.error(f"Failed to initialize Supabase client: {exc}")
 
-    if settings.redis.is_configured:
+    if settings.redis_configured:
         log.info("Redis (Upstash) configured")
     else:
         log.warning("Redis not configured — caching disabled")
@@ -125,7 +125,7 @@ def create_app() -> FastAPI:
             all_ok = False
 
         # Check Redis (if configured)
-        if settings.redis.is_configured:
+        if settings.redis_configured:
             try:
                 async with httpx.AsyncClient() as rc:
                     resp = await rc.get(

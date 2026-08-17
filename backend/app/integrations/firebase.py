@@ -47,7 +47,7 @@ def get_firebase() -> FirebaseService:
         project_id=settings.firebase_project_id,
         client_email=settings.firebase_client_email,
         private_key=settings.firebase_private_key,
-        is_configured=settings.firebase.is_configured,
+        is_configured=settings.firebase_configured,
     )
     _initialized = True
     return _instance
