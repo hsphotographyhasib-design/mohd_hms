@@ -1,22 +1,17 @@
-# Render.com Blueprint — at repository root
-# Matches existing service name: mohd-hms
-#
-# IMPORTANT: If the existing service was created as Node.js,
-# you MUST manually change its Environment to "Docker" in the
-# Render Dashboard (Settings → Environment). The Blueprint alone
-# cannot change the runtime of an existing service.
+# Render.com Blueprint — place at repository root
+# Points to backend/ subdirectory
 
 services:
   - type: web
     name: mohd-hms
     rootDir: backend
-    env: docker
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     plan: starter
     envVars:
       - key: APP_ENV
         value: production
-      - key: PORT
-        value: "8000"
       - key: APP_NAME
         value: "MOHD.HMS ENTERPRISE"
       - key: APP_VERSION
