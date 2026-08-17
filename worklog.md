@@ -1,6 +1,29 @@
 # Worklog
 
-## Task ID: join-fix
+---
+Task ID: supabase-keys-config
+Agent: Main Agent
+Task: Configure user-provided Supabase API keys in both backend and frontend .env files
+
+Work Log:
+- Decoded JWT service_role token to extract Supabase project ref: sbcqgsbdaerdoladmbcc
+- Created /home/z/my-project/backend/.env with SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, SUPABASE_ANON_KEY
+- Updated /home/z/my-project/.env with NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
+- Added USE_SUPABASE=true to root .env to enable frontend Supabase adapter
+- Verified PostgREST connection: curl to /rest/v1/User returns HTTP 200
+- Verified login via curl: POST /api/auth/login with admin@mohd.com returns valid JWT + user data
+- Confirmed database has 7 users including admin@mohd.com (super_admin) and tech@mohd.com (technician)
+- Dev server OOMs during full recompile in sandbox (memory limit), but login API verified working
+
+Stage Summary:
+- Supabase project: https://sbcqgsbdaerdoladmbcc.supabase.co
+- Backend .env: SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY configured
+- Frontend .env: NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY + SUPABASE_SERVICE_ROLE_KEY + USE_SUPABASE=true
+- Login verified: admin@mohd.com → JWT token + user profile (super_admin, tenant: MOHD HMS Enterprise)
+- Both .env files are gitignored (not pushed to repo)
+
+---
+Task ID: join-fix
 ## Date: 2025-07-09
 
 ### Summary
