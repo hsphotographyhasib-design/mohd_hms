@@ -25,7 +25,7 @@ class AppSettings(BaseSettings):
     app_name: str = Field(default="MOHD.HMS ENTERPRISE", alias="APP_NAME")
     app_version: str = Field(default="1.0.0", alias="APP_VERSION")
     port: int = Field(default=8000, alias="PORT")
-    cors_origins: list[str] = Field(default=["http://localhost:3000"], alias="CORS_ORIGINS")
+    cors_origins: str = Field(default="http://localhost:3000", alias="CORS_ORIGINS")
     jwt_secret: str = Field(default="change-me-in-production", alias="JWT_SECRET")
     jwt_algorithm: str = Field(default="HS256", alias="JWT_ALGORITHM")
     jwt_access_token_expire: int = Field(default=604800, alias="JWT_ACCESS_TOKEN_EXPIRE")  # 7 days in seconds
