@@ -34,6 +34,7 @@ from app.core.exceptions import (
     ConflictException,
     ForbiddenException,
     NotFoundException,
+    ServiceUnavailableException,
     UnauthorizedException,
     ValidationException,
 )

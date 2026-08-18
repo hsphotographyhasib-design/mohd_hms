@@ -76,10 +76,10 @@ export const GET = withErrorLogging(async function GET(request: NextRequest) {
   // ── Production: proxy to Render backend ────────────────────────────────
   if (BACKEND_URL) {
     try {
-      const res = await fetch(`${BACKEND_URL}/api/auth/google/callback`, {
+      const res = await fetch(`${BACKEND_URL}/api/v1/auth/google/callback`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code, state, redirectUri }),
+        body: JSON.stringify({ code, code_verifier: codeVerifier, redirectUri }),
       });
 
       const data = await res.json();
