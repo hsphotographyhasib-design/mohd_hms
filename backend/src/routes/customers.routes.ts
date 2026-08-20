@@ -1,0 +1,143 @@
+import { Router, Request, Response } from 'express';
+import { db } from '../lib/db.js';
+import { requireAuth } from '../middleware/auth.js';
+import { generateCustomerNumber } from '../lib/auth.js';
+import { cachedFetch } from '../cache/cache.service.js';
+import { TTL } from '../cache/cache.constants.js';
+import { customerKey, invalidateCustomers } from '../cache/cache.utils.js';
+
+const router = Router();
+
+// ─── GET / — List Customers ─────────────────────────────────────────────────
+router.route('/').get(requireAuth, async (req: Request, res: Response) => {
+  try {
+    const tenantId = req.tenantId!;
+    const page = parseInt(req.query.page as string || '1');
+    const pageSize = parseInt(req.query.pageSize as string || '20');
+    const search = (req.query.search as string) || '';
+    const skip = (page - 1) * pageSize;
+
+    const where: Record<string, unknown> = { tenantId };
+    if (search) {
+      where.OR = [
+        { name: { contains: search } },
+        { email: { contains: search } },
+        { phone: { contains: search } },
+        { companyName: { contains: search } },
+        { customerNumber: { contains: search } },
+      ];
+    }
+
+    const cacheKey = customerKey('list', tenantId, `p${page}:s${pageSize}:q${search}`);
+    const data = await cachedFetch(cacheKey, tenantId, async () => {
+      const [items, total] = await Promise.all([
+        db.customer.findMany({
+          where,
+          skip,
+          take: pageSize,
+          orderBy: { createdAt: 'desc' },
+        }),
+        db.customer.count({ where }),
+      ]);
+
+      const mapped = (items as any[]).map((c: any) => ({
+        id: c.id,
+        tenantId: c.tenantId,
+        name: c.name,
+        email: c.email,
+        phone: c.phone,
+        address: c.address,
+        companyName: c.companyName,
+        customerNumber: c.customerNumber,
+        building: c.building,
+        floor: c.floor,
+        unit: c.unit,
+        photo: c.photo,
+        paymentTerms: c.paymentTerms,
+        pic: c.pic,
+        country: c.country,
+        district: c.district,
+        taxRate: c.taxRate,
+        isActive: c.isActive,
+        createdAt: c.createdAt?.toISOString?.() || c.createdAt,
+        updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
+      }));
+
+      return {
+        data: mapped,
+        total: total as number,
+        page,
+        pageSize,
+        totalPages: Math.ceil((total as number) / pageSize),
+      };
+    }, TTL.customerList);
+
+    res.json(data);
+  } catch (error) {
+    console.error('Customers list error:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ─── POST / — Create Customer ───────────────────────────────────────────────
+router.route('/').post(requireAuth, async (req: Request, res: Response) => {
+  try {
+    const tenantId = req.tenantId!;
+    const { name, email, phone, address, building, floor, unit, city, postalCode, companyName, photo, gpsLocation } = req.body;
+
+    if (!name || !phone) {
+      res.status(400).json({ error: 'Name and phone are required' });
+      return;
+    }
+
+    const customerNumber = generateCustomerNumber();
+
+    const customer = await db.customer.create({
+      data: {
+        tenantId,
+        name,
+        email: email || null,
+        phone,
+        address: address || null,
+        building: building || null,
+        floor: floor || null,
+        unit: unit || null,
+        city: city || null,
+        postalCode: postalCode || null,
+        companyName: companyName || null,
+        customerNumber,
+        photo: photo || null,
+        gpsLocation: gpsLocation || null,
+        isActive: true,
+      },
+    });
+
+    const c = customer as any;
+
+    invalidateCustomers(tenantId).catch(() => {});
+
+    res.status(201).json({
+      id: c.id,
+      tenantId: c.tenantId,
+      name: c.name,
+      email: c.email,
+      phone: c.phone,
+      address: c.address,
+      building: c.building,
+      floor: c.floor,
+      unit: c.unit,
+      city: c.city,
+      postalCode: c.postalCode,
+      companyName: c.companyName,
+      customerNumber: c.customerNumber,
+      isActive: c.isActive,
+      createdAt: c.createdAt?.toISOString?.() || c.createdAt,
+      updatedAt: c.updatedAt?.toISOString?.() || c.updatedAt,
+    });
+  } catch (error) {
+    console.error('Customer create error:', error);
+    res.status(500).json({ error: 'Internal server error', debug: (error as any)?.message || String(error) });
+  }
+});
+
+export default router;

@@ -1,0 +1,166 @@
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { createHash, randomBytes } from 'node:crypto';
+
+/**
+ * JWT Secret resolution — NEVER throws at module level.
+ *
+ * Priority:
+ *   1. Well-known env var names (JWT_SECRET)
+ *   2. Scan all env vars for keys containing jwt/secret/signing
+ *   3. Derive a deterministic secret from the database URL (SHA-256)
+ *   4. Last resort: random bytes (tokens invalidate on server restart)
+ */
+function findDatabaseUrl(): string | null {
+  const candidates = ['DATABASE_URL', 'PRISMA_DATABASE_URL', 'POSTGRES_URL', 'SUPABASE_URL'];
+  for (const name of candidates) {
+    const val = process.env[name];
+    if (val && (val.startsWith('postgres://') || val.startsWith('postgresql://') || val.startsWith('https://'))) return val;
+  }
+  for (const [key, val] of Object.entries(process.env)) {
+    if (val && typeof val === 'string' && (val.startsWith('postgres://') || val.startsWith('postgresql://') || val.startsWith('https://'))) {
+      return val;
+    }
+  }
+  return null;
+}
+
+const _resolvedSecret = (() => {
+  // 1. Well-known names
+  const candidates = ['JWT_SECRET', 'JWT_PRIVATE_KEY'];
+  for (const name of candidates) {
+    const val = process.env[name];
+    if (val && val.length >= 16) {
+      console.log(`[AUTH] Found JWT secret in env: ${name}`);
+      return { value: val, source: `env:${name}` };
+    }
+  }
+
+  // 2. Scan ALL env vars for secret-like keys
+  const sortedKeys = Object.keys(process.env).sort();
+  for (const key of sortedKeys) {
+    const val = process.env[key];
+    if (!val || val.length < 16) continue;
+    const k = key.toLowerCase();
+    if (k.includes('jwt') || k.includes('secret') || k.includes('token_key') || k.includes('signing')) {
+      if (val.startsWith('postgres://') || val.startsWith('http') || val.startsWith('{')) continue;
+      console.log(`[AUTH] Found JWT secret in env (scan): ${key}`);
+      return { value: val, source: `scan:${key}` };
+    }
+  }
+
+  // 3. Derive a deterministic secret from the database URL (SHA-256)
+  const dbUrl = findDatabaseUrl();
+  if (dbUrl) {
+    const derived = createHash('sha256')
+      .update(`mohd-hms-jwt-derived:${dbUrl}`)
+      .digest('hex');
+    console.log('[AUTH] Derived JWT secret from database URL (deterministic, tokens survive restarts)');
+    return { value: derived, source: 'derived:db-url' };
+  }
+
+  // 4. Absolute last resort: random bytes
+  console.warn(
+    '[AUTH] WARNING: No JWT secret found and no database URL. Using random secret. ' +
+    'Tokens will invalidate on server restart.'
+  );
+  return { value: randomBytes(32).toString('hex'), source: 'random-fallback' };
+})();
+
+const JWT_SECRET = _resolvedSecret.value;
+const JWT_EXPIRES_IN = '7d';
+
+export async function hashPassword(password: string): Promise<string> {
+  return bcrypt.hash(password, 12);
+}
+
+export async function verifyPassword(password: string, hash: string): Promise<boolean> {
+  return bcrypt.compare(password, hash);
+}
+
+export function generateToken(payload: object): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN } as jwt.SignOptions);
+}
+
+export function verifyToken(token: string): jwt.JwtPayload | null {
+  try {
+    return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+  } catch {
+    return null;
+  }
+}
+
+export function generateAssetNumber(category: string): string {
+  const prefix: Record<string, string> = {
+    HVAC: 'HVC',
+    Electrical: 'ELC',
+    Plumbing: 'PLB',
+    Generator: 'GEN',
+    Mechanical: 'MEC',
+    FireProtection: 'FIR',
+  };
+  const p = prefix[category] || 'EQP';
+  const ts = Date.now().toString(36).toUpperCase().slice(-6);
+  const rand = Math.random().toString(36).toUpperCase().slice(2, 5);
+  return `${p}-${ts}${rand}`;
+}
+
+export function generateInvoiceNumber(): string {
+  const now = new Date();
+  const y = now.getFullYear();
+  const seq = Math.floor(Math.random() * 9000) + 1000;
+  return `INV/SMSB/01/${y}/${seq}`;
+}
+
+export function generatePONumber(): string {
+  const now = new Date();
+  const y = now.getFullYear().toString().slice(-2);
+  const m = (now.getMonth() + 1).toString().padStart(2, '0');
+  const seq = Math.random().toString(36).toUpperCase().slice(2, 6);
+  return `PO-${y}${m}-${seq}`;
+}
+
+export function generateCustomerNumber(): string {
+  const seq = Math.random().toString(36).toUpperCase().slice(2, 8);
+  return `CUST-${seq}`;
+}
+
+export function sanitizeInput(input: string): string {
+  return input.replace(/<[^>]*>/g, '').trim();
+}
+
+export function generateOtpCode(): string {
+  const digits = '0123456789';
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += digits[Math.floor(Math.random() * digits.length)];
+  }
+  return code;
+}
+
+export function generateRefreshToken(): string {
+  return randomBytes(16).toString('hex');
+}
+
+const TEMP_TOKEN_EXPIRES_IN = '30m';
+
+export function generateTempToken(payload: object): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: TEMP_TOKEN_EXPIRES_IN } as jwt.SignOptions);
+}
+
+export function verifyTempToken(token: string): jwt.JwtPayload | null {
+  try {
+    return jwt.verify(token, JWT_SECRET) as jwt.JwtPayload;
+  } catch {
+    return null;
+  }
+}
+
+export function parseJsonSafe<T>(str: string | null | undefined, fallback: T): T {
+  if (!str) return fallback;
+  try {
+    return JSON.parse(str) as T;
+  } catch {
+    return fallback;
+  }
+}
