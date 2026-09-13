@@ -9,6 +9,10 @@ export interface LineItem {
   amount?: number;
   description?: string;
   unitPrice?: number;
+  discount?: number;
+  taxRate?: number;
+  labourCost?: number;
+  materialCost?: number;
   [key: string]: unknown;
 }
 
@@ -18,9 +22,18 @@ export function computeTotals(
   discount = 0,
   shipping = 0,
 ) {
-  const subtotal = items.reduce((sum, item) => sum + (item.amount || 0), 0);
-  const tax = subtotal * (taxRate / 100);
-  const total = subtotal + tax - discount + shipping;
+  const subtotal = items.reduce((sum, item) => {
+    const baseAmount = item.amount || 0;
+    const lineDiscount = item.discount || 0;
+    const lineTaxRate = item.taxRate ?? taxRate;
+    const labourCost = item.labourCost || 0;
+    const materialCost = item.materialCost || 0;
+    const afterDiscount = baseAmount - lineDiscount;
+    const lineTax = afterDiscount * (lineTaxRate / 100);
+    return sum + afterDiscount + lineTax + labourCost + materialCost;
+  }, 0);
+  const tax = 0; // tax already applied per-line above
+  const total = subtotal - discount + shipping;
   return { subtotal, tax, discount, shipping, total };
 }
 

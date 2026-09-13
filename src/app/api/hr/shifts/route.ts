@@ -24,12 +24,12 @@ export async function GET(request: NextRequest) {
       // Get employee names via HrEmployee → User
       const empIds = [...new Set(schedules.map((s) => s.employeeId))];
       const hrEmployees = empIds.length > 0
-        ? await db.hrEmployee.findMany({ where: { id: { in: empIds } }, select: { id: true, userId: true } })
+        ? await db.hrEmployee.findMany({ where: { id: { in: empIds }, tenantId }, select: { id: true, userId: true } })
         : [];
       const empUserMap = new Map(hrEmployees.map((e) => [e.id, e.userId]));
       const userIds = [...new Set(hrEmployees.map((e) => e.userId).filter(Boolean))];
       const users = userIds.length > 0
-        ? await db.user.findMany({ where: { id: { in: userIds } }, select: { id: true, name: true } })
+        ? await db.user.findMany({ where: { id: { in: userIds }, tenantId }, select: { id: true, name: true } })
         : [];
       const userMap = new Map(users.map((u) => [u.id, u.name]));
 

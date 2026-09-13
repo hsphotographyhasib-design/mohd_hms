@@ -108,7 +108,7 @@ export async function GET(
       safeQuery(
         () => complaintCustomerIds.length > 0
           ? db.customer.findMany({
-              where: { id: { in: complaintCustomerIds } },
+              where: { id: { in: complaintCustomerIds }, tenantId },
               select: { id: true, name: true, phone: true, address: true },
             })
           : Promise.resolve([]),
@@ -117,7 +117,7 @@ export async function GET(
       safeQuery(
         () => complaintEquipmentIds.length > 0
           ? db.equipment.findMany({
-              where: { id: { in: complaintEquipmentIds } },
+              where: { id: { in: complaintEquipmentIds }, tenantId },
               select: { id: true, name: true, assetNumber: true, category: true },
             })
           : Promise.resolve([]),
@@ -152,7 +152,7 @@ export async function GET(
     const woCustomers: any[] = await safeQuery(
       () => woCustomerIds.length > 0
         ? db.customer.findMany({
-            where: { id: { in: woCustomerIds } },
+            where: { id: { in: woCustomerIds }, tenantId },
             select: { id: true, name: true },
           })
         : Promise.resolve([]),
@@ -321,7 +321,7 @@ export async function GET(
     const smItems: any[] = await safeQuery(
       () => smItemIds.length > 0
         ? db.inventoryItem.findMany({
-            where: { id: { in: smItemIds } },
+            where: { id: { in: smItemIds }, tenantId },
             select: { id: true, name: true, sku: true, itemCode: true },
           })
         : Promise.resolve([]),

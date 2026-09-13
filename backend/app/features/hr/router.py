@@ -53,7 +53,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, Query
 
-from app.api.dependencies import AuthUser, get_current_user, require_role
+from app.api.dependencies import AuthUser, get_current_user, require_role, require_permission
 from app.features.hr import service
 
 router = APIRouter(tags=["hr"])
@@ -69,7 +69,7 @@ _hr_auth = require_role("super_admin", "admin", "hr")
 
 @router.get("/employees")
 async def list_employees(
-    user: AuthUser = Depends(_hr_auth),
+    user: AuthUser = Depends(require_permission("hr.employees.list")),
     page: int = Query(default=1, ge=1),
     pageSize: int = Query(default=20, ge=1, le=100),
     search: str = Query(default=""),
@@ -156,7 +156,7 @@ async def create_department(
 
 @router.get("/attendance")
 async def list_attendance(
-    user: AuthUser = Depends(_hr_auth),
+    user: AuthUser = Depends(require_permission("hr.attendance.list")),
     page: int = Query(default=1, ge=1),
     pageSize: int = Query(default=20, ge=1, le=100),
     search: str = Query(default=""),
@@ -186,7 +186,7 @@ async def list_attendance(
 @router.post("/attendance", status_code=201)
 async def create_attendance(
     body: dict[str, Any],
-    user: AuthUser = Depends(_hr_auth),
+    user: AuthUser = Depends(require_permission("hr.attendance.create")),
 ):
     """POST /api/v1/hr/attendance — checkIn/checkOut action"""
     return await service.create_attendance_action(tenant_id=user.tenantId, user=user, data=body)
@@ -199,7 +199,7 @@ async def create_attendance(
 
 @router.get("/leave")
 async def list_leave(
-    user: AuthUser = Depends(_hr_auth),
+    user: AuthUser = Depends(require_permission("hr.leave.list")),
     page: int = Query(default=1, ge=1),
     pageSize: int = Query(default=20, ge=1, le=100),
     search: str = Query(default=""),
@@ -223,7 +223,7 @@ async def list_leave(
 @router.post("/leave", status_code=201)
 async def create_leave(
     body: dict[str, Any],
-    user: AuthUser = Depends(_hr_auth),
+    user: AuthUser = Depends(require_permission("hr.leave.create")),
 ):
     """POST /api/v1/hr/leave"""
     return await service.create_leave_request(tenant_id=user.tenantId, user=user, data=body)
@@ -233,7 +233,7 @@ async def create_leave(
 async def update_leave(
     item_id: str,
     body: dict[str, Any],
-    user: AuthUser = Depends(_hr_auth),
+    user: AuthUser = Depends(require_permission("hr.leave.update")),
 ):
     """PUT /api/v1/hr/leave/{id}"""
     return await service.update_leave_request(leave_id=item_id, tenant_id=user.tenantId, data=body)

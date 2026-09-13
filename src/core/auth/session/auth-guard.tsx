@@ -45,7 +45,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       if (res.ok) {
         const userData = await res.json();
         useAuthStore.setState({
-          user: userData,
+          user: { ...userData, role: (userData.role as string).toLowerCase() },
           token: storedToken,
           isAuthenticated: true,
         });

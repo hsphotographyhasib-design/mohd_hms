@@ -386,7 +386,7 @@ export const ROLE_TRANSITION_MATRIX: Record<string, Set<string>> = {
     'customer', 'technician', 'supervisor', 'finance', 'hr', 'manager', 'admin', 'super_admin',
   ]),
   admin: new Set([
-    'customer', 'technician', 'hr', 'finance',
+    'customer', 'technician', 'hr', 'finance', 'user', 'supervisor',
   ]),
   // All other roles cannot change anyone's role
   manager: new Set([]),

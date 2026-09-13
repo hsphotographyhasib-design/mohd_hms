@@ -93,10 +93,10 @@ export const GET = withErrorLogging(async (request: NextRequest) => {
 
     const [resolvedCustomers, resolvedEquipment] = await Promise.all([
       missingCustomerIds.length > 0
-        ? db.customer.findMany({ where: { id: { in: missingCustomerIds } }, select: { id: true, name: true } })
+        ? db.customer.findMany({ where: { id: { in: missingCustomerIds }, tenantId: ctx.tenantId }, select: { id: true, name: true } })
         : [],
       missingEquipmentIds.length > 0
-        ? db.equipment.findMany({ where: { id: { in: missingEquipmentIds } }, select: { id: true, name: true } })
+        ? db.equipment.findMany({ where: { id: { in: missingEquipmentIds }, tenantId: ctx.tenantId }, select: { id: true, name: true } })
         : [],
     ]);
 

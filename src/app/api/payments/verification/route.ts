@@ -29,13 +29,13 @@ export async function GET(req: NextRequest) {
     const [customers, invoices] = await Promise.all([
       customerIds.length > 0
         ? db.customer.findMany({
-            where: { id: { in: customerIds } },
+            where: { id: { in: customerIds }, tenantId },
             select: { id: true, name: true },
           })
         : [],
       invoiceIds.length > 0
         ? db.invoice.findMany({
-            where: { id: { in: invoiceIds } },
+            where: { id: { in: invoiceIds }, tenantId },
             select: { id: true, invoiceNumber: true },
           })
         : [],

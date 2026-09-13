@@ -74,7 +74,9 @@ export function SettingsView() {
       <Tabs defaultValue="general">
         <TabsList className="flex-wrap h-auto gap-1">
           <TabsTrigger value="general">General</TabsTrigger>
-          <TabsTrigger value="users">Users</TabsTrigger>
+          {(['super_admin', 'admin', 'manager'] as string[]).includes(user?.role || '') && (
+            <TabsTrigger value="users">Users</TabsTrigger>
+          )}
           <TabsTrigger value="roles">Roles &amp; Permissions</TabsTrigger>
           <TabsTrigger value="system">System</TabsTrigger>
           {user?.role === 'super_admin' && (
@@ -91,9 +93,11 @@ export function SettingsView() {
         </TabsContent>
 
         {/* Users Tab */}
+        {(['super_admin', 'admin', 'manager'] as string[]).includes(user?.role || '') && (
         <TabsContent value="users" className="mt-4">
           <UsersTab />
         </TabsContent>
+        )}
 
         {/* Roles Tab */}
         <TabsContent value="roles" className="mt-4">
@@ -129,11 +133,21 @@ function GeneralTab({ user }: { user: { tenantName?: string; tenantDomain?: stri
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Simulate save - in production this would call an API
-      await new Promise((r) => setTimeout(r, 500));
+      const res = await fetch('/api/tenants', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token()}`,
+        },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error((err as any).error || `Save failed (${res.status})`);
+      }
       toast.success('Settings saved successfully');
-    } catch {
-      toast.error('Failed to save settings');
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Failed to save settings');
     } finally {
       setSaving(false);
     }
@@ -212,6 +226,8 @@ function GeneralTab({ user }: { user: { tenantName?: string; tenantDomain?: stri
 }
 
 function UsersTab() {
+  const currentUser = useAuthStore((s) => s.user);
+  const assignableRoles = ALL_ROLES.filter((r) => currentUser?.role === 'super_admin' || r !== 'super_admin');
   const [users, setUsers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -299,6 +315,10 @@ function UsersTab() {
   const handleInvite = async () => {
     if (!form.name || !form.email || !form.role) {
       toast.error('All fields are required');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      toast.error('Invalid email format');
       return;
     }
     setSubmitting(true);
@@ -506,7 +526,7 @@ function UsersTab() {
                     <SelectValue placeholder="Select role" />
                   </SelectTrigger>
                   <SelectContent>
-                    {ALL_ROLES.map((r) => (
+                    {assignableRoles.map((r) => (
                       <SelectItem key={r} value={r} className="capitalize">
                         {r.replace(/_/g, ' ')}
                       </SelectItem>
@@ -576,7 +596,7 @@ function UsersTab() {
                   <SelectValue placeholder="Select role" />
                 </SelectTrigger>
                 <SelectContent>
-                  {ALL_ROLES.map((r) => (
+                  {assignableRoles.map((r) => (
                     <SelectItem key={r} value={r} className="capitalize">
                       {r.replace(/_/g, ' ')}
                     </SelectItem>

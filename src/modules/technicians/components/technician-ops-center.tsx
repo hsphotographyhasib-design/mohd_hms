@@ -283,7 +283,7 @@ function AssignJobDialog({
     if (!open) { setComplaints([]); setError(null); setSelectedComplaintId(null); setReason(''); return; }
     setLoading(true);
     setError(null);
-    fetch('/api/complaints?status=NEW&pageSize=50', {
+    fetch('/api/complaints?status=NEW&status=REWORK_REQUIRED&pageSize=50', {
       headers: { Authorization: 'Bearer ' + token() },
     })
       .then(async (r) => {

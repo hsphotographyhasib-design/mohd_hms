@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     // Fetch user names
     const userIds = [...new Set(items.map((a) => a.userId))];
     const users = userIds.length > 0
-      ? await db.user.findMany({ where: { id: { in: userIds } }, select: { id: true, name: true } })
+      ? await db.user.findMany({ where: { id: { in: userIds }, tenantId }, select: { id: true, name: true } })
       : [];
     const userMap = new Map<string, string>(users.map((u: any) => [u.id, u.name]));
 

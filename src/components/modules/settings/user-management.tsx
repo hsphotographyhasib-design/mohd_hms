@@ -61,7 +61,7 @@ interface UserItem {
 
 // ============ Constants ============
 
-const ROLES: UserRole[] = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'finance', 'customer'];
+const ROLES: UserRole[] = ['super_admin', 'admin', 'manager', 'supervisor', 'technician', 'hr', 'finance', 'user', 'customer'];
 
 const ROLE_LABELS: Record<UserRole, string> = {
   super_admin: 'Super Admin',
@@ -69,7 +69,9 @@ const ROLE_LABELS: Record<UserRole, string> = {
   manager: 'Manager',
   supervisor: 'Supervisor',
   technician: 'Technician',
+  hr: 'HR',
   finance: 'Finance',
+  user: 'User',
   customer: 'Customer',
   vendor: 'Vendor',
   guest: 'Guest',
@@ -81,7 +83,9 @@ const ROLE_COLORS: Record<UserRole, string> = {
   manager: 'bg-blue-100 text-blue-800 border-blue-200',
   supervisor: 'bg-orange-100 text-orange-800 border-orange-200',
   technician: 'bg-emerald-100 text-emerald-800 border-emerald-200',
+  hr: 'bg-indigo-100 text-indigo-800 border-indigo-200',
   finance: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+  user: 'bg-slate-100 text-slate-800 border-slate-200',
   customer: 'bg-gray-100 text-gray-800 border-gray-200',
   vendor: 'bg-cyan-100 text-cyan-800 border-cyan-200',
   guest: 'bg-stone-100 text-stone-800 border-stone-200',

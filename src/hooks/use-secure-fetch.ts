@@ -77,7 +77,7 @@ async function revalidateSession(): Promise<boolean> {
       return true;
     }
 
-    if (meRes.status === 401 || meRes.status === 403) {
+    if (meRes.status === 401) {
       // Confirmed session expiry — force logout
       handleSessionExpired('Your session has expired. Please sign in again.');
       return false;
@@ -111,8 +111,8 @@ export function useSecureFetch() {
 
     const res = await fetch(url, { ...options, headers });
 
-    // Handle auth errors from any endpoint
-    if (res.status === 401 || res.status === 403) {
+    // Handle auth errors from any endpoint (401 = unauthenticated; 403 = forbidden, don't logout)
+    if (res.status === 401) {
       const isAuthEndpoint = AUTH_ENDPOINTS.some(ep => url.includes(ep));
       const inGracePeriod = (Date.now() - lastLoginTime) < LOGIN_GRACE_MS;
       if (!isAuthEndpoint && !inGracePeriod) {
@@ -179,7 +179,7 @@ export function setupFetchInterceptor() {
     const inGracePeriod = (Date.now() - lastLoginTime) < LOGIN_GRACE_MS;
 
     if (
-      (res.status === 401 || res.status === 403) &&
+      res.status === 401 &&
       isApiCall &&
       !isAuthEndpoint &&
       !inGracePeriod

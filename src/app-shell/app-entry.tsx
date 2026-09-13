@@ -108,7 +108,7 @@ export default function AppEntry() {
       if (token && userStr) {
         try {
           const user = JSON.parse(userStr);
-          useAuthStore.setState({ user, token, isAuthenticated: true });
+          useAuthStore.setState({ user: { ...user, role: (user.role as string).toLowerCase() }, token, isAuthenticated: true });
           markLoginTime(); // Grace period for page refresh
         } catch {
           localStorage.clear();

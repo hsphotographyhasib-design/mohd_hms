@@ -84,7 +84,7 @@ export async function GET(request: NextRequest) {
     const equipmentMap = new Map<string, string>();
     if (topEquipmentIds.length > 0) {
       const equipmentList = await db.equipment.findMany({
-        where: { id: { in: topEquipmentIds } },
+        where: { id: { in: topEquipmentIds }, tenantId },
         select: { id: true, name: true },
       });
       for (const eq of equipmentList) {

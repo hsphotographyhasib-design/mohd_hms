@@ -55,7 +55,7 @@ ROLE_TRANSITION_MATRIX: dict[str, set[str]] = {
         "customer", "technician", "supervisor", "finance",
         "hr", "manager", "admin", "super_admin",
     },
-    "admin": {"customer", "technician", "hr", "finance"},
+    "admin": {"customer", "technician", "hr", "finance", "user", "supervisor"},
     # All other roles cannot change anyone's role
     "manager": set(),
     "supervisor": set(),

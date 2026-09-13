@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import type { CMSData } from './landing-data'
 
-export { LandingDataProvider } from './use-landing-data.tsx'
+export { LandingDataProvider } from './use-landing-data'
 
 export function useLandingData() {
   const [cms, setCms] = useState<CMSData | null>(null)

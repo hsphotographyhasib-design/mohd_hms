@@ -195,6 +195,18 @@ export async function buildDataScope(payload: {
     return { complaint: complaintWhere, workOrder: workOrderWhere, invoice: invoiceWhere, quotation: quotationWhere, equipment: equipmentWhere, customer: customerWhere };
   }
 
+  // ─── user: assigned complaints + own work orders, denied for invoicing ──
+  if (role === 'user') {
+    workOrderWhere = { tenantId, assignedToId: userId };
+    equipmentWhere = { tenantId };
+    // Invoices / Quotations / Customers: DENIED
+    invoiceWhere = DENIED_INVOICE;
+    quotationWhere = DENIED_QUOTATION;
+    customerWhere = DENIED_CUSTOMER;
+
+    return { complaint: complaintWhere, workOrder: workOrderWhere, invoice: invoiceWhere, quotation: quotationWhere, equipment: equipmentWhere, customer: customerWhere };
+  }
+
   // ─── finance: financial complaints + full tenant invoices, denied for quotations/WOs/equipment
   //   Quotations: DENIED per permission spec (except convert_to_invoice) ──
   if (role === 'finance') {

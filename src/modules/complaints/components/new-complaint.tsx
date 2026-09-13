@@ -583,14 +583,19 @@ export function NewComplaint() {
             </div>
             <div>
               {step < 4 && (
-                <Button
-                  onClick={() => setStep((s) => s + 1)}
-                  disabled={!canProceed()}
-                  className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
-                >
-                  Next Step
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
+                <div className="flex flex-col items-end gap-1">
+                  <Button
+                    onClick={() => setStep((s) => s + 1)}
+                    disabled={!canProceed()}
+                    className="gap-2 bg-emerald-600 hover:bg-emerald-700 text-white"
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                  {!canProceed() && (
+                    <span className="text-xs text-muted-foreground">Please fill in all required fields</span>
+                  )}
+                </div>
               )}
               {step === 4 && (
                 <Button

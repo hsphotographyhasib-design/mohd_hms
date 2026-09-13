@@ -163,7 +163,7 @@ export async function GET(request: NextRequest) {
     const fastMoving = Array.from(movementCounts.entries()).sort((a, b) => b[1] - a[1]).slice(0, 5);
     if (fastMoving.length > 0) {
       const fastMovingItems = await db.inventoryItem.findMany({
-        where: { id: { in: fastMoving.map(f => f[0]) } },
+        where: { id: { in: fastMoving.map(f => f[0]) }, tenantId },
         select: { name: true, id: true },
       });
       insights.push({

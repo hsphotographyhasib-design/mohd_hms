@@ -154,7 +154,7 @@ export async function GET(request: NextRequest) {
         // Get technician names
         const techIds = technicianWorkload.map((t) => t.assignedToId!);
         const techs = techIds.length > 0 ? await db.user.findMany({
-          where: { id: { in: techIds } },
+          where: { id: { in: techIds }, tenantId },
           select: { id: true, name: true },
         }) : [];
         const techMap: Record<string, string> = {};

@@ -143,6 +143,25 @@ def build_data_scope(
         case ("technician", _):
             return tenant_filter
 
+        # ── User (assigned-to scope, similar to technician) ──────
+        case ("user", "complaint"):
+            return {**tenant_filter, "assignedToId": user_id}
+
+        case ("user", "work_order"):
+            return {**tenant_filter, "assignedToId": user_id}
+
+        case ("user", "invoice"):
+            return NEVER_MATCH
+
+        case ("user", "quotation"):
+            return NEVER_MATCH
+
+        case ("user", "customer"):
+            return NEVER_MATCH
+
+        case ("user", _):
+            return tenant_filter
+
         # ── Finance ──────────────────────────────────────────────
         case ("finance", "invoice"):
             return tenant_filter  # Full tenant invoice access

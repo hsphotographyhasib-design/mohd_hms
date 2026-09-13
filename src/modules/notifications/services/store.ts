@@ -275,7 +275,7 @@ export const useNotificationStore = create<UnifiedNotificationState>((set, get) 
       });
     } catch { /* ignore */ }
     set({
-      dbNotifications: get().dbNotifications.filter((n) => n.isRead),
+      dbNotifications: get().dbNotifications.filter((n) => !n.isRead),
       unreadCount: 0,
     });
   },

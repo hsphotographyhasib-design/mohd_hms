@@ -314,6 +314,8 @@ export function InvoiceForm({ invoiceId }: { invoiceId: string }) {
   }, [customerSearch, customers]);
 
   const handleItemsChange = useCallback((newItems: InvoiceLineItem[]) => {
+    // Recompute amount = quantity * rate for every item
+    newItems = newItems.map(item => ({ ...item, amount: item.quantity * item.rate }));
     const lastItem = newItems[newItems.length - 1];
     if (!lastItem || (lastItem.title.trim() || lastItem.quantity || lastItem.rate)) {
       newItems = [...newItems, { title: '', description: '', unit: 'Nos', quantity: 0, rate: 0, amount: 0, itemType: 'custom', itemCode: '', discount: 0, tax: 0, labourCost: 0, materialCost: 0 }];

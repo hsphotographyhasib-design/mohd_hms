@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
     // Fetch uploader names in batch
     const uploaderIds = [...new Set(documents.map(d => d.uploadedBy).filter(Boolean))] as string[];
     const uploaders = uploaderIds.length > 0
-      ? await db.user.findMany({ where: { id: { in: uploaderIds } }, select: { id: true, name: true } })
+      ? await db.user.findMany({ where: { id: { in: uploaderIds }, tenantId }, select: { id: true, name: true } })
       : [];
     const uploaderMap = new Map(uploaders.map(u => [u.id, u.name]));
 

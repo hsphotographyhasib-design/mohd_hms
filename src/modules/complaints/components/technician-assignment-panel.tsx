@@ -86,6 +86,7 @@ export function TechnicianAssignmentPanel({
   const [submitting, setSubmitting] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [reason, setReason] = useState('');
+  const [retryCounter, setRetryCounter] = useState(0);
   const searchTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Fetch technicians when dialog opens or filters change
@@ -131,7 +132,7 @@ export function TechnicianAssignmentPanel({
     }, 250);
 
     return () => clearTimeout(timer);
-  }, [open, complaintId, search, statusFilter]);
+  }, [open, complaintId, search, statusFilter, retryCounter]);
 
   // Reset on open
   useEffect(() => {
@@ -278,7 +279,7 @@ export function TechnicianAssignmentPanel({
               <button
                 type="button"
                 className="mt-3 text-xs text-emerald-600 hover:text-emerald-700 font-medium underline"
-                onClick={() => setLoading(true)}
+                onClick={() => setRetryCounter((c) => c + 1)}
               >
                 Try again
               </button>

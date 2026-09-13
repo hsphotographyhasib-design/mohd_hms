@@ -53,7 +53,7 @@ export function SessionHeartbeat() {
         // Update user data from server
         try {
           const userData = await res.json();
-          useAuthStore.setState({ user: userData });
+          useAuthStore.setState({ user: { ...userData, role: (userData.role as string).toLowerCase() } });
         } catch {
           // Ignore parse errors
         }

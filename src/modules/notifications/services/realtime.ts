@@ -188,10 +188,12 @@ export function useNotificationRealtime() {
     }
 
     // ── Create socket connection ──
+    const storedToken = localStorage.getItem('cmms_token') || '';
     const socket = io('/?XTransformPort=3010', {
       transports: ['websocket', 'polling'],
       reconnection: false, // We handle reconnection manually with backoff
       timeout: 10000,
+      auth: { token: storedToken },
     });
 
     socketRef.current = socket;

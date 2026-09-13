@@ -192,12 +192,24 @@ function isTableNotFoundError(error: { message?: string; code?: string } | null 
 // 5. Where Clause → PostgREST Filters
 // ---------------------------------------------------------------------------
 
+/** Escape special PostgREST characters in filter values.
+ *  Commas, parentheses, and backslashes must be escaped in PostgREST. */
+function escapePostgrestValue(val: unknown): string {
+  const s = String(val);
+  return s
+    .replace(/\\/g, '\\\\')
+    .replace(/,/g, '\\2C')
+    .replace(/\(/g, '\\28')
+    .replace(/\)/g, '\\29');
+}
+
 function whereToFilters(where: Record<string, unknown>, prefix = ''): [string, string][] {
   const filters: [string, string][] = [];
 
   for (const [key, value] of Object.entries(where)) {
     const col = prefix ? `${prefix}.${key}` : key;
-    if (value === null || value === undefined) continue;
+    if (value === undefined) continue;
+    if (value === null) { filters.push([col, 'is.null']); continue; }
 
     // Handle OR clause — convert to PostgREST or= filter
     if (key === 'OR' && Array.isArray(value)) {
@@ -211,18 +223,18 @@ function whereToFilters(where: Record<string, unknown>, prefix = ''): [string, s
           } else if (typeof gVal === 'object' && !Array.isArray(gVal) && !(gVal instanceof Date)) {
             const gObj = gVal as Record<string, unknown>;
             for (const [op, opVal] of Object.entries(gObj)) {
-              if (op === 'lte') groupParts.push(`${gKey}.lte.${opVal instanceof Date ? opVal.toISOString() : opVal}`);
-              else if (op === 'gte') groupParts.push(`${gKey}.gte.${opVal instanceof Date ? opVal.toISOString() : opVal}`);
-              else if (op === 'lt') groupParts.push(`${gKey}.lt.${opVal instanceof Date ? opVal.toISOString() : opVal}`);
-              else if (op === 'gt') groupParts.push(`${gKey}.gt.${opVal instanceof Date ? opVal.toISOString() : opVal}`);
-              else if (op === 'eq') groupParts.push(`${gKey}.eq.${opVal}`);
-              else if (op === 'ne') groupParts.push(`${gKey}.neq.${opVal}`);
-              else if (op === 'contains') groupParts.push(`${gKey}.ilike.%${opVal}%`);
+              if (op === 'lte') groupParts.push(`${gKey}.lte.${escapePostgrestValue(opVal instanceof Date ? opVal.toISOString() : opVal)}`);
+              else if (op === 'gte') groupParts.push(`${gKey}.gte.${escapePostgrestValue(opVal instanceof Date ? opVal.toISOString() : opVal)}`);
+              else if (op === 'lt') groupParts.push(`${gKey}.lt.${escapePostgrestValue(opVal instanceof Date ? opVal.toISOString() : opVal)}`);
+              else if (op === 'gt') groupParts.push(`${gKey}.gt.${escapePostgrestValue(opVal instanceof Date ? opVal.toISOString() : opVal)}`);
+              else if (op === 'eq') groupParts.push(`${gKey}.eq.${escapePostgrestValue(opVal)}`);
+              else if (op === 'ne') groupParts.push(`${gKey}.neq.${escapePostgrestValue(opVal)}`);
+              else if (op === 'contains') groupParts.push(`${gKey}.like.%${escapePostgrestValue(opVal)}%`);
             }
           } else if (gVal instanceof Date) {
-            groupParts.push(`${gKey}.eq.${gVal.toISOString()}`);
+            groupParts.push(`${gKey}.eq.${escapePostgrestValue(gVal.toISOString())}`);
           } else {
-            groupParts.push(`${gKey}.eq.${gVal}`);
+            groupParts.push(`${gKey}.eq.${escapePostgrestValue(gVal)}`);
           }
         }
         if (groupParts.length > 0) orParts.push(`(${groupParts.join(',')})`);
@@ -248,31 +260,31 @@ function whereToFilters(where: Record<string, unknown>, prefix = ''): [string, s
         if (op === 'equals' || op === 'eq' || (!op.startsWith('_') && typeof opVal !== 'object')) {
           const v = (op === 'equals' || op === 'eq') ? opVal : value;
           if (typeof v === 'boolean') filters.push([col, `is.${v}`]);
-          else if (v instanceof Date) filters.push([col, `eq.${v.toISOString()}`]);
-          else filters.push([col, `eq.${v}`]);
+          else if (v instanceof Date) filters.push([col, `eq.${escapePostgrestValue(v.toISOString())}`]);
+          else filters.push([col, `eq.${escapePostgrestValue(v)}`]);
           break;
         }
         if (op === 'in') {
-          filters.push([col, `in.(${(opVal as any[]).join(',')})`]);
+          filters.push([col, `in.(${(opVal as any[]).map(escapePostgrestValue).join(',')})`]);
         } else if (op === 'notIn') {
-          filters.push([col, `not.in.(${(opVal as any[]).join(',')})`]);
+          filters.push([col, `not.in.(${(opVal as any[]).map(escapePostgrestValue).join(',')})`]);
         } else if (op === 'contains') {
-          filters.push([col, `ilike.%${opVal}%`]);
+          filters.push([col, `like.%${escapePostgrestValue(opVal)}%`]);
         } else if (op === 'startsWith') {
-          filters.push([col, `ilike.${opVal}%`]);
+          filters.push([col, `like.${escapePostgrestValue(opVal)}%`]);
         } else if (op === 'endsWith') {
-          filters.push([col, `ilike.%${opVal}`]);
+          filters.push([col, `like.%${escapePostgrestValue(opVal)}`]);
         } else if (op === 'gt') {
-          filters.push([col, `gt.${opVal instanceof Date ? opVal.toISOString() : opVal}`]);
+          filters.push([col, `gt.${escapePostgrestValue(opVal instanceof Date ? opVal.toISOString() : opVal)}`]);
         } else if (op === 'gte') {
-          filters.push([col, `gte.${opVal instanceof Date ? opVal.toISOString() : opVal}`]);
+          filters.push([col, `gte.${escapePostgrestValue(opVal instanceof Date ? opVal.toISOString() : opVal)}`]);
         } else if (op === 'lt') {
-          filters.push([col, `lt.${opVal instanceof Date ? opVal.toISOString() : opVal}`]);
+          filters.push([col, `lt.${escapePostgrestValue(opVal instanceof Date ? opVal.toISOString() : opVal)}`]);
         } else if (op === 'lte') {
-          filters.push([col, `lte.${opVal instanceof Date ? opVal.toISOString() : opVal}`]);
+          filters.push([col, `lte.${escapePostgrestValue(opVal instanceof Date ? opVal.toISOString() : opVal)}`]);
         } else if (op === 'ne' || op === 'not') {
           if (opVal === null) filters.push([col, 'not.is.null']);
-          else filters.push([col, `neq.${opVal}`]);
+          else filters.push([col, `neq.${escapePostgrestValue(opVal)}`]);
         } else if (op === 'mode' || op === 'path') {
           // Prisma internal — skip
         }
@@ -280,9 +292,9 @@ function whereToFilters(where: Record<string, unknown>, prefix = ''): [string, s
     } else if (typeof value === 'boolean') {
       filters.push([col, `is.${value}`]);
     } else if (value instanceof Date) {
-      filters.push([col, `eq.${value.toISOString()}`]);
+      filters.push([col, `eq.${escapePostgrestValue(value.toISOString())}`]);
     } else {
-      filters.push([col, `eq.${value}`]);
+      filters.push([col, `eq.${escapePostgrestValue(value)}`]);
     }
   }
   return filters;
@@ -399,7 +411,7 @@ async function resolveIncludes(
         // Fetch all related records (just the FK column)
         const r = await supabaseRequest(countTable, 'GET', {
           select: countFkCol,
-          filters: { 'or': orParts.join(',') },
+          filters: { 'or': `(${orParts.join(',')})` },
         });
 
         if (!r.error && r.data) {
@@ -626,7 +638,7 @@ function createTableProxy(tableName: string) {
       const { columns } = parseSelectAndInclude(args?.select);
       const r = await supabaseRequest(tableName, 'POST', {
         select: columns,
-        body: args.create,
+        body: { ...args.create, ...args.update },
         upsert: true,
         onConflict: Object.keys(args.where)[0],
       });
@@ -742,8 +754,16 @@ function createTableProxy(tableName: string) {
 
     async groupBy(args: { by: string[]; where?: Record<string, unknown>; _count?: Record<string, unknown>; _sum?: Record<string, unknown>; _avg?: Record<string, unknown>; _min?: Record<string, unknown>; _max?: Record<string, unknown>; orderBy?: unknown; take?: number; skip?: number; having?: unknown }) {
       // PostgREST doesn't support GROUP BY — fetch all rows and group in-memory
+      // Include aggregate columns in the select so we can compute them
+      const aggCols: string[] = [];
+      if (args._sum) aggCols.push(...Object.keys(args._sum));
+      if (args._avg) aggCols.push(...Object.keys(args._avg));
+      if (args._min) aggCols.push(...Object.keys(args._min));
+      if (args._max) aggCols.push(...Object.keys(args._max));
+      const selectCols = [...args.by, ...aggCols].join(',');
+
       const r = await supabaseRequest(tableName, 'GET', {
-        select: args.by.join(','),
+        select: selectCols,
         filters: args?.where ? whereToFilters(args.where as any) : undefined,
       });
       if (r.error) throw new Error(`[Supabase] ${tableName}.groupBy: ${r.error.message}`);
@@ -765,11 +785,73 @@ function createTableProxy(tableName: string) {
               (group._sum as Record<string, unknown>)[field] = 0;
             }
           }
+          if (args._avg) {
+            group._avg = {};
+            for (const field of Object.keys(args._avg)) {
+              (group._avg as Record<string, unknown>)[field] = { _sum: 0, _count: 0 };
+            }
+          }
+          if (args._min) {
+            group._min = {};
+            for (const field of Object.keys(args._min)) {
+              (group._min as Record<string, unknown>)[field] = Infinity;
+            }
+          }
+          if (args._max) {
+            group._max = {};
+            for (const field of Object.keys(args._max)) {
+              (group._max as Record<string, unknown>)[field] = -Infinity;
+            }
+          }
           groups.set(key, group);
         }
         const group = groups.get(key)!;
         if (args._count) {
           (group._count as Record<string, number>).id = ((group._count as Record<string, number>).id || 0) + 1;
+        }
+        if (args._sum) {
+          for (const field of Object.keys(args._sum)) {
+            (group._sum as Record<string, number>)[field] += Number(row[field]) || 0;
+          }
+        }
+        if (args._avg) {
+          for (const field of Object.keys(args._avg)) {
+            const acc = (group._avg as Record<string, { _sum: number; _count: number }>)[field];
+            const val = Number(row[field]);
+            if (!isNaN(val)) { acc._sum += val; acc._count += 1; }
+          }
+        }
+        if (args._min) {
+          for (const field of Object.keys(args._min)) {
+            const val = Number(row[field]);
+            if (!isNaN(val)) (group._min as Record<string, number>)[field] = Math.min((group._min as Record<string, number>)[field], val);
+          }
+        }
+        if (args._max) {
+          for (const field of Object.keys(args._max)) {
+            const val = Number(row[field]);
+            if (!isNaN(val)) (group._max as Record<string, number>)[field] = Math.max((group._max as Record<string, number>)[field], val);
+          }
+        }
+      }
+
+      // Finalize _avg and clean up _min/_max for empty groups
+      for (const group of groups.values()) {
+        if (args._avg) {
+          for (const field of Object.keys(args._avg)) {
+            const acc = (group._avg as Record<string, { _sum: number; _count: number }>)[field];
+            (group._avg as Record<string, number>)[field] = acc._count > 0 ? acc._sum / acc._count : 0;
+          }
+        }
+        if (args._min) {
+          for (const field of Object.keys(args._min)) {
+            if ((group._min as Record<string, number>)[field] === Infinity) (group._min as Record<string, unknown>)[field] = null;
+          }
+        }
+        if (args._max) {
+          for (const field of Object.keys(args._max)) {
+            if ((group._max as Record<string, number>)[field] === -Infinity) (group._max as Record<string, unknown>)[field] = null;
+          }
         }
       }
 
@@ -876,7 +958,7 @@ async function $queryRaw(strings: TemplateStringsArray, ...values: any[]): Promi
       } else if (typeof val === 'boolean') {
         query += val ? 'TRUE' : 'FALSE';
       } else {
-        query += String(val);
+        throw new Error(`[Supabase] $queryRaw: non-primitive value cannot be interpolated safely (got ${typeof val}: ${JSON.stringify(val)})`);
       }
     }
   }

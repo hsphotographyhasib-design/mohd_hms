@@ -240,15 +240,15 @@ export function PublicLayout({ children, onSignIn }: PublicLayoutProps) {
             </div>
             <div className="fcol">
               <h5>Clients</h5>
-              <a href="#">Sign in</a>
+              <a href="#" onClick={e => { e.preventDefault(); onSignIn?.(); }}>Sign in</a>
               <a href="#overview">System overview</a>
               <a href="#projects">Projects</a>
               <a href="#contact">Contact</a>
             </div>
             <div className="fcol">
               <h5>Legal</h5>
-              <a href="#">Privacy policy</a>
-              <a href="#">Terms &amp; conditions</a>
+              <a href="/privacy-policy">Privacy policy</a>
+              <a href="/terms-and-conditions">Terms &amp; conditions</a>
               <a href="#">HSE policy</a>
             </div>
           </div>

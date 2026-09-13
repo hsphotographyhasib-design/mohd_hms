@@ -60,7 +60,7 @@ export const GET = withErrorLogging(async function GET(request: NextRequest) {
       name: user.name,
       phone: user.phone,
       avatar: user.avatar,
-      role: user.role,
+      role: (user.role as string).toLowerCase(),
       tenantId: user.tenantId,
       tenantName: user.tenant?.name,
       tenantDomain: user.tenant?.domain,
